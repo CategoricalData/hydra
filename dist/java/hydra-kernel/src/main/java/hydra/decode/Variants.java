@@ -16,7 +16,7 @@ public interface Variants {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.variants.EliminationVariant> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.variants.EliminationVariant> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
@@ -62,7 +62,7 @@ public interface Variants {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.variants.FunctionVariant> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.variants.FunctionVariant> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
@@ -103,7 +103,7 @@ public interface Variants {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.variants.LiteralVariant> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.variants.LiteralVariant> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
@@ -159,7 +159,7 @@ public interface Variants {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
@@ -181,6 +181,11 @@ public interface Variants {
                 input)))))),
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant>>>(new hydra.core.Name("either"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<java.lang.Void, hydra.variants.TermVariant>) (t -> new hydra.variants.TermVariant.Either()),
+              hydra.extract.Core.decodeUnit(
+                cx,
+                input)))))),
+            (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant>>>(new hydra.core.Name("inject"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant>>) (input -> hydra.lib.eithers.Map.apply(
+              (java.util.function.Function<java.lang.Void, hydra.variants.TermVariant>) (t -> new hydra.variants.TermVariant.Inject()),
               hydra.extract.Core.decodeUnit(
                 cx,
                 input)))))),
@@ -244,11 +249,6 @@ public interface Variants {
               hydra.extract.Core.decodeUnit(
                 cx,
                 input)))))),
-            (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant>>>(new hydra.core.Name("union"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<java.lang.Void, hydra.variants.TermVariant>) (t -> new hydra.variants.TermVariant.Union()),
-              hydra.extract.Core.decodeUnit(
-                cx,
-                input)))))),
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant>>>(new hydra.core.Name("unit"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<java.lang.Void, hydra.variants.TermVariant>) (t -> new hydra.variants.TermVariant.Unit()),
               hydra.extract.Core.decodeUnit(
@@ -295,7 +295,7 @@ public interface Variants {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TypeVariant> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TypeVariant> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;

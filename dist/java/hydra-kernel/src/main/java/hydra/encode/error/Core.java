@@ -88,112 +88,112 @@ public interface Core {
     return (v1).accept(new hydra.error.core.InvalidTermError.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.ConstantCondition y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("constantCondition"), hydra.encode.error.Core.constantConditionError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("constantCondition"), hydra.encode.error.Core.constantConditionError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.DuplicateBinding y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("duplicateBinding"), hydra.encode.error.Core.duplicateBindingError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("duplicateBinding"), hydra.encode.error.Core.duplicateBindingError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.DuplicateField y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("duplicateField"), hydra.encode.error.Core.duplicateFieldError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("duplicateField"), hydra.encode.error.Core.duplicateFieldError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.EmptyCaseStatement y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("emptyCaseStatement"), hydra.encode.error.Core.emptyCaseStatementError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("emptyCaseStatement"), hydra.encode.error.Core.emptyCaseStatementError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.EmptyLetBindings y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("emptyLetBindings"), hydra.encode.error.Core.emptyLetBindingsError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("emptyLetBindings"), hydra.encode.error.Core.emptyLetBindingsError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.EmptyTermAnnotation y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("emptyTermAnnotation"), hydra.encode.error.Core.emptyTermAnnotationError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("emptyTermAnnotation"), hydra.encode.error.Core.emptyTermAnnotationError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.EmptyTypeNameInTerm y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("emptyTypeNameInTerm"), hydra.encode.error.Core.emptyTypeNameInTermError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("emptyTypeNameInTerm"), hydra.encode.error.Core.emptyTypeNameInTermError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.InvalidLambdaParameterName y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("invalidLambdaParameterName"), hydra.encode.error.Core.invalidLambdaParameterNameError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("invalidLambdaParameterName"), hydra.encode.error.Core.invalidLambdaParameterNameError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.InvalidLetBindingName y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("invalidLetBindingName"), hydra.encode.error.Core.invalidLetBindingNameError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("invalidLetBindingName"), hydra.encode.error.Core.invalidLetBindingNameError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.InvalidTypeLambdaParameterName y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("invalidTypeLambdaParameterName"), hydra.encode.error.Core.invalidTypeLambdaParameterNameError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("invalidTypeLambdaParameterName"), hydra.encode.error.Core.invalidTypeLambdaParameterNameError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.NestedTermAnnotation y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("nestedTermAnnotation"), hydra.encode.error.Core.nestedTermAnnotationError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("nestedTermAnnotation"), hydra.encode.error.Core.nestedTermAnnotationError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.RedundantWrapUnwrap y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("redundantWrapUnwrap"), hydra.encode.error.Core.redundantWrapUnwrapError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("redundantWrapUnwrap"), hydra.encode.error.Core.redundantWrapUnwrapError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.SelfApplication y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("selfApplication"), hydra.encode.error.Core.selfApplicationError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("selfApplication"), hydra.encode.error.Core.selfApplicationError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.TermVariableShadowing y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("termVariableShadowing"), hydra.encode.error.Core.termVariableShadowingError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("termVariableShadowing"), hydra.encode.error.Core.termVariableShadowingError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.TypeVariableShadowingInTypeLambda y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("typeVariableShadowingInTypeLambda"), hydra.encode.error.Core.typeVariableShadowingInTypeLambdaError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("typeVariableShadowingInTypeLambda"), hydra.encode.error.Core.typeVariableShadowingInTypeLambdaError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.UndefinedTermVariable y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("undefinedTermVariable"), hydra.encode.error.Core.undefinedTermVariableError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("undefinedTermVariable"), hydra.encode.error.Core.undefinedTermVariableError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.UndefinedTypeVariableInBindingType y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("undefinedTypeVariableInBindingType"), hydra.encode.error.Core.undefinedTypeVariableInBindingTypeError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("undefinedTypeVariableInBindingType"), hydra.encode.error.Core.undefinedTypeVariableInBindingTypeError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.UndefinedTypeVariableInLambdaDomain y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("undefinedTypeVariableInLambdaDomain"), hydra.encode.error.Core.undefinedTypeVariableInLambdaDomainError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("undefinedTypeVariableInLambdaDomain"), hydra.encode.error.Core.undefinedTypeVariableInLambdaDomainError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.UndefinedTypeVariableInTypeApplication y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("undefinedTypeVariableInTypeApplication"), hydra.encode.error.Core.undefinedTypeVariableInTypeApplicationError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("undefinedTypeVariableInTypeApplication"), hydra.encode.error.Core.undefinedTypeVariableInTypeApplicationError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.UnknownPrimitiveName y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("unknownPrimitiveName"), hydra.encode.error.Core.unknownPrimitiveNameError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("unknownPrimitiveName"), hydra.encode.error.Core.unknownPrimitiveNameError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.UnnecessaryIdentityApplication y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("unnecessaryIdentityApplication"), hydra.encode.error.Core.unnecessaryIdentityApplicationError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("unnecessaryIdentityApplication"), hydra.encode.error.Core.unnecessaryIdentityApplicationError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTermError.UntypedTermVariable y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("untypedTermVariable"), hydra.encode.error.Core.untypedTermVariableError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("untypedTermVariable"), hydra.encode.error.Core.untypedTermVariableError((y).value))));
       }
     });
   }
@@ -202,72 +202,72 @@ public interface Core {
     return (v1).accept(new hydra.error.core.InvalidTypeError.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTypeError.DuplicateRecordTypeFieldNames y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("duplicateRecordTypeFieldNames"), hydra.encode.error.Core.duplicateRecordTypeFieldNamesError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("duplicateRecordTypeFieldNames"), hydra.encode.error.Core.duplicateRecordTypeFieldNamesError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTypeError.DuplicateUnionTypeFieldNames y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("duplicateUnionTypeFieldNames"), hydra.encode.error.Core.duplicateUnionTypeFieldNamesError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("duplicateUnionTypeFieldNames"), hydra.encode.error.Core.duplicateUnionTypeFieldNamesError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTypeError.EmptyRecordType y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("emptyRecordType"), hydra.encode.error.Core.emptyRecordTypeError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("emptyRecordType"), hydra.encode.error.Core.emptyRecordTypeError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTypeError.EmptyTypeAnnotation y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("emptyTypeAnnotation"), hydra.encode.error.Core.emptyTypeAnnotationError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("emptyTypeAnnotation"), hydra.encode.error.Core.emptyTypeAnnotationError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTypeError.EmptyUnionType y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("emptyUnionType"), hydra.encode.error.Core.emptyUnionTypeError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("emptyUnionType"), hydra.encode.error.Core.emptyUnionTypeError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTypeError.InvalidForallParameterName y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("invalidForallParameterName"), hydra.encode.error.Core.invalidForallParameterNameError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("invalidForallParameterName"), hydra.encode.error.Core.invalidForallParameterNameError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTypeError.InvalidTypeSchemeVariableName y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("invalidTypeSchemeVariableName"), hydra.encode.error.Core.invalidTypeSchemeVariableNameError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("invalidTypeSchemeVariableName"), hydra.encode.error.Core.invalidTypeSchemeVariableNameError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTypeError.NestedTypeAnnotation y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("nestedTypeAnnotation"), hydra.encode.error.Core.nestedTypeAnnotationError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("nestedTypeAnnotation"), hydra.encode.error.Core.nestedTypeAnnotationError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTypeError.NonComparableMapKeyType y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("nonComparableMapKeyType"), hydra.encode.error.Core.nonComparableMapKeyTypeError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("nonComparableMapKeyType"), hydra.encode.error.Core.nonComparableMapKeyTypeError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTypeError.NonComparableSetElementType y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("nonComparableSetElementType"), hydra.encode.error.Core.nonComparableSetElementTypeError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("nonComparableSetElementType"), hydra.encode.error.Core.nonComparableSetElementTypeError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTypeError.SingleVariantUnion y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("singleVariantUnion"), hydra.encode.error.Core.singleVariantUnionError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("singleVariantUnion"), hydra.encode.error.Core.singleVariantUnionError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTypeError.TypeVariableShadowingInForall y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("typeVariableShadowingInForall"), hydra.encode.error.Core.typeVariableShadowingInForallError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("typeVariableShadowingInForall"), hydra.encode.error.Core.typeVariableShadowingInForallError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTypeError.UndefinedTypeVariable y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("undefinedTypeVariable"), hydra.encode.error.Core.undefinedTypeVariableError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("undefinedTypeVariable"), hydra.encode.error.Core.undefinedTypeVariableError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.core.InvalidTypeError.VoidInNonBottomPosition y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("voidInNonBottomPosition"), hydra.encode.error.Core.voidInNonBottomPositionError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("voidInNonBottomPosition"), hydra.encode.error.Core.voidInNonBottomPositionError((y).value))));
       }
     });
   }

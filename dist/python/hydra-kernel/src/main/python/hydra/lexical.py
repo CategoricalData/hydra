@@ -179,7 +179,7 @@ def match_union(graph: hydra.graph.Graph, tname: hydra.core.Name, pairs: frozenl
         case hydra.core.TermVariable(value=name):
             return hydra.lib.eithers.bind(require_binding(graph, name), (lambda el: match_union(graph, tname, pairs, el.term)))
 
-        case hydra.core.TermUnion(value=injection):
+        case hydra.core.TermInject(value=injection):
             @lru_cache(1)
             def exp() -> Either[hydra.errors.Error, T0]:
                 fname = injection.field.name

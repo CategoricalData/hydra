@@ -11,7 +11,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 
 linkRelationTypeAbout :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeAbout =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "about"),
@@ -19,7 +19,7 @@ linkRelationTypeAbout =
 
 linkRelationTypeAcl :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeAcl =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "acl"),
@@ -27,7 +27,7 @@ linkRelationTypeAcl =
 
 linkRelationTypeAlternate :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeAlternate =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "alternate"),
@@ -35,7 +35,7 @@ linkRelationTypeAlternate =
 
 linkRelationTypeAmphtml :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeAmphtml =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "amphtml"),
@@ -43,7 +43,7 @@ linkRelationTypeAmphtml =
 
 linkRelationTypeAppendix :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeAppendix =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "appendix"),
@@ -51,7 +51,7 @@ linkRelationTypeAppendix =
 
 linkRelationTypeApple_touch_icon :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeApple_touch_icon =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "apple-touch-icon"),
@@ -59,7 +59,7 @@ linkRelationTypeApple_touch_icon =
 
 linkRelationTypeApple_touch_startup_image :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeApple_touch_startup_image =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "apple-touch-startup-image"),
@@ -67,7 +67,7 @@ linkRelationTypeApple_touch_startup_image =
 
 linkRelationTypeArchives :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeArchives =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "archives"),
@@ -75,7 +75,7 @@ linkRelationTypeArchives =
 
 linkRelationTypeAuthor :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeAuthor =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "author"),
@@ -83,7 +83,7 @@ linkRelationTypeAuthor =
 
 linkRelationTypeBlocked_by :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeBlocked_by =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "blocked-by"),
@@ -91,7 +91,7 @@ linkRelationTypeBlocked_by =
 
 linkRelationTypeBookmark :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeBookmark =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bookmark"),
@@ -99,7 +99,7 @@ linkRelationTypeBookmark =
 
 linkRelationTypeCanonical :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeCanonical =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "canonical"),
@@ -107,7 +107,7 @@ linkRelationTypeCanonical =
 
 linkRelationTypeChapter :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeChapter =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "chapter"),
@@ -115,7 +115,7 @@ linkRelationTypeChapter =
 
 linkRelationTypeCite_as :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeCite_as =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cite-as"),
@@ -123,7 +123,7 @@ linkRelationTypeCite_as =
 
 linkRelationTypeCollection :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeCollection =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "collection"),
@@ -131,7 +131,7 @@ linkRelationTypeCollection =
 
 linkRelationTypeContents :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeContents =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "contents"),
@@ -139,7 +139,7 @@ linkRelationTypeContents =
 
 linkRelationTypeConvertedfrom :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeConvertedfrom =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "convertedfrom"),
@@ -147,7 +147,7 @@ linkRelationTypeConvertedfrom =
 
 linkRelationTypeCopyright :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeCopyright =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "copyright"),
@@ -155,7 +155,7 @@ linkRelationTypeCopyright =
 
 linkRelationTypeCreate_form :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeCreate_form =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "create-form"),
@@ -163,7 +163,7 @@ linkRelationTypeCreate_form =
 
 linkRelationTypeCurrent :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeCurrent =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "current"),
@@ -171,7 +171,7 @@ linkRelationTypeCurrent =
 
 linkRelationTypeDescribedby :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeDescribedby =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "describedby"),
@@ -179,7 +179,7 @@ linkRelationTypeDescribedby =
 
 linkRelationTypeDescribes :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeDescribes =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "describes"),
@@ -187,7 +187,7 @@ linkRelationTypeDescribes =
 
 linkRelationTypeDisclosure :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeDisclosure =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "disclosure"),
@@ -195,7 +195,7 @@ linkRelationTypeDisclosure =
 
 linkRelationTypeDns_prefetch :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeDns_prefetch =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dns-prefetch"),
@@ -203,7 +203,7 @@ linkRelationTypeDns_prefetch =
 
 linkRelationTypeDuplicate :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeDuplicate =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "duplicate"),
@@ -211,7 +211,7 @@ linkRelationTypeDuplicate =
 
 linkRelationTypeEdit :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeEdit =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edit"),
@@ -219,7 +219,7 @@ linkRelationTypeEdit =
 
 linkRelationTypeEdit_form :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeEdit_form =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edit-form"),
@@ -227,7 +227,7 @@ linkRelationTypeEdit_form =
 
 linkRelationTypeEdit_media :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeEdit_media =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edit-media"),
@@ -235,7 +235,7 @@ linkRelationTypeEdit_media =
 
 linkRelationTypeEnclosure :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeEnclosure =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "enclosure"),
@@ -243,7 +243,7 @@ linkRelationTypeEnclosure =
 
 linkRelationTypeExternal :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeExternal =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "external"),
@@ -251,7 +251,7 @@ linkRelationTypeExternal =
 
 linkRelationTypeFirst :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeFirst =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "first"),
@@ -259,7 +259,7 @@ linkRelationTypeFirst =
 
 linkRelationTypeGlossary :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeGlossary =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "glossary"),
@@ -267,7 +267,7 @@ linkRelationTypeGlossary =
 
 linkRelationTypeHelp :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeHelp =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "help"),
@@ -275,7 +275,7 @@ linkRelationTypeHelp =
 
 linkRelationTypeHosts :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeHosts =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hosts"),
@@ -283,7 +283,7 @@ linkRelationTypeHosts =
 
 linkRelationTypeHub :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeHub =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hub"),
@@ -291,7 +291,7 @@ linkRelationTypeHub =
 
 linkRelationTypeIcon :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeIcon =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "icon"),
@@ -299,7 +299,7 @@ linkRelationTypeIcon =
 
 linkRelationTypeIndex :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeIndex =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "index"),
@@ -307,7 +307,7 @@ linkRelationTypeIndex =
 
 linkRelationTypeIntervalafter :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeIntervalafter =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "intervalafter"),
@@ -315,7 +315,7 @@ linkRelationTypeIntervalafter =
 
 linkRelationTypeIntervalbefore :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeIntervalbefore =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "intervalbefore"),
@@ -323,7 +323,7 @@ linkRelationTypeIntervalbefore =
 
 linkRelationTypeIntervalcontains :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeIntervalcontains =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "intervalcontains"),
@@ -331,7 +331,7 @@ linkRelationTypeIntervalcontains =
 
 linkRelationTypeIntervaldisjoint :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeIntervaldisjoint =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "intervaldisjoint"),
@@ -339,7 +339,7 @@ linkRelationTypeIntervaldisjoint =
 
 linkRelationTypeIntervalduring :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeIntervalduring =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "intervalduring"),
@@ -347,7 +347,7 @@ linkRelationTypeIntervalduring =
 
 linkRelationTypeIntervalequals :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeIntervalequals =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "intervalequals"),
@@ -355,7 +355,7 @@ linkRelationTypeIntervalequals =
 
 linkRelationTypeIntervalfinishedby :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeIntervalfinishedby =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "intervalfinishedby"),
@@ -363,7 +363,7 @@ linkRelationTypeIntervalfinishedby =
 
 linkRelationTypeIntervalfinishes :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeIntervalfinishes =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "intervalfinishes"),
@@ -371,7 +371,7 @@ linkRelationTypeIntervalfinishes =
 
 linkRelationTypeIntervalin :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeIntervalin =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "intervalin"),
@@ -379,7 +379,7 @@ linkRelationTypeIntervalin =
 
 linkRelationTypeIntervalmeets :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeIntervalmeets =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "intervalmeets"),
@@ -387,7 +387,7 @@ linkRelationTypeIntervalmeets =
 
 linkRelationTypeIntervalmetby :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeIntervalmetby =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "intervalmetby"),
@@ -395,7 +395,7 @@ linkRelationTypeIntervalmetby =
 
 linkRelationTypeIntervaloverlappedby :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeIntervaloverlappedby =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "intervaloverlappedby"),
@@ -403,7 +403,7 @@ linkRelationTypeIntervaloverlappedby =
 
 linkRelationTypeIntervaloverlaps :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeIntervaloverlaps =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "intervaloverlaps"),
@@ -411,7 +411,7 @@ linkRelationTypeIntervaloverlaps =
 
 linkRelationTypeIntervalstartedby :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeIntervalstartedby =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "intervalstartedby"),
@@ -419,7 +419,7 @@ linkRelationTypeIntervalstartedby =
 
 linkRelationTypeIntervalstarts :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeIntervalstarts =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "intervalstarts"),
@@ -427,7 +427,7 @@ linkRelationTypeIntervalstarts =
 
 linkRelationTypeItem :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeItem =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "item"),
@@ -435,7 +435,7 @@ linkRelationTypeItem =
 
 linkRelationTypeLast :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeLast =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "last"),
@@ -443,7 +443,7 @@ linkRelationTypeLast =
 
 linkRelationTypeLatest_version :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeLatest_version =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "latest-version"),
@@ -451,7 +451,7 @@ linkRelationTypeLatest_version =
 
 linkRelationTypeLicense :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeLicense =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "license"),
@@ -459,7 +459,7 @@ linkRelationTypeLicense =
 
 linkRelationTypeLinkset :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeLinkset =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "linkset"),
@@ -467,7 +467,7 @@ linkRelationTypeLinkset =
 
 linkRelationTypeLrdd :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeLrdd =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lrdd"),
@@ -475,7 +475,7 @@ linkRelationTypeLrdd =
 
 linkRelationTypeManifest :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeManifest =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "manifest"),
@@ -483,7 +483,7 @@ linkRelationTypeManifest =
 
 linkRelationTypeMask_icon :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeMask_icon =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mask-icon"),
@@ -491,7 +491,7 @@ linkRelationTypeMask_icon =
 
 linkRelationTypeMedia_feed :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeMedia_feed =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "media-feed"),
@@ -499,7 +499,7 @@ linkRelationTypeMedia_feed =
 
 linkRelationTypeMemento :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeMemento =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "memento"),
@@ -507,7 +507,7 @@ linkRelationTypeMemento =
 
 linkRelationTypeMicropub :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeMicropub =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "micropub"),
@@ -515,7 +515,7 @@ linkRelationTypeMicropub =
 
 linkRelationTypeModulepreload :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeModulepreload =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "modulepreload"),
@@ -523,7 +523,7 @@ linkRelationTypeModulepreload =
 
 linkRelationTypeMonitor :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeMonitor =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "monitor"),
@@ -531,7 +531,7 @@ linkRelationTypeMonitor =
 
 linkRelationTypeMonitor_group :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeMonitor_group =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "monitor-group"),
@@ -539,7 +539,7 @@ linkRelationTypeMonitor_group =
 
 linkRelationTypeNext :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeNext =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "next"),
@@ -547,7 +547,7 @@ linkRelationTypeNext =
 
 linkRelationTypeNext_archive :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeNext_archive =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "next-archive"),
@@ -555,7 +555,7 @@ linkRelationTypeNext_archive =
 
 linkRelationTypeNofollow :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeNofollow =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nofollow"),
@@ -563,7 +563,7 @@ linkRelationTypeNofollow =
 
 linkRelationTypeNoopener :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeNoopener =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "noopener"),
@@ -571,7 +571,7 @@ linkRelationTypeNoopener =
 
 linkRelationTypeNoreferrer :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeNoreferrer =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "noreferrer"),
@@ -579,7 +579,7 @@ linkRelationTypeNoreferrer =
 
 linkRelationTypeOpener :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeOpener =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "opener"),
@@ -587,7 +587,7 @@ linkRelationTypeOpener =
 
 linkRelationTypeOpenid2Local_id :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeOpenid2Local_id =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "openid2.local_id"),
@@ -595,7 +595,7 @@ linkRelationTypeOpenid2Local_id =
 
 linkRelationTypeOpenid2Provider :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeOpenid2Provider =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "openid2.provider"),
@@ -603,7 +603,7 @@ linkRelationTypeOpenid2Provider =
 
 linkRelationTypeOriginal :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeOriginal =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "original"),
@@ -611,7 +611,7 @@ linkRelationTypeOriginal =
 
 linkRelationTypeP3pv1 :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeP3pv1 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "p3pv1"),
@@ -619,7 +619,7 @@ linkRelationTypeP3pv1 =
 
 linkRelationTypePayment :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypePayment =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "payment"),
@@ -627,7 +627,7 @@ linkRelationTypePayment =
 
 linkRelationTypePingback :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypePingback =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pingback"),
@@ -635,7 +635,7 @@ linkRelationTypePingback =
 
 linkRelationTypePreconnect :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypePreconnect =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "preconnect"),
@@ -643,7 +643,7 @@ linkRelationTypePreconnect =
 
 linkRelationTypePredecessor_version :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypePredecessor_version =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predecessor-version"),
@@ -651,7 +651,7 @@ linkRelationTypePredecessor_version =
 
 linkRelationTypePrefetch :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypePrefetch =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "prefetch"),
@@ -659,7 +659,7 @@ linkRelationTypePrefetch =
 
 linkRelationTypePreload :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypePreload =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "preload"),
@@ -667,7 +667,7 @@ linkRelationTypePreload =
 
 linkRelationTypePrerender :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypePrerender =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "prerender"),
@@ -675,7 +675,7 @@ linkRelationTypePrerender =
 
 linkRelationTypePrev :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypePrev =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "prev"),
@@ -683,7 +683,7 @@ linkRelationTypePrev =
 
 linkRelationTypePrev_archive :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypePrev_archive =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "prev-archive"),
@@ -691,7 +691,7 @@ linkRelationTypePrev_archive =
 
 linkRelationTypePreview :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypePreview =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "preview"),
@@ -699,7 +699,7 @@ linkRelationTypePreview =
 
 linkRelationTypePrevious :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypePrevious =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "previous"),
@@ -707,7 +707,7 @@ linkRelationTypePrevious =
 
 linkRelationTypePrivacy_policy :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypePrivacy_policy =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "privacy-policy"),
@@ -715,7 +715,7 @@ linkRelationTypePrivacy_policy =
 
 linkRelationTypeProfile :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeProfile =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "profile"),
@@ -723,7 +723,7 @@ linkRelationTypeProfile =
 
 linkRelationTypePublication :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypePublication =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "publication"),
@@ -731,7 +731,7 @@ linkRelationTypePublication =
 
 linkRelationTypeRelated :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeRelated =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "related"),
@@ -739,7 +739,7 @@ linkRelationTypeRelated =
 
 linkRelationTypeReplies :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeReplies =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "replies"),
@@ -747,7 +747,7 @@ linkRelationTypeReplies =
 
 linkRelationTypeRestconf :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeRestconf =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "restconf"),
@@ -755,7 +755,7 @@ linkRelationTypeRestconf =
 
 linkRelationTypeRuleinput :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeRuleinput =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ruleinput"),
@@ -763,7 +763,7 @@ linkRelationTypeRuleinput =
 
 linkRelationTypeSearch :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeSearch =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "search"),
@@ -771,7 +771,7 @@ linkRelationTypeSearch =
 
 linkRelationTypeSection :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeSection =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "section"),
@@ -779,7 +779,7 @@ linkRelationTypeSection =
 
 linkRelationTypeSelf :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeSelf =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "self"),
@@ -787,7 +787,7 @@ linkRelationTypeSelf =
 
 linkRelationTypeService :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeService =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "service"),
@@ -795,7 +795,7 @@ linkRelationTypeService =
 
 linkRelationTypeService_desc :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeService_desc =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "service-desc"),
@@ -803,7 +803,7 @@ linkRelationTypeService_desc =
 
 linkRelationTypeService_doc :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeService_doc =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "service-doc"),
@@ -811,7 +811,7 @@ linkRelationTypeService_doc =
 
 linkRelationTypeService_meta :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeService_meta =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "service-meta"),
@@ -819,7 +819,7 @@ linkRelationTypeService_meta =
 
 linkRelationTypeSiptrunkingcapability :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeSiptrunkingcapability =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "siptrunkingcapability"),
@@ -827,7 +827,7 @@ linkRelationTypeSiptrunkingcapability =
 
 linkRelationTypeSponsored :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeSponsored =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sponsored"),
@@ -835,7 +835,7 @@ linkRelationTypeSponsored =
 
 linkRelationTypeStart :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeStart =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "start"),
@@ -843,7 +843,7 @@ linkRelationTypeStart =
 
 linkRelationTypeStatus :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeStatus =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "status"),
@@ -851,7 +851,7 @@ linkRelationTypeStatus =
 
 linkRelationTypeStylesheet :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeStylesheet =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "stylesheet"),
@@ -859,7 +859,7 @@ linkRelationTypeStylesheet =
 
 linkRelationTypeSubsection :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeSubsection =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "subsection"),
@@ -867,7 +867,7 @@ linkRelationTypeSubsection =
 
 linkRelationTypeSuccessor_version :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeSuccessor_version =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "successor-version"),
@@ -875,7 +875,7 @@ linkRelationTypeSuccessor_version =
 
 linkRelationTypeSunset :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeSunset =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sunset"),
@@ -883,7 +883,7 @@ linkRelationTypeSunset =
 
 linkRelationTypeTag :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeTag =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tag"),
@@ -891,7 +891,7 @@ linkRelationTypeTag =
 
 linkRelationTypeTerms_of_service :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeTerms_of_service =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "terms-of-service"),
@@ -899,7 +899,7 @@ linkRelationTypeTerms_of_service =
 
 linkRelationTypeTimegate :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeTimegate =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "timegate"),
@@ -907,7 +907,7 @@ linkRelationTypeTimegate =
 
 linkRelationTypeTimemap :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeTimemap =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "timemap"),
@@ -915,7 +915,7 @@ linkRelationTypeTimemap =
 
 linkRelationTypeType :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeType =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "type"),
@@ -923,7 +923,7 @@ linkRelationTypeType =
 
 linkRelationTypeUgc :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeUgc =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ugc"),
@@ -931,7 +931,7 @@ linkRelationTypeUgc =
 
 linkRelationTypeUp :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeUp =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "up"),
@@ -939,7 +939,7 @@ linkRelationTypeUp =
 
 linkRelationTypeVersion_history :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeVersion_history =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "version-history"),
@@ -947,7 +947,7 @@ linkRelationTypeVersion_history =
 
 linkRelationTypeVia :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeVia =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "via"),
@@ -955,7 +955,7 @@ linkRelationTypeVia =
 
 linkRelationTypeWebmention :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeWebmention =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "webmention"),
@@ -963,7 +963,7 @@ linkRelationTypeWebmention =
 
 linkRelationTypeWorking_copy :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeWorking_copy =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "working-copy"),
@@ -971,7 +971,7 @@ linkRelationTypeWorking_copy =
 
 linkRelationTypeWorking_copy_of :: Phantoms.TTerm Linkrelations.LinkRelationType
 linkRelationTypeWorking_copy_of =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.iana.linkrelations.LinkRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "working-copy-of"),

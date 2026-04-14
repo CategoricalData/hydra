@@ -7,55 +7,55 @@ package hydra.dsl.error;
  */
 public interface Checking {
   static hydra.phantoms.TTerm<hydra.error.checking.CheckingError> checkingErrorIncorrectUnification(hydra.phantoms.TTerm<hydra.error.checking.IncorrectUnificationError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("incorrectUnification"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("incorrectUnification"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.checking.CheckingError> checkingErrorNotAForallType(hydra.phantoms.TTerm<hydra.error.checking.NotAForallTypeError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("notAForallType"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("notAForallType"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.checking.CheckingError> checkingErrorNotAFunctionType(hydra.phantoms.TTerm<hydra.error.checking.NotAFunctionTypeError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("notAFunctionType"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("notAFunctionType"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.checking.CheckingError> checkingErrorOther(hydra.phantoms.TTerm<hydra.error.checking.OtherCheckingError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("other"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("other"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.checking.CheckingError> checkingErrorTypeArityMismatch(hydra.phantoms.TTerm<hydra.error.checking.TypeArityMismatchError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("typeArityMismatch"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("typeArityMismatch"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.checking.CheckingError> checkingErrorTypeMismatch(hydra.phantoms.TTerm<hydra.error.checking.TypeMismatchError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("typeMismatch"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("typeMismatch"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.checking.CheckingError> checkingErrorUnboundTypeVariables(hydra.phantoms.TTerm<hydra.error.checking.UnboundTypeVariablesError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("unboundTypeVariables"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("unboundTypeVariables"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.checking.CheckingError> checkingErrorUndefinedTermVariable(hydra.phantoms.TTerm<hydra.error.checking.UndefinedTermVariableCheckingError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("undefinedTermVariable"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("undefinedTermVariable"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.checking.CheckingError> checkingErrorUnequalTypes(hydra.phantoms.TTerm<hydra.error.checking.UnequalTypesError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("unequalTypes"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("unequalTypes"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.checking.CheckingError> checkingErrorUnsupportedTermVariant(hydra.phantoms.TTerm<hydra.error.checking.UnsupportedTermVariantError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("unsupportedTermVariant"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("unsupportedTermVariant"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.checking.CheckingError> checkingErrorUntypedLambda(hydra.phantoms.TTerm<hydra.error.checking.UntypedLambdaError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("untypedLambda"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("untypedLambda"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.checking.CheckingError> checkingErrorUntypedLetBinding(hydra.phantoms.TTerm<hydra.error.checking.UntypedLetBindingError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("untypedLetBinding"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("untypedLetBinding"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.checking.CheckingError> checkingErrorUntypedTermVariable(hydra.phantoms.TTerm<hydra.error.checking.UntypedTermVariableCheckingError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("untypedTermVariable"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("untypedTermVariable"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.checking.IncorrectUnificationError> incorrectUnificationError(hydra.phantoms.TTerm<hydra.typing.TypeSubst> substitution) {

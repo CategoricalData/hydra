@@ -71,7 +71,7 @@ andConditionWithRight original newVal =
 
 baseExpressionPaths0 :: Phantoms.TTerm Expressions.GraphReference -> Phantoms.TTerm Expressions.BaseExpression
 baseExpressionPaths0 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.BaseExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "paths0"),
@@ -79,7 +79,7 @@ baseExpressionPaths0 x =
 
 baseExpressionPaths1 :: Phantoms.TTerm Expressions.GraphReference -> Phantoms.TTerm Expressions.BaseExpression
 baseExpressionPaths1 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.BaseExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "paths1"),
@@ -87,7 +87,7 @@ baseExpressionPaths1 x =
 
 baseExpressionPathsStar :: Phantoms.TTerm Expressions.GraphReference -> Phantoms.TTerm Expressions.BaseExpression
 baseExpressionPathsStar x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.BaseExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pathsStar"),
@@ -95,7 +95,7 @@ baseExpressionPathsStar x =
 
 comparisonOperatorEqual :: Phantoms.TTerm Expressions.ComparisonOperator
 comparisonOperatorEqual =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "equal"),
@@ -103,7 +103,7 @@ comparisonOperatorEqual =
 
 comparisonOperatorGreaterThan :: Phantoms.TTerm Expressions.ComparisonOperator
 comparisonOperatorGreaterThan =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "greaterThan"),
@@ -111,7 +111,7 @@ comparisonOperatorGreaterThan =
 
 comparisonOperatorGreaterThanOrEqual :: Phantoms.TTerm Expressions.ComparisonOperator
 comparisonOperatorGreaterThanOrEqual =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "greaterThanOrEqual"),
@@ -119,7 +119,7 @@ comparisonOperatorGreaterThanOrEqual =
 
 comparisonOperatorLessThan :: Phantoms.TTerm Expressions.ComparisonOperator
 comparisonOperatorLessThan =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThan"),
@@ -127,7 +127,7 @@ comparisonOperatorLessThan =
 
 comparisonOperatorLessThanOrEqual :: Phantoms.TTerm Expressions.ComparisonOperator
 comparisonOperatorLessThanOrEqual =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThanOrEqual"),
@@ -135,7 +135,7 @@ comparisonOperatorLessThanOrEqual =
 
 comparisonOperatorNotEqual :: Phantoms.TTerm Expressions.ComparisonOperator
 comparisonOperatorNotEqual =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notEqual"),
@@ -209,7 +209,7 @@ graphReference x =
 
 groupByCriterionLength :: Phantoms.TTerm Expressions.GroupByCriterion
 groupByCriterionLength =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.GroupByCriterion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "length"),
@@ -217,7 +217,7 @@ groupByCriterionLength =
 
 groupByCriterionNone :: Phantoms.TTerm Expressions.GroupByCriterion
 groupByCriterionNone =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.GroupByCriterion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "none"),
@@ -225,7 +225,7 @@ groupByCriterionNone =
 
 groupByCriterionSource :: Phantoms.TTerm Expressions.GroupByCriterion
 groupByCriterionSource =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.GroupByCriterion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "source"),
@@ -233,7 +233,7 @@ groupByCriterionSource =
 
 groupByCriterionSourceLength :: Phantoms.TTerm Expressions.GroupByCriterion
 groupByCriterionSourceLength =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.GroupByCriterion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sourceLength"),
@@ -241,7 +241,7 @@ groupByCriterionSourceLength =
 
 groupByCriterionSourceTarget :: Phantoms.TTerm Expressions.GroupByCriterion
 groupByCriterionSourceTarget =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.GroupByCriterion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sourceTarget"),
@@ -249,7 +249,7 @@ groupByCriterionSourceTarget =
 
 groupByCriterionSourceTargetLength :: Phantoms.TTerm Expressions.GroupByCriterion
 groupByCriterionSourceTargetLength =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.GroupByCriterion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sourceTargetLength"),
@@ -257,7 +257,7 @@ groupByCriterionSourceTargetLength =
 
 groupByCriterionTarget :: Phantoms.TTerm Expressions.GroupByCriterion
 groupByCriterionTarget =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.GroupByCriterion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "target"),
@@ -265,7 +265,7 @@ groupByCriterionTarget =
 
 groupByCriterionTargetLength :: Phantoms.TTerm Expressions.GroupByCriterion
 groupByCriterionTargetLength =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.GroupByCriterion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "targetLength"),
@@ -479,7 +479,7 @@ lengthConditionWithLength original newVal =
 
 literalValueBoolean :: Phantoms.TTerm Bool -> Phantoms.TTerm Expressions.LiteralValue
 literalValueBoolean x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.LiteralValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -487,7 +487,7 @@ literalValueBoolean x =
 
 literalValueFloat :: Phantoms.TTerm Double -> Phantoms.TTerm Expressions.LiteralValue
 literalValueFloat x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.LiteralValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
@@ -495,7 +495,7 @@ literalValueFloat x =
 
 literalValueInteger :: Phantoms.TTerm Int -> Phantoms.TTerm Expressions.LiteralValue
 literalValueInteger x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.LiteralValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
@@ -503,7 +503,7 @@ literalValueInteger x =
 
 literalValueString :: Phantoms.TTerm String -> Phantoms.TTerm Expressions.LiteralValue
 literalValueString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.LiteralValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -657,7 +657,7 @@ orConditionWithRight original newVal =
 
 orderByCriterionGroup :: Phantoms.TTerm Expressions.OrderByCriterion
 orderByCriterionGroup =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.OrderByCriterion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "group"),
@@ -665,7 +665,7 @@ orderByCriterionGroup =
 
 orderByCriterionGroupPath :: Phantoms.TTerm Expressions.OrderByCriterion
 orderByCriterionGroupPath =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.OrderByCriterion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "groupPath"),
@@ -673,7 +673,7 @@ orderByCriterionGroupPath =
 
 orderByCriterionPartition :: Phantoms.TTerm Expressions.OrderByCriterion
 orderByCriterionPartition =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.OrderByCriterion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "partition"),
@@ -681,7 +681,7 @@ orderByCriterionPartition =
 
 orderByCriterionPartitionGroup :: Phantoms.TTerm Expressions.OrderByCriterion
 orderByCriterionPartitionGroup =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.OrderByCriterion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "partitionGroup"),
@@ -689,7 +689,7 @@ orderByCriterionPartitionGroup =
 
 orderByCriterionPartitionGroupPath :: Phantoms.TTerm Expressions.OrderByCriterion
 orderByCriterionPartitionGroupPath =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.OrderByCriterion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "partitionGroupPath"),
@@ -697,7 +697,7 @@ orderByCriterionPartitionGroupPath =
 
 orderByCriterionPartitionPath :: Phantoms.TTerm Expressions.OrderByCriterion
 orderByCriterionPartitionPath =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.OrderByCriterion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "partitionPath"),
@@ -705,7 +705,7 @@ orderByCriterionPartitionPath =
 
 orderByCriterionPath :: Phantoms.TTerm Expressions.OrderByCriterion
 orderByCriterionPath =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.OrderByCriterion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "path"),
@@ -773,7 +773,7 @@ orderByExpressionWithExpression original newVal =
 
 pathElementEdge :: Phantoms.TTerm Int -> Phantoms.TTerm Expressions.PathElement
 pathElementEdge x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PathElement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edge"),
@@ -781,7 +781,7 @@ pathElementEdge x =
 
 pathElementFirst :: Phantoms.TTerm Expressions.PathElement
 pathElementFirst =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PathElement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "first"),
@@ -789,7 +789,7 @@ pathElementFirst =
 
 pathElementLast :: Phantoms.TTerm Expressions.PathElement
 pathElementLast =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PathElement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "last"),
@@ -797,7 +797,7 @@ pathElementLast =
 
 pathElementNode :: Phantoms.TTerm Int -> Phantoms.TTerm Expressions.PathElement
 pathElementNode x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PathElement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "node"),
@@ -805,7 +805,7 @@ pathElementNode x =
 
 pathExpressionBase :: Phantoms.TTerm Expressions.BaseExpression -> Phantoms.TTerm Expressions.PathExpression
 pathExpressionBase x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PathExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "base"),
@@ -813,7 +813,7 @@ pathExpressionBase x =
 
 pathExpressionGroupBy :: Phantoms.TTerm Expressions.GroupByExpression -> Phantoms.TTerm Expressions.PathExpression
 pathExpressionGroupBy x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PathExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "groupBy"),
@@ -821,7 +821,7 @@ pathExpressionGroupBy x =
 
 pathExpressionJoin :: Phantoms.TTerm Expressions.JoinExpression -> Phantoms.TTerm Expressions.PathExpression
 pathExpressionJoin x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PathExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "join"),
@@ -829,7 +829,7 @@ pathExpressionJoin x =
 
 pathExpressionOrderBy :: Phantoms.TTerm Expressions.OrderByExpression -> Phantoms.TTerm Expressions.PathExpression
 pathExpressionOrderBy x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PathExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "orderBy"),
@@ -837,7 +837,7 @@ pathExpressionOrderBy x =
 
 pathExpressionProjection :: Phantoms.TTerm Expressions.ProjectionExpression -> Phantoms.TTerm Expressions.PathExpression
 pathExpressionProjection x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PathExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "projection"),
@@ -845,7 +845,7 @@ pathExpressionProjection x =
 
 pathExpressionRecursive :: Phantoms.TTerm Expressions.RecursiveExpression -> Phantoms.TTerm Expressions.PathExpression
 pathExpressionRecursive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PathExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "recursive"),
@@ -853,7 +853,7 @@ pathExpressionRecursive x =
 
 pathExpressionSelection :: Phantoms.TTerm Expressions.SelectionExpression -> Phantoms.TTerm Expressions.PathExpression
 pathExpressionSelection x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PathExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "selection"),
@@ -861,7 +861,7 @@ pathExpressionSelection x =
 
 pathExpressionUnion :: Phantoms.TTerm Expressions.UnionExpression -> Phantoms.TTerm Expressions.PathExpression
 pathExpressionUnion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PathExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "union"),
@@ -869,7 +869,7 @@ pathExpressionUnion x =
 
 pathPropertyRefEndNode :: Phantoms.TTerm Expressions.PathPropertyRef
 pathPropertyRefEndNode =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PathPropertyRef"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "endNode"),
@@ -877,7 +877,7 @@ pathPropertyRefEndNode =
 
 pathPropertyRefLength :: Phantoms.TTerm Expressions.PathPropertyRef
 pathPropertyRefLength =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PathPropertyRef"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "length"),
@@ -885,7 +885,7 @@ pathPropertyRefLength =
 
 pathPropertyRefStartNode :: Phantoms.TTerm Expressions.PathPropertyRef
 pathPropertyRefStartNode =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PathPropertyRef"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "startNode"),
@@ -893,7 +893,7 @@ pathPropertyRefStartNode =
 
 pathSemanticsAcyclic :: Phantoms.TTerm Expressions.PathSemantics
 pathSemanticsAcyclic =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PathSemantics"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "acyclic"),
@@ -901,7 +901,7 @@ pathSemanticsAcyclic =
 
 pathSemanticsShortest :: Phantoms.TTerm Expressions.PathSemantics
 pathSemanticsShortest =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PathSemantics"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "shortest"),
@@ -909,7 +909,7 @@ pathSemanticsShortest =
 
 pathSemanticsSimple :: Phantoms.TTerm Expressions.PathSemantics
 pathSemanticsSimple =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PathSemantics"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -917,7 +917,7 @@ pathSemanticsSimple =
 
 pathSemanticsTrail :: Phantoms.TTerm Expressions.PathSemantics
 pathSemanticsTrail =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PathSemantics"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "trail"),
@@ -925,7 +925,7 @@ pathSemanticsTrail =
 
 pathSemanticsWalk :: Phantoms.TTerm Expressions.PathSemantics
 pathSemanticsWalk =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PathSemantics"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "walk"),
@@ -1103,7 +1103,7 @@ projectionExpressionWithPaths original newVal =
 
 projectionSpecAll :: Phantoms.TTerm Expressions.ProjectionSpec
 projectionSpecAll =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ProjectionSpec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "all"),
@@ -1111,7 +1111,7 @@ projectionSpecAll =
 
 projectionSpecLimited :: Phantoms.TTerm Int -> Phantoms.TTerm Expressions.ProjectionSpec
 projectionSpecLimited x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ProjectionSpec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "limited"),
@@ -1457,7 +1457,7 @@ propertyExtractionWithSource original newVal =
 
 propertySourceEdgeProperty :: Phantoms.TTerm Expressions.EdgePropertyRef -> Phantoms.TTerm Expressions.PropertySource
 propertySourceEdgeProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertySource"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edgeProperty"),
@@ -1465,7 +1465,7 @@ propertySourceEdgeProperty x =
 
 propertySourceNodeProperty :: Phantoms.TTerm Expressions.NodePropertyRef -> Phantoms.TTerm Expressions.PropertySource
 propertySourceNodeProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertySource"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nodeProperty"),
@@ -1473,7 +1473,7 @@ propertySourceNodeProperty x =
 
 propertySourcePathProperty :: Phantoms.TTerm Expressions.PathPropertyRef -> Phantoms.TTerm Expressions.PropertySource
 propertySourcePathProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertySource"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pathProperty"),
@@ -1627,7 +1627,7 @@ resultProjectionWithProjections original newVal =
 
 selectionConditionAnd :: Phantoms.TTerm Expressions.AndCondition -> Phantoms.TTerm Expressions.SelectionCondition
 selectionConditionAnd x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.SelectionCondition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "and"),
@@ -1635,7 +1635,7 @@ selectionConditionAnd x =
 
 selectionConditionNot :: Phantoms.TTerm Expressions.NotCondition -> Phantoms.TTerm Expressions.SelectionCondition
 selectionConditionNot x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.SelectionCondition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "not"),
@@ -1643,7 +1643,7 @@ selectionConditionNot x =
 
 selectionConditionOr :: Phantoms.TTerm Expressions.OrCondition -> Phantoms.TTerm Expressions.SelectionCondition
 selectionConditionOr x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.SelectionCondition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "or"),
@@ -1651,7 +1651,7 @@ selectionConditionOr x =
 
 selectionConditionSimple :: Phantoms.TTerm Expressions.SimpleCondition -> Phantoms.TTerm Expressions.SelectionCondition
 selectionConditionSimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.SelectionCondition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -1719,7 +1719,7 @@ selectionExpressionWithExpression original newVal =
 
 simpleConditionLabelEquals :: Phantoms.TTerm Expressions.LabelCondition -> Phantoms.TTerm Expressions.SimpleCondition
 simpleConditionLabelEquals x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.SimpleCondition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "labelEquals"),
@@ -1727,7 +1727,7 @@ simpleConditionLabelEquals x =
 
 simpleConditionLengthEquals :: Phantoms.TTerm Expressions.LengthCondition -> Phantoms.TTerm Expressions.SimpleCondition
 simpleConditionLengthEquals x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.SimpleCondition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lengthEquals"),
@@ -1735,7 +1735,7 @@ simpleConditionLengthEquals x =
 
 simpleConditionPropertyComparison :: Phantoms.TTerm Expressions.PropertyComparisonCondition -> Phantoms.TTerm Expressions.SimpleCondition
 simpleConditionPropertyComparison x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.SimpleCondition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "propertyComparison"),
@@ -1743,7 +1743,7 @@ simpleConditionPropertyComparison x =
 
 simpleConditionPropertyEquals :: Phantoms.TTerm Expressions.PropertyCondition -> Phantoms.TTerm Expressions.SimpleCondition
 simpleConditionPropertyEquals x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.SimpleCondition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "propertyEquals"),
@@ -1751,7 +1751,7 @@ simpleConditionPropertyEquals x =
 
 solutionSpaceExpressionGroupBy :: Phantoms.TTerm Expressions.GroupByExpression -> Phantoms.TTerm Expressions.SolutionSpaceExpression
 solutionSpaceExpressionGroupBy x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.SolutionSpaceExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "groupBy"),
@@ -1759,7 +1759,7 @@ solutionSpaceExpressionGroupBy x =
 
 solutionSpaceExpressionOrderBy :: Phantoms.TTerm Expressions.OrderByExpression -> Phantoms.TTerm Expressions.SolutionSpaceExpression
 solutionSpaceExpressionOrderBy x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.SolutionSpaceExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "orderBy"),

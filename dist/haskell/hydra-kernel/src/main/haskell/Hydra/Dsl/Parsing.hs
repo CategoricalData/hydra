@@ -71,7 +71,7 @@ parseErrorWithRemainder original newVal =
 
 parseResultFailure :: Phantoms.TTerm Parsing.ParseError -> Phantoms.TTerm (Parsing.ParseResult a)
 parseResultFailure x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parsing.ParseResult"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "failure"),
@@ -79,7 +79,7 @@ parseResultFailure x =
 
 parseResultSuccess :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm (Parsing.ParseResult a)
 parseResultSuccess x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.parsing.ParseResult"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "success"),

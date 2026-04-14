@@ -576,12 +576,12 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in union inject value",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermUnion (Core.Injection {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermInject (Core.Injection {
                   Core.injectionTypeName = (Core.Name "Result"),
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "success"),
                     Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}})))),
-                Testing.universalTestCaseExpected = (Core_.term (Core.TermUnion (Core.Injection {
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermInject (Core.Injection {
                   Core.injectionTypeName = (Core.Name "Result"),
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "success"),

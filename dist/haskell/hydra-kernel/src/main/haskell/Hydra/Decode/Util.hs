@@ -18,7 +18,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 caseConvention :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.CaseConvention
 caseConvention cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -37,7 +37,7 @@ caseConvention cx raw =
 comparison :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.Comparison
 comparison cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -55,7 +55,7 @@ comparison cx raw =
 precision :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.Precision
 precision cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field

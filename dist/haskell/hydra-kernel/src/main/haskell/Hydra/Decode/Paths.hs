@@ -65,7 +65,7 @@ subtermPath cx raw =
 subtermStep :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Paths.SubtermStep
 subtermStep cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -176,7 +176,7 @@ subtypePath cx raw =
 subtypeStep :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Paths.SubtypeStep
 subtypeStep cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field

@@ -493,7 +493,7 @@
                                 "domain": {"variable": "hydra.core.Application"},
                                 "parameter": "a"}}},
                           {
-                            "name": "union",
+                            "name": "inject",
                             "term": {
                               "lambda": {
                                 "body": {
@@ -560,7 +560,7 @@
                                 "domain": {"variable": "hydra.core.Application"},
                                 "parameter": "a"}}},
                           {
-                            "name": "union",
+                            "name": "inject",
                             "term": {
                               "lambda": {
                                 "body": {
@@ -807,7 +807,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "pre", "term": {"unit": {}}},
                                                             "typeName": "hydra.coders.TraversalOrder"}},
                                                         "function": {
@@ -910,7 +910,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "function", "term": {"unit": {}}},
                                                             "typeName": "hydra.variants.TypeVariant"}},
                                                         "function": {
@@ -1013,7 +1013,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "pre", "term": {"unit": {}}},
                                                             "typeName": "hydra.coders.TraversalOrder"}},
                                                         "function": {
@@ -1113,7 +1113,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "function", "term": {"unit": {}}},
                                                             "typeName": "hydra.variants.TypeVariant"}},
                                                         "function": {
@@ -1212,7 +1212,7 @@
                                             "function": {
                                               "application": {
                                                 "argument": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {"name": "pre", "term": {"unit": {}}},
                                                     "typeName": "hydra.coders.TraversalOrder"}},
                                                 "function": {
@@ -1244,7 +1244,7 @@
                             "function": {
                               "application": {
                                 "argument": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "function", "term": {"unit": {}}},
                                     "typeName": "hydra.variants.TypeVariant"}},
                                 "function": {
@@ -1748,7 +1748,7 @@
                                                                     "argument": {
                                                                       "lambda": {
                                                                         "body": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {"name": "decoding", "term": {"variable": "_e"}},
                                                                             "typeName": "hydra.errors.Error"}},
                                                                         "domain": {"variable": "hydra.errors.DecodingError"},

@@ -195,7 +195,7 @@ encodeTerm cx g term =
           Syntax.structExprRest = Nothing}))))
       Core.TermSet v0 -> Eithers.bind (Eithers.mapList (encodeTerm cx g) (Sets.toList v0)) (\sels -> Right (rustCall (rustExprPath "BTreeSet::from") [
         Syntax.ExpressionArray (Syntax.ArrayExprElements sels)]))
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let tname = Formatting.capitalize (Names.localNameOf (Core.injectionTypeName v0))
             field = Core.injectionField v0
             fname = Formatting.capitalize (Core.unName (Core.fieldName field))

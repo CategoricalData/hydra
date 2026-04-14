@@ -141,8 +141,8 @@ def toJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)
       }
       case _ => Left("expected record term")
     case hydra.core.Type.union(v_Type_union_rt) => strippedTerm match
-      case hydra.core.Term.union(v_Term_union_inj) => {
-        lazy val field: hydra.core.Field = (v_Term_union_inj.field)
+      case hydra.core.Term.inject(v_Term_inject_inj) => {
+        lazy val field: hydra.core.Field = (v_Term_inject_inj.field)
         {
           lazy val fname: scala.Predef.String = (field.name)
           {
@@ -295,8 +295,8 @@ def toJsonUntyped(term: hydra.core.Term): Either[scala.Predef.String, hydra.json
         }
       }
     }
-    case hydra.core.Term.union(v_Term_union_inj) => {
-      lazy val field: hydra.core.Field = (v_Term_union_inj.field)
+    case hydra.core.Term.inject(v_Term_inject_inj) => {
+      lazy val field: hydra.core.Field = (v_Term_inject_inj.field)
       {
         lazy val fname: scala.Predef.String = (field.name)
         {

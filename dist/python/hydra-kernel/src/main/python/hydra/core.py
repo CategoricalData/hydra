@@ -423,6 +423,9 @@ class TermCases(Node["CaseStatement"]):
 class TermEither(Node["Either[Term, Term]"]):
     r"""An either value"""
 
+class TermInject(Node["Injection"]):
+    r"""An injection; an instance of a union type"""
+
 class TermLambda(Node["Lambda"]):
     r"""A function abstraction (lambda)"""
 
@@ -459,9 +462,6 @@ class TermTypeApplication(Node["TypeApplicationTerm"]):
 class TermTypeLambda(Node["TypeLambda"]):
     r"""A System F type abstraction term"""
 
-class TermUnion(Node["Injection"]):
-    r"""An injection; an instance of a union type"""
-
 class TermUnit:
     r"""A unit value; a term with no value"""
 
@@ -486,13 +486,14 @@ class _TermMeta(type):
 
 # A data term.
 class Term(metaclass=_TermMeta):
-    r"""TermAnnotated | TermApplication | TermCases | TermEither | TermLambda | TermLet | TermList | TermLiteral | TermMap | TermMaybe | TermPair | TermProject | TermRecord | TermSet | TermTypeApplication | TermTypeLambda | TermUnion | TermUnit | TermUnwrap | TermVariable | TermWrap"""
+    r"""TermAnnotated | TermApplication | TermCases | TermEither | TermInject | TermLambda | TermLet | TermList | TermLiteral | TermMap | TermMaybe | TermPair | TermProject | TermRecord | TermSet | TermTypeApplication | TermTypeLambda | TermUnit | TermUnwrap | TermVariable | TermWrap"""
 
     TYPE_ = Name("hydra.core.Term")
     ANNOTATED = Name("annotated")
     APPLICATION = Name("application")
     CASES = Name("cases")
     EITHER = Name("either")
+    INJECT = Name("inject")
     LAMBDA = Name("lambda")
     LET = Name("let")
     LIST = Name("list")
@@ -505,7 +506,6 @@ class Term(metaclass=_TermMeta):
     SET = Name("set")
     TYPE_APPLICATION = Name("typeApplication")
     TYPE_LAMBDA = Name("typeLambda")
-    UNION = Name("union")
     UNIT = Name("unit")
     UNWRAP = Name("unwrap")
     VARIABLE = Name("variable")

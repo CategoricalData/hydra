@@ -82,7 +82,7 @@ def adjacent_edge(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra
 def direction(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_pg_model_direction_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -188,7 +188,7 @@ def vertex(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors
 def element(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_pg_model_element_1(cx, v, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -204,7 +204,7 @@ def element(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.error
 def element_kind(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_pg_model_element_kind_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -246,7 +246,7 @@ def vertex_type(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.e
 def element_type(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_pg_model_element_type_1(cx, t, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -301,7 +301,7 @@ def graph_schema(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.
 def label(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_pg_model_label_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term

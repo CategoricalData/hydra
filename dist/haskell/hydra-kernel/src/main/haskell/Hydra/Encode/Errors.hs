@@ -24,72 +24,72 @@ emptyListError _ = Core.TermUnit
 error :: Errors.Error -> Core.Term
 error x =
     case x of
-      Errors.ErrorChecking v0 -> Core.TermUnion (Core.Injection {
+      Errors.ErrorChecking v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "checking"),
           Core.fieldTerm = (Checking.checkingError v0)}})
-      Errors.ErrorDecoding v0 -> Core.TermUnion (Core.Injection {
+      Errors.ErrorDecoding v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "decoding"),
           Core.fieldTerm = (decodingError v0)}})
-      Errors.ErrorDuplicateBinding v0 -> Core.TermUnion (Core.Injection {
+      Errors.ErrorDuplicateBinding v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "duplicateBinding"),
           Core.fieldTerm = (Core__.duplicateBindingError v0)}})
-      Errors.ErrorDuplicateField v0 -> Core.TermUnion (Core.Injection {
+      Errors.ErrorDuplicateField v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "duplicateField"),
           Core.fieldTerm = (Core__.duplicateFieldError v0)}})
-      Errors.ErrorExtraction v0 -> Core.TermUnion (Core.Injection {
+      Errors.ErrorExtraction v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "extraction"),
           Core.fieldTerm = (extractionError v0)}})
-      Errors.ErrorInference v0 -> Core.TermUnion (Core.Injection {
+      Errors.ErrorInference v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "inference"),
           Core.fieldTerm = (inferenceError v0)}})
-      Errors.ErrorOther v0 -> Core.TermUnion (Core.Injection {
+      Errors.ErrorOther v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "other"),
           Core.fieldTerm = (otherError v0)}})
-      Errors.ErrorResolution v0 -> Core.TermUnion (Core.Injection {
+      Errors.ErrorResolution v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "resolution"),
           Core.fieldTerm = (resolutionError v0)}})
-      Errors.ErrorUndefinedField v0 -> Core.TermUnion (Core.Injection {
+      Errors.ErrorUndefinedField v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "undefinedField"),
           Core.fieldTerm = (Core__.undefinedFieldError v0)}})
-      Errors.ErrorUndefinedTermVariable v0 -> Core.TermUnion (Core.Injection {
+      Errors.ErrorUndefinedTermVariable v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "undefinedTermVariable"),
           Core.fieldTerm = (Core__.undefinedTermVariableError v0)}})
-      Errors.ErrorUntypedTermVariable v0 -> Core.TermUnion (Core.Injection {
+      Errors.ErrorUntypedTermVariable v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "untypedTermVariable"),
           Core.fieldTerm = (Core__.untypedTermVariableError v0)}})
-      Errors.ErrorUnexpectedTermVariant v0 -> Core.TermUnion (Core.Injection {
+      Errors.ErrorUnexpectedTermVariant v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unexpectedTermVariant"),
           Core.fieldTerm = (Core__.unexpectedTermVariantError v0)}})
-      Errors.ErrorUnexpectedTypeVariant v0 -> Core.TermUnion (Core.Injection {
+      Errors.ErrorUnexpectedTypeVariant v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unexpectedTypeVariant"),
           Core.fieldTerm = (Core__.unexpectedTypeVariantError v0)}})
-      Errors.ErrorUnification v0 -> Core.TermUnion (Core.Injection {
+      Errors.ErrorUnification v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unification"),
@@ -98,37 +98,37 @@ error x =
 extractionError :: Errors.ExtractionError -> Core.Term
 extractionError x =
     case x of
-      Errors.ExtractionErrorEmptyList v0 -> Core.TermUnion (Core.Injection {
+      Errors.ExtractionErrorEmptyList v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.ExtractionError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "emptyList"),
           Core.fieldTerm = (emptyListError v0)}})
-      Errors.ExtractionErrorMultipleBindings v0 -> Core.TermUnion (Core.Injection {
+      Errors.ExtractionErrorMultipleBindings v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.ExtractionError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "multipleBindings"),
           Core.fieldTerm = (multipleBindingsError v0)}})
-      Errors.ExtractionErrorMultipleFields v0 -> Core.TermUnion (Core.Injection {
+      Errors.ExtractionErrorMultipleFields v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.ExtractionError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "multipleFields"),
           Core.fieldTerm = (multipleFieldsError v0)}})
-      Errors.ExtractionErrorNoMatchingField v0 -> Core.TermUnion (Core.Injection {
+      Errors.ExtractionErrorNoMatchingField v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.ExtractionError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "noMatchingField"),
           Core.fieldTerm = (noMatchingFieldError v0)}})
-      Errors.ExtractionErrorNoSuchBinding v0 -> Core.TermUnion (Core.Injection {
+      Errors.ExtractionErrorNoSuchBinding v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.ExtractionError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "noSuchBinding"),
           Core.fieldTerm = (noSuchBindingError v0)}})
-      Errors.ExtractionErrorNotEnoughCases v0 -> Core.TermUnion (Core.Injection {
+      Errors.ExtractionErrorNotEnoughCases v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.ExtractionError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "notEnoughCases"),
           Core.fieldTerm = (notEnoughCasesError v0)}})
-      Errors.ExtractionErrorUnexpectedShape v0 -> Core.TermUnion (Core.Injection {
+      Errors.ExtractionErrorUnexpectedShape v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.ExtractionError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unexpectedShape"),
@@ -137,17 +137,17 @@ extractionError x =
 inferenceError :: Errors.InferenceError -> Core.Term
 inferenceError x =
     case x of
-      Errors.InferenceErrorChecking v0 -> Core.TermUnion (Core.Injection {
+      Errors.InferenceErrorChecking v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.InferenceError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "checking"),
           Core.fieldTerm = (Checking.checkingError v0)}})
-      Errors.InferenceErrorOther v0 -> Core.TermUnion (Core.Injection {
+      Errors.InferenceErrorOther v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.InferenceError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "other"),
           Core.fieldTerm = (otherInferenceError v0)}})
-      Errors.InferenceErrorUnification v0 -> Core.TermUnion (Core.Injection {
+      Errors.InferenceErrorUnification v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.InferenceError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unification"),
@@ -228,27 +228,27 @@ otherResolutionError x =
 resolutionError :: Errors.ResolutionError -> Core.Term
 resolutionError x =
     case x of
-      Errors.ResolutionErrorNoSuchBinding v0 -> Core.TermUnion (Core.Injection {
+      Errors.ResolutionErrorNoSuchBinding v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.ResolutionError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "noSuchBinding"),
           Core.fieldTerm = (noSuchBindingError v0)}})
-      Errors.ResolutionErrorNoSuchPrimitive v0 -> Core.TermUnion (Core.Injection {
+      Errors.ResolutionErrorNoSuchPrimitive v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.ResolutionError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "noSuchPrimitive"),
           Core.fieldTerm = (noSuchPrimitiveError v0)}})
-      Errors.ResolutionErrorNoMatchingField v0 -> Core.TermUnion (Core.Injection {
+      Errors.ResolutionErrorNoMatchingField v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.ResolutionError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "noMatchingField"),
           Core.fieldTerm = (noMatchingFieldError v0)}})
-      Errors.ResolutionErrorOther v0 -> Core.TermUnion (Core.Injection {
+      Errors.ResolutionErrorOther v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.ResolutionError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "other"),
           Core.fieldTerm = (otherResolutionError v0)}})
-      Errors.ResolutionErrorUnexpectedShape v0 -> Core.TermUnion (Core.Injection {
+      Errors.ResolutionErrorUnexpectedShape v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.ResolutionError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unexpectedShape"),

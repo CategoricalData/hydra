@@ -19,7 +19,7 @@ import hydra.util
 def case_convention(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_util_case_convention_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -35,7 +35,7 @@ def case_convention(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def comparison(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_util_comparison_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -51,7 +51,7 @@ def comparison(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def precision(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_util_precision_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term

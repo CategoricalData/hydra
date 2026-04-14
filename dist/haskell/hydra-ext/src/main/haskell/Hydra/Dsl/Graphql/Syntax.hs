@@ -11,7 +11,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 
 aliasColon :: Phantoms.TTerm Syntax.Alias
 aliasColon =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.Alias"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Colon"),
@@ -19,7 +19,7 @@ aliasColon =
 
 aliasName :: Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.Alias
 aliasName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.Alias"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Name"),
@@ -99,7 +99,7 @@ argumentsDefinition x =
 
 booleanValueFalse :: Phantoms.TTerm Syntax.BooleanValue
 booleanValueFalse =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.BooleanValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "False"),
@@ -107,7 +107,7 @@ booleanValueFalse =
 
 booleanValueTrue :: Phantoms.TTerm Syntax.BooleanValue
 booleanValueTrue =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.BooleanValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "True"),
@@ -121,7 +121,7 @@ defaultValue x =
 
 definitionExecutable :: Phantoms.TTerm Syntax.ExecutableDefinition -> Phantoms.TTerm Syntax.Definition
 definitionExecutable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.Definition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "executable"),
@@ -129,7 +129,7 @@ definitionExecutable x =
 
 definitionTypeSystem :: Phantoms.TTerm Syntax.TypeSystemDefinitionOrExtension -> Phantoms.TTerm Syntax.Definition
 definitionTypeSystem x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.Definition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeSystem"),
@@ -409,7 +409,7 @@ directiveDefinitionWithRepeatable original newVal =
 
 directiveLocationExecutable :: Phantoms.TTerm Syntax.ExecutableDirectiveLocation -> Phantoms.TTerm Syntax.DirectiveLocation
 directiveLocationExecutable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.DirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "executable"),
@@ -417,7 +417,7 @@ directiveLocationExecutable x =
 
 directiveLocationTypeSystem :: Phantoms.TTerm Syntax.TypeSystemDirectiveLocation -> Phantoms.TTerm Syntax.DirectiveLocation
 directiveLocationTypeSystem x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.DirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeSystem"),
@@ -425,7 +425,7 @@ directiveLocationTypeSystem x =
 
 directiveLocationsSequence :: Phantoms.TTerm Syntax.DirectiveLocations_Sequence -> Phantoms.TTerm Syntax.DirectiveLocations
 directiveLocationsSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.DirectiveLocations"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -433,7 +433,7 @@ directiveLocationsSequence x =
 
 directiveLocationsSequence2 :: Phantoms.TTerm Syntax.DirectiveLocations_Sequence2 -> Phantoms.TTerm Syntax.DirectiveLocations
 directiveLocationsSequence2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.DirectiveLocations"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence2"),
@@ -783,7 +783,7 @@ enumTypeDefinitionWithName original newVal =
 
 enumTypeExtensionSequence :: Phantoms.TTerm Syntax.EnumTypeExtension_Sequence -> Phantoms.TTerm Syntax.EnumTypeExtension
 enumTypeExtensionSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.EnumTypeExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -791,7 +791,7 @@ enumTypeExtensionSequence x =
 
 enumTypeExtensionSequence2 :: Phantoms.TTerm Syntax.EnumTypeExtension_Sequence2 -> Phantoms.TTerm Syntax.EnumTypeExtension
 enumTypeExtensionSequence2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.EnumTypeExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence2"),
@@ -1087,7 +1087,7 @@ enumValuesDefinition x =
 
 executableDefinitionFragment :: Phantoms.TTerm Syntax.FragmentDefinition -> Phantoms.TTerm Syntax.ExecutableDefinition
 executableDefinitionFragment x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.ExecutableDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fragment"),
@@ -1095,7 +1095,7 @@ executableDefinitionFragment x =
 
 executableDefinitionOperation :: Phantoms.TTerm Syntax.OperationDefinition -> Phantoms.TTerm Syntax.ExecutableDefinition
 executableDefinitionOperation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.ExecutableDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "operation"),
@@ -1103,7 +1103,7 @@ executableDefinitionOperation x =
 
 executableDirectiveLocationFIELD :: Phantoms.TTerm Syntax.ExecutableDirectiveLocation
 executableDirectiveLocationFIELD =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.ExecutableDirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "FIELD"),
@@ -1111,7 +1111,7 @@ executableDirectiveLocationFIELD =
 
 executableDirectiveLocationFRAGMENT_DEFINITION :: Phantoms.TTerm Syntax.ExecutableDirectiveLocation
 executableDirectiveLocationFRAGMENT_DEFINITION =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.ExecutableDirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "FRAGMENT_DEFINITION"),
@@ -1119,7 +1119,7 @@ executableDirectiveLocationFRAGMENT_DEFINITION =
 
 executableDirectiveLocationFRAGMENT_SPREAD :: Phantoms.TTerm Syntax.ExecutableDirectiveLocation
 executableDirectiveLocationFRAGMENT_SPREAD =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.ExecutableDirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "FRAGMENT_SPREAD"),
@@ -1127,7 +1127,7 @@ executableDirectiveLocationFRAGMENT_SPREAD =
 
 executableDirectiveLocationINLINE_FRAGMENT :: Phantoms.TTerm Syntax.ExecutableDirectiveLocation
 executableDirectiveLocationINLINE_FRAGMENT =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.ExecutableDirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "INLINE_FRAGMENT"),
@@ -1135,7 +1135,7 @@ executableDirectiveLocationINLINE_FRAGMENT =
 
 executableDirectiveLocationMUTATION :: Phantoms.TTerm Syntax.ExecutableDirectiveLocation
 executableDirectiveLocationMUTATION =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.ExecutableDirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "MUTATION"),
@@ -1143,7 +1143,7 @@ executableDirectiveLocationMUTATION =
 
 executableDirectiveLocationQUERY :: Phantoms.TTerm Syntax.ExecutableDirectiveLocation
 executableDirectiveLocationQUERY =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.ExecutableDirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "QUERY"),
@@ -1151,7 +1151,7 @@ executableDirectiveLocationQUERY =
 
 executableDirectiveLocationSUBSCRIPTION :: Phantoms.TTerm Syntax.ExecutableDirectiveLocation
 executableDirectiveLocationSUBSCRIPTION =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.ExecutableDirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "SUBSCRIPTION"),
@@ -1159,7 +1159,7 @@ executableDirectiveLocationSUBSCRIPTION =
 
 executableDirectiveLocationVARIABLE_DEFINITION :: Phantoms.TTerm Syntax.ExecutableDirectiveLocation
 executableDirectiveLocationVARIABLE_DEFINITION =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.ExecutableDirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "VARIABLE_DEFINITION"),
@@ -1913,7 +1913,7 @@ fragmentSpreadWithFragmentName original newVal =
 
 implementsInterfacesSequence :: Phantoms.TTerm Syntax.ImplementsInterfaces_Sequence -> Phantoms.TTerm Syntax.ImplementsInterfaces
 implementsInterfacesSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.ImplementsInterfaces"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -1921,7 +1921,7 @@ implementsInterfacesSequence x =
 
 implementsInterfacesSequence2 :: Phantoms.TTerm Syntax.ImplementsInterfaces_Sequence2 -> Phantoms.TTerm Syntax.ImplementsInterfaces
 implementsInterfacesSequence2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.ImplementsInterfaces"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence2"),
@@ -2163,7 +2163,7 @@ inputFieldsDefinition x =
 
 inputObjectTypeDefinitionSequence :: Phantoms.TTerm Syntax.InputObjectTypeDefinition_Sequence -> Phantoms.TTerm Syntax.InputObjectTypeDefinition
 inputObjectTypeDefinitionSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.InputObjectTypeDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -2171,7 +2171,7 @@ inputObjectTypeDefinitionSequence x =
 
 inputObjectTypeDefinitionSequence2 :: Phantoms.TTerm Syntax.InputObjectTypeDefinition_Sequence2 -> Phantoms.TTerm Syntax.InputObjectTypeDefinition
 inputObjectTypeDefinitionSequence2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.InputObjectTypeDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence2"),
@@ -2457,7 +2457,7 @@ inputObjectTypeDefinition_SequenceWithName original newVal =
 
 inputObjectTypeExtensionSequence :: Phantoms.TTerm Syntax.InputObjectTypeExtension_Sequence -> Phantoms.TTerm Syntax.InputObjectTypeExtension
 inputObjectTypeExtensionSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.InputObjectTypeExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -2465,7 +2465,7 @@ inputObjectTypeExtensionSequence x =
 
 inputObjectTypeExtensionSequence2 :: Phantoms.TTerm Syntax.InputObjectTypeExtension_Sequence2 -> Phantoms.TTerm Syntax.InputObjectTypeExtension
 inputObjectTypeExtensionSequence2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.InputObjectTypeExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence2"),
@@ -2893,7 +2893,7 @@ intValue x =
 
 interfaceTypeDefinitionSequence :: Phantoms.TTerm Syntax.InterfaceTypeDefinition_Sequence -> Phantoms.TTerm Syntax.InterfaceTypeDefinition
 interfaceTypeDefinitionSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.InterfaceTypeDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -2901,7 +2901,7 @@ interfaceTypeDefinitionSequence x =
 
 interfaceTypeDefinitionSequence2 :: Phantoms.TTerm Syntax.InterfaceTypeDefinition_Sequence2 -> Phantoms.TTerm Syntax.InterfaceTypeDefinition
 interfaceTypeDefinitionSequence2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.InterfaceTypeDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence2"),
@@ -3325,7 +3325,7 @@ interfaceTypeDefinition_SequenceWithName original newVal =
 
 interfaceTypeExtensionSequence :: Phantoms.TTerm Syntax.InterfaceTypeExtension_Sequence -> Phantoms.TTerm Syntax.InterfaceTypeExtension
 interfaceTypeExtensionSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.InterfaceTypeExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -3333,7 +3333,7 @@ interfaceTypeExtensionSequence x =
 
 interfaceTypeExtensionSequence2 :: Phantoms.TTerm Syntax.InterfaceTypeExtension_Sequence2 -> Phantoms.TTerm Syntax.InterfaceTypeExtension
 interfaceTypeExtensionSequence2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.InterfaceTypeExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence2"),
@@ -3341,7 +3341,7 @@ interfaceTypeExtensionSequence2 x =
 
 interfaceTypeExtensionSequence3 :: Phantoms.TTerm Syntax.InterfaceTypeExtension_Sequence3 -> Phantoms.TTerm Syntax.InterfaceTypeExtension
 interfaceTypeExtensionSequence3 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.InterfaceTypeExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence3"),
@@ -3693,7 +3693,7 @@ listType x =
 
 listValueSequence :: Phantoms.TTerm Syntax.ListValue_Sequence -> Phantoms.TTerm Syntax.ListValue
 listValueSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.ListValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -3701,7 +3701,7 @@ listValueSequence x =
 
 listValueSequence2 :: Phantoms.TTerm [Syntax.Value] -> Phantoms.TTerm Syntax.ListValue
 listValueSequence2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.ListValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence2"),
@@ -3727,7 +3727,7 @@ namedType x =
 
 nonNullTypeList :: Phantoms.TTerm Syntax.ListType -> Phantoms.TTerm Syntax.NonNullType
 nonNullTypeList x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.NonNullType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -3735,7 +3735,7 @@ nonNullTypeList x =
 
 nonNullTypeNamed :: Phantoms.TTerm Syntax.NamedType -> Phantoms.TTerm Syntax.NonNullType
 nonNullTypeNamed x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.NonNullType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "named"),
@@ -4055,7 +4055,7 @@ objectTypeDefinitionWithName original newVal =
 
 objectTypeExtensionSequence :: Phantoms.TTerm Syntax.ObjectTypeExtension_Sequence -> Phantoms.TTerm Syntax.ObjectTypeExtension
 objectTypeExtensionSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.ObjectTypeExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -4063,7 +4063,7 @@ objectTypeExtensionSequence x =
 
 objectTypeExtensionSequence2 :: Phantoms.TTerm Syntax.ObjectTypeExtension_Sequence2 -> Phantoms.TTerm Syntax.ObjectTypeExtension
 objectTypeExtensionSequence2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.ObjectTypeExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence2"),
@@ -4071,7 +4071,7 @@ objectTypeExtensionSequence2 x =
 
 objectTypeExtensionSequence3 :: Phantoms.TTerm Syntax.ObjectTypeExtension_Sequence3 -> Phantoms.TTerm Syntax.ObjectTypeExtension
 objectTypeExtensionSequence3 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.ObjectTypeExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence3"),
@@ -4417,7 +4417,7 @@ objectTypeExtension_SequenceWithName original newVal =
 
 objectValueSequence :: Phantoms.TTerm Syntax.ObjectValue_Sequence -> Phantoms.TTerm Syntax.ObjectValue
 objectValueSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.ObjectValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -4425,7 +4425,7 @@ objectValueSequence x =
 
 objectValueSequence2 :: Phantoms.TTerm [Syntax.ObjectField] -> Phantoms.TTerm Syntax.ObjectValue
 objectValueSequence2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.ObjectValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence2"),
@@ -4439,7 +4439,7 @@ objectValue_Sequence =
 
 operationDefinitionSelectionSet :: Phantoms.TTerm Syntax.SelectionSet -> Phantoms.TTerm Syntax.OperationDefinition
 operationDefinitionSelectionSet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.OperationDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "SelectionSet"),
@@ -4447,7 +4447,7 @@ operationDefinitionSelectionSet x =
 
 operationDefinitionSequence :: Phantoms.TTerm Syntax.OperationDefinition_Sequence -> Phantoms.TTerm Syntax.OperationDefinition
 operationDefinitionSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.OperationDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -4701,7 +4701,7 @@ operationDefinition_SequenceWithVariablesDefinition original newVal =
 
 operationTypeMutation :: Phantoms.TTerm Syntax.OperationType
 operationTypeMutation =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.OperationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Mutation"),
@@ -4709,7 +4709,7 @@ operationTypeMutation =
 
 operationTypeQuery :: Phantoms.TTerm Syntax.OperationType
 operationTypeQuery =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.OperationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Query"),
@@ -4717,7 +4717,7 @@ operationTypeQuery =
 
 operationTypeSubscription :: Phantoms.TTerm Syntax.OperationType
 operationTypeSubscription =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.OperationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Subscription"),
@@ -5061,7 +5061,7 @@ schemaDefinitionWithRootOperationTypeDefinition original newVal =
 
 schemaExtensionSequence :: Phantoms.TTerm Syntax.SchemaExtension_Sequence -> Phantoms.TTerm Syntax.SchemaExtension
 schemaExtensionSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.SchemaExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -5069,7 +5069,7 @@ schemaExtensionSequence x =
 
 schemaExtensionSequence2 :: Phantoms.TTerm Syntax.Directives -> Phantoms.TTerm Syntax.SchemaExtension
 schemaExtensionSequence2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.SchemaExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence2"),
@@ -5137,7 +5137,7 @@ schemaExtension_SequenceWithRootOperationTypeDefinition original newVal =
 
 selectionField :: Phantoms.TTerm Syntax.Field -> Phantoms.TTerm Syntax.Selection
 selectionField x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.Selection"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Field"),
@@ -5145,7 +5145,7 @@ selectionField x =
 
 selectionFragmentSpread :: Phantoms.TTerm Syntax.FragmentSpread -> Phantoms.TTerm Syntax.Selection
 selectionFragmentSpread x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.Selection"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "FragmentSpread"),
@@ -5153,7 +5153,7 @@ selectionFragmentSpread x =
 
 selectionInlineFragment :: Phantoms.TTerm Syntax.InlineFragment -> Phantoms.TTerm Syntax.Selection
 selectionInlineFragment x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.Selection"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "InlineFragment"),
@@ -5173,7 +5173,7 @@ stringValue x =
 
 typeConditionNamedType :: Phantoms.TTerm Syntax.NamedType -> Phantoms.TTerm Syntax.TypeCondition
 typeConditionNamedType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeCondition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "NamedType"),
@@ -5181,7 +5181,7 @@ typeConditionNamedType x =
 
 typeConditionOn :: Phantoms.TTerm Syntax.TypeCondition
 typeConditionOn =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeCondition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "On"),
@@ -5189,7 +5189,7 @@ typeConditionOn =
 
 typeDefinitionEnum :: Phantoms.TTerm Syntax.EnumTypeDefinition -> Phantoms.TTerm Syntax.TypeDefinition
 typeDefinitionEnum x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "enum"),
@@ -5197,7 +5197,7 @@ typeDefinitionEnum x =
 
 typeDefinitionInputObject :: Phantoms.TTerm Syntax.InputObjectTypeDefinition -> Phantoms.TTerm Syntax.TypeDefinition
 typeDefinitionInputObject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inputObject"),
@@ -5205,7 +5205,7 @@ typeDefinitionInputObject x =
 
 typeDefinitionInterface :: Phantoms.TTerm Syntax.InterfaceTypeDefinition -> Phantoms.TTerm Syntax.TypeDefinition
 typeDefinitionInterface x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "interface"),
@@ -5213,7 +5213,7 @@ typeDefinitionInterface x =
 
 typeDefinitionObject :: Phantoms.TTerm Syntax.ObjectTypeDefinition -> Phantoms.TTerm Syntax.TypeDefinition
 typeDefinitionObject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "object"),
@@ -5221,7 +5221,7 @@ typeDefinitionObject x =
 
 typeDefinitionScalar :: Phantoms.TTerm Syntax.ScalarTypeDefinition -> Phantoms.TTerm Syntax.TypeDefinition
 typeDefinitionScalar x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "scalar"),
@@ -5229,7 +5229,7 @@ typeDefinitionScalar x =
 
 typeDefinitionUnion :: Phantoms.TTerm Syntax.UnionTypeDefinition -> Phantoms.TTerm Syntax.TypeDefinition
 typeDefinitionUnion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "union"),
@@ -5237,7 +5237,7 @@ typeDefinitionUnion x =
 
 typeExtensionEnum :: Phantoms.TTerm Syntax.EnumTypeExtension -> Phantoms.TTerm Syntax.TypeExtension
 typeExtensionEnum x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "enum"),
@@ -5245,7 +5245,7 @@ typeExtensionEnum x =
 
 typeExtensionInputObject :: Phantoms.TTerm Syntax.InputObjectTypeExtension -> Phantoms.TTerm Syntax.TypeExtension
 typeExtensionInputObject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inputObject"),
@@ -5253,7 +5253,7 @@ typeExtensionInputObject x =
 
 typeExtensionInterface :: Phantoms.TTerm Syntax.InterfaceTypeExtension -> Phantoms.TTerm Syntax.TypeExtension
 typeExtensionInterface x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "interface"),
@@ -5261,7 +5261,7 @@ typeExtensionInterface x =
 
 typeExtensionObject :: Phantoms.TTerm Syntax.ObjectTypeExtension -> Phantoms.TTerm Syntax.TypeExtension
 typeExtensionObject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "object"),
@@ -5269,7 +5269,7 @@ typeExtensionObject x =
 
 typeExtensionScalar :: Phantoms.TTerm Syntax.ScalarTypeExtension -> Phantoms.TTerm Syntax.TypeExtension
 typeExtensionScalar x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "scalar"),
@@ -5277,7 +5277,7 @@ typeExtensionScalar x =
 
 typeExtensionUnion :: Phantoms.TTerm Syntax.UnionTypeExtension -> Phantoms.TTerm Syntax.TypeExtension
 typeExtensionUnion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "union"),
@@ -5285,7 +5285,7 @@ typeExtensionUnion x =
 
 typeList :: Phantoms.TTerm Syntax.ListType -> Phantoms.TTerm Syntax.Type
 typeList x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -5293,7 +5293,7 @@ typeList x =
 
 typeNamed :: Phantoms.TTerm Syntax.NamedType -> Phantoms.TTerm Syntax.Type
 typeNamed x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "named"),
@@ -5301,7 +5301,7 @@ typeNamed x =
 
 typeNonNull :: Phantoms.TTerm Syntax.NonNullType -> Phantoms.TTerm Syntax.Type
 typeNonNull x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nonNull"),
@@ -5309,7 +5309,7 @@ typeNonNull x =
 
 typeSystemDefinitionDirective :: Phantoms.TTerm Syntax.DirectiveDefinition -> Phantoms.TTerm Syntax.TypeSystemDefinition
 typeSystemDefinitionDirective x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeSystemDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "directive"),
@@ -5317,7 +5317,7 @@ typeSystemDefinitionDirective x =
 
 typeSystemDefinitionOrExtensionDefinition :: Phantoms.TTerm Syntax.TypeSystemDefinition -> Phantoms.TTerm Syntax.TypeSystemDefinitionOrExtension
 typeSystemDefinitionOrExtensionDefinition x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeSystemDefinitionOrExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "definition"),
@@ -5325,7 +5325,7 @@ typeSystemDefinitionOrExtensionDefinition x =
 
 typeSystemDefinitionOrExtensionExtension :: Phantoms.TTerm Syntax.TypeSystemExtension -> Phantoms.TTerm Syntax.TypeSystemDefinitionOrExtension
 typeSystemDefinitionOrExtensionExtension x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeSystemDefinitionOrExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "extension"),
@@ -5333,7 +5333,7 @@ typeSystemDefinitionOrExtensionExtension x =
 
 typeSystemDefinitionSchema :: Phantoms.TTerm Syntax.SchemaDefinition -> Phantoms.TTerm Syntax.TypeSystemDefinition
 typeSystemDefinitionSchema x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeSystemDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "schema"),
@@ -5341,7 +5341,7 @@ typeSystemDefinitionSchema x =
 
 typeSystemDefinitionType :: Phantoms.TTerm Syntax.TypeDefinition -> Phantoms.TTerm Syntax.TypeSystemDefinition
 typeSystemDefinitionType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeSystemDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "type"),
@@ -5349,7 +5349,7 @@ typeSystemDefinitionType x =
 
 typeSystemDirectiveLocationARGUMENT_DEFINITION :: Phantoms.TTerm Syntax.TypeSystemDirectiveLocation
 typeSystemDirectiveLocationARGUMENT_DEFINITION =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeSystemDirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ARGUMENT_DEFINITION"),
@@ -5357,7 +5357,7 @@ typeSystemDirectiveLocationARGUMENT_DEFINITION =
 
 typeSystemDirectiveLocationENUM :: Phantoms.TTerm Syntax.TypeSystemDirectiveLocation
 typeSystemDirectiveLocationENUM =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeSystemDirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ENUM"),
@@ -5365,7 +5365,7 @@ typeSystemDirectiveLocationENUM =
 
 typeSystemDirectiveLocationENUM_VALUE :: Phantoms.TTerm Syntax.TypeSystemDirectiveLocation
 typeSystemDirectiveLocationENUM_VALUE =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeSystemDirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ENUM_VALUE"),
@@ -5373,7 +5373,7 @@ typeSystemDirectiveLocationENUM_VALUE =
 
 typeSystemDirectiveLocationFIELD_DEFINITION :: Phantoms.TTerm Syntax.TypeSystemDirectiveLocation
 typeSystemDirectiveLocationFIELD_DEFINITION =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeSystemDirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "FIELD_DEFINITION"),
@@ -5381,7 +5381,7 @@ typeSystemDirectiveLocationFIELD_DEFINITION =
 
 typeSystemDirectiveLocationINPUT_FIELD_DEFINITION :: Phantoms.TTerm Syntax.TypeSystemDirectiveLocation
 typeSystemDirectiveLocationINPUT_FIELD_DEFINITION =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeSystemDirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "INPUT_FIELD_DEFINITION"),
@@ -5389,7 +5389,7 @@ typeSystemDirectiveLocationINPUT_FIELD_DEFINITION =
 
 typeSystemDirectiveLocationINPUT_OBJECT :: Phantoms.TTerm Syntax.TypeSystemDirectiveLocation
 typeSystemDirectiveLocationINPUT_OBJECT =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeSystemDirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "INPUT_OBJECT"),
@@ -5397,7 +5397,7 @@ typeSystemDirectiveLocationINPUT_OBJECT =
 
 typeSystemDirectiveLocationINTERFACE :: Phantoms.TTerm Syntax.TypeSystemDirectiveLocation
 typeSystemDirectiveLocationINTERFACE =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeSystemDirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "INTERFACE"),
@@ -5405,7 +5405,7 @@ typeSystemDirectiveLocationINTERFACE =
 
 typeSystemDirectiveLocationOBJECT :: Phantoms.TTerm Syntax.TypeSystemDirectiveLocation
 typeSystemDirectiveLocationOBJECT =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeSystemDirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "OBJECT"),
@@ -5413,7 +5413,7 @@ typeSystemDirectiveLocationOBJECT =
 
 typeSystemDirectiveLocationSCALAR :: Phantoms.TTerm Syntax.TypeSystemDirectiveLocation
 typeSystemDirectiveLocationSCALAR =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeSystemDirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "SCALAR"),
@@ -5421,7 +5421,7 @@ typeSystemDirectiveLocationSCALAR =
 
 typeSystemDirectiveLocationSCHEMA :: Phantoms.TTerm Syntax.TypeSystemDirectiveLocation
 typeSystemDirectiveLocationSCHEMA =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeSystemDirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "SCHEMA"),
@@ -5429,7 +5429,7 @@ typeSystemDirectiveLocationSCHEMA =
 
 typeSystemDirectiveLocationUNION :: Phantoms.TTerm Syntax.TypeSystemDirectiveLocation
 typeSystemDirectiveLocationUNION =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeSystemDirectiveLocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "UNION"),
@@ -5449,7 +5449,7 @@ typeSystemExtensionDocument x =
 
 typeSystemExtensionSchema :: Phantoms.TTerm Syntax.SchemaExtension -> Phantoms.TTerm Syntax.TypeSystemExtension
 typeSystemExtensionSchema x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeSystemExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "schema"),
@@ -5457,7 +5457,7 @@ typeSystemExtensionSchema x =
 
 typeSystemExtensionType :: Phantoms.TTerm Syntax.TypeExtension -> Phantoms.TTerm Syntax.TypeSystemExtension
 typeSystemExtensionType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.TypeSystemExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "type"),
@@ -5603,7 +5603,7 @@ unVariable x =
 
 unionMemberTypesSequence :: Phantoms.TTerm Syntax.UnionMemberTypes_Sequence -> Phantoms.TTerm Syntax.UnionMemberTypes
 unionMemberTypesSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.UnionMemberTypes"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -5611,7 +5611,7 @@ unionMemberTypesSequence x =
 
 unionMemberTypesSequence2 :: Phantoms.TTerm Syntax.UnionMemberTypes_Sequence2 -> Phantoms.TTerm Syntax.UnionMemberTypes
 unionMemberTypesSequence2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.UnionMemberTypes"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence2"),
@@ -5909,7 +5909,7 @@ unionTypeDefinitionWithUnionMemberTypes original newVal =
 
 unionTypeExtensionSequence :: Phantoms.TTerm Syntax.UnionTypeExtension_Sequence -> Phantoms.TTerm Syntax.UnionTypeExtension
 unionTypeExtensionSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.UnionTypeExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -5917,7 +5917,7 @@ unionTypeExtensionSequence x =
 
 unionTypeExtensionSequence2 :: Phantoms.TTerm Syntax.UnionTypeExtension_Sequence2 -> Phantoms.TTerm Syntax.UnionTypeExtension
 unionTypeExtensionSequence2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.UnionTypeExtension"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence2"),
@@ -6093,7 +6093,7 @@ unionTypeExtension_SequenceWithUnionMemberTypes original newVal =
 
 valueBoolean :: Phantoms.TTerm Syntax.BooleanValue -> Phantoms.TTerm Syntax.Value
 valueBoolean x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -6101,7 +6101,7 @@ valueBoolean x =
 
 valueEnum :: Phantoms.TTerm Syntax.EnumValue -> Phantoms.TTerm Syntax.Value
 valueEnum x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "enum"),
@@ -6109,7 +6109,7 @@ valueEnum x =
 
 valueFloat :: Phantoms.TTerm Syntax.FloatValue -> Phantoms.TTerm Syntax.Value
 valueFloat x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
@@ -6117,7 +6117,7 @@ valueFloat x =
 
 valueInt :: Phantoms.TTerm Syntax.IntValue -> Phantoms.TTerm Syntax.Value
 valueInt x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int"),
@@ -6125,7 +6125,7 @@ valueInt x =
 
 valueList :: Phantoms.TTerm Syntax.ListValue -> Phantoms.TTerm Syntax.Value
 valueList x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -6133,7 +6133,7 @@ valueList x =
 
 valueNull :: Phantoms.TTerm Syntax.NullValue -> Phantoms.TTerm Syntax.Value
 valueNull x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "null"),
@@ -6141,7 +6141,7 @@ valueNull x =
 
 valueObject :: Phantoms.TTerm Syntax.ObjectValue -> Phantoms.TTerm Syntax.Value
 valueObject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "object"),
@@ -6149,7 +6149,7 @@ valueObject x =
 
 valueString :: Phantoms.TTerm Syntax.StringValue -> Phantoms.TTerm Syntax.Value
 valueString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -6157,7 +6157,7 @@ valueString x =
 
 valueVariable :: Phantoms.TTerm Syntax.Variable -> Phantoms.TTerm Syntax.Value
 valueVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphql.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Variable"),

@@ -26,7 +26,7 @@
                                 "body": {
                                   "either": {
                                     "@left": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "other",
                                           "term": {
@@ -135,7 +135,7 @@
                                     "argument": {
                                       "lambda": {
                                         "body": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "other",
                                               "term": {
@@ -634,7 +634,7 @@
                                                                                               {
                                                                                                 "name": "type",
                                                                                                 "term": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {"name": "simple", "term": {"variable": "ft"}},
                                                                                                     "typeName": "hydra.protobuf.proto3.FieldType"}}},
                                                                                               {"name": "number", "term": {"variable": "idx"}},
@@ -831,7 +831,7 @@
                                                                                                             "body": {
                                                                                                               "pair": {
                                                                                                                 "@first": {
-                                                                                                                  "union": {
+                                                                                                                  "inject": {
                                                                                                                     "field": {
                                                                                                                       "name": "message",
                                                                                                                       "term": {
@@ -1057,7 +1057,7 @@
                                                                                                             "body": {
                                                                                                               "pair": {
                                                                                                                 "@first": {
-                                                                                                                  "union": {
+                                                                                                                  "inject": {
                                                                                                                     "field": {
                                                                                                                       "name": "message",
                                                                                                                       "term": {
@@ -1230,7 +1230,7 @@
                                                     "body": {
                                                       "either": {
                                                         "@right": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "reference",
                                                               "term": {
@@ -1285,7 +1285,7 @@
                                                         "argument": {
                                                           "lambda": {
                                                             "body": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {"name": "scalar", "term": {"variable": "st"}},
                                                                 "typeName": "hydra.protobuf.proto3.SimpleType"}},
                                                             "domain": {"variable": "hydra.protobuf.proto3.ScalarType"},
@@ -1357,7 +1357,7 @@
                                                         "body": {
                                                           "either": {
                                                             "@right": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "reference",
                                                                   "term": {
@@ -1541,7 +1541,7 @@
                                                             "function": {
                                                               "application": {
                                                                 "argument": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "either",
                                                                       "term": {
@@ -1577,7 +1577,7 @@
                                                             "function": {
                                                               "application": {
                                                                 "argument": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "pair",
                                                                       "term": {
@@ -1612,7 +1612,7 @@
                             "function": {
                               "application": {
                                 "argument": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "pre", "term": {"unit": {}}},
                                     "typeName": "hydra.coders.TraversalOrder"}},
                                 "function": {
@@ -2038,7 +2038,7 @@
                                               {
                                                 "name": "value",
                                                 "term": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {"name": "boolean", "term": {"literal": {"boolean": true}}},
                                                     "typeName": "hydra.protobuf.proto3.Value"}}}],
                                             "typeName": "hydra.protobuf.proto3.Option"}},
@@ -2051,7 +2051,7 @@
                                               {
                                                 "name": "value",
                                                 "term": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "string",
                                                       "term": {
@@ -2077,7 +2077,7 @@
                                           {
                                             "name": "value",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "string",
                                                   "term": {
@@ -2354,7 +2354,7 @@
                                                                                     "function": {
                                                                                       "application": {
                                                                                         "argument": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "pre", "term": {"unit": {}}},
                                                                                             "typeName": "hydra.coders.TraversalOrder"}},
                                                                                         "function": {
@@ -3081,7 +3081,7 @@
                                         "term": {
                                           "lambda": {
                                             "body": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "record",
                                                   "term": {
@@ -3176,7 +3176,7 @@
                                                                             "argument": {
                                                                               "lambda": {
                                                                                 "body": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {"name": "message", "term": {"variable": "md"}},
                                                                                     "typeName": "hydra.protobuf.proto3.Definition"}},
                                                                                 "domain": {"variable": "hydra.protobuf.proto3.MessageDefinition"},
@@ -3204,7 +3204,7 @@
                                                                             "argument": {
                                                                               "application": {
                                                                                 "argument": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {"name": "union", "term": {"variable": "fts"}},
                                                                                     "typeName": "hydra.core.Type"}},
                                                                                 "function": {"variable": "wrapAsRecordType"}}},
@@ -3250,7 +3250,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "enum", "term": {"variable": "ed"}},
                                                                                             "typeName": "hydra.protobuf.proto3.Definition"}},
                                                                                         "domain": {"variable": "hydra.protobuf.proto3.EnumDefinition"},
@@ -3883,7 +3883,7 @@
                                                                           {
                                                                             "name": "ref",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "either",
                                                                                   "term": {
@@ -3913,11 +3913,11 @@
                                                                                 "body": {
                                                                                   "either": {
                                                                                     "@right": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "simple",
                                                                                           "term": {
-                                                                                            "union": {
+                                                                                            "inject": {
                                                                                               "field": {
                                                                                                 "name": "reference",
                                                                                                 "term": {
@@ -3946,7 +3946,7 @@
                                                                           {
                                                                             "name": "ref",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "pair",
                                                                                   "term": {
@@ -3976,11 +3976,11 @@
                                                                                 "body": {
                                                                                   "either": {
                                                                                     "@right": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "simple",
                                                                                           "term": {
-                                                                                            "union": {
+                                                                                            "inject": {
                                                                                               "field": {
                                                                                                 "name": "reference",
                                                                                                 "term": {
@@ -4029,7 +4029,7 @@
                                                                             "argument": {
                                                                               "lambda": {
                                                                                 "body": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {"name": "repeated", "term": {"variable": "st"}},
                                                                                     "typeName": "hydra.protobuf.proto3.FieldType"}},
                                                                                 "domain": {"variable": "hydra.protobuf.proto3.SimpleType"},
@@ -4076,7 +4076,7 @@
                                                                             "argument": {
                                                                               "lambda": {
                                                                                 "body": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {"name": "repeated", "term": {"variable": "st"}},
                                                                                     "typeName": "hydra.protobuf.proto3.FieldType"}},
                                                                                 "domain": {"variable": "hydra.protobuf.proto3.SimpleType"},
@@ -4112,7 +4112,7 @@
                                                                                             "body": {
                                                                                               "either": {
                                                                                                 "@right": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {
                                                                                                       "name": "map",
                                                                                                       "term": {
@@ -4232,7 +4232,7 @@
                                                                                             "argument": {
                                                                                               "lambda": {
                                                                                                 "body": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {"name": "simple", "term": {"variable": "st"}},
                                                                                                     "typeName": "hydra.protobuf.proto3.FieldType"}},
                                                                                                 "domain": {"variable": "hydra.protobuf.proto3.SimpleType"},
@@ -4298,7 +4298,7 @@
                                                                                         "body": {
                                                                                           "either": {
                                                                                             "@right": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {"name": "oneof", "term": {"variable": "fields_"}},
                                                                                                 "typeName": "hydra.protobuf.proto3.FieldType"}}}},
                                                                                         "type": {"variable": "hydra.errors.Error"}}},
@@ -4393,7 +4393,7 @@
                                                                     "argument": {
                                                                       "lambda": {
                                                                         "body": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {"name": "simple", "term": {"variable": "st"}},
                                                                             "typeName": "hydra.protobuf.proto3.FieldType"}},
                                                                         "domain": {"variable": "hydra.protobuf.proto3.SimpleType"},
@@ -4465,7 +4465,7 @@
                                                                                     "body": {
                                                                                       "either": {
                                                                                         "@right": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "reference",
                                                                                               "term": {
@@ -4520,7 +4520,7 @@
                                                                                         "argument": {
                                                                                           "lambda": {
                                                                                             "body": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {"name": "scalar", "term": {"variable": "st"}},
                                                                                                 "typeName": "hydra.protobuf.proto3.SimpleType"}},
                                                                                             "domain": {"variable": "hydra.protobuf.proto3.ScalarType"},
@@ -4592,7 +4592,7 @@
                                                                                         "body": {
                                                                                           "either": {
                                                                                             "@right": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {
                                                                                                   "name": "reference",
                                                                                                   "term": {
@@ -4672,7 +4672,7 @@
                                                                                                                     "argument": {
                                                                                                                       "lambda": {
                                                                                                                         "body": {
-                                                                                                                          "union": {
+                                                                                                                          "inject": {
                                                                                                                             "field": {
                                                                                                                               "name": "other",
                                                                                                                               "term": {
@@ -5219,7 +5219,7 @@
                                                 "body": {
                                                   "either": {
                                                     "@right": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {"name": "bytes", "term": {"unit": {}}},
                                                         "typeName": "hydra.protobuf.proto3.ScalarType"}}}},
                                                 "type": {"variable": "hydra.errors.Error"}}},
@@ -5237,7 +5237,7 @@
                                                 "body": {
                                                   "either": {
                                                     "@right": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {"name": "bool", "term": {"unit": {}}},
                                                         "typeName": "hydra.protobuf.proto3.ScalarType"}}}},
                                                 "type": {"variable": "hydra.errors.Error"}}},
@@ -5265,7 +5265,7 @@
                                                                 "body": {
                                                                   "either": {
                                                                     "@right": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {"name": "float", "term": {"unit": {}}},
                                                                         "typeName": "hydra.protobuf.proto3.ScalarType"}}}},
                                                                 "type": {"variable": "hydra.errors.Error"}}},
@@ -5283,7 +5283,7 @@
                                                                 "body": {
                                                                   "either": {
                                                                     "@right": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {"name": "double", "term": {"unit": {}}},
                                                                         "typeName": "hydra.protobuf.proto3.ScalarType"}}}},
                                                                 "type": {"variable": "hydra.errors.Error"}}},
@@ -5333,7 +5333,7 @@
                                                                 "body": {
                                                                   "either": {
                                                                     "@right": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {"name": "int32", "term": {"unit": {}}},
                                                                         "typeName": "hydra.protobuf.proto3.ScalarType"}}}},
                                                                 "type": {"variable": "hydra.errors.Error"}}},
@@ -5351,7 +5351,7 @@
                                                                 "body": {
                                                                   "either": {
                                                                     "@right": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {"name": "int64", "term": {"unit": {}}},
                                                                         "typeName": "hydra.protobuf.proto3.ScalarType"}}}},
                                                                 "type": {"variable": "hydra.errors.Error"}}},
@@ -5369,7 +5369,7 @@
                                                                 "body": {
                                                                   "either": {
                                                                     "@right": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {"name": "uint32", "term": {"unit": {}}},
                                                                         "typeName": "hydra.protobuf.proto3.ScalarType"}}}},
                                                                 "type": {"variable": "hydra.errors.Error"}}},
@@ -5387,7 +5387,7 @@
                                                                 "body": {
                                                                   "either": {
                                                                     "@right": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {"name": "uint64", "term": {"unit": {}}},
                                                                         "typeName": "hydra.protobuf.proto3.ScalarType"}}}},
                                                                 "type": {"variable": "hydra.errors.Error"}}},
@@ -5427,7 +5427,7 @@
                                                 "body": {
                                                   "either": {
                                                     "@right": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {"name": "string", "term": {"unit": {}}},
                                                         "typeName": "hydra.protobuf.proto3.ScalarType"}}}},
                                                 "type": {"variable": "hydra.errors.Error"}}},
@@ -5504,7 +5504,7 @@
                                                 "body": {
                                                   "either": {
                                                     "@right": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "reference",
                                                           "term": {
@@ -5981,11 +5981,11 @@
                                                         "function": {
                                                           "application": {
                                                             "argument": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "literal",
                                                                   "term": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {"name": "string", "term": {"unit": {}}},
                                                                       "typeName": "hydra.core.LiteralType"}}},
                                                                 "typeName": "hydra.core.Type"}},
@@ -6081,7 +6081,7 @@
                                                                       {
                                                                         "name": "value",
                                                                         "term": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {"name": "string", "term": {"variable": "desc_"}},
                                                                             "typeName": "hydra.protobuf.proto3.Value"}}}],
                                                                     "typeName": "hydra.protobuf.proto3.Option"}},
@@ -6115,7 +6115,7 @@
                                                                     {
                                                                       "name": "value",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {"name": "boolean", "term": {"literal": {"boolean": true}}},
                                                                           "typeName": "hydra.protobuf.proto3.Value"}}}],
                                                                   "typeName": "hydra.protobuf.proto3.Option"}}},

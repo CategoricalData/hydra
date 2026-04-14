@@ -91,19 +91,19 @@ def duplicate_module_namespace_error_with_namespace(original: hydra.phantoms.TTe
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.packaging.DuplicateModuleNamespaceError"), (hydra.core.Field(hydra.core.Name("namespace"), new_val.value),)))))
 
 def invalid_module_error_conflicting_variant_name(x: hydra.phantoms.TTerm[hydra.error.packaging.ConflictingVariantNameError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.packaging.InvalidModuleError"), hydra.core.Field(hydra.core.Name("conflictingVariantName"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.packaging.InvalidModuleError"), hydra.core.Field(hydra.core.Name("conflictingVariantName"), x.value)))))
 
 def invalid_module_error_definition_not_in_module_namespace(x: hydra.phantoms.TTerm[hydra.error.packaging.DefinitionNotInModuleNamespaceError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.packaging.InvalidModuleError"), hydra.core.Field(hydra.core.Name("definitionNotInModuleNamespace"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.packaging.InvalidModuleError"), hydra.core.Field(hydra.core.Name("definitionNotInModuleNamespace"), x.value)))))
 
 def invalid_module_error_duplicate_definition_name(x: hydra.phantoms.TTerm[hydra.error.packaging.DuplicateDefinitionNameError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.packaging.InvalidModuleError"), hydra.core.Field(hydra.core.Name("duplicateDefinitionName"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.packaging.InvalidModuleError"), hydra.core.Field(hydra.core.Name("duplicateDefinitionName"), x.value)))))
 
 def invalid_package_error_conflicting_module_namespace(x: hydra.phantoms.TTerm[hydra.error.packaging.ConflictingModuleNamespaceError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.packaging.InvalidPackageError"), hydra.core.Field(hydra.core.Name("conflictingModuleNamespace"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.packaging.InvalidPackageError"), hydra.core.Field(hydra.core.Name("conflictingModuleNamespace"), x.value)))))
 
 def invalid_package_error_duplicate_module_namespace(x: hydra.phantoms.TTerm[hydra.error.packaging.DuplicateModuleNamespaceError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.packaging.InvalidPackageError"), hydra.core.Field(hydra.core.Name("duplicateModuleNamespace"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.packaging.InvalidPackageError"), hydra.core.Field(hydra.core.Name("duplicateModuleNamespace"), x.value)))))
 
 def invalid_package_error_invalid_module(x: hydra.phantoms.TTerm[hydra.error.packaging.InvalidModuleError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.packaging.InvalidPackageError"), hydra.core.Field(hydra.core.Name("invalidModule"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.packaging.InvalidPackageError"), hydra.core.Field(hydra.core.Name("invalidModule"), x.value)))))

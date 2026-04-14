@@ -772,7 +772,7 @@ mediaType x =
 
 relationTypeIana :: Phantoms.TTerm Linkrelations.LinkRelationType -> Phantoms.TTerm Items.RelationType
 relationTypeIana x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.stac.items.RelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "iana"),
@@ -780,7 +780,7 @@ relationTypeIana x =
 
 relationTypeOther :: Phantoms.TTerm String -> Phantoms.TTerm Items.RelationType
 relationTypeOther x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.stac.items.RelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "other"),
@@ -788,7 +788,7 @@ relationTypeOther x =
 
 relationTypeStac :: Phantoms.TTerm Items.StacRelationType -> Phantoms.TTerm Items.RelationType
 relationTypeStac x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.stac.items.RelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "stac"),
@@ -796,7 +796,7 @@ relationTypeStac x =
 
 roleData :: Phantoms.TTerm Items.Role
 roleData =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.stac.items.Role"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "data"),
@@ -804,7 +804,7 @@ roleData =
 
 roleMetadata :: Phantoms.TTerm Items.Role
 roleMetadata =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.stac.items.Role"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "metadata"),
@@ -812,7 +812,7 @@ roleMetadata =
 
 roleOther :: Phantoms.TTerm String -> Phantoms.TTerm Items.Role
 roleOther x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.stac.items.Role"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "other"),
@@ -820,7 +820,7 @@ roleOther x =
 
 roleOverview :: Phantoms.TTerm Items.Role
 roleOverview =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.stac.items.Role"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "overview"),
@@ -828,7 +828,7 @@ roleOverview =
 
 roleThumbnail :: Phantoms.TTerm Items.Role
 roleThumbnail =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.stac.items.Role"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "thumbnail"),
@@ -836,7 +836,7 @@ roleThumbnail =
 
 stacRelationTypeCollection :: Phantoms.TTerm Items.StacRelationType
 stacRelationTypeCollection =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.stac.items.StacRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "collection"),
@@ -844,7 +844,7 @@ stacRelationTypeCollection =
 
 stacRelationTypeDerivedFrom :: Phantoms.TTerm Items.StacRelationType
 stacRelationTypeDerivedFrom =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.stac.items.StacRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "derivedFrom"),
@@ -852,7 +852,7 @@ stacRelationTypeDerivedFrom =
 
 stacRelationTypeParent :: Phantoms.TTerm Items.StacRelationType
 stacRelationTypeParent =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.stac.items.StacRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parent"),
@@ -860,7 +860,7 @@ stacRelationTypeParent =
 
 stacRelationTypeRoot :: Phantoms.TTerm Items.StacRelationType
 stacRelationTypeRoot =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.stac.items.StacRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "root"),
@@ -868,7 +868,7 @@ stacRelationTypeRoot =
 
 stacRelationTypeSelf :: Phantoms.TTerm Items.StacRelationType
 stacRelationTypeSelf =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.stac.items.StacRelationType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "self"),

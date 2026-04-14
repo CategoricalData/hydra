@@ -349,8 +349,8 @@ def eta_expand_term(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra.cor
                     return cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(tl.parameter, rewrite_with_args((), tx1(), tl.body))))
                 return after_recursion(result())
 
-            case hydra.core.TermUnion(value=inj):
-                return after_recursion(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(inj.type_name, for_field(inj.field)))))
+            case hydra.core.TermInject(value=inj):
+                return after_recursion(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(inj.type_name, for_field(inj.field)))))
 
             case hydra.core.TermUnit():
                 return cast(hydra.core.Term, hydra.core.TermUnit())
@@ -741,7 +741,7 @@ def term_is_value(term: hydra.core.Term) -> bool:
         case hydra.core.TermSet(value=s):
             return for_list(hydra.lib.sets.to_list(s))
 
-        case hydra.core.TermUnion(value=i):
+        case hydra.core.TermInject(value=i):
             return check_field(i.field)
 
         case hydra.core.TermUnit():

@@ -215,7 +215,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "binary", "term": {"unit": {}}},
                                                             "typeName": "hydra.variants.LiteralVariant"}},
                                                         "function": {
@@ -234,7 +234,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "boolean", "term": {"unit": {}}},
                                                             "typeName": "hydra.variants.LiteralVariant"}},
                                                         "function": {
@@ -265,7 +265,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "float", "term": {"unit": {}}},
                                                             "typeName": "hydra.variants.LiteralVariant"}},
                                                         "function": {
@@ -296,7 +296,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "integer", "term": {"unit": {}}},
                                                             "typeName": "hydra.variants.LiteralVariant"}},
                                                         "function": {
@@ -315,7 +315,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "string", "term": {"unit": {}}},
                                                             "typeName": "hydra.variants.LiteralVariant"}},
                                                         "function": {
@@ -353,7 +353,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "float32", "term": {"unit": {}}},
                                                             "typeName": "hydra.core.FloatType"}},
                                                         "function": {
@@ -372,7 +372,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "float64", "term": {"unit": {}}},
                                                             "typeName": "hydra.core.FloatType"}},
                                                         "function": {
@@ -423,7 +423,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "int32", "term": {"unit": {}}},
                                                             "typeName": "hydra.core.IntegerType"}},
                                                         "function": {
@@ -442,7 +442,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "int64", "term": {"unit": {}}},
                                                             "typeName": "hydra.core.IntegerType"}},
                                                         "function": {
@@ -474,7 +474,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "list", "term": {"unit": {}}},
                                                             "typeName": "hydra.variants.TermVariant"}},
                                                         "function": {
@@ -487,7 +487,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "literal", "term": {"unit": {}}},
                                                             "typeName": "hydra.variants.TermVariant"}},
                                                         "function": {
@@ -500,7 +500,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "map", "term": {"unit": {}}},
                                                             "typeName": "hydra.variants.TermVariant"}},
                                                         "function": {
@@ -510,7 +510,7 @@
                                                 {
                                                   "application": {
                                                     "argument": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {"name": "maybe", "term": {"unit": {}}},
                                                         "typeName": "hydra.variants.TermVariant"}},
                                                     "function": {
@@ -542,7 +542,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "list", "term": {"unit": {}}},
                                                             "typeName": "hydra.variants.TypeVariant"}},
                                                         "function": {
@@ -555,7 +555,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "literal", "term": {"unit": {}}},
                                                             "typeName": "hydra.variants.TypeVariant"}},
                                                         "function": {
@@ -568,7 +568,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "map", "term": {"unit": {}}},
                                                             "typeName": "hydra.variants.TypeVariant"}},
                                                         "function": {
@@ -578,7 +578,7 @@
                                                 {
                                                   "application": {
                                                     "argument": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {"name": "maybe", "term": {"unit": {}}},
                                                         "typeName": "hydra.variants.TypeVariant"}},
                                                     "function": {
@@ -588,7 +588,7 @@
                                                 {
                                                   "application": {
                                                     "argument": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {"name": "wrap", "term": {"unit": {}}},
                                                         "typeName": "hydra.variants.TypeVariant"}},
                                                     "function": {

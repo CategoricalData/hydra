@@ -61,6 +61,7 @@ data TermVariant =
   TermVariantApplication  |
   TermVariantCases  |
   TermVariantEither  |
+  TermVariantInject  |
   TermVariantLambda  |
   TermVariantLet  |
   TermVariantList  |
@@ -73,7 +74,6 @@ data TermVariant =
   TermVariantSet  |
   TermVariantTypeApplication  |
   TermVariantTypeLambda  |
-  TermVariantUnion  |
   TermVariantUnit  |
   TermVariantUnwrap  |
   TermVariantVariable  |
@@ -89,6 +89,8 @@ _TermVariant_application = Core.Name "application"
 _TermVariant_cases = Core.Name "cases"
 
 _TermVariant_either = Core.Name "either"
+
+_TermVariant_inject = Core.Name "inject"
 
 _TermVariant_lambda = Core.Name "lambda"
 
@@ -113,8 +115,6 @@ _TermVariant_set = Core.Name "set"
 _TermVariant_typeApplication = Core.Name "typeApplication"
 
 _TermVariant_typeLambda = Core.Name "typeLambda"
-
-_TermVariant_union = Core.Name "union"
 
 _TermVariant_unit = Core.Name "unit"
 

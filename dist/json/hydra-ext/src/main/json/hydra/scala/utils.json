@@ -162,7 +162,7 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "apply",
                           "term": {
@@ -337,7 +337,7 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "assign",
                           "term": {
@@ -653,11 +653,11 @@
                     "body": {
                       "lambda": {
                         "body": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "functionData",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "function",
                                     "term": {
@@ -677,7 +677,7 @@
                                                       {
                                                         "name": "name",
                                                         "term": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "value", "term": {"variable": "v"}},
                                                             "typeName": "hydra.scala.syntax.Name"}}},
                                                       {"name": "decltpe", "term": {"variable": "sdom"}},
@@ -722,11 +722,11 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "ref",
                       "term": {
-                        "union": {
+                        "inject": {
                           "field": {
                             "name": "name",
                             "term": {
@@ -840,7 +840,7 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "apply",
                           "term": {
@@ -972,7 +972,7 @@
                           {
                             "name": "name",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "value", "term": {"variable": "v"}},
                                 "typeName": "hydra.scala.syntax.Name"}}},
                           {
@@ -1020,11 +1020,11 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "ref",
                       "term": {
-                        "union": {
+                        "inject": {
                           "field": {
                             "name": "name",
                             "term": {
@@ -1063,7 +1063,7 @@
                             "function": {"unwrap": "hydra.core.Name"}}},
                         "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "var",
                           "term": {

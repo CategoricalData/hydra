@@ -263,8 +263,8 @@ def etaExpandTerm(tx0: hydra.graph.Graph)(term0: hydra.core.Term): hydra.core.Te
           afterRecursion(result)
         }
       }
-      case hydra.core.Term.union(v_Term_union_inj) => afterRecursion(hydra.core.Term.union(hydra.core.Injection(v_Term_union_inj.typeName,
-         forField(v_Term_union_inj.field))))
+      case hydra.core.Term.inject(v_Term_inject_inj) => afterRecursion(hydra.core.Term.inject(hydra.core.Injection(v_Term_inject_inj.typeName,
+         forField(v_Term_inject_inj.field))))
       case hydra.core.Term.unit => hydra.core.Term.unit
       case hydra.core.Term.variable(v_Term_variable_vn) => {
         lazy val arty: Int = termArityWithContext(tx)(term)
@@ -630,7 +630,7 @@ def termIsValue(term: hydra.core.Term): Boolean =
     case hydra.core.Term.maybe(v_Term_maybe_m) => hydra.lib.maybes.maybe[Boolean, hydra.core.Term](true)(hydra.reduction.termIsValue)(v_Term_maybe_m)
     case hydra.core.Term.record(v_Term_record_r) => checkFields(v_Term_record_r.fields)
     case hydra.core.Term.set(v_Term_set_s) => forList(hydra.lib.sets.toList[hydra.core.Term](v_Term_set_s))
-    case hydra.core.Term.union(v_Term_union_i) => checkField(v_Term_union_i.field)
+    case hydra.core.Term.inject(v_Term_inject_i) => checkField(v_Term_inject_i.field)
     case hydra.core.Term.unit => true
     case hydra.core.Term.variable(v_Term_variable__) => false
     case _ => false

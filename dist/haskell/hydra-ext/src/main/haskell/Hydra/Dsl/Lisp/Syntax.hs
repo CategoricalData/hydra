@@ -123,7 +123,7 @@ beginExpressionWithExpressions original newVal =
 
 booleanStyleHashTF :: Phantoms.TTerm Syntax.BooleanStyle
 booleanStyleHashTF =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.BooleanStyle"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hashTF"),
@@ -131,7 +131,7 @@ booleanStyleHashTF =
 
 booleanStyleTNil :: Phantoms.TTerm Syntax.BooleanStyle
 booleanStyleTNil =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.BooleanStyle"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tNil"),
@@ -139,7 +139,7 @@ booleanStyleTNil =
 
 booleanStyleTrueFalse :: Phantoms.TTerm Syntax.BooleanStyle
 booleanStyleTrueFalse =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.BooleanStyle"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "trueFalse"),
@@ -361,7 +361,7 @@ commentStyle x =
 
 commentStyleBlock :: Phantoms.TTerm Syntax.CommentStyle
 commentStyleBlock =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.CommentStyle"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "block"),
@@ -369,7 +369,7 @@ commentStyleBlock =
 
 commentStyleDatum :: Phantoms.TTerm Syntax.CommentStyle
 commentStyleDatum =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.CommentStyle"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "datum"),
@@ -377,7 +377,7 @@ commentStyleDatum =
 
 commentStyleLine :: Phantoms.TTerm Syntax.CommentStyle
 commentStyleLine =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.CommentStyle"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "line"),
@@ -833,7 +833,7 @@ destructuringBindingWithValue original newVal =
 
 destructuringPatternAssociative :: Phantoms.TTerm [Syntax.Symbol] -> Phantoms.TTerm Syntax.DestructuringPattern
 destructuringPatternAssociative x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.DestructuringPattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "associative"),
@@ -841,7 +841,7 @@ destructuringPatternAssociative x =
 
 destructuringPatternRest :: Phantoms.TTerm [Syntax.Symbol] -> Phantoms.TTerm Syntax.DestructuringPattern
 destructuringPatternRest x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.DestructuringPattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rest"),
@@ -849,7 +849,7 @@ destructuringPatternRest x =
 
 destructuringPatternSequential :: Phantoms.TTerm [Syntax.Symbol] -> Phantoms.TTerm Syntax.DestructuringPattern
 destructuringPatternSequential x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.DestructuringPattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequential"),
@@ -857,7 +857,7 @@ destructuringPatternSequential x =
 
 dialectClojure :: Phantoms.TTerm Syntax.Dialect
 dialectClojure =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Dialect"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "clojure"),
@@ -865,7 +865,7 @@ dialectClojure =
 
 dialectCommonLisp :: Phantoms.TTerm Syntax.Dialect
 dialectCommonLisp =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Dialect"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "commonLisp"),
@@ -873,7 +873,7 @@ dialectCommonLisp =
 
 dialectEmacsLisp :: Phantoms.TTerm Syntax.Dialect
 dialectEmacsLisp =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Dialect"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "emacsLisp"),
@@ -881,7 +881,7 @@ dialectEmacsLisp =
 
 dialectScheme :: Phantoms.TTerm Syntax.Dialect
 dialectScheme =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Dialect"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "scheme"),
@@ -1007,7 +1007,7 @@ exportDeclarationWithSymbols original newVal =
 
 expressionAnd :: Phantoms.TTerm Syntax.AndExpression -> Phantoms.TTerm Syntax.Expression
 expressionAnd x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "and"),
@@ -1015,7 +1015,7 @@ expressionAnd x =
 
 expressionApplication :: Phantoms.TTerm Syntax.Application -> Phantoms.TTerm Syntax.Expression
 expressionApplication x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "application"),
@@ -1023,7 +1023,7 @@ expressionApplication x =
 
 expressionBegin :: Phantoms.TTerm Syntax.BeginExpression -> Phantoms.TTerm Syntax.Expression
 expressionBegin x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "begin"),
@@ -1031,7 +1031,7 @@ expressionBegin x =
 
 expressionCase :: Phantoms.TTerm Syntax.CaseExpression -> Phantoms.TTerm Syntax.Expression
 expressionCase x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "case"),
@@ -1039,7 +1039,7 @@ expressionCase x =
 
 expressionCond :: Phantoms.TTerm Syntax.CondExpression -> Phantoms.TTerm Syntax.Expression
 expressionCond x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cond"),
@@ -1047,7 +1047,7 @@ expressionCond x =
 
 expressionCons :: Phantoms.TTerm Syntax.ConsExpression -> Phantoms.TTerm Syntax.Expression
 expressionCons x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cons"),
@@ -1055,7 +1055,7 @@ expressionCons x =
 
 expressionDo :: Phantoms.TTerm Syntax.DoExpression -> Phantoms.TTerm Syntax.Expression
 expressionDo x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "do"),
@@ -1063,7 +1063,7 @@ expressionDo x =
 
 expressionDottedPair :: Phantoms.TTerm Syntax.DottedPair -> Phantoms.TTerm Syntax.Expression
 expressionDottedPair x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dottedPair"),
@@ -1071,7 +1071,7 @@ expressionDottedPair x =
 
 expressionFieldAccess :: Phantoms.TTerm Syntax.FieldAccess -> Phantoms.TTerm Syntax.Expression
 expressionFieldAccess x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fieldAccess"),
@@ -1079,7 +1079,7 @@ expressionFieldAccess x =
 
 expressionIf :: Phantoms.TTerm Syntax.IfExpression -> Phantoms.TTerm Syntax.Expression
 expressionIf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "if"),
@@ -1087,7 +1087,7 @@ expressionIf x =
 
 expressionLambda :: Phantoms.TTerm Syntax.Lambda -> Phantoms.TTerm Syntax.Expression
 expressionLambda x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lambda"),
@@ -1095,7 +1095,7 @@ expressionLambda x =
 
 expressionLet :: Phantoms.TTerm Syntax.LetExpression -> Phantoms.TTerm Syntax.Expression
 expressionLet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "let"),
@@ -1103,7 +1103,7 @@ expressionLet x =
 
 expressionList :: Phantoms.TTerm Syntax.ListLiteral -> Phantoms.TTerm Syntax.Expression
 expressionList x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -1111,7 +1111,7 @@ expressionList x =
 
 expressionLiteral :: Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm Syntax.Expression
 expressionLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
@@ -1119,7 +1119,7 @@ expressionLiteral x =
 
 expressionMap :: Phantoms.TTerm Syntax.MapLiteral -> Phantoms.TTerm Syntax.Expression
 expressionMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -1127,7 +1127,7 @@ expressionMap x =
 
 expressionNot :: Phantoms.TTerm Syntax.NotExpression -> Phantoms.TTerm Syntax.Expression
 expressionNot x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "not"),
@@ -1135,7 +1135,7 @@ expressionNot x =
 
 expressionOr :: Phantoms.TTerm Syntax.OrExpression -> Phantoms.TTerm Syntax.Expression
 expressionOr x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "or"),
@@ -1143,7 +1143,7 @@ expressionOr x =
 
 expressionQuasiquote :: Phantoms.TTerm Syntax.QuasiquoteExpression -> Phantoms.TTerm Syntax.Expression
 expressionQuasiquote x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "quasiquote"),
@@ -1151,7 +1151,7 @@ expressionQuasiquote x =
 
 expressionQuote :: Phantoms.TTerm Syntax.QuoteExpression -> Phantoms.TTerm Syntax.Expression
 expressionQuote x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "quote"),
@@ -1159,7 +1159,7 @@ expressionQuote x =
 
 expressionSExpression :: Phantoms.TTerm Syntax.SExpression -> Phantoms.TTerm Syntax.Expression
 expressionSExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sExpression"),
@@ -1167,7 +1167,7 @@ expressionSExpression x =
 
 expressionSet :: Phantoms.TTerm Syntax.SetLiteral -> Phantoms.TTerm Syntax.Expression
 expressionSet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),
@@ -1175,7 +1175,7 @@ expressionSet x =
 
 expressionSplicingUnquote :: Phantoms.TTerm Syntax.SplicingUnquoteExpression -> Phantoms.TTerm Syntax.Expression
 expressionSplicingUnquote x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "splicingUnquote"),
@@ -1183,7 +1183,7 @@ expressionSplicingUnquote x =
 
 expressionTypeAnnotation :: Phantoms.TTerm Syntax.TypeAnnotation -> Phantoms.TTerm Syntax.Expression
 expressionTypeAnnotation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeAnnotation"),
@@ -1191,7 +1191,7 @@ expressionTypeAnnotation x =
 
 expressionUnquote :: Phantoms.TTerm Syntax.UnquoteExpression -> Phantoms.TTerm Syntax.Expression
 expressionUnquote x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unquote"),
@@ -1199,7 +1199,7 @@ expressionUnquote x =
 
 expressionVariable :: Phantoms.TTerm Syntax.VariableReference -> Phantoms.TTerm Syntax.Expression
 expressionVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -1207,7 +1207,7 @@ expressionVariable x =
 
 expressionVector :: Phantoms.TTerm Syntax.VectorLiteral -> Phantoms.TTerm Syntax.Expression
 expressionVector x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "vector"),
@@ -1947,7 +1947,7 @@ importDeclarationWithSpec original newVal =
 
 importSpecAlias :: Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.ImportSpec
 importSpecAlias x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.ImportSpec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "alias"),
@@ -1955,7 +1955,7 @@ importSpecAlias x =
 
 importSpecAll :: Phantoms.TTerm Syntax.ImportSpec
 importSpecAll =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.ImportSpec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "all"),
@@ -1963,7 +1963,7 @@ importSpecAll =
 
 importSpecOnly :: Phantoms.TTerm [Syntax.Symbol] -> Phantoms.TTerm Syntax.ImportSpec
 importSpecOnly x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.ImportSpec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "only"),
@@ -1971,7 +1971,7 @@ importSpecOnly x =
 
 importSpecRename :: Phantoms.TTerm [[Syntax.Symbol]] -> Phantoms.TTerm Syntax.ImportSpec
 importSpecRename x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.ImportSpec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rename"),
@@ -2269,7 +2269,7 @@ lambdaWithRestParam original newVal =
 
 letBindingDestructuring :: Phantoms.TTerm Syntax.DestructuringBinding -> Phantoms.TTerm Syntax.LetBinding
 letBindingDestructuring x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.LetBinding"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "destructuring"),
@@ -2277,7 +2277,7 @@ letBindingDestructuring x =
 
 letBindingSimple :: Phantoms.TTerm Syntax.SimpleBinding -> Phantoms.TTerm Syntax.LetBinding
 letBindingSimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.LetBinding"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -2393,7 +2393,7 @@ letExpressionWithKind original newVal =
 
 letKindParallel :: Phantoms.TTerm Syntax.LetKind
 letKindParallel =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.LetKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parallel"),
@@ -2401,7 +2401,7 @@ letKindParallel =
 
 letKindRecursive :: Phantoms.TTerm Syntax.LetKind
 letKindRecursive =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.LetKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "recursive"),
@@ -2409,7 +2409,7 @@ letKindRecursive =
 
 letKindSequential :: Phantoms.TTerm Syntax.LetKind
 letKindSequential =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.LetKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequential"),
@@ -2477,7 +2477,7 @@ listLiteralWithQuoted original newVal =
 
 literalBoolean :: Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.Literal
 literalBoolean x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -2485,7 +2485,7 @@ literalBoolean x =
 
 literalCharacter :: Phantoms.TTerm Syntax.CharacterLiteral -> Phantoms.TTerm Syntax.Literal
 literalCharacter x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "character"),
@@ -2493,7 +2493,7 @@ literalCharacter x =
 
 literalFloat :: Phantoms.TTerm Syntax.FloatLiteral -> Phantoms.TTerm Syntax.Literal
 literalFloat x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
@@ -2501,7 +2501,7 @@ literalFloat x =
 
 literalInteger :: Phantoms.TTerm Syntax.IntegerLiteral -> Phantoms.TTerm Syntax.Literal
 literalInteger x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
@@ -2509,7 +2509,7 @@ literalInteger x =
 
 literalKeyword :: Phantoms.TTerm Syntax.Keyword -> Phantoms.TTerm Syntax.Literal
 literalKeyword x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "keyword"),
@@ -2517,7 +2517,7 @@ literalKeyword x =
 
 literalNil :: Phantoms.TTerm Syntax.Literal
 literalNil =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nil"),
@@ -2551,7 +2551,7 @@ literalPatternWithValue original newVal =
 
 literalString :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.Literal
 literalString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -2559,7 +2559,7 @@ literalString x =
 
 literalSymbol :: Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.Literal
 literalSymbol x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "symbol"),
@@ -2889,7 +2889,7 @@ namespaceName x =
 
 nilStyleEmptyList :: Phantoms.TTerm Syntax.NilStyle
 nilStyleEmptyList =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.NilStyle"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "emptyList"),
@@ -2897,7 +2897,7 @@ nilStyleEmptyList =
 
 nilStyleNil :: Phantoms.TTerm Syntax.NilStyle
 nilStyleNil =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.NilStyle"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nil"),
@@ -2957,7 +2957,7 @@ orExpressionWithExpressions original newVal =
 
 patternConstructor :: Phantoms.TTerm Syntax.ConstructorPattern -> Phantoms.TTerm Syntax.Pattern
 patternConstructor x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Pattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "constructor"),
@@ -2965,7 +2965,7 @@ patternConstructor x =
 
 patternLiteral :: Phantoms.TTerm Syntax.LiteralPattern -> Phantoms.TTerm Syntax.Pattern
 patternLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Pattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
@@ -2973,7 +2973,7 @@ patternLiteral x =
 
 patternVariable :: Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.Pattern
 patternVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Pattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -2981,7 +2981,7 @@ patternVariable x =
 
 patternWildcard :: Phantoms.TTerm Syntax.WildcardPattern -> Phantoms.TTerm Syntax.Pattern
 patternWildcard x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.Pattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "wildcard"),
@@ -3455,7 +3455,7 @@ recordTypeDefinitionWithName original newVal =
 
 sExpressionAtom :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.SExpression
 sExpressionAtom x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.SExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "atom"),
@@ -3463,7 +3463,7 @@ sExpressionAtom x =
 
 sExpressionList :: Phantoms.TTerm [Syntax.SExpression] -> Phantoms.TTerm Syntax.SExpression
 sExpressionList x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.SExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -3589,7 +3589,7 @@ symbol x =
 
 topLevelFormConstant :: Phantoms.TTerm Syntax.ConstantDefinition -> Phantoms.TTerm Syntax.TopLevelForm
 topLevelFormConstant x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelForm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "constant"),
@@ -3597,7 +3597,7 @@ topLevelFormConstant x =
 
 topLevelFormExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.TopLevelForm
 topLevelFormExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelForm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "expression"),
@@ -3605,7 +3605,7 @@ topLevelFormExpression x =
 
 topLevelFormFunction :: Phantoms.TTerm Syntax.FunctionDefinition -> Phantoms.TTerm Syntax.TopLevelForm
 topLevelFormFunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelForm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "function"),
@@ -3613,7 +3613,7 @@ topLevelFormFunction x =
 
 topLevelFormMacro :: Phantoms.TTerm Syntax.MacroDefinition -> Phantoms.TTerm Syntax.TopLevelForm
 topLevelFormMacro x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelForm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "macro"),
@@ -3621,7 +3621,7 @@ topLevelFormMacro x =
 
 topLevelFormRecordType :: Phantoms.TTerm Syntax.RecordTypeDefinition -> Phantoms.TTerm Syntax.TopLevelForm
 topLevelFormRecordType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelForm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "recordType"),
@@ -3629,7 +3629,7 @@ topLevelFormRecordType x =
 
 topLevelFormVariable :: Phantoms.TTerm Syntax.VariableDefinition -> Phantoms.TTerm Syntax.TopLevelForm
 topLevelFormVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TopLevelForm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -3865,7 +3865,7 @@ typeHintWithType original newVal =
 
 typeSpecifierEither :: Phantoms.TTerm [Syntax.TypeSpecifier] -> Phantoms.TTerm Syntax.TypeSpecifier
 typeSpecifierEither x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TypeSpecifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "either"),
@@ -3873,7 +3873,7 @@ typeSpecifierEither x =
 
 typeSpecifierFunction :: Phantoms.TTerm [Syntax.TypeSpecifier] -> Phantoms.TTerm Syntax.TypeSpecifier
 typeSpecifierFunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TypeSpecifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "function"),
@@ -3881,7 +3881,7 @@ typeSpecifierFunction x =
 
 typeSpecifierList :: Phantoms.TTerm Syntax.TypeSpecifier -> Phantoms.TTerm Syntax.TypeSpecifier
 typeSpecifierList x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TypeSpecifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -3889,7 +3889,7 @@ typeSpecifierList x =
 
 typeSpecifierMap :: Phantoms.TTerm [Syntax.TypeSpecifier] -> Phantoms.TTerm Syntax.TypeSpecifier
 typeSpecifierMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TypeSpecifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -3897,7 +3897,7 @@ typeSpecifierMap x =
 
 typeSpecifierMaybe :: Phantoms.TTerm Syntax.TypeSpecifier -> Phantoms.TTerm Syntax.TypeSpecifier
 typeSpecifierMaybe x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TypeSpecifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "maybe"),
@@ -3905,7 +3905,7 @@ typeSpecifierMaybe x =
 
 typeSpecifierNamed :: Phantoms.TTerm Syntax.Symbol -> Phantoms.TTerm Syntax.TypeSpecifier
 typeSpecifierNamed x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TypeSpecifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "named"),
@@ -3913,7 +3913,7 @@ typeSpecifierNamed x =
 
 typeSpecifierPair :: Phantoms.TTerm [Syntax.TypeSpecifier] -> Phantoms.TTerm Syntax.TypeSpecifier
 typeSpecifierPair x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TypeSpecifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pair"),
@@ -3921,7 +3921,7 @@ typeSpecifierPair x =
 
 typeSpecifierSet :: Phantoms.TTerm Syntax.TypeSpecifier -> Phantoms.TTerm Syntax.TypeSpecifier
 typeSpecifierSet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TypeSpecifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),
@@ -3929,7 +3929,7 @@ typeSpecifierSet x =
 
 typeSpecifierUnit :: Phantoms.TTerm Syntax.TypeSpecifier
 typeSpecifierUnit =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.lisp.syntax.TypeSpecifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unit"),

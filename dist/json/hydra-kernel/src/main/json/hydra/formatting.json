@@ -444,13 +444,13 @@
             "body": {
               "application": {
                 "argument": {
-                  "union": {
+                  "inject": {
                     "field": {"name": "lowerSnake", "term": {"unit": {}}},
                     "typeName": "hydra.util.CaseConvention"}},
                 "function": {
                   "application": {
                     "argument": {
-                      "union": {
+                      "inject": {
                         "field": {"name": "camel", "term": {"unit": {}}},
                         "typeName": "hydra.util.CaseConvention"}},
                     "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
@@ -473,13 +473,13 @@
             "body": {
               "application": {
                 "argument": {
-                  "union": {
+                  "inject": {
                     "field": {"name": "upperSnake", "term": {"unit": {}}},
                     "typeName": "hydra.util.CaseConvention"}},
                 "function": {
                   "application": {
                     "argument": {
-                      "union": {
+                      "inject": {
                         "field": {"name": "camel", "term": {"unit": {}}},
                         "typeName": "hydra.util.CaseConvention"}},
                     "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
@@ -502,13 +502,13 @@
             "body": {
               "application": {
                 "argument": {
-                  "union": {
+                  "inject": {
                     "field": {"name": "upperSnake", "term": {"unit": {}}},
                     "typeName": "hydra.util.CaseConvention"}},
                 "function": {
                   "application": {
                     "argument": {
-                      "union": {
+                      "inject": {
                         "field": {"name": "pascal", "term": {"unit": {}}},
                         "typeName": "hydra.util.CaseConvention"}},
                     "function": {"variable": "hydra.formatting.convertCase"}}}}}}},

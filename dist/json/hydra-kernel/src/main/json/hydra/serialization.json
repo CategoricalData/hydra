@@ -278,7 +278,7 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "brackets",
                           "term": {
@@ -452,7 +452,7 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "const",
                   "term": {
@@ -555,13 +555,13 @@
                                       {
                                         "name": "left",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {"name": "space", "term": {"unit": {}}},
                                             "typeName": "hydra.ast.Ws"}}},
                                       {
                                         "name": "right",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {"name": "breakAndIndent", "term": {"variable": "idt"}},
                                             "typeName": "hydra.ast.Ws"}}}],
                                     "typeName": "hydra.ast.Padding"}}},
@@ -574,7 +574,7 @@
                               {
                                 "name": "associativity",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "none", "term": {"unit": {}}},
                                     "typeName": "hydra.ast.Associativity"}}}],
                             "typeName": "hydra.ast.Op"}},
@@ -691,13 +691,13 @@
                           {
                             "name": "left",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "none", "term": {"unit": {}}},
                                 "typeName": "hydra.ast.Ws"}}},
                           {
                             "name": "right",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "none", "term": {"unit": {}}},
                                 "typeName": "hydra.ast.Ws"}}}],
                         "typeName": "hydra.ast.Padding"}}},
@@ -710,7 +710,7 @@
                   {
                     "name": "associativity",
                     "term": {
-                      "union": {
+                      "inject": {
                         "field": {"name": "none", "term": {"unit": {}}},
                         "typeName": "hydra.ast.Associativity"}}}],
                 "typeName": "hydra.ast.Op"}},
@@ -743,13 +743,13 @@
                           {
                             "name": "left",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "break", "term": {"unit": {}}},
                                 "typeName": "hydra.ast.Ws"}}},
                           {
                             "name": "right",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "break", "term": {"unit": {}}},
                                 "typeName": "hydra.ast.Ws"}}}],
                         "typeName": "hydra.ast.Padding"}}},
@@ -762,7 +762,7 @@
                   {
                     "name": "associativity",
                     "term": {
-                      "union": {
+                      "inject": {
                         "field": {"name": "none", "term": {"unit": {}}},
                         "typeName": "hydra.ast.Associativity"}}}],
                 "typeName": "hydra.ast.Op"}},
@@ -1507,7 +1507,7 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "op",
                           "term": {
@@ -1570,7 +1570,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "indent",
                       "term": {
@@ -1579,7 +1579,7 @@
                             {
                               "name": "style",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {"name": "subsequentLines", "term": {"variable": "idt"}},
                                   "typeName": "hydra.ast.IndentStyle"}}},
                             {"name": "expr", "term": {"variable": "e"}}],
@@ -1791,13 +1791,13 @@
                           {
                             "name": "left",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "none", "term": {"unit": {}}},
                                 "typeName": "hydra.ast.Ws"}}},
                           {
                             "name": "right",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "break", "term": {"unit": {}}},
                                 "typeName": "hydra.ast.Ws"}}}],
                         "typeName": "hydra.ast.Padding"}}},
@@ -1810,7 +1810,7 @@
                   {
                     "name": "associativity",
                     "term": {
-                      "union": {
+                      "inject": {
                         "field": {"name": "none", "term": {"unit": {}}},
                         "typeName": "hydra.ast.Associativity"}}}],
                 "typeName": "hydra.ast.Op"}},
@@ -1830,13 +1830,13 @@
               {
                 "name": "left",
                 "term": {
-                  "union": {
+                  "inject": {
                     "field": {"name": "none", "term": {"unit": {}}},
                     "typeName": "hydra.ast.Ws"}}},
               {
                 "name": "right",
                 "term": {
-                  "union": {
+                  "inject": {
                     "field": {"name": "none", "term": {"unit": {}}},
                     "typeName": "hydra.ast.Ws"}}}],
             "typeName": "hydra.ast.Padding"}},
@@ -1863,13 +1863,13 @@
                           {
                             "name": "left",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "none", "term": {"unit": {}}},
                                 "typeName": "hydra.ast.Ws"}}},
                           {
                             "name": "right",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "none", "term": {"unit": {}}},
                                 "typeName": "hydra.ast.Ws"}}}],
                         "typeName": "hydra.ast.Padding"}}},
@@ -1882,7 +1882,7 @@
                   {
                     "name": "associativity",
                     "term": {
-                      "union": {
+                      "inject": {
                         "field": {"name": "none", "term": {"unit": {}}},
                         "typeName": "hydra.ast.Associativity"}}}],
                 "typeName": "hydra.ast.Op"}},
@@ -1939,13 +1939,13 @@
                                   {
                                     "name": "left",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "space", "term": {"unit": {}}},
                                         "typeName": "hydra.ast.Ws"}}},
                                   {
                                     "name": "right",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "space", "term": {"unit": {}}},
                                         "typeName": "hydra.ast.Ws"}}}],
                                 "typeName": "hydra.ast.Padding"}}},
@@ -1995,7 +1995,7 @@
                           {
                             "name": "left",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "space", "term": {"unit": {}}},
                                 "typeName": "hydra.ast.Ws"}}},
                           {
@@ -2003,13 +2003,13 @@
                             "term": {
                               "application": {
                                 "argument": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "space", "term": {"unit": {}}},
                                     "typeName": "hydra.ast.Ws"}},
                                 "function": {
                                   "application": {
                                     "argument": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "break", "term": {"unit": {}}},
                                         "typeName": "hydra.ast.Ws"}},
                                     "function": {
@@ -2029,7 +2029,7 @@
                   {
                     "name": "associativity",
                     "term": {
-                      "union": {
+                      "inject": {
                         "field": {"name": "none", "term": {"unit": {}}},
                         "typeName": "hydra.ast.Associativity"}}}],
                 "typeName": "hydra.ast.Op"}},
@@ -2350,7 +2350,7 @@
                                 "term": {
                                   "lambda": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "brackets",
                                           "term": {
@@ -2395,7 +2395,7 @@
                                 "term": {
                                   "lambda": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "indent",
                                           "term": {
@@ -2427,7 +2427,7 @@
                                 "term": {
                                   "lambda": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "seq",
                                           "term": {
@@ -2793,7 +2793,7 @@
                                                                                     "typeName": "hydra.ast.Expr"}}}},
                                                                             "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                                                                         "body": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "op",
                                                                               "term": {
@@ -2844,13 +2844,13 @@
                                       {
                                         "name": "left",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {"name": "none", "term": {"unit": {}}},
                                             "typeName": "hydra.ast.Ws"}}},
                                       {
                                         "name": "right",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {"name": "none", "term": {"unit": {}}},
                                             "typeName": "hydra.ast.Ws"}}}],
                                     "typeName": "hydra.ast.Padding"}}},
@@ -2863,7 +2863,7 @@
                               {
                                 "name": "associativity",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "none", "term": {"unit": {}}},
                                     "typeName": "hydra.ast.Associativity"}}}],
                             "typeName": "hydra.ast.Op"}},
@@ -3781,13 +3781,13 @@
                           {
                             "name": "left",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "space", "term": {"unit": {}}},
                                 "typeName": "hydra.ast.Ws"}}},
                           {
                             "name": "right",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "none", "term": {"unit": {}}},
                                 "typeName": "hydra.ast.Ws"}}}],
                         "typeName": "hydra.ast.Padding"}}},
@@ -3800,7 +3800,7 @@
                   {
                     "name": "associativity",
                     "term": {
-                      "union": {
+                      "inject": {
                         "field": {"name": "none", "term": {"unit": {}}},
                         "typeName": "hydra.ast.Associativity"}}}],
                 "typeName": "hydra.ast.Op"}},
@@ -3831,7 +3831,7 @@
                         "argument": {
                           "application": {
                             "argument": {
-                              "union": {
+                              "inject": {
                                 "field": {
                                   "name": "seq",
                                   "term": {
@@ -3934,13 +3934,13 @@
                               {
                                 "name": "left",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "space", "term": {"unit": {}}},
                                     "typeName": "hydra.ast.Ws"}}},
                               {
                                 "name": "right",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "none", "term": {"unit": {}}},
                                     "typeName": "hydra.ast.Ws"}}}],
                             "typeName": "hydra.ast.Padding"}}},
@@ -3953,7 +3953,7 @@
                       {
                         "name": "associativity",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {"name": "none", "term": {"unit": {}}},
                             "typeName": "hydra.ast.Associativity"}}}],
                     "typeName": "hydra.ast.Op"}},
@@ -4015,13 +4015,13 @@
                                           {
                                             "name": "left",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "none", "term": {"unit": {}}},
                                                 "typeName": "hydra.ast.Ws"}}},
                                           {
                                             "name": "right",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "none", "term": {"unit": {}}},
                                                 "typeName": "hydra.ast.Ws"}}}],
                                         "typeName": "hydra.ast.Padding"}}},
@@ -4034,7 +4034,7 @@
                                   {
                                     "name": "associativity",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "none", "term": {"unit": {}}},
                                         "typeName": "hydra.ast.Associativity"}}}],
                                 "typeName": "hydra.ast.Op"}},
@@ -4135,13 +4135,13 @@
                                     "argument": {
                                       "application": {
                                         "argument": {
-                                          "union": {
+                                          "inject": {
                                             "field": {"name": "doubleBreak", "term": {"unit": {}}},
                                             "typeName": "hydra.ast.Ws"}},
                                         "function": {
                                           "application": {
                                             "argument": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "break", "term": {"unit": {}}},
                                                 "typeName": "hydra.ast.Ws"}},
                                             "function": {
@@ -4163,7 +4163,7 @@
                                     "function": {
                                       "application": {
                                         "argument": {
-                                          "union": {
+                                          "inject": {
                                             "field": {"name": "space", "term": {"unit": {}}},
                                             "typeName": "hydra.ast.Ws"}},
                                         "function": {
@@ -4205,7 +4205,7 @@
                                                   {
                                                     "name": "left",
                                                     "term": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {"name": "none", "term": {"unit": {}}},
                                                         "typeName": "hydra.ast.Ws"}}},
                                                   {"name": "right", "term": {"variable": "break"}}],
@@ -4219,7 +4219,7 @@
                                           {
                                             "name": "associativity",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "none", "term": {"unit": {}}},
                                                 "typeName": "hydra.ast.Associativity"}}}],
                                         "typeName": "hydra.ast.Op"}},
@@ -4318,7 +4318,7 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "indent",
                   "term": {
@@ -4327,7 +4327,7 @@
                         {
                           "name": "style",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {"name": "allLines", "term": {"literal": {"string": "    "}}},
                               "typeName": "hydra.ast.IndentStyle"}}},
                         {"name": "expr", "term": {"variable": "e"}}],

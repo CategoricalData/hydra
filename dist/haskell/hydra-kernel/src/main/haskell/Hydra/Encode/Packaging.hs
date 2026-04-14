@@ -16,12 +16,12 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 definition :: Packaging.Definition -> Core.Term
 definition x =
     case x of
-      Packaging.DefinitionTerm v0 -> Core.TermUnion (Core.Injection {
+      Packaging.DefinitionTerm v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.packaging.Definition"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (termDefinition v0)}})
-      Packaging.DefinitionType v0 -> Core.TermUnion (Core.Injection {
+      Packaging.DefinitionType v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.packaging.Definition"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "type"),

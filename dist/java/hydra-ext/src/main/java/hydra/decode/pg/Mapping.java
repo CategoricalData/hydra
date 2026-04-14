@@ -564,7 +564,7 @@ public interface Mapping {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.mapping.ElementSpec> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.mapping.ElementSpec> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
@@ -641,7 +641,7 @@ public interface Mapping {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.mapping.ValueSpec> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.mapping.ValueSpec> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;

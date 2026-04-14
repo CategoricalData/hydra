@@ -14,7 +14,7 @@ def tag(x: hydra.phantoms.TTerm[str]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.testing.Tag"), x.value))))
 
 def test_case_universal(x: hydra.phantoms.TTerm[hydra.testing.UniversalTestCase]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("universal"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("universal"), x.value)))))
 
 def test_case_with_metadata(name: hydra.phantoms.TTerm[str], case: hydra.phantoms.TTerm[hydra.testing.TestCase], description: hydra.phantoms.TTerm[Maybe[str]], tags: hydra.phantoms.TTerm[frozenlist[hydra.testing.Tag]]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.TestCaseWithMetadata"), (hydra.core.Field(hydra.core.Name("name"), name.value), hydra.core.Field(hydra.core.Name("case"), case.value), hydra.core.Field(hydra.core.Name("description"), description.value), hydra.core.Field(hydra.core.Name("tags"), tags.value))))))

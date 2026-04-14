@@ -437,7 +437,7 @@ public interface Dependencies {
         }
 
         @Override
-        public java.util.Set<hydra.core.Name> visit(hydra.core.Term.Union injection) {
+        public java.util.Set<hydra.core.Name> visit(hydra.core.Term.Inject injection) {
           return (nominal).apply((injection).value.typeName);
         }
 

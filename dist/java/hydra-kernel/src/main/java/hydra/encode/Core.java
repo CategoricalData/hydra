@@ -78,17 +78,17 @@ public interface Core {
     return (v1).accept(new hydra.core.FloatType.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.core.FloatType.Bigfloat y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatType"), new hydra.core.Field(new hydra.core.Name("bigfloat"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatType"), new hydra.core.Field(new hydra.core.Name("bigfloat"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.FloatType.Float32 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatType"), new hydra.core.Field(new hydra.core.Name("float32"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatType"), new hydra.core.Field(new hydra.core.Name("float32"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.FloatType.Float64 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatType"), new hydra.core.Field(new hydra.core.Name("float64"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatType"), new hydra.core.Field(new hydra.core.Name("float64"), new hydra.core.Term.Unit())));
       }
     });
   }
@@ -97,17 +97,17 @@ public interface Core {
     return (v1).accept(new hydra.core.FloatValue.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.core.FloatValue.Bigfloat y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatValue"), new hydra.core.Field(new hydra.core.Name("bigfloat"), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Bigfloat((y).value))))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatValue"), new hydra.core.Field(new hydra.core.Name("bigfloat"), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Bigfloat((y).value))))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.FloatValue.Float32 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatValue"), new hydra.core.Field(new hydra.core.Name("float32"), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float32((y).value))))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatValue"), new hydra.core.Field(new hydra.core.Name("float32"), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float32((y).value))))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.FloatValue.Float64 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatValue"), new hydra.core.Field(new hydra.core.Name("float64"), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64((y).value))))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatValue"), new hydra.core.Field(new hydra.core.Name("float64"), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64((y).value))))));
       }
     });
   }
@@ -134,47 +134,47 @@ public interface Core {
     return (v1).accept(new hydra.core.IntegerType.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.core.IntegerType.Bigint y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("bigint"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("bigint"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.IntegerType.Int8 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("int8"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("int8"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.IntegerType.Int16 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("int16"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("int16"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.IntegerType.Int32 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("int32"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("int32"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.IntegerType.Int64 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("int64"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("int64"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.IntegerType.Uint8 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("uint8"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("uint8"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.IntegerType.Uint16 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("uint16"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("uint16"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.IntegerType.Uint32 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("uint32"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("uint32"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.IntegerType.Uint64 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("uint64"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("uint64"), new hydra.core.Term.Unit())));
       }
     });
   }
@@ -183,47 +183,47 @@ public interface Core {
     return (v1).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.core.IntegerValue.Bigint y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("bigint"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Bigint((y).value))))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("bigint"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Bigint((y).value))))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.IntegerValue.Int8 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("int8"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int8((y).value))))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("int8"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int8((y).value))))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.IntegerValue.Int16 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("int16"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int16((y).value))))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("int16"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int16((y).value))))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.IntegerValue.Int32 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("int32"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32((y).value))))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("int32"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32((y).value))))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.IntegerValue.Int64 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("int64"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int64((y).value))))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("int64"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int64((y).value))))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.IntegerValue.Uint8 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("uint8"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Uint8((y).value))))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("uint8"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Uint8((y).value))))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.IntegerValue.Uint16 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("uint16"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Uint16((y).value))))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("uint16"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Uint16((y).value))))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.IntegerValue.Uint32 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("uint32"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Uint32((y).value))))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("uint32"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Uint32((y).value))))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.IntegerValue.Uint64 y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("uint64"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Uint64((y).value))))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("uint64"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Uint64((y).value))))));
       }
     });
   }
@@ -249,27 +249,27 @@ public interface Core {
     return (v1).accept(new hydra.core.Literal.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.core.Literal.Binary y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("binary"), new hydra.core.Term.Literal(new hydra.core.Literal.Binary((y).value)))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("binary"), new hydra.core.Term.Literal(new hydra.core.Literal.Binary((y).value)))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Literal.Boolean_ y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("boolean"), new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_((y).value)))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("boolean"), new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_((y).value)))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Literal.Float_ y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("float"), hydra.encode.Core.floatValue((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("float"), hydra.encode.Core.floatValue((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Literal.Integer_ y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("integer"), hydra.encode.Core.integerValue((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("integer"), hydra.encode.Core.integerValue((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Literal.String_ y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("string"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((y).value)))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("string"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((y).value)))));
       }
     });
   }
@@ -278,27 +278,27 @@ public interface Core {
     return (v1).accept(new hydra.core.LiteralType.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.core.LiteralType.Binary y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("binary"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("binary"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.LiteralType.Boolean_ y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("boolean"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("boolean"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.LiteralType.Float_ y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("float"), hydra.encode.Core.floatType((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("float"), hydra.encode.Core.floatType((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.LiteralType.Integer_ y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("integer"), hydra.encode.Core.integerType((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("integer"), hydra.encode.Core.integerType((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.LiteralType.String_ y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("string"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("string"), new hydra.core.Term.Unit())));
       }
     });
   }
@@ -337,52 +337,57 @@ public interface Core {
     return (v1).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.core.Term.Annotated y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("annotated"), hydra.encode.Core.annotatedTerm((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("annotated"), hydra.encode.Core.annotatedTerm((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.Application y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("application"), hydra.encode.Core.application((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("application"), hydra.encode.Core.application((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.Cases y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("cases"), hydra.encode.Core.caseStatement((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("cases"), hydra.encode.Core.caseStatement((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.Either y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("either"), new hydra.core.Term.Either(hydra.lib.eithers.Bimap.apply(
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("either"), new hydra.core.Term.Either(hydra.lib.eithers.Bimap.apply(
           hydra.encode.Core::term,
           hydra.encode.Core::term,
           (y).value)))));
       }
 
       @Override
+      public hydra.core.Term visit(hydra.core.Term.Inject y) {
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("inject"), hydra.encode.Core.injection((y).value))));
+      }
+
+      @Override
       public hydra.core.Term visit(hydra.core.Term.Lambda y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("lambda"), hydra.encode.Core.lambda((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("lambda"), hydra.encode.Core.lambda((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.Let y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("let"), hydra.encode.Core.let((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("let"), hydra.encode.Core.let((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.List y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("list"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("list"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
           hydra.encode.Core::term,
           (y).value)))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.Literal y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("literal"), hydra.encode.Core.literal((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("literal"), hydra.encode.Core.literal((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.Map y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("map"), new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("map"), new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(
           hydra.encode.Core::term,
           hydra.encode.Core::term,
           (y).value)))));
@@ -390,14 +395,14 @@ public interface Core {
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.Maybe y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("maybe"), new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("maybe"), new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
           hydra.encode.Core::term,
           (y).value)))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.Pair y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("pair"), new hydra.core.Term.Pair(hydra.lib.pairs.Bimap.apply(
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("pair"), new hydra.core.Term.Pair(hydra.lib.pairs.Bimap.apply(
           hydra.encode.Core::term,
           hydra.encode.Core::term,
           (y).value)))));
@@ -405,54 +410,49 @@ public interface Core {
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.Project y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("project"), hydra.encode.Core.projection((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("project"), hydra.encode.Core.projection((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.Record y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("record"), hydra.encode.Core.record((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("record"), hydra.encode.Core.record((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.Set y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("set"), new hydra.core.Term.Set(hydra.lib.sets.Map.apply(
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("set"), new hydra.core.Term.Set(hydra.lib.sets.Map.apply(
           hydra.encode.Core::term,
           (y).value)))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.TypeApplication y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("typeApplication"), hydra.encode.Core.typeApplicationTerm((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("typeApplication"), hydra.encode.Core.typeApplicationTerm((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.TypeLambda y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("typeLambda"), hydra.encode.Core.typeLambda((y).value))));
-      }
-
-      @Override
-      public hydra.core.Term visit(hydra.core.Term.Union y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("union"), hydra.encode.Core.injection((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("typeLambda"), hydra.encode.Core.typeLambda((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.Unit y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("unit"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("unit"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.Unwrap y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("unwrap"), hydra.encode.Core.name((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("unwrap"), hydra.encode.Core.name((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.Variable y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("variable"), hydra.encode.Core.name((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("variable"), hydra.encode.Core.name((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.Wrap y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("wrap"), hydra.encode.Core.wrappedTerm((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("wrap"), hydra.encode.Core.wrappedTerm((y).value))));
       }
     });
   }
@@ -461,91 +461,91 @@ public interface Core {
     return (v1).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.core.Type.Annotated y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("annotated"), hydra.encode.Core.annotatedType((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("annotated"), hydra.encode.Core.annotatedType((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Type.Application y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("application"), hydra.encode.Core.applicationType((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("application"), hydra.encode.Core.applicationType((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Type.Either y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("either"), hydra.encode.Core.eitherType((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("either"), hydra.encode.Core.eitherType((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Type.Forall y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("forall"), hydra.encode.Core.forallType((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("forall"), hydra.encode.Core.forallType((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Type.Function y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("function"), hydra.encode.Core.functionType((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("function"), hydra.encode.Core.functionType((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Type.List y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("list"), hydra.encode.Core.type((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("list"), hydra.encode.Core.type((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Type.Literal y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("literal"), hydra.encode.Core.literalType((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("literal"), hydra.encode.Core.literalType((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Type.Map y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("map"), hydra.encode.Core.mapType((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("map"), hydra.encode.Core.mapType((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Type.Maybe y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("maybe"), hydra.encode.Core.type((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("maybe"), hydra.encode.Core.type((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Type.Pair y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("pair"), hydra.encode.Core.pairType((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("pair"), hydra.encode.Core.pairType((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Type.Record y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("record"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("record"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
           hydra.encode.Core::fieldType,
           (y).value)))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Type.Set y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("set"), hydra.encode.Core.type((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("set"), hydra.encode.Core.type((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Type.Union y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("union"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("union"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
           hydra.encode.Core::fieldType,
           (y).value)))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Type.Unit y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("unit"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("unit"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Type.Variable y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("variable"), hydra.encode.Core.name((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("variable"), hydra.encode.Core.name((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Type.Void_ y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("void"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("void"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.core.Type.Wrap y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("wrap"), hydra.encode.Core.type((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("wrap"), hydra.encode.Core.type((y).value))));
       }
     });
   }

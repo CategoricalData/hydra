@@ -97,7 +97,7 @@ iri x =
 
 iriOrLiteralIri :: Phantoms.TTerm Syntax.Iri -> Phantoms.TTerm Syntax.IriOrLiteral
 iriOrLiteralIri x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.rdf.syntax.IriOrLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "iri"),
@@ -105,7 +105,7 @@ iriOrLiteralIri x =
 
 iriOrLiteralLiteral :: Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm Syntax.IriOrLiteral
 iriOrLiteralLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.rdf.syntax.IriOrLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
@@ -233,7 +233,7 @@ literalWithLexicalForm original newVal =
 
 nodeBnode :: Phantoms.TTerm Syntax.BlankNode -> Phantoms.TTerm Syntax.Node
 nodeBnode x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.rdf.syntax.Node"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bnode"),
@@ -241,7 +241,7 @@ nodeBnode x =
 
 nodeIri :: Phantoms.TTerm Syntax.Iri -> Phantoms.TTerm Syntax.Node
 nodeIri x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.rdf.syntax.Node"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "iri"),
@@ -249,7 +249,7 @@ nodeIri x =
 
 nodeLiteral :: Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm Syntax.Node
 nodeLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.rdf.syntax.Node"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
@@ -541,7 +541,7 @@ rdfsClass x =
 
 resourceBnode :: Phantoms.TTerm Syntax.BlankNode -> Phantoms.TTerm Syntax.Resource
 resourceBnode x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.rdf.syntax.Resource"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bnode"),
@@ -549,7 +549,7 @@ resourceBnode x =
 
 resourceIri :: Phantoms.TTerm Syntax.Iri -> Phantoms.TTerm Syntax.Resource
 resourceIri x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.rdf.syntax.Resource"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "iri"),

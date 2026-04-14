@@ -18,7 +18,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 coderDirection :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Coders.CoderDirection
 coderDirection cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -45,7 +45,7 @@ languageName cx raw =
 traversalOrder :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Coders.TraversalOrder
 traversalOrder cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field

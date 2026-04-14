@@ -92,7 +92,7 @@ def subterms(v1: hydra.core.Term) -> frozenlist[hydra.core.Term]:
         case hydra.core.TermTypeLambda(value=ta2):
             return (ta2.body,)
 
-        case hydra.core.TermUnion(value=ut):
+        case hydra.core.TermInject(value=ut):
             return (ut.field.term,)
 
         case hydra.core.TermUnit():
@@ -327,8 +327,8 @@ def rewrite_and_fold_term_with_path(f: Callable[[
                 case hydra.core.TermTypeLambda(value=tl):
                     return for_single_with_accessor(recurse, (lambda t: cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(tl.parameter, t)))), cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepTypeLambdaBody()), val0, tl.body)
 
-                case hydra.core.TermUnion(value=inj):
-                    return for_single_with_accessor(recurse, (lambda t: cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(inj.type_name, hydra.core.Field(inj.field.name, t))))), cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepInjectionTerm()), val0, inj.field.term)
+                case hydra.core.TermInject(value=inj):
+                    return for_single_with_accessor(recurse, (lambda t: cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(inj.type_name, hydra.core.Field(inj.field.name, t))))), cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepInjectionTerm()), val0, inj.field.term)
 
                 case hydra.core.TermUnwrap(value=n):
                     return (val0, cast(hydra.core.Term, hydra.core.TermUnwrap(n)))
@@ -535,8 +535,8 @@ def rewrite_and_fold_term(f: Callable[[
                 case hydra.core.TermTypeLambda(value=tl):
                     return for_single(recurse, (lambda t: cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(tl.parameter, t)))), val0, tl.body)
 
-                case hydra.core.TermUnion(value=inj):
-                    return for_single(recurse, (lambda t: cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(inj.type_name, hydra.core.Field(inj.field.name, t))))), val0, inj.field.term)
+                case hydra.core.TermInject(value=inj):
+                    return for_single(recurse, (lambda t: cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(inj.type_name, hydra.core.Field(inj.field.name, t))))), val0, inj.field.term)
 
                 case hydra.core.TermUnwrap(value=n):
                     return (val0, cast(hydra.core.Term, hydra.core.TermUnwrap(n)))
@@ -656,8 +656,8 @@ def rewrite_term(f: Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydr
             case hydra.core.TermTypeLambda(value=ta):
                 return cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(ta.parameter, recurse(ta.body))))
 
-            case hydra.core.TermUnion(value=i):
-                return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(i.type_name, for_field(i.field))))
+            case hydra.core.TermInject(value=i):
+                return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(i.type_name, for_field(i.field))))
 
             case hydra.core.TermUnit():
                 return cast(hydra.core.Term, hydra.core.TermUnit())
@@ -751,10 +751,10 @@ def rewrite_term_m(f: Callable[[
                     body = tl.body
                     return hydra.lib.eithers.bind(recurse(body), (lambda rbody: Right(cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(v, rbody))))))
 
-                case hydra.core.TermUnion(value=i):
+                case hydra.core.TermInject(value=i):
                     n = i.type_name
                     field = i.field
-                    return hydra.lib.eithers.map((lambda rfield: cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(n, rfield)))), for_field(field))
+                    return hydra.lib.eithers.map((lambda rfield: cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(n, rfield)))), for_field(field))
 
                 case hydra.core.TermUnit():
                     return Right(cast(hydra.core.Term, hydra.core.TermUnit()))
@@ -846,8 +846,8 @@ def rewrite_term_with_context(f: Callable[[
                 case hydra.core.TermTypeLambda(value=ta):
                     return cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(ta.parameter, recurse(ta.body))))
 
-                case hydra.core.TermUnion(value=i):
-                    return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(i.type_name, for_field(i.field))))
+                case hydra.core.TermInject(value=i):
+                    return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(i.type_name, for_field(i.field))))
 
                 case hydra.core.TermUnit():
                     return cast(hydra.core.Term, hydra.core.TermUnit())
@@ -945,10 +945,10 @@ def rewrite_term_with_context_m(f: Callable[[
                     body = tl.body
                     return hydra.lib.eithers.bind(recurse(body), (lambda rbody: Right(cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(v, rbody))))))
 
-                case hydra.core.TermUnion(value=i):
+                case hydra.core.TermInject(value=i):
                     n = i.type_name
                     field = i.field
-                    return hydra.lib.eithers.map((lambda rfield: cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(n, rfield)))), for_field(field))
+                    return hydra.lib.eithers.map((lambda rfield: cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(n, rfield)))), for_field(field))
 
                 case hydra.core.TermUnit():
                     return Right(cast(hydra.core.Term, hydra.core.TermUnit()))
@@ -1190,7 +1190,7 @@ def subterms_with_steps(v1: hydra.core.Term) -> frozenlist[tuple[hydra.paths.Sub
         case hydra.core.TermTypeLambda(value=ta2):
             return ((cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepTypeLambdaBody()), ta2.body),)
 
-        case hydra.core.TermUnion(value=ut):
+        case hydra.core.TermInject(value=ut):
             return ((cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepInjectionTerm()), ut.field.term),)
 
         case hydra.core.TermUnit():

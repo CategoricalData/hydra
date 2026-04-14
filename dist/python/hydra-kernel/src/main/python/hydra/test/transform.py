@@ -42,7 +42,7 @@ def encode_case_convention(conv: hydra.util.CaseConvention) -> hydra.core.Term:
 
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.util.CaseConvention"), hydra.core.Field(_hoist_hydra_test_transform_encode_case_convention_1(conv), cast(hydra.core.Term, hydra.core.TermUnit())))))
+    return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.util.CaseConvention"), hydra.core.Field(_hoist_hydra_test_transform_encode_case_convention_1(conv), cast(hydra.core.Term, hydra.core.TermUnit())))))
 
 def build_convert_case_call(from_conv: hydra.util.CaseConvention, to_conv: hydra.util.CaseConvention, input_: str) -> hydra.core.Term:
     r"""Build a Term representing a convertCase function call."""

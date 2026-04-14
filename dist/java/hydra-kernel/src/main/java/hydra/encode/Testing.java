@@ -14,7 +14,7 @@ public interface Testing {
     return (v1).accept(new hydra.testing.TestCase.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.testing.TestCase.Universal y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("universal"), hydra.encode.Testing.universalTestCase((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("universal"), hydra.encode.Testing.universalTestCase((y).value))));
       }
     });
   }

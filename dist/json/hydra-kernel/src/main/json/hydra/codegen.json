@@ -758,7 +758,7 @@
                                                                                                                     {
                                                                                                                       "name": "schemaTerm",
                                                                                                                       "term": {
-                                                                                                                        "union": {
+                                                                                                                        "inject": {
                                                                                                                           "field": {
                                                                                                                             "name": "variable",
                                                                                                                             "term": {
@@ -775,7 +775,7 @@
                                                                                                                           "term": {
                                                                                                                             "application": {
                                                                                                                               "argument": {
-                                                                                                                                "union": {
+                                                                                                                                "inject": {
                                                                                                                                   "field": {
                                                                                                                                     "name": "annotated",
                                                                                                                                     "term": {
@@ -832,7 +832,7 @@
                                                                                                                                       {
                                                                                                                                         "name": "type",
                                                                                                                                         "term": {
-                                                                                                                                          "union": {
+                                                                                                                                          "inject": {
                                                                                                                                             "field": {
                                                                                                                                               "name": "variable",
                                                                                                                                               "term": {
@@ -1269,7 +1269,7 @@
                                                                                                                                                         {
                                                                                                                                                           "name": "schemaTerm",
                                                                                                                                                           "term": {
-                                                                                                                                                            "union": {
+                                                                                                                                                            "inject": {
                                                                                                                                                               "field": {
                                                                                                                                                                 "name": "variable",
                                                                                                                                                                 "term": {
@@ -1286,7 +1286,7 @@
                                                                                                                                                               "term": {
                                                                                                                                                                 "application": {
                                                                                                                                                                   "argument": {
-                                                                                                                                                                    "union": {
+                                                                                                                                                                    "inject": {
                                                                                                                                                                       "field": {
                                                                                                                                                                         "name": "annotated",
                                                                                                                                                                         "term": {
@@ -1343,7 +1343,7 @@
                                                                                                                                                                           {
                                                                                                                                                                             "name": "type",
                                                                                                                                                                             "term": {
-                                                                                                                                                                              "union": {
+                                                                                                                                                                              "inject": {
                                                                                                                                                                                 "field": {
                                                                                                                                                                                   "name": "variable",
                                                                                                                                                                                   "term": {
@@ -1584,7 +1584,7 @@
                                                                                                                                                                 {
                                                                                                                                                                   "name": "schemaTerm",
                                                                                                                                                                   "term": {
-                                                                                                                                                                    "union": {
+                                                                                                                                                                    "inject": {
                                                                                                                                                                       "field": {
                                                                                                                                                                         "name": "variable",
                                                                                                                                                                         "term": {
@@ -1601,7 +1601,7 @@
                                                                                                                                                                       "term": {
                                                                                                                                                                         "application": {
                                                                                                                                                                           "argument": {
-                                                                                                                                                                            "union": {
+                                                                                                                                                                            "inject": {
                                                                                                                                                                               "field": {
                                                                                                                                                                                 "name": "annotated",
                                                                                                                                                                                 "term": {
@@ -1658,7 +1658,7 @@
                                                                                                                                                                                   {
                                                                                                                                                                                     "name": "type",
                                                                                                                                                                                     "term": {
-                                                                                                                                                                                      "union": {
+                                                                                                                                                                                      "inject": {
                                                                                                                                                                                         "field": {
                                                                                                                                                                                           "name": "variable",
                                                                                                                                                                                           "term": {
@@ -2112,7 +2112,7 @@
                                                                                                                                                                                                           "lambda": {
                                                                                                                                                                                                             "body": {
                                                                                                                                                                                                               "maybe": {
-                                                                                                                                                                                                                "union": {
+                                                                                                                                                                                                                "inject": {
                                                                                                                                                                                                                   "field": {"name": "type", "term": {"variable": "td"}},
                                                                                                                                                                                                                   "typeName": "hydra.packaging.Definition"}}},
                                                                                                                                                                                                             "domain": {"variable": "hydra.packaging.TypeDefinition"},
@@ -2158,7 +2158,7 @@
                                                                                                                                                                                                                     "argument": {
                                                                                                                                                                                                                       "lambda": {
                                                                                                                                                                                                                         "body": {
-                                                                                                                                                                                                                          "union": {
+                                                                                                                                                                                                                          "inject": {
                                                                                                                                                                                                                             "field": {
                                                                                                                                                                                                                               "name": "term",
                                                                                                                                                                                                                               "term": {
@@ -2447,7 +2447,7 @@
                                                                                                                                                                                                                         "argument": {
                                                                                                                                                                                                                           "lambda": {
                                                                                                                                                                                                                             "body": {
-                                                                                                                                                                                                                              "union": {
+                                                                                                                                                                                                                              "inject": {
                                                                                                                                                                                                                                 "field": {"name": "term", "term": {"variable": "d"}},
                                                                                                                                                                                                                                 "typeName": "hydra.packaging.Definition"}},
                                                                                                                                                                                                                             "domain": {"variable": "hydra.packaging.TermDefinition"},
@@ -2862,7 +2862,7 @@
                                                                                                                                                                                         "argument": {
                                                                                                                                                                                           "lambda": {
                                                                                                                                                                                             "body": {
-                                                                                                                                                                                              "union": {
+                                                                                                                                                                                              "inject": {
                                                                                                                                                                                                 "field": {"name": "type", "term": {"variable": "d"}},
                                                                                                                                                                                                 "typeName": "hydra.packaging.Definition"}},
                                                                                                                                                                                             "domain": {"variable": "hydra.packaging.TypeDefinition"},
@@ -3357,7 +3357,7 @@
                                         "argument": {
                                           "lambda": {
                                             "body": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "decoding", "term": {"variable": "_e"}},
                                                 "typeName": "hydra.errors.Error"}},
                                             "domain": {"variable": "hydra.errors.DecodingError"},
@@ -3526,7 +3526,7 @@
                               {
                                 "name": "moduleDef",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "term",
                                       "term": {
@@ -3975,7 +3975,7 @@
                               {
                                 "name": "modType",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "variable",
                                       "term": {
@@ -4016,7 +4016,7 @@
                                             "argument": {
                                               "lambda": {
                                                 "body": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "other",
                                                       "term": {
@@ -4457,7 +4457,7 @@
                                                                                                                       "lambda": {
                                                                                                                         "body": {
                                                                                                                           "maybe": {
-                                                                                                                            "union": {
+                                                                                                                            "inject": {
                                                                                                                               "field": {"name": "type", "term": {"variable": "td"}},
                                                                                                                               "typeName": "hydra.packaging.Definition"}}},
                                                                                                                         "domain": {"variable": "hydra.packaging.TypeDefinition"},
@@ -4503,7 +4503,7 @@
                                                                                                                                 "argument": {
                                                                                                                                   "lambda": {
                                                                                                                                     "body": {
-                                                                                                                                      "union": {
+                                                                                                                                      "inject": {
                                                                                                                                         "field": {
                                                                                                                                           "name": "term",
                                                                                                                                           "term": {
@@ -4875,7 +4875,7 @@
                                                                                                                                             {
                                                                                                                                               "name": "schemaTerm",
                                                                                                                                               "term": {
-                                                                                                                                                "union": {
+                                                                                                                                                "inject": {
                                                                                                                                                   "field": {
                                                                                                                                                     "name": "variable",
                                                                                                                                                     "term": {
@@ -4892,7 +4892,7 @@
                                                                                                                                                   "term": {
                                                                                                                                                     "application": {
                                                                                                                                                       "argument": {
-                                                                                                                                                        "union": {
+                                                                                                                                                        "inject": {
                                                                                                                                                           "field": {
                                                                                                                                                             "name": "annotated",
                                                                                                                                                             "term": {
@@ -4949,7 +4949,7 @@
                                                                                                                                                               {
                                                                                                                                                                 "name": "type",
                                                                                                                                                                 "term": {
-                                                                                                                                                                  "union": {
+                                                                                                                                                                  "inject": {
                                                                                                                                                                     "field": {
                                                                                                                                                                       "name": "variable",
                                                                                                                                                                       "term": {
@@ -5976,7 +5976,7 @@
                                       {
                                         "name": "modType",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "variable",
                                               "term": {
@@ -6040,7 +6040,7 @@
                                                                         "body": {
                                                                           "either": {
                                                                             "@left": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {"name": "decoding", "term": {"variable": "decErr"}},
                                                                                 "typeName": "hydra.errors.Error"}}}},
                                                                         "type": {"variable": "hydra.errors.Error"}}},
@@ -6073,7 +6073,7 @@
                                                             "body": {
                                                               "either": {
                                                                 "@left": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "other",
                                                                       "term": {

@@ -11,7 +11,7 @@
                   {
                     "name": "first",
                     "term": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "unary",
                           "term": {
@@ -50,7 +50,7 @@
                                 "body": {
                                   "lambda": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "plus",
                                           "term": {
@@ -360,15 +360,15 @@
                                                                                     "body": {
                                                                                       "either": {
                                                                                         "@right": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "reference",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "classOrInterface",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "class",
                                                                                                           "term": {
@@ -384,7 +384,7 @@
                                                                                                                       "argument": {
                                                                                                                         "list": [
                                                                                                                           {
-                                                                                                                            "union": {
+                                                                                                                            "inject": {
                                                                                                                               "field": {"name": "reference", "term": {"variable": "rt"}},
                                                                                                                               "typeName": "hydra.java.syntax.TypeArgument"}}]},
                                                                                                                       "function": {
@@ -413,7 +413,7 @@
                                                                                 "body": {
                                                                                   "either": {
                                                                                     "@left": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "other",
                                                                                           "term": {
@@ -457,7 +457,7 @@
                                                                 "body": {
                                                                   "either": {
                                                                     "@left": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "other",
                                                                           "term": {
@@ -484,7 +484,7 @@
                                                 "body": {
                                                   "either": {
                                                     "@left": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "other",
                                                           "term": {
@@ -710,15 +710,15 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "assignment",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "conditional",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "simple",
                               "term": {
@@ -742,35 +742,35 @@
                                                                   "body": {
                                                                     "list": [
                                                                       {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "unary",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "simple",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {
                                                                                         "name": "unary",
                                                                                         "term": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "unary",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "unary",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "other",
                                                                                                           "term": {
-                                                                                                            "union": {
+                                                                                                            "inject": {
                                                                                                               "field": {
                                                                                                                 "name": "postfix",
                                                                                                                 "term": {
-                                                                                                                  "union": {
+                                                                                                                  "inject": {
                                                                                                                     "field": {
                                                                                                                       "name": "name",
                                                                                                                       "term": {
@@ -884,7 +884,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "localVariableDeclaration",
                       "term": {
@@ -897,13 +897,13 @@
                                   "term": {
                                     "list": [
                                       {
-                                        "union": {
+                                        "inject": {
                                           "field": {"name": "final", "term": {"unit": {}}},
                                           "typeName": "hydra.java.syntax.VariableModifier"}}]}},
                                 {
                                   "name": "type",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "var", "term": {"unit": {}}},
                                       "typeName": "hydra.java.syntax.LocalVariableType"}}},
                                 {
@@ -914,7 +914,7 @@
                                         "application": {
                                           "argument": {
                                             "maybe": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "expression", "term": {"variable": "rhs"}},
                                                 "typeName": "hydra.java.syntax.VariableInitializer"}}},
                                           "function": {
@@ -1056,7 +1056,7 @@
                             "body": {
                               "lambda": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "interfaceMethod",
                                       "term": {
@@ -1154,15 +1154,15 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "assignment",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "conditional",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "simple",
                               "term": {
@@ -1186,15 +1186,15 @@
                                                                   "body": {
                                                                     "list": [
                                                                       {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "unary",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "simple",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {"name": "unary", "term": {"variable": "ae"}},
                                                                                       "typeName": "hydra.java.syntax.ShiftExpression"}}},
                                                                                 "typeName": "hydra.java.syntax.RelationalExpression"}}},
@@ -1259,11 +1259,11 @@
                     "body": {
                       "application": {
                         "argument": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "arrayCreation",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "primitiveArray",
                                     "term": {
@@ -1309,7 +1309,7 @@
                             "argument": {
                               "lambda": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "expression", "term": {"variable": "e"}},
                                     "typeName": "hydra.java.syntax.VariableInitializer"}},
                                 "domain": {"variable": "hydra.java.syntax.Expression"},
@@ -1338,17 +1338,17 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "withoutTrailing",
                       "term": {
-                        "union": {
+                        "inject": {
                           "field": {
                             "name": "expression",
                             "term": {
                               "wrap": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "assignment",
                                       "term": {
@@ -1358,7 +1358,7 @@
                                             {
                                               "name": "op",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {"name": "simple", "term": {"unit": {}}},
                                                   "typeName": "hydra.java.syntax.AssignmentOperator"}}},
                                             {"name": "expression", "term": {"variable": "rhs"}}],
@@ -1386,7 +1386,7 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {"name": "boolean", "term": {"variable": "b"}},
                 "typeName": "hydra.java.syntax.Literal"}},
             "domain": {"literal": {"boolean": {}}},
@@ -1426,7 +1426,7 @@
         "term": {
           "application": {
             "argument": {
-              "union": {
+              "inject": {
                 "field": {"name": "boolean", "term": {"unit": {}}},
                 "typeName": "hydra.java.syntax.PrimitiveType"}},
             "function": {"variable": "hydra.java.utils.javaPrimitiveTypeToJavaType"}}},
@@ -1440,15 +1440,15 @@
               {
                 "name": "type",
                 "term": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "numeric",
                       "term": {
-                        "union": {
+                        "inject": {
                           "field": {
                             "name": "integral",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "byte", "term": {"unit": {}}},
                                 "typeName": "hydra.java.syntax.IntegralType"}}},
                           "typeName": "hydra.java.syntax.NumericType"}}},
@@ -1471,7 +1471,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "notPlusMinus",
                       "term": {
@@ -1512,15 +1512,15 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "assignment",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "conditional",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "simple",
                               "term": {
@@ -1544,31 +1544,31 @@
                                                                   "body": {
                                                                     "list": [
                                                                       {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "unary",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "simple",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {
                                                                                         "name": "unary",
                                                                                         "term": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "unary",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "unary",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "other",
                                                                                                           "term": {
-                                                                                                            "union": {
+                                                                                                            "inject": {
                                                                                                               "field": {"name": "cast", "term": {"variable": "ce"}},
                                                                                                               "typeName": "hydra.java.syntax.UnaryExpressionNotPlusMinus"}}},
                                                                                                         "typeName": "hydra.java.syntax.UnaryExpression"}}},
@@ -1601,7 +1601,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "primitive",
                       "term": {
@@ -1698,7 +1698,7 @@
                                               "type": {"maybe": {"variable": "hydra.java.syntax.ClassType"}},
                                               "variables": []}}],
                                         "body": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "normal",
                                               "term": {
@@ -1781,7 +1781,7 @@
                                 "argument": {
                                   "lambda": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "package", "term": {"variable": "p"}},
                                         "typeName": "hydra.java.syntax.ClassTypeQualifier"}},
                                     "domain": {"variable": "hydra.java.syntax.PackageName"},
@@ -1789,7 +1789,7 @@
                                 "function": {
                                   "application": {
                                     "argument": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "none", "term": {"unit": {}}},
                                         "typeName": "hydra.java.syntax.ClassTypeQualifier"}},
                                     "function": {
@@ -1815,7 +1815,7 @@
                                     "argument": {
                                       "lambda": {
                                         "body": {
-                                          "union": {
+                                          "inject": {
                                             "field": {"name": "reference", "term": {"variable": "rt"}},
                                             "typeName": "hydra.java.syntax.TypeArgument"}},
                                         "domain": {"variable": "hydra.java.syntax.ReferenceType"},
@@ -1872,15 +1872,15 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "reference",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "classOrInterface",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {"name": "class", "term": {"variable": "ct"}},
                             "typeName": "hydra.java.syntax.ClassOrInterfaceType"}}},
                       "typeName": "hydra.java.syntax.ReferenceType"}}},
@@ -1899,15 +1899,15 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "assignment",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "conditional",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "simple",
                               "term": {
@@ -1935,15 +1935,15 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "assignment",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "conditional",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "simple",
                                       "term": {
@@ -1967,43 +1967,43 @@
                                                                           "body": {
                                                                             "list": [
                                                                               {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {
                                                                                     "name": "unary",
                                                                                     "term": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "simple",
                                                                                           "term": {
-                                                                                            "union": {
+                                                                                            "inject": {
                                                                                               "field": {
                                                                                                 "name": "unary",
                                                                                                 "term": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {
                                                                                                       "name": "unary",
                                                                                                       "term": {
-                                                                                                        "union": {
+                                                                                                        "inject": {
                                                                                                           "field": {
                                                                                                             "name": "unary",
                                                                                                             "term": {
-                                                                                                              "union": {
+                                                                                                              "inject": {
                                                                                                                 "field": {
                                                                                                                   "name": "other",
                                                                                                                   "term": {
-                                                                                                                    "union": {
+                                                                                                                    "inject": {
                                                                                                                       "field": {
                                                                                                                         "name": "postfix",
                                                                                                                         "term": {
-                                                                                                                          "union": {
+                                                                                                                          "inject": {
                                                                                                                             "field": {
                                                                                                                               "name": "primary",
                                                                                                                               "term": {
-                                                                                                                                "union": {
+                                                                                                                                "inject": {
                                                                                                                                   "field": {
                                                                                                                                     "name": "noNewArray",
                                                                                                                                     "term": {
-                                                                                                                                      "union": {
+                                                                                                                                      "inject": {
                                                                                                                                         "field": {
                                                                                                                                           "name": "classInstance",
                                                                                                                                           "term": {
@@ -2227,11 +2227,11 @@
       "term": {
         "name": "hydra.java.utils.javaEmptyStatement",
         "term": {
-          "union": {
+          "inject": {
             "field": {
               "name": "withoutTrailing",
               "term": {
-                "union": {
+                "inject": {
                   "field": {"name": "empty", "term": {"unit": {}}},
                   "typeName": "hydra.java.syntax.StatementWithoutTrailingSubstatement"}}},
             "typeName": "hydra.java.syntax.Statement"}},
@@ -2242,15 +2242,15 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "assignment",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "conditional",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "simple",
                               "term": {
@@ -2323,7 +2323,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "equal",
                       "term": {
@@ -2356,7 +2356,7 @@
                 "argument": {
                   "application": {
                     "argument": {
-                      "union": {
+                      "inject": {
                         "field": {"name": "null", "term": {"unit": {}}},
                         "typeName": "hydra.java.syntax.Literal"}},
                     "function": {"variable": "hydra.java.utils.javaLiteralToJavaRelationalExpression"}}},
@@ -2378,15 +2378,15 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "assignment",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "conditional",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "simple",
                               "term": {
@@ -2410,35 +2410,35 @@
                                                                   "body": {
                                                                     "list": [
                                                                       {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "unary",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "simple",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {
                                                                                         "name": "unary",
                                                                                         "term": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "unary",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "unary",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "other",
                                                                                                           "term": {
-                                                                                                            "union": {
+                                                                                                            "inject": {
                                                                                                               "field": {
                                                                                                                 "name": "postfix",
                                                                                                                 "term": {
-                                                                                                                  "union": {
+                                                                                                                  "inject": {
                                                                                                                     "field": {"name": "name", "term": {"variable": "en"}},
                                                                                                                     "typeName": "hydra.java.syntax.PostfixExpression"}}},
                                                                                                               "typeName": "hydra.java.syntax.UnaryExpressionNotPlusMinus"}}},
@@ -2483,11 +2483,11 @@
                       {
                         "name": "fallback",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "noNewArray",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {"name": "parens", "term": {"variable": "e"}},
                                   "typeName": "hydra.java.syntax.PrimaryNoNewArrayExpression"}}},
                             "typeName": "hydra.java.syntax.Primary"}},
@@ -2886,23 +2886,23 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "other",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "postfix",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "primary",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "noNewArray",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "parens", "term": {"variable": "e"}},
                                         "typeName": "hydra.java.syntax.PrimaryNoNewArrayExpression"}}},
                                   "typeName": "hydra.java.syntax.Primary"}}},
@@ -2923,15 +2923,15 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "assignment",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "conditional",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "simple",
                               "term": {
@@ -2955,43 +2955,43 @@
                                                                   "body": {
                                                                     "list": [
                                                                       {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "unary",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "simple",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {
                                                                                         "name": "unary",
                                                                                         "term": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "unary",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "unary",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "other",
                                                                                                           "term": {
-                                                                                                            "union": {
+                                                                                                            "inject": {
                                                                                                               "field": {
                                                                                                                 "name": "postfix",
                                                                                                                 "term": {
-                                                                                                                  "union": {
+                                                                                                                  "inject": {
                                                                                                                     "field": {
                                                                                                                       "name": "primary",
                                                                                                                       "term": {
-                                                                                                                        "union": {
+                                                                                                                        "inject": {
                                                                                                                           "field": {
                                                                                                                             "name": "noNewArray",
                                                                                                                             "term": {
-                                                                                                                              "union": {
+                                                                                                                              "inject": {
                                                                                                                                 "field": {"name": "fieldAccess", "term": {"variable": "fa"}},
                                                                                                                                 "typeName": "hydra.java.syntax.PrimaryNoNewArrayExpression"}}},
                                                                                                                           "typeName": "hydra.java.syntax.Primary"}}},
@@ -3045,15 +3045,15 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "assignment",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "conditional",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "simple",
                               "term": {
@@ -3077,35 +3077,35 @@
                                                                   "body": {
                                                                     "list": [
                                                                       {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "unary",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "simple",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {
                                                                                         "name": "unary",
                                                                                         "term": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "unary",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "unary",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "other",
                                                                                                           "term": {
-                                                                                                            "union": {
+                                                                                                            "inject": {
                                                                                                               "field": {
                                                                                                                 "name": "postfix",
                                                                                                                 "term": {
-                                                                                                                  "union": {
+                                                                                                                  "inject": {
                                                                                                                     "field": {
                                                                                                                       "name": "name",
                                                                                                                       "term": {
@@ -3173,31 +3173,31 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "simple",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "unary",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "unary",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "unary",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "other",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "postfix",
                                                 "term": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "name",
                                                       "term": {
@@ -3232,15 +3232,15 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "other",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "postfix",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "name",
                               "term": {
@@ -3273,7 +3273,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "instanceof",
                       "term": {
@@ -3302,7 +3302,7 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "integer",
                   "term": {
@@ -3347,15 +3347,15 @@
         "term": {
           "application": {
             "argument": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "numeric",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "integral",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {"name": "int", "term": {"unit": {}}},
                             "typeName": "hydra.java.syntax.IntegralType"}}},
                       "typeName": "hydra.java.syntax.NumericType"}}},
@@ -3368,15 +3368,15 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "classMember",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "interface",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {"name": "normalInterface", "term": {"variable": "nid"}},
                             "typeName": "hydra.java.syntax.InterfaceDeclaration"}}},
                       "typeName": "hydra.java.syntax.ClassMemberDeclaration"}}},
@@ -3397,7 +3397,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "lambda",
                       "term": {
@@ -3406,7 +3406,7 @@
                             {
                               "name": "parameters",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "single",
                                     "term": {
@@ -3417,7 +3417,7 @@
                             {
                               "name": "body",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {"name": "expression", "term": {"variable": "body"}},
                                   "typeName": "hydra.java.syntax.LambdaBody"}}}],
                           "typeName": "hydra.java.syntax.LambdaExpression"}}},
@@ -3443,7 +3443,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "lambda",
                       "term": {
@@ -3452,7 +3452,7 @@
                             {
                               "name": "parameters",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "single",
                                     "term": {
@@ -3463,7 +3463,7 @@
                             {
                               "name": "body",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {"name": "block", "term": {"variable": "block"}},
                                   "typeName": "hydra.java.syntax.LambdaBody"}}}],
                           "typeName": "hydra.java.syntax.LambdaExpression"}}},
@@ -3487,15 +3487,15 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "assignment",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "conditional",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "simple",
                               "term": {
@@ -3519,43 +3519,43 @@
                                                                   "body": {
                                                                     "list": [
                                                                       {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "unary",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "simple",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {
                                                                                         "name": "unary",
                                                                                         "term": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "unary",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "unary",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "other",
                                                                                                           "term": {
-                                                                                                            "union": {
+                                                                                                            "inject": {
                                                                                                               "field": {
                                                                                                                 "name": "postfix",
                                                                                                                 "term": {
-                                                                                                                  "union": {
+                                                                                                                  "inject": {
                                                                                                                     "field": {
                                                                                                                       "name": "primary",
                                                                                                                       "term": {
-                                                                                                                        "union": {
+                                                                                                                        "inject": {
                                                                                                                           "field": {
                                                                                                                             "name": "noNewArray",
                                                                                                                             "term": {
-                                                                                                                              "union": {
+                                                                                                                              "inject": {
                                                                                                                                 "field": {"name": "literal", "term": {"variable": "lit"}},
                                                                                                                                 "typeName": "hydra.java.syntax.PrimaryNoNewArrayExpression"}}},
                                                                                                                           "typeName": "hydra.java.syntax.Primary"}}},
@@ -3589,27 +3589,27 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "unary",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "other",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "postfix",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "primary",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "noNewArray",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {"name": "literal", "term": {"variable": "lit"}},
                                               "typeName": "hydra.java.syntax.PrimaryNoNewArrayExpression"}}},
                                         "typeName": "hydra.java.syntax.Primary"}}},
@@ -3631,11 +3631,11 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "noNewArray",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {"name": "literal", "term": {"variable": "lit"}},
                       "typeName": "hydra.java.syntax.PrimaryNoNewArrayExpression"}}},
                 "typeName": "hydra.java.syntax.Primary"}},
@@ -3653,39 +3653,39 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "simple",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "unary",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "unary",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "unary",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "other",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "postfix",
                                                 "term": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "primary",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "noNewArray",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {"name": "literal", "term": {"variable": "lit"}},
                                                                 "typeName": "hydra.java.syntax.PrimaryNoNewArrayExpression"}}},
                                                           "typeName": "hydra.java.syntax.Primary"}}},
@@ -3714,11 +3714,11 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "classMember",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "field",
                                 "term": {
@@ -3763,7 +3763,7 @@
                 "argument": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "block",
                           "term": {
@@ -3774,7 +3774,7 @@
                 "function": {
                   "application": {
                     "argument": {
-                      "union": {
+                      "inject": {
                         "field": {"name": "none", "term": {"unit": {}}},
                         "typeName": "hydra.java.syntax.MethodBody"}},
                     "function": {
@@ -3801,11 +3801,11 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "classMember",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {"name": "method", "term": {"variable": "md"}},
                       "typeName": "hydra.java.syntax.ClassMemberDeclaration"}}},
                 "typeName": "hydra.java.syntax.ClassBodyDeclaration"}},
@@ -3888,15 +3888,15 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "assignment",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "conditional",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "simple",
                               "term": {
@@ -3920,43 +3920,43 @@
                                                                   "body": {
                                                                     "list": [
                                                                       {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "unary",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "simple",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {
                                                                                         "name": "unary",
                                                                                         "term": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "unary",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "unary",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "other",
                                                                                                           "term": {
-                                                                                                            "union": {
+                                                                                                            "inject": {
                                                                                                               "field": {
                                                                                                                 "name": "postfix",
                                                                                                                 "term": {
-                                                                                                                  "union": {
+                                                                                                                  "inject": {
                                                                                                                     "field": {
                                                                                                                       "name": "primary",
                                                                                                                       "term": {
-                                                                                                                        "union": {
+                                                                                                                        "inject": {
                                                                                                                           "field": {
                                                                                                                             "name": "noNewArray",
                                                                                                                             "term": {
-                                                                                                                              "union": {
+                                                                                                                              "inject": {
                                                                                                                                 "field": {"name": "methodInvocation", "term": {"variable": "mi"}},
                                                                                                                                 "typeName": "hydra.java.syntax.PrimaryNoNewArrayExpression"}}},
                                                                                                                           "typeName": "hydra.java.syntax.Primary"}}},
@@ -3990,15 +3990,15 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "primary",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "noNewArray",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {"name": "methodInvocation", "term": {"variable": "mi"}},
                             "typeName": "hydra.java.syntax.PrimaryNoNewArrayExpression"}}},
                       "typeName": "hydra.java.syntax.Primary"}}},
@@ -4017,11 +4017,11 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "noNewArray",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {"name": "methodInvocation", "term": {"variable": "mi"}},
                       "typeName": "hydra.java.syntax.PrimaryNoNewArrayExpression"}}},
                 "typeName": "hydra.java.syntax.Primary"}},
@@ -4039,17 +4039,17 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "withoutTrailing",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "expression",
                         "term": {
                           "wrap": {
                             "body": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "methodInvocation", "term": {"variable": "mi"}},
                                 "typeName": "hydra.java.syntax.StatementExpression"}},
                             "typeName": "hydra.java.syntax.ExpressionStatement"}}},
@@ -4069,15 +4069,15 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "simple",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "unary",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {"name": "unary", "term": {"variable": "me"}},
                             "typeName": "hydra.java.syntax.AdditiveExpression"}}},
                       "typeName": "hydra.java.syntax.ShiftExpression"}}},
@@ -4150,31 +4150,31 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "unary",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "simple",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "unary",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "unary",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "unary",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "other",
                                                 "term": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {"name": "postfix", "term": {"variable": "pe"}},
                                                     "typeName": "hydra.java.syntax.UnaryExpressionNotPlusMinus"}}},
                                               "typeName": "hydra.java.syntax.UnaryExpression"}}},
@@ -4197,15 +4197,15 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "assignment",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "conditional",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "simple",
                               "term": {
@@ -4229,31 +4229,31 @@
                                                                   "body": {
                                                                     "list": [
                                                                       {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "unary",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "simple",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {
                                                                                         "name": "unary",
                                                                                         "term": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "unary",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "unary",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "other",
                                                                                                           "term": {
-                                                                                                            "union": {
+                                                                                                            "inject": {
                                                                                                               "field": {"name": "postfix", "term": {"variable": "pe"}},
                                                                                                               "typeName": "hydra.java.syntax.UnaryExpressionNotPlusMinus"}}},
                                                                                                         "typeName": "hydra.java.syntax.UnaryExpression"}}},
@@ -4296,31 +4296,31 @@
                                 "body": {
                                   "list": [
                                     {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "unary",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "simple",
                                                 "term": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "unary",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "unary",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "unary",
                                                                   "term": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "other",
                                                                         "term": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {"name": "postfix", "term": {"variable": "pe"}},
                                                                             "typeName": "hydra.java.syntax.UnaryExpressionNotPlusMinus"}}},
                                                                       "typeName": "hydra.java.syntax.UnaryExpression"}}},
@@ -4346,27 +4346,27 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "simple",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "unary",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "unary",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "unary",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "other",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {"name": "postfix", "term": {"variable": "pe"}},
                                               "typeName": "hydra.java.syntax.UnaryExpressionNotPlusMinus"}}},
                                         "typeName": "hydra.java.syntax.UnaryExpression"}}},
@@ -4388,11 +4388,11 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "other",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {"name": "postfix", "term": {"variable": "pe"}},
                       "typeName": "hydra.java.syntax.UnaryExpressionNotPlusMinus"}}},
                 "typeName": "hydra.java.syntax.UnaryExpression"}},
@@ -4410,15 +4410,15 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "assignment",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "conditional",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "simple",
                               "term": {
@@ -4442,35 +4442,35 @@
                                                                   "body": {
                                                                     "list": [
                                                                       {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "unary",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "simple",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {
                                                                                         "name": "unary",
                                                                                         "term": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "unary",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "unary",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "other",
                                                                                                           "term": {
-                                                                                                            "union": {
+                                                                                                            "inject": {
                                                                                                               "field": {
                                                                                                                 "name": "postfix",
                                                                                                                 "term": {
-                                                                                                                  "union": {
+                                                                                                                  "inject": {
                                                                                                                     "field": {"name": "primary", "term": {"variable": "p"}},
                                                                                                                     "typeName": "hydra.java.syntax.PostfixExpression"}}},
                                                                                                               "typeName": "hydra.java.syntax.UnaryExpressionNotPlusMinus"}}},
@@ -4502,15 +4502,15 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "other",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "postfix",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {"name": "primary", "term": {"variable": "p"}},
                             "typeName": "hydra.java.syntax.PostfixExpression"}}},
                       "typeName": "hydra.java.syntax.UnaryExpressionNotPlusMinus"}}},
@@ -4529,7 +4529,7 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "primitive",
                   "term": {
@@ -4562,15 +4562,15 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "reference",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "classOrInterface",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "class",
                                       "term": {
@@ -4663,11 +4663,11 @@
                                                       "type": {"variable": "hydra.java.syntax.TypeIdentifier"},
                                                       "variables": []}}],
                                                 "body": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "classOrInterface",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "class",
                                                             "term": {
@@ -4732,11 +4732,11 @@
                                                       "type": {"variable": "hydra.java.syntax.TypeIdentifier"},
                                                       "variables": []}}],
                                                 "body": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "classOrInterface",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "interface",
                                                             "term": {
@@ -4778,7 +4778,7 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {"name": "unary", "term": {"variable": "re"}},
                 "typeName": "hydra.java.syntax.EqualityExpression"}},
             "domain": {"variable": "hydra.java.syntax.RelationalExpression"},
@@ -4797,7 +4797,7 @@
             "body": {
               "application": {
                 "argument": {
-                  "union": {
+                  "inject": {
                     "field": {"name": "unary", "term": {"variable": "re"}},
                     "typeName": "hydra.java.syntax.EqualityExpression"}},
                 "function": {
@@ -4816,35 +4816,35 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "other",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "postfix",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "primary",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "noNewArray",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "parens",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "assignment",
                                                 "term": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "conditional",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "simple",
                                                             "term": {
@@ -4868,7 +4868,7 @@
                                                                                                 "body": {
                                                                                                   "list": [
                                                                                                     {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {"name": "unary", "term": {"variable": "re"}},
                                                                                                         "typeName": "hydra.java.syntax.EqualityExpression"}}]},
                                                                                                 "typeName": "hydra.java.syntax.AndExpression"}}]},
@@ -4898,11 +4898,11 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "withoutTrailing",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "return",
                         "term": {
@@ -4934,7 +4934,7 @@
                         "argument": {
                           "lambda": {
                             "body": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "statement", "term": {"variable": "s"}},
                                 "typeName": "hydra.java.syntax.BlockStatement"}},
                             "domain": {"variable": "hydra.java.syntax.Statement"},
@@ -4961,7 +4961,7 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "string",
                   "term": {
@@ -5002,15 +5002,15 @@
       "term": {
         "name": "hydra.java.utils.javaThis",
         "term": {
-          "union": {
+          "inject": {
             "field": {
               "name": "assignment",
               "term": {
-                "union": {
+                "inject": {
                   "field": {
                     "name": "conditional",
                     "term": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "simple",
                           "term": {
@@ -5034,43 +5034,43 @@
                                                               "body": {
                                                                 "list": [
                                                                   {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "unary",
                                                                         "term": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "simple",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {
                                                                                     "name": "unary",
                                                                                     "term": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "unary",
                                                                                           "term": {
-                                                                                            "union": {
+                                                                                            "inject": {
                                                                                               "field": {
                                                                                                 "name": "unary",
                                                                                                 "term": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {
                                                                                                       "name": "other",
                                                                                                       "term": {
-                                                                                                        "union": {
+                                                                                                        "inject": {
                                                                                                           "field": {
                                                                                                             "name": "postfix",
                                                                                                             "term": {
-                                                                                                              "union": {
+                                                                                                              "inject": {
                                                                                                                 "field": {
                                                                                                                   "name": "primary",
                                                                                                                   "term": {
-                                                                                                                    "union": {
+                                                                                                                    "inject": {
                                                                                                                       "field": {
                                                                                                                         "name": "noNewArray",
                                                                                                                         "term": {
-                                                                                                                          "union": {
+                                                                                                                          "inject": {
                                                                                                                             "field": {"name": "this", "term": {"unit": {}}},
                                                                                                                             "typeName": "hydra.java.syntax.PrimaryNoNewArrayExpression"}}},
                                                                                                                       "typeName": "hydra.java.syntax.Primary"}}},
@@ -5181,11 +5181,11 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "withoutTrailing",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "throw",
                         "term": {
@@ -5273,11 +5273,11 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "reference",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "variable",
                         "term": {
@@ -5373,7 +5373,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "simple",
                       "term": {
@@ -5451,7 +5451,7 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "other",
                                                       "term": {
@@ -5487,7 +5487,7 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "type",
                   "term": {
@@ -5519,7 +5519,7 @@
                         "term": {
                           "lambda": {
                             "body": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "reference", "term": {"variable": "rt"}},
                                 "typeName": "hydra.java.syntax.TypeArgument"}},
                             "domain": {"variable": "hydra.java.syntax.ReferenceType"},
@@ -5529,7 +5529,7 @@
                         "term": {
                           "lambda": {
                             "body": {
-                              "union": {
+                              "inject": {
                                 "field": {
                                   "name": "wildcard",
                                   "term": {
@@ -5566,7 +5566,7 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "variable",
                   "term": {
@@ -5603,11 +5603,11 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "reference",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {"name": "variable", "term": {"variable": "tv"}},
                       "typeName": "hydra.java.syntax.ReferenceType"}}},
                 "typeName": "hydra.java.syntax.Type"}},
@@ -5625,15 +5625,15 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "assignment",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "conditional",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "simple",
                               "term": {
@@ -5657,23 +5657,23 @@
                                                                   "body": {
                                                                     "list": [
                                                                       {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "unary",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "simple",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {
                                                                                         "name": "unary",
                                                                                         "term": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "unary",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {"name": "unary", "term": {"variable": "ue"}},
                                                                                                   "typeName": "hydra.java.syntax.MultiplicativeExpression"}}},
                                                                                             "typeName": "hydra.java.syntax.AdditiveExpression"}}},
@@ -5702,19 +5702,19 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "simple",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "unary",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "unary",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {"name": "unary", "term": {"variable": "ue"}},
                                   "typeName": "hydra.java.syntax.MultiplicativeExpression"}}},
                             "typeName": "hydra.java.syntax.AdditiveExpression"}}},
@@ -5923,13 +5923,13 @@
                                         {
                                           "application": {
                                             "argument": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "public", "term": {"unit": {}}},
                                                 "typeName": "hydra.java.syntax.ConstructorModifier"}},
                                             "function": {
                                               "application": {
                                                 "argument": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {"name": "private", "term": {"unit": {}}},
                                                     "typeName": "hydra.java.syntax.ConstructorModifier"}},
                                                 "function": {
@@ -5959,7 +5959,7 @@
                                       "type": {"variable": "hydra.java.syntax.ConstructorBody"},
                                       "variables": []}}],
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "constructorDeclaration",
                                       "term": {
@@ -6109,7 +6109,7 @@
                                 "argument": {
                                   "lambda": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "complex",
                                           "term": {
@@ -6125,7 +6125,7 @@
                                                           "argument": {
                                                             "lambda": {
                                                               "body": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {"name": "primary", "term": {"variable": "p"}},
                                                                   "typeName": "hydra.java.syntax.MethodInvocation_Variant"}},
                                                               "domain": {"variable": "hydra.java.syntax.Primary"},
@@ -6135,7 +6135,7 @@
                                                               "argument": {
                                                                 "lambda": {
                                                                   "body": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {"name": "expression", "term": {"variable": "en"}},
                                                                       "typeName": "hydra.java.syntax.MethodInvocation_Variant"}},
                                                                   "domain": {"variable": "hydra.java.syntax.ExpressionName"},
@@ -6167,7 +6167,7 @@
                                 "function": {
                                   "application": {
                                     "argument": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "simple",
                                           "term": {
@@ -6289,7 +6289,7 @@
                               {
                                 "name": "header",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "complex",
                                       "term": {
@@ -6298,7 +6298,7 @@
                                             {
                                               "name": "variant",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "expression",
                                                     "term": {
@@ -6661,11 +6661,11 @@
                         "body": {
                           "lambda": {
                             "body": {
-                              "union": {
+                              "inject": {
                                 "field": {
                                   "name": "classOrInterface",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {
                                         "name": "class",
                                         "term": {
@@ -6886,7 +6886,7 @@
                                 "term": {
                                   "application": {
                                     "argument": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "none", "term": {"unit": {}}},
                                         "typeName": "hydra.java.syntax.ClassTypeQualifier"}},
                                     "function": {
@@ -6896,7 +6896,7 @@
                                             "argument": {
                                               "lambda": {
                                                 "body": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {"name": "package", "term": {"variable": "p"}},
                                                     "typeName": "hydra.java.syntax.ClassTypeQualifier"}},
                                                 "domain": {"variable": "hydra.java.syntax.PackageName"},
@@ -6904,7 +6904,7 @@
                                             "function": {
                                               "application": {
                                                 "argument": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {"name": "none", "term": {"unit": {}}},
                                                     "typeName": "hydra.java.syntax.ClassTypeQualifier"}},
                                                 "function": {
@@ -7014,7 +7014,7 @@
       "term": {
         "name": "hydra.java.utils.overrideAnnotation",
         "term": {
-          "union": {
+          "inject": {
             "field": {
               "name": "marker",
               "term": {
@@ -7039,7 +7039,7 @@
             "body": {
               "application": {
                 "argument": {
-                  "union": {
+                  "inject": {
                     "field": {"name": "reference", "term": {"variable": "rt"}},
                     "typeName": "hydra.java.syntax.Type"}},
                 "function": {"variable": "hydra.java.utils.javaTypeToJavaResult"}}},
@@ -7114,7 +7114,7 @@
       "term": {
         "name": "hydra.java.utils.suppressWarningsUncheckedAnnotation",
         "term": {
-          "union": {
+          "inject": {
             "field": {
               "name": "singleElement",
               "term": {
@@ -7133,11 +7133,11 @@
                       "name": "value",
                       "term": {
                         "maybe": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "conditionalExpression",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "simple",
                                     "term": {
@@ -7151,7 +7151,7 @@
                                                     {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "primary",
                                                               "term": {
@@ -7190,7 +7190,7 @@
                             "argument": {
                               "list": [
                                 {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "public", "term": {"unit": {}}},
                                     "typeName": "hydra.java.syntax.MethodModifier"}}]},
                             "function": {
@@ -7198,11 +7198,11 @@
                                 "argument": {
                                   "list": [
                                     {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "public", "term": {"unit": {}}},
                                         "typeName": "hydra.java.syntax.MethodModifier"}},
                                     {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "abstract", "term": {"unit": {}}},
                                         "typeName": "hydra.java.syntax.MethodModifier"}}]},
                                 "function": {
@@ -7257,7 +7257,7 @@
                                 "argument": {
                                   "lambda": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "reference",
                                           "term": {
@@ -7293,7 +7293,7 @@
                                   {
                                     "name": "qualifier",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "none", "term": {"unit": {}}},
                                         "typeName": "hydra.java.syntax.ClassTypeQualifier"}}},
                                   {
@@ -7309,7 +7309,7 @@
                                         "argument": {
                                           "list": [
                                             {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "reference",
                                                   "term": {"variable": "hydra.java.utils.visitorTypeVariable"}},
@@ -7344,7 +7344,7 @@
                         "term": {
                           "application": {
                             "argument": {
-                              "union": {
+                              "inject": {
                                 "field": {
                                   "name": "reference",
                                   "term": {"variable": "hydra.java.utils.visitorTypeVariable"}},
@@ -7383,7 +7383,7 @@
                               "maybe": {
                                 "list": [
                                   {
-                                    "union": {
+                                    "inject": {
                                       "field": {
                                         "name": "statement",
                                         "term": {
@@ -7462,7 +7462,7 @@
                   {
                     "name": "lhs",
                     "term": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "fieldAccess",
                           "term": {
@@ -7471,15 +7471,15 @@
                                 {
                                   "name": "qualifier",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {
                                         "name": "primary",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "noNewArray",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {"name": "this", "term": {"unit": {}}},
                                                   "typeName": "hydra.java.syntax.PrimaryNoNewArrayExpression"}}},
                                             "typeName": "hydra.java.syntax.Primary"}}},
@@ -7550,11 +7550,11 @@
                                                             "body": {
                                                               "either": {
                                                                 "@right": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "reference",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "array",
                                                                             "term": {
@@ -7574,7 +7574,7 @@
                                                                                   {
                                                                                     "name": "variant",
                                                                                     "term": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {"name": "classOrInterface", "term": {"variable": "cit"}},
                                                                                         "typeName": "hydra.java.syntax.ArrayType_Variant"}}}],
                                                                                 "typeName": "hydra.java.syntax.ArrayType"}}},
@@ -7642,11 +7642,11 @@
                                                                 "body": {
                                                                   "either": {
                                                                     "@right": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "reference",
                                                                           "term": {
-                                                                            "union": {
+                                                                            "inject": {
                                                                               "field": {
                                                                                 "name": "array",
                                                                                 "term": {
@@ -7672,7 +7672,7 @@
                                                             "body": {
                                                               "either": {
                                                                 "@left": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "other",
                                                                       "term": {
@@ -7700,7 +7700,7 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "other",
                                                       "term": {
@@ -7986,7 +7986,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "localVariableDeclaration",
                       "term": {
@@ -8003,7 +8003,7 @@
                                 {
                                   "name": "type",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "var", "term": {"unit": {}}},
                                       "typeName": "hydra.java.syntax.LocalVariableType"}}},
                                 {
@@ -8014,7 +8014,7 @@
                                         "application": {
                                           "argument": {
                                             "maybe": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "expression", "term": {"variable": "rhs"}},
                                                 "typeName": "hydra.java.syntax.VariableInitializer"}}},
                                           "function": {
@@ -8187,7 +8187,7 @@
                                   {
                                     "name": "init_",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "expression", "term": {"variable": "rhs"}},
                                         "typeName": "hydra.java.syntax.VariableInitializer"}},
                                     "type": {
@@ -8206,7 +8206,7 @@
                                       "type": {"variable": "hydra.java.syntax.VariableDeclarator"},
                                       "variables": []}}],
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "localVariableDeclaration",
                                       "term": {
@@ -8223,7 +8223,7 @@
                                                 {
                                                   "name": "type",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "type",
                                                         "term": {

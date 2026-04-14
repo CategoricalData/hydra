@@ -16,7 +16,7 @@ public interface Query {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.query.ComparisonConstraint> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.query.ComparisonConstraint> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
@@ -166,7 +166,7 @@ public interface Query {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.query.Node> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.query.Node> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
@@ -212,7 +212,7 @@ public interface Query {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.query.Path> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.query.Path> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
@@ -294,7 +294,7 @@ public interface Query {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.query.Pattern> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.query.Pattern> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
@@ -536,7 +536,7 @@ public interface Query {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.query.RegexQuantifier> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.query.RegexQuantifier> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
@@ -704,7 +704,7 @@ public interface Query {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.query.Step> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.query.Step> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;

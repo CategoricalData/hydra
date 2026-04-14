@@ -58,43 +58,43 @@ def untyped_term_variable_checking_error(x: hydra.error.checking.UntypedTermVari
 def checking_error(v1: hydra.error.checking.CheckingError) -> hydra.core.Term:
     match v1:
         case hydra.error.checking.CheckingErrorIncorrectUnification(value=y):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("incorrectUnification"), incorrect_unification_error(y)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("incorrectUnification"), incorrect_unification_error(y)))))
 
         case hydra.error.checking.CheckingErrorNotAForallType(value=y2):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("notAForallType"), not_a_forall_type_error(y2)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("notAForallType"), not_a_forall_type_error(y2)))))
 
         case hydra.error.checking.CheckingErrorNotAFunctionType(value=y3):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("notAFunctionType"), not_a_function_type_error(y3)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("notAFunctionType"), not_a_function_type_error(y3)))))
 
         case hydra.error.checking.CheckingErrorOther(value=y4):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("other"), other_checking_error(y4)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("other"), other_checking_error(y4)))))
 
         case hydra.error.checking.CheckingErrorTypeArityMismatch(value=y5):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("typeArityMismatch"), type_arity_mismatch_error(y5)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("typeArityMismatch"), type_arity_mismatch_error(y5)))))
 
         case hydra.error.checking.CheckingErrorTypeMismatch(value=y6):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("typeMismatch"), type_mismatch_error(y6)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("typeMismatch"), type_mismatch_error(y6)))))
 
         case hydra.error.checking.CheckingErrorUnboundTypeVariables(value=y7):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("unboundTypeVariables"), unbound_type_variables_error(y7)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("unboundTypeVariables"), unbound_type_variables_error(y7)))))
 
         case hydra.error.checking.CheckingErrorUndefinedTermVariable(value=y8):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("undefinedTermVariable"), undefined_term_variable_checking_error(y8)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("undefinedTermVariable"), undefined_term_variable_checking_error(y8)))))
 
         case hydra.error.checking.CheckingErrorUnequalTypes(value=y9):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("unequalTypes"), unequal_types_error(y9)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("unequalTypes"), unequal_types_error(y9)))))
 
         case hydra.error.checking.CheckingErrorUnsupportedTermVariant(value=y10):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("unsupportedTermVariant"), unsupported_term_variant_error(y10)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("unsupportedTermVariant"), unsupported_term_variant_error(y10)))))
 
         case hydra.error.checking.CheckingErrorUntypedLambda(value=y11):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("untypedLambda"), untyped_lambda_error(y11)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("untypedLambda"), untyped_lambda_error(y11)))))
 
         case hydra.error.checking.CheckingErrorUntypedLetBinding(value=y12):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("untypedLetBinding"), untyped_let_binding_error(y12)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("untypedLetBinding"), untyped_let_binding_error(y12)))))
 
         case hydra.error.checking.CheckingErrorUntypedTermVariable(value=y13):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("untypedTermVariable"), untyped_term_variable_checking_error(y13)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("untypedTermVariable"), untyped_term_variable_checking_error(y13)))))
 
         case _:
             raise AssertionError("Unreachable: all variants handled")

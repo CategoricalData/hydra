@@ -198,7 +198,7 @@
                     "argument": {
                       "lambda": {
                         "body": {
-                          "union": {
+                          "inject": {
                             "field": {"name": "null", "term": {"unit": {}}},
                             "typeName": "hydra.json.model.Value"}},
                         "domain": {"literal": {"string": {}}},
@@ -244,7 +244,7 @@
                         "argument": {
                           "lambda": {
                             "body": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "boolean", "term": {"literal": {"boolean": false}}},
                                 "typeName": "hydra.json.model.Value"}},
                             "domain": {"literal": {"string": {}}},
@@ -275,7 +275,7 @@
                             "argument": {
                               "lambda": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "boolean", "term": {"literal": {"boolean": true}}},
                                     "typeName": "hydra.json.model.Value"}},
                                 "domain": {"literal": {"string": {}}},
@@ -794,7 +794,7 @@
                                             "body": {
                                               "application": {
                                                 "argument": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "number",
                                                       "term": {
@@ -1163,7 +1163,7 @@
                                         "body": {
                                           "application": {
                                             "argument": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "string",
                                                   "term": {
@@ -1317,7 +1317,7 @@
                     "argument": {
                       "lambda": {
                         "body": {
-                          "union": {
+                          "inject": {
                             "field": {"name": "array", "term": {"variable": "x"}},
                             "typeName": "hydra.json.model.Value"}},
                         "domain": {"list": {"variable": "hydra.json.model.Value"}},
@@ -1607,7 +1607,7 @@
                             "function": {
                               "lambda": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "object", "term": {"variable": "x"}},
                                     "typeName": "hydra.json.model.Value"}},
                                 "domain": {

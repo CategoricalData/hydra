@@ -1097,8 +1097,8 @@ public interface Adapt {
         }
 
         @Override
-        public hydra.core.Term visit(hydra.core.Term.Union i) {
-          return new hydra.core.Term.Union(new hydra.core.Injection((i).value.typeName, (forField).apply((i).value.field)));
+        public hydra.core.Term visit(hydra.core.Term.Inject i) {
+          return new hydra.core.Term.Inject(new hydra.core.Injection((i).value.typeName, (forField).apply((i).value.field)));
         }
 
         @Override
@@ -1224,7 +1224,7 @@ public interface Adapt {
       }
 
       @Override
-      public hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.core.Term>> visit(hydra.core.Term.Union inj) {
+      public hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.core.Term>> visit(hydra.core.Term.Inject inj) {
         hydra.core.Field field = (inj).value.field;
         hydra.core.Name fname = (field).name;
         hydra.core.Term fterm = (field).term;

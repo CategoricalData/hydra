@@ -1163,7 +1163,7 @@
                                         "body": {
                                           "lambda": {
                                             "body": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "forall",
                                                   "term": {

@@ -116,7 +116,7 @@ public interface Predicates {
       }
 
       @Override
-      public Boolean visit(hydra.core.Term.Union i) {
+      public Boolean visit(hydra.core.Term.Inject i) {
         return hydra.lib.equality.Equal.apply(
           "hydra.core.Term",
           (i).value.typeName.value);
@@ -137,7 +137,7 @@ public interface Predicates {
       }
 
       @Override
-      public Boolean visit(hydra.core.Term.Union i) {
+      public Boolean visit(hydra.core.Term.Inject i) {
         return hydra.lib.equality.Equal.apply(
           "hydra.core.Type",
           (i).value.typeName.value);

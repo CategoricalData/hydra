@@ -6,7 +6,7 @@
 
 (def hydra_test_transform_add_generation_prefix (fn [ns_] ((hydra_lib_strings_cat2 "generation.") ((fn [v] v) ns_))))
 
-(def hydra_test_transform_encode_case_convention (fn [conv] (list :union (->hydra_core_injection "hydra.util.CaseConvention" (->hydra_core_field ((fn [match_target] ((fn [match_value] (cond (= (first match_target) :lower_snake) ((fn [_] "lowerSnake") match_value) (= (first match_target) :upper_snake) ((fn [_] "upperSnake") match_value) (= (first match_target) :camel) ((fn [_] "camel") match_value) (= (first match_target) :pascal) ((fn [_] "pascal") match_value))) (second match_target))) conv) (list :unit nil))))))
+(def hydra_test_transform_encode_case_convention (fn [conv] (list :inject (->hydra_core_injection "hydra.util.CaseConvention" (->hydra_core_field ((fn [match_target] ((fn [match_value] (cond (= (first match_target) :lower_snake) ((fn [_] "lowerSnake") match_value) (= (first match_target) :upper_snake) ((fn [_] "upperSnake") match_value) (= (first match_target) :camel) ((fn [_] "camel") match_value) (= (first match_target) :pascal) ((fn [_] "pascal") match_value))) (second match_target))) conv) (list :unit nil))))))
 
 (def hydra_test_transform_build_convert_case_call (fn [from_conv] (fn [to_conv] (fn [input_] (list :application (->hydra_core_application (list :application (->hydra_core_application (list :application (->hydra_core_application (list :variable "hydra.formatting.convertCase") (hydra_test_transform_encode_case_convention from_conv))) (hydra_test_transform_encode_case_convention to_conv))) (list :literal (list :string input_))))))))
 

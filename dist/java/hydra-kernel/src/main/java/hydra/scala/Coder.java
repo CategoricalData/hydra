@@ -1185,7 +1185,7 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Union inj) {
+      public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Inject inj) {
         hydra.core.Name fn = (inj).value.field.name;
         hydra.core.Term ft = (inj).value.field.term;
         hydra.core.Name sn = (inj).value.typeName;

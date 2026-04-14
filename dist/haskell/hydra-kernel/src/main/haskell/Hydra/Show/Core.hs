@@ -348,7 +348,7 @@ term t =
             "\10216",
             (type_ typ),
             "\10217"])
-        Core.TermUnion v0 -> injection v0
+        Core.TermInject v0 -> injection v0
         Core.TermUnit -> "unit"
         Core.TermUnwrap v0 -> Strings.cat [
           "unwrap(",

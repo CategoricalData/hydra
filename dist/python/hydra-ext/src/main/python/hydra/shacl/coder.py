@@ -136,7 +136,7 @@ def encode_term(subject: hydra.rdf.syntax.Resource, term: hydra.core.Term, cx: h
         case hydra.core.TermSet(value=terms2):
             return hydra.lib.eithers.map((lambda _r: (hydra.lib.lists.concat(hydra.lib.pairs.first(_r)), hydra.lib.pairs.second(_r))), fold_accum_result((lambda _cx0, t: (pair3 := hydra.rdf.utils.next_blank_node(_cx0), node3 := hydra.lib.pairs.first(pair3), cx3 := hydra.lib.pairs.second(pair3), encode_term(node3, t, cx3, g))[3]), cx, hydra.lib.sets.to_list(terms2)))
 
-        case hydra.core.TermUnion(value=inj):
+        case hydra.core.TermInject(value=inj):
             rname = inj.type_name
             field = inj.field
             return hydra.lib.eithers.map((lambda _r: ((with_type(rname, hydra.rdf.syntax.Description(hydra.rdf.utils.resource_to_node(subject), hydra.rdf.syntax.Graph(hydra.lib.sets.from_list(hydra.lib.pairs.first(_r))))),), hydra.lib.pairs.second(_r))), encode_field(rname, subject, field, cx, g))

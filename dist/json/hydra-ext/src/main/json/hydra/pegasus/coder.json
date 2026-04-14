@@ -231,7 +231,7 @@
                                                         "body": {
                                                           "either": {
                                                             "@left": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "other",
                                                                   "term": {
@@ -573,7 +573,7 @@
                                                                         "argument": {
                                                                           "lambda": {
                                                                             "body": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {"name": "typeref", "term": {"variable": "schema"}},
                                                                                 "typeName": "hydra.pegasus.pdl.NamedSchemaType"}},
                                                                             "domain": {"variable": "hydra.pegasus.pdl.Schema"},
@@ -885,7 +885,7 @@
                                                         "function": {
                                                           "application": {
                                                             "argument": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {"name": "camel", "term": {"unit": {}}},
                                                                 "typeName": "hydra.util.CaseConvention"}},
                                                             "function": {"variable": "hydra.names.namespaceToFilePath"}}}}}}},
@@ -1232,7 +1232,7 @@
                                                                                             "body": {
                                                                                               "either": {
                                                                                                 "@left": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {
                                                                                                       "name": "union",
                                                                                                       "term": {
@@ -1342,7 +1342,7 @@
                                                                             "body": {
                                                                               "either": {
                                                                                 "@left": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {"name": "array", "term": {"variable": "inner"}},
                                                                                     "typeName": "hydra.pegasus.pdl.Schema"}}}},
                                                                             "type": {"variable": "hydra.pegasus.pdl.Schema"}}},
@@ -1414,11 +1414,11 @@
                                                                                     "body": {
                                                                                       "either": {
                                                                                         "@left": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "primitive",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {"name": "bytes", "term": {"unit": {}}},
                                                                                                   "typeName": "hydra.pegasus.pdl.PrimitiveType"}}},
                                                                                             "typeName": "hydra.pegasus.pdl.Schema"}}}},
@@ -1448,11 +1448,11 @@
                                                                                     "body": {
                                                                                       "either": {
                                                                                         "@left": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "primitive",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {"name": "boolean", "term": {"unit": {}}},
                                                                                                   "typeName": "hydra.pegasus.pdl.PrimitiveType"}}},
                                                                                             "typeName": "hydra.pegasus.pdl.Schema"}}}},
@@ -1492,11 +1492,11 @@
                                                                                                     "body": {
                                                                                                       "either": {
                                                                                                         "@left": {
-                                                                                                          "union": {
+                                                                                                          "inject": {
                                                                                                             "field": {
                                                                                                               "name": "primitive",
                                                                                                               "term": {
-                                                                                                                "union": {
+                                                                                                                "inject": {
                                                                                                                   "field": {"name": "float", "term": {"unit": {}}},
                                                                                                                   "typeName": "hydra.pegasus.pdl.PrimitiveType"}}},
                                                                                                             "typeName": "hydra.pegasus.pdl.Schema"}}}},
@@ -1526,11 +1526,11 @@
                                                                                                     "body": {
                                                                                                       "either": {
                                                                                                         "@left": {
-                                                                                                          "union": {
+                                                                                                          "inject": {
                                                                                                             "field": {
                                                                                                               "name": "primitive",
                                                                                                               "term": {
-                                                                                                                "union": {
+                                                                                                                "inject": {
                                                                                                                   "field": {"name": "double", "term": {"unit": {}}},
                                                                                                                   "typeName": "hydra.pegasus.pdl.PrimitiveType"}}},
                                                                                                             "typeName": "hydra.pegasus.pdl.Schema"}}}},
@@ -1550,7 +1550,7 @@
                                                                                 "body": {
                                                                                   "either": {
                                                                                     "@left": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "other",
                                                                                           "term": {
@@ -1614,11 +1614,11 @@
                                                                                                     "body": {
                                                                                                       "either": {
                                                                                                         "@left": {
-                                                                                                          "union": {
+                                                                                                          "inject": {
                                                                                                             "field": {
                                                                                                               "name": "primitive",
                                                                                                               "term": {
-                                                                                                                "union": {
+                                                                                                                "inject": {
                                                                                                                   "field": {"name": "int", "term": {"unit": {}}},
                                                                                                                   "typeName": "hydra.pegasus.pdl.PrimitiveType"}}},
                                                                                                             "typeName": "hydra.pegasus.pdl.Schema"}}}},
@@ -1648,11 +1648,11 @@
                                                                                                     "body": {
                                                                                                       "either": {
                                                                                                         "@left": {
-                                                                                                          "union": {
+                                                                                                          "inject": {
                                                                                                             "field": {
                                                                                                               "name": "primitive",
                                                                                                               "term": {
-                                                                                                                "union": {
+                                                                                                                "inject": {
                                                                                                                   "field": {"name": "long", "term": {"unit": {}}},
                                                                                                                   "typeName": "hydra.pegasus.pdl.PrimitiveType"}}},
                                                                                                             "typeName": "hydra.pegasus.pdl.Schema"}}}},
@@ -1672,7 +1672,7 @@
                                                                                 "body": {
                                                                                   "either": {
                                                                                     "@left": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "other",
                                                                                           "term": {
@@ -1726,11 +1726,11 @@
                                                                                     "body": {
                                                                                       "either": {
                                                                                         "@left": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "primitive",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {"name": "string", "term": {"unit": {}}},
                                                                                                   "typeName": "hydra.pegasus.pdl.PrimitiveType"}}},
                                                                                             "typeName": "hydra.pegasus.pdl.Schema"}}}},
@@ -1750,7 +1750,7 @@
                                                                 "body": {
                                                                   "either": {
                                                                     "@left": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "other",
                                                                           "term": {
@@ -1808,7 +1808,7 @@
                                                                             "body": {
                                                                               "either": {
                                                                                 "@left": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {"name": "map", "term": {"variable": "inner"}},
                                                                                     "typeName": "hydra.pegasus.pdl.Schema"}}}},
                                                                             "type": {"variable": "hydra.pegasus.pdl.Schema"}}},
@@ -1939,7 +1939,7 @@
                                                                                             "body": {
                                                                                               "either": {
                                                                                                 "@right": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {
                                                                                                       "name": "record",
                                                                                                       "term": {
@@ -2058,7 +2058,7 @@
                                                                             "body": {
                                                                               "either": {
                                                                                 "@left": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {"name": "array", "term": {"variable": "inner"}},
                                                                                     "typeName": "hydra.pegasus.pdl.Schema"}}}},
                                                                             "type": {"variable": "hydra.pegasus.pdl.Schema"}}},
@@ -2120,7 +2120,7 @@
                                                                     "body": {
                                                                       "either": {
                                                                         "@left": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "named",
                                                                               "term": {
@@ -2176,7 +2176,7 @@
                                                         "body": {
                                                           "either": {
                                                             "@left": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "other",
                                                                   "term": {
@@ -2212,7 +2212,7 @@
                                                                             "body": {
                                                                               "either": {
                                                                                 "@right": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "record",
                                                                                       "term": {
@@ -2304,7 +2304,7 @@
                                                                                 "body": {
                                                                                   "either": {
                                                                                     "@left": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "union",
                                                                                           "term": {
@@ -2383,7 +2383,7 @@
                                                                                     "body": {
                                                                                       "either": {
                                                                                         "@right": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "enum",
                                                                                               "term": {
@@ -2478,7 +2478,7 @@
                                                                                     "argument": {
                                                                                       "application": {
                                                                                         "argument": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "unit", "term": {"unit": {}}},
                                                                                             "typeName": "hydra.core.Type"}},
                                                                                         "function": {
@@ -2525,7 +2525,7 @@
                                                 "body": {
                                                   "either": {
                                                     "@left": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "other",
                                                           "term": {
@@ -2644,7 +2644,7 @@
                                                                                 "body": {
                                                                                   "either": {
                                                                                     "@left": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "other",
                                                                                           "term": {
@@ -2733,15 +2733,15 @@
                                                         "argument": {
                                                           "application": {
                                                             "argument": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "literal",
                                                                   "term": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "integer",
                                                                         "term": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {"name": "int32", "term": {"unit": {}}},
                                                                             "typeName": "hydra.core.IntegerType"}}},
                                                                       "typeName": "hydra.core.LiteralType"}}},
@@ -2795,7 +2795,7 @@
                                                                     "body": {
                                                                       "either": {
                                                                         "@left": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "other",
                                                                               "term": {
@@ -3197,7 +3197,7 @@
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "union",
                                                                                   "term": {
@@ -3207,7 +3207,7 @@
                                                                                           "argument": {
                                                                                             "list": [
                                                                                               {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {"name": "null", "term": {"unit": {}}},
                                                                                                   "typeName": "hydra.pegasus.pdl.Schema"}},
                                                                                               {"variable": "s"}]},
@@ -3415,13 +3415,13 @@
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {"name": "upperSnake", "term": {"unit": {}}},
                                                                             "typeName": "hydra.util.CaseConvention"}},
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {"name": "camel", "term": {"unit": {}}},
                                                                                 "typeName": "hydra.util.CaseConvention"}},
                                                                             "function": {"variable": "hydra.formatting.convertCase"}}}}}}},

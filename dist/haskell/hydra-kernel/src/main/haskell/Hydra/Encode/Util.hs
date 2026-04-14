@@ -11,22 +11,22 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 caseConvention :: Util.CaseConvention -> Core.Term
 caseConvention x =
     case x of
-      Util.CaseConventionCamel -> Core.TermUnion (Core.Injection {
+      Util.CaseConventionCamel -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.util.CaseConvention"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "camel"),
           Core.fieldTerm = Core.TermUnit}})
-      Util.CaseConventionPascal -> Core.TermUnion (Core.Injection {
+      Util.CaseConventionPascal -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.util.CaseConvention"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "pascal"),
           Core.fieldTerm = Core.TermUnit}})
-      Util.CaseConventionLowerSnake -> Core.TermUnion (Core.Injection {
+      Util.CaseConventionLowerSnake -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.util.CaseConvention"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "lowerSnake"),
           Core.fieldTerm = Core.TermUnit}})
-      Util.CaseConventionUpperSnake -> Core.TermUnion (Core.Injection {
+      Util.CaseConventionUpperSnake -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.util.CaseConvention"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "upperSnake"),
@@ -35,17 +35,17 @@ caseConvention x =
 comparison :: Util.Comparison -> Core.Term
 comparison x =
     case x of
-      Util.ComparisonLessThan -> Core.TermUnion (Core.Injection {
+      Util.ComparisonLessThan -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.util.Comparison"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "lessThan"),
           Core.fieldTerm = Core.TermUnit}})
-      Util.ComparisonEqualTo -> Core.TermUnion (Core.Injection {
+      Util.ComparisonEqualTo -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.util.Comparison"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "equalTo"),
           Core.fieldTerm = Core.TermUnit}})
-      Util.ComparisonGreaterThan -> Core.TermUnion (Core.Injection {
+      Util.ComparisonGreaterThan -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.util.Comparison"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "greaterThan"),
@@ -54,12 +54,12 @@ comparison x =
 precision :: Util.Precision -> Core.Term
 precision x =
     case x of
-      Util.PrecisionArbitrary -> Core.TermUnion (Core.Injection {
+      Util.PrecisionArbitrary -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.util.Precision"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "arbitrary"),
           Core.fieldTerm = Core.TermUnit}})
-      Util.PrecisionBits v0 -> Core.TermUnion (Core.Injection {
+      Util.PrecisionBits v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.util.Precision"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "bits"),

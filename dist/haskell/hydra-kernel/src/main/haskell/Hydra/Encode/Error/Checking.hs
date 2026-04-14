@@ -17,67 +17,67 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 checkingError :: Checking.CheckingError -> Core.Term
 checkingError x =
     case x of
-      Checking.CheckingErrorIncorrectUnification v0 -> Core.TermUnion (Core.Injection {
+      Checking.CheckingErrorIncorrectUnification v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "incorrectUnification"),
           Core.fieldTerm = (incorrectUnificationError v0)}})
-      Checking.CheckingErrorNotAForallType v0 -> Core.TermUnion (Core.Injection {
+      Checking.CheckingErrorNotAForallType v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "notAForallType"),
           Core.fieldTerm = (notAForallTypeError v0)}})
-      Checking.CheckingErrorNotAFunctionType v0 -> Core.TermUnion (Core.Injection {
+      Checking.CheckingErrorNotAFunctionType v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "notAFunctionType"),
           Core.fieldTerm = (notAFunctionTypeError v0)}})
-      Checking.CheckingErrorOther v0 -> Core.TermUnion (Core.Injection {
+      Checking.CheckingErrorOther v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "other"),
           Core.fieldTerm = (otherCheckingError v0)}})
-      Checking.CheckingErrorTypeArityMismatch v0 -> Core.TermUnion (Core.Injection {
+      Checking.CheckingErrorTypeArityMismatch v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "typeArityMismatch"),
           Core.fieldTerm = (typeArityMismatchError v0)}})
-      Checking.CheckingErrorTypeMismatch v0 -> Core.TermUnion (Core.Injection {
+      Checking.CheckingErrorTypeMismatch v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "typeMismatch"),
           Core.fieldTerm = (typeMismatchError v0)}})
-      Checking.CheckingErrorUnboundTypeVariables v0 -> Core.TermUnion (Core.Injection {
+      Checking.CheckingErrorUnboundTypeVariables v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unboundTypeVariables"),
           Core.fieldTerm = (unboundTypeVariablesError v0)}})
-      Checking.CheckingErrorUndefinedTermVariable v0 -> Core.TermUnion (Core.Injection {
+      Checking.CheckingErrorUndefinedTermVariable v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "undefinedTermVariable"),
           Core.fieldTerm = (undefinedTermVariableCheckingError v0)}})
-      Checking.CheckingErrorUnequalTypes v0 -> Core.TermUnion (Core.Injection {
+      Checking.CheckingErrorUnequalTypes v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unequalTypes"),
           Core.fieldTerm = (unequalTypesError v0)}})
-      Checking.CheckingErrorUnsupportedTermVariant v0 -> Core.TermUnion (Core.Injection {
+      Checking.CheckingErrorUnsupportedTermVariant v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unsupportedTermVariant"),
           Core.fieldTerm = (unsupportedTermVariantError v0)}})
-      Checking.CheckingErrorUntypedLambda v0 -> Core.TermUnion (Core.Injection {
+      Checking.CheckingErrorUntypedLambda v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "untypedLambda"),
           Core.fieldTerm = (untypedLambdaError v0)}})
-      Checking.CheckingErrorUntypedLetBinding v0 -> Core.TermUnion (Core.Injection {
+      Checking.CheckingErrorUntypedLetBinding v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "untypedLetBinding"),
           Core.fieldTerm = (untypedLetBindingError v0)}})
-      Checking.CheckingErrorUntypedTermVariable v0 -> Core.TermUnion (Core.Injection {
+      Checking.CheckingErrorUntypedTermVariable v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "untypedTermVariable"),

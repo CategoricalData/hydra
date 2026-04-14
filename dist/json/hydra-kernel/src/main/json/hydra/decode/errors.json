@@ -281,7 +281,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -340,7 +340,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "checking", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.Error"}},
                                                                                         "domain": {"variable": "hydra.error.checking.CheckingError"},
@@ -391,7 +391,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "decoding", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.Error"}},
                                                                                         "domain": {"variable": "hydra.errors.DecodingError"},
@@ -442,7 +442,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "duplicateBinding", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.Error"}},
                                                                                         "domain": {"variable": "hydra.error.core.DuplicateBindingError"},
@@ -493,7 +493,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "duplicateField", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.Error"}},
                                                                                         "domain": {"variable": "hydra.error.core.DuplicateFieldError"},
@@ -544,7 +544,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "extraction", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.Error"}},
                                                                                         "domain": {"variable": "hydra.errors.ExtractionError"},
@@ -595,7 +595,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "inference", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.Error"}},
                                                                                         "domain": {"variable": "hydra.errors.InferenceError"},
@@ -646,7 +646,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "other", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.Error"}},
                                                                                         "domain": {"variable": "hydra.errors.OtherError"},
@@ -697,7 +697,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "resolution", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.Error"}},
                                                                                         "domain": {"variable": "hydra.errors.ResolutionError"},
@@ -748,7 +748,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "undefinedField", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.Error"}},
                                                                                         "domain": {"variable": "hydra.error.core.UndefinedFieldError"},
@@ -799,7 +799,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "undefinedTermVariable", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.Error"}},
                                                                                         "domain": {"variable": "hydra.error.core.UndefinedTermVariableError"},
@@ -850,7 +850,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "untypedTermVariable", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.Error"}},
                                                                                         "domain": {"variable": "hydra.error.core.UntypedTermVariableError"},
@@ -901,7 +901,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "unexpectedTermVariant", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.Error"}},
                                                                                         "domain": {"variable": "hydra.error.core.UnexpectedTermVariantError"},
@@ -952,7 +952,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "unexpectedTypeVariant", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.Error"}},
                                                                                         "domain": {"variable": "hydra.error.core.UnexpectedTypeVariantError"},
@@ -1003,7 +1003,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "unification", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.Error"}},
                                                                                         "domain": {"variable": "hydra.errors.UnificationError"},
@@ -1214,7 +1214,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -1273,7 +1273,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "emptyList", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.ExtractionError"}},
                                                                                         "domain": {"unit": {}},
@@ -1322,7 +1322,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "multipleBindings", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.ExtractionError"}},
                                                                                         "domain": {"variable": "hydra.errors.MultipleBindingsError"},
@@ -1373,7 +1373,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "multipleFields", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.ExtractionError"}},
                                                                                         "domain": {"variable": "hydra.errors.MultipleFieldsError"},
@@ -1424,7 +1424,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "noMatchingField", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.ExtractionError"}},
                                                                                         "domain": {"variable": "hydra.errors.NoMatchingFieldError"},
@@ -1475,7 +1475,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "noSuchBinding", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.ExtractionError"}},
                                                                                         "domain": {"variable": "hydra.errors.NoSuchBindingError"},
@@ -1526,7 +1526,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "notEnoughCases", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.ExtractionError"}},
                                                                                         "domain": {"unit": {}},
@@ -1575,7 +1575,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "unexpectedShape", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.ExtractionError"}},
                                                                                         "domain": {"variable": "hydra.errors.UnexpectedShapeError"},
@@ -1786,7 +1786,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -1845,7 +1845,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "checking", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.InferenceError"}},
                                                                                         "domain": {"variable": "hydra.error.checking.CheckingError"},
@@ -1896,7 +1896,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "other", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.InferenceError"}},
                                                                                         "domain": {"variable": "hydra.errors.OtherInferenceError"},
@@ -1947,7 +1947,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "unification", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.InferenceError"}},
                                                                                         "domain": {"variable": "hydra.errors.UnificationInferenceError"},
@@ -3721,7 +3721,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -3780,7 +3780,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "noSuchBinding", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.ResolutionError"}},
                                                                                         "domain": {"variable": "hydra.errors.NoSuchBindingError"},
@@ -3831,7 +3831,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "noSuchPrimitive", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.ResolutionError"}},
                                                                                         "domain": {"variable": "hydra.errors.NoSuchPrimitiveError"},
@@ -3882,7 +3882,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "noMatchingField", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.ResolutionError"}},
                                                                                         "domain": {"variable": "hydra.errors.NoMatchingFieldError"},
@@ -3933,7 +3933,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "other", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.ResolutionError"}},
                                                                                         "domain": {"variable": "hydra.errors.OtherResolutionError"},
@@ -3984,7 +3984,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "unexpectedShape", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.errors.ResolutionError"}},
                                                                                         "domain": {"variable": "hydra.errors.UnexpectedShapeError"},

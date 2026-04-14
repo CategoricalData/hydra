@@ -171,7 +171,7 @@ termVariant x =
       Core.TermSet _ -> Variants.TermVariantSet
       Core.TermTypeApplication _ -> Variants.TermVariantTypeApplication
       Core.TermTypeLambda _ -> Variants.TermVariantTypeLambda
-      Core.TermUnion _ -> Variants.TermVariantUnion
+      Core.TermInject _ -> Variants.TermVariantInject
       Core.TermUnit -> Variants.TermVariantUnit
       Core.TermUnwrap _ -> Variants.TermVariantUnwrap
       Core.TermVariable _ -> Variants.TermVariantVariable
@@ -197,7 +197,7 @@ termVariants =
       Variants.TermVariantSet,
       Variants.TermVariantTypeLambda,
       Variants.TermVariantTypeApplication,
-      Variants.TermVariantUnion,
+      Variants.TermVariantInject,
       Variants.TermVariantUnit,
       Variants.TermVariantUnwrap,
       Variants.TermVariantVariable,

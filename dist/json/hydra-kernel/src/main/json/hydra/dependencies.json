@@ -318,7 +318,7 @@
                                                                                                   {
                                                                                                     "name": "term",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "annotated",
                                                                                                           "term": {
@@ -901,7 +901,7 @@
                                                                                                         "type": {"variable": "hydra.core.Term"}}}}},
                                                                                                 "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                                             "body": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {
                                                                                                   "name": "let",
                                                                                                   "term": {
@@ -1026,7 +1026,7 @@
                                                                                         "body": {
                                                                                           "either": {
                                                                                             "@left": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {
                                                                                                   "name": "other",
                                                                                                   "term": {
@@ -1339,7 +1339,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "annotated",
                                                                                               "term": {
@@ -1371,7 +1371,7 @@
                                                                         "term": {
                                                                           "lambda": {
                                                                             "body": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "lambda",
                                                                                   "term": {
@@ -1436,7 +1436,7 @@
                                                                                         "body": {
                                                                                           "application": {
                                                                                             "argument": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {
                                                                                                   "name": "let",
                                                                                                   "term": {
@@ -1513,7 +1513,7 @@
                                                                     "argument": {
                                                                       "lambda": {
                                                                         "body": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "let",
                                                                               "term": {
@@ -1851,7 +1851,7 @@
                                                 "term": {
                                                   "lambda": {
                                                     "body": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "annotated",
                                                           "term": {
@@ -2573,7 +2573,7 @@
                                                                         "domain": {"variable": "hydra.core.Record"},
                                                                         "parameter": "record"}}},
                                                                   {
-                                                                    "name": "union",
+                                                                    "name": "inject",
                                                                     "term": {
                                                                       "lambda": {
                                                                         "body": {
@@ -2637,7 +2637,7 @@
                                             "function": {
                                               "application": {
                                                 "argument": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {"name": "pre", "term": {"unit": {}}},
                                                     "typeName": "hydra.coders.TraversalOrder"}},
                                                 "function": {
@@ -3334,11 +3334,11 @@
                                                             "function": {
                                                               "application": {
                                                                 "argument": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "literal",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {"name": "string", "term": {"literal": {"string": "Impossible!"}}},
                                                                           "typeName": "hydra.core.Literal"}}},
                                                                     "typeName": "hydra.core.Term"}},
@@ -3845,7 +3845,7 @@
                                 "function": {
                                   "application": {
                                     "argument": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "pre", "term": {"unit": {}}},
                                         "typeName": "hydra.coders.TraversalOrder"}},
                                     "function": {

@@ -159,9 +159,9 @@ def rewriteAndFoldTerm[T0](f: ((T0 => hydra.core.Term => Tuple2[T0, hydra.core.T
         hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(t, (v_Term_typeApplication_ta.`type`))))(val0)(v_Term_typeApplication_ta.body)
       case hydra.core.Term.typeLambda(v_Term_typeLambda_tl) => forSingle(recurse)((t: hydra.core.Term) =>
         hydra.core.Term.typeLambda(hydra.core.TypeLambda(v_Term_typeLambda_tl.parameter, t)))(val0)(v_Term_typeLambda_tl.body)
-      case hydra.core.Term.union(v_Term_union_inj) => forSingle(recurse)((t: hydra.core.Term) =>
-        hydra.core.Term.union(hydra.core.Injection(v_Term_union_inj.typeName, hydra.core.Field(v_Term_union_inj.field.name,
-           t))))(val0)(v_Term_union_inj.field.term)
+      case hydra.core.Term.inject(v_Term_inject_inj) => forSingle(recurse)((t: hydra.core.Term) =>
+        hydra.core.Term.inject(hydra.core.Injection(v_Term_inject_inj.typeName, hydra.core.Field(v_Term_inject_inj.field.name,
+           t))))(val0)(v_Term_inject_inj.field.term)
       case hydra.core.Term.unwrap(v_Term_unwrap_n) => Tuple2(val0, hydra.core.Term.unwrap(v_Term_unwrap_n))
       case hydra.core.Term.wrap(v_Term_wrap_wt) => forSingle(recurse)((t: hydra.core.Term) =>
         hydra.core.Term.wrap(hydra.core.WrappedTerm(v_Term_wrap_wt.typeName, t)))(val0)(v_Term_wrap_wt.body)
@@ -441,9 +441,9 @@ def rewriteAndFoldTermWithPath[T0](f: ((Seq[hydra.paths.SubtermStep] => T0 => hy
         hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(t, (v_Term_typeApplication_ta.`type`))))(hydra.paths.SubtermStep.typeApplicationTerm)(val0)(v_Term_typeApplication_ta.body)
       case hydra.core.Term.typeLambda(v_Term_typeLambda_tl) => forSingleWithAccessor(recurse)((t: hydra.core.Term) =>
         hydra.core.Term.typeLambda(hydra.core.TypeLambda(v_Term_typeLambda_tl.parameter, t)))(hydra.paths.SubtermStep.typeLambdaBody)(val0)(v_Term_typeLambda_tl.body)
-      case hydra.core.Term.union(v_Term_union_inj) => forSingleWithAccessor(recurse)((t: hydra.core.Term) =>
-        hydra.core.Term.union(hydra.core.Injection(v_Term_union_inj.typeName, hydra.core.Field(v_Term_union_inj.field.name,
-           t))))(hydra.paths.SubtermStep.injectionTerm)(val0)(v_Term_union_inj.field.term)
+      case hydra.core.Term.inject(v_Term_inject_inj) => forSingleWithAccessor(recurse)((t: hydra.core.Term) =>
+        hydra.core.Term.inject(hydra.core.Injection(v_Term_inject_inj.typeName, hydra.core.Field(v_Term_inject_inj.field.name,
+           t))))(hydra.paths.SubtermStep.injectionTerm)(val0)(v_Term_inject_inj.field.term)
       case hydra.core.Term.unwrap(v_Term_unwrap_n) => Tuple2(val0, hydra.core.Term.unwrap(v_Term_unwrap_n))
       case hydra.core.Term.wrap(v_Term_wrap_wt) => forSingleWithAccessor(recurse)((t: hydra.core.Term) =>
         hydra.core.Term.wrap(hydra.core.WrappedTerm(v_Term_wrap_wt.typeName, t)))(hydra.paths.SubtermStep.wrappedTerm)(val0)(v_Term_wrap_wt.body)
@@ -501,7 +501,7 @@ def rewriteTerm(f: ((hydra.core.Term => hydra.core.Term) => hydra.core.Term => h
          (v_Term_typeApplication_tt.`type`)))
       case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => hydra.core.Term.typeLambda(hydra.core.TypeLambda(v_Term_typeLambda_ta.parameter,
          recurse(v_Term_typeLambda_ta.body)))
-      case hydra.core.Term.union(v_Term_union_i) => hydra.core.Term.union(hydra.core.Injection(v_Term_union_i.typeName, forField(v_Term_union_i.field)))
+      case hydra.core.Term.inject(v_Term_inject_i) => hydra.core.Term.inject(hydra.core.Injection(v_Term_inject_i.typeName, forField(v_Term_inject_i.field)))
       case hydra.core.Term.unit => hydra.core.Term.unit
       case hydra.core.Term.unwrap(v_Term_unwrap_n) => hydra.core.Term.unwrap(v_Term_unwrap_n)
       case hydra.core.Term.variable(v_Term_variable_v) => hydra.core.Term.variable(v_Term_variable_v)
@@ -613,11 +613,11 @@ def rewriteTermM[T0](f: ((hydra.core.Term => Either[T0, hydra.core.Term]) => hyd
             Right(hydra.core.Term.typeLambda(hydra.core.TypeLambda(v, rbody))))
         }
       }
-      case hydra.core.Term.union(v_Term_union_i) => {
-        lazy val n: hydra.core.Name = (v_Term_union_i.typeName)
+      case hydra.core.Term.inject(v_Term_inject_i) => {
+        lazy val n: hydra.core.Name = (v_Term_inject_i.typeName)
         {
-          lazy val field: hydra.core.Field = (v_Term_union_i.field)
-          hydra.lib.eithers.map[hydra.core.Field, hydra.core.Term, T1]((rfield: hydra.core.Field) => hydra.core.Term.union(hydra.core.Injection(n,
+          lazy val field: hydra.core.Field = (v_Term_inject_i.field)
+          hydra.lib.eithers.map[hydra.core.Field, hydra.core.Term, T1]((rfield: hydra.core.Field) => hydra.core.Term.inject(hydra.core.Injection(n,
              rfield)))(forField(field))
         }
       }
@@ -684,7 +684,7 @@ def rewriteTermWithContext[T0](f: ((T0 => hydra.core.Term => hydra.core.Term) =>
          (v_Term_typeApplication_tt.`type`)))
       case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => hydra.core.Term.typeLambda(hydra.core.TypeLambda(v_Term_typeLambda_ta.parameter,
          recurse(v_Term_typeLambda_ta.body)))
-      case hydra.core.Term.union(v_Term_union_i) => hydra.core.Term.union(hydra.core.Injection(v_Term_union_i.typeName, forField(v_Term_union_i.field)))
+      case hydra.core.Term.inject(v_Term_inject_i) => hydra.core.Term.inject(hydra.core.Injection(v_Term_inject_i.typeName, forField(v_Term_inject_i.field)))
       case hydra.core.Term.unit => hydra.core.Term.unit
       case hydra.core.Term.unwrap(v_Term_unwrap_n) => hydra.core.Term.unwrap(v_Term_unwrap_n)
       case hydra.core.Term.variable(v_Term_variable_v) => hydra.core.Term.variable(v_Term_variable_v)
@@ -797,11 +797,11 @@ def rewriteTermWithContextM[T0, T1](f: ((T0 => hydra.core.Term => Either[T1, hyd
             Right(hydra.core.Term.typeLambda(hydra.core.TypeLambda(v, rbody))))
         }
       }
-      case hydra.core.Term.union(v_Term_union_i) => {
-        lazy val n: hydra.core.Name = (v_Term_union_i.typeName)
+      case hydra.core.Term.inject(v_Term_inject_i) => {
+        lazy val n: hydra.core.Name = (v_Term_inject_i.typeName)
         {
-          lazy val field: hydra.core.Field = (v_Term_union_i.field)
-          hydra.lib.eithers.map[hydra.core.Field, hydra.core.Term, T3]((rfield: hydra.core.Field) => hydra.core.Term.union(hydra.core.Injection(n,
+          lazy val field: hydra.core.Field = (v_Term_inject_i.field)
+          hydra.lib.eithers.map[hydra.core.Field, hydra.core.Term, T3]((rfield: hydra.core.Field) => hydra.core.Term.inject(hydra.core.Injection(n,
              rfield)))(forField(field))
         }
       }
@@ -964,7 +964,7 @@ def subterms(v1: hydra.core.Term): Seq[hydra.core.Term] =
   case hydra.core.Term.set(v_Term_set_l) => hydra.lib.sets.toList[hydra.core.Term](v_Term_set_l)
   case hydra.core.Term.typeApplication(v_Term_typeApplication_ta) => Seq(v_Term_typeApplication_ta.body)
   case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => Seq(v_Term_typeLambda_ta.body)
-  case hydra.core.Term.union(v_Term_union_ut) => Seq(v_Term_union_ut.field.term)
+  case hydra.core.Term.inject(v_Term_inject_ut) => Seq(v_Term_inject_ut.field.term)
   case hydra.core.Term.unit => Seq()
   case hydra.core.Term.unwrap(v_Term_unwrap__) => Seq()
   case hydra.core.Term.variable(v_Term_variable__) => Seq()
@@ -1005,7 +1005,7 @@ def subtermsWithSteps(v1: hydra.core.Term): Seq[Tuple2[hydra.paths.SubtermStep, 
      hydra.core.Term]]((e: hydra.core.Term) => Tuple2(hydra.paths.SubtermStep.listElement(0), e))(hydra.lib.sets.toList[hydra.core.Term](v_Term_set_s))
   case hydra.core.Term.typeApplication(v_Term_typeApplication_ta) => Seq(Tuple2(hydra.paths.SubtermStep.typeApplicationTerm, (v_Term_typeApplication_ta.body)))
   case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => Seq(Tuple2(hydra.paths.SubtermStep.typeLambdaBody, (v_Term_typeLambda_ta.body)))
-  case hydra.core.Term.union(v_Term_union_ut) => Seq(Tuple2(hydra.paths.SubtermStep.injectionTerm, (v_Term_union_ut.field.term)))
+  case hydra.core.Term.inject(v_Term_inject_ut) => Seq(Tuple2(hydra.paths.SubtermStep.injectionTerm, (v_Term_inject_ut.field.term)))
   case hydra.core.Term.unit => Seq()
   case hydra.core.Term.unwrap(v_Term_unwrap__) => Seq()
   case hydra.core.Term.variable(v_Term_variable__) => Seq()

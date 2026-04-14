@@ -18,7 +18,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 associativity :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.Associativity
 associativity cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -81,7 +81,7 @@ brackets cx raw =
 expr :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.Expr
 expr cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -101,7 +101,7 @@ expr cx raw =
 indentStyle :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.IndentStyle
 indentStyle cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -201,7 +201,7 @@ symbol cx raw =
 ws :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Ast.Ws
 ws cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field

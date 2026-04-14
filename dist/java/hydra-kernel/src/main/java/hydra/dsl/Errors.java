@@ -11,99 +11,99 @@ public interface Errors {
   }
 
   static hydra.phantoms.TTerm<hydra.errors.Error_> errorChecking(hydra.phantoms.TTerm<hydra.error.checking.CheckingError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("checking"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("checking"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.Error_> errorDecoding(hydra.phantoms.TTerm<hydra.errors.DecodingError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("decoding"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("decoding"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.Error_> errorDuplicateBinding(hydra.phantoms.TTerm<hydra.error.core.DuplicateBindingError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("duplicateBinding"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("duplicateBinding"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.Error_> errorDuplicateField(hydra.phantoms.TTerm<hydra.error.core.DuplicateFieldError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("duplicateField"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("duplicateField"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.Error_> errorExtraction(hydra.phantoms.TTerm<hydra.errors.ExtractionError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("extraction"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("extraction"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.Error_> errorInference(hydra.phantoms.TTerm<hydra.errors.InferenceError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("inference"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("inference"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.Error_> errorOther(hydra.phantoms.TTerm<hydra.errors.OtherError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("other"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("other"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.Error_> errorResolution(hydra.phantoms.TTerm<hydra.errors.ResolutionError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("resolution"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("resolution"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.Error_> errorUndefinedField(hydra.phantoms.TTerm<hydra.error.core.UndefinedFieldError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("undefinedField"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("undefinedField"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.Error_> errorUndefinedTermVariable(hydra.phantoms.TTerm<hydra.error.core.UndefinedTermVariableError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("undefinedTermVariable"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("undefinedTermVariable"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.Error_> errorUnexpectedTermVariant(hydra.phantoms.TTerm<hydra.error.core.UnexpectedTermVariantError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("unexpectedTermVariant"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("unexpectedTermVariant"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.Error_> errorUnexpectedTypeVariant(hydra.phantoms.TTerm<hydra.error.core.UnexpectedTypeVariantError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("unexpectedTypeVariant"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("unexpectedTypeVariant"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.Error_> errorUnification(hydra.phantoms.TTerm<hydra.errors.UnificationError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("unification"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("unification"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.Error_> errorUntypedTermVariable(hydra.phantoms.TTerm<hydra.error.core.UntypedTermVariableError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("untypedTermVariable"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("untypedTermVariable"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.ExtractionError> extractionErrorEmptyList(hydra.phantoms.TTerm<java.lang.Void> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ExtractionError"), new hydra.core.Field(new hydra.core.Name("emptyList"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ExtractionError"), new hydra.core.Field(new hydra.core.Name("emptyList"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.ExtractionError> extractionErrorMultipleBindings(hydra.phantoms.TTerm<hydra.errors.MultipleBindingsError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ExtractionError"), new hydra.core.Field(new hydra.core.Name("multipleBindings"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ExtractionError"), new hydra.core.Field(new hydra.core.Name("multipleBindings"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.ExtractionError> extractionErrorMultipleFields(hydra.phantoms.TTerm<hydra.errors.MultipleFieldsError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ExtractionError"), new hydra.core.Field(new hydra.core.Name("multipleFields"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ExtractionError"), new hydra.core.Field(new hydra.core.Name("multipleFields"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.ExtractionError> extractionErrorNoMatchingField(hydra.phantoms.TTerm<hydra.errors.NoMatchingFieldError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ExtractionError"), new hydra.core.Field(new hydra.core.Name("noMatchingField"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ExtractionError"), new hydra.core.Field(new hydra.core.Name("noMatchingField"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.ExtractionError> extractionErrorNoSuchBinding(hydra.phantoms.TTerm<hydra.errors.NoSuchBindingError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ExtractionError"), new hydra.core.Field(new hydra.core.Name("noSuchBinding"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ExtractionError"), new hydra.core.Field(new hydra.core.Name("noSuchBinding"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.ExtractionError> extractionErrorNotEnoughCases(hydra.phantoms.TTerm<java.lang.Void> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ExtractionError"), new hydra.core.Field(new hydra.core.Name("notEnoughCases"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ExtractionError"), new hydra.core.Field(new hydra.core.Name("notEnoughCases"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.ExtractionError> extractionErrorUnexpectedShape(hydra.phantoms.TTerm<hydra.errors.UnexpectedShapeError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ExtractionError"), new hydra.core.Field(new hydra.core.Name("unexpectedShape"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ExtractionError"), new hydra.core.Field(new hydra.core.Name("unexpectedShape"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.InferenceError> inferenceErrorChecking(hydra.phantoms.TTerm<hydra.error.checking.CheckingError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.InferenceError"), new hydra.core.Field(new hydra.core.Name("checking"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.InferenceError"), new hydra.core.Field(new hydra.core.Name("checking"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.InferenceError> inferenceErrorOther(hydra.phantoms.TTerm<hydra.errors.OtherInferenceError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.InferenceError"), new hydra.core.Field(new hydra.core.Name("other"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.InferenceError"), new hydra.core.Field(new hydra.core.Name("other"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.InferenceError> inferenceErrorUnification(hydra.phantoms.TTerm<hydra.errors.UnificationInferenceError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.InferenceError"), new hydra.core.Field(new hydra.core.Name("unification"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.InferenceError"), new hydra.core.Field(new hydra.core.Name("unification"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.MultipleBindingsError> multipleBindingsError(hydra.phantoms.TTerm<hydra.core.Name> name) {
@@ -201,23 +201,23 @@ public interface Errors {
   }
 
   static hydra.phantoms.TTerm<hydra.errors.ResolutionError> resolutionErrorNoMatchingField(hydra.phantoms.TTerm<hydra.errors.NoMatchingFieldError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ResolutionError"), new hydra.core.Field(new hydra.core.Name("noMatchingField"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ResolutionError"), new hydra.core.Field(new hydra.core.Name("noMatchingField"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.ResolutionError> resolutionErrorNoSuchBinding(hydra.phantoms.TTerm<hydra.errors.NoSuchBindingError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ResolutionError"), new hydra.core.Field(new hydra.core.Name("noSuchBinding"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ResolutionError"), new hydra.core.Field(new hydra.core.Name("noSuchBinding"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.ResolutionError> resolutionErrorNoSuchPrimitive(hydra.phantoms.TTerm<hydra.errors.NoSuchPrimitiveError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ResolutionError"), new hydra.core.Field(new hydra.core.Name("noSuchPrimitive"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ResolutionError"), new hydra.core.Field(new hydra.core.Name("noSuchPrimitive"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.ResolutionError> resolutionErrorOther(hydra.phantoms.TTerm<hydra.errors.OtherResolutionError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ResolutionError"), new hydra.core.Field(new hydra.core.Name("other"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ResolutionError"), new hydra.core.Field(new hydra.core.Name("other"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.ResolutionError> resolutionErrorUnexpectedShape(hydra.phantoms.TTerm<hydra.errors.UnexpectedShapeError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ResolutionError"), new hydra.core.Field(new hydra.core.Name("unexpectedShape"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.errors.ResolutionError"), new hydra.core.Field(new hydra.core.Name("unexpectedShape"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<String> unDecodingError(hydra.phantoms.TTerm<hydra.errors.DecodingError> x) {

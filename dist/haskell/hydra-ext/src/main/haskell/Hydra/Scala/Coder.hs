@@ -422,7 +422,7 @@ encodeTerm cx g term0 =
               n = Utils.scalaTypeName True rname
           in (Eithers.bind (Eithers.mapList (\f -> encodeTerm cx g (Core.fieldTerm f)) fields) (\args -> Right (Utils.sapply (Utils.sname n) args)))
         Core.TermSet v0 -> Eithers.bind (Eithers.mapList (\e -> encodeTerm cx g e) (Sets.toList v0)) (\sels -> Right (Utils.sapply (Utils.sname "scala.collection.immutable.Set") sels))
-        Core.TermUnion v0 ->
+        Core.TermInject v0 ->
           let sn = Core.injectionTypeName v0
               fn = Core.fieldName (Core.injectionField v0)
               ft = Core.fieldTerm (Core.injectionField v0)

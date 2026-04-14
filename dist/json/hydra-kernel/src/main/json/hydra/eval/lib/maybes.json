@@ -49,7 +49,7 @@
                                                                             "body": {
                                                                               "either": {
                                                                                 "@right": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "maybe",
                                                                                       "term": {
@@ -64,7 +64,7 @@
                                                                                                       "argument": {
                                                                                                         "lambda": {
                                                                                                           "body": {
-                                                                                                            "union": {
+                                                                                                            "inject": {
                                                                                                               "field": {
                                                                                                                 "name": "application",
                                                                                                                 "term": {
@@ -107,11 +107,11 @@
                                                                     "body": {
                                                                       "either": {
                                                                         "@left": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "extraction",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {
                                                                                     "name": "unexpectedShape",
                                                                                     "term": {
@@ -141,11 +141,11 @@
                                                     "body": {
                                                       "either": {
                                                         "@left": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "extraction",
                                                               "term": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "unexpectedShape",
                                                                     "term": {
@@ -240,7 +240,7 @@
                                                                         "argument": {
                                                                           "lambda": {
                                                                             "body": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "application",
                                                                                   "term": {
@@ -255,7 +255,7 @@
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "maybe",
                                                                                   "term": {
@@ -279,11 +279,11 @@
                                                     "body": {
                                                       "either": {
                                                         "@left": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "extraction",
                                                               "term": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "unexpectedShape",
                                                                     "term": {
@@ -381,7 +381,7 @@
                                                                             "argument": {
                                                                               "lambda": {
                                                                                 "body": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "application",
                                                                                       "term": {
@@ -414,11 +414,11 @@
                                                         "body": {
                                                           "either": {
                                                             "@left": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "extraction",
                                                                   "term": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "unexpectedShape",
                                                                         "term": {
@@ -651,7 +651,7 @@
                                                     "body": {
                                                       "either": {
                                                         "@right": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "application",
                                                               "term": {
@@ -660,7 +660,7 @@
                                                                     {
                                                                       "name": "function",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "application",
                                                                             "term": {
@@ -669,7 +669,7 @@
                                                                                   {
                                                                                     "name": "function",
                                                                                     "term": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "variable",
                                                                                           "term": {
@@ -680,7 +680,7 @@
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "application",
                                                                                           "term": {
@@ -784,11 +784,11 @@
                                                                     "body": {
                                                                       "either": {
                                                                         "@left": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "extraction",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {
                                                                                     "name": "unexpectedShape",
                                                                                     "term": {
@@ -825,11 +825,11 @@
                                                 "body": {
                                                   "either": {
                                                     "@left": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "extraction",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "unexpectedShape",
                                                                 "term": {
@@ -942,11 +942,11 @@
                                                     "body": {
                                                       "either": {
                                                         "@left": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "extraction",
                                                               "term": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "unexpectedShape",
                                                                     "term": {
@@ -1039,11 +1039,11 @@
                                                                     "argument": {
                                                                       "lambda": {
                                                                         "body": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "literal",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {"name": "boolean", "term": {"literal": {"boolean": true}}},
                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                             "typeName": "hydra.core.Term"}},
@@ -1052,11 +1052,11 @@
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "literal",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {"name": "boolean", "term": {"literal": {"boolean": false}}},
                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                             "typeName": "hydra.core.Term"}},
@@ -1078,11 +1078,11 @@
                                                 "body": {
                                                   "either": {
                                                     "@left": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "extraction",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "unexpectedShape",
                                                                 "term": {
@@ -1170,11 +1170,11 @@
                                                                     "argument": {
                                                                       "lambda": {
                                                                         "body": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "literal",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {"name": "boolean", "term": {"literal": {"boolean": false}}},
                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                             "typeName": "hydra.core.Term"}},
@@ -1183,11 +1183,11 @@
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "literal",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {"name": "boolean", "term": {"literal": {"boolean": true}}},
                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                             "typeName": "hydra.core.Term"}},
@@ -1209,11 +1209,11 @@
                                                 "body": {
                                                   "either": {
                                                     "@left": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "extraction",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "unexpectedShape",
                                                                 "term": {
@@ -1295,7 +1295,7 @@
                                                             "body": {
                                                               "either": {
                                                                 "@right": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "maybe",
                                                                       "term": {
@@ -1306,7 +1306,7 @@
                                                                               "argument": {
                                                                                 "lambda": {
                                                                                   "body": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {
                                                                                         "name": "application",
                                                                                         "term": {
@@ -1337,11 +1337,11 @@
                                                     "body": {
                                                       "either": {
                                                         "@left": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "extraction",
                                                               "term": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "unexpectedShape",
                                                                     "term": {
@@ -1421,7 +1421,7 @@
                                                 "body": {
                                                   "either": {
                                                     "@right": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "application",
                                                           "term": {
@@ -1430,7 +1430,7 @@
                                                                 {
                                                                   "name": "function",
                                                                   "term": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "variable",
                                                                         "term": {
@@ -1441,7 +1441,7 @@
                                                                 {
                                                                   "name": "argument",
                                                                   "term": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "list",
                                                                         "term": {
@@ -1452,7 +1452,7 @@
                                                                                 "argument": {
                                                                                   "lambda": {
                                                                                     "body": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "application",
                                                                                           "term": {
@@ -1572,7 +1572,7 @@
                                                                             "argument": {
                                                                               "lambda": {
                                                                                 "body": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "application",
                                                                                       "term": {
@@ -1605,11 +1605,11 @@
                                                         "body": {
                                                           "either": {
                                                             "@left": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "extraction",
                                                                   "term": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "unexpectedShape",
                                                                         "term": {
@@ -1691,7 +1691,7 @@
                                             "body": {
                                               "either": {
                                                 "@right": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {"name": "maybe", "term": {"maybe": {"variable": "x"}}},
                                                     "typeName": "hydra.core.Term"}}}},
                                             "type": {"variable": "t2"}}},
@@ -1755,7 +1755,7 @@
                                                         "body": {
                                                           "either": {
                                                             "@right": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "list",
                                                                   "term": {
@@ -1797,11 +1797,11 @@
                                                 "body": {
                                                   "either": {
                                                     "@left": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "extraction",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "unexpectedShape",
                                                                 "term": {

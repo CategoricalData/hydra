@@ -19,7 +19,7 @@ def universal_test_case(x: hydra.testing.UniversalTestCase) -> hydra.core.Term:
 def test_case(v1: hydra.testing.TestCase) -> hydra.core.Term:
     match v1:
         case hydra.testing.TestCaseUniversal(value=y):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("universal"), universal_test_case(y)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("universal"), universal_test_case(y)))))
 
         case _:
             raise AssertionError("Unreachable: all variants handled")

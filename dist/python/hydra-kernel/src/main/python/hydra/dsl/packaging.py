@@ -13,10 +13,10 @@ import hydra.phantoms
 N = TypeVar("N")
 
 def definition_term(x: hydra.phantoms.TTerm[hydra.packaging.TermDefinition]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.packaging.Definition"), hydra.core.Field(hydra.core.Name("term"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.packaging.Definition"), hydra.core.Field(hydra.core.Name("term"), x.value)))))
 
 def definition_type(x: hydra.phantoms.TTerm[hydra.packaging.TypeDefinition]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.packaging.Definition"), hydra.core.Field(hydra.core.Name("type"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.packaging.Definition"), hydra.core.Field(hydra.core.Name("type"), x.value)))))
 
 def file_extension(x: hydra.phantoms.TTerm[str]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.packaging.FileExtension"), x.value))))

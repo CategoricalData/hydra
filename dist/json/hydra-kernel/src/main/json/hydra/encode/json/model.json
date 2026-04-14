@@ -11,9 +11,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -42,7 +42,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "list",
                                                         "term": {
@@ -71,9 +71,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -102,11 +102,11 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "literal",
                                                         "term": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "boolean", "term": {"variable": "x"}},
                                                             "typeName": "hydra.core.Literal"}}},
                                                       "typeName": "hydra.core.Term"}},
@@ -122,9 +122,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -153,7 +153,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -168,9 +168,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -199,15 +199,15 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "literal",
                                                         "term": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "float",
                                                               "term": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {"name": "bigfloat", "term": {"variable": "x"}},
                                                                   "typeName": "hydra.core.FloatValue"}}},
                                                             "typeName": "hydra.core.Literal"}}},
@@ -224,9 +224,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -255,7 +255,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "map",
                                                         "term": {
@@ -269,11 +269,11 @@
                                                                     "argument": {
                                                                       "lambda": {
                                                                         "body": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "literal",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {"name": "string", "term": {"variable": "x"}},
                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                             "typeName": "hydra.core.Term"}},
@@ -311,9 +311,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -342,11 +342,11 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "literal",
                                                         "term": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "string", "term": {"variable": "x"}},
                                                             "typeName": "hydra.core.Literal"}}},
                                                       "typeName": "hydra.core.Term"}},

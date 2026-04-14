@@ -45,17 +45,17 @@ def fieldType(x: hydra.core.FieldType): hydra.core.Term =
 
 def floatType(v1: hydra.core.FloatType): hydra.core.Term =
   v1 match
-  case hydra.core.FloatType.bigfloat => hydra.core.Term.union(hydra.core.Injection("hydra.core.FloatType", hydra.core.Field("bigfloat", hydra.core.Term.unit)))
-  case hydra.core.FloatType.float32 => hydra.core.Term.union(hydra.core.Injection("hydra.core.FloatType", hydra.core.Field("float32", hydra.core.Term.unit)))
-  case hydra.core.FloatType.float64 => hydra.core.Term.union(hydra.core.Injection("hydra.core.FloatType", hydra.core.Field("float64", hydra.core.Term.unit)))
+  case hydra.core.FloatType.bigfloat => hydra.core.Term.inject(hydra.core.Injection("hydra.core.FloatType", hydra.core.Field("bigfloat", hydra.core.Term.unit)))
+  case hydra.core.FloatType.float32 => hydra.core.Term.inject(hydra.core.Injection("hydra.core.FloatType", hydra.core.Field("float32", hydra.core.Term.unit)))
+  case hydra.core.FloatType.float64 => hydra.core.Term.inject(hydra.core.Injection("hydra.core.FloatType", hydra.core.Field("float64", hydra.core.Term.unit)))
 
 def floatValue(v1: hydra.core.FloatValue): hydra.core.Term =
   v1 match
-  case hydra.core.FloatValue.bigfloat(v_FloatValue_bigfloat_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.FloatValue",
+  case hydra.core.FloatValue.bigfloat(v_FloatValue_bigfloat_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.FloatValue",
      hydra.core.Field("bigfloat", hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.bigfloat(v_FloatValue_bigfloat_y))))))
-  case hydra.core.FloatValue.float32(v_FloatValue_float32_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.FloatValue",
+  case hydra.core.FloatValue.float32(v_FloatValue_float32_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.FloatValue",
      hydra.core.Field("float32", hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float32(v_FloatValue_float32_y))))))
-  case hydra.core.FloatValue.float64(v_FloatValue_float64_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.FloatValue",
+  case hydra.core.FloatValue.float64(v_FloatValue_float64_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.FloatValue",
      hydra.core.Field("float64", hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(v_FloatValue_float64_y))))))
 
 def forallType(x: hydra.core.ForallType): hydra.core.Term =
@@ -72,35 +72,35 @@ def injection(x: hydra.core.Injection): hydra.core.Term =
 
 def integerType(v1: hydra.core.IntegerType): hydra.core.Term =
   v1 match
-  case hydra.core.IntegerType.bigint => hydra.core.Term.union(hydra.core.Injection("hydra.core.IntegerType", hydra.core.Field("bigint", hydra.core.Term.unit)))
-  case hydra.core.IntegerType.int8 => hydra.core.Term.union(hydra.core.Injection("hydra.core.IntegerType", hydra.core.Field("int8", hydra.core.Term.unit)))
-  case hydra.core.IntegerType.int16 => hydra.core.Term.union(hydra.core.Injection("hydra.core.IntegerType", hydra.core.Field("int16", hydra.core.Term.unit)))
-  case hydra.core.IntegerType.int32 => hydra.core.Term.union(hydra.core.Injection("hydra.core.IntegerType", hydra.core.Field("int32", hydra.core.Term.unit)))
-  case hydra.core.IntegerType.int64 => hydra.core.Term.union(hydra.core.Injection("hydra.core.IntegerType", hydra.core.Field("int64", hydra.core.Term.unit)))
-  case hydra.core.IntegerType.uint8 => hydra.core.Term.union(hydra.core.Injection("hydra.core.IntegerType", hydra.core.Field("uint8", hydra.core.Term.unit)))
-  case hydra.core.IntegerType.uint16 => hydra.core.Term.union(hydra.core.Injection("hydra.core.IntegerType", hydra.core.Field("uint16", hydra.core.Term.unit)))
-  case hydra.core.IntegerType.uint32 => hydra.core.Term.union(hydra.core.Injection("hydra.core.IntegerType", hydra.core.Field("uint32", hydra.core.Term.unit)))
-  case hydra.core.IntegerType.uint64 => hydra.core.Term.union(hydra.core.Injection("hydra.core.IntegerType", hydra.core.Field("uint64", hydra.core.Term.unit)))
+  case hydra.core.IntegerType.bigint => hydra.core.Term.inject(hydra.core.Injection("hydra.core.IntegerType", hydra.core.Field("bigint", hydra.core.Term.unit)))
+  case hydra.core.IntegerType.int8 => hydra.core.Term.inject(hydra.core.Injection("hydra.core.IntegerType", hydra.core.Field("int8", hydra.core.Term.unit)))
+  case hydra.core.IntegerType.int16 => hydra.core.Term.inject(hydra.core.Injection("hydra.core.IntegerType", hydra.core.Field("int16", hydra.core.Term.unit)))
+  case hydra.core.IntegerType.int32 => hydra.core.Term.inject(hydra.core.Injection("hydra.core.IntegerType", hydra.core.Field("int32", hydra.core.Term.unit)))
+  case hydra.core.IntegerType.int64 => hydra.core.Term.inject(hydra.core.Injection("hydra.core.IntegerType", hydra.core.Field("int64", hydra.core.Term.unit)))
+  case hydra.core.IntegerType.uint8 => hydra.core.Term.inject(hydra.core.Injection("hydra.core.IntegerType", hydra.core.Field("uint8", hydra.core.Term.unit)))
+  case hydra.core.IntegerType.uint16 => hydra.core.Term.inject(hydra.core.Injection("hydra.core.IntegerType", hydra.core.Field("uint16", hydra.core.Term.unit)))
+  case hydra.core.IntegerType.uint32 => hydra.core.Term.inject(hydra.core.Injection("hydra.core.IntegerType", hydra.core.Field("uint32", hydra.core.Term.unit)))
+  case hydra.core.IntegerType.uint64 => hydra.core.Term.inject(hydra.core.Injection("hydra.core.IntegerType", hydra.core.Field("uint64", hydra.core.Term.unit)))
 
 def integerValue(v1: hydra.core.IntegerValue): hydra.core.Term =
   v1 match
-  case hydra.core.IntegerValue.bigint(v_IntegerValue_bigint_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.IntegerValue",
+  case hydra.core.IntegerValue.bigint(v_IntegerValue_bigint_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.IntegerValue",
      hydra.core.Field("bigint", hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.bigint(v_IntegerValue_bigint_y))))))
-  case hydra.core.IntegerValue.int8(v_IntegerValue_int8_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.IntegerValue",
+  case hydra.core.IntegerValue.int8(v_IntegerValue_int8_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.IntegerValue",
      hydra.core.Field("int8", hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int8(v_IntegerValue_int8_y))))))
-  case hydra.core.IntegerValue.int16(v_IntegerValue_int16_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.IntegerValue",
+  case hydra.core.IntegerValue.int16(v_IntegerValue_int16_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.IntegerValue",
      hydra.core.Field("int16", hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int16(v_IntegerValue_int16_y))))))
-  case hydra.core.IntegerValue.int32(v_IntegerValue_int32_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.IntegerValue",
+  case hydra.core.IntegerValue.int32(v_IntegerValue_int32_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.IntegerValue",
      hydra.core.Field("int32", hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(v_IntegerValue_int32_y))))))
-  case hydra.core.IntegerValue.int64(v_IntegerValue_int64_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.IntegerValue",
+  case hydra.core.IntegerValue.int64(v_IntegerValue_int64_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.IntegerValue",
      hydra.core.Field("int64", hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int64(v_IntegerValue_int64_y))))))
-  case hydra.core.IntegerValue.uint8(v_IntegerValue_uint8_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.IntegerValue",
+  case hydra.core.IntegerValue.uint8(v_IntegerValue_uint8_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.IntegerValue",
      hydra.core.Field("uint8", hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint8(v_IntegerValue_uint8_y))))))
-  case hydra.core.IntegerValue.uint16(v_IntegerValue_uint16_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.IntegerValue",
+  case hydra.core.IntegerValue.uint16(v_IntegerValue_uint16_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.IntegerValue",
      hydra.core.Field("uint16", hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint16(v_IntegerValue_uint16_y))))))
-  case hydra.core.IntegerValue.uint32(v_IntegerValue_uint32_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.IntegerValue",
+  case hydra.core.IntegerValue.uint32(v_IntegerValue_uint32_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.IntegerValue",
      hydra.core.Field("uint32", hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint32(v_IntegerValue_uint32_y))))))
-  case hydra.core.IntegerValue.uint64(v_IntegerValue_uint64_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.IntegerValue",
+  case hydra.core.IntegerValue.uint64(v_IntegerValue_uint64_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.IntegerValue",
      hydra.core.Field("uint64", hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint64(v_IntegerValue_uint64_y))))))
 
 def lambda(x: hydra.core.Lambda): hydra.core.Term =
@@ -114,27 +114,27 @@ def let(x: hydra.core.Let): hydra.core.Term =
 
 def literal(v1: hydra.core.Literal): hydra.core.Term =
   v1 match
-  case hydra.core.Literal.binary(v_Literal_binary_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Literal",
+  case hydra.core.Literal.binary(v_Literal_binary_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Literal",
      hydra.core.Field("binary", hydra.core.Term.literal(hydra.core.Literal.binary(v_Literal_binary_y)))))
-  case hydra.core.Literal.boolean(v_Literal_boolean_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Literal",
+  case hydra.core.Literal.boolean(v_Literal_boolean_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Literal",
      hydra.core.Field("boolean", hydra.core.Term.literal(hydra.core.Literal.boolean(v_Literal_boolean_y)))))
-  case hydra.core.Literal.float(v_Literal_float_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Literal",
+  case hydra.core.Literal.float(v_Literal_float_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Literal",
      hydra.core.Field("float", hydra.encode.core.floatValue(v_Literal_float_y))))
-  case hydra.core.Literal.integer(v_Literal_integer_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Literal",
+  case hydra.core.Literal.integer(v_Literal_integer_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Literal",
      hydra.core.Field("integer", hydra.encode.core.integerValue(v_Literal_integer_y))))
-  case hydra.core.Literal.string(v_Literal_string_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Literal",
+  case hydra.core.Literal.string(v_Literal_string_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Literal",
      hydra.core.Field("string", hydra.core.Term.literal(hydra.core.Literal.string(v_Literal_string_y)))))
 
 def literalType(v1: hydra.core.LiteralType): hydra.core.Term =
   v1 match
-  case hydra.core.LiteralType.binary => hydra.core.Term.union(hydra.core.Injection("hydra.core.LiteralType", hydra.core.Field("binary", hydra.core.Term.unit)))
-  case hydra.core.LiteralType.boolean => hydra.core.Term.union(hydra.core.Injection("hydra.core.LiteralType",
+  case hydra.core.LiteralType.binary => hydra.core.Term.inject(hydra.core.Injection("hydra.core.LiteralType", hydra.core.Field("binary", hydra.core.Term.unit)))
+  case hydra.core.LiteralType.boolean => hydra.core.Term.inject(hydra.core.Injection("hydra.core.LiteralType",
      hydra.core.Field("boolean", hydra.core.Term.unit)))
-  case hydra.core.LiteralType.float(v_LiteralType_float_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.LiteralType",
+  case hydra.core.LiteralType.float(v_LiteralType_float_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.LiteralType",
      hydra.core.Field("float", hydra.encode.core.floatType(v_LiteralType_float_y))))
-  case hydra.core.LiteralType.integer(v_LiteralType_integer_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.LiteralType",
+  case hydra.core.LiteralType.integer(v_LiteralType_integer_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.LiteralType",
      hydra.core.Field("integer", hydra.encode.core.integerType(v_LiteralType_integer_y))))
-  case hydra.core.LiteralType.string => hydra.core.Term.union(hydra.core.Injection("hydra.core.LiteralType", hydra.core.Field("string", hydra.core.Term.unit)))
+  case hydra.core.LiteralType.string => hydra.core.Term.inject(hydra.core.Injection("hydra.core.LiteralType", hydra.core.Field("string", hydra.core.Term.unit)))
 
 def mapType(x: hydra.core.MapType): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.core.MapType", Seq(hydra.core.Field("keys", hydra.encode.core.`type`(x.keys)),
@@ -157,84 +157,84 @@ def record(x: hydra.core.Record): hydra.core.Term =
 
 def term(v1: hydra.core.Term): hydra.core.Term =
   v1 match
-  case hydra.core.Term.annotated(v_Term_annotated_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
+  case hydra.core.Term.annotated(v_Term_annotated_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("annotated", hydra.encode.core.annotatedTerm(v_Term_annotated_y))))
-  case hydra.core.Term.application(v_Term_application_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
+  case hydra.core.Term.application(v_Term_application_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("application", hydra.encode.core.application(v_Term_application_y))))
-  case hydra.core.Term.cases(v_Term_cases_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
+  case hydra.core.Term.cases(v_Term_cases_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("cases", hydra.encode.core.caseStatement(v_Term_cases_y))))
-  case hydra.core.Term.either(v_Term_either_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
+  case hydra.core.Term.either(v_Term_either_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("either", hydra.core.Term.either(hydra.lib.eithers.bimap[hydra.core.Term, hydra.core.Term,
      hydra.core.Term, hydra.core.Term](hydra.encode.core.term)(hydra.encode.core.term)(v_Term_either_y)))))
-  case hydra.core.Term.lambda(v_Term_lambda_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
+  case hydra.core.Term.inject(v_Term_inject_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
+     hydra.core.Field("inject", hydra.encode.core.injection(v_Term_inject_y))))
+  case hydra.core.Term.lambda(v_Term_lambda_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("lambda", hydra.encode.core.lambda(v_Term_lambda_y))))
-  case hydra.core.Term.let(v_Term_let_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
+  case hydra.core.Term.let(v_Term_let_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("let", hydra.encode.core.let(v_Term_let_y))))
-  case hydra.core.Term.list(v_Term_list_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
+  case hydra.core.Term.list(v_Term_list_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("list", hydra.core.Term.list(hydra.lib.lists.map[hydra.core.Term, hydra.core.Term](hydra.encode.core.term)(v_Term_list_y)))))
-  case hydra.core.Term.literal(v_Term_literal_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
+  case hydra.core.Term.literal(v_Term_literal_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("literal", hydra.encode.core.literal(v_Term_literal_y))))
-  case hydra.core.Term.map(v_Term_map_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
+  case hydra.core.Term.map(v_Term_map_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("map", hydra.core.Term.map(hydra.lib.maps.bimap[hydra.core.Term, hydra.core.Term,
      hydra.core.Term, hydra.core.Term](hydra.encode.core.term)(hydra.encode.core.term)(v_Term_map_y)))))
-  case hydra.core.Term.maybe(v_Term_maybe_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
+  case hydra.core.Term.maybe(v_Term_maybe_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("maybe", hydra.core.Term.maybe(hydra.lib.maybes.map[hydra.core.Term, hydra.core.Term](hydra.encode.core.term)(v_Term_maybe_y)))))
-  case hydra.core.Term.pair(v_Term_pair_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
+  case hydra.core.Term.pair(v_Term_pair_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("pair", hydra.core.Term.pair(hydra.lib.pairs.bimap[hydra.core.Term, hydra.core.Term,
      hydra.core.Term, hydra.core.Term](hydra.encode.core.term)(hydra.encode.core.term)(v_Term_pair_y)))))
-  case hydra.core.Term.project(v_Term_project_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
+  case hydra.core.Term.project(v_Term_project_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("project", hydra.encode.core.projection(v_Term_project_y))))
-  case hydra.core.Term.record(v_Term_record_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
+  case hydra.core.Term.record(v_Term_record_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("record", hydra.encode.core.record(v_Term_record_y))))
-  case hydra.core.Term.set(v_Term_set_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
+  case hydra.core.Term.set(v_Term_set_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("set", hydra.core.Term.set(hydra.lib.sets.map[hydra.core.Term, hydra.core.Term](hydra.encode.core.term)(v_Term_set_y)))))
-  case hydra.core.Term.typeApplication(v_Term_typeApplication_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
+  case hydra.core.Term.typeApplication(v_Term_typeApplication_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("typeApplication", hydra.encode.core.typeApplicationTerm(v_Term_typeApplication_y))))
-  case hydra.core.Term.typeLambda(v_Term_typeLambda_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
+  case hydra.core.Term.typeLambda(v_Term_typeLambda_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("typeLambda", hydra.encode.core.typeLambda(v_Term_typeLambda_y))))
-  case hydra.core.Term.union(v_Term_union_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
-     hydra.core.Field("union", hydra.encode.core.injection(v_Term_union_y))))
-  case hydra.core.Term.unit => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term", hydra.core.Field("unit", hydra.core.Term.unit)))
-  case hydra.core.Term.unwrap(v_Term_unwrap_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
+  case hydra.core.Term.unit => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term", hydra.core.Field("unit", hydra.core.Term.unit)))
+  case hydra.core.Term.unwrap(v_Term_unwrap_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("unwrap", hydra.encode.core.name(v_Term_unwrap_y))))
-  case hydra.core.Term.variable(v_Term_variable_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
+  case hydra.core.Term.variable(v_Term_variable_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("variable", hydra.encode.core.name(v_Term_variable_y))))
-  case hydra.core.Term.wrap(v_Term_wrap_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
+  case hydra.core.Term.wrap(v_Term_wrap_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("wrap", hydra.encode.core.wrappedTerm(v_Term_wrap_y))))
 
 def `type`(v1: hydra.core.Type): hydra.core.Term =
   v1 match
-  case hydra.core.Type.annotated(v_Type_annotated_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
+  case hydra.core.Type.annotated(v_Type_annotated_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Type",
      hydra.core.Field("annotated", hydra.encode.core.annotatedType(v_Type_annotated_y))))
-  case hydra.core.Type.application(v_Type_application_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
+  case hydra.core.Type.application(v_Type_application_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Type",
      hydra.core.Field("application", hydra.encode.core.applicationType(v_Type_application_y))))
-  case hydra.core.Type.either(v_Type_either_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
+  case hydra.core.Type.either(v_Type_either_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Type",
      hydra.core.Field("either", hydra.encode.core.eitherType(v_Type_either_y))))
-  case hydra.core.Type.forall(v_Type_forall_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
+  case hydra.core.Type.forall(v_Type_forall_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Type",
      hydra.core.Field("forall", hydra.encode.core.forallType(v_Type_forall_y))))
-  case hydra.core.Type.function(v_Type_function_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
+  case hydra.core.Type.function(v_Type_function_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Type",
      hydra.core.Field("function", hydra.encode.core.functionType(v_Type_function_y))))
-  case hydra.core.Type.list(v_Type_list_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
+  case hydra.core.Type.list(v_Type_list_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Type",
      hydra.core.Field("list", hydra.encode.core.`type`(v_Type_list_y))))
-  case hydra.core.Type.literal(v_Type_literal_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
+  case hydra.core.Type.literal(v_Type_literal_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Type",
      hydra.core.Field("literal", hydra.encode.core.literalType(v_Type_literal_y))))
-  case hydra.core.Type.map(v_Type_map_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
+  case hydra.core.Type.map(v_Type_map_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Type",
      hydra.core.Field("map", hydra.encode.core.mapType(v_Type_map_y))))
-  case hydra.core.Type.maybe(v_Type_maybe_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
+  case hydra.core.Type.maybe(v_Type_maybe_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Type",
      hydra.core.Field("maybe", hydra.encode.core.`type`(v_Type_maybe_y))))
-  case hydra.core.Type.pair(v_Type_pair_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
+  case hydra.core.Type.pair(v_Type_pair_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Type",
      hydra.core.Field("pair", hydra.encode.core.pairType(v_Type_pair_y))))
-  case hydra.core.Type.record(v_Type_record_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
+  case hydra.core.Type.record(v_Type_record_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Type",
      hydra.core.Field("record", hydra.core.Term.list(hydra.lib.lists.map[hydra.core.FieldType, hydra.core.Term](hydra.encode.core.fieldType)(v_Type_record_y)))))
-  case hydra.core.Type.set(v_Type_set_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
+  case hydra.core.Type.set(v_Type_set_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Type",
      hydra.core.Field("set", hydra.encode.core.`type`(v_Type_set_y))))
-  case hydra.core.Type.union(v_Type_union_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
+  case hydra.core.Type.union(v_Type_union_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Type",
      hydra.core.Field("union", hydra.core.Term.list(hydra.lib.lists.map[hydra.core.FieldType, hydra.core.Term](hydra.encode.core.fieldType)(v_Type_union_y)))))
-  case hydra.core.Type.unit => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type", hydra.core.Field("unit", hydra.core.Term.unit)))
-  case hydra.core.Type.variable(v_Type_variable_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
+  case hydra.core.Type.unit => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Type", hydra.core.Field("unit", hydra.core.Term.unit)))
+  case hydra.core.Type.variable(v_Type_variable_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Type",
      hydra.core.Field("variable", hydra.encode.core.name(v_Type_variable_y))))
-  case hydra.core.Type.void => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type", hydra.core.Field("void", hydra.core.Term.unit)))
-  case hydra.core.Type.wrap(v_Type_wrap_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
+  case hydra.core.Type.void => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Type", hydra.core.Field("void", hydra.core.Term.unit)))
+  case hydra.core.Type.wrap(v_Type_wrap_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Type",
      hydra.core.Field("wrap", hydra.encode.core.`type`(v_Type_wrap_y))))
 
 def typeApplicationTerm(x: hydra.core.TypeApplicationTerm): hydra.core.Term =

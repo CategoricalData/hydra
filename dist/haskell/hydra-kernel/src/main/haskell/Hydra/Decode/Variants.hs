@@ -18,7 +18,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 eliminationVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.EliminationVariant
 eliminationVariant cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -36,7 +36,7 @@ eliminationVariant cx raw =
 functionVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.FunctionVariant
 functionVariant cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -53,7 +53,7 @@ functionVariant cx raw =
 literalVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.LiteralVariant
 literalVariant cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -73,7 +73,7 @@ literalVariant cx raw =
 termVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.TermVariant
 termVariant cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -83,6 +83,7 @@ termVariant cx raw =
                       (Core.Name "application", (\input -> Eithers.map (\t -> Variants.TermVariantApplication) (Core_.decodeUnit cx input))),
                       (Core.Name "cases", (\input -> Eithers.map (\t -> Variants.TermVariantCases) (Core_.decodeUnit cx input))),
                       (Core.Name "either", (\input -> Eithers.map (\t -> Variants.TermVariantEither) (Core_.decodeUnit cx input))),
+                      (Core.Name "inject", (\input -> Eithers.map (\t -> Variants.TermVariantInject) (Core_.decodeUnit cx input))),
                       (Core.Name "lambda", (\input -> Eithers.map (\t -> Variants.TermVariantLambda) (Core_.decodeUnit cx input))),
                       (Core.Name "let", (\input -> Eithers.map (\t -> Variants.TermVariantLet) (Core_.decodeUnit cx input))),
                       (Core.Name "list", (\input -> Eithers.map (\t -> Variants.TermVariantList) (Core_.decodeUnit cx input))),
@@ -95,7 +96,6 @@ termVariant cx raw =
                       (Core.Name "set", (\input -> Eithers.map (\t -> Variants.TermVariantSet) (Core_.decodeUnit cx input))),
                       (Core.Name "typeApplication", (\input -> Eithers.map (\t -> Variants.TermVariantTypeApplication) (Core_.decodeUnit cx input))),
                       (Core.Name "typeLambda", (\input -> Eithers.map (\t -> Variants.TermVariantTypeLambda) (Core_.decodeUnit cx input))),
-                      (Core.Name "union", (\input -> Eithers.map (\t -> Variants.TermVariantUnion) (Core_.decodeUnit cx input))),
                       (Core.Name "unit", (\input -> Eithers.map (\t -> Variants.TermVariantUnit) (Core_.decodeUnit cx input))),
                       (Core.Name "unwrap", (\input -> Eithers.map (\t -> Variants.TermVariantUnwrap) (Core_.decodeUnit cx input))),
                       (Core.Name "variable", (\input -> Eithers.map (\t -> Variants.TermVariantVariable) (Core_.decodeUnit cx input))),
@@ -109,7 +109,7 @@ termVariant cx raw =
 typeVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.TypeVariant
 typeVariant cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field

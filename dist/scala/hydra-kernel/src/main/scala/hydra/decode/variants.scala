@@ -10,8 +10,8 @@ def eliminationVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydr
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.variants.EliminationVariant]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
-  case hydra.core.Term.union(v_Term_union_inj) => {
-    lazy val field: hydra.core.Field = (v_Term_union_inj.field)
+  case hydra.core.Term.inject(v_Term_inject_inj) => {
+    lazy val field: hydra.core.Field = (v_Term_inject_inj.field)
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.variants.EliminationVariant])] = hydra.lib.maps.fromList[hydra.core.Name,
@@ -33,8 +33,8 @@ def functionVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.e
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.variants.FunctionVariant]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
-  case hydra.core.Term.union(v_Term_union_inj) => {
-    lazy val field: hydra.core.Field = (v_Term_union_inj.field)
+  case hydra.core.Term.inject(v_Term_inject_inj) => {
+    lazy val field: hydra.core.Field = (v_Term_inject_inj.field)
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.variants.FunctionVariant])] = hydra.lib.maps.fromList[hydra.core.Name,
@@ -54,8 +54,8 @@ def literalVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.er
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.variants.LiteralVariant]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
-  case hydra.core.Term.union(v_Term_union_inj) => {
-    lazy val field: hydra.core.Field = (v_Term_union_inj.field)
+  case hydra.core.Term.inject(v_Term_inject_inj) => {
+    lazy val field: hydra.core.Field = (v_Term_inject_inj.field)
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.variants.LiteralVariant])] = hydra.lib.maps.fromList[hydra.core.Name,
@@ -81,8 +81,8 @@ def termVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.variants.TermVariant]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
-  case hydra.core.Term.union(v_Term_union_inj) => {
-    lazy val field: hydra.core.Field = (v_Term_union_inj.field)
+  case hydra.core.Term.inject(v_Term_inject_inj) => {
+    lazy val field: hydra.core.Field = (v_Term_inject_inj.field)
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.variants.TermVariant])] = hydra.lib.maps.fromList[hydra.core.Name,
@@ -95,6 +95,8 @@ def termVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
       hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.cases)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("either", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.either)(hydra.extract.core.decodeUnit(cx)(input))),
+         Tuple2("inject", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.inject)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("lambda", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.lambda)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("let", (input: hydra.core.Term) =>
@@ -119,8 +121,6 @@ def termVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
       hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.typeApplication)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("typeLambda", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.typeLambda)(hydra.extract.core.decodeUnit(cx)(input))),
-         Tuple2("union", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.union)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("unit", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.unit)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("unwrap", (input: hydra.core.Term) =>
@@ -140,8 +140,8 @@ def typeVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.variants.TypeVariant]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
-  case hydra.core.Term.union(v_Term_union_inj) => {
-    lazy val field: hydra.core.Field = (v_Term_union_inj.field)
+  case hydra.core.Term.inject(v_Term_inject_inj) => {
+    lazy val field: hydra.core.Field = (v_Term_inject_inj.field)
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.variants.TypeVariant])] = hydra.lib.maps.fromList[hydra.core.Name,

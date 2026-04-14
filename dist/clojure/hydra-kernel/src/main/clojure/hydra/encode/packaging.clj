@@ -8,7 +8,7 @@
 
 (def hydra_encode_packaging_type_definition (fn [x] (list :record (->hydra_core_record "hydra.packaging.TypeDefinition" (list (->hydra_core_field "name" (hydra_encode_core_name ((fn [v] (:name v)) x))) (->hydra_core_field "type" (hydra_encode_core_type_scheme ((fn [v] (:type v)) x))))))))
 
-(def hydra_encode_packaging_definition (fn [match_target] ((fn [match_value] (cond (= (first match_target) :term) ((fn [y] (list :union (->hydra_core_injection "hydra.packaging.Definition" (->hydra_core_field "term" (hydra_encode_packaging_term_definition y))))) match_value) (= (first match_target) :type) ((fn [y] (list :union (->hydra_core_injection "hydra.packaging.Definition" (->hydra_core_field "type" (hydra_encode_packaging_type_definition y))))) match_value))) (second match_target))))
+(def hydra_encode_packaging_definition (fn [match_target] ((fn [match_value] (cond (= (first match_target) :term) ((fn [y] (list :inject (->hydra_core_injection "hydra.packaging.Definition" (->hydra_core_field "term" (hydra_encode_packaging_term_definition y))))) match_value) (= (first match_target) :type) ((fn [y] (list :inject (->hydra_core_injection "hydra.packaging.Definition" (->hydra_core_field "type" (hydra_encode_packaging_type_definition y))))) match_value))) (second match_target))))
 
 (def hydra_encode_packaging_file_extension (fn [x] (list :wrap (->hydra_core_wrapped_term "hydra.packaging.FileExtension" ((fn [x2] (list :literal (list :string x2))) ((fn [v] v) x))))))
 

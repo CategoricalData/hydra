@@ -293,7 +293,7 @@ subtermPath x =
 
 subtermStepAnnotatedBody :: Phantoms.TTerm Paths.SubtermStep
 subtermStepAnnotatedBody =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotatedBody"),
@@ -301,7 +301,7 @@ subtermStepAnnotatedBody =
 
 subtermStepApplicationArgument :: Phantoms.TTerm Paths.SubtermStep
 subtermStepApplicationArgument =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "applicationArgument"),
@@ -309,7 +309,7 @@ subtermStepApplicationArgument =
 
 subtermStepApplicationFunction :: Phantoms.TTerm Paths.SubtermStep
 subtermStepApplicationFunction =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "applicationFunction"),
@@ -317,7 +317,7 @@ subtermStepApplicationFunction =
 
 subtermStepInjectionTerm :: Phantoms.TTerm Paths.SubtermStep
 subtermStepInjectionTerm =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "injectionTerm"),
@@ -325,7 +325,7 @@ subtermStepInjectionTerm =
 
 subtermStepLambdaBody :: Phantoms.TTerm Paths.SubtermStep
 subtermStepLambdaBody =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lambdaBody"),
@@ -333,7 +333,7 @@ subtermStepLambdaBody =
 
 subtermStepLetBinding :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Paths.SubtermStep
 subtermStepLetBinding x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "letBinding"),
@@ -341,7 +341,7 @@ subtermStepLetBinding x =
 
 subtermStepLetBody :: Phantoms.TTerm Paths.SubtermStep
 subtermStepLetBody =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "letBody"),
@@ -349,7 +349,7 @@ subtermStepLetBody =
 
 subtermStepListElement :: Phantoms.TTerm Int -> Phantoms.TTerm Paths.SubtermStep
 subtermStepListElement x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "listElement"),
@@ -357,7 +357,7 @@ subtermStepListElement x =
 
 subtermStepMapKey :: Phantoms.TTerm Int -> Phantoms.TTerm Paths.SubtermStep
 subtermStepMapKey x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mapKey"),
@@ -365,7 +365,7 @@ subtermStepMapKey x =
 
 subtermStepMapValue :: Phantoms.TTerm Int -> Phantoms.TTerm Paths.SubtermStep
 subtermStepMapValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mapValue"),
@@ -373,7 +373,7 @@ subtermStepMapValue x =
 
 subtermStepMaybeTerm :: Phantoms.TTerm Paths.SubtermStep
 subtermStepMaybeTerm =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "maybeTerm"),
@@ -381,7 +381,7 @@ subtermStepMaybeTerm =
 
 subtermStepProductTerm :: Phantoms.TTerm Int -> Phantoms.TTerm Paths.SubtermStep
 subtermStepProductTerm x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "productTerm"),
@@ -389,7 +389,7 @@ subtermStepProductTerm x =
 
 subtermStepRecordField :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Paths.SubtermStep
 subtermStepRecordField x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "recordField"),
@@ -397,7 +397,7 @@ subtermStepRecordField x =
 
 subtermStepSetElement :: Phantoms.TTerm Int -> Phantoms.TTerm Paths.SubtermStep
 subtermStepSetElement x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "setElement"),
@@ -405,7 +405,7 @@ subtermStepSetElement x =
 
 subtermStepSumTerm :: Phantoms.TTerm Paths.SubtermStep
 subtermStepSumTerm =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sumTerm"),
@@ -413,7 +413,7 @@ subtermStepSumTerm =
 
 subtermStepTypeApplicationTerm :: Phantoms.TTerm Paths.SubtermStep
 subtermStepTypeApplicationTerm =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeApplicationTerm"),
@@ -421,7 +421,7 @@ subtermStepTypeApplicationTerm =
 
 subtermStepTypeLambdaBody :: Phantoms.TTerm Paths.SubtermStep
 subtermStepTypeLambdaBody =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeLambdaBody"),
@@ -429,7 +429,7 @@ subtermStepTypeLambdaBody =
 
 subtermStepUnionCasesBranch :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Paths.SubtermStep
 subtermStepUnionCasesBranch x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unionCasesBranch"),
@@ -437,7 +437,7 @@ subtermStepUnionCasesBranch x =
 
 subtermStepUnionCasesDefault :: Phantoms.TTerm Paths.SubtermStep
 subtermStepUnionCasesDefault =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unionCasesDefault"),
@@ -445,7 +445,7 @@ subtermStepUnionCasesDefault =
 
 subtermStepWrappedTerm :: Phantoms.TTerm Paths.SubtermStep
 subtermStepWrappedTerm =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "wrappedTerm"),
@@ -735,7 +735,7 @@ subtypePath x =
 
 subtypeStepAnnotatedBody :: Phantoms.TTerm Paths.SubtypeStep
 subtypeStepAnnotatedBody =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotatedBody"),
@@ -743,7 +743,7 @@ subtypeStepAnnotatedBody =
 
 subtypeStepApplicationArgument :: Phantoms.TTerm Paths.SubtypeStep
 subtypeStepApplicationArgument =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "applicationArgument"),
@@ -751,7 +751,7 @@ subtypeStepApplicationArgument =
 
 subtypeStepApplicationFunction :: Phantoms.TTerm Paths.SubtypeStep
 subtypeStepApplicationFunction =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "applicationFunction"),
@@ -759,7 +759,7 @@ subtypeStepApplicationFunction =
 
 subtypeStepEitherLeft :: Phantoms.TTerm Paths.SubtypeStep
 subtypeStepEitherLeft =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "eitherLeft"),
@@ -767,7 +767,7 @@ subtypeStepEitherLeft =
 
 subtypeStepEitherRight :: Phantoms.TTerm Paths.SubtypeStep
 subtypeStepEitherRight =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "eitherRight"),
@@ -775,7 +775,7 @@ subtypeStepEitherRight =
 
 subtypeStepForallBody :: Phantoms.TTerm Paths.SubtypeStep
 subtypeStepForallBody =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "forallBody"),
@@ -783,7 +783,7 @@ subtypeStepForallBody =
 
 subtypeStepFunctionCodomain :: Phantoms.TTerm Paths.SubtypeStep
 subtypeStepFunctionCodomain =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "functionCodomain"),
@@ -791,7 +791,7 @@ subtypeStepFunctionCodomain =
 
 subtypeStepFunctionDomain :: Phantoms.TTerm Paths.SubtypeStep
 subtypeStepFunctionDomain =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "functionDomain"),
@@ -799,7 +799,7 @@ subtypeStepFunctionDomain =
 
 subtypeStepListElement :: Phantoms.TTerm Paths.SubtypeStep
 subtypeStepListElement =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "listElement"),
@@ -807,7 +807,7 @@ subtypeStepListElement =
 
 subtypeStepMapKeys :: Phantoms.TTerm Paths.SubtypeStep
 subtypeStepMapKeys =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mapKeys"),
@@ -815,7 +815,7 @@ subtypeStepMapKeys =
 
 subtypeStepMapValues :: Phantoms.TTerm Paths.SubtypeStep
 subtypeStepMapValues =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mapValues"),
@@ -823,7 +823,7 @@ subtypeStepMapValues =
 
 subtypeStepMaybeElement :: Phantoms.TTerm Paths.SubtypeStep
 subtypeStepMaybeElement =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "maybeElement"),
@@ -831,7 +831,7 @@ subtypeStepMaybeElement =
 
 subtypeStepPairFirst :: Phantoms.TTerm Paths.SubtypeStep
 subtypeStepPairFirst =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pairFirst"),
@@ -839,7 +839,7 @@ subtypeStepPairFirst =
 
 subtypeStepPairSecond :: Phantoms.TTerm Paths.SubtypeStep
 subtypeStepPairSecond =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pairSecond"),
@@ -847,7 +847,7 @@ subtypeStepPairSecond =
 
 subtypeStepRecordField :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Paths.SubtypeStep
 subtypeStepRecordField x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "recordField"),
@@ -855,7 +855,7 @@ subtypeStepRecordField x =
 
 subtypeStepSetElement :: Phantoms.TTerm Paths.SubtypeStep
 subtypeStepSetElement =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "setElement"),
@@ -863,7 +863,7 @@ subtypeStepSetElement =
 
 subtypeStepUnionField :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Paths.SubtypeStep
 subtypeStepUnionField x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unionField"),
@@ -871,7 +871,7 @@ subtypeStepUnionField x =
 
 subtypeStepWrappedType :: Phantoms.TTerm Paths.SubtypeStep
 subtypeStepWrappedType =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "wrappedType"),

@@ -290,7 +290,7 @@ binaryExpressionWithRight original newVal =
 
 binaryOperatorCaseInsensitiveEqual :: Phantoms.TTerm Kql.BinaryOperator
 binaryOperatorCaseInsensitiveEqual =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "caseInsensitiveEqual"),
@@ -298,7 +298,7 @@ binaryOperatorCaseInsensitiveEqual =
 
 binaryOperatorContains :: Phantoms.TTerm Kql.BinaryOperator
 binaryOperatorContains =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "contains"),
@@ -306,7 +306,7 @@ binaryOperatorContains =
 
 binaryOperatorDivide :: Phantoms.TTerm Kql.BinaryOperator
 binaryOperatorDivide =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "divide"),
@@ -314,7 +314,7 @@ binaryOperatorDivide =
 
 binaryOperatorEndsWith :: Phantoms.TTerm Kql.BinaryOperator
 binaryOperatorEndsWith =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "endsWith"),
@@ -322,7 +322,7 @@ binaryOperatorEndsWith =
 
 binaryOperatorEqual :: Phantoms.TTerm Kql.BinaryOperator
 binaryOperatorEqual =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "equal"),
@@ -330,7 +330,7 @@ binaryOperatorEqual =
 
 binaryOperatorGreater :: Phantoms.TTerm Kql.BinaryOperator
 binaryOperatorGreater =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "greater"),
@@ -338,7 +338,7 @@ binaryOperatorGreater =
 
 binaryOperatorGreaterOrEqual :: Phantoms.TTerm Kql.BinaryOperator
 binaryOperatorGreaterOrEqual =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "greaterOrEqual"),
@@ -346,7 +346,7 @@ binaryOperatorGreaterOrEqual =
 
 binaryOperatorHas :: Phantoms.TTerm Kql.BinaryOperator
 binaryOperatorHas =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "has"),
@@ -354,7 +354,7 @@ binaryOperatorHas =
 
 binaryOperatorHasPrefix :: Phantoms.TTerm Kql.BinaryOperator
 binaryOperatorHasPrefix =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hasPrefix"),
@@ -362,7 +362,7 @@ binaryOperatorHasPrefix =
 
 binaryOperatorHasSuffix :: Phantoms.TTerm Kql.BinaryOperator
 binaryOperatorHasSuffix =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hasSuffix"),
@@ -370,7 +370,7 @@ binaryOperatorHasSuffix =
 
 binaryOperatorLess :: Phantoms.TTerm Kql.BinaryOperator
 binaryOperatorLess =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "less"),
@@ -378,7 +378,7 @@ binaryOperatorLess =
 
 binaryOperatorLessOrEqual :: Phantoms.TTerm Kql.BinaryOperator
 binaryOperatorLessOrEqual =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessOrEqual"),
@@ -386,7 +386,7 @@ binaryOperatorLessOrEqual =
 
 binaryOperatorMatchesRegex :: Phantoms.TTerm Kql.BinaryOperator
 binaryOperatorMatchesRegex =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "matchesRegex"),
@@ -394,7 +394,7 @@ binaryOperatorMatchesRegex =
 
 binaryOperatorMinus :: Phantoms.TTerm Kql.BinaryOperator
 binaryOperatorMinus =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "minus"),
@@ -402,7 +402,7 @@ binaryOperatorMinus =
 
 binaryOperatorNotEqual :: Phantoms.TTerm Kql.BinaryOperator
 binaryOperatorNotEqual =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notEqual"),
@@ -410,7 +410,7 @@ binaryOperatorNotEqual =
 
 binaryOperatorPlus :: Phantoms.TTerm Kql.BinaryOperator
 binaryOperatorPlus =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "plus"),
@@ -418,7 +418,7 @@ binaryOperatorPlus =
 
 binaryOperatorStartsWith :: Phantoms.TTerm Kql.BinaryOperator
 binaryOperatorStartsWith =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "startsWith"),
@@ -426,7 +426,7 @@ binaryOperatorStartsWith =
 
 binaryOperatorTimes :: Phantoms.TTerm Kql.BinaryOperator
 binaryOperatorTimes =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "times"),
@@ -434,7 +434,7 @@ binaryOperatorTimes =
 
 builtInFunctionAgo :: Phantoms.TTerm Kql.BuiltInFunction
 builtInFunctionAgo =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BuiltInFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ago"),
@@ -442,7 +442,7 @@ builtInFunctionAgo =
 
 builtInFunctionBin :: Phantoms.TTerm Kql.BuiltInFunction
 builtInFunctionBin =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BuiltInFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bin"),
@@ -450,7 +450,7 @@ builtInFunctionBin =
 
 builtInFunctionCount :: Phantoms.TTerm Kql.BuiltInFunction
 builtInFunctionCount =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BuiltInFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "count"),
@@ -458,7 +458,7 @@ builtInFunctionCount =
 
 builtInFunctionDcount :: Phantoms.TTerm Kql.BuiltInFunction
 builtInFunctionDcount =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BuiltInFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dcount"),
@@ -466,7 +466,7 @@ builtInFunctionDcount =
 
 builtInFunctionEndofday :: Phantoms.TTerm Kql.BuiltInFunction
 builtInFunctionEndofday =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BuiltInFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "endofday"),
@@ -474,7 +474,7 @@ builtInFunctionEndofday =
 
 builtInFunctionExtract :: Phantoms.TTerm Kql.BuiltInFunction
 builtInFunctionExtract =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BuiltInFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "extract"),
@@ -482,7 +482,7 @@ builtInFunctionExtract =
 
 builtInFunctionFormat_datetime :: Phantoms.TTerm Kql.BuiltInFunction
 builtInFunctionFormat_datetime =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BuiltInFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "format_datetime"),
@@ -490,7 +490,7 @@ builtInFunctionFormat_datetime =
 
 builtInFunctionMaterialize :: Phantoms.TTerm Kql.BuiltInFunction
 builtInFunctionMaterialize =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BuiltInFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "materialize"),
@@ -498,7 +498,7 @@ builtInFunctionMaterialize =
 
 builtInFunctionNow :: Phantoms.TTerm Kql.BuiltInFunction
 builtInFunctionNow =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BuiltInFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "now"),
@@ -506,7 +506,7 @@ builtInFunctionNow =
 
 builtInFunctionRange :: Phantoms.TTerm Kql.BuiltInFunction
 builtInFunctionRange =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BuiltInFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "range"),
@@ -514,7 +514,7 @@ builtInFunctionRange =
 
 builtInFunctionStartofday :: Phantoms.TTerm Kql.BuiltInFunction
 builtInFunctionStartofday =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BuiltInFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "startofday"),
@@ -522,7 +522,7 @@ builtInFunctionStartofday =
 
 builtInFunctionStrcat :: Phantoms.TTerm Kql.BuiltInFunction
 builtInFunctionStrcat =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BuiltInFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "strcat"),
@@ -530,7 +530,7 @@ builtInFunctionStrcat =
 
 builtInFunctionTodynamic :: Phantoms.TTerm Kql.BuiltInFunction
 builtInFunctionTodynamic =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.BuiltInFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "todynamic"),
@@ -664,7 +664,7 @@ columnName x =
 
 columnsAll :: Phantoms.TTerm Kql.Columns
 columnsAll =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Columns"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "all"),
@@ -672,7 +672,7 @@ columnsAll =
 
 columnsSingle :: Phantoms.TTerm Kql.ColumnName -> Phantoms.TTerm Kql.Columns
 columnsSingle x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Columns"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "single"),
@@ -680,7 +680,7 @@ columnsSingle x =
 
 commandCount :: Phantoms.TTerm Kql.Command
 commandCount =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Command"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "count"),
@@ -688,7 +688,7 @@ commandCount =
 
 commandDistinct :: Phantoms.TTerm [Kql.ColumnName] -> Phantoms.TTerm Kql.Command
 commandDistinct x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Command"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "distinct"),
@@ -696,7 +696,7 @@ commandDistinct x =
 
 commandExtend :: Phantoms.TTerm [Kql.ColumnAssignment] -> Phantoms.TTerm Kql.Command
 commandExtend x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Command"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "extend"),
@@ -704,7 +704,7 @@ commandExtend x =
 
 commandJoin :: Phantoms.TTerm Kql.JoinCommand -> Phantoms.TTerm Kql.Command
 commandJoin x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Command"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "join"),
@@ -712,7 +712,7 @@ commandJoin x =
 
 commandLimit :: Phantoms.TTerm Int -> Phantoms.TTerm Kql.Command
 commandLimit x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Command"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "limit"),
@@ -720,7 +720,7 @@ commandLimit x =
 
 commandMvexpand :: Phantoms.TTerm Kql.ColumnName -> Phantoms.TTerm Kql.Command
 commandMvexpand x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Command"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mvexpand"),
@@ -728,7 +728,7 @@ commandMvexpand x =
 
 commandOrderBy :: Phantoms.TTerm [Kql.SortBy] -> Phantoms.TTerm Kql.Command
 commandOrderBy x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Command"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "orderBy"),
@@ -736,7 +736,7 @@ commandOrderBy x =
 
 commandParse :: Phantoms.TTerm Kql.ParseCommand -> Phantoms.TTerm Kql.Command
 commandParse x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Command"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parse"),
@@ -744,7 +744,7 @@ commandParse x =
 
 commandPrint :: Phantoms.TTerm Kql.PrintCommand -> Phantoms.TTerm Kql.Command
 commandPrint x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Command"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "print"),
@@ -752,7 +752,7 @@ commandPrint x =
 
 commandProject :: Phantoms.TTerm [Kql.Projection] -> Phantoms.TTerm Kql.Command
 commandProject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Command"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "project"),
@@ -760,7 +760,7 @@ commandProject x =
 
 commandProjectAway :: Phantoms.TTerm [Kql.ColumnName] -> Phantoms.TTerm Kql.Command
 commandProjectAway x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Command"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "projectAway"),
@@ -768,7 +768,7 @@ commandProjectAway x =
 
 commandProjectRename :: Phantoms.TTerm [Kql.ColumnAlias] -> Phantoms.TTerm Kql.Command
 commandProjectRename x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Command"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "projectRename"),
@@ -776,7 +776,7 @@ commandProjectRename x =
 
 commandRender :: Phantoms.TTerm String -> Phantoms.TTerm Kql.Command
 commandRender x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Command"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "render"),
@@ -784,7 +784,7 @@ commandRender x =
 
 commandSearch :: Phantoms.TTerm Kql.SearchCommand -> Phantoms.TTerm Kql.Command
 commandSearch x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Command"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "search"),
@@ -792,7 +792,7 @@ commandSearch x =
 
 commandSortBy :: Phantoms.TTerm [Kql.SortBy] -> Phantoms.TTerm Kql.Command
 commandSortBy x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Command"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sortBy"),
@@ -800,7 +800,7 @@ commandSortBy x =
 
 commandSummarize :: Phantoms.TTerm Kql.SummarizeCommand -> Phantoms.TTerm Kql.Command
 commandSummarize x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Command"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "summarize"),
@@ -808,7 +808,7 @@ commandSummarize x =
 
 commandTake :: Phantoms.TTerm Int -> Phantoms.TTerm Kql.Command
 commandTake x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Command"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "take"),
@@ -816,7 +816,7 @@ commandTake x =
 
 commandTop :: Phantoms.TTerm Kql.TopCommand -> Phantoms.TTerm Kql.Command
 commandTop x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Command"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "top"),
@@ -824,7 +824,7 @@ commandTop x =
 
 commandUnion :: Phantoms.TTerm Kql.UnionCommand -> Phantoms.TTerm Kql.Command
 commandUnion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Command"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "union"),
@@ -832,7 +832,7 @@ commandUnion x =
 
 commandWhere :: Phantoms.TTerm Kql.Expression -> Phantoms.TTerm Kql.Command
 commandWhere x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Command"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "where"),
@@ -866,7 +866,7 @@ durationUnit x =
 
 durationUnitHour :: Phantoms.TTerm Kql.DurationUnit
 durationUnitHour =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.DurationUnit"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hour"),
@@ -874,7 +874,7 @@ durationUnitHour =
 
 durationUnitMinute :: Phantoms.TTerm Kql.DurationUnit
 durationUnitMinute =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.DurationUnit"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "minute"),
@@ -882,7 +882,7 @@ durationUnitMinute =
 
 durationUnitSecond :: Phantoms.TTerm Kql.DurationUnit
 durationUnitSecond =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.DurationUnit"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "second"),
@@ -930,7 +930,7 @@ durationWithValue original newVal =
 
 expressionAnd :: Phantoms.TTerm [Kql.Expression] -> Phantoms.TTerm Kql.Expression
 expressionAnd x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "and"),
@@ -938,7 +938,7 @@ expressionAnd x =
 
 expressionAny :: Phantoms.TTerm Kql.Expression
 expressionAny =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "any"),
@@ -946,7 +946,7 @@ expressionAny =
 
 expressionBetween :: Phantoms.TTerm Kql.BetweenExpression -> Phantoms.TTerm Kql.Expression
 expressionBetween x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "between"),
@@ -954,7 +954,7 @@ expressionBetween x =
 
 expressionBinary :: Phantoms.TTerm Kql.BinaryExpression -> Phantoms.TTerm Kql.Expression
 expressionBinary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "binary"),
@@ -962,7 +962,7 @@ expressionBinary x =
 
 expressionBraces :: Phantoms.TTerm Kql.Expression -> Phantoms.TTerm Kql.Expression
 expressionBraces x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "braces"),
@@ -970,7 +970,7 @@ expressionBraces x =
 
 expressionColumn :: Phantoms.TTerm Kql.ColumnName -> Phantoms.TTerm Kql.Expression
 expressionColumn x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "column"),
@@ -978,7 +978,7 @@ expressionColumn x =
 
 expressionDataset :: Phantoms.TTerm Kql.TableName -> Phantoms.TTerm Kql.Expression
 expressionDataset x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dataset"),
@@ -986,7 +986,7 @@ expressionDataset x =
 
 expressionIndex :: Phantoms.TTerm Kql.IndexExpression -> Phantoms.TTerm Kql.Expression
 expressionIndex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "index"),
@@ -994,7 +994,7 @@ expressionIndex x =
 
 expressionList :: Phantoms.TTerm [Kql.Expression] -> Phantoms.TTerm Kql.Expression
 expressionList x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -1002,7 +1002,7 @@ expressionList x =
 
 expressionLiteral :: Phantoms.TTerm Kql.Literal -> Phantoms.TTerm Kql.Expression
 expressionLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
@@ -1010,7 +1010,7 @@ expressionLiteral x =
 
 expressionOr :: Phantoms.TTerm [Kql.Expression] -> Phantoms.TTerm Kql.Expression
 expressionOr x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "or"),
@@ -1018,7 +1018,7 @@ expressionOr x =
 
 expressionParentheses :: Phantoms.TTerm Kql.Expression -> Phantoms.TTerm Kql.Expression
 expressionParentheses x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parentheses"),
@@ -1026,7 +1026,7 @@ expressionParentheses x =
 
 expressionProperty :: Phantoms.TTerm Kql.PropertyExpression -> Phantoms.TTerm Kql.Expression
 expressionProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "property"),
@@ -1034,7 +1034,7 @@ expressionProperty x =
 
 expressionUnary :: Phantoms.TTerm Kql.UnaryExpression -> Phantoms.TTerm Kql.Expression
 expressionUnary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unary"),
@@ -1042,7 +1042,7 @@ expressionUnary x =
 
 functionBuiltIn :: Phantoms.TTerm Kql.BuiltInFunction -> Phantoms.TTerm Kql.Function
 functionBuiltIn x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Function"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "builtIn"),
@@ -1050,7 +1050,7 @@ functionBuiltIn x =
 
 functionCustom :: Phantoms.TTerm Kql.FunctionName -> Phantoms.TTerm Kql.Function
 functionCustom x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Function"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "custom"),
@@ -1292,7 +1292,7 @@ joinCommandWithOn original newVal =
 
 joinKindFullouter :: Phantoms.TTerm Kql.JoinKind
 joinKindFullouter =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.JoinKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fullouter"),
@@ -1300,7 +1300,7 @@ joinKindFullouter =
 
 joinKindInner :: Phantoms.TTerm Kql.JoinKind
 joinKindInner =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.JoinKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inner"),
@@ -1308,7 +1308,7 @@ joinKindInner =
 
 joinKindInnerunique :: Phantoms.TTerm Kql.JoinKind
 joinKindInnerunique =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.JoinKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "innerunique"),
@@ -1316,7 +1316,7 @@ joinKindInnerunique =
 
 joinKindLeftanti :: Phantoms.TTerm Kql.JoinKind
 joinKindLeftanti =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.JoinKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "leftanti"),
@@ -1324,7 +1324,7 @@ joinKindLeftanti =
 
 joinKindLeftouter :: Phantoms.TTerm Kql.JoinKind
 joinKindLeftouter =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.JoinKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "leftouter"),
@@ -1332,7 +1332,7 @@ joinKindLeftouter =
 
 joinKindLeftsemi :: Phantoms.TTerm Kql.JoinKind
 joinKindLeftsemi =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.JoinKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "leftsemi"),
@@ -1340,7 +1340,7 @@ joinKindLeftsemi =
 
 joinKindRightanti :: Phantoms.TTerm Kql.JoinKind
 joinKindRightanti =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.JoinKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rightanti"),
@@ -1348,7 +1348,7 @@ joinKindRightanti =
 
 joinKindRightouter :: Phantoms.TTerm Kql.JoinKind
 joinKindRightouter =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.JoinKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rightouter"),
@@ -1356,7 +1356,7 @@ joinKindRightouter =
 
 joinKindRightsemi :: Phantoms.TTerm Kql.JoinKind
 joinKindRightsemi =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.JoinKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rightsemi"),
@@ -1544,7 +1544,7 @@ letExpressionWithExpression original newVal =
 
 literalBoolean :: Phantoms.TTerm Bool -> Phantoms.TTerm Kql.Literal
 literalBoolean x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -1552,7 +1552,7 @@ literalBoolean x =
 
 literalDatetime :: Phantoms.TTerm Kql.Datetime -> Phantoms.TTerm Kql.Literal
 literalDatetime x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "datetime"),
@@ -1560,7 +1560,7 @@ literalDatetime x =
 
 literalDouble :: Phantoms.TTerm Double -> Phantoms.TTerm Kql.Literal
 literalDouble x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "double"),
@@ -1568,7 +1568,7 @@ literalDouble x =
 
 literalDuration :: Phantoms.TTerm Kql.Duration -> Phantoms.TTerm Kql.Literal
 literalDuration x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "duration"),
@@ -1576,7 +1576,7 @@ literalDuration x =
 
 literalInt :: Phantoms.TTerm Int -> Phantoms.TTerm Kql.Literal
 literalInt x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int"),
@@ -1584,7 +1584,7 @@ literalInt x =
 
 literalLong :: Phantoms.TTerm I.Int64 -> Phantoms.TTerm Kql.Literal
 literalLong x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "long"),
@@ -1592,7 +1592,7 @@ literalLong x =
 
 literalString :: Phantoms.TTerm String -> Phantoms.TTerm Kql.Literal
 literalString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -1600,7 +1600,7 @@ literalString x =
 
 orderAscending :: Phantoms.TTerm Kql.Order
 orderAscending =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Order"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ascending"),
@@ -1608,7 +1608,7 @@ orderAscending =
 
 orderDescending :: Phantoms.TTerm Kql.Order
 orderDescending =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.Order"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "descending"),
@@ -2114,7 +2114,7 @@ tableName x =
 
 tabularExpressionCommand :: Phantoms.TTerm Kql.Command -> Phantoms.TTerm Kql.TabularExpression
 tabularExpressionCommand x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.TabularExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "command"),
@@ -2122,7 +2122,7 @@ tabularExpressionCommand x =
 
 tabularExpressionLet :: Phantoms.TTerm Kql.LetExpression -> Phantoms.TTerm Kql.TabularExpression
 tabularExpressionLet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.TabularExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "let"),
@@ -2130,7 +2130,7 @@ tabularExpressionLet x =
 
 tabularExpressionPipeline :: Phantoms.TTerm Kql.PipelineExpression -> Phantoms.TTerm Kql.TabularExpression
 tabularExpressionPipeline x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.TabularExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pipeline"),
@@ -2138,7 +2138,7 @@ tabularExpressionPipeline x =
 
 tabularExpressionTable :: Phantoms.TTerm Kql.TableName -> Phantoms.TTerm Kql.TabularExpression
 tabularExpressionTable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.TabularExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "table"),
@@ -2302,7 +2302,7 @@ unaryExpressionWithOperator original newVal =
 
 unaryOperatorNot :: Phantoms.TTerm Kql.UnaryOperator
 unaryOperatorNot =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.UnaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "not"),
@@ -2556,7 +2556,7 @@ unionCommandWithWithSource original newVal =
 
 unionKindInner :: Phantoms.TTerm Kql.UnionKind
 unionKindInner =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.UnionKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inner"),
@@ -2564,7 +2564,7 @@ unionKindInner =
 
 unionKindOuter :: Phantoms.TTerm Kql.UnionKind
 unionKindOuter =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.kusto.kql.UnionKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "outer"),

@@ -17,7 +17,7 @@ tag x =
 
 testCaseUniversal :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm Testing.TestCase
 testCaseUniversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "universal"),

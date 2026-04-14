@@ -1295,7 +1295,7 @@ decodeUnionTypeNamed ename rt =
                     Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "t"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                      Core.lambdaBody = (Core.TermInject (Core.Injection {
                         Core.injectionTypeName = ename,
                         Core.injectionField = Core.Field {
                           Core.fieldName = (Core.fieldTypeName ft),
@@ -1330,7 +1330,7 @@ decodeUnionTypeNamed ename rt =
                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
-                        Core.fieldName = (Core.Name "union"),
+                        Core.fieldName = (Core.Name "inject"),
                         Core.fieldTerm = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "inj"),
                           Core.lambdaDomain = Nothing,

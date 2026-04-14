@@ -12,7 +12,7 @@
                     "body": {
                       "lambda": {
                         "body": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "record",
                               "term": {
@@ -116,7 +116,7 @@
                     "body": {
                       "lambda": {
                         "body": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "wrap",
                               "term": {
@@ -175,7 +175,7 @@
                     "body": {
                       "lambda": {
                         "body": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "record",
                               "term": {

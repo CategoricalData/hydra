@@ -369,7 +369,7 @@ geometryCollectionWithGeometries original newVal =
 
 geometryGeometryCollection :: Phantoms.TTerm Model.GeometryCollection -> Phantoms.TTerm Model.Geometry
 geometryGeometryCollection x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.geojson.model.Geometry"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "geometryCollection"),
@@ -377,7 +377,7 @@ geometryGeometryCollection x =
 
 geometryLineString :: Phantoms.TTerm Model.LineString -> Phantoms.TTerm Model.Geometry
 geometryLineString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.geojson.model.Geometry"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lineString"),
@@ -385,7 +385,7 @@ geometryLineString x =
 
 geometryMultiLineString :: Phantoms.TTerm Model.MultiLineString -> Phantoms.TTerm Model.Geometry
 geometryMultiLineString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.geojson.model.Geometry"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multiLineString"),
@@ -393,7 +393,7 @@ geometryMultiLineString x =
 
 geometryMultiPoint :: Phantoms.TTerm Model.MultiPoint -> Phantoms.TTerm Model.Geometry
 geometryMultiPoint x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.geojson.model.Geometry"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multiPoint"),
@@ -401,7 +401,7 @@ geometryMultiPoint x =
 
 geometryMultiPolygon :: Phantoms.TTerm Model.MultiPolygon -> Phantoms.TTerm Model.Geometry
 geometryMultiPolygon x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.geojson.model.Geometry"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multiPolygon"),
@@ -409,7 +409,7 @@ geometryMultiPolygon x =
 
 geometryPoint :: Phantoms.TTerm Model.Point -> Phantoms.TTerm Model.Geometry
 geometryPoint x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.geojson.model.Geometry"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "point"),
@@ -417,7 +417,7 @@ geometryPoint x =
 
 geometryPolygon :: Phantoms.TTerm Model.Polygon -> Phantoms.TTerm Model.Geometry
 geometryPolygon x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.geojson.model.Geometry"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "polygon"),
@@ -425,7 +425,7 @@ geometryPolygon x =
 
 idNumber :: Phantoms.TTerm Double -> Phantoms.TTerm Model.Id
 idNumber x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.geojson.model.Id"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "number"),
@@ -433,7 +433,7 @@ idNumber x =
 
 idString :: Phantoms.TTerm String -> Phantoms.TTerm Model.Id
 idString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.geojson.model.Id"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -681,7 +681,7 @@ multiPolygonWithCoordinates original newVal =
 
 objectFeature :: Phantoms.TTerm Model.Feature -> Phantoms.TTerm Model.Object
 objectFeature x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.geojson.model.Object"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "feature"),
@@ -689,7 +689,7 @@ objectFeature x =
 
 objectFeatureCollection :: Phantoms.TTerm Model.FeatureCollection -> Phantoms.TTerm Model.Object
 objectFeatureCollection x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.geojson.model.Object"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "featureCollection"),
@@ -697,7 +697,7 @@ objectFeatureCollection x =
 
 objectGeometry :: Phantoms.TTerm Model.Geometry -> Phantoms.TTerm Model.Object
 objectGeometry x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.geojson.model.Object"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "geometry"),

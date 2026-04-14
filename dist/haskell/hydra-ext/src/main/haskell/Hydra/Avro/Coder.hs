@@ -127,12 +127,12 @@ avroHydraAdapter cx schema env0 =
                             Core.fieldTypeName = (Core.Name s),
                             Core.fieldTypeType = Core.TypeUnit}) syms)
               in (simpleAdapter env1 typ (\_cx -> \jv -> case jv of
-                Model.ValueString v2 -> Right (Core.TermUnion (Core.Injection {
+                Model.ValueString v2 -> Right (Core.TermInject (Core.Injection {
                   Core.injectionTypeName = hydraName,
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name v2),
                     Core.fieldTerm = Core.TermUnit}}))) (\_cx -> \t -> case t of
-                Core.TermUnion v2 ->
+                Core.TermInject v2 ->
                   let fld = Core.injectionField v2
                       fn = Core.fieldName fld
                   in (Right (Model.ValueString (Core.unName fn)))))

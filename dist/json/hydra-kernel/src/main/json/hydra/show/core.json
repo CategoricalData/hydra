@@ -15,11 +15,11 @@
               "lambda": {
                 "body": {
                   "maybe": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "literal",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {"name": "string", "term": {"variable": "s"}},
                             "typeName": "hydra.core.Literal"}}},
                       "typeName": "hydra.core.Term"}}},
@@ -2383,7 +2383,7 @@
                                                 "function": {"variable": "hydra.lib.strings.cat"}}}}}}},
                                     "domain": {"variable": "hydra.core.TypeApplicationTerm"},
                                     "parameter": "tt"}}},
-                              {"name": "union", "term": {"variable": "hydra.show.core.injection"}},
+                              {"name": "inject", "term": {"variable": "hydra.show.core.injection"}},
                               {
                                 "name": "unit",
                                 "term": {

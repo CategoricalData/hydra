@@ -182,7 +182,7 @@ adjacentEdgeWithVertex original newVal =
 
 directionBoth :: Phantoms.TTerm Model.Direction
 directionBoth =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.model.Direction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "both"),
@@ -190,7 +190,7 @@ directionBoth =
 
 directionIn :: Phantoms.TTerm Model.Direction
 directionIn =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.model.Direction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "in"),
@@ -198,7 +198,7 @@ directionIn =
 
 directionOut :: Phantoms.TTerm Model.Direction
 directionOut =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.model.Direction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "out"),
@@ -206,7 +206,7 @@ directionOut =
 
 directionUndirected :: Phantoms.TTerm Model.Direction
 directionUndirected =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.model.Direction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "undirected"),
@@ -712,7 +712,7 @@ edgeWithProperties original newVal =
 
 elementEdge :: Phantoms.TTerm (Model.Edge v) -> Phantoms.TTerm (Model.Element v)
 elementEdge x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.model.Element"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edge"),
@@ -720,7 +720,7 @@ elementEdge x =
 
 elementKindEdge :: Phantoms.TTerm Model.ElementKind
 elementKindEdge =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.model.ElementKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edge"),
@@ -728,7 +728,7 @@ elementKindEdge =
 
 elementKindVertex :: Phantoms.TTerm Model.ElementKind
 elementKindVertex =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.model.ElementKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "vertex"),
@@ -796,7 +796,7 @@ elementTreeWithSelf original newVal =
 
 elementTypeEdge :: Phantoms.TTerm (Model.EdgeType t) -> Phantoms.TTerm (Model.ElementType t)
 elementTypeEdge x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.model.ElementType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edge"),
@@ -864,7 +864,7 @@ elementTypeTreeWithSelf original newVal =
 
 elementTypeVertex :: Phantoms.TTerm (Model.VertexType t) -> Phantoms.TTerm (Model.ElementType t)
 elementTypeVertex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.model.ElementType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "vertex"),
@@ -872,7 +872,7 @@ elementTypeVertex x =
 
 elementVertex :: Phantoms.TTerm (Model.Vertex v) -> Phantoms.TTerm (Model.Element v)
 elementVertex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.model.Element"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "vertex"),
@@ -1000,7 +1000,7 @@ graphWithVertices original newVal =
 
 labelEdge :: Phantoms.TTerm Model.EdgeLabel -> Phantoms.TTerm Model.Label
 labelEdge x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.model.Label"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edge"),
@@ -1008,7 +1008,7 @@ labelEdge x =
 
 labelVertex :: Phantoms.TTerm Model.VertexLabel -> Phantoms.TTerm Model.Label
 labelVertex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.model.Label"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "vertex"),

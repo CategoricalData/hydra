@@ -11,43 +11,43 @@ import hydra.core
 import hydra.phantoms
 
 def checking_error_incorrect_unification(x: hydra.phantoms.TTerm[hydra.error.checking.IncorrectUnificationError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("incorrectUnification"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("incorrectUnification"), x.value)))))
 
 def checking_error_not_a_forall_type(x: hydra.phantoms.TTerm[hydra.error.checking.NotAForallTypeError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("notAForallType"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("notAForallType"), x.value)))))
 
 def checking_error_not_a_function_type(x: hydra.phantoms.TTerm[hydra.error.checking.NotAFunctionTypeError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("notAFunctionType"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("notAFunctionType"), x.value)))))
 
 def checking_error_other(x: hydra.phantoms.TTerm[hydra.error.checking.OtherCheckingError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("other"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("other"), x.value)))))
 
 def checking_error_type_arity_mismatch(x: hydra.phantoms.TTerm[hydra.error.checking.TypeArityMismatchError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("typeArityMismatch"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("typeArityMismatch"), x.value)))))
 
 def checking_error_type_mismatch(x: hydra.phantoms.TTerm[hydra.error.checking.TypeMismatchError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("typeMismatch"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("typeMismatch"), x.value)))))
 
 def checking_error_unbound_type_variables(x: hydra.phantoms.TTerm[hydra.error.checking.UnboundTypeVariablesError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("unboundTypeVariables"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("unboundTypeVariables"), x.value)))))
 
 def checking_error_undefined_term_variable(x: hydra.phantoms.TTerm[hydra.error.checking.UndefinedTermVariableCheckingError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("undefinedTermVariable"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("undefinedTermVariable"), x.value)))))
 
 def checking_error_unequal_types(x: hydra.phantoms.TTerm[hydra.error.checking.UnequalTypesError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("unequalTypes"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("unequalTypes"), x.value)))))
 
 def checking_error_unsupported_term_variant(x: hydra.phantoms.TTerm[hydra.error.checking.UnsupportedTermVariantError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("unsupportedTermVariant"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("unsupportedTermVariant"), x.value)))))
 
 def checking_error_untyped_lambda(x: hydra.phantoms.TTerm[hydra.error.checking.UntypedLambdaError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("untypedLambda"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("untypedLambda"), x.value)))))
 
 def checking_error_untyped_let_binding(x: hydra.phantoms.TTerm[hydra.error.checking.UntypedLetBindingError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("untypedLetBinding"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("untypedLetBinding"), x.value)))))
 
 def checking_error_untyped_term_variable(x: hydra.phantoms.TTerm[hydra.error.checking.UntypedTermVariableCheckingError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("untypedTermVariable"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("untypedTermVariable"), x.value)))))
 
 def incorrect_unification_error(substitution: hydra.phantoms.TTerm[hydra.typing.TypeSubst]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.checking.IncorrectUnificationError"), (hydra.core.Field(hydra.core.Name("substitution"), substitution.value),)))))

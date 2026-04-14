@@ -11,7 +11,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 
 comparisonConstraintEqual :: Phantoms.TTerm Query.ComparisonConstraint
 comparisonConstraintEqual =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.ComparisonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "equal"),
@@ -19,7 +19,7 @@ comparisonConstraintEqual =
 
 comparisonConstraintGreaterThan :: Phantoms.TTerm Query.ComparisonConstraint
 comparisonConstraintGreaterThan =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.ComparisonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "greaterThan"),
@@ -27,7 +27,7 @@ comparisonConstraintGreaterThan =
 
 comparisonConstraintGreaterThanOrEqual :: Phantoms.TTerm Query.ComparisonConstraint
 comparisonConstraintGreaterThanOrEqual =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.ComparisonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "greaterThanOrEqual"),
@@ -35,7 +35,7 @@ comparisonConstraintGreaterThanOrEqual =
 
 comparisonConstraintLessThan :: Phantoms.TTerm Query.ComparisonConstraint
 comparisonConstraintLessThan =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.ComparisonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThan"),
@@ -43,7 +43,7 @@ comparisonConstraintLessThan =
 
 comparisonConstraintLessThanOrEqual :: Phantoms.TTerm Query.ComparisonConstraint
 comparisonConstraintLessThanOrEqual =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.ComparisonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThanOrEqual"),
@@ -51,7 +51,7 @@ comparisonConstraintLessThanOrEqual =
 
 comparisonConstraintNotEqual :: Phantoms.TTerm Query.ComparisonConstraint
 comparisonConstraintNotEqual =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.ComparisonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notEqual"),
@@ -227,7 +227,7 @@ graphPatternWithPatterns original newVal =
 
 nodeTerm :: Phantoms.TTerm Core.Term -> Phantoms.TTerm Query.Node
 nodeTerm x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.Node"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "term"),
@@ -235,7 +235,7 @@ nodeTerm x =
 
 nodeVariable :: Phantoms.TTerm Query.Variable -> Phantoms.TTerm Query.Node
 nodeVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.Node"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -243,7 +243,7 @@ nodeVariable x =
 
 nodeWildcard :: Phantoms.TTerm Query.Node
 nodeWildcard =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.Node"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "wildcard"),
@@ -311,7 +311,7 @@ pathEquationWithRight original newVal =
 
 pathInverse :: Phantoms.TTerm Query.Path -> Phantoms.TTerm Query.Path
 pathInverse x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.Path"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inverse"),
@@ -319,7 +319,7 @@ pathInverse x =
 
 pathRegex :: Phantoms.TTerm Query.RegexSequence -> Phantoms.TTerm Query.Path
 pathRegex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.Path"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "regex"),
@@ -327,7 +327,7 @@ pathRegex x =
 
 pathStep :: Phantoms.TTerm Query.Step -> Phantoms.TTerm Query.Path
 pathStep x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.Path"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "step"),
@@ -335,7 +335,7 @@ pathStep x =
 
 patternConjunction :: Phantoms.TTerm [Query.Pattern] -> Phantoms.TTerm Query.Pattern
 patternConjunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.Pattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "conjunction"),
@@ -343,7 +343,7 @@ patternConjunction x =
 
 patternDisjunction :: Phantoms.TTerm [Query.Pattern] -> Phantoms.TTerm Query.Pattern
 patternDisjunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.Pattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "disjunction"),
@@ -351,7 +351,7 @@ patternDisjunction x =
 
 patternGraph :: Phantoms.TTerm Query.GraphPattern -> Phantoms.TTerm Query.Pattern
 patternGraph x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.Pattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "graph"),
@@ -419,7 +419,7 @@ patternImplicationWithConsequent original newVal =
 
 patternNegation :: Phantoms.TTerm Query.Pattern -> Phantoms.TTerm Query.Pattern
 patternNegation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.Pattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "negation"),
@@ -427,7 +427,7 @@ patternNegation x =
 
 patternTriple :: Phantoms.TTerm Query.TriplePattern -> Phantoms.TTerm Query.Pattern
 patternTriple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.Pattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "triple"),
@@ -555,7 +555,7 @@ rangeWithMin original newVal =
 
 regexQuantifierAtLeast :: Phantoms.TTerm Int -> Phantoms.TTerm Query.RegexQuantifier
 regexQuantifierAtLeast x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.RegexQuantifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "atLeast"),
@@ -563,7 +563,7 @@ regexQuantifierAtLeast x =
 
 regexQuantifierExactly :: Phantoms.TTerm Int -> Phantoms.TTerm Query.RegexQuantifier
 regexQuantifierExactly x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.RegexQuantifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "exactly"),
@@ -571,7 +571,7 @@ regexQuantifierExactly x =
 
 regexQuantifierOne :: Phantoms.TTerm Query.RegexQuantifier
 regexQuantifierOne =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.RegexQuantifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "one"),
@@ -579,7 +579,7 @@ regexQuantifierOne =
 
 regexQuantifierOneOrMore :: Phantoms.TTerm Query.RegexQuantifier
 regexQuantifierOneOrMore =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.RegexQuantifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "oneOrMore"),
@@ -587,7 +587,7 @@ regexQuantifierOneOrMore =
 
 regexQuantifierRange :: Phantoms.TTerm Query.Range -> Phantoms.TTerm Query.RegexQuantifier
 regexQuantifierRange x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.RegexQuantifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "range"),
@@ -595,7 +595,7 @@ regexQuantifierRange x =
 
 regexQuantifierZeroOrMore :: Phantoms.TTerm Query.RegexQuantifier
 regexQuantifierZeroOrMore =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.RegexQuantifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "zeroOrMore"),
@@ -603,7 +603,7 @@ regexQuantifierZeroOrMore =
 
 regexQuantifierZeroOrOne :: Phantoms.TTerm Query.RegexQuantifier
 regexQuantifierZeroOrOne =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.RegexQuantifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "zeroOrOne"),
@@ -671,7 +671,7 @@ regexSequenceWithQuantifier original newVal =
 
 stepCompare :: Phantoms.TTerm Query.ComparisonConstraint -> Phantoms.TTerm Query.Step
 stepCompare x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.Step"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "compare"),
@@ -679,7 +679,7 @@ stepCompare x =
 
 stepEdge :: Phantoms.TTerm Query.Edge -> Phantoms.TTerm Query.Step
 stepEdge x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.Step"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edge"),
@@ -687,7 +687,7 @@ stepEdge x =
 
 stepProject :: Phantoms.TTerm Core.Projection -> Phantoms.TTerm Query.Step
 stepProject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.query.Step"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "project"),

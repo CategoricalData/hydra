@@ -268,8 +268,8 @@ def term_variant(v1: hydra.core.Term) -> hydra.variants.TermVariant:
         case hydra.core.TermTypeLambda():
             return hydra.variants.TermVariant.TYPE_LAMBDA
 
-        case hydra.core.TermUnion():
-            return hydra.variants.TermVariant.UNION
+        case hydra.core.TermInject():
+            return hydra.variants.TermVariant.INJECT
 
         case hydra.core.TermUnit():
             return hydra.variants.TermVariant.UNIT
@@ -287,7 +287,7 @@ def term_variant(v1: hydra.core.Term) -> hydra.variants.TermVariant:
             raise AssertionError("Unreachable: all variants handled")
 
 # All term (expression) variants, in a canonical order.
-term_variants = (hydra.variants.TermVariant.ANNOTATED, hydra.variants.TermVariant.APPLICATION, hydra.variants.TermVariant.CASES, hydra.variants.TermVariant.EITHER, hydra.variants.TermVariant.LAMBDA, hydra.variants.TermVariant.LET, hydra.variants.TermVariant.LIST, hydra.variants.TermVariant.LITERAL, hydra.variants.TermVariant.MAP, hydra.variants.TermVariant.MAYBE, hydra.variants.TermVariant.PAIR, hydra.variants.TermVariant.PROJECT, hydra.variants.TermVariant.RECORD, hydra.variants.TermVariant.SET, hydra.variants.TermVariant.TYPE_LAMBDA, hydra.variants.TermVariant.TYPE_APPLICATION, hydra.variants.TermVariant.UNION, hydra.variants.TermVariant.UNIT, hydra.variants.TermVariant.UNWRAP, hydra.variants.TermVariant.VARIABLE, hydra.variants.TermVariant.WRAP)
+term_variants = (hydra.variants.TermVariant.ANNOTATED, hydra.variants.TermVariant.APPLICATION, hydra.variants.TermVariant.CASES, hydra.variants.TermVariant.EITHER, hydra.variants.TermVariant.LAMBDA, hydra.variants.TermVariant.LET, hydra.variants.TermVariant.LIST, hydra.variants.TermVariant.LITERAL, hydra.variants.TermVariant.MAP, hydra.variants.TermVariant.MAYBE, hydra.variants.TermVariant.PAIR, hydra.variants.TermVariant.PROJECT, hydra.variants.TermVariant.RECORD, hydra.variants.TermVariant.SET, hydra.variants.TermVariant.TYPE_LAMBDA, hydra.variants.TermVariant.TYPE_APPLICATION, hydra.variants.TermVariant.INJECT, hydra.variants.TermVariant.UNIT, hydra.variants.TermVariant.UNWRAP, hydra.variants.TermVariant.VARIABLE, hydra.variants.TermVariant.WRAP)
 
 def type_variant(v1: hydra.core.Type) -> hydra.variants.TypeVariant:
     r"""Find the type inject (constructor) for a given type."""

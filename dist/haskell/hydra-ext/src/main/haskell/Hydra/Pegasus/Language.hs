@@ -53,7 +53,7 @@ pdlLanguage =
           Variants.TermVariantWrap,
           Variants.TermVariantMaybe,
           Variants.TermVariantRecord,
-          Variants.TermVariantUnion]
+          Variants.TermVariantInject]
     typeVariants =
         Sets.fromList [
           Variants.TypeVariantAnnotated,

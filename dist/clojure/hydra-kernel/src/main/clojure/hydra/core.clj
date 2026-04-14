@@ -71,7 +71,7 @@
 (defrecord hydra_core_record [type_name fields])
 (defn make-hydra_core_record [type_name fields] (->hydra_core_record type_name fields))
 
-(def hydra_core_term-variants (list :annotated :application :cases :either :lambda :let :list :literal :map :maybe :pair :project :record :set :type_application :type_lambda :union :unit :unwrap :variable :wrap))
+(def hydra_core_term-variants (list :annotated :application :cases :either :inject :lambda :let :list :literal :map :maybe :pair :project :record :set :type_application :type_lambda :unit :unwrap :variable :wrap))
 
 (def hydra_core_type-variants (list :annotated :application :either :forall :function :list :literal :map :maybe :pair :record :set :union :unit :variable :void :wrap))
 

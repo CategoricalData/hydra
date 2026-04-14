@@ -9,7 +9,7 @@ def tag(x: hydra.testing.Tag): hydra.core.Term =
 
 def testCase(v1: hydra.testing.TestCase): hydra.core.Term =
   v1 match
-  case hydra.testing.TestCase.universal(v_TestCase_universal_y) => hydra.core.Term.union(hydra.core.Injection("hydra.testing.TestCase",
+  case hydra.testing.TestCase.universal(v_TestCase_universal_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.testing.TestCase",
      hydra.core.Field("universal", hydra.encode.testing.universalTestCase(v_TestCase_universal_y))))
 
 def testCaseWithMetadata(x: hydra.testing.TestCaseWithMetadata): hydra.core.Term =

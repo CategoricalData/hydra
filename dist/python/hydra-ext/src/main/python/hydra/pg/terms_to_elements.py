@@ -46,7 +46,7 @@ def eval_step(cx: T0, step: str, term: hydra.core.Term):
             case hydra.core.TermRecord(value=rec):
                 return hydra.lib.maybes.maybe((lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2("No such field ", step), " in record")))))), (lambda t: Right((t,))), hydra.lib.maps.lookup(hydra.core.Name(step), hydra.resolution.field_map(rec.fields)))
 
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 return hydra.lib.logic.if_else(hydra.lib.equality.equal(inj.field.name.value, step), (lambda : eval_step(cx, step, inj.field.term)), (lambda : Right(())))
 
             case hydra.core.TermWrap(value=wt):

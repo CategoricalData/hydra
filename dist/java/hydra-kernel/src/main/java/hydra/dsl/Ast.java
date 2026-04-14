@@ -7,19 +7,19 @@ package hydra.dsl;
  */
 public interface Ast {
   static hydra.phantoms.TTerm<hydra.ast.Associativity> associativityBoth() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Associativity"), new hydra.core.Field(new hydra.core.Name("both"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Associativity"), new hydra.core.Field(new hydra.core.Name("both"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Associativity> associativityLeft() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Associativity"), new hydra.core.Field(new hydra.core.Name("left"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Associativity"), new hydra.core.Field(new hydra.core.Name("left"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Associativity> associativityNone() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Associativity"), new hydra.core.Field(new hydra.core.Name("none"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Associativity"), new hydra.core.Field(new hydra.core.Name("none"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Associativity> associativityRight() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Associativity"), new hydra.core.Field(new hydra.core.Name("right"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Associativity"), new hydra.core.Field(new hydra.core.Name("right"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.BlockStyle> blockStyle(hydra.phantoms.TTerm<hydra.util.Maybe<String>> indent, hydra.phantoms.TTerm<Boolean> newlineBeforeContent, hydra.phantoms.TTerm<Boolean> newlineAfterContent) {
@@ -129,31 +129,31 @@ public interface Ast {
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Expr> exprBrackets(hydra.phantoms.TTerm<hydra.ast.BracketExpr> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Expr"), new hydra.core.Field(new hydra.core.Name("brackets"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Expr"), new hydra.core.Field(new hydra.core.Name("brackets"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Expr> exprConst(hydra.phantoms.TTerm<hydra.ast.Symbol> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Expr"), new hydra.core.Field(new hydra.core.Name("const"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Expr"), new hydra.core.Field(new hydra.core.Name("const"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Expr> exprIndent(hydra.phantoms.TTerm<hydra.ast.IndentedExpression> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Expr"), new hydra.core.Field(new hydra.core.Name("indent"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Expr"), new hydra.core.Field(new hydra.core.Name("indent"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Expr> exprOp(hydra.phantoms.TTerm<hydra.ast.OpExpr> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Expr"), new hydra.core.Field(new hydra.core.Name("op"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Expr"), new hydra.core.Field(new hydra.core.Name("op"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Expr> exprSeq(hydra.phantoms.TTerm<hydra.ast.SeqExpr> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Expr"), new hydra.core.Field(new hydra.core.Name("seq"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Expr"), new hydra.core.Field(new hydra.core.Name("seq"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.IndentStyle> indentStyleAllLines(hydra.phantoms.TTerm<String> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.IndentStyle"), new hydra.core.Field(new hydra.core.Name("allLines"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.ast.IndentStyle"), new hydra.core.Field(new hydra.core.Name("allLines"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.IndentStyle> indentStyleSubsequentLines(hydra.phantoms.TTerm<String> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.IndentStyle"), new hydra.core.Field(new hydra.core.Name("subsequentLines"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.ast.IndentStyle"), new hydra.core.Field(new hydra.core.Name("subsequentLines"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.IndentedExpression> indentedExpression(hydra.phantoms.TTerm<hydra.ast.IndentStyle> style, hydra.phantoms.TTerm<hydra.ast.Expr> expr) {
@@ -347,22 +347,22 @@ public interface Ast {
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Ws> wsBreak() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Ws"), new hydra.core.Field(new hydra.core.Name("break"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Ws"), new hydra.core.Field(new hydra.core.Name("break"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Ws> wsBreakAndIndent(hydra.phantoms.TTerm<String> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Ws"), new hydra.core.Field(new hydra.core.Name("breakAndIndent"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Ws"), new hydra.core.Field(new hydra.core.Name("breakAndIndent"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Ws> wsDoubleBreak() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Ws"), new hydra.core.Field(new hydra.core.Name("doubleBreak"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Ws"), new hydra.core.Field(new hydra.core.Name("doubleBreak"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Ws> wsNone() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Ws"), new hydra.core.Field(new hydra.core.Name("none"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Ws"), new hydra.core.Field(new hydra.core.Name("none"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Ws> wsSpace() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Ws"), new hydra.core.Field(new hydra.core.Name("space"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Ws"), new hydra.core.Field(new hydra.core.Name("space"), new hydra.core.Term.Unit()))));
   }
 }

@@ -19,7 +19,7 @@ import hydra.variants
 def elimination_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_variants_elimination_variant_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -35,7 +35,7 @@ def elimination_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def function_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_variants_function_variant_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -51,7 +51,7 @@ def function_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def literal_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_variants_literal_variant_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -67,13 +67,13 @@ def literal_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def term_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_variants_term_variant_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.errors.DecodingError, hydra.variants.TermVariant]]]:
-                    return hydra.lib.maps.from_list(((hydra.core.Name("annotated"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.ANNOTATED), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("application"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.APPLICATION), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("cases"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.CASES), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("either"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.EITHER), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("lambda"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.LAMBDA), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("let"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.LET), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("list"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.LIST), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("literal"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.LITERAL), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("map"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.MAP), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("maybe"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.MAYBE), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("pair"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.PAIR), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("project"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.PROJECT), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("record"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.RECORD), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("set"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.SET), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("typeApplication"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.TYPE_APPLICATION), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("typeLambda"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.TYPE_LAMBDA), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("union"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.UNION), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("unit"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.UNIT), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("unwrap"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.UNWRAP), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("variable"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.VARIABLE), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("wrap"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.WRAP), hydra.extract.core.decode_unit(cx, input))))))
+                    return hydra.lib.maps.from_list(((hydra.core.Name("annotated"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.ANNOTATED), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("application"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.APPLICATION), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("cases"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.CASES), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("either"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.EITHER), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("inject"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.INJECT), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("lambda"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.LAMBDA), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("let"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.LET), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("list"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.LIST), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("literal"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.LITERAL), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("map"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.MAP), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("maybe"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.MAYBE), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("pair"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.PAIR), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("project"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.PROJECT), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("record"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.RECORD), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("set"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.SET), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("typeApplication"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.TYPE_APPLICATION), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("typeLambda"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.TYPE_LAMBDA), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("unit"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.UNIT), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("unwrap"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.UNWRAP), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("variable"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.VARIABLE), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("wrap"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.TermVariant.WRAP), hydra.extract.core.decode_unit(cx, input))))))
                 return hydra.lib.maybes.maybe((lambda : Left(hydra.errors.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
 
             case _:
@@ -83,7 +83,7 @@ def term_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def type_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_variants_type_variant_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term

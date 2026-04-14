@@ -17,7 +17,7 @@ additionalBound x =
 
 additiveExpressionMinus :: Phantoms.TTerm Syntax.AdditiveExpression_Binary -> Phantoms.TTerm Syntax.AdditiveExpression
 additiveExpressionMinus x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AdditiveExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "minus"),
@@ -25,7 +25,7 @@ additiveExpressionMinus x =
 
 additiveExpressionPlus :: Phantoms.TTerm Syntax.AdditiveExpression_Binary -> Phantoms.TTerm Syntax.AdditiveExpression
 additiveExpressionPlus x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AdditiveExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "plus"),
@@ -33,7 +33,7 @@ additiveExpressionPlus x =
 
 additiveExpressionUnary :: Phantoms.TTerm Syntax.MultiplicativeExpression -> Phantoms.TTerm Syntax.AdditiveExpression
 additiveExpressionUnary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AdditiveExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unary"),
@@ -173,7 +173,7 @@ annotatedIdentifierWithIdentifier original newVal =
 
 annotationMarker :: Phantoms.TTerm Syntax.MarkerAnnotation -> Phantoms.TTerm Syntax.Annotation
 annotationMarker x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Annotation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "marker"),
@@ -181,7 +181,7 @@ annotationMarker x =
 
 annotationNormal :: Phantoms.TTerm Syntax.NormalAnnotation -> Phantoms.TTerm Syntax.Annotation
 annotationNormal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Annotation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "normal"),
@@ -189,7 +189,7 @@ annotationNormal x =
 
 annotationSingleElement :: Phantoms.TTerm Syntax.SingleElementAnnotation -> Phantoms.TTerm Syntax.Annotation
 annotationSingleElement x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Annotation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "singleElement"),
@@ -557,7 +557,7 @@ annotationTypeElementDeclarationWithType original newVal =
 
 annotationTypeElementModifierAbstract :: Phantoms.TTerm Syntax.AnnotationTypeElementModifier
 annotationTypeElementModifierAbstract =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "abstract"),
@@ -565,7 +565,7 @@ annotationTypeElementModifierAbstract =
 
 annotationTypeElementModifierPublic :: Phantoms.TTerm Syntax.Annotation -> Phantoms.TTerm Syntax.AnnotationTypeElementModifier
 annotationTypeElementModifierPublic x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "public"),
@@ -573,7 +573,7 @@ annotationTypeElementModifierPublic x =
 
 annotationTypeMemberDeclarationAnnotationType :: Phantoms.TTerm Syntax.AnnotationTypeElementDeclaration -> Phantoms.TTerm Syntax.AnnotationTypeMemberDeclaration
 annotationTypeMemberDeclarationAnnotationType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeMemberDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotationType"),
@@ -581,7 +581,7 @@ annotationTypeMemberDeclarationAnnotationType x =
 
 annotationTypeMemberDeclarationClass :: Phantoms.TTerm Syntax.ClassDeclaration -> Phantoms.TTerm Syntax.AnnotationTypeMemberDeclaration
 annotationTypeMemberDeclarationClass x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeMemberDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "class"),
@@ -589,7 +589,7 @@ annotationTypeMemberDeclarationClass x =
 
 annotationTypeMemberDeclarationConstant :: Phantoms.TTerm Syntax.ConstantDeclaration -> Phantoms.TTerm Syntax.AnnotationTypeMemberDeclaration
 annotationTypeMemberDeclarationConstant x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeMemberDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "constant"),
@@ -597,7 +597,7 @@ annotationTypeMemberDeclarationConstant x =
 
 annotationTypeMemberDeclarationInterface :: Phantoms.TTerm Syntax.InterfaceDeclaration -> Phantoms.TTerm Syntax.AnnotationTypeMemberDeclaration
 annotationTypeMemberDeclarationInterface x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeMemberDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "interface"),
@@ -665,7 +665,7 @@ arrayAccessWithVariant original newVal =
 
 arrayAccess_VariantName :: Phantoms.TTerm Syntax.ExpressionName -> Phantoms.TTerm Syntax.ArrayAccess_Variant
 arrayAccess_VariantName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ArrayAccess_Variant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "name"),
@@ -673,7 +673,7 @@ arrayAccess_VariantName x =
 
 arrayAccess_VariantPrimary :: Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression -> Phantoms.TTerm Syntax.ArrayAccess_Variant
 arrayAccess_VariantPrimary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ArrayAccess_Variant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primary"),
@@ -681,7 +681,7 @@ arrayAccess_VariantPrimary x =
 
 arrayCreationExpressionClassOrInterface :: Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterface -> Phantoms.TTerm Syntax.ArrayCreationExpression
 arrayCreationExpressionClassOrInterface x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "classOrInterface"),
@@ -689,7 +689,7 @@ arrayCreationExpressionClassOrInterface x =
 
 arrayCreationExpressionClassOrInterfaceArray :: Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterfaceArray -> Phantoms.TTerm Syntax.ArrayCreationExpression
 arrayCreationExpressionClassOrInterfaceArray x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "classOrInterfaceArray"),
@@ -697,7 +697,7 @@ arrayCreationExpressionClassOrInterfaceArray x =
 
 arrayCreationExpressionPrimitive :: Phantoms.TTerm Syntax.ArrayCreationExpression_Primitive -> Phantoms.TTerm Syntax.ArrayCreationExpression
 arrayCreationExpressionPrimitive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primitive"),
@@ -705,7 +705,7 @@ arrayCreationExpressionPrimitive x =
 
 arrayCreationExpressionPrimitiveArray :: Phantoms.TTerm Syntax.ArrayCreationExpression_PrimitiveArray -> Phantoms.TTerm Syntax.ArrayCreationExpression
 arrayCreationExpressionPrimitiveArray x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primitiveArray"),
@@ -1211,7 +1211,7 @@ arrayTypeWithVariant original newVal =
 
 arrayType_VariantClassOrInterface :: Phantoms.TTerm Syntax.ClassOrInterfaceType -> Phantoms.TTerm Syntax.ArrayType_Variant
 arrayType_VariantClassOrInterface x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ArrayType_Variant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "classOrInterface"),
@@ -1219,7 +1219,7 @@ arrayType_VariantClassOrInterface x =
 
 arrayType_VariantPrimitive :: Phantoms.TTerm Syntax.PrimitiveTypeWithAnnotations -> Phantoms.TTerm Syntax.ArrayType_Variant
 arrayType_VariantPrimitive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ArrayType_Variant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primitive"),
@@ -1227,7 +1227,7 @@ arrayType_VariantPrimitive x =
 
 arrayType_VariantVariable :: Phantoms.TTerm Syntax.TypeVariable -> Phantoms.TTerm Syntax.ArrayType_Variant
 arrayType_VariantVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ArrayType_Variant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -1235,7 +1235,7 @@ arrayType_VariantVariable x =
 
 assertStatementPair :: Phantoms.TTerm Syntax.AssertStatement_Pair -> Phantoms.TTerm Syntax.AssertStatement
 assertStatementPair x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AssertStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pair"),
@@ -1243,7 +1243,7 @@ assertStatementPair x =
 
 assertStatementSingle :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.AssertStatement
 assertStatementSingle x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AssertStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "single"),
@@ -1334,7 +1334,7 @@ assignmentExpression x =
 
 assignmentExpressionAssignment :: Phantoms.TTerm Syntax.Assignment -> Phantoms.TTerm Syntax.AssignmentExpression
 assignmentExpressionAssignment x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AssignmentExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "assignment"),
@@ -1342,7 +1342,7 @@ assignmentExpressionAssignment x =
 
 assignmentExpressionConditional :: Phantoms.TTerm Syntax.ConditionalExpression -> Phantoms.TTerm Syntax.AssignmentExpression
 assignmentExpressionConditional x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AssignmentExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "conditional"),
@@ -1366,7 +1366,7 @@ assignmentOp x =
 
 assignmentOperatorAnd :: Phantoms.TTerm Syntax.AssignmentOperator
 assignmentOperatorAnd =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AssignmentOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "and"),
@@ -1374,7 +1374,7 @@ assignmentOperatorAnd =
 
 assignmentOperatorDiv :: Phantoms.TTerm Syntax.AssignmentOperator
 assignmentOperatorDiv =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AssignmentOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "div"),
@@ -1382,7 +1382,7 @@ assignmentOperatorDiv =
 
 assignmentOperatorMinus :: Phantoms.TTerm Syntax.AssignmentOperator
 assignmentOperatorMinus =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AssignmentOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "minus"),
@@ -1390,7 +1390,7 @@ assignmentOperatorMinus =
 
 assignmentOperatorMod :: Phantoms.TTerm Syntax.AssignmentOperator
 assignmentOperatorMod =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AssignmentOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mod"),
@@ -1398,7 +1398,7 @@ assignmentOperatorMod =
 
 assignmentOperatorOr :: Phantoms.TTerm Syntax.AssignmentOperator
 assignmentOperatorOr =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AssignmentOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "or"),
@@ -1406,7 +1406,7 @@ assignmentOperatorOr =
 
 assignmentOperatorPlus :: Phantoms.TTerm Syntax.AssignmentOperator
 assignmentOperatorPlus =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AssignmentOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "plus"),
@@ -1414,7 +1414,7 @@ assignmentOperatorPlus =
 
 assignmentOperatorShiftLeft :: Phantoms.TTerm Syntax.AssignmentOperator
 assignmentOperatorShiftLeft =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AssignmentOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "shiftLeft"),
@@ -1422,7 +1422,7 @@ assignmentOperatorShiftLeft =
 
 assignmentOperatorShiftRight :: Phantoms.TTerm Syntax.AssignmentOperator
 assignmentOperatorShiftRight =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AssignmentOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "shiftRight"),
@@ -1430,7 +1430,7 @@ assignmentOperatorShiftRight =
 
 assignmentOperatorShiftRightZeroFill :: Phantoms.TTerm Syntax.AssignmentOperator
 assignmentOperatorShiftRightZeroFill =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AssignmentOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "shiftRightZeroFill"),
@@ -1438,7 +1438,7 @@ assignmentOperatorShiftRightZeroFill =
 
 assignmentOperatorSimple :: Phantoms.TTerm Syntax.AssignmentOperator
 assignmentOperatorSimple =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AssignmentOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -1446,7 +1446,7 @@ assignmentOperatorSimple =
 
 assignmentOperatorTimes :: Phantoms.TTerm Syntax.AssignmentOperator
 assignmentOperatorTimes =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AssignmentOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "times"),
@@ -1454,7 +1454,7 @@ assignmentOperatorTimes =
 
 assignmentOperatorXor :: Phantoms.TTerm Syntax.AssignmentOperator
 assignmentOperatorXor =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.AssignmentOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "xor"),
@@ -1657,7 +1657,7 @@ block x =
 
 blockStatementClass :: Phantoms.TTerm Syntax.ClassDeclaration -> Phantoms.TTerm Syntax.BlockStatement
 blockStatementClass x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.BlockStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "class"),
@@ -1665,7 +1665,7 @@ blockStatementClass x =
 
 blockStatementLocalVariableDeclaration :: Phantoms.TTerm Syntax.LocalVariableDeclarationStatement -> Phantoms.TTerm Syntax.BlockStatement
 blockStatementLocalVariableDeclaration x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.BlockStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "localVariableDeclaration"),
@@ -1673,7 +1673,7 @@ blockStatementLocalVariableDeclaration x =
 
 blockStatementStatement :: Phantoms.TTerm Syntax.Statement -> Phantoms.TTerm Syntax.BlockStatement
 blockStatementStatement x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.BlockStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "statement"),
@@ -1681,7 +1681,7 @@ blockStatementStatement x =
 
 booleanArrayArray :: Phantoms.TTerm Syntax.BooleanArray -> Phantoms.TTerm Syntax.BooleanArray
 booleanArrayArray x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.BooleanArray"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "array"),
@@ -1689,7 +1689,7 @@ booleanArrayArray x =
 
 booleanArraySimple :: Phantoms.TTerm Syntax.BooleanArray
 booleanArraySimple =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.BooleanArray"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -1703,7 +1703,7 @@ breakStatement x =
 
 castExpressionLambda :: Phantoms.TTerm Syntax.CastExpression_Lambda -> Phantoms.TTerm Syntax.CastExpression
 castExpressionLambda x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.CastExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lambda"),
@@ -1711,7 +1711,7 @@ castExpressionLambda x =
 
 castExpressionNotPlusMinus :: Phantoms.TTerm Syntax.CastExpression_NotPlusMinus -> Phantoms.TTerm Syntax.CastExpression
 castExpressionNotPlusMinus x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.CastExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notPlusMinus"),
@@ -1719,7 +1719,7 @@ castExpressionNotPlusMinus x =
 
 castExpressionPrimitive :: Phantoms.TTerm Syntax.CastExpression_Primitive -> Phantoms.TTerm Syntax.CastExpression
 castExpressionPrimitive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.CastExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primitive"),
@@ -2207,7 +2207,7 @@ classBody x =
 
 classBodyDeclarationClassMember :: Phantoms.TTerm Syntax.ClassMemberDeclaration -> Phantoms.TTerm Syntax.ClassBodyDeclaration
 classBodyDeclarationClassMember x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassBodyDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "classMember"),
@@ -2215,7 +2215,7 @@ classBodyDeclarationClassMember x =
 
 classBodyDeclarationConstructorDeclaration :: Phantoms.TTerm Syntax.ConstructorDeclaration -> Phantoms.TTerm Syntax.ClassBodyDeclaration
 classBodyDeclarationConstructorDeclaration x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassBodyDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "constructorDeclaration"),
@@ -2223,7 +2223,7 @@ classBodyDeclarationConstructorDeclaration x =
 
 classBodyDeclarationInstanceInitializer :: Phantoms.TTerm Syntax.InstanceInitializer -> Phantoms.TTerm Syntax.ClassBodyDeclaration
 classBodyDeclarationInstanceInitializer x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassBodyDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "instanceInitializer"),
@@ -2231,7 +2231,7 @@ classBodyDeclarationInstanceInitializer x =
 
 classBodyDeclarationStaticInitializer :: Phantoms.TTerm Syntax.StaticInitializer -> Phantoms.TTerm Syntax.ClassBodyDeclaration
 classBodyDeclarationStaticInitializer x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassBodyDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "staticInitializer"),
@@ -2299,7 +2299,7 @@ classBodyDeclarationWithCommentsWithValue original newVal =
 
 classDeclarationEnum :: Phantoms.TTerm Syntax.EnumDeclaration -> Phantoms.TTerm Syntax.ClassDeclaration
 classDeclarationEnum x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "enum"),
@@ -2307,7 +2307,7 @@ classDeclarationEnum x =
 
 classDeclarationNormal :: Phantoms.TTerm Syntax.NormalClassDeclaration -> Phantoms.TTerm Syntax.ClassDeclaration
 classDeclarationNormal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "normal"),
@@ -2375,7 +2375,7 @@ classInstanceCreationExpressionWithQualifier original newVal =
 
 classInstanceCreationExpression_QualifierExpression :: Phantoms.TTerm Syntax.ExpressionName -> Phantoms.TTerm Syntax.ClassInstanceCreationExpression_Qualifier
 classInstanceCreationExpression_QualifierExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassInstanceCreationExpression_Qualifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "expression"),
@@ -2383,7 +2383,7 @@ classInstanceCreationExpression_QualifierExpression x =
 
 classInstanceCreationExpression_QualifierPrimary :: Phantoms.TTerm Syntax.Primary -> Phantoms.TTerm Syntax.ClassInstanceCreationExpression_Qualifier
 classInstanceCreationExpression_QualifierPrimary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassInstanceCreationExpression_Qualifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primary"),
@@ -2391,7 +2391,7 @@ classInstanceCreationExpression_QualifierPrimary x =
 
 classLiteralBoolean :: Phantoms.TTerm Syntax.BooleanArray -> Phantoms.TTerm Syntax.ClassLiteral
 classLiteralBoolean x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -2399,7 +2399,7 @@ classLiteralBoolean x =
 
 classLiteralNumericType :: Phantoms.TTerm Syntax.NumericTypeArray -> Phantoms.TTerm Syntax.ClassLiteral
 classLiteralNumericType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "numericType"),
@@ -2407,7 +2407,7 @@ classLiteralNumericType x =
 
 classLiteralType :: Phantoms.TTerm Syntax.TypeNameArray -> Phantoms.TTerm Syntax.ClassLiteral
 classLiteralType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "type"),
@@ -2415,7 +2415,7 @@ classLiteralType x =
 
 classLiteralVoid :: Phantoms.TTerm Syntax.ClassLiteral
 classLiteralVoid =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "void"),
@@ -2423,7 +2423,7 @@ classLiteralVoid =
 
 classMemberDeclarationClass :: Phantoms.TTerm Syntax.ClassDeclaration -> Phantoms.TTerm Syntax.ClassMemberDeclaration
 classMemberDeclarationClass x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassMemberDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "class"),
@@ -2431,7 +2431,7 @@ classMemberDeclarationClass x =
 
 classMemberDeclarationField :: Phantoms.TTerm Syntax.FieldDeclaration -> Phantoms.TTerm Syntax.ClassMemberDeclaration
 classMemberDeclarationField x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassMemberDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "field"),
@@ -2439,7 +2439,7 @@ classMemberDeclarationField x =
 
 classMemberDeclarationInterface :: Phantoms.TTerm Syntax.InterfaceDeclaration -> Phantoms.TTerm Syntax.ClassMemberDeclaration
 classMemberDeclarationInterface x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassMemberDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "interface"),
@@ -2447,7 +2447,7 @@ classMemberDeclarationInterface x =
 
 classMemberDeclarationMethod :: Phantoms.TTerm Syntax.MethodDeclaration -> Phantoms.TTerm Syntax.ClassMemberDeclaration
 classMemberDeclarationMethod x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassMemberDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "method"),
@@ -2455,7 +2455,7 @@ classMemberDeclarationMethod x =
 
 classMemberDeclarationNone :: Phantoms.TTerm Syntax.ClassMemberDeclaration
 classMemberDeclarationNone =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassMemberDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "none"),
@@ -2463,7 +2463,7 @@ classMemberDeclarationNone =
 
 classModifierAbstract :: Phantoms.TTerm Syntax.ClassModifier
 classModifierAbstract =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "abstract"),
@@ -2471,7 +2471,7 @@ classModifierAbstract =
 
 classModifierAnnotation :: Phantoms.TTerm Syntax.Annotation -> Phantoms.TTerm Syntax.ClassModifier
 classModifierAnnotation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotation"),
@@ -2479,7 +2479,7 @@ classModifierAnnotation x =
 
 classModifierFinal :: Phantoms.TTerm Syntax.ClassModifier
 classModifierFinal =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "final"),
@@ -2487,7 +2487,7 @@ classModifierFinal =
 
 classModifierPrivate :: Phantoms.TTerm Syntax.ClassModifier
 classModifierPrivate =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "private"),
@@ -2495,7 +2495,7 @@ classModifierPrivate =
 
 classModifierProtected :: Phantoms.TTerm Syntax.ClassModifier
 classModifierProtected =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "protected"),
@@ -2503,7 +2503,7 @@ classModifierProtected =
 
 classModifierPublic :: Phantoms.TTerm Syntax.ClassModifier
 classModifierPublic =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "public"),
@@ -2511,7 +2511,7 @@ classModifierPublic =
 
 classModifierStatic :: Phantoms.TTerm Syntax.ClassModifier
 classModifierStatic =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "static"),
@@ -2519,7 +2519,7 @@ classModifierStatic =
 
 classModifierStrictfp :: Phantoms.TTerm Syntax.ClassModifier
 classModifierStrictfp =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "strictfp"),
@@ -2527,7 +2527,7 @@ classModifierStrictfp =
 
 classOrInterfaceTypeClass :: Phantoms.TTerm Syntax.ClassType -> Phantoms.TTerm Syntax.ClassOrInterfaceType
 classOrInterfaceTypeClass x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassOrInterfaceType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "class"),
@@ -2535,7 +2535,7 @@ classOrInterfaceTypeClass x =
 
 classOrInterfaceTypeInterface :: Phantoms.TTerm Syntax.InterfaceType -> Phantoms.TTerm Syntax.ClassOrInterfaceType
 classOrInterfaceTypeInterface x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassOrInterfaceType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "interface"),
@@ -2653,7 +2653,7 @@ classTypeQualifier x =
 
 classTypeQualifierNone :: Phantoms.TTerm Syntax.ClassTypeQualifier
 classTypeQualifierNone =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassTypeQualifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "none"),
@@ -2661,7 +2661,7 @@ classTypeQualifierNone =
 
 classTypeQualifierPackage :: Phantoms.TTerm Syntax.PackageName -> Phantoms.TTerm Syntax.ClassTypeQualifier
 classTypeQualifierPackage x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassTypeQualifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "package"),
@@ -2669,7 +2669,7 @@ classTypeQualifierPackage x =
 
 classTypeQualifierParent :: Phantoms.TTerm Syntax.ClassOrInterfaceType -> Phantoms.TTerm Syntax.ClassTypeQualifier
 classTypeQualifierParent x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ClassTypeQualifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parent"),
@@ -2797,7 +2797,7 @@ classTypeWithQualifier original newVal =
 
 compilationUnitModular :: Phantoms.TTerm Syntax.ModularCompilationUnit -> Phantoms.TTerm Syntax.CompilationUnit
 compilationUnitModular x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.CompilationUnit"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "modular"),
@@ -2805,7 +2805,7 @@ compilationUnitModular x =
 
 compilationUnitOrdinary :: Phantoms.TTerm Syntax.OrdinaryCompilationUnit -> Phantoms.TTerm Syntax.CompilationUnit
 compilationUnitOrdinary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.CompilationUnit"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ordinary"),
@@ -2819,7 +2819,7 @@ conditionalAndExpression x =
 
 conditionalExpressionSimple :: Phantoms.TTerm Syntax.ConditionalOrExpression -> Phantoms.TTerm Syntax.ConditionalExpression
 conditionalExpressionSimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ConditionalExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -2827,7 +2827,7 @@ conditionalExpressionSimple x =
 
 conditionalExpressionTernaryCond :: Phantoms.TTerm Syntax.ConditionalExpression_TernaryCond -> Phantoms.TTerm Syntax.ConditionalExpression
 conditionalExpressionTernaryCond x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ConditionalExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ternaryCond"),
@@ -2835,7 +2835,7 @@ conditionalExpressionTernaryCond x =
 
 conditionalExpressionTernaryLambda :: Phantoms.TTerm Syntax.ConditionalExpression_TernaryLambda -> Phantoms.TTerm Syntax.ConditionalExpression
 conditionalExpressionTernaryLambda x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ConditionalExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ternaryLambda"),
@@ -3179,7 +3179,7 @@ constantExpression x =
 
 constantModifierAnnotation :: Phantoms.TTerm Syntax.Annotation -> Phantoms.TTerm Syntax.ConstantModifier
 constantModifierAnnotation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ConstantModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotation"),
@@ -3187,7 +3187,7 @@ constantModifierAnnotation x =
 
 constantModifierFinal :: Phantoms.TTerm Syntax.ConstantModifier
 constantModifierFinal =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ConstantModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "final"),
@@ -3195,7 +3195,7 @@ constantModifierFinal =
 
 constantModifierPublic :: Phantoms.TTerm Syntax.ConstantModifier
 constantModifierPublic =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ConstantModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "public"),
@@ -3203,7 +3203,7 @@ constantModifierPublic =
 
 constantModifierStatic :: Phantoms.TTerm Syntax.ConstantModifier
 constantModifierStatic =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ConstantModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "static"),
@@ -3611,7 +3611,7 @@ constructorDeclaratorWithReceiverParameter original newVal =
 
 constructorModifierAnnotation :: Phantoms.TTerm Syntax.Annotation -> Phantoms.TTerm Syntax.ConstructorModifier
 constructorModifierAnnotation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ConstructorModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotation"),
@@ -3619,7 +3619,7 @@ constructorModifierAnnotation x =
 
 constructorModifierPrivate :: Phantoms.TTerm Syntax.ConstructorModifier
 constructorModifierPrivate =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ConstructorModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "private"),
@@ -3627,7 +3627,7 @@ constructorModifierPrivate =
 
 constructorModifierProtected :: Phantoms.TTerm Syntax.ConstructorModifier
 constructorModifierProtected =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ConstructorModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "protected"),
@@ -3635,7 +3635,7 @@ constructorModifierProtected =
 
 constructorModifierPublic :: Phantoms.TTerm Syntax.ConstructorModifier
 constructorModifierPublic =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ConstructorModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "public"),
@@ -3781,7 +3781,7 @@ doStatementWithConde original newVal =
 
 elementValueAnnotation :: Phantoms.TTerm Syntax.Annotation -> Phantoms.TTerm Syntax.ElementValue
 elementValueAnnotation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ElementValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotation"),
@@ -3795,7 +3795,7 @@ elementValueArrayInitializer x =
 
 elementValueConditionalExpression :: Phantoms.TTerm Syntax.ConditionalExpression -> Phantoms.TTerm Syntax.ElementValue
 elementValueConditionalExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ElementValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "conditionalExpression"),
@@ -3803,7 +3803,7 @@ elementValueConditionalExpression x =
 
 elementValueElementValueArrayInitializer :: Phantoms.TTerm Syntax.ElementValueArrayInitializer -> Phantoms.TTerm Syntax.ElementValue
 elementValueElementValueArrayInitializer x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ElementValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "elementValueArrayInitializer"),
@@ -4579,7 +4579,7 @@ enumDeclarationWithModifiers original newVal =
 
 equalityExpressionEqual :: Phantoms.TTerm Syntax.EqualityExpression_Binary -> Phantoms.TTerm Syntax.EqualityExpression
 equalityExpressionEqual x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.EqualityExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "equal"),
@@ -4587,7 +4587,7 @@ equalityExpressionEqual x =
 
 equalityExpressionNotEqual :: Phantoms.TTerm Syntax.EqualityExpression_Binary -> Phantoms.TTerm Syntax.EqualityExpression
 equalityExpressionNotEqual x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.EqualityExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notEqual"),
@@ -4595,7 +4595,7 @@ equalityExpressionNotEqual x =
 
 equalityExpressionUnary :: Phantoms.TTerm Syntax.RelationalExpression -> Phantoms.TTerm Syntax.EqualityExpression
 equalityExpressionUnary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.EqualityExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unary"),
@@ -4663,7 +4663,7 @@ equalityExpression_BinaryWithRhs original newVal =
 
 exceptionTypeClass :: Phantoms.TTerm Syntax.ClassType -> Phantoms.TTerm Syntax.ExceptionType
 exceptionTypeClass x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ExceptionType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "class"),
@@ -4671,7 +4671,7 @@ exceptionTypeClass x =
 
 exceptionTypeVariable :: Phantoms.TTerm Syntax.TypeVariable -> Phantoms.TTerm Syntax.ExceptionType
 exceptionTypeVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ExceptionType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -4793,7 +4793,7 @@ explicitConstructorInvocationWithVariant original newVal =
 
 explicitConstructorInvocation_VariantPrimary :: Phantoms.TTerm Syntax.Primary -> Phantoms.TTerm Syntax.ExplicitConstructorInvocation_Variant
 explicitConstructorInvocation_VariantPrimary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ExplicitConstructorInvocation_Variant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primary"),
@@ -4801,7 +4801,7 @@ explicitConstructorInvocation_VariantPrimary x =
 
 explicitConstructorInvocation_VariantSuper :: Phantoms.TTerm (Maybe Syntax.ExpressionName) -> Phantoms.TTerm Syntax.ExplicitConstructorInvocation_Variant
 explicitConstructorInvocation_VariantSuper x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ExplicitConstructorInvocation_Variant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "super"),
@@ -4809,7 +4809,7 @@ explicitConstructorInvocation_VariantSuper x =
 
 explicitConstructorInvocation_VariantThis :: Phantoms.TTerm Syntax.ExplicitConstructorInvocation_Variant
 explicitConstructorInvocation_VariantThis =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ExplicitConstructorInvocation_Variant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "this"),
@@ -4817,7 +4817,7 @@ explicitConstructorInvocation_VariantThis =
 
 expressionAssignment :: Phantoms.TTerm Syntax.AssignmentExpression -> Phantoms.TTerm Syntax.Expression
 expressionAssignment x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "assignment"),
@@ -4825,7 +4825,7 @@ expressionAssignment x =
 
 expressionLambda :: Phantoms.TTerm Syntax.LambdaExpression -> Phantoms.TTerm Syntax.Expression
 expressionLambda x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lambda"),
@@ -4959,7 +4959,7 @@ fieldAccessWithQualifier original newVal =
 
 fieldAccess_QualifierPrimary :: Phantoms.TTerm Syntax.Primary -> Phantoms.TTerm Syntax.FieldAccess_Qualifier
 fieldAccess_QualifierPrimary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.FieldAccess_Qualifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primary"),
@@ -4967,7 +4967,7 @@ fieldAccess_QualifierPrimary x =
 
 fieldAccess_QualifierSuper :: Phantoms.TTerm Syntax.FieldAccess_Qualifier
 fieldAccess_QualifierSuper =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.FieldAccess_Qualifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "super"),
@@ -4975,7 +4975,7 @@ fieldAccess_QualifierSuper =
 
 fieldAccess_QualifierTyped :: Phantoms.TTerm Syntax.TypeName -> Phantoms.TTerm Syntax.FieldAccess_Qualifier
 fieldAccess_QualifierTyped x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.FieldAccess_Qualifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typed"),
@@ -5091,7 +5091,7 @@ fieldDeclarationWithVariableDeclarators original newVal =
 
 fieldModifierAnnotation :: Phantoms.TTerm Syntax.Annotation -> Phantoms.TTerm Syntax.FieldModifier
 fieldModifierAnnotation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.FieldModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotation"),
@@ -5099,7 +5099,7 @@ fieldModifierAnnotation x =
 
 fieldModifierFinal :: Phantoms.TTerm Syntax.FieldModifier
 fieldModifierFinal =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.FieldModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "final"),
@@ -5107,7 +5107,7 @@ fieldModifierFinal =
 
 fieldModifierPrivate :: Phantoms.TTerm Syntax.FieldModifier
 fieldModifierPrivate =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.FieldModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "private"),
@@ -5115,7 +5115,7 @@ fieldModifierPrivate =
 
 fieldModifierProtected :: Phantoms.TTerm Syntax.FieldModifier
 fieldModifierProtected =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.FieldModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "protected"),
@@ -5123,7 +5123,7 @@ fieldModifierProtected =
 
 fieldModifierPublic :: Phantoms.TTerm Syntax.FieldModifier
 fieldModifierPublic =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.FieldModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "public"),
@@ -5131,7 +5131,7 @@ fieldModifierPublic =
 
 fieldModifierStatic :: Phantoms.TTerm Syntax.FieldModifier
 fieldModifierStatic =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.FieldModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "static"),
@@ -5139,7 +5139,7 @@ fieldModifierStatic =
 
 fieldModifierTransient :: Phantoms.TTerm Syntax.FieldModifier
 fieldModifierTransient =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.FieldModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "transient"),
@@ -5147,7 +5147,7 @@ fieldModifierTransient =
 
 fieldModifierVolatile :: Phantoms.TTerm Syntax.FieldModifier
 fieldModifierVolatile =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.FieldModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "volatile"),
@@ -5167,7 +5167,7 @@ floatingPointLiteral x =
 
 floatingPointTypeDouble :: Phantoms.TTerm Syntax.FloatingPointType
 floatingPointTypeDouble =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.FloatingPointType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "double"),
@@ -5175,7 +5175,7 @@ floatingPointTypeDouble =
 
 floatingPointTypeFloat :: Phantoms.TTerm Syntax.FloatingPointType
 floatingPointTypeFloat =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.FloatingPointType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
@@ -5291,7 +5291,7 @@ forCondWithUpdate original newVal =
 
 forInitLocalVariable :: Phantoms.TTerm Syntax.LocalVariableDeclaration -> Phantoms.TTerm Syntax.ForInit
 forInitLocalVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ForInit"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "localVariable"),
@@ -5299,7 +5299,7 @@ forInitLocalVariable x =
 
 forInitStatements :: Phantoms.TTerm [Syntax.StatementExpression] -> Phantoms.TTerm Syntax.ForInit
 forInitStatements x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ForInit"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "statements"),
@@ -5307,7 +5307,7 @@ forInitStatements x =
 
 forStatementBasic :: Phantoms.TTerm Syntax.BasicForStatement -> Phantoms.TTerm Syntax.ForStatement
 forStatementBasic x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ForStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "basic"),
@@ -5315,7 +5315,7 @@ forStatementBasic x =
 
 forStatementEnhanced :: Phantoms.TTerm Syntax.EnhancedForStatement -> Phantoms.TTerm Syntax.ForStatement
 forStatementEnhanced x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ForStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "enhanced"),
@@ -5323,7 +5323,7 @@ forStatementEnhanced x =
 
 forStatementNoShortIfBasic :: Phantoms.TTerm Syntax.BasicForStatementNoShortIf -> Phantoms.TTerm Syntax.ForStatementNoShortIf
 forStatementNoShortIfBasic x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ForStatementNoShortIf"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "basic"),
@@ -5331,7 +5331,7 @@ forStatementNoShortIfBasic x =
 
 forStatementNoShortIfEnhanced :: Phantoms.TTerm Syntax.EnhancedForStatementNoShortIf -> Phantoms.TTerm Syntax.ForStatementNoShortIf
 forStatementNoShortIfEnhanced x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ForStatementNoShortIf"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "enhanced"),
@@ -5345,7 +5345,7 @@ forUpdate x =
 
 formalParameterSimple :: Phantoms.TTerm Syntax.FormalParameter_Simple -> Phantoms.TTerm Syntax.FormalParameter
 formalParameterSimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.FormalParameter"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -5353,7 +5353,7 @@ formalParameterSimple x =
 
 formalParameterVariableArity :: Phantoms.TTerm Syntax.VariableArityParameter -> Phantoms.TTerm Syntax.FormalParameter
 formalParameterVariableArity x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.FormalParameter"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variableArity"),
@@ -5751,7 +5751,7 @@ ifThenStatementWithStatement original newVal =
 
 importDeclarationSingleStaticImport :: Phantoms.TTerm Syntax.SingleStaticImportDeclaration -> Phantoms.TTerm Syntax.ImportDeclaration
 importDeclarationSingleStaticImport x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ImportDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "singleStaticImport"),
@@ -5759,7 +5759,7 @@ importDeclarationSingleStaticImport x =
 
 importDeclarationSingleType :: Phantoms.TTerm Syntax.SingleTypeImportDeclaration -> Phantoms.TTerm Syntax.ImportDeclaration
 importDeclarationSingleType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ImportDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "singleType"),
@@ -5767,7 +5767,7 @@ importDeclarationSingleType x =
 
 importDeclarationStaticImportOnDemand :: Phantoms.TTerm Syntax.StaticImportOnDemandDeclaration -> Phantoms.TTerm Syntax.ImportDeclaration
 importDeclarationStaticImportOnDemand x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ImportDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "staticImportOnDemand"),
@@ -5775,7 +5775,7 @@ importDeclarationStaticImportOnDemand x =
 
 importDeclarationTypeImportOnDemand :: Phantoms.TTerm Syntax.TypeImportOnDemandDeclaration -> Phantoms.TTerm Syntax.ImportDeclaration
 importDeclarationTypeImportOnDemand x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ImportDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeImportOnDemand"),
@@ -5801,7 +5801,7 @@ integerLiteral x =
 
 integralTypeByte :: Phantoms.TTerm Syntax.IntegralType
 integralTypeByte =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.IntegralType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "byte"),
@@ -5809,7 +5809,7 @@ integralTypeByte =
 
 integralTypeChar :: Phantoms.TTerm Syntax.IntegralType
 integralTypeChar =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.IntegralType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "char"),
@@ -5817,7 +5817,7 @@ integralTypeChar =
 
 integralTypeInt :: Phantoms.TTerm Syntax.IntegralType
 integralTypeInt =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.IntegralType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int"),
@@ -5825,7 +5825,7 @@ integralTypeInt =
 
 integralTypeLong :: Phantoms.TTerm Syntax.IntegralType
 integralTypeLong =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.IntegralType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "long"),
@@ -5833,7 +5833,7 @@ integralTypeLong =
 
 integralTypeShort :: Phantoms.TTerm Syntax.IntegralType
 integralTypeShort =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.IntegralType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "short"),
@@ -5847,7 +5847,7 @@ interfaceBody x =
 
 interfaceDeclarationAnnotationType :: Phantoms.TTerm Syntax.AnnotationTypeDeclaration -> Phantoms.TTerm Syntax.InterfaceDeclaration
 interfaceDeclarationAnnotationType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotationType"),
@@ -5855,7 +5855,7 @@ interfaceDeclarationAnnotationType x =
 
 interfaceDeclarationNormalInterface :: Phantoms.TTerm Syntax.NormalInterfaceDeclaration -> Phantoms.TTerm Syntax.InterfaceDeclaration
 interfaceDeclarationNormalInterface x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "normalInterface"),
@@ -5863,7 +5863,7 @@ interfaceDeclarationNormalInterface x =
 
 interfaceMemberDeclarationClass :: Phantoms.TTerm Syntax.ClassDeclaration -> Phantoms.TTerm Syntax.InterfaceMemberDeclaration
 interfaceMemberDeclarationClass x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceMemberDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "class"),
@@ -5871,7 +5871,7 @@ interfaceMemberDeclarationClass x =
 
 interfaceMemberDeclarationConstant :: Phantoms.TTerm Syntax.ConstantDeclaration -> Phantoms.TTerm Syntax.InterfaceMemberDeclaration
 interfaceMemberDeclarationConstant x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceMemberDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "constant"),
@@ -5879,7 +5879,7 @@ interfaceMemberDeclarationConstant x =
 
 interfaceMemberDeclarationInterface :: Phantoms.TTerm Syntax.InterfaceDeclaration -> Phantoms.TTerm Syntax.InterfaceMemberDeclaration
 interfaceMemberDeclarationInterface x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceMemberDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "interface"),
@@ -5887,7 +5887,7 @@ interfaceMemberDeclarationInterface x =
 
 interfaceMemberDeclarationInterfaceMethod :: Phantoms.TTerm Syntax.InterfaceMethodDeclaration -> Phantoms.TTerm Syntax.InterfaceMemberDeclaration
 interfaceMemberDeclarationInterfaceMethod x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceMemberDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "interfaceMethod"),
@@ -6003,7 +6003,7 @@ interfaceMethodDeclarationWithModifiers original newVal =
 
 interfaceMethodModifierAbstract :: Phantoms.TTerm Syntax.InterfaceMethodModifier
 interfaceMethodModifierAbstract =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceMethodModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "abstract"),
@@ -6011,7 +6011,7 @@ interfaceMethodModifierAbstract =
 
 interfaceMethodModifierAnnotation :: Phantoms.TTerm Syntax.Annotation -> Phantoms.TTerm Syntax.InterfaceMethodModifier
 interfaceMethodModifierAnnotation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceMethodModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotation"),
@@ -6019,7 +6019,7 @@ interfaceMethodModifierAnnotation x =
 
 interfaceMethodModifierDefault :: Phantoms.TTerm Syntax.InterfaceMethodModifier
 interfaceMethodModifierDefault =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceMethodModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "default"),
@@ -6027,7 +6027,7 @@ interfaceMethodModifierDefault =
 
 interfaceMethodModifierPrivate :: Phantoms.TTerm Syntax.InterfaceMethodModifier
 interfaceMethodModifierPrivate =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceMethodModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "private"),
@@ -6035,7 +6035,7 @@ interfaceMethodModifierPrivate =
 
 interfaceMethodModifierPublic :: Phantoms.TTerm Syntax.InterfaceMethodModifier
 interfaceMethodModifierPublic =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceMethodModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "public"),
@@ -6043,7 +6043,7 @@ interfaceMethodModifierPublic =
 
 interfaceMethodModifierStatic :: Phantoms.TTerm Syntax.InterfaceMethodModifier
 interfaceMethodModifierStatic =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceMethodModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "static"),
@@ -6051,7 +6051,7 @@ interfaceMethodModifierStatic =
 
 interfaceMethodModifierStrictfp :: Phantoms.TTerm Syntax.InterfaceMethodModifier
 interfaceMethodModifierStrictfp =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceMethodModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "strictfp"),
@@ -6059,7 +6059,7 @@ interfaceMethodModifierStrictfp =
 
 interfaceModifierAbstract :: Phantoms.TTerm Syntax.InterfaceModifier
 interfaceModifierAbstract =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "abstract"),
@@ -6067,7 +6067,7 @@ interfaceModifierAbstract =
 
 interfaceModifierAnnotation :: Phantoms.TTerm Syntax.Annotation -> Phantoms.TTerm Syntax.InterfaceModifier
 interfaceModifierAnnotation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotation"),
@@ -6075,7 +6075,7 @@ interfaceModifierAnnotation x =
 
 interfaceModifierPrivate :: Phantoms.TTerm Syntax.InterfaceModifier
 interfaceModifierPrivate =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "private"),
@@ -6083,7 +6083,7 @@ interfaceModifierPrivate =
 
 interfaceModifierProtected :: Phantoms.TTerm Syntax.InterfaceModifier
 interfaceModifierProtected =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "protected"),
@@ -6091,7 +6091,7 @@ interfaceModifierProtected =
 
 interfaceModifierPublic :: Phantoms.TTerm Syntax.InterfaceModifier
 interfaceModifierPublic =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "public"),
@@ -6099,7 +6099,7 @@ interfaceModifierPublic =
 
 interfaceModifierStatic :: Phantoms.TTerm Syntax.InterfaceModifier
 interfaceModifierStatic =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "static"),
@@ -6107,7 +6107,7 @@ interfaceModifierStatic =
 
 interfaceModifierStrictfb :: Phantoms.TTerm Syntax.InterfaceModifier
 interfaceModifierStrictfb =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "strictfb"),
@@ -6241,7 +6241,7 @@ labeledStatementWithStatement original newVal =
 
 lambdaBodyBlock :: Phantoms.TTerm Syntax.Block -> Phantoms.TTerm Syntax.LambdaBody
 lambdaBodyBlock x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.LambdaBody"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "block"),
@@ -6249,7 +6249,7 @@ lambdaBodyBlock x =
 
 lambdaBodyExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.LambdaBody
 lambdaBodyExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.LambdaBody"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "expression"),
@@ -6317,7 +6317,7 @@ lambdaExpressionWithParameters original newVal =
 
 lambdaParameterNormal :: Phantoms.TTerm Syntax.LambdaParameter_Normal -> Phantoms.TTerm Syntax.LambdaParameter
 lambdaParameterNormal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.LambdaParameter"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "normal"),
@@ -6325,7 +6325,7 @@ lambdaParameterNormal x =
 
 lambdaParameterTypeType :: Phantoms.TTerm Syntax.UnannType -> Phantoms.TTerm Syntax.LambdaParameterType
 lambdaParameterTypeType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.LambdaParameterType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "type"),
@@ -6333,7 +6333,7 @@ lambdaParameterTypeType x =
 
 lambdaParameterTypeVar :: Phantoms.TTerm Syntax.LambdaParameterType
 lambdaParameterTypeVar =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.LambdaParameterType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "var"),
@@ -6341,7 +6341,7 @@ lambdaParameterTypeVar =
 
 lambdaParameterVariableArity :: Phantoms.TTerm Syntax.VariableArityParameter -> Phantoms.TTerm Syntax.LambdaParameter
 lambdaParameterVariableArity x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.LambdaParameter"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variableArity"),
@@ -6457,7 +6457,7 @@ lambdaParameter_NormalWithType original newVal =
 
 lambdaParametersSingle :: Phantoms.TTerm Syntax.Identifier -> Phantoms.TTerm Syntax.LambdaParameters
 lambdaParametersSingle x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.LambdaParameters"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "single"),
@@ -6465,7 +6465,7 @@ lambdaParametersSingle x =
 
 lambdaParametersTuple :: Phantoms.TTerm [Syntax.LambdaParameters] -> Phantoms.TTerm Syntax.LambdaParameters
 lambdaParametersTuple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.LambdaParameters"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tuple"),
@@ -6473,7 +6473,7 @@ lambdaParametersTuple x =
 
 leftHandSideArrayAccess :: Phantoms.TTerm Syntax.ArrayAccess -> Phantoms.TTerm Syntax.LeftHandSide
 leftHandSideArrayAccess x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.LeftHandSide"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "arrayAccess"),
@@ -6481,7 +6481,7 @@ leftHandSideArrayAccess x =
 
 leftHandSideExpressionName :: Phantoms.TTerm Syntax.ExpressionName -> Phantoms.TTerm Syntax.LeftHandSide
 leftHandSideExpressionName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.LeftHandSide"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "expressionName"),
@@ -6489,7 +6489,7 @@ leftHandSideExpressionName x =
 
 leftHandSideFieldAccess :: Phantoms.TTerm Syntax.FieldAccess -> Phantoms.TTerm Syntax.LeftHandSide
 leftHandSideFieldAccess x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.LeftHandSide"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fieldAccess"),
@@ -6497,7 +6497,7 @@ leftHandSideFieldAccess x =
 
 literalBoolean :: Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.Literal
 literalBoolean x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -6505,7 +6505,7 @@ literalBoolean x =
 
 literalCharacter :: Phantoms.TTerm Int -> Phantoms.TTerm Syntax.Literal
 literalCharacter x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "character"),
@@ -6513,7 +6513,7 @@ literalCharacter x =
 
 literalFloatingPoint :: Phantoms.TTerm Syntax.FloatingPointLiteral -> Phantoms.TTerm Syntax.Literal
 literalFloatingPoint x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "floatingPoint"),
@@ -6521,7 +6521,7 @@ literalFloatingPoint x =
 
 literalInteger :: Phantoms.TTerm Syntax.IntegerLiteral -> Phantoms.TTerm Syntax.Literal
 literalInteger x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
@@ -6529,7 +6529,7 @@ literalInteger x =
 
 literalNull :: Phantoms.TTerm Syntax.Literal
 literalNull =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "null"),
@@ -6537,7 +6537,7 @@ literalNull =
 
 literalString :: Phantoms.TTerm Syntax.StringLiteral -> Phantoms.TTerm Syntax.Literal
 literalString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -6659,7 +6659,7 @@ localVariableDeclarationWithType original newVal =
 
 localVariableTypeType :: Phantoms.TTerm Syntax.UnannType -> Phantoms.TTerm Syntax.LocalVariableType
 localVariableTypeType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.LocalVariableType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "type"),
@@ -6667,7 +6667,7 @@ localVariableTypeType x =
 
 localVariableTypeVar :: Phantoms.TTerm Syntax.LocalVariableType
 localVariableTypeVar =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.LocalVariableType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "var"),
@@ -6681,7 +6681,7 @@ markerAnnotation x =
 
 methodBodyBlock :: Phantoms.TTerm Syntax.Block -> Phantoms.TTerm Syntax.MethodBody
 methodBodyBlock x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodBody"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "block"),
@@ -6689,7 +6689,7 @@ methodBodyBlock x =
 
 methodBodyNone :: Phantoms.TTerm Syntax.MethodBody
 methodBodyNone =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodBody"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "none"),
@@ -7313,7 +7313,7 @@ methodInvocation_ComplexWithVariant original newVal =
 
 methodInvocation_HeaderComplex :: Phantoms.TTerm Syntax.MethodInvocation_Complex -> Phantoms.TTerm Syntax.MethodInvocation_Header
 methodInvocation_HeaderComplex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodInvocation_Header"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "complex"),
@@ -7321,7 +7321,7 @@ methodInvocation_HeaderComplex x =
 
 methodInvocation_HeaderSimple :: Phantoms.TTerm Syntax.MethodName -> Phantoms.TTerm Syntax.MethodInvocation_Header
 methodInvocation_HeaderSimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodInvocation_Header"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -7329,7 +7329,7 @@ methodInvocation_HeaderSimple x =
 
 methodInvocation_VariantExpression :: Phantoms.TTerm Syntax.ExpressionName -> Phantoms.TTerm Syntax.MethodInvocation_Variant
 methodInvocation_VariantExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodInvocation_Variant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "expression"),
@@ -7337,7 +7337,7 @@ methodInvocation_VariantExpression x =
 
 methodInvocation_VariantPrimary :: Phantoms.TTerm Syntax.Primary -> Phantoms.TTerm Syntax.MethodInvocation_Variant
 methodInvocation_VariantPrimary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodInvocation_Variant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primary"),
@@ -7345,7 +7345,7 @@ methodInvocation_VariantPrimary x =
 
 methodInvocation_VariantSuper :: Phantoms.TTerm Syntax.MethodInvocation_Variant
 methodInvocation_VariantSuper =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodInvocation_Variant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "super"),
@@ -7353,7 +7353,7 @@ methodInvocation_VariantSuper =
 
 methodInvocation_VariantType :: Phantoms.TTerm Syntax.TypeName -> Phantoms.TTerm Syntax.MethodInvocation_Variant
 methodInvocation_VariantType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodInvocation_Variant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "type"),
@@ -7361,7 +7361,7 @@ methodInvocation_VariantType x =
 
 methodInvocation_VariantTypeSuper :: Phantoms.TTerm Syntax.TypeName -> Phantoms.TTerm Syntax.MethodInvocation_Variant
 methodInvocation_VariantTypeSuper x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodInvocation_Variant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeSuper"),
@@ -7369,7 +7369,7 @@ methodInvocation_VariantTypeSuper x =
 
 methodModifierAbstract :: Phantoms.TTerm Syntax.MethodModifier
 methodModifierAbstract =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "abstract"),
@@ -7377,7 +7377,7 @@ methodModifierAbstract =
 
 methodModifierAnnotation :: Phantoms.TTerm Syntax.Annotation -> Phantoms.TTerm Syntax.MethodModifier
 methodModifierAnnotation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotation"),
@@ -7385,7 +7385,7 @@ methodModifierAnnotation x =
 
 methodModifierFinal :: Phantoms.TTerm Syntax.MethodModifier
 methodModifierFinal =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "final"),
@@ -7393,7 +7393,7 @@ methodModifierFinal =
 
 methodModifierNative :: Phantoms.TTerm Syntax.MethodModifier
 methodModifierNative =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "native"),
@@ -7401,7 +7401,7 @@ methodModifierNative =
 
 methodModifierPrivate :: Phantoms.TTerm Syntax.MethodModifier
 methodModifierPrivate =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "private"),
@@ -7409,7 +7409,7 @@ methodModifierPrivate =
 
 methodModifierProtected :: Phantoms.TTerm Syntax.MethodModifier
 methodModifierProtected =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "protected"),
@@ -7417,7 +7417,7 @@ methodModifierProtected =
 
 methodModifierPublic :: Phantoms.TTerm Syntax.MethodModifier
 methodModifierPublic =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "public"),
@@ -7425,7 +7425,7 @@ methodModifierPublic =
 
 methodModifierStatic :: Phantoms.TTerm Syntax.MethodModifier
 methodModifierStatic =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "static"),
@@ -7433,7 +7433,7 @@ methodModifierStatic =
 
 methodModifierStrictfb :: Phantoms.TTerm Syntax.MethodModifier
 methodModifierStrictfb =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "strictfb"),
@@ -7441,7 +7441,7 @@ methodModifierStrictfb =
 
 methodModifierSynchronized :: Phantoms.TTerm Syntax.MethodModifier
 methodModifierSynchronized =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "synchronized"),
@@ -7455,7 +7455,7 @@ methodName x =
 
 methodReferenceArray :: Phantoms.TTerm Syntax.MethodReference_Array -> Phantoms.TTerm Syntax.MethodReference
 methodReferenceArray x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "array"),
@@ -7463,7 +7463,7 @@ methodReferenceArray x =
 
 methodReferenceExpression :: Phantoms.TTerm Syntax.MethodReference_Expression -> Phantoms.TTerm Syntax.MethodReference
 methodReferenceExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "expression"),
@@ -7471,7 +7471,7 @@ methodReferenceExpression x =
 
 methodReferenceNew :: Phantoms.TTerm Syntax.MethodReference_New -> Phantoms.TTerm Syntax.MethodReference
 methodReferenceNew x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "new"),
@@ -7479,7 +7479,7 @@ methodReferenceNew x =
 
 methodReferencePrimary :: Phantoms.TTerm Syntax.MethodReference_Primary -> Phantoms.TTerm Syntax.MethodReference
 methodReferencePrimary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primary"),
@@ -7487,7 +7487,7 @@ methodReferencePrimary x =
 
 methodReferenceReferenceType :: Phantoms.TTerm Syntax.MethodReference_ReferenceType -> Phantoms.TTerm Syntax.MethodReference
 methodReferenceReferenceType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "referenceType"),
@@ -7495,7 +7495,7 @@ methodReferenceReferenceType x =
 
 methodReferenceSuper :: Phantoms.TTerm Syntax.MethodReference_Super -> Phantoms.TTerm Syntax.MethodReference
 methodReferenceSuper x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "super"),
@@ -8231,7 +8231,7 @@ moduleDeclarationWithOpen original newVal =
 
 moduleDirectiveExports :: Phantoms.TTerm Syntax.ModuleDirective_ExportsOrOpens -> Phantoms.TTerm Syntax.ModuleDirective
 moduleDirectiveExports x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ModuleDirective"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "exports"),
@@ -8239,7 +8239,7 @@ moduleDirectiveExports x =
 
 moduleDirectiveOpens :: Phantoms.TTerm Syntax.ModuleDirective_ExportsOrOpens -> Phantoms.TTerm Syntax.ModuleDirective
 moduleDirectiveOpens x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ModuleDirective"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "opens"),
@@ -8247,7 +8247,7 @@ moduleDirectiveOpens x =
 
 moduleDirectiveProvides :: Phantoms.TTerm Syntax.ModuleDirective_Provides -> Phantoms.TTerm Syntax.ModuleDirective
 moduleDirectiveProvides x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ModuleDirective"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "provides"),
@@ -8255,7 +8255,7 @@ moduleDirectiveProvides x =
 
 moduleDirectiveRequires :: Phantoms.TTerm Syntax.ModuleDirective_Requires -> Phantoms.TTerm Syntax.ModuleDirective
 moduleDirectiveRequires x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ModuleDirective"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "requires"),
@@ -8263,7 +8263,7 @@ moduleDirectiveRequires x =
 
 moduleDirectiveUses :: Phantoms.TTerm Syntax.TypeName -> Phantoms.TTerm Syntax.ModuleDirective
 moduleDirectiveUses x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ModuleDirective"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uses"),
@@ -8511,7 +8511,7 @@ moduleNameWithName original newVal =
 
 multiplicativeExpressionDivide :: Phantoms.TTerm Syntax.MultiplicativeExpression_Binary -> Phantoms.TTerm Syntax.MultiplicativeExpression
 multiplicativeExpressionDivide x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MultiplicativeExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "divide"),
@@ -8519,7 +8519,7 @@ multiplicativeExpressionDivide x =
 
 multiplicativeExpressionMod :: Phantoms.TTerm Syntax.MultiplicativeExpression_Binary -> Phantoms.TTerm Syntax.MultiplicativeExpression
 multiplicativeExpressionMod x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MultiplicativeExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mod"),
@@ -8527,7 +8527,7 @@ multiplicativeExpressionMod x =
 
 multiplicativeExpressionTimes :: Phantoms.TTerm Syntax.MultiplicativeExpression_Binary -> Phantoms.TTerm Syntax.MultiplicativeExpression
 multiplicativeExpressionTimes x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MultiplicativeExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "times"),
@@ -8535,7 +8535,7 @@ multiplicativeExpressionTimes x =
 
 multiplicativeExpressionUnary :: Phantoms.TTerm Syntax.UnaryExpression -> Phantoms.TTerm Syntax.MultiplicativeExpression
 multiplicativeExpressionUnary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MultiplicativeExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unary"),
@@ -9245,7 +9245,7 @@ normalInterfaceDeclarationWithParameters original newVal =
 
 numericTypeArrayArray :: Phantoms.TTerm Syntax.NumericTypeArray -> Phantoms.TTerm Syntax.NumericTypeArray
 numericTypeArrayArray x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.NumericTypeArray"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "array"),
@@ -9253,7 +9253,7 @@ numericTypeArrayArray x =
 
 numericTypeArraySimple :: Phantoms.TTerm Syntax.NumericType -> Phantoms.TTerm Syntax.NumericTypeArray
 numericTypeArraySimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.NumericTypeArray"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -9261,7 +9261,7 @@ numericTypeArraySimple x =
 
 numericTypeFloatingPoint :: Phantoms.TTerm Syntax.FloatingPointType -> Phantoms.TTerm Syntax.NumericType
 numericTypeFloatingPoint x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.NumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "floatingPoint"),
@@ -9269,7 +9269,7 @@ numericTypeFloatingPoint x =
 
 numericTypeIntegral :: Phantoms.TTerm Syntax.IntegralType -> Phantoms.TTerm Syntax.NumericType
 numericTypeIntegral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.NumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integral"),
@@ -9475,7 +9475,7 @@ postIncrementExpression x =
 
 postfixExpressionName :: Phantoms.TTerm Syntax.ExpressionName -> Phantoms.TTerm Syntax.PostfixExpression
 postfixExpressionName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.PostfixExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "name"),
@@ -9483,7 +9483,7 @@ postfixExpressionName x =
 
 postfixExpressionPostDecrement :: Phantoms.TTerm Syntax.PostDecrementExpression -> Phantoms.TTerm Syntax.PostfixExpression
 postfixExpressionPostDecrement x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.PostfixExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "postDecrement"),
@@ -9491,7 +9491,7 @@ postfixExpressionPostDecrement x =
 
 postfixExpressionPostIncrement :: Phantoms.TTerm Syntax.PostIncrementExpression -> Phantoms.TTerm Syntax.PostfixExpression
 postfixExpressionPostIncrement x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.PostfixExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "postIncrement"),
@@ -9499,7 +9499,7 @@ postfixExpressionPostIncrement x =
 
 postfixExpressionPrimary :: Phantoms.TTerm Syntax.Primary -> Phantoms.TTerm Syntax.PostfixExpression
 postfixExpressionPrimary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.PostfixExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primary"),
@@ -9519,7 +9519,7 @@ preIncrementExpression x =
 
 primaryArrayCreation :: Phantoms.TTerm Syntax.ArrayCreationExpression -> Phantoms.TTerm Syntax.Primary
 primaryArrayCreation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Primary"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "arrayCreation"),
@@ -9527,7 +9527,7 @@ primaryArrayCreation x =
 
 primaryNoNewArray :: Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression -> Phantoms.TTerm Syntax.Primary
 primaryNoNewArray x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Primary"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "noNewArray"),
@@ -9535,7 +9535,7 @@ primaryNoNewArray x =
 
 primaryNoNewArrayExpressionArrayAccess :: Phantoms.TTerm Syntax.ArrayAccess -> Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression
 primaryNoNewArrayExpressionArrayAccess x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.PrimaryNoNewArrayExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "arrayAccess"),
@@ -9543,7 +9543,7 @@ primaryNoNewArrayExpressionArrayAccess x =
 
 primaryNoNewArrayExpressionClassInstance :: Phantoms.TTerm Syntax.ClassInstanceCreationExpression -> Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression
 primaryNoNewArrayExpressionClassInstance x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.PrimaryNoNewArrayExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "classInstance"),
@@ -9551,7 +9551,7 @@ primaryNoNewArrayExpressionClassInstance x =
 
 primaryNoNewArrayExpressionClassLiteral :: Phantoms.TTerm Syntax.ClassLiteral -> Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression
 primaryNoNewArrayExpressionClassLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.PrimaryNoNewArrayExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "classLiteral"),
@@ -9559,7 +9559,7 @@ primaryNoNewArrayExpressionClassLiteral x =
 
 primaryNoNewArrayExpressionDotThis :: Phantoms.TTerm Syntax.TypeName -> Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression
 primaryNoNewArrayExpressionDotThis x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.PrimaryNoNewArrayExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dotThis"),
@@ -9567,7 +9567,7 @@ primaryNoNewArrayExpressionDotThis x =
 
 primaryNoNewArrayExpressionFieldAccess :: Phantoms.TTerm Syntax.FieldAccess -> Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression
 primaryNoNewArrayExpressionFieldAccess x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.PrimaryNoNewArrayExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fieldAccess"),
@@ -9575,7 +9575,7 @@ primaryNoNewArrayExpressionFieldAccess x =
 
 primaryNoNewArrayExpressionLiteral :: Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression
 primaryNoNewArrayExpressionLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.PrimaryNoNewArrayExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
@@ -9583,7 +9583,7 @@ primaryNoNewArrayExpressionLiteral x =
 
 primaryNoNewArrayExpressionMethodInvocation :: Phantoms.TTerm Syntax.MethodInvocation -> Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression
 primaryNoNewArrayExpressionMethodInvocation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.PrimaryNoNewArrayExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "methodInvocation"),
@@ -9591,7 +9591,7 @@ primaryNoNewArrayExpressionMethodInvocation x =
 
 primaryNoNewArrayExpressionMethodReference :: Phantoms.TTerm Syntax.MethodReference -> Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression
 primaryNoNewArrayExpressionMethodReference x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.PrimaryNoNewArrayExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "methodReference"),
@@ -9599,7 +9599,7 @@ primaryNoNewArrayExpressionMethodReference x =
 
 primaryNoNewArrayExpressionParens :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression
 primaryNoNewArrayExpressionParens x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.PrimaryNoNewArrayExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parens"),
@@ -9607,7 +9607,7 @@ primaryNoNewArrayExpressionParens x =
 
 primaryNoNewArrayExpressionThis :: Phantoms.TTerm Syntax.PrimaryNoNewArrayExpression
 primaryNoNewArrayExpressionThis =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.PrimaryNoNewArrayExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "this"),
@@ -9615,7 +9615,7 @@ primaryNoNewArrayExpressionThis =
 
 primitiveTypeBoolean :: Phantoms.TTerm Syntax.PrimitiveType
 primitiveTypeBoolean =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.PrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -9623,7 +9623,7 @@ primitiveTypeBoolean =
 
 primitiveTypeNumeric :: Phantoms.TTerm Syntax.NumericType -> Phantoms.TTerm Syntax.PrimitiveType
 primitiveTypeNumeric x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.PrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "numeric"),
@@ -9799,7 +9799,7 @@ receiverParameterWithUnannType original newVal =
 
 referenceTypeArray :: Phantoms.TTerm Syntax.ArrayType -> Phantoms.TTerm Syntax.ReferenceType
 referenceTypeArray x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ReferenceType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "array"),
@@ -9807,7 +9807,7 @@ referenceTypeArray x =
 
 referenceTypeClassOrInterface :: Phantoms.TTerm Syntax.ClassOrInterfaceType -> Phantoms.TTerm Syntax.ReferenceType
 referenceTypeClassOrInterface x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ReferenceType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "classOrInterface"),
@@ -9815,7 +9815,7 @@ referenceTypeClassOrInterface x =
 
 referenceTypeVariable :: Phantoms.TTerm Syntax.TypeVariable -> Phantoms.TTerm Syntax.ReferenceType
 referenceTypeVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ReferenceType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -9823,7 +9823,7 @@ referenceTypeVariable x =
 
 relationalExpressionGreaterThan :: Phantoms.TTerm Syntax.RelationalExpression_GreaterThan -> Phantoms.TTerm Syntax.RelationalExpression
 relationalExpressionGreaterThan x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.RelationalExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "greaterThan"),
@@ -9831,7 +9831,7 @@ relationalExpressionGreaterThan x =
 
 relationalExpressionGreaterThanEqual :: Phantoms.TTerm Syntax.RelationalExpression_GreaterThanEqual -> Phantoms.TTerm Syntax.RelationalExpression
 relationalExpressionGreaterThanEqual x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.RelationalExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "greaterThanEqual"),
@@ -9839,7 +9839,7 @@ relationalExpressionGreaterThanEqual x =
 
 relationalExpressionInstanceof :: Phantoms.TTerm Syntax.RelationalExpression_InstanceOf -> Phantoms.TTerm Syntax.RelationalExpression
 relationalExpressionInstanceof x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.RelationalExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "instanceof"),
@@ -9847,7 +9847,7 @@ relationalExpressionInstanceof x =
 
 relationalExpressionLessThan :: Phantoms.TTerm Syntax.RelationalExpression_LessThan -> Phantoms.TTerm Syntax.RelationalExpression
 relationalExpressionLessThan x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.RelationalExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThan"),
@@ -9855,7 +9855,7 @@ relationalExpressionLessThan x =
 
 relationalExpressionLessThanEqual :: Phantoms.TTerm Syntax.RelationalExpression_LessThanEqual -> Phantoms.TTerm Syntax.RelationalExpression
 relationalExpressionLessThanEqual x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.RelationalExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThanEqual"),
@@ -9863,7 +9863,7 @@ relationalExpressionLessThanEqual x =
 
 relationalExpressionSimple :: Phantoms.TTerm Syntax.ShiftExpression -> Phantoms.TTerm Syntax.RelationalExpression
 relationalExpressionSimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.RelationalExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -10171,7 +10171,7 @@ relationalExpression_LessThanWithRhs original newVal =
 
 requiresModifierStatic :: Phantoms.TTerm Syntax.RequiresModifier
 requiresModifierStatic =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.RequiresModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "static"),
@@ -10179,7 +10179,7 @@ requiresModifierStatic =
 
 requiresModifierTransitive :: Phantoms.TTerm Syntax.RequiresModifier
 requiresModifierTransitive =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.RequiresModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "transitive"),
@@ -10187,7 +10187,7 @@ requiresModifierTransitive =
 
 resourceLocal :: Phantoms.TTerm Syntax.Resource_Local -> Phantoms.TTerm Syntax.Resource
 resourceLocal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Resource"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "local"),
@@ -10201,7 +10201,7 @@ resourceSpecification x =
 
 resourceVariable :: Phantoms.TTerm Syntax.VariableAccess -> Phantoms.TTerm Syntax.Resource
 resourceVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Resource"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -10379,7 +10379,7 @@ resource_LocalWithType original newVal =
 
 resultType :: Phantoms.TTerm Syntax.UnannType -> Phantoms.TTerm Syntax.Result
 resultType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Result"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "type"),
@@ -10387,7 +10387,7 @@ resultType x =
 
 resultVoid :: Phantoms.TTerm Syntax.Result
 resultVoid =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Result"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "void"),
@@ -10401,7 +10401,7 @@ returnStatement x =
 
 shiftExpressionShiftLeft :: Phantoms.TTerm Syntax.ShiftExpression_Binary -> Phantoms.TTerm Syntax.ShiftExpression
 shiftExpressionShiftLeft x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ShiftExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "shiftLeft"),
@@ -10409,7 +10409,7 @@ shiftExpressionShiftLeft x =
 
 shiftExpressionShiftRight :: Phantoms.TTerm Syntax.ShiftExpression_Binary -> Phantoms.TTerm Syntax.ShiftExpression
 shiftExpressionShiftRight x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ShiftExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "shiftRight"),
@@ -10417,7 +10417,7 @@ shiftExpressionShiftRight x =
 
 shiftExpressionShiftRightZeroFill :: Phantoms.TTerm Syntax.ShiftExpression_Binary -> Phantoms.TTerm Syntax.ShiftExpression
 shiftExpressionShiftRightZeroFill x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ShiftExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "shiftRightZeroFill"),
@@ -10425,7 +10425,7 @@ shiftExpressionShiftRightZeroFill x =
 
 shiftExpressionUnary :: Phantoms.TTerm Syntax.AdditiveExpression -> Phantoms.TTerm Syntax.ShiftExpression
 shiftExpressionUnary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ShiftExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unary"),
@@ -10625,7 +10625,7 @@ singleTypeImportDeclaration x =
 
 statementExpressionAssignment :: Phantoms.TTerm Syntax.Assignment -> Phantoms.TTerm Syntax.StatementExpression
 statementExpressionAssignment x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "assignment"),
@@ -10633,7 +10633,7 @@ statementExpressionAssignment x =
 
 statementExpressionClassInstanceCreation :: Phantoms.TTerm Syntax.ClassInstanceCreationExpression -> Phantoms.TTerm Syntax.StatementExpression
 statementExpressionClassInstanceCreation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "classInstanceCreation"),
@@ -10641,7 +10641,7 @@ statementExpressionClassInstanceCreation x =
 
 statementExpressionMethodInvocation :: Phantoms.TTerm Syntax.MethodInvocation -> Phantoms.TTerm Syntax.StatementExpression
 statementExpressionMethodInvocation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "methodInvocation"),
@@ -10649,7 +10649,7 @@ statementExpressionMethodInvocation x =
 
 statementExpressionPostDecrement :: Phantoms.TTerm Syntax.PostDecrementExpression -> Phantoms.TTerm Syntax.StatementExpression
 statementExpressionPostDecrement x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "postDecrement"),
@@ -10657,7 +10657,7 @@ statementExpressionPostDecrement x =
 
 statementExpressionPostIncrement :: Phantoms.TTerm Syntax.PostIncrementExpression -> Phantoms.TTerm Syntax.StatementExpression
 statementExpressionPostIncrement x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "postIncrement"),
@@ -10665,7 +10665,7 @@ statementExpressionPostIncrement x =
 
 statementExpressionPreDecrement :: Phantoms.TTerm Syntax.PreDecrementExpression -> Phantoms.TTerm Syntax.StatementExpression
 statementExpressionPreDecrement x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "preDecrement"),
@@ -10673,7 +10673,7 @@ statementExpressionPreDecrement x =
 
 statementExpressionPreIncrement :: Phantoms.TTerm Syntax.PreIncrementExpression -> Phantoms.TTerm Syntax.StatementExpression
 statementExpressionPreIncrement x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "preIncrement"),
@@ -10681,7 +10681,7 @@ statementExpressionPreIncrement x =
 
 statementFor :: Phantoms.TTerm Syntax.ForStatement -> Phantoms.TTerm Syntax.Statement
 statementFor x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Statement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "for"),
@@ -10689,7 +10689,7 @@ statementFor x =
 
 statementIfThen :: Phantoms.TTerm Syntax.IfThenStatement -> Phantoms.TTerm Syntax.Statement
 statementIfThen x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Statement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ifThen"),
@@ -10697,7 +10697,7 @@ statementIfThen x =
 
 statementIfThenElse :: Phantoms.TTerm Syntax.IfThenElseStatement -> Phantoms.TTerm Syntax.Statement
 statementIfThenElse x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Statement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ifThenElse"),
@@ -10705,7 +10705,7 @@ statementIfThenElse x =
 
 statementLabeled :: Phantoms.TTerm Syntax.LabeledStatement -> Phantoms.TTerm Syntax.Statement
 statementLabeled x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Statement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "labeled"),
@@ -10713,7 +10713,7 @@ statementLabeled x =
 
 statementNoShortIfFor :: Phantoms.TTerm Syntax.ForStatementNoShortIf -> Phantoms.TTerm Syntax.StatementNoShortIf
 statementNoShortIfFor x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementNoShortIf"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "for"),
@@ -10721,7 +10721,7 @@ statementNoShortIfFor x =
 
 statementNoShortIfIfThenElse :: Phantoms.TTerm Syntax.IfThenElseStatementNoShortIf -> Phantoms.TTerm Syntax.StatementNoShortIf
 statementNoShortIfIfThenElse x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementNoShortIf"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ifThenElse"),
@@ -10729,7 +10729,7 @@ statementNoShortIfIfThenElse x =
 
 statementNoShortIfLabeled :: Phantoms.TTerm Syntax.LabeledStatementNoShortIf -> Phantoms.TTerm Syntax.StatementNoShortIf
 statementNoShortIfLabeled x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementNoShortIf"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "labeled"),
@@ -10737,7 +10737,7 @@ statementNoShortIfLabeled x =
 
 statementNoShortIfWhile :: Phantoms.TTerm Syntax.WhileStatementNoShortIf -> Phantoms.TTerm Syntax.StatementNoShortIf
 statementNoShortIfWhile x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementNoShortIf"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "while"),
@@ -10745,7 +10745,7 @@ statementNoShortIfWhile x =
 
 statementNoShortIfWithoutTrailing :: Phantoms.TTerm Syntax.StatementWithoutTrailingSubstatement -> Phantoms.TTerm Syntax.StatementNoShortIf
 statementNoShortIfWithoutTrailing x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementNoShortIf"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withoutTrailing"),
@@ -10753,7 +10753,7 @@ statementNoShortIfWithoutTrailing x =
 
 statementWhile :: Phantoms.TTerm Syntax.WhileStatement -> Phantoms.TTerm Syntax.Statement
 statementWhile x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Statement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "while"),
@@ -10761,7 +10761,7 @@ statementWhile x =
 
 statementWithoutTrailing :: Phantoms.TTerm Syntax.StatementWithoutTrailingSubstatement -> Phantoms.TTerm Syntax.Statement
 statementWithoutTrailing x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Statement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withoutTrailing"),
@@ -10769,7 +10769,7 @@ statementWithoutTrailing x =
 
 statementWithoutTrailingSubstatementAssert :: Phantoms.TTerm Syntax.AssertStatement -> Phantoms.TTerm Syntax.StatementWithoutTrailingSubstatement
 statementWithoutTrailingSubstatementAssert x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementWithoutTrailingSubstatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "assert"),
@@ -10777,7 +10777,7 @@ statementWithoutTrailingSubstatementAssert x =
 
 statementWithoutTrailingSubstatementBlock :: Phantoms.TTerm Syntax.Block -> Phantoms.TTerm Syntax.StatementWithoutTrailingSubstatement
 statementWithoutTrailingSubstatementBlock x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementWithoutTrailingSubstatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "block"),
@@ -10785,7 +10785,7 @@ statementWithoutTrailingSubstatementBlock x =
 
 statementWithoutTrailingSubstatementBreak :: Phantoms.TTerm Syntax.BreakStatement -> Phantoms.TTerm Syntax.StatementWithoutTrailingSubstatement
 statementWithoutTrailingSubstatementBreak x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementWithoutTrailingSubstatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "break"),
@@ -10793,7 +10793,7 @@ statementWithoutTrailingSubstatementBreak x =
 
 statementWithoutTrailingSubstatementContinue :: Phantoms.TTerm Syntax.ContinueStatement -> Phantoms.TTerm Syntax.StatementWithoutTrailingSubstatement
 statementWithoutTrailingSubstatementContinue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementWithoutTrailingSubstatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "continue"),
@@ -10801,7 +10801,7 @@ statementWithoutTrailingSubstatementContinue x =
 
 statementWithoutTrailingSubstatementDo :: Phantoms.TTerm Syntax.DoStatement -> Phantoms.TTerm Syntax.StatementWithoutTrailingSubstatement
 statementWithoutTrailingSubstatementDo x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementWithoutTrailingSubstatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "do"),
@@ -10809,7 +10809,7 @@ statementWithoutTrailingSubstatementDo x =
 
 statementWithoutTrailingSubstatementEmpty :: Phantoms.TTerm Syntax.StatementWithoutTrailingSubstatement
 statementWithoutTrailingSubstatementEmpty =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementWithoutTrailingSubstatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "empty"),
@@ -10817,7 +10817,7 @@ statementWithoutTrailingSubstatementEmpty =
 
 statementWithoutTrailingSubstatementExpression :: Phantoms.TTerm Syntax.ExpressionStatement -> Phantoms.TTerm Syntax.StatementWithoutTrailingSubstatement
 statementWithoutTrailingSubstatementExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementWithoutTrailingSubstatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "expression"),
@@ -10825,7 +10825,7 @@ statementWithoutTrailingSubstatementExpression x =
 
 statementWithoutTrailingSubstatementReturn :: Phantoms.TTerm Syntax.ReturnStatement -> Phantoms.TTerm Syntax.StatementWithoutTrailingSubstatement
 statementWithoutTrailingSubstatementReturn x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementWithoutTrailingSubstatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "return"),
@@ -10833,7 +10833,7 @@ statementWithoutTrailingSubstatementReturn x =
 
 statementWithoutTrailingSubstatementSwitch :: Phantoms.TTerm Syntax.SwitchStatement -> Phantoms.TTerm Syntax.StatementWithoutTrailingSubstatement
 statementWithoutTrailingSubstatementSwitch x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementWithoutTrailingSubstatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "switch"),
@@ -10841,7 +10841,7 @@ statementWithoutTrailingSubstatementSwitch x =
 
 statementWithoutTrailingSubstatementSynchronized :: Phantoms.TTerm Syntax.SynchronizedStatement -> Phantoms.TTerm Syntax.StatementWithoutTrailingSubstatement
 statementWithoutTrailingSubstatementSynchronized x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementWithoutTrailingSubstatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "synchronized"),
@@ -10849,7 +10849,7 @@ statementWithoutTrailingSubstatementSynchronized x =
 
 statementWithoutTrailingSubstatementThrow :: Phantoms.TTerm Syntax.ThrowStatement -> Phantoms.TTerm Syntax.StatementWithoutTrailingSubstatement
 statementWithoutTrailingSubstatementThrow x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementWithoutTrailingSubstatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "throw"),
@@ -10857,7 +10857,7 @@ statementWithoutTrailingSubstatementThrow x =
 
 statementWithoutTrailingSubstatementTry :: Phantoms.TTerm Syntax.TryStatement -> Phantoms.TTerm Syntax.StatementWithoutTrailingSubstatement
 statementWithoutTrailingSubstatementTry x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.StatementWithoutTrailingSubstatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "try"),
@@ -11009,7 +11009,7 @@ switchBlock_PairWithStatements original newVal =
 
 switchLabelConstant :: Phantoms.TTerm Syntax.ConstantExpression -> Phantoms.TTerm Syntax.SwitchLabel
 switchLabelConstant x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.SwitchLabel"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "constant"),
@@ -11017,7 +11017,7 @@ switchLabelConstant x =
 
 switchLabelDefault :: Phantoms.TTerm Syntax.SwitchLabel
 switchLabelDefault =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.SwitchLabel"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "default"),
@@ -11025,7 +11025,7 @@ switchLabelDefault =
 
 switchLabelEnumConstant :: Phantoms.TTerm Syntax.EnumConstantName -> Phantoms.TTerm Syntax.SwitchLabel
 switchLabelEnumConstant x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.SwitchLabel"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "enumConstant"),
@@ -11165,7 +11165,7 @@ throws x =
 
 tryStatementSimple :: Phantoms.TTerm Syntax.TryStatement_Simple -> Phantoms.TTerm Syntax.TryStatement
 tryStatementSimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.TryStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -11173,7 +11173,7 @@ tryStatementSimple x =
 
 tryStatementWithFinally :: Phantoms.TTerm Syntax.TryStatement_WithFinally -> Phantoms.TTerm Syntax.TryStatement
 tryStatementWithFinally x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.TryStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withFinally"),
@@ -11181,7 +11181,7 @@ tryStatementWithFinally x =
 
 tryStatementWithResources :: Phantoms.TTerm Syntax.TryWithResourcesStatement -> Phantoms.TTerm Syntax.TryStatement
 tryStatementWithResources x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.TryStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withResources"),
@@ -11527,7 +11527,7 @@ tryWithResourcesStatementWithResourceSpecification original newVal =
 
 typeArgumentReference :: Phantoms.TTerm Syntax.ReferenceType -> Phantoms.TTerm Syntax.TypeArgument
 typeArgumentReference x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.TypeArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "reference"),
@@ -11535,7 +11535,7 @@ typeArgumentReference x =
 
 typeArgumentWildcard :: Phantoms.TTerm Syntax.Wildcard -> Phantoms.TTerm Syntax.TypeArgument
 typeArgumentWildcard x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.TypeArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "wildcard"),
@@ -11543,7 +11543,7 @@ typeArgumentWildcard x =
 
 typeArgumentsOrDiamondArguments :: Phantoms.TTerm [Syntax.TypeArgument] -> Phantoms.TTerm Syntax.TypeArgumentsOrDiamond
 typeArgumentsOrDiamondArguments x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.TypeArgumentsOrDiamond"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "arguments"),
@@ -11551,7 +11551,7 @@ typeArgumentsOrDiamondArguments x =
 
 typeArgumentsOrDiamondDiamond :: Phantoms.TTerm Syntax.TypeArgumentsOrDiamond
 typeArgumentsOrDiamondDiamond =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.TypeArgumentsOrDiamond"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "diamond"),
@@ -11559,7 +11559,7 @@ typeArgumentsOrDiamondDiamond =
 
 typeBoundClassOrInterface :: Phantoms.TTerm Syntax.TypeBound_ClassOrInterface -> Phantoms.TTerm Syntax.TypeBound
 typeBoundClassOrInterface x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.TypeBound"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "classOrInterface"),
@@ -11567,7 +11567,7 @@ typeBoundClassOrInterface x =
 
 typeBoundVariable :: Phantoms.TTerm Syntax.TypeVariable -> Phantoms.TTerm Syntax.TypeBound
 typeBoundVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.TypeBound"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -11635,7 +11635,7 @@ typeBound_ClassOrInterfaceWithType original newVal =
 
 typeDeclarationClass :: Phantoms.TTerm Syntax.ClassDeclaration -> Phantoms.TTerm Syntax.TypeDeclaration
 typeDeclarationClass x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.TypeDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "class"),
@@ -11643,7 +11643,7 @@ typeDeclarationClass x =
 
 typeDeclarationInterface :: Phantoms.TTerm Syntax.InterfaceDeclaration -> Phantoms.TTerm Syntax.TypeDeclaration
 typeDeclarationInterface x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.TypeDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "interface"),
@@ -11651,7 +11651,7 @@ typeDeclarationInterface x =
 
 typeDeclarationNone :: Phantoms.TTerm Syntax.TypeDeclaration
 typeDeclarationNone =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.TypeDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "none"),
@@ -11743,7 +11743,7 @@ typeName identifier qualifier =
 
 typeNameArrayArray :: Phantoms.TTerm Syntax.TypeNameArray -> Phantoms.TTerm Syntax.TypeNameArray
 typeNameArrayArray x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.TypeNameArray"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "array"),
@@ -11751,7 +11751,7 @@ typeNameArrayArray x =
 
 typeNameArraySimple :: Phantoms.TTerm Syntax.TypeName -> Phantoms.TTerm Syntax.TypeNameArray
 typeNameArraySimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.TypeNameArray"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -11921,7 +11921,7 @@ typeParameterWithModifiers original newVal =
 
 typePrimitive :: Phantoms.TTerm Syntax.PrimitiveTypeWithAnnotations -> Phantoms.TTerm Syntax.Type
 typePrimitive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primitive"),
@@ -11929,7 +11929,7 @@ typePrimitive x =
 
 typeReference :: Phantoms.TTerm Syntax.ReferenceType -> Phantoms.TTerm Syntax.Type
 typeReference x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "reference"),
@@ -12345,7 +12345,7 @@ unannType x =
 
 unaryExpressionMinus :: Phantoms.TTerm Syntax.UnaryExpression -> Phantoms.TTerm Syntax.UnaryExpression
 unaryExpressionMinus x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.UnaryExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "minus"),
@@ -12353,7 +12353,7 @@ unaryExpressionMinus x =
 
 unaryExpressionNotPlusMinusCast :: Phantoms.TTerm Syntax.CastExpression -> Phantoms.TTerm Syntax.UnaryExpressionNotPlusMinus
 unaryExpressionNotPlusMinusCast x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.UnaryExpressionNotPlusMinus"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cast"),
@@ -12361,7 +12361,7 @@ unaryExpressionNotPlusMinusCast x =
 
 unaryExpressionNotPlusMinusNot :: Phantoms.TTerm Syntax.UnaryExpression -> Phantoms.TTerm Syntax.UnaryExpressionNotPlusMinus
 unaryExpressionNotPlusMinusNot x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.UnaryExpressionNotPlusMinus"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "not"),
@@ -12369,7 +12369,7 @@ unaryExpressionNotPlusMinusNot x =
 
 unaryExpressionNotPlusMinusPostfix :: Phantoms.TTerm Syntax.PostfixExpression -> Phantoms.TTerm Syntax.UnaryExpressionNotPlusMinus
 unaryExpressionNotPlusMinusPostfix x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.UnaryExpressionNotPlusMinus"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "postfix"),
@@ -12377,7 +12377,7 @@ unaryExpressionNotPlusMinusPostfix x =
 
 unaryExpressionNotPlusMinusTilde :: Phantoms.TTerm Syntax.UnaryExpression -> Phantoms.TTerm Syntax.UnaryExpressionNotPlusMinus
 unaryExpressionNotPlusMinusTilde x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.UnaryExpressionNotPlusMinus"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tilde"),
@@ -12385,7 +12385,7 @@ unaryExpressionNotPlusMinusTilde x =
 
 unaryExpressionOther :: Phantoms.TTerm Syntax.UnaryExpressionNotPlusMinus -> Phantoms.TTerm Syntax.UnaryExpression
 unaryExpressionOther x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.UnaryExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "other"),
@@ -12393,7 +12393,7 @@ unaryExpressionOther x =
 
 unaryExpressionPlus :: Phantoms.TTerm Syntax.UnaryExpression -> Phantoms.TTerm Syntax.UnaryExpression
 unaryExpressionPlus x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.UnaryExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "plus"),
@@ -12401,7 +12401,7 @@ unaryExpressionPlus x =
 
 unaryExpressionPreDecrement :: Phantoms.TTerm Syntax.PreDecrementExpression -> Phantoms.TTerm Syntax.UnaryExpression
 unaryExpressionPreDecrement x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.UnaryExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "preDecrement"),
@@ -12409,7 +12409,7 @@ unaryExpressionPreDecrement x =
 
 unaryExpressionPreIncrement :: Phantoms.TTerm Syntax.PreIncrementExpression -> Phantoms.TTerm Syntax.UnaryExpression
 unaryExpressionPreIncrement x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.UnaryExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "preIncrement"),
@@ -12587,7 +12587,7 @@ unqualifiedClassInstanceCreationExpressionWithTypeArguments original newVal =
 
 variableAccessExpressionName :: Phantoms.TTerm Syntax.ExpressionName -> Phantoms.TTerm Syntax.VariableAccess
 variableAccessExpressionName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.VariableAccess"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "expressionName"),
@@ -12595,7 +12595,7 @@ variableAccessExpressionName x =
 
 variableAccessFieldAccess :: Phantoms.TTerm Syntax.FieldAccess -> Phantoms.TTerm Syntax.VariableAccess
 variableAccessFieldAccess x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.VariableAccess"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fieldAccess"),
@@ -12893,7 +12893,7 @@ variableDeclaratorWithInitializer original newVal =
 
 variableInitializerArrayInitializer :: Phantoms.TTerm Syntax.ArrayInitializer -> Phantoms.TTerm Syntax.VariableInitializer
 variableInitializerArrayInitializer x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.VariableInitializer"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "arrayInitializer"),
@@ -12901,7 +12901,7 @@ variableInitializerArrayInitializer x =
 
 variableInitializerExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.VariableInitializer
 variableInitializerExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.VariableInitializer"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "expression"),
@@ -12909,7 +12909,7 @@ variableInitializerExpression x =
 
 variableModifierAnnotation :: Phantoms.TTerm Syntax.Annotation -> Phantoms.TTerm Syntax.VariableModifier
 variableModifierAnnotation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.VariableModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotation"),
@@ -12917,7 +12917,7 @@ variableModifierAnnotation x =
 
 variableModifierFinal :: Phantoms.TTerm Syntax.VariableModifier
 variableModifierFinal =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.VariableModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "final"),
@@ -13065,7 +13065,7 @@ wildcardAnnotations x =
 
 wildcardBoundsExtends :: Phantoms.TTerm Syntax.ReferenceType -> Phantoms.TTerm Syntax.WildcardBounds
 wildcardBoundsExtends x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.WildcardBounds"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "extends"),
@@ -13073,7 +13073,7 @@ wildcardBoundsExtends x =
 
 wildcardBoundsSuper :: Phantoms.TTerm Syntax.ReferenceType -> Phantoms.TTerm Syntax.WildcardBounds
 wildcardBoundsSuper x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.WildcardBounds"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "super"),

@@ -68,7 +68,7 @@ pythonLanguage =
           Variants.TermVariantSet,
           Variants.TermVariantTypeApplication,
           Variants.TermVariantTypeLambda,
-          Variants.TermVariantUnion,
+          Variants.TermVariantInject,
           Variants.TermVariantUnit,
           Variants.TermVariantVariable,
           Variants.TermVariantWrap]

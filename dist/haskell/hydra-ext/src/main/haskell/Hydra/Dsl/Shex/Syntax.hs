@@ -71,7 +71,7 @@ annotationWithPredicate original newVal =
 
 annotation_AltsIri :: Phantoms.TTerm Syntax.Iri -> Phantoms.TTerm Syntax.Annotation_Alts
 annotation_AltsIri x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Annotation_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Iri"),
@@ -79,7 +79,7 @@ annotation_AltsIri x =
 
 annotation_AltsLiteral :: Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm Syntax.Annotation_Alts
 annotation_AltsLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Annotation_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Literal"),
@@ -273,7 +273,7 @@ blankNodeLabelWithPnChars original newVal =
 
 blankNodeLabel_AltsPnCharsU :: Phantoms.TTerm Syntax.PnCharsU -> Phantoms.TTerm Syntax.BlankNodeLabel_Alts
 blankNodeLabel_AltsPnCharsU x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.BlankNodeLabel_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "PnCharsU"),
@@ -281,7 +281,7 @@ blankNodeLabel_AltsPnCharsU x =
 
 blankNodeLabel_AltsRegex :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.BlankNodeLabel_Alts
 blankNodeLabel_AltsRegex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.BlankNodeLabel_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "regex"),
@@ -289,7 +289,7 @@ blankNodeLabel_AltsRegex x =
 
 blankNodeLabel_ListOfAlts_Option_ElmtPeriod :: Phantoms.TTerm Syntax.BlankNodeLabel_ListOfAlts_Option_Elmt
 blankNodeLabel_ListOfAlts_Option_ElmtPeriod =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Period"),
@@ -297,7 +297,7 @@ blankNodeLabel_ListOfAlts_Option_ElmtPeriod =
 
 blankNodeLabel_ListOfAlts_Option_ElmtPnChars :: Phantoms.TTerm Syntax.PnChars -> Phantoms.TTerm Syntax.BlankNodeLabel_ListOfAlts_Option_Elmt
 blankNodeLabel_ListOfAlts_Option_ElmtPnChars x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "PnChars"),
@@ -305,7 +305,7 @@ blankNodeLabel_ListOfAlts_Option_ElmtPnChars x =
 
 booleanLiteralFalse :: Phantoms.TTerm Syntax.BooleanLiteral
 booleanLiteralFalse =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.BooleanLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "False"),
@@ -313,7 +313,7 @@ booleanLiteralFalse =
 
 booleanLiteralTrue :: Phantoms.TTerm Syntax.BooleanLiteral
 booleanLiteralTrue =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.BooleanLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "True"),
@@ -491,7 +491,7 @@ bracketedTripleExprWithSemanticActions original newVal =
 
 cardinalityAst :: Phantoms.TTerm Syntax.Cardinality
 cardinalityAst =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Cardinality"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Ast"),
@@ -499,7 +499,7 @@ cardinalityAst =
 
 cardinalityPlus :: Phantoms.TTerm Syntax.Cardinality
 cardinalityPlus =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Cardinality"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Plus"),
@@ -507,7 +507,7 @@ cardinalityPlus =
 
 cardinalityQuest :: Phantoms.TTerm Syntax.Cardinality
 cardinalityQuest =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Cardinality"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Quest"),
@@ -515,7 +515,7 @@ cardinalityQuest =
 
 cardinalityRepeatRange :: Phantoms.TTerm Syntax.RepeatRange -> Phantoms.TTerm Syntax.Cardinality
 cardinalityRepeatRange x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Cardinality"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "RepeatRange"),
@@ -589,7 +589,7 @@ codeDeclWithIri original newVal =
 
 codeDecl_AltsCode :: Phantoms.TTerm Syntax.Code -> Phantoms.TTerm Syntax.CodeDecl_Alts
 codeDecl_AltsCode x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.CodeDecl_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Code"),
@@ -597,7 +597,7 @@ codeDecl_AltsCode x =
 
 codeDecl_AltsPercnt :: Phantoms.TTerm Syntax.CodeDecl_Alts
 codeDecl_AltsPercnt =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.CodeDecl_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Percnt"),
@@ -605,7 +605,7 @@ codeDecl_AltsPercnt =
 
 code_ElmtRegex :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.Code_Elmt
 code_ElmtRegex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Code_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "regex"),
@@ -613,7 +613,7 @@ code_ElmtRegex x =
 
 code_ElmtSequence :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.Code_Elmt
 code_ElmtSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Code_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -621,7 +621,7 @@ code_ElmtSequence x =
 
 code_ElmtUchar :: Phantoms.TTerm Syntax.Uchar -> Phantoms.TTerm Syntax.Code_Elmt
 code_ElmtUchar x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Code_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Uchar"),
@@ -641,7 +641,7 @@ decimal x =
 
 directiveBaseDecl :: Phantoms.TTerm Syntax.BaseDecl -> Phantoms.TTerm Syntax.Directive
 directiveBaseDecl x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Directive"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "BaseDecl"),
@@ -649,7 +649,7 @@ directiveBaseDecl x =
 
 directivePrefixDecl :: Phantoms.TTerm Syntax.PrefixDecl -> Phantoms.TTerm Syntax.Directive
 directivePrefixDecl x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Directive"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "PrefixDecl"),
@@ -681,7 +681,7 @@ extraPropertySet x =
 
 groupTripleExprMultiElementGroup :: Phantoms.TTerm Syntax.MultiElementGroup -> Phantoms.TTerm Syntax.GroupTripleExpr
 groupTripleExprMultiElementGroup x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.GroupTripleExpr"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "MultiElementGroup"),
@@ -689,7 +689,7 @@ groupTripleExprMultiElementGroup x =
 
 groupTripleExprSingleElementGroup :: Phantoms.TTerm Syntax.SingleElementGroup -> Phantoms.TTerm Syntax.GroupTripleExpr
 groupTripleExprSingleElementGroup x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.GroupTripleExpr"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "SingleElementGroup"),
@@ -775,7 +775,7 @@ inlineShapeAndWithListOfSequence original newVal =
 
 inlineShapeAtomPeriod :: Phantoms.TTerm Syntax.InlineShapeAtom
 inlineShapeAtomPeriod =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeAtom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Period"),
@@ -783,7 +783,7 @@ inlineShapeAtomPeriod =
 
 inlineShapeAtomSequence :: Phantoms.TTerm Syntax.InlineShapeAtom_Sequence -> Phantoms.TTerm Syntax.InlineShapeAtom
 inlineShapeAtomSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeAtom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -791,7 +791,7 @@ inlineShapeAtomSequence x =
 
 inlineShapeAtomSequence2 :: Phantoms.TTerm Syntax.InlineShapeAtom_Sequence2 -> Phantoms.TTerm Syntax.InlineShapeAtom
 inlineShapeAtomSequence2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeAtom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence2"),
@@ -799,7 +799,7 @@ inlineShapeAtomSequence2 x =
 
 inlineShapeAtomSequence3 :: Phantoms.TTerm Syntax.ShapeExpression -> Phantoms.TTerm Syntax.InlineShapeAtom
 inlineShapeAtomSequence3 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeAtom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence3"),
@@ -987,7 +987,7 @@ inlineShapeDefinitionWithTripleExpression original newVal =
 
 inlineShapeDefinition_ListOfAlts_ElmtCLOSED :: Phantoms.TTerm Syntax.InlineShapeDefinition_ListOfAlts_Elmt
 inlineShapeDefinition_ListOfAlts_ElmtCLOSED =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "CLOSED"),
@@ -995,7 +995,7 @@ inlineShapeDefinition_ListOfAlts_ElmtCLOSED =
 
 inlineShapeDefinition_ListOfAlts_ElmtExtraPropertySet :: Phantoms.TTerm Syntax.ExtraPropertySet -> Phantoms.TTerm Syntax.InlineShapeDefinition_ListOfAlts_Elmt
 inlineShapeDefinition_ListOfAlts_ElmtExtraPropertySet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ExtraPropertySet"),
@@ -1003,7 +1003,7 @@ inlineShapeDefinition_ListOfAlts_ElmtExtraPropertySet x =
 
 inlineShapeDefinition_ListOfAlts_ElmtIncludeSet :: Phantoms.TTerm Syntax.IncludeSet -> Phantoms.TTerm Syntax.InlineShapeDefinition_ListOfAlts_Elmt
 inlineShapeDefinition_ListOfAlts_ElmtIncludeSet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "IncludeSet"),
@@ -1097,7 +1097,7 @@ inlineShapeOrListOfSequence x =
 
 inlineShapeOrRefAtpNameLn :: Phantoms.TTerm Syntax.AtpNameLn -> Phantoms.TTerm Syntax.InlineShapeOrRef
 inlineShapeOrRefAtpNameLn x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeOrRef"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "AtpNameLn"),
@@ -1105,7 +1105,7 @@ inlineShapeOrRefAtpNameLn x =
 
 inlineShapeOrRefAtpNameNs :: Phantoms.TTerm Syntax.AtpNameNs -> Phantoms.TTerm Syntax.InlineShapeOrRef
 inlineShapeOrRefAtpNameNs x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeOrRef"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "AtpNameNs"),
@@ -1113,7 +1113,7 @@ inlineShapeOrRefAtpNameNs x =
 
 inlineShapeOrRefInlineShapeDefinition :: Phantoms.TTerm Syntax.InlineShapeDefinition -> Phantoms.TTerm Syntax.InlineShapeOrRef
 inlineShapeOrRefInlineShapeDefinition x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeOrRef"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "InlineShapeDefinition"),
@@ -1121,7 +1121,7 @@ inlineShapeOrRefInlineShapeDefinition x =
 
 inlineShapeOrRefSequence :: Phantoms.TTerm Syntax.ShapeExprLabel -> Phantoms.TTerm Syntax.InlineShapeOrRef
 inlineShapeOrRefSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeOrRef"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -1169,7 +1169,7 @@ inlineShapeOrWithShapeAnd original newVal =
 
 innerTripleExprMultiElementGroup :: Phantoms.TTerm Syntax.MultiElementGroup -> Phantoms.TTerm Syntax.InnerTripleExpr
 innerTripleExprMultiElementGroup x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.InnerTripleExpr"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "MultiElementGroup"),
@@ -1177,7 +1177,7 @@ innerTripleExprMultiElementGroup x =
 
 innerTripleExprMultiElementOneOf :: Phantoms.TTerm Syntax.MultiElementOneOf -> Phantoms.TTerm Syntax.InnerTripleExpr
 innerTripleExprMultiElementOneOf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.InnerTripleExpr"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "MultiElementOneOf"),
@@ -1191,7 +1191,7 @@ integer x =
 
 iriIriRef :: Phantoms.TTerm Syntax.IriRef -> Phantoms.TTerm Syntax.Iri
 iriIriRef x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Iri"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "IriRef"),
@@ -1199,7 +1199,7 @@ iriIriRef x =
 
 iriPrefixedName :: Phantoms.TTerm Syntax.PrefixedName -> Phantoms.TTerm Syntax.Iri
 iriPrefixedName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Iri"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "PrefixedName"),
@@ -1207,7 +1207,7 @@ iriPrefixedName x =
 
 iriRangeSequence :: Phantoms.TTerm Syntax.IriRange_Sequence -> Phantoms.TTerm Syntax.IriRange
 iriRangeSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.IriRange"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -1215,7 +1215,7 @@ iriRangeSequence x =
 
 iriRangeSequence2 :: Phantoms.TTerm [Syntax.Exclusion] -> Phantoms.TTerm Syntax.IriRange
 iriRangeSequence2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.IriRange"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence2"),
@@ -1289,7 +1289,7 @@ iriRef x =
 
 iriRef_ElmtRegex :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.IriRef_Elmt
 iriRef_ElmtRegex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.IriRef_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "regex"),
@@ -1297,7 +1297,7 @@ iriRef_ElmtRegex x =
 
 iriRef_ElmtUchar :: Phantoms.TTerm Syntax.Uchar -> Phantoms.TTerm Syntax.IriRef_Elmt
 iriRef_ElmtUchar x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.IriRef_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Uchar"),
@@ -1311,7 +1311,7 @@ langTag x =
 
 literalBooleanLiteral :: Phantoms.TTerm Syntax.BooleanLiteral -> Phantoms.TTerm Syntax.Literal
 literalBooleanLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "BooleanLiteral"),
@@ -1319,7 +1319,7 @@ literalBooleanLiteral x =
 
 literalNumericLiteral :: Phantoms.TTerm Syntax.NumericLiteral -> Phantoms.TTerm Syntax.Literal
 literalNumericLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "NumericLiteral"),
@@ -1327,7 +1327,7 @@ literalNumericLiteral x =
 
 literalRdfLiteral :: Phantoms.TTerm Syntax.RdfLiteral -> Phantoms.TTerm Syntax.Literal
 literalRdfLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "RdfLiteral"),
@@ -1503,7 +1503,7 @@ multiElementOneOfWithListOfSequence original newVal =
 
 nodeConstraintListOfXsFacet :: Phantoms.TTerm [Syntax.XsFacet] -> Phantoms.TTerm Syntax.NodeConstraint
 nodeConstraintListOfXsFacet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "listOfXsFacet"),
@@ -1511,7 +1511,7 @@ nodeConstraintListOfXsFacet x =
 
 nodeConstraintSequence :: Phantoms.TTerm [Syntax.XsFacet] -> Phantoms.TTerm Syntax.NodeConstraint
 nodeConstraintSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -1519,7 +1519,7 @@ nodeConstraintSequence x =
 
 nodeConstraintSequence2 :: Phantoms.TTerm Syntax.NodeConstraint_Sequence2 -> Phantoms.TTerm Syntax.NodeConstraint
 nodeConstraintSequence2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence2"),
@@ -1527,7 +1527,7 @@ nodeConstraintSequence2 x =
 
 nodeConstraintSequence3 :: Phantoms.TTerm Syntax.NodeConstraint_Sequence3 -> Phantoms.TTerm Syntax.NodeConstraint
 nodeConstraintSequence3 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence3"),
@@ -1535,7 +1535,7 @@ nodeConstraintSequence3 x =
 
 nodeConstraintSequence4 :: Phantoms.TTerm Syntax.NodeConstraint_Sequence4 -> Phantoms.TTerm Syntax.NodeConstraint
 nodeConstraintSequence4 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence4"),
@@ -1543,7 +1543,7 @@ nodeConstraintSequence4 x =
 
 nodeConstraintSequence5 :: Phantoms.TTerm Syntax.NodeConstraint_Sequence5 -> Phantoms.TTerm Syntax.NodeConstraint
 nodeConstraintSequence5 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence5"),
@@ -1791,7 +1791,7 @@ nodeConstraint_Sequence5WithValueSet original newVal =
 
 nonLiteralKindBNODE :: Phantoms.TTerm Syntax.NonLiteralKind
 nonLiteralKindBNODE =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NonLiteralKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "BNODE"),
@@ -1799,7 +1799,7 @@ nonLiteralKindBNODE =
 
 nonLiteralKindIRI :: Phantoms.TTerm Syntax.NonLiteralKind
 nonLiteralKindIRI =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NonLiteralKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "IRI"),
@@ -1807,7 +1807,7 @@ nonLiteralKindIRI =
 
 nonLiteralKindNONLITERAL :: Phantoms.TTerm Syntax.NonLiteralKind
 nonLiteralKindNONLITERAL =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NonLiteralKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "NONLITERAL"),
@@ -1815,7 +1815,7 @@ nonLiteralKindNONLITERAL =
 
 notStartActionShapeExprDecl :: Phantoms.TTerm Syntax.NotStartAction_ShapeExprDecl -> Phantoms.TTerm Syntax.NotStartAction
 notStartActionShapeExprDecl x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NotStartAction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "shapeExprDecl"),
@@ -1823,7 +1823,7 @@ notStartActionShapeExprDecl x =
 
 notStartActionStart :: Phantoms.TTerm Syntax.ShapeExpression -> Phantoms.TTerm Syntax.NotStartAction
 notStartActionStart x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NotStartAction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "start"),
@@ -1891,7 +1891,7 @@ notStartAction_ShapeExprDeclWithShapeExprLabel original newVal =
 
 notStartAction_ShapeExprDecl_AltsEXTERNAL :: Phantoms.TTerm Syntax.NotStartAction_ShapeExprDecl_Alts
 notStartAction_ShapeExprDecl_AltsEXTERNAL =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NotStartAction_ShapeExprDecl_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "EXTERNAL"),
@@ -1899,7 +1899,7 @@ notStartAction_ShapeExprDecl_AltsEXTERNAL =
 
 notStartAction_ShapeExprDecl_AltsShapeExpression :: Phantoms.TTerm Syntax.ShapeExpression -> Phantoms.TTerm Syntax.NotStartAction_ShapeExprDecl_Alts
 notStartAction_ShapeExprDecl_AltsShapeExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NotStartAction_ShapeExprDecl_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ShapeExpression"),
@@ -1907,7 +1907,7 @@ notStartAction_ShapeExprDecl_AltsShapeExpression x =
 
 numericFacetSequence :: Phantoms.TTerm Syntax.NumericFacet_Sequence -> Phantoms.TTerm Syntax.NumericFacet
 numericFacetSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NumericFacet"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -1915,7 +1915,7 @@ numericFacetSequence x =
 
 numericFacetSequence2 :: Phantoms.TTerm Syntax.NumericFacet_Sequence2 -> Phantoms.TTerm Syntax.NumericFacet
 numericFacetSequence2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NumericFacet"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence2"),
@@ -2043,7 +2043,7 @@ numericFacet_SequenceWithNumericRange original newVal =
 
 numericLengthFRACTIONDIGITS :: Phantoms.TTerm Syntax.NumericLength
 numericLengthFRACTIONDIGITS =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NumericLength"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "FRACTIONDIGITS"),
@@ -2051,7 +2051,7 @@ numericLengthFRACTIONDIGITS =
 
 numericLengthTOTALDIGITS :: Phantoms.TTerm Syntax.NumericLength
 numericLengthTOTALDIGITS =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NumericLength"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "TOTALDIGITS"),
@@ -2059,7 +2059,7 @@ numericLengthTOTALDIGITS =
 
 numericLiteralDecimal :: Phantoms.TTerm Syntax.Decimal -> Phantoms.TTerm Syntax.NumericLiteral
 numericLiteralDecimal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NumericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Decimal"),
@@ -2067,7 +2067,7 @@ numericLiteralDecimal x =
 
 numericLiteralDouble :: Phantoms.TTerm Syntax.Double_ -> Phantoms.TTerm Syntax.NumericLiteral
 numericLiteralDouble x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NumericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Double"),
@@ -2075,7 +2075,7 @@ numericLiteralDouble x =
 
 numericLiteralInteger :: Phantoms.TTerm Syntax.Integer_ -> Phantoms.TTerm Syntax.NumericLiteral
 numericLiteralInteger x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NumericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Integer"),
@@ -2083,7 +2083,7 @@ numericLiteralInteger x =
 
 numericRangeMAXEXCLUSIVE :: Phantoms.TTerm Syntax.NumericRange
 numericRangeMAXEXCLUSIVE =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NumericRange"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "MAXEXCLUSIVE"),
@@ -2091,7 +2091,7 @@ numericRangeMAXEXCLUSIVE =
 
 numericRangeMAXINCLUSIVE :: Phantoms.TTerm Syntax.NumericRange
 numericRangeMAXINCLUSIVE =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NumericRange"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "MAXINCLUSIVE"),
@@ -2099,7 +2099,7 @@ numericRangeMAXINCLUSIVE =
 
 numericRangeMINEXCLUSIVE :: Phantoms.TTerm Syntax.NumericRange
 numericRangeMINEXCLUSIVE =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NumericRange"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "MINEXCLUSIVE"),
@@ -2107,7 +2107,7 @@ numericRangeMINEXCLUSIVE =
 
 numericRangeMININCLUSIVE :: Phantoms.TTerm Syntax.NumericRange
 numericRangeMININCLUSIVE =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.NumericRange"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "MININCLUSIVE"),
@@ -2115,7 +2115,7 @@ numericRangeMININCLUSIVE =
 
 oneOfTripleExprGroupTripleExpr :: Phantoms.TTerm Syntax.GroupTripleExpr -> Phantoms.TTerm Syntax.OneOfTripleExpr
 oneOfTripleExprGroupTripleExpr x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.OneOfTripleExpr"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "GroupTripleExpr"),
@@ -2123,7 +2123,7 @@ oneOfTripleExprGroupTripleExpr x =
 
 oneOfTripleExprMultiElementOneOf :: Phantoms.TTerm Syntax.MultiElementOneOf -> Phantoms.TTerm Syntax.OneOfTripleExpr
 oneOfTripleExprMultiElementOneOf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.OneOfTripleExpr"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "MultiElementOneOf"),
@@ -2191,7 +2191,7 @@ percentWithHex2 original newVal =
 
 plxPercent :: Phantoms.TTerm Syntax.Percent -> Phantoms.TTerm Syntax.Plx
 plxPercent x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Plx"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Percent"),
@@ -2199,7 +2199,7 @@ plxPercent x =
 
 plxPnLocalEsc :: Phantoms.TTerm Syntax.PnLocalEsc -> Phantoms.TTerm Syntax.Plx
 plxPnLocalEsc x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Plx"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "PnLocalEsc"),
@@ -2207,7 +2207,7 @@ plxPnLocalEsc x =
 
 pnCharsBaseRegex :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.PnCharsBase
 pnCharsBaseRegex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PnCharsBase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "regex"),
@@ -2215,7 +2215,7 @@ pnCharsBaseRegex x =
 
 pnCharsBaseRegex2 :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.PnCharsBase
 pnCharsBaseRegex2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PnCharsBase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "regex2"),
@@ -2223,7 +2223,7 @@ pnCharsBaseRegex2 x =
 
 pnCharsMinus :: Phantoms.TTerm Syntax.PnChars
 pnCharsMinus =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PnChars"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Minus"),
@@ -2231,7 +2231,7 @@ pnCharsMinus =
 
 pnCharsPnCharsU :: Phantoms.TTerm Syntax.PnCharsU -> Phantoms.TTerm Syntax.PnChars
 pnCharsPnCharsU x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PnChars"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "PnCharsU"),
@@ -2239,7 +2239,7 @@ pnCharsPnCharsU x =
 
 pnCharsRegex :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.PnChars
 pnCharsRegex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PnChars"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "regex"),
@@ -2247,7 +2247,7 @@ pnCharsRegex x =
 
 pnCharsULowbar :: Phantoms.TTerm Syntax.PnCharsU
 pnCharsULowbar =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PnCharsU"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Lowbar"),
@@ -2255,7 +2255,7 @@ pnCharsULowbar =
 
 pnCharsUPnCharsBase :: Phantoms.TTerm Syntax.PnCharsBase -> Phantoms.TTerm Syntax.PnCharsU
 pnCharsUPnCharsBase x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PnCharsU"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "PnCharsBase"),
@@ -2329,7 +2329,7 @@ pnLocalWithSequence original newVal =
 
 pnLocal_AltsColon :: Phantoms.TTerm Syntax.PnLocal_Alts
 pnLocal_AltsColon =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PnLocal_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Colon"),
@@ -2337,7 +2337,7 @@ pnLocal_AltsColon =
 
 pnLocal_AltsPlx :: Phantoms.TTerm Syntax.Plx -> Phantoms.TTerm Syntax.PnLocal_Alts
 pnLocal_AltsPlx x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PnLocal_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Plx"),
@@ -2345,7 +2345,7 @@ pnLocal_AltsPlx x =
 
 pnLocal_AltsPnCharsU :: Phantoms.TTerm Syntax.PnCharsU -> Phantoms.TTerm Syntax.PnLocal_Alts
 pnLocal_AltsPnCharsU x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PnLocal_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "PnCharsU"),
@@ -2353,7 +2353,7 @@ pnLocal_AltsPnCharsU x =
 
 pnLocal_AltsRegex :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.PnLocal_Alts
 pnLocal_AltsRegex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PnLocal_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "regex"),
@@ -2421,7 +2421,7 @@ pnLocal_Sequence_OptionWithListOfAlts original newVal =
 
 pnLocal_Sequence_Option_AltsColon :: Phantoms.TTerm Syntax.PnLocal_Sequence_Option_Alts
 pnLocal_Sequence_Option_AltsColon =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PnLocal_Sequence_Option_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Colon"),
@@ -2429,7 +2429,7 @@ pnLocal_Sequence_Option_AltsColon =
 
 pnLocal_Sequence_Option_AltsPlx :: Phantoms.TTerm Syntax.Plx -> Phantoms.TTerm Syntax.PnLocal_Sequence_Option_Alts
 pnLocal_Sequence_Option_AltsPlx x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PnLocal_Sequence_Option_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Plx"),
@@ -2437,7 +2437,7 @@ pnLocal_Sequence_Option_AltsPlx x =
 
 pnLocal_Sequence_Option_AltsPnChars :: Phantoms.TTerm Syntax.PnChars -> Phantoms.TTerm Syntax.PnLocal_Sequence_Option_Alts
 pnLocal_Sequence_Option_AltsPnChars x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PnLocal_Sequence_Option_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "PnChars"),
@@ -2445,7 +2445,7 @@ pnLocal_Sequence_Option_AltsPnChars x =
 
 pnLocal_Sequence_Option_ListOfAlts_ElmtColon :: Phantoms.TTerm Syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt
 pnLocal_Sequence_Option_ListOfAlts_ElmtColon =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Colon"),
@@ -2453,7 +2453,7 @@ pnLocal_Sequence_Option_ListOfAlts_ElmtColon =
 
 pnLocal_Sequence_Option_ListOfAlts_ElmtPeriod :: Phantoms.TTerm Syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt
 pnLocal_Sequence_Option_ListOfAlts_ElmtPeriod =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Period"),
@@ -2461,7 +2461,7 @@ pnLocal_Sequence_Option_ListOfAlts_ElmtPeriod =
 
 pnLocal_Sequence_Option_ListOfAlts_ElmtPlx :: Phantoms.TTerm Syntax.Plx -> Phantoms.TTerm Syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt
 pnLocal_Sequence_Option_ListOfAlts_ElmtPlx x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Plx"),
@@ -2469,7 +2469,7 @@ pnLocal_Sequence_Option_ListOfAlts_ElmtPlx x =
 
 pnLocal_Sequence_Option_ListOfAlts_ElmtPnChars :: Phantoms.TTerm Syntax.PnChars -> Phantoms.TTerm Syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt
 pnLocal_Sequence_Option_ListOfAlts_ElmtPnChars x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "PnChars"),
@@ -2597,7 +2597,7 @@ pnPrefix_Sequence_OptionWithPnChars original newVal =
 
 pnPrefix_Sequence_Option_AltsPeriod :: Phantoms.TTerm Syntax.PnPrefix_Sequence_Option_Alts
 pnPrefix_Sequence_Option_AltsPeriod =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PnPrefix_Sequence_Option_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Period"),
@@ -2605,7 +2605,7 @@ pnPrefix_Sequence_Option_AltsPeriod =
 
 pnPrefix_Sequence_Option_AltsPnChars :: Phantoms.TTerm Syntax.PnChars -> Phantoms.TTerm Syntax.PnPrefix_Sequence_Option_Alts
 pnPrefix_Sequence_Option_AltsPnChars x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PnPrefix_Sequence_Option_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "PnChars"),
@@ -2679,7 +2679,7 @@ pnameNs x =
 
 predicateIri :: Phantoms.TTerm Syntax.Iri -> Phantoms.TTerm Syntax.Predicate
 predicateIri x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Predicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Iri"),
@@ -2687,7 +2687,7 @@ predicateIri x =
 
 predicateRdfType :: Phantoms.TTerm Syntax.RdfType -> Phantoms.TTerm Syntax.Predicate
 predicateRdfType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Predicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "RdfType"),
@@ -2755,7 +2755,7 @@ prefixDeclWithPnameNs original newVal =
 
 prefixedNamePnameLn :: Phantoms.TTerm Syntax.PnameLn -> Phantoms.TTerm Syntax.PrefixedName
 prefixedNamePnameLn x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PrefixedName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "PnameLn"),
@@ -2763,7 +2763,7 @@ prefixedNamePnameLn x =
 
 prefixedNamePnameNs :: Phantoms.TTerm Syntax.PnameNs -> Phantoms.TTerm Syntax.PrefixedName
 prefixedNamePnameNs x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.PrefixedName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "PnameNs"),
@@ -2831,7 +2831,7 @@ rdfLiteralWithString original newVal =
 
 rdfLiteral_Alts_OptionLangTag :: Phantoms.TTerm Syntax.LangTag -> Phantoms.TTerm Syntax.RdfLiteral_Alts_Option
 rdfLiteral_Alts_OptionLangTag x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.RdfLiteral_Alts_Option"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "LangTag"),
@@ -2839,7 +2839,7 @@ rdfLiteral_Alts_OptionLangTag x =
 
 rdfLiteral_Alts_OptionSequence :: Phantoms.TTerm Syntax.Datatype -> Phantoms.TTerm Syntax.RdfLiteral_Alts_Option
 rdfLiteral_Alts_OptionSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.RdfLiteral_Alts_Option"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -2913,7 +2913,7 @@ regexpWithListOfRegex original newVal =
 
 regexp_ListOfAlts_ElmtRegex :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.Regexp_ListOfAlts_Elmt
 regexp_ListOfAlts_ElmtRegex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Regexp_ListOfAlts_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "regex"),
@@ -2921,7 +2921,7 @@ regexp_ListOfAlts_ElmtRegex x =
 
 regexp_ListOfAlts_ElmtSequence :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.Regexp_ListOfAlts_Elmt
 regexp_ListOfAlts_ElmtSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Regexp_ListOfAlts_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -2929,7 +2929,7 @@ regexp_ListOfAlts_ElmtSequence x =
 
 regexp_ListOfAlts_ElmtUchar :: Phantoms.TTerm Syntax.Uchar -> Phantoms.TTerm Syntax.Regexp_ListOfAlts_Elmt
 regexp_ListOfAlts_ElmtUchar x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Regexp_ListOfAlts_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Uchar"),
@@ -2997,7 +2997,7 @@ repeatRangeWithSequence original newVal =
 
 repeatRange_Sequence_Option_Option_OptionAst :: Phantoms.TTerm Syntax.RepeatRange_Sequence_Option_Option_Option
 repeatRange_Sequence_Option_Option_OptionAst =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.RepeatRange_Sequence_Option_Option_Option"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Ast"),
@@ -3005,7 +3005,7 @@ repeatRange_Sequence_Option_Option_OptionAst =
 
 repeatRange_Sequence_Option_Option_OptionInteger :: Phantoms.TTerm Syntax.Integer_ -> Phantoms.TTerm Syntax.RepeatRange_Sequence_Option_Option_Option
 repeatRange_Sequence_Option_Option_OptionInteger x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.RepeatRange_Sequence_Option_Option_Option"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Integer"),
@@ -3085,7 +3085,7 @@ shapeAndWithShapeNot original newVal =
 
 shapeAtomPeriod :: Phantoms.TTerm Syntax.ShapeAtom
 shapeAtomPeriod =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.ShapeAtom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Period"),
@@ -3093,7 +3093,7 @@ shapeAtomPeriod =
 
 shapeAtomSequence :: Phantoms.TTerm Syntax.ShapeAtom_Sequence -> Phantoms.TTerm Syntax.ShapeAtom
 shapeAtomSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.ShapeAtom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -3101,7 +3101,7 @@ shapeAtomSequence x =
 
 shapeAtomSequence2 :: Phantoms.TTerm Syntax.ShapeExpression -> Phantoms.TTerm Syntax.ShapeAtom
 shapeAtomSequence2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.ShapeAtom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence2"),
@@ -3109,7 +3109,7 @@ shapeAtomSequence2 x =
 
 shapeAtomShapeOrRef :: Phantoms.TTerm Syntax.ShapeOrRef -> Phantoms.TTerm Syntax.ShapeAtom
 shapeAtomShapeOrRef x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.ShapeAtom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ShapeOrRef"),
@@ -3347,7 +3347,7 @@ shapeDefinitionWithTripleExpression original newVal =
 
 shapeDefinition_ListOfAlts_ElmtCLOSED :: Phantoms.TTerm Syntax.ShapeDefinition_ListOfAlts_Elmt
 shapeDefinition_ListOfAlts_ElmtCLOSED =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.ShapeDefinition_ListOfAlts_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "CLOSED"),
@@ -3355,7 +3355,7 @@ shapeDefinition_ListOfAlts_ElmtCLOSED =
 
 shapeDefinition_ListOfAlts_ElmtExtraPropertySet :: Phantoms.TTerm Syntax.ExtraPropertySet -> Phantoms.TTerm Syntax.ShapeDefinition_ListOfAlts_Elmt
 shapeDefinition_ListOfAlts_ElmtExtraPropertySet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.ShapeDefinition_ListOfAlts_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ExtraPropertySet"),
@@ -3363,7 +3363,7 @@ shapeDefinition_ListOfAlts_ElmtExtraPropertySet x =
 
 shapeDefinition_ListOfAlts_ElmtIncludeSet :: Phantoms.TTerm Syntax.IncludeSet -> Phantoms.TTerm Syntax.ShapeDefinition_ListOfAlts_Elmt
 shapeDefinition_ListOfAlts_ElmtIncludeSet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.ShapeDefinition_ListOfAlts_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "IncludeSet"),
@@ -3371,7 +3371,7 @@ shapeDefinition_ListOfAlts_ElmtIncludeSet x =
 
 shapeExprLabelBlankNode :: Phantoms.TTerm Syntax.BlankNode -> Phantoms.TTerm Syntax.ShapeExprLabel
 shapeExprLabelBlankNode x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.ShapeExprLabel"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "BlankNode"),
@@ -3379,7 +3379,7 @@ shapeExprLabelBlankNode x =
 
 shapeExprLabelIri :: Phantoms.TTerm Syntax.Iri -> Phantoms.TTerm Syntax.ShapeExprLabel
 shapeExprLabelIri x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.ShapeExprLabel"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Iri"),
@@ -3473,7 +3473,7 @@ shapeOrListOfSequence x =
 
 shapeOrRefAtpNameLn :: Phantoms.TTerm Syntax.AtpNameLn -> Phantoms.TTerm Syntax.ShapeOrRef
 shapeOrRefAtpNameLn x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.ShapeOrRef"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "AtpNameLn"),
@@ -3481,7 +3481,7 @@ shapeOrRefAtpNameLn x =
 
 shapeOrRefAtpNameNs :: Phantoms.TTerm Syntax.AtpNameNs -> Phantoms.TTerm Syntax.ShapeOrRef
 shapeOrRefAtpNameNs x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.ShapeOrRef"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "AtpNameNs"),
@@ -3489,7 +3489,7 @@ shapeOrRefAtpNameNs x =
 
 shapeOrRefSequence :: Phantoms.TTerm Syntax.ShapeExprLabel -> Phantoms.TTerm Syntax.ShapeOrRef
 shapeOrRefSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.ShapeOrRef"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -3497,7 +3497,7 @@ shapeOrRefSequence x =
 
 shapeOrRefShapeDefinition :: Phantoms.TTerm Syntax.ShapeDefinition -> Phantoms.TTerm Syntax.ShapeOrRef
 shapeOrRefShapeDefinition x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.ShapeOrRef"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ShapeDefinition"),
@@ -3713,7 +3713,7 @@ shexDoc_Sequence_OptionWithListOfStatement original newVal =
 
 shexDoc_Sequence_Option_AltsNotStartAction :: Phantoms.TTerm Syntax.NotStartAction -> Phantoms.TTerm Syntax.ShexDoc_Sequence_Option_Alts
 shexDoc_Sequence_Option_AltsNotStartAction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.ShexDoc_Sequence_Option_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "NotStartAction"),
@@ -3721,7 +3721,7 @@ shexDoc_Sequence_Option_AltsNotStartAction x =
 
 shexDoc_Sequence_Option_AltsStartActions :: Phantoms.TTerm Syntax.StartActions -> Phantoms.TTerm Syntax.ShexDoc_Sequence_Option_Alts
 shexDoc_Sequence_Option_AltsStartActions x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.ShexDoc_Sequence_Option_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "StartActions"),
@@ -3795,7 +3795,7 @@ startActions x =
 
 statementDirective :: Phantoms.TTerm Syntax.Directive -> Phantoms.TTerm Syntax.Statement
 statementDirective x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Statement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Directive"),
@@ -3803,7 +3803,7 @@ statementDirective x =
 
 statementNotStartAction :: Phantoms.TTerm Syntax.NotStartAction -> Phantoms.TTerm Syntax.Statement
 statementNotStartAction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Statement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "NotStartAction"),
@@ -3811,7 +3811,7 @@ statementNotStartAction x =
 
 stringFacetRegexp :: Phantoms.TTerm Syntax.Regexp -> Phantoms.TTerm Syntax.StringFacet
 stringFacetRegexp x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringFacet"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Regexp"),
@@ -3819,7 +3819,7 @@ stringFacetRegexp x =
 
 stringFacetSequence :: Phantoms.TTerm Syntax.StringFacet_Sequence -> Phantoms.TTerm Syntax.StringFacet
 stringFacetSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringFacet"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -3887,7 +3887,7 @@ stringFacet_SequenceWithStringLength original newVal =
 
 stringLengthLENGTH :: Phantoms.TTerm Syntax.StringLength
 stringLengthLENGTH =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringLength"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "LENGTH"),
@@ -3895,7 +3895,7 @@ stringLengthLENGTH =
 
 stringLengthMAXLENGTH :: Phantoms.TTerm Syntax.StringLength
 stringLengthMAXLENGTH =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringLength"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "MAXLENGTH"),
@@ -3903,7 +3903,7 @@ stringLengthMAXLENGTH =
 
 stringLengthMINLENGTH :: Phantoms.TTerm Syntax.StringLength
 stringLengthMINLENGTH =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringLength"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "MINLENGTH"),
@@ -3917,7 +3917,7 @@ stringLiteral1 x =
 
 stringLiteral1_ElmtEchar :: Phantoms.TTerm Syntax.Echar -> Phantoms.TTerm Syntax.StringLiteral1_Elmt
 stringLiteral1_ElmtEchar x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteral1_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Echar"),
@@ -3925,7 +3925,7 @@ stringLiteral1_ElmtEchar x =
 
 stringLiteral1_ElmtRegex :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.StringLiteral1_Elmt
 stringLiteral1_ElmtRegex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteral1_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "regex"),
@@ -3933,7 +3933,7 @@ stringLiteral1_ElmtRegex x =
 
 stringLiteral1_ElmtUchar :: Phantoms.TTerm Syntax.Uchar -> Phantoms.TTerm Syntax.StringLiteral1_Elmt
 stringLiteral1_ElmtUchar x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteral1_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Uchar"),
@@ -3947,7 +3947,7 @@ stringLiteral2 x =
 
 stringLiteral2_ElmtEchar :: Phantoms.TTerm Syntax.Echar -> Phantoms.TTerm Syntax.StringLiteral2_Elmt
 stringLiteral2_ElmtEchar x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteral2_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Echar"),
@@ -3955,7 +3955,7 @@ stringLiteral2_ElmtEchar x =
 
 stringLiteral2_ElmtRegex :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.StringLiteral2_Elmt
 stringLiteral2_ElmtRegex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteral2_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "regex"),
@@ -3963,7 +3963,7 @@ stringLiteral2_ElmtRegex x =
 
 stringLiteral2_ElmtUchar :: Phantoms.TTerm Syntax.Uchar -> Phantoms.TTerm Syntax.StringLiteral2_Elmt
 stringLiteral2_ElmtUchar x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteral2_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Uchar"),
@@ -3977,7 +3977,7 @@ stringLiteralLong1 x =
 
 stringLiteralLong1_ElmtEchar :: Phantoms.TTerm Syntax.Echar -> Phantoms.TTerm Syntax.StringLiteralLong1_Elmt
 stringLiteralLong1_ElmtEchar x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteralLong1_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Echar"),
@@ -3985,7 +3985,7 @@ stringLiteralLong1_ElmtEchar x =
 
 stringLiteralLong1_ElmtSequence :: Phantoms.TTerm Syntax.StringLiteralLong1_Elmt_Sequence -> Phantoms.TTerm Syntax.StringLiteralLong1_Elmt
 stringLiteralLong1_ElmtSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteralLong1_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -3993,7 +3993,7 @@ stringLiteralLong1_ElmtSequence x =
 
 stringLiteralLong1_ElmtUchar :: Phantoms.TTerm Syntax.Uchar -> Phantoms.TTerm Syntax.StringLiteralLong1_Elmt
 stringLiteralLong1_ElmtUchar x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteralLong1_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Uchar"),
@@ -4061,7 +4061,7 @@ stringLiteralLong1_Elmt_SequenceWithRegex original newVal =
 
 stringLiteralLong1_Elmt_Sequence_Alts_OptionApos :: Phantoms.TTerm Syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option
 stringLiteralLong1_Elmt_Sequence_Alts_OptionApos =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Apos"),
@@ -4069,7 +4069,7 @@ stringLiteralLong1_Elmt_Sequence_Alts_OptionApos =
 
 stringLiteralLong1_Elmt_Sequence_Alts_OptionSequence :: Phantoms.TTerm Syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence -> Phantoms.TTerm Syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option
 stringLiteralLong1_Elmt_Sequence_Alts_OptionSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -4089,7 +4089,7 @@ stringLiteralLong2 x =
 
 stringLiteralLong2_ElmtEchar :: Phantoms.TTerm Syntax.Echar -> Phantoms.TTerm Syntax.StringLiteralLong2_Elmt
 stringLiteralLong2_ElmtEchar x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteralLong2_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Echar"),
@@ -4097,7 +4097,7 @@ stringLiteralLong2_ElmtEchar x =
 
 stringLiteralLong2_ElmtSequence :: Phantoms.TTerm Syntax.StringLiteralLong2_Elmt_Sequence -> Phantoms.TTerm Syntax.StringLiteralLong2_Elmt
 stringLiteralLong2_ElmtSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteralLong2_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -4105,7 +4105,7 @@ stringLiteralLong2_ElmtSequence x =
 
 stringLiteralLong2_ElmtUchar :: Phantoms.TTerm Syntax.Uchar -> Phantoms.TTerm Syntax.StringLiteralLong2_Elmt
 stringLiteralLong2_ElmtUchar x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteralLong2_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Uchar"),
@@ -4173,7 +4173,7 @@ stringLiteralLong2_Elmt_SequenceWithRegex original newVal =
 
 stringLiteralLong2_Elmt_Sequence_Alts_OptionQuot :: Phantoms.TTerm Syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option
 stringLiteralLong2_Elmt_Sequence_Alts_OptionQuot =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Quot"),
@@ -4181,7 +4181,7 @@ stringLiteralLong2_Elmt_Sequence_Alts_OptionQuot =
 
 stringLiteralLong2_Elmt_Sequence_Alts_OptionSequence :: Phantoms.TTerm Syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence -> Phantoms.TTerm Syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option
 stringLiteralLong2_Elmt_Sequence_Alts_OptionSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -4195,7 +4195,7 @@ stringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence =
 
 stringStringLiteral1 :: Phantoms.TTerm Syntax.StringLiteral1 -> Phantoms.TTerm Syntax.String_
 stringStringLiteral1 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.String"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "StringLiteral1"),
@@ -4203,7 +4203,7 @@ stringStringLiteral1 x =
 
 stringStringLiteral2 :: Phantoms.TTerm Syntax.StringLiteral2 -> Phantoms.TTerm Syntax.String_
 stringStringLiteral2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.String"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "StringLiteral2"),
@@ -4211,7 +4211,7 @@ stringStringLiteral2 x =
 
 stringStringLiteralLong1 :: Phantoms.TTerm Syntax.StringLiteralLong1 -> Phantoms.TTerm Syntax.String_
 stringStringLiteralLong1 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.String"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "StringLiteralLong1"),
@@ -4219,7 +4219,7 @@ stringStringLiteralLong1 x =
 
 stringStringLiteralLong2 :: Phantoms.TTerm Syntax.StringLiteralLong2 -> Phantoms.TTerm Syntax.String_
 stringStringLiteralLong2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.String"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "StringLiteralLong2"),
@@ -4563,7 +4563,7 @@ tripleConstraintWithSenseFlags original newVal =
 
 tripleExprLabelBlankNode :: Phantoms.TTerm Syntax.BlankNode -> Phantoms.TTerm Syntax.TripleExprLabel
 tripleExprLabelBlankNode x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.TripleExprLabel"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "BlankNode"),
@@ -4571,7 +4571,7 @@ tripleExprLabelBlankNode x =
 
 tripleExprLabelIri :: Phantoms.TTerm Syntax.Iri -> Phantoms.TTerm Syntax.TripleExprLabel
 tripleExprLabelIri x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.TripleExprLabel"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Iri"),
@@ -4585,7 +4585,7 @@ tripleExpression x =
 
 ucharSequence :: Phantoms.TTerm Syntax.Uchar_Sequence -> Phantoms.TTerm Syntax.Uchar
 ucharSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Uchar"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -4593,7 +4593,7 @@ ucharSequence x =
 
 ucharSequence2 :: Phantoms.TTerm Syntax.Uchar_Sequence2 -> Phantoms.TTerm Syntax.Uchar
 ucharSequence2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.Uchar"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence2"),
@@ -5509,7 +5509,7 @@ unValueSet x =
 
 unaryTripleExprInclude :: Phantoms.TTerm Syntax.Include -> Phantoms.TTerm Syntax.UnaryTripleExpr
 unaryTripleExprInclude x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.UnaryTripleExpr"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Include"),
@@ -5517,7 +5517,7 @@ unaryTripleExprInclude x =
 
 unaryTripleExprSequence :: Phantoms.TTerm Syntax.UnaryTripleExpr_Sequence -> Phantoms.TTerm Syntax.UnaryTripleExpr
 unaryTripleExprSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.UnaryTripleExpr"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -5585,7 +5585,7 @@ unaryTripleExpr_SequenceWithSequence original newVal =
 
 unaryTripleExpr_Sequence_AltsBracketedTripleExpr :: Phantoms.TTerm Syntax.BracketedTripleExpr -> Phantoms.TTerm Syntax.UnaryTripleExpr_Sequence_Alts
 unaryTripleExpr_Sequence_AltsBracketedTripleExpr x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.UnaryTripleExpr_Sequence_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "BracketedTripleExpr"),
@@ -5593,7 +5593,7 @@ unaryTripleExpr_Sequence_AltsBracketedTripleExpr x =
 
 unaryTripleExpr_Sequence_AltsTripleConstraint :: Phantoms.TTerm Syntax.TripleConstraint -> Phantoms.TTerm Syntax.UnaryTripleExpr_Sequence_Alts
 unaryTripleExpr_Sequence_AltsTripleConstraint x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.UnaryTripleExpr_Sequence_Alts"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "TripleConstraint"),
@@ -5607,7 +5607,7 @@ valueSet x =
 
 valueSetValueIriRange :: Phantoms.TTerm Syntax.IriRange -> Phantoms.TTerm Syntax.ValueSetValue
 valueSetValueIriRange x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.ValueSetValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "IriRange"),
@@ -5615,7 +5615,7 @@ valueSetValueIriRange x =
 
 valueSetValueLiteral :: Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm Syntax.ValueSetValue
 valueSetValueLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.ValueSetValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Literal"),
@@ -5623,7 +5623,7 @@ valueSetValueLiteral x =
 
 xsFacetNumericFacet :: Phantoms.TTerm Syntax.NumericFacet -> Phantoms.TTerm Syntax.XsFacet
 xsFacetNumericFacet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.XsFacet"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "NumericFacet"),
@@ -5631,7 +5631,7 @@ xsFacetNumericFacet x =
 
 xsFacetStringFacet :: Phantoms.TTerm Syntax.StringFacet -> Phantoms.TTerm Syntax.XsFacet
 xsFacetStringFacet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shex.syntax.XsFacet"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "StringFacet"),

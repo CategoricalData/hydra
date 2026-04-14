@@ -670,7 +670,7 @@ def inferTypeOfInjection(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(inje
                   hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.FieldType], hydra.typing.InferenceResult](hydra.extract.core.unionType(tname)(stype))((sfields: Seq[hydra.core.FieldType]) =>
                     hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, hydra.typing.InferenceResult](hydra.resolution.findFieldType(fcx3)(fname)(sfields))((ftyp: hydra.core.Type) =>
                     hydra.lib.eithers.bind[hydra.errors.Error, hydra.typing.InferenceResult, hydra.typing.InferenceResult](hydra.inference.mapConstraints(fcx3)(cx)((subst: hydra.typing.TypeSubst) =>
-                    hydra.inference.`yield`(fcx3)(hydra.inference.buildTypeApplicationTerm(svars)(hydra.core.Term.union(hydra.core.Injection(tname,
+                    hydra.inference.`yield`(fcx3)(hydra.inference.buildTypeApplicationTerm(svars)(hydra.core.Term.inject(hydra.core.Injection(tname,
                        hydra.core.Field(fname, iterm)))))(hydra.resolution.nominalApplication(tname)(hydra.lib.lists.map[hydra.core.Name,
                        hydra.core.Type]((x: hydra.core.Name) => hydra.core.Type.variable(x))(svars)))(hydra.substitution.composeTypeSubst(isubst)(subst)))(Seq(hydra.typing.TypeConstraint(ftyp,
                        ityp, "schema type of injected field"))))((mcResult: hydra.typing.InferenceResult) => Right(mcResult))))
@@ -1297,7 +1297,7 @@ def inferTypeOfTerm(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(term: hyd
     case hydra.core.Term.set(v_Term_set_s) => hydra.inference.inferTypeOfSet(fcx2)(cx)(v_Term_set_s)
     case hydra.core.Term.typeApplication(v_Term_typeApplication_tt) => hydra.inference.inferTypeOfTypeApplication(fcx2)(cx)(v_Term_typeApplication_tt)
     case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => hydra.inference.inferTypeOfTypeLambda(fcx2)(cx)(v_Term_typeLambda_ta)
-    case hydra.core.Term.union(v_Term_union_i) => hydra.inference.inferTypeOfInjection(fcx2)(cx)(v_Term_union_i)
+    case hydra.core.Term.inject(v_Term_inject_i) => hydra.inference.inferTypeOfInjection(fcx2)(cx)(v_Term_inject_i)
     case hydra.core.Term.unit => Right(hydra.inference.inferTypeOfUnit(fcx2))
     case hydra.core.Term.unwrap(v_Term_unwrap_tname) => hydra.inference.inferTypeOfUnwrap(fcx2)(cx)(v_Term_unwrap_tname)
     case hydra.core.Term.variable(v_Term_variable_name) => hydra.inference.inferTypeOfVariable(fcx2)(cx)(v_Term_variable_name)

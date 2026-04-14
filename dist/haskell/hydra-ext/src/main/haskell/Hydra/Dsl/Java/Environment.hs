@@ -1460,7 +1460,7 @@ javaFeaturesWithSupportsDiamondOperator original newVal =
 
 javaSymbolClassConstant :: Phantoms.TTerm Environment.JavaSymbolClass
 javaSymbolClassConstant =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.environment.JavaSymbolClass"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "constant"),
@@ -1468,7 +1468,7 @@ javaSymbolClassConstant =
 
 javaSymbolClassHoistedLambda :: Phantoms.TTerm Int -> Phantoms.TTerm Environment.JavaSymbolClass
 javaSymbolClassHoistedLambda x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.environment.JavaSymbolClass"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hoistedLambda"),
@@ -1476,7 +1476,7 @@ javaSymbolClassHoistedLambda x =
 
 javaSymbolClassLocalVariable :: Phantoms.TTerm Environment.JavaSymbolClass
 javaSymbolClassLocalVariable =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.environment.JavaSymbolClass"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "localVariable"),
@@ -1484,7 +1484,7 @@ javaSymbolClassLocalVariable =
 
 javaSymbolClassNullaryFunction :: Phantoms.TTerm Environment.JavaSymbolClass
 javaSymbolClassNullaryFunction =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.environment.JavaSymbolClass"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nullaryFunction"),
@@ -1492,7 +1492,7 @@ javaSymbolClassNullaryFunction =
 
 javaSymbolClassUnaryFunction :: Phantoms.TTerm Environment.JavaSymbolClass
 javaSymbolClassUnaryFunction =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.environment.JavaSymbolClass"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unaryFunction"),

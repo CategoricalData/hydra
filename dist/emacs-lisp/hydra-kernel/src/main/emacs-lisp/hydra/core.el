@@ -50,7 +50,7 @@
 
 (cl-defstruct hydra_core_record type_name fields)
 
-(defvar hydra_core_term-variants (list :annotated :application :cases :either :lambda :let :list :literal :map :maybe :pair :project :record :set :type_application :type_lambda :union :unit :unwrap :variable :wrap))
+(defvar hydra_core_term-variants (list :annotated :application :cases :either :inject :lambda :let :list :literal :map :maybe :pair :project :record :set :type_application :type_lambda :unit :unwrap :variable :wrap))
 
 (defvar hydra_core_type-variants (list :annotated :application :either :forall :function :list :literal :map :maybe :pair :record :set :union :unit :variable :void :wrap))
 

@@ -154,18 +154,18 @@ def matchUnion[T0](graph: hydra.graph.Graph)(tname: hydra.core.Name)(pairs: Seq[
   stripped match
     case hydra.core.Term.variable(v_Term_variable_name) => hydra.lib.eithers.bind[hydra.errors.Error,
        hydra.core.Binding, T0](hydra.lexical.requireBinding(graph)(v_Term_variable_name))((el: hydra.core.Binding) => hydra.lexical.matchUnion(graph)(tname)(pairs)(el.term))
-    case hydra.core.Term.union(v_Term_union_injection) => {
+    case hydra.core.Term.inject(v_Term_inject_injection) => {
       lazy val exp: Either[hydra.errors.Error, T0] = {
-        lazy val fname: hydra.core.Name = (v_Term_union_injection.field.name)
+        lazy val fname: hydra.core.Name = (v_Term_inject_injection.field.name)
         {
-          lazy val `val`: hydra.core.Term = (v_Term_union_injection.field.term)
+          lazy val `val`: hydra.core.Term = (v_Term_inject_injection.field.term)
           hydra.lib.maybes.maybe[Either[hydra.errors.Error, T0], (hydra.core.Term) => Either[hydra.errors.Error,
              T0]](Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noMatchingField(hydra.errors.NoMatchingFieldError(fname)))))((f: (hydra.core.Term => Either[hydra.errors.Error,
              T0])) => f(`val`))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.Error,
              T0]](fname)(mapping))
         }
       }
-      hydra.lib.logic.ifElse[Either[hydra.errors.Error, T0]](hydra.lib.equality.equal[scala.Predef.String](v_Term_union_injection.typeName)(tname))(exp)(Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.unexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2("injection for type ")(tname),
+      hydra.lib.logic.ifElse[Either[hydra.errors.Error, T0]](hydra.lib.equality.equal[scala.Predef.String](v_Term_inject_injection.typeName)(tname))(exp)(Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.unexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2("injection for type ")(tname),
          hydra.show.core.term(term))))))
     }
     case _ => Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.unexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2("injection for type ")(tname),

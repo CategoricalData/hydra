@@ -89,7 +89,7 @@ def parse_success(a: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra
 def parse_result(a: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_parsing_parse_result_1(a, cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
