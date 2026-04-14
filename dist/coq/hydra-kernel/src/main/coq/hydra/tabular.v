@@ -5,25 +5,23 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 
 (* Module dependencies *)
 Require Import hydra.relational hydra.core.
-Definition HeaderRow : Type :=
-  (list) (string).
+Definition HeaderRow : Type := (list) (string).
 
-Definition DataRow (v : Type) : Type :=
-  (list) ((option) (v)).
+Definition DataRow (v : Type) : Type := (list) ((option) (v)).
 
 Record Table (v : Type) : Type := Build_Table {
-  table_header : (option) (HeaderRow) ;
-  table_data : (list) ((DataRow) (v))
+table_header : (option) (HeaderRow) ;
+table_data : (list) ((DataRow) (v)) ;
 }.
 
 Record ColumnType : Type := Build_ColumnType {
-  columnType_name : ColumnName ;
-  columnType_type : Type_
+columnType_name : ColumnName ;
+columnType_type : Type_ ;
 }.
 
 Record TableType : Type := Build_TableType {
-  tableType_name : RelationName ;
-  tableType_columns : (list) (ColumnType)
+tableType_name : RelationName ;
+tableType_columns : (list) (ColumnType) ;
 }.
 
 Arguments Build_Table {v}.

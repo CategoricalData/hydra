@@ -5,17 +5,16 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 
 (* Module dependencies *)
 Require Import hydra.core.
-Definition TTerm (a : Type) : Type :=
-  Term.
+Definition TTerm (a : Type) : Type := Term.
 
 Record TTermDefinition (a : Type) : Type := Build_TTermDefinition {
-  tTermDefinition_name : Name ;
-  tTermDefinition_term : (TTerm) (a)
+tTermDefinition_name : Name ;
+tTermDefinition_term : (TTerm) (a) ;
 }.
 
 Record TBinding (a : Type) : Type := Build_TBinding {
-  tBinding_name : Name ;
-  tBinding_term : (TTerm) (a)
+tBinding_name : Name ;
+tBinding_term : (TTerm) (a) ;
 }.
 
 Arguments Build_TBinding {a}.

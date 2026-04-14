@@ -6,40 +6,28 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 (* Module dependencies *)
 Require Import hydra.core hydra.lib.logic hydra.lib.equality hydra.lib.lists hydra.lib.maybes hydra.lib.pairs hydra.lib.sets hydra.error.core hydra.graph hydra.variables hydra.paths hydra.lib.maps hydra.rewriting.
 
-Definition isValidName : Name -> bool :=
-  fun (name : Name) => (logic.not) (((equality.equal) ((fun w_ => w_) (name))) (""%string)).
-Definition firstTypeError (t0 : Type) : (list) ((option) (t0)) -> (option) (t0) :=
-  fun (checks : (list) ((option) (t0))) => (((lists.foldl) (fun (acc : (option) (t0)) => fun (check : (option) (t0)) => (((maybes.cases) (acc)) (check)) (fun (_ : t0) => acc))) (None)) (checks).
+Definition isValidName : forall (_ : Name) , bool := fun (name : Name) => (logic.not) (((equality.equal) ((fun w_ => w_) (name))) (""%string)).
+Definition firstTypeError (t0 : Type) : forall (_ : (list) ((option) (t0))) , (option) (t0) := fun (checks : (list) ((option) (t0))) => (((lists.foldl) (fun (acc : (option) (t0)) => fun (check : (option) (t0)) => (((maybes.cases) (acc)) (check)) (fun (_ : t0) => acc))) (None)) (checks).
 Arguments firstTypeError {t0}.
-Definition firstError (t0 : Type) : (list) ((option) (t0)) -> (option) (t0) :=
-  fun (checks : (list) ((option) (t0))) => (((lists.foldl) (fun (acc : (option) (t0)) => fun (check : (option) (t0)) => (((maybes.cases) (acc)) (check)) (fun (_ : t0) => acc))) (None)) (checks).
+Definition firstError (t0 : Type) : forall (_ : (list) ((option) (t0))) , (option) (t0) := fun (checks : (list) ((option) (t0))) => (((lists.foldl) (fun (acc : (option) (t0)) => fun (check : (option) (t0)) => (((maybes.cases) (acc)) (check)) (fun (_ : t0) => acc))) (None)) (checks).
 Arguments firstError {t0}.
-Definition findDuplicateFieldType (t0 : Type) : (list) (t0) -> (option) (t0) :=
-  fun (names : (list) (t0)) => let result := (((lists.foldl) (fun (acc : (prod) ((list) (t0)) ((option) (t0))) => fun (name : t0) => let seen := (pairs.first) (acc) in let dup := (pairs.second) (acc) in (((maybes.cases) (dup)) ((((logic.ifElse) (((sets.member) (name)) (seen))) ((pair) (seen) ((Some) (name)))) ((pair) (((sets.insert) (name)) (seen)) (None)))) (fun (_ : t0) => acc))) ((pair) (sets.empty) (None))) (names) in (pairs.second) (result).
+Definition findDuplicateFieldType (t0 : Type) : forall (_ : (list) (t0)) , (option) (t0) := fun (names : (list) (t0)) => let result := (((lists.foldl) (fun (acc : (prod) ((list) (t0)) ((option) (t0))) => fun (name : t0) => let seen := (pairs.first) (acc) in let dup := (pairs.second) (acc) in (((maybes.cases) (dup)) ((((logic.ifElse) (((sets.member) (name)) (seen))) ((pair) (seen) ((Some) (name)))) ((pair) (((sets.insert) (name)) (seen)) (None)))) (fun (_ : t0) => acc))) ((pair) (sets.empty) (None))) (names) in (pairs.second) (result).
 Arguments findDuplicateFieldType {t0}.
-Definition findDuplicate (t0 : Type) : (list) (t0) -> (option) (t0) :=
-  fun (names : (list) (t0)) => let result := (((lists.foldl) (fun (acc : (prod) ((list) (t0)) ((option) (t0))) => fun (name : t0) => let seen := (pairs.first) (acc) in let dup := (pairs.second) (acc) in (((maybes.cases) (dup)) ((((logic.ifElse) (((sets.member) (name)) (seen))) ((pair) (seen) ((Some) (name)))) ((pair) (((sets.insert) (name)) (seen)) (None)))) (fun (_ : t0) => acc))) ((pair) (sets.empty) (None))) (names) in (pairs.second) (result).
+Definition findDuplicate (t0 : Type) : forall (_ : (list) (t0)) , (option) (t0) := fun (names : (list) (t0)) => let result := (((lists.foldl) (fun (acc : (prod) ((list) (t0)) ((option) (t0))) => fun (name : t0) => let seen := (pairs.first) (acc) in let dup := (pairs.second) (acc) in (((maybes.cases) (dup)) ((((logic.ifElse) (((sets.member) (name)) (seen))) ((pair) (seen) ((Some) (name)))) ((pair) (((sets.insert) (name)) (seen)) (None)))) (fun (_ : t0) => acc))) ((pair) (sets.empty) (None))) (names) in (pairs.second) (result).
 Arguments findDuplicate {t0}.
-Definition checkVoid : Type_ -> (option) (InvalidTypeError) :=
-  fun (typ : Type_) => (fun x_ => match x_ with
+Definition checkVoid : forall (_ : Type_) , (option) (InvalidTypeError) := fun (typ : Type_) => (fun x_ => match x_ with
 | Type__Void _ => (Some) ((InvalidTypeError_VoidInNonBottomPosition) ((Build_VoidInNonBottomPositionError) (nil)))
 | _ => None
 end) (typ).
-Definition checkUndefinedTypeVariablesInTypeScheme (t0 : Type) (t1 : Type) : t0 -> hydra.graph.Graph -> TypeScheme -> (Name -> (option) (t1)) -> (option) (t1) :=
-  fun (path : t0) => fun (cx : hydra.graph.Graph) => fun (ts : TypeScheme) => fun (mkError : Name -> (option) (t1)) => let freeVars := (freeVariablesInTypeScheme) (ts) in let undefined := ((sets.difference) (freeVars)) ((fun r_ => (graph_typeVariables) (r_)) (cx)) in (((logic.ifElse) ((sets.null) (undefined))) (None)) (let firstUndefined := (lists.head) ((sets.toList) (undefined)) in (mkError) (firstUndefined)).
+Definition checkUndefinedTypeVariablesInTypeScheme (t0 : Type) (t1 : Type) : forall (_ : t0) , forall (_ : hydra.graph.Graph) , forall (_ : TypeScheme) , forall (_ : forall (_ : Name) , (option) (t1)) , (option) (t1) := fun (path : t0) => fun (cx : hydra.graph.Graph) => fun (ts : TypeScheme) => fun (mkError : forall (_ : Name) , (option) (t1)) => let freeVars := (freeVariablesInTypeScheme) (ts) in let undefined := ((sets.difference) (freeVars)) ((fun r_ => (graph_typeVariables) (r_)) (cx)) in (((logic.ifElse) ((sets.null) (undefined))) (None)) (let firstUndefined := (lists.head) ((sets.toList) (undefined)) in (mkError) (firstUndefined)).
 Arguments checkUndefinedTypeVariablesInTypeScheme {t0} {t1}.
-Definition checkUndefinedTypeVariablesInType (t0 : Type) (t1 : Type) : t0 -> hydra.graph.Graph -> Type_ -> (Name -> (option) (t1)) -> (option) (t1) :=
-  fun (path : t0) => fun (cx : hydra.graph.Graph) => fun (typ : Type_) => fun (mkError : Name -> (option) (t1)) => let freeVars := (freeVariablesInType) (typ) in let undefined := ((sets.difference) (freeVars)) ((fun r_ => (graph_typeVariables) (r_)) (cx)) in (((logic.ifElse) ((sets.null) (undefined))) (None)) (let firstUndefined := (lists.head) ((sets.toList) (undefined)) in (mkError) (firstUndefined)).
+Definition checkUndefinedTypeVariablesInType (t0 : Type) (t1 : Type) : forall (_ : t0) , forall (_ : hydra.graph.Graph) , forall (_ : Type_) , forall (_ : forall (_ : Name) , (option) (t1)) , (option) (t1) := fun (path : t0) => fun (cx : hydra.graph.Graph) => fun (typ : Type_) => fun (mkError : forall (_ : Name) , (option) (t1)) => let freeVars := (freeVariablesInType) (typ) in let undefined := ((sets.difference) (freeVars)) ((fun r_ => (graph_typeVariables) (r_)) (cx)) in (((logic.ifElse) ((sets.null) (undefined))) (None)) (let firstUndefined := (lists.head) ((sets.toList) (undefined)) in (mkError) (firstUndefined)).
 Arguments checkUndefinedTypeVariablesInType {t0} {t1}.
-Definition checkShadowing : SubtermPath -> hydra.graph.Graph -> (list) (Name) -> (option) (InvalidTermError) :=
-  fun (path : SubtermPath) => fun (cx : hydra.graph.Graph) => fun (names : (list) (Name)) => let result := (((lists.foldl) (fun (acc : (option) (InvalidTermError)) => fun (name : Name) => (((maybes.cases) (acc)) ((((logic.ifElse) (((logic.or) ((maybes.isJust) (((maps.lookup) (name)) ((fun r_ => (graph_boundTerms) (r_)) (cx))))) (((sets.member) (name)) ((fun r_ => (graph_lambdaVariables) (r_)) (cx))))) ((Some) ((InvalidTermError_TermVariableShadowing) ((Build_TermVariableShadowingError) (path) (name))))) (None))) (fun (_ : InvalidTermError) => acc))) (None)) (names) in result.
-Definition checkDuplicateFields : SubtermPath -> (list) (Name) -> (option) (InvalidTermError) :=
-  fun (path : SubtermPath) => fun (names : (list) (Name)) => let dup := (findDuplicate) (names) in ((maybes.map) (fun (name : Name) => (InvalidTermError_DuplicateField) ((Build_DuplicateFieldError) (path) (name)))) (dup).
-Definition checkDuplicateFieldTypes (t0 : Type) : (list) (FieldType) -> (Name -> (option) (t0)) -> (option) (t0) :=
-  fun (fields : (list) (FieldType)) => fun (mkError : Name -> (option) (t0)) => let names := ((lists.map) (fun r_ => (fieldType_name) (r_))) (fields) in let dup := (findDuplicateFieldType) (names) in (((maybes.cases) (dup)) (None)) (fun (name : Name) => (mkError) (name)).
+Definition checkShadowing : forall (_ : SubtermPath) , forall (_ : hydra.graph.Graph) , forall (_ : (list) (Name)) , (option) (InvalidTermError) := fun (path : SubtermPath) => fun (cx : hydra.graph.Graph) => fun (names : (list) (Name)) => let result := (((lists.foldl) (fun (acc : (option) (InvalidTermError)) => fun (name : Name) => (((maybes.cases) (acc)) ((((logic.ifElse) (((logic.or) ((maybes.isJust) (((maps.lookup) (name)) ((fun r_ => (graph_boundTerms) (r_)) (cx))))) (((sets.member) (name)) ((fun r_ => (graph_lambdaVariables) (r_)) (cx))))) ((Some) ((InvalidTermError_TermVariableShadowing) ((Build_TermVariableShadowingError) (path) (name))))) (None))) (fun (_ : InvalidTermError) => acc))) (None)) (names) in result.
+Definition checkDuplicateFields : forall (_ : SubtermPath) , forall (_ : (list) (Name)) , (option) (InvalidTermError) := fun (path : SubtermPath) => fun (names : (list) (Name)) => let dup := (findDuplicate) (names) in ((maybes.map) (fun (name : Name) => (InvalidTermError_DuplicateField) ((Build_DuplicateFieldError) (path) (name)))) (dup).
+Definition checkDuplicateFieldTypes (t0 : Type) : forall (_ : (list) (FieldType)) , forall (_ : forall (_ : Name) , (option) (t0)) , (option) (t0) := fun (fields : (list) (FieldType)) => fun (mkError : forall (_ : Name) , (option) (t0)) => let names := ((lists.map) (fun r_ => (fieldType_name) (r_))) (fields) in let dup := (findDuplicateFieldType) (names) in (((maybes.cases) (dup)) (None)) (fun (name : Name) => (mkError) (name)).
 Arguments checkDuplicateFieldTypes {t0}.
-Definition validateTypeNode : (list) (Name) -> Type_ -> (option) (InvalidTypeError) :=
-  fun (boundVars : (list) (Name)) => fun (typ : Type_) => (fun x_ => match x_ with
+Definition validateTypeNode : forall (_ : (list) (Name)) , forall (_ : Type_) , (option) (InvalidTypeError) := fun (boundVars : (list) (Name)) => fun (typ : Type_) => (fun x_ => match x_ with
 | Type__Annotated v_ => (fun (ann : AnnotatedType) => let body := (fun r_ => (annotatedType_body) (r_)) (ann) in let annMap := (fun r_ => (annotatedType_annotation) (r_)) (ann) in (firstTypeError) ((cons) ((((logic.ifElse) ((maps.null) (annMap))) ((Some) ((InvalidTypeError_EmptyTypeAnnotation) ((Build_EmptyTypeAnnotationError) (nil))))) (None)) ((cons) ((fun x_ => match x_ with
 | Type__Annotated v_ => (fun (_ : AnnotatedType) => (Some) ((InvalidTypeError_NestedTypeAnnotation) ((Build_NestedTypeAnnotationError) (nil)))) (v_)
 | _ => None
@@ -63,7 +51,7 @@ end) (elemType)) ((cons) ((checkVoid) (elemType)) (nil)))) (v_)
 | _ => None
 end) (typ).
 Definition type_bundle :=
-  hydra_fix (fun (bundle_ : (list) (Name) -> Type_ -> (option) (InvalidTypeError)) =>
+  hydra_fix (fun (bundle_ : forall (_ : (list) (Name)) , forall (_ : Type_) , (option) (InvalidTypeError)) =>
     let type := bundle_ in
     fun (boundVars : (list) (Name)) => fun (typ : Type_) => let checkResult := ((validateTypeNode) (boundVars)) (typ) in (((maybes.cases) (checkResult)) ((fun x_ => match x_ with
 | Type__Forall v_ => (fun (ft : ForallType) => let newBound := ((sets.insert) ((fun r_ => (forallType_parameter) (r_)) (ft))) (boundVars) in ((type) (newBound)) ((fun r_ => (forallType_body) (r_)) (ft))) (v_)
@@ -82,12 +70,11 @@ Definition type_bundle :=
 | _ => None
 end) (typ))) (fun (err : InvalidTypeError) => (Some) (err))).
 
-Definition type : (list) (Name) -> Type_ -> (option) (InvalidTypeError) :=
+Definition type : forall (_ : (list) (Name)) , forall (_ : Type_) , (option) (InvalidTypeError) :=
   type_bundle.
-Definition checkDuplicateBindings : SubtermPath -> (list) (Binding) -> (option) (InvalidTermError) :=
-  fun (path : SubtermPath) => fun (bindings : (list) (Binding)) => let names := ((lists.map) (fun r_ => (binding_name) (r_))) (bindings) in let dup := (findDuplicate) (names) in ((maybes.map) (fun (name : Name) => (InvalidTermError_DuplicateBinding) ((Build_DuplicateBindingError) (path) (name)))) (dup).
+Definition checkDuplicateBindings : forall (_ : SubtermPath) , forall (_ : (list) (Binding)) , (option) (InvalidTermError) := fun (path : SubtermPath) => fun (bindings : (list) (Binding)) => let names := ((lists.map) (fun r_ => (binding_name) (r_))) (bindings) in let dup := (findDuplicate) (names) in ((maybes.map) (fun (name : Name) => (InvalidTermError_DuplicateBinding) ((Build_DuplicateBindingError) (path) (name)))) (dup).
 Definition checkTerm_term_bundle :=
-  hydra_fix (fun (bundle_ : prod (bool -> SubtermPath -> hydra.graph.Graph -> Term -> (option) (InvalidTermError)) (bool -> hydra.graph.Graph -> Term -> (option) (InvalidTermError))) =>
+  hydra_fix (fun (bundle_ : prod (forall (_ : bool) , forall (_ : SubtermPath) , forall (_ : hydra.graph.Graph) , forall (_ : Term) , (option) (InvalidTermError)) (forall (_ : bool) , forall (_ : hydra.graph.Graph) , forall (_ : Term) , (option) (InvalidTermError))) =>
     let checkTerm := (fst bundle_) in
     let term := (snd bundle_) in
     (pair (fun (typed : bool) => fun (path : SubtermPath) => fun (cx : hydra.graph.Graph) => fun (term_ : Term) => (fun x_ => match x_ with
@@ -134,10 +121,10 @@ end) (fun_)) (nil)))))) (v_)
 | Term_Variable v_ => (fun (varName : Name) => (((logic.ifElse) (((logic.or) ((maybes.isJust) (((maps.lookup) (varName)) ((fun r_ => (graph_boundTerms) (r_)) (cx))))) (((logic.or) (((sets.member) (varName)) ((fun r_ => (graph_lambdaVariables) (r_)) (cx)))) ((maybes.isJust) (((maps.lookup) (varName)) ((fun r_ => (graph_primitives) (r_)) (cx))))))) (None)) ((Some) ((InvalidTermError_UndefinedTermVariable) ((Build_UndefinedTermVariableError) (path) (varName))))) (v_)
 | Term_Wrap v_ => (fun (wt : WrappedTerm) => let tname := (fun r_ => (wrappedTerm_typeName) (r_)) (wt) in (((logic.ifElse) (((equality.equal) ((fun w_ => w_) (tname))) (""%string))) ((Some) ((InvalidTermError_EmptyTypeNameInTerm) ((Build_EmptyTypeNameInTermError) (path))))) (None)) (v_)
 | _ => None
-end) (term_)) (fun (typed : bool) => fun (g : hydra.graph.Graph) => fun (t : Term) => ((((foldTermWithGraphAndPath) (fun (recurse : (option) (InvalidTermError) -> Term -> (option) (InvalidTermError)) => fun (path : (list) (SubtermStep)) => fun (cx : hydra.graph.Graph) => fun (acc : (option) (InvalidTermError)) => fun (trm : Term) => (((maybes.cases) (acc)) (let checkResult := ((((checkTerm) (typed)) (path)) (cx)) (trm) in (((maybes.cases) (checkResult)) (((recurse) (None)) (trm))) (fun (err : InvalidTermError) => (Some) (err)))) (fun (_ : InvalidTermError) => acc))) (g)) (None)) (t)))).
+end) (term_)) (fun (typed : bool) => fun (g : hydra.graph.Graph) => fun (t : Term) => ((((foldTermWithGraphAndPath) (fun (recurse : forall (_ : (option) (InvalidTermError)) , forall (_ : Term) , (option) (InvalidTermError)) => fun (path : (list) (SubtermStep)) => fun (cx : hydra.graph.Graph) => fun (acc : (option) (InvalidTermError)) => fun (trm : Term) => (((maybes.cases) (acc)) (let checkResult := ((((checkTerm) (typed)) (path)) (cx)) (trm) in (((maybes.cases) (checkResult)) (((recurse) (None)) (trm))) (fun (err : InvalidTermError) => (Some) (err)))) (fun (_ : InvalidTermError) => acc))) (g)) (None)) (t)))).
 
-Definition checkTerm : bool -> SubtermPath -> hydra.graph.Graph -> Term -> (option) (InvalidTermError) :=
+Definition checkTerm : forall (_ : bool) , forall (_ : SubtermPath) , forall (_ : hydra.graph.Graph) , forall (_ : Term) , (option) (InvalidTermError) :=
   (fst checkTerm_term_bundle).
-Definition term : bool -> hydra.graph.Graph -> Term -> (option) (InvalidTermError) :=
+Definition term : forall (_ : bool) , forall (_ : hydra.graph.Graph) , forall (_ : Term) , (option) (InvalidTermError) :=
   (snd checkTerm_term_bundle).
 

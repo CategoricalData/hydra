@@ -6,8 +6,7 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 (* Module dependencies *)
 Require Import hydra.variants hydra.core.
 
-Definition typeVariant : TypeVariant -> Term :=
-  fun x_ => match x_ with
+Definition typeVariant : forall (_ : TypeVariant) , Term := fun x_ => match x_ with
 | TypeVariant_Annotated v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("TypeVariant"%string) ((Build_Field) ("annotated"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | TypeVariant_Application v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("TypeVariant"%string) ((Build_Field) ("application"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | TypeVariant_Either v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("TypeVariant"%string) ((Build_Field) ("either"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
@@ -26,8 +25,7 @@ Definition typeVariant : TypeVariant -> Term :=
 | TypeVariant_Void v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("TypeVariant"%string) ((Build_Field) ("void"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | TypeVariant_Wrap v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("TypeVariant"%string) ((Build_Field) ("wrap"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 end.
-Definition termVariant : TermVariant -> Term :=
-  fun x_ => match x_ with
+Definition termVariant : forall (_ : TermVariant) , Term := fun x_ => match x_ with
 | TermVariant_Annotated v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("TermVariant"%string) ((Build_Field) ("annotated"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | TermVariant_Application v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("TermVariant"%string) ((Build_Field) ("application"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | TermVariant_Cases v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("TermVariant"%string) ((Build_Field) ("cases"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
@@ -50,21 +48,18 @@ Definition termVariant : TermVariant -> Term :=
 | TermVariant_Variable v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("TermVariant"%string) ((Build_Field) ("variable"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | TermVariant_Wrap v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("TermVariant"%string) ((Build_Field) ("wrap"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 end.
-Definition literalVariant : LiteralVariant -> Term :=
-  fun x_ => match x_ with
+Definition literalVariant : forall (_ : LiteralVariant) , Term := fun x_ => match x_ with
 | LiteralVariant_Binary v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("LiteralVariant"%string) ((Build_Field) ("binary"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | LiteralVariant_Boolean v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("LiteralVariant"%string) ((Build_Field) ("boolean"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | LiteralVariant_Float v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("LiteralVariant"%string) ((Build_Field) ("float"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | LiteralVariant_Integer v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("LiteralVariant"%string) ((Build_Field) ("integer"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | LiteralVariant_String v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("LiteralVariant"%string) ((Build_Field) ("string"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 end.
-Definition functionVariant : FunctionVariant -> Term :=
-  fun x_ => match x_ with
+Definition functionVariant : forall (_ : FunctionVariant) , Term := fun x_ => match x_ with
 | FunctionVariant_Elimination v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("FunctionVariant"%string) ((Build_Field) ("elimination"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | FunctionVariant_Lambda v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("FunctionVariant"%string) ((Build_Field) ("lambda"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 end.
-Definition eliminationVariant : EliminationVariant -> Term :=
-  fun x_ => match x_ with
+Definition eliminationVariant : forall (_ : EliminationVariant) , Term := fun x_ => match x_ with
 | EliminationVariant_Record v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("EliminationVariant"%string) ((Build_Field) ("record"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | EliminationVariant_Union v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("EliminationVariant"%string) ((Build_Field) ("union"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | EliminationVariant_Wrap v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("EliminationVariant"%string) ((Build_Field) ("wrap"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)

@@ -7,7 +7,7 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 Require Import hydra.json.model hydra.core hydra.lib.lists hydra.lib.maps.
 
 Definition value_bundle :=
-  hydra_fix (fun (bundle_ : Value -> Term) =>
+  hydra_fix (fun (bundle_ : forall (_ : Value) , Term) =>
     let value := bundle_ in
     fun x_ => match x_ with
 | Value_Array v_ => (fun (y : (list) (Value)) => (Term_Inject) ((Build_Injection) ("Value"%string) ((Build_Field) ("array"%string) ((fun (xs : (list) (Value)) => (Term_List) (((lists.map) (value)) (xs))) (y))))) (v_)
@@ -18,6 +18,6 @@ Definition value_bundle :=
 | Value_String v_ => (fun (y : string) => (Term_Inject) ((Build_Injection) ("Value"%string) ((Build_Field) ("string"%string) ((fun (x : string) => (Term_Literal) ((Literal_String) (x))) (y))))) (v_)
 end).
 
-Definition value : Value -> Term :=
+Definition value : forall (_ : Value) , Term :=
   value_bundle.
 

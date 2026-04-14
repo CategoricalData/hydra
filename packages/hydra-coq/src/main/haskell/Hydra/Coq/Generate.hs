@@ -7,7 +7,8 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Packaging as Pkg
 import qualified Hydra.Coq.Syntax as Coq
 import qualified Hydra.Coq.Coder as Coder
-import qualified Hydra.Coq.Print as Print
+import qualified Hydra.Coq.Serde as Serde
+import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Context as Context
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Errors as Errors
@@ -90,6 +91,40 @@ moduleToCoq fieldMap constrCounts ambiguousNames globalSanitizedAcc mod defs _cx
                    maybe [] Core.typeSchemeVariables (Pkg.termDefinitionType td),
                    fmap Core.typeSchemeType (Pkg.termDefinitionType td))
                  | Pkg.DefinitionTerm td <- defs]
+  in if isAxiomOnly
+     then Right (Map.singleton path (buildAxiomOnlyContent desc ns typeDefs termDefs mod))
+     else buildFullModule fieldMap constrCounts ambiguousNames globalSanitizedAcc mod defs ns path desc typeDefs termDefs
+
+-- | Assemble the source of an axiom-only module: imports + Axiom declarations only.
+-- Used for modules (currently hydra.hoisting and hydra.inference) whose full
+-- definitions exceed Coq's practical typechecking limits.
+buildAxiomOnlyContent :: String -> String -> [(String, Core.Type)] -> [(String, Core.Term, [Core.Name], Maybe Core.Type)] -> Pkg.Module -> String
+buildAxiomOnlyContent desc ns typeDefs termDefs mod =
+  let -- For axiom-only modules, each typeDef becomes `Axiom name : Type.` and each
+      -- termDef becomes `Axiom name : <its type scheme body>.`. Untyped terms are
+      -- skipped (unusual, but possible if a termDef lacks a type annotation).
+      typeAxioms = [ Coder.encodeAxiomDefinitionPair (n, typeOfType) | (n, _) <- typeDefs]
+      typeOfType = Core.TypeVariable (Core.Name "Type")
+      termAxioms = [ Coder.encodeAxiomDefinitionPair (n, ty)
+                   | (n, _, _, Just schemeTy) <- termDefs
+                   , let (_, ty) = extractTypeParams schemeTy]
+      -- For axiom-only modules we import every declared dependency; we cannot
+      -- discover imports from the body because we are not emitting a body.
+      deps = moduleDependencies mod
+      depSentences = dependencyImports deps
+      doc = Coq.Document (Coder.standardImports : depSentences ++ typeAxioms ++ termAxioms)
+      body = Serialization.printExpr (Serialization.parenthesize (Serde.documentToExpr doc))
+  in desc ++ body ++ "\n"
+
+-- | Full (non-axiom) module assembly — the original implementation, kept inline
+-- here while the rest of the post-processing is still being removed.
+buildFullModule :: Map.Map (String, String) String -> Map.Map String Int -> Set.Set String -> Set.Set String
+                -> Pkg.Module -> [Pkg.Definition] -> String -> FilePath -> String
+                -> [(String, Core.Type)]
+                -> [(String, Core.Term, [Core.Name], Maybe Core.Type)]
+                -> Either Errors.Error (Map.Map FilePath String)
+buildFullModule fieldMap constrCounts ambiguousNames globalSanitizedAcc mod defs ns path desc typeDefs termDefs =
+  let _ = mod -- suppress unused warning until the rest of the pipeline is refactored
 
       fm = fieldMap
 
@@ -113,7 +148,7 @@ moduleToCoq fieldMap constrCounts ambiguousNames globalSanitizedAcc mod defs _cx
         if cyc
         then encodeMutualGroupText grp
         else let sentences = concatMap (\td -> encodeTermGroup (False, [td])) grp
-             in Print.printDocument (Coq.Document sentences) ++ "\n") termGroups'
+             in Serialization.printExpr (Serialization.parenthesize (Serde.documentToExpr (Coq.Document sentences))) ++ "\n") termGroups'
 
       -- For namespace discovery, we still need AST sentences for non-mutual terms
       termSentences = concatMap (\(cyc, grp) ->
@@ -150,7 +185,7 @@ moduleToCoq fieldMap constrCounts ambiguousNames globalSanitizedAcc mod defs _cx
                     nms = map (Core.unName . Core.bindingName) bs
                 in "let [" ++ unwords nms ++ "] in " ++ showLets' (Core.letBody v)
               _ -> "..."
-            coqBody = Coder.encodeTerm body'
+            coqBody = Coder.encodeTerm constrCounts body'
             showFirstBindingVars tm = case tm of
               Core.TermLambda lam -> showFirstBindingVars (Core.lambdaBody lam)
               Core.TermLet v ->
@@ -183,11 +218,11 @@ moduleToCoq fieldMap constrCounts ambiguousNames globalSanitizedAcc mod defs _cx
         let groupSchemeVars = Set.fromList $ concatMap (\(_, _, tv, _) -> map Core.unName tv) group
             funInfos = map (\(name, body, _typeVars, mType) ->
               let body' = reorderLetBindings $ eraseUnboundTypeVarDomains groupSchemeVars body
-                  coqBody = Coder.encodeTerm body'
-                  bodyText = Print.printTerm coqBody
+                  coqBody = Coder.encodeTerm constrCounts body'
+                  bodyText = Serialization.printExpr (Serialization.parenthesize (Serde.termToExpr coqBody))
                   typeText = case mType of
                     Just ty -> let (_, bodyTy) = extractTypeParams ty
-                               in Print.printType (Coq.Type (Coder.encodeType bodyTy))
+                               in Serialization.printExpr (Serialization.parenthesize (Serde.typeToExpr (Coq.Type (Coder.encodeType bodyTy))))
                     Nothing -> "_"
               in (name, typeText, bodyText)) group
 
@@ -272,7 +307,7 @@ moduleToCoq fieldMap constrCounts ambiguousNames globalSanitizedAcc mod defs _cx
         | otherwise = head s : replaceBundle (tail s) bname
 
       -- Render type sentences and all term parts for namespace discovery
-      typeSentencesText = Print.printDocument (Coq.Document typeSentences)
+      typeSentencesText = Serialization.printExpr (Serialization.parenthesize (Serde.documentToExpr (Coq.Document typeSentences)))
       allTermText = concat termRenderedParts
       rawBody = typeSentencesText ++ "\n" ++ allTermText
 
@@ -281,24 +316,20 @@ moduleToCoq fieldMap constrCounts ambiguousNames globalSanitizedAcc mod defs _cx
       depSentences = dependencyImports referencedNs
 
       -- Assemble: imports + type sentences + term parts (interleaved in SCC order)
-      importText = Print.printDocument (Coq.Document (Coder.standardImports : depSentences))
+      importText = Serialization.printExpr (Serialization.parenthesize (Serde.documentToExpr (Coq.Document (Coder.standardImports : depSentences))))
       bodyWithImports = importText ++ "\n" ++ typeSentencesText ++ "\n" ++ allTermText
       -- Collect all names that could cause collisions: local definitions + ambiguous names
       localDefNames = Set.union ambiguousNames $ Set.fromList $
         [n | (n, _) <- typeDefs] ++
         concatMap (\(_, grp) -> map (\(n, _, _, _) -> n) grp) termGroups'
       body0 = stripHydraQualifications ns localDefNames bodyWithImports
-      -- Remove redundant default branches from exhaustive matches
-      body1 = removeRedundantDefaults constrCounts body0
-      -- Add catch-all branches for non-exhaustive matches
-      body2 = addPartialMatchCatchAll constrCounts body1
+      -- Match-exhaustiveness handling has moved into Coder.encodeUnionElim, which
+      -- inspects the constructor-count map directly at emission time.
       -- Extract polymorphic helpers to reduce Coq type inference overhead
-      body3 = extractPolymorphicHelpers body2
+      body3 = extractPolymorphicHelpers body0
       -- Replace applications of sanitized field accessors with hydra_unreachable.
       -- Use global set (cross-module) since accessor definitions may be in other modules.
-      body4 = replaceSanitizedAccessors globalSanitizedAcc body3
-      -- For modules that are too complex for coqc, convert Definition to Axiom
-      body = if isAxiomOnly then convertDefinitionsToAxioms body4 else body4
+      body = replaceSanitizedAccessors globalSanitizedAcc body3
 
       -- Generate Arguments declarations for parameterized types (appended after types)
       typeArgsDecls = generateArgumentsDecls typeDefs
@@ -1217,240 +1248,6 @@ buildConstructorCounts = Map.fromList . concatMap extractCounts
         Core.TypeUnion fields -> [(name, length fields)]
         _ -> []
 
--- | Remove redundant default branches (| _ => ...) from exhaustive matches.
--- Uses a stack of pattern accumulators to track nesting depth.
--- Only removes a default when patterns at the current depth exhaust the type.
-removeRedundantDefaults :: Map.Map String Int -> String -> String
-removeRedundantDefaults constrCounts = unlines . processStack [[]] . lines
-  where
-    -- Stack: list of pattern accumulators, one per match nesting level.
-    -- stack !! 0 is the current (innermost) level.
-    processStack _ [] = []
-    processStack stack (l:ls) =
-      let trimmed = dropWhile (== ' ') l
-          matchCount = countOccurrences "match " l
-          endCount = countOccurrences "end)" l + (if trimmed == "end." then 1 else 0)
-      in case () of
-        _ | isDefaultPattern trimmed ->
-              let currentPatterns = head stack
-                  mPrefix = case currentPatterns of
-                    (p:_) -> extractTypePrefix p
-                    _ -> Nothing
-                  -- Count only patterns with the same type prefix (prevents cross-match leakage)
-                  samePrefix = case mPrefix of
-                    Just pfx -> length [p | p <- currentPatterns, extractTypePrefix p == Just pfx]
-                    Nothing -> 0
-                  expectedCount = mPrefix >>= (`Map.lookup` constrCounts)
-                  redundant = case expectedCount of
-                    Just n -> samePrefix >= n
-                    Nothing -> False
-              in if redundant
-                 then processStack (adjustStack matchCount endCount stack) ls
-                 else l : processStack (adjustStack matchCount endCount stack) ls
-          | isConstructorPattern trimmed ->
-              let stack' = case stack of
-                    (cur:rest) -> (trimmed:cur) : rest
-                    [] -> [[trimmed]]
-              in l : processStack (adjustStack matchCount endCount stack') ls
-          | otherwise ->
-              l : processStack (adjustStack matchCount endCount stack) ls
-
-    adjustStack opens closes stack =
-      let popped = drop closes stack
-          safePopped = if null popped then [[]] else popped
-          pushed = iterate ([] :) safePopped !! opens
-      in pushed
-
-    countOccurrences needle haystack = countKw Nothing haystack
-      where
-        countKw _ [] = 0
-        countKw prev s@(_:cs)
-          | needle `isPrefixOf` s && not (isWordChar prev) =
-              1 + countKw Nothing (drop (length needle) s)
-          | otherwise = countKw (Just (head s)) cs
-        isWordChar Nothing = False
-        isWordChar (Just c) = isAlphaNum c || c == '_'
-
-    isDefaultPattern s = "| _ =>" `isPrefixOf` s
-    isConstructorPattern s = "|" `isPrefixOf` s && not ("| _" `isPrefixOf` s)
-
-    extractTypePrefix line =
-      let t = dropWhile (\c -> c == '|' || c == ' ') line
-          constrName = takeWhile (\c -> isAlphaNum c || c == '_') t
-      in if null constrName then Nothing
-         else Just $ typeNameFromConstructor constrName
-
-    typeNameFromConstructor name =
-      case break (== '_') (reverse name) of
-        (_, _:rest) -> reverse rest
-        _ -> name
-
--- | Add catch-all branches for non-exhaustive pattern matches.
--- Uses a stack of pattern accumulators (like removeRedundantDefaults) to handle nesting.
--- When closing a match, checks if the accumulated patterns are fewer than the type's
--- constructor count. If so, inserts a catch-all before the end.
-addPartialMatchCatchAll :: Map.Map String Int -> String -> String
-addPartialMatchCatchAll constrCounts = unlines . processStack [[]] . lines
-  where
-    processStack _ [] = []
-    processStack stack (l:ls) =
-      let trimmed = dropWhile (== ' ') l
-          matchCount = countOccurrences "match " l
-          endCount = countOccurrences "end)" l + (if trimmed == "end." then 1 else 0)
-      in if endCount > 0
-         then -- For each end, check if we need a catch-all at the current level
-              let (output, stack') = handleEnds endCount matchCount stack
-              in output ++ (l : processStack stack' ls)
-         else if isConstructorPattern trimmed
-              then let stack' = case stack of
-                         (cur:rest) -> (trimmed:cur) : rest
-                         [] -> [[trimmed]]
-                       stack'' = pushN matchCount stack'
-                   in l : processStack stack'' ls
-              else l : processStack (pushN matchCount (popN endCount stack)) ls
-
-    handleEnds 0 opens stack = ([], pushN opens stack)
-    handleEnds n opens stack =
-      let currentPatterns = head stack
-          catchAll = needsCatchAll currentPatterns
-          popped = if length stack > 1 then tail stack else [[]]
-          (restOutput, restStack) = handleEnds (n - 1) opens popped
-      in (catchAll ++ restOutput, restStack)
-
-    pushN 0 stack = stack
-    pushN n stack = pushN (n - 1) ([] : stack)
-
-    popN 0 stack = stack
-    popN n stack = popN (n - 1) (if length stack > 1 then tail stack else [[]])
-
-    needsCatchAll patterns =
-      let constrPatterns = filter (not . isDefaultPattern) patterns
-          mPrefix = case constrPatterns of
-            (p:_) -> extractConstrPrefix p
-            _ -> Nothing
-          isRecordMatch = case mPrefix of
-            Just prefix -> "Build_" `isPrefixOf` prefix || prefix == "Build"
-            Nothing -> False
-          expectedCount = mPrefix >>= (`Map.lookup` constrCounts)
-          patCount = length constrPatterns
-          hasDefault = any isDefaultPattern patterns
-      in case expectedCount of
-           Just n | not isRecordMatch && not hasDefault && patCount > 0 && patCount < n ->
-             ["| _ => hydra_unreachable"]
-           _ -> []
-
-    isDefaultPattern s = "| _ =>" `isPrefixOf` s
-    isConstructorPattern s = "|" `isPrefixOf` s
-
-    extractConstrPrefix pat =
-      let t = dropWhile (\c -> c == '|' || c == ' ') pat
-          constrName = takeWhile (\c -> isAlphaNum c || c == '_') t
-      in case constrName of
-        [] -> Nothing
-        "_" -> Nothing  -- wildcard pattern, not a constructor
-        _ -> Just (typeNameFromConstructor constrName)
-
-    typeNameFromConstructor name =
-      case break (== '_') (reverse name) of
-        (_, _:rest) -> reverse rest
-        _ -> name
-
-    countOccurrences needle haystack = countKw Nothing haystack
-      where
-        countKw _ [] = 0
-        countKw prev s@(_:cs)
-          | needle `isPrefixOf` s && not (isWordChar prev) =
-              1 + countKw Nothing (drop (length needle) s)
-          | otherwise = countKw (Just (head s)) cs
-        isWordChar Nothing = False
-        isWordChar (Just c) = isAlphaNum c || c == '_'
-
--- | Convert all Definition/Fixpoint blocks to Axiom declarations.
--- Parses line-by-line, tracking whether we're inside a definition body.
--- A definition body starts with 'Definition X ... :=' and ends at a line
--- whose top-level (non-paren-wrapped) trailing char is '.', followed by
--- another top-level declaration line.
-convertDefinitionsToAxioms :: String -> String
-convertDefinitionsToAxioms text = unlines (processLines (lines text))
-  where
-    processLines [] = []
-    processLines (l:rest)
-      | "Definition " `isPrefixOf` l || "Fixpoint " `isPrefixOf` l =
-          -- Collect full definition lines until we see a new top-level declaration
-          let (defnLines, afterDef) = collectDefinition (l:rest)
-              fullDefn = unwords (map (dropWhile (== ' ')) defnLines)
-              sig = takeBeforeAssign fullDefn
-              axiomLine = convertSigToAxiom sig
-          in axiomLine : processLines afterDef
-      | "Arguments " `isPrefixOf` l = l : processLines rest
-      | otherwise = l : processLines rest
-
-    -- Collect lines that belong to the current Definition/Fixpoint block
-    -- Stop when we encounter a new top-level declaration or blank line after a '.'
-    collectDefinition [] = ([], [])
-    collectDefinition (l:rest) = go [l] rest
-      where
-        go acc [] = (reverse acc, [])
-        go acc (next:more)
-          | "Definition " `isPrefixOf` next
-          || "Fixpoint " `isPrefixOf` next
-          || "Arguments " `isPrefixOf` next
-          || "Axiom " `isPrefixOf` next
-          || "(*" `isPrefixOf` next
-          || "Require " `isPrefixOf` next
-          || next == "" =
-              (reverse acc, next:more)
-          | otherwise = go (next:acc) more
-
-    -- Take everything before ':=' in the full (potentially multi-line) definition
-    takeBeforeAssign s = case findAssign s of
-      Just idx -> take idx s
-      Nothing -> s
-
-    findAssign s = go 0 s
-      where
-        go _ [] = Nothing
-        go i (':':'=':_) = Just i
-        go i (_:cs) = go (i+1) cs
-
-    convertSigToAxiom sig =
-      let sig' = trimRight sig
-          rest = if "Definition " `isPrefixOf` sig'
-                 then drop (length "Definition ") sig'
-                 else if "Fixpoint " `isPrefixOf` sig'
-                      then drop (length "Fixpoint ") sig'
-                      else sig'
-      in case parseNameAndType rest of
-           Just (name, typ) -> "Axiom " ++ name ++ " : " ++ typ ++ "."
-           Nothing -> "(* Failed to convert: " ++ sig' ++ " *)"
-
-    trimRight = reverse . dropWhile (\c -> c == ' ' || c == ':') . reverse
-
-    parseNameAndType s =
-      case break (== ' ') s of
-        (name, []) -> Just (name, "unit")
-        (name, ' ':rest) ->
-          let rest' = dropWhile (== ' ') rest
-          in if null rest' then Just (name, "unit")
-             else if head rest' == ':'
-                  then Just (name, dropWhile (== ' ') (tail rest'))
-                  else case findTopLevelColon rest' of
-                    Just idx ->
-                      let binders = reverse (dropWhile (== ' ') (reverse (take idx rest')))
-                          typ = dropWhile (== ' ') (drop (idx + 1) rest')
-                      in Just (name, "forall " ++ binders ++ ", " ++ typ)
-                    Nothing -> Just (name, rest')
-        _ -> Nothing
-
-    findTopLevelColon s = go 0 0 s
-      where
-        go _ _ [] = Nothing
-        go depth idx (c:cs)
-          | c == '(' = go (depth + 1) (idx + 1) cs
-          | c == ')' = go (depth - 1) (idx + 1) cs
-          | c == ':' && depth == 0 = Just idx
-          | otherwise = go depth (idx + 1) cs
-
 -- | Collect accessor names for fields that were sanitized due to positivity issues.
 -- These accessors have type 'Record -> unit' but the Hydra code treats them as functions.
 -- Returns a set of accessor names like "primitive_implementation".
@@ -1919,48 +1716,6 @@ extractReferencedNamespaces ownNs body =
 
     isWordChar c' = isAlphaNum c' || c' == '_'
 
--- | Generate a .v file for a single module using the direct pretty-printer.
--- Returns (filePath, content).
-generateModule :: Map.Map (String, String) String -> Pkg.Module -> (FilePath, String)
-generateModule fieldMap m =
-  let ns = Pkg.unNamespace (Pkg.moduleNamespace m)
-      path = namespaceToPath ns
-      termGroups = sortTermDefsSCC ns (extractTermDefs m)
-      -- Flatten and rewrite term definitions to use prefixed field names
-      termDefs = [(n, rewriteTermFields fieldMap t) | (_, group) <- termGroups, (n, t) <- group]
-      desc = maybe "" (\d -> "(* " ++ d ++ " *)\n\n") (Pkg.moduleDescription m)
-
-      -- Build type sentences with SCC-based mutual recursion support
-      typeGroups = sortTypeDefsSCC ns (extractTypeDefs m)
-      typeSentences = concatMap generateTypeGroup typeGroups
-
-      -- Build term sentences using the generated DSL runtime
-      termSentences = map Coder.encodeTermDefinitionPair termDefs
-
-      -- Assemble document with standard imports
-      doc = Coq.Document (Coder.standardImports : typeSentences ++ termSentences)
-
-      -- Render without imports first to discover all referenced namespaces
-      rawBody = Print.printDocument doc
-
-      -- Discover all referenced hydra.xxx namespaces from the body
-      referencedNs = extractReferencedNamespaces ns rawBody
-      depSentences = dependencyImports referencedNs
-
-      -- Add dependency imports after the standard imports
-      doc' = doc { Coq.documentSentences =
-        let ss = Coq.documentSentences doc
-        in case ss of
-          (stdImport:rest) -> stdImport : depSentences ++ rest
-          _ -> depSentences ++ ss
-        }
-
-      -- Re-render with imports, then strip hydra qualifications
-      bodyWithImports = Print.printDocument doc'
-      body = stripHydraQualifications ns Set.empty bodyWithImports
-
-  in (path, desc ++ body ++ "\n")
-
 -- | Strip all hydra.xxx qualified name prefixes from a string,
 -- except on Require Import lines (which need full module paths).
 -- E.g., "hydra.core.Term_Literal" -> "Term_Literal"
@@ -2043,24 +1798,6 @@ stripHydraQualifications ownNs localDefs = unlines . map processLine . lines
     lastComponent qn = case splitOn '.' qn of
       [] -> qn
       parts -> last parts
-
--- | Generate all .v files for a list of modules.
--- Returns list of (filePath, content) pairs.
-generateAll :: [Pkg.Module] -> [(FilePath, String)]
-generateAll modules =
-  let fm = buildFieldMapping modules
-  in map (generateModule fm) modules
-
--- | Write all generated .v files to a base directory.
-writeAll :: FilePath -> [Pkg.Module] -> IO Int
-writeAll baseDir modules = do
-  let files = generateAll modules
-  mapM_ (\(path, content) -> do
-    let fullPath = baseDir </> path
-    createDirectoryIfMissing True (takeDirectory fullPath)
-    writeFile fullPath content
-    putStrLn $ "  " ++ path) files
-  return (length files)
 
 -- | Generate a _CoqProject file for the output directory.
 -- Maps the physical directory to the empty logical path so that

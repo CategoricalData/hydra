@@ -195,6 +195,46 @@ executables:
     dependencies:
       - hydra
 
+  regen-coq-serde:
+    main: Main.hs
+    source-dirs:
+      - src/exec/regen-coq-serde
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
+  regen-coq-coder:
+    main: Main.hs
+    source-dirs:
+      - src/exec/regen-coq-coder
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
+  regen-coq-language:
+    main: Main.hs
+    source-dirs:
+      - src/exec/regen-coq-language
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
+  regen-coq-syntax:
+    main: Main.hs
+    source-dirs:
+      - src/exec/regen-coq-syntax
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
+  regen-coq-environment:
+    main: Main.hs
+    source-dirs:
+      - src/exec/regen-coq-environment
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
   bootstrap-from-json:
     main: Main.hs
     source-dirs:

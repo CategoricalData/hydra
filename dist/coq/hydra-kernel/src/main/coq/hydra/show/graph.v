@@ -6,6 +6,5 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 (* Module dependencies *)
 Require Import hydra.core hydra.lib.lists hydra.show.core hydra.lib.strings.
 
-Definition graph_ : (list) (Binding) -> string :=
-  fun (elements : (list) (Binding)) => let elementStrs := ((lists.map) (hydra.show.core.binding)) (elements) in (strings.cat) ((cons) ("{"%string) ((cons) (((strings.intercalate) (", "%string)) (elementStrs)) ((cons) ("}"%string) (nil)))).
+Definition graph_ : forall (_ : (list) (Binding)) , string := fun (elements : (list) (Binding)) => let elementStrs := ((lists.map) (hydra.show.core.binding)) (elements) in (strings.cat) ((cons) ("{"%string) ((cons) (((strings.intercalate) (", "%string)) (elementStrs)) ((cons) ("}"%string) (nil)))).
 

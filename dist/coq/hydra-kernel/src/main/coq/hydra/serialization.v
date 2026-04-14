@@ -6,39 +6,24 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 (* Module dependencies *)
 Require Import hydra.ast hydra.lib.logic hydra.lib.strings hydra.lib.lists hydra.lib.equality hydra.lib.maybes hydra.lib.literals hydra.lib.math hydra.util.
 
-Definition tabIndent : Expr -> Expr :=
-  fun (e : Expr) => (Expr_Indent) ((Build_IndentedExpression) ((IndentStyle_AllLines) ("    "%string)) (e)).
-Definition sym : string -> Symbol :=
-  fun (s : string) => s.
-Definition squareBrackets : Brackets :=
-  (Build_Brackets) ("["%string) ("]"%string).
-Definition parentheses : Brackets :=
-  (Build_Brackets) ("("%string) (")"%string).
-Definition orOp : bool -> Op :=
-  fun (newlines : bool) => (Build_Op) ((sym) ("|"%string)) ((Build_Padding) ((Ws_Space) (tt)) ((((logic.ifElse) (newlines)) ((Ws_Break) (tt))) ((Ws_Space) (tt)))) ((0)%Z) ((Associativity_None) (tt)).
-Definition op : string -> Z -> Associativity -> Op :=
-  fun (s : string) => fun (p : Z) => fun (assoc : Associativity) => (Build_Op) ((sym) (s)) ((Build_Padding) ((Ws_Space) (tt)) ((Ws_Space) (tt))) (p) (assoc).
-Definition noPadding : Padding :=
-  (Build_Padding) ((Ws_None) (tt)) ((Ws_None) (tt)).
-Definition inlineStyle : BlockStyle :=
-  (Build_BlockStyle) (None) (false) (false).
-Definition indentSubsequentLines : string -> Expr -> Expr :=
-  fun (idt : string) => fun (e : Expr) => (Expr_Indent) ((Build_IndentedExpression) ((IndentStyle_SubsequentLines) (idt)) (e)).
-Definition ifx : Op -> Expr -> Expr -> Expr :=
-  fun (op : Op) => fun (lhs : Expr) => fun (rhs : Expr) => (Expr_Op) ((Build_OpExpr) (op) (lhs) (rhs)).
-Definition doubleSpace : string :=
-  "  "%string.
-Definition fullBlockStyle : BlockStyle :=
-  (Build_BlockStyle) ((Some) (doubleSpace)) (true) (true).
-Definition halfBlockStyle : BlockStyle :=
-  (Build_BlockStyle) ((Some) (doubleSpace)) (true) (false).
-Definition customIndent : string -> string -> string :=
-  fun (idt : string) => fun (s : string) => (strings.cat) (((lists.intersperse) ("
+Definition tabIndent : forall (_ : Expr) , Expr := fun (e : Expr) => (Expr_Indent) ((Build_IndentedExpression) ((IndentStyle_AllLines) ("    "%string)) (e)).
+Definition sym : forall (_ : string) , Symbol := fun (s : string) => s.
+Definition squareBrackets : Brackets := (Build_Brackets) ("["%string) ("]"%string).
+Definition parentheses : Brackets := (Build_Brackets) ("("%string) (")"%string).
+Definition orOp : forall (_ : bool) , Op := fun (newlines : bool) => (Build_Op) ((sym) ("|"%string)) ((Build_Padding) ((Ws_Space) (tt)) ((((logic.ifElse) (newlines)) ((Ws_Break) (tt))) ((Ws_Space) (tt)))) ((0)%Z) ((Associativity_None) (tt)).
+Definition op : forall (_ : string) , forall (_ : Z) , forall (_ : Associativity) , Op := fun (s : string) => fun (p : Z) => fun (assoc : Associativity) => (Build_Op) ((sym) (s)) ((Build_Padding) ((Ws_Space) (tt)) ((Ws_Space) (tt))) (p) (assoc).
+Definition noPadding : Padding := (Build_Padding) ((Ws_None) (tt)) ((Ws_None) (tt)).
+Definition inlineStyle : BlockStyle := (Build_BlockStyle) (None) (false) (false).
+Definition indentSubsequentLines : forall (_ : string) , forall (_ : Expr) , Expr := fun (idt : string) => fun (e : Expr) => (Expr_Indent) ((Build_IndentedExpression) ((IndentStyle_SubsequentLines) (idt)) (e)).
+Definition ifx : forall (_ : Op) , forall (_ : Expr) , forall (_ : Expr) , Expr := fun (op : Op) => fun (lhs : Expr) => fun (rhs : Expr) => (Expr_Op) ((Build_OpExpr) (op) (lhs) (rhs)).
+Definition doubleSpace : string := "  "%string.
+Definition fullBlockStyle : BlockStyle := (Build_BlockStyle) ((Some) (doubleSpace)) (true) (true).
+Definition halfBlockStyle : BlockStyle := (Build_BlockStyle) ((Some) (doubleSpace)) (true) (false).
+Definition customIndent : forall (_ : string) , forall (_ : string) , string := fun (idt : string) => fun (s : string) => (strings.cat) (((lists.intersperse) ("
 "%string)) (((lists.map) (fun (line : string) => ((strings.cat2) (idt)) (line))) ((strings.lines) (s)))).
-Definition indent : string -> string :=
-  (customIndent) (doubleSpace).
+Definition indent : forall (_ : string) , string := (customIndent) (doubleSpace).
 Definition printExpr_bundle :=
-  hydra_fix (fun (bundle_ : Expr -> string) =>
+  hydra_fix (fun (bundle_ : forall (_ : Expr) , string) =>
     let printExpr := bundle_ in
     fun (e : Expr) => let pad := fun (ws : Ws) => (fun x_ => match x_ with
 | Ws_None _ => ""%string
@@ -67,70 +52,40 @@ end) (style) in ((strings.intercalate) ("
 "%string)) (""%string) in let e := (fun r_ => (bracketExpr_enclosed) (r_)) (bracketExpr) in let doIndent := (fun r_ => (blockStyle_indent) (r_)) (style) in let brs := (fun r_ => (bracketExpr_brackets) (r_)) (bracketExpr) in let l := (fun w_ => w_) ((fun r_ => (brackets_open) (r_)) (brs)) in let r := (fun w_ => w_) ((fun r_ => (brackets_close) (r_)) (brs)) in let body := (printExpr) (e) in let ibody := (((maybes.maybe) (body)) (fun (idt2 : string) => ((customIndent) (idt2)) (body))) (doIndent) in ((strings.cat2) (((strings.cat2) (((strings.cat2) (((strings.cat2) (l)) (pre))) (ibody))) (suf))) (r)) (v_)
 end) (e)).
 
-Definition printExpr : Expr -> string :=
+Definition printExpr : forall (_ : Expr) , string :=
   printExpr_bundle.
-Definition curlyBraces : Brackets :=
-  (Build_Brackets) ("{"%string) ("}"%string).
-Definition cst : string -> Expr :=
-  fun (s : string) => (Expr_Const) ((sym) (s)).
-Definition num : Z -> Expr :=
-  fun (i : Z) => (cst) ((literals.showInt32) (i)).
-Definition orSep : BlockStyle -> (list) (Expr) -> Expr :=
-  fun (style : BlockStyle) => fun (l : (list) (Expr)) => let newlines := (fun r_ => (blockStyle_newlineBeforeContent) (r_)) (style) in (((maybes.maybe) ((cst) (""%string))) (fun (h : Expr) => (((lists.foldl) (fun (acc : Expr) => fun (el : Expr) => (((ifx) ((orOp) (newlines))) (acc)) (el))) (h)) (((lists.drop) ((1)%Z)) (l)))) ((lists.safeHead) (l)).
-Definition prefix : string -> Expr -> Expr :=
-  fun (p : string) => fun (expr : Expr) => let preOp := (Build_Op) ((sym) (p)) ((Build_Padding) ((Ws_None) (tt)) ((Ws_None) (tt))) ((0)%Z) ((Associativity_None) (tt)) in (((ifx) (preOp)) ((cst) (""%string))) (expr).
-Definition sep : Op -> (list) (Expr) -> Expr :=
-  fun (op : Op) => fun (els : (list) (Expr)) => (((maybes.maybe) ((cst) (""%string))) (fun (h : Expr) => (((lists.foldl) (fun (acc : Expr) => fun (el : Expr) => (((ifx) (op)) (acc)) (el))) (h)) (((lists.drop) ((1)%Z)) (els)))) ((lists.safeHead) (els)).
-Definition dotSep : (list) (Expr) -> Expr :=
-  (sep) ((Build_Op) ((sym) ("."%string)) ((Build_Padding) ((Ws_None) (tt)) ((Ws_None) (tt))) ((0)%Z) ((Associativity_None) (tt))).
-Definition doubleNewlineSep : (list) (Expr) -> Expr :=
-  (sep) ((Build_Op) ((sym) (""%string)) ((Build_Padding) ((Ws_Break) (tt)) ((Ws_Break) (tt))) ((0)%Z) ((Associativity_None) (tt))).
-Definition tabIndentDoubleSpace : (list) (Expr) -> Expr :=
-  fun (exprs : (list) (Expr)) => (tabIndent) ((doubleNewlineSep) (exprs)).
-Definition newlineSep : (list) (Expr) -> Expr :=
-  (sep) ((Build_Op) ((sym) (""%string)) ((Build_Padding) ((Ws_None) (tt)) ((Ws_Break) (tt))) ((0)%Z) ((Associativity_None) (tt))).
-Definition customIndentBlock : string -> (list) (Expr) -> Expr :=
-  fun (idt : string) => fun (els : (list) (Expr)) => let idtOp := (Build_Op) ((sym) (""%string)) ((Build_Padding) ((Ws_Space) (tt)) ((Ws_BreakAndIndent) (idt))) ((0)%Z) ((Associativity_None) (tt)) in (((maybes.maybe) ((cst) (""%string))) (fun (head : Expr) => (((logic.ifElse) (((equality.equal) ((lists.length) (els))) ((1)%Z))) (head)) ((((ifx) (idtOp)) (head)) ((newlineSep) (((lists.drop) ((1)%Z)) (els)))))) ((lists.safeHead) (els)).
-Definition indentBlock : (list) (Expr) -> Expr :=
-  (customIndentBlock) (doubleSpace).
-Definition tabIndentSingleSpace : (list) (Expr) -> Expr :=
-  fun (exprs : (list) (Expr)) => (tabIndent) ((newlineSep) (exprs)).
-Definition noSep : (list) (Expr) -> Expr :=
-  (sep) ((Build_Op) ((sym) (""%string)) ((Build_Padding) ((Ws_None) (tt)) ((Ws_None) (tt))) ((0)%Z) ((Associativity_None) (tt))).
-Definition spaceSep : (list) (Expr) -> Expr :=
-  (sep) ((Build_Op) ((sym) (""%string)) ((Build_Padding) ((Ws_Space) (tt)) ((Ws_None) (tt))) ((0)%Z) ((Associativity_None) (tt))).
-Definition infixWs : string -> Expr -> Expr -> Expr :=
-  fun (op : string) => fun (l : Expr) => fun (r : Expr) => (spaceSep) ((cons) (l) ((cons) ((cst) (op)) ((cons) (r) (nil)))).
-Definition infixWsList : string -> (list) (Expr) -> Expr :=
-  fun (op : string) => fun (opers : (list) (Expr)) => let opExpr := (cst) (op) in let foldFun := fun (e : (list) (Expr)) => fun (r : Expr) => (((logic.ifElse) ((lists.null) (e))) ((cons) (r) (nil))) (((lists.cons) (r)) (((lists.cons) (opExpr)) (e))) in (spaceSep) ((((lists.foldl) (foldFun)) (nil)) ((lists.reverse) (opers))).
-Definition structuralSep : Op -> (list) (Expr) -> Expr :=
-  fun (op : Op) => fun (els : (list) (Expr)) => (((logic.ifElse) ((lists.null) (els))) ((cst) (""%string))) ((((logic.ifElse) (((equality.equal) ((lists.length) (els))) ((1)%Z))) ((lists.head) (els))) ((Expr_Seq) ((Build_SeqExpr) (op) (els)))).
-Definition structuralSpaceSep : (list) (Expr) -> Expr :=
-  (structuralSep) ((Build_Op) ((sym) (""%string)) ((Build_Padding) ((Ws_Space) (tt)) ((Ws_None) (tt))) ((0)%Z) ((Associativity_None) (tt))).
-Definition suffix : string -> Expr -> Expr :=
-  fun (s : string) => fun (expr : Expr) => let sufOp := (Build_Op) ((sym) (s)) ((Build_Padding) ((Ws_None) (tt)) ((Ws_None) (tt))) ((0)%Z) ((Associativity_None) (tt)) in (((ifx) (sufOp)) (expr)) ((cst) (""%string)).
-Definition symbolSep : string -> BlockStyle -> (list) (Expr) -> Expr :=
-  fun (symb : string) => fun (style : BlockStyle) => fun (l : (list) (Expr)) => let breakCount := (lists.length) (((lists.filter) (fun (x_ : bool) => x_)) ((cons) ((fun r_ => (blockStyle_newlineBeforeContent) (r_)) (style)) ((cons) ((fun r_ => (blockStyle_newlineAfterContent) (r_)) (style)) (nil)))) in let break := (((logic.ifElse) (((equality.equal) (breakCount)) ((0)%Z))) ((Ws_Space) (tt))) ((((logic.ifElse) (((equality.equal) (breakCount)) ((1)%Z))) ((Ws_Break) (tt))) ((Ws_DoubleBreak) (tt))) in let commaOp := (Build_Op) ((sym) (symb)) ((Build_Padding) ((Ws_None) (tt)) (break)) ((0)%Z) ((Associativity_None) (tt)) in (((maybes.maybe) ((cst) (""%string))) (fun (h : Expr) => (((lists.foldl) (fun (acc : Expr) => fun (el : Expr) => (((ifx) (commaOp)) (acc)) (el))) (h)) (((lists.drop) ((1)%Z)) (l)))) ((lists.safeHead) (l)).
-Definition semicolonSep : (list) (Expr) -> Expr :=
-  ((symbolSep) (";"%string)) (inlineStyle).
-Definition unsupportedType : string -> Expr :=
-  fun (label : string) => (cst) (((strings.cat2) (((strings.cat2) ("["%string)) (label))) ("]"%string)).
-Definition unsupportedVariant : string -> string -> Expr :=
-  fun (label : string) => fun (obj : string) => (cst) (((strings.cat2) (((strings.cat2) (((strings.cat2) (((strings.cat2) ("[unsupported "%string)) (label))) (": "%string))) ((literals.showString) (obj)))) ("]"%string)).
-Definition withComma : Expr -> Expr :=
-  fun (e : Expr) => (noSep) ((cons) (e) ((cons) ((cst) (","%string)) (nil))).
-Definition withSemi : Expr -> Expr :=
-  fun (e : Expr) => (noSep) ((cons) (e) ((cons) ((cst) (";"%string)) (nil))).
-Definition commaSep : BlockStyle -> (list) (Expr) -> Expr :=
-  (symbolSep) (","%string).
-Definition brackets : Brackets -> BlockStyle -> Expr -> Expr :=
-  fun (br : Brackets) => fun (style : BlockStyle) => fun (e : Expr) => (Expr_Brackets) ((Build_BracketExpr) (br) (e) (style)).
-Definition curlyBracesList : (option) (string) -> BlockStyle -> (list) (Expr) -> Expr :=
-  fun (msymb : (option) (string)) => fun (style : BlockStyle) => fun (els : (list) (Expr)) => (((logic.ifElse) ((lists.null) (els))) ((cst) ("{}"%string))) ((((brackets) (curlyBraces)) (style)) ((((symbolSep) (((maybes.fromMaybe) (","%string)) (msymb))) (style)) (els))).
-Definition curlyBlock : BlockStyle -> Expr -> Expr :=
-  fun (style : BlockStyle) => fun (e : Expr) => (((curlyBracesList) (None)) (style)) ((cons) (e) (nil)).
+Definition curlyBraces : Brackets := (Build_Brackets) ("{"%string) ("}"%string).
+Definition cst : forall (_ : string) , Expr := fun (s : string) => (Expr_Const) ((sym) (s)).
+Definition num : forall (_ : Z) , Expr := fun (i : Z) => (cst) ((literals.showInt32) (i)).
+Definition orSep : forall (_ : BlockStyle) , forall (_ : (list) (Expr)) , Expr := fun (style : BlockStyle) => fun (l : (list) (Expr)) => let newlines := (fun r_ => (blockStyle_newlineBeforeContent) (r_)) (style) in (((maybes.maybe) ((cst) (""%string))) (fun (h : Expr) => (((lists.foldl) (fun (acc : Expr) => fun (el : Expr) => (((ifx) ((orOp) (newlines))) (acc)) (el))) (h)) (((lists.drop) ((1)%Z)) (l)))) ((lists.safeHead) (l)).
+Definition prefix : forall (_ : string) , forall (_ : Expr) , Expr := fun (p : string) => fun (expr : Expr) => let preOp := (Build_Op) ((sym) (p)) ((Build_Padding) ((Ws_None) (tt)) ((Ws_None) (tt))) ((0)%Z) ((Associativity_None) (tt)) in (((ifx) (preOp)) ((cst) (""%string))) (expr).
+Definition sep : forall (_ : Op) , forall (_ : (list) (Expr)) , Expr := fun (op : Op) => fun (els : (list) (Expr)) => (((maybes.maybe) ((cst) (""%string))) (fun (h : Expr) => (((lists.foldl) (fun (acc : Expr) => fun (el : Expr) => (((ifx) (op)) (acc)) (el))) (h)) (((lists.drop) ((1)%Z)) (els)))) ((lists.safeHead) (els)).
+Definition dotSep : forall (_ : (list) (Expr)) , Expr := (sep) ((Build_Op) ((sym) ("."%string)) ((Build_Padding) ((Ws_None) (tt)) ((Ws_None) (tt))) ((0)%Z) ((Associativity_None) (tt))).
+Definition doubleNewlineSep : forall (_ : (list) (Expr)) , Expr := (sep) ((Build_Op) ((sym) (""%string)) ((Build_Padding) ((Ws_Break) (tt)) ((Ws_Break) (tt))) ((0)%Z) ((Associativity_None) (tt))).
+Definition tabIndentDoubleSpace : forall (_ : (list) (Expr)) , Expr := fun (exprs : (list) (Expr)) => (tabIndent) ((doubleNewlineSep) (exprs)).
+Definition newlineSep : forall (_ : (list) (Expr)) , Expr := (sep) ((Build_Op) ((sym) (""%string)) ((Build_Padding) ((Ws_None) (tt)) ((Ws_Break) (tt))) ((0)%Z) ((Associativity_None) (tt))).
+Definition customIndentBlock : forall (_ : string) , forall (_ : (list) (Expr)) , Expr := fun (idt : string) => fun (els : (list) (Expr)) => let idtOp := (Build_Op) ((sym) (""%string)) ((Build_Padding) ((Ws_Space) (tt)) ((Ws_BreakAndIndent) (idt))) ((0)%Z) ((Associativity_None) (tt)) in (((maybes.maybe) ((cst) (""%string))) (fun (head : Expr) => (((logic.ifElse) (((equality.equal) ((lists.length) (els))) ((1)%Z))) (head)) ((((ifx) (idtOp)) (head)) ((newlineSep) (((lists.drop) ((1)%Z)) (els)))))) ((lists.safeHead) (els)).
+Definition indentBlock : forall (_ : (list) (Expr)) , Expr := (customIndentBlock) (doubleSpace).
+Definition tabIndentSingleSpace : forall (_ : (list) (Expr)) , Expr := fun (exprs : (list) (Expr)) => (tabIndent) ((newlineSep) (exprs)).
+Definition noSep : forall (_ : (list) (Expr)) , Expr := (sep) ((Build_Op) ((sym) (""%string)) ((Build_Padding) ((Ws_None) (tt)) ((Ws_None) (tt))) ((0)%Z) ((Associativity_None) (tt))).
+Definition spaceSep : forall (_ : (list) (Expr)) , Expr := (sep) ((Build_Op) ((sym) (""%string)) ((Build_Padding) ((Ws_Space) (tt)) ((Ws_None) (tt))) ((0)%Z) ((Associativity_None) (tt))).
+Definition infixWs : forall (_ : string) , forall (_ : Expr) , forall (_ : Expr) , Expr := fun (op : string) => fun (l : Expr) => fun (r : Expr) => (spaceSep) ((cons) (l) ((cons) ((cst) (op)) ((cons) (r) (nil)))).
+Definition infixWsList : forall (_ : string) , forall (_ : (list) (Expr)) , Expr := fun (op : string) => fun (opers : (list) (Expr)) => let opExpr := (cst) (op) in let foldFun := fun (e : (list) (Expr)) => fun (r : Expr) => (((logic.ifElse) ((lists.null) (e))) ((cons) (r) (nil))) (((lists.cons) (r)) (((lists.cons) (opExpr)) (e))) in (spaceSep) ((((lists.foldl) (foldFun)) (nil)) ((lists.reverse) (opers))).
+Definition structuralSep : forall (_ : Op) , forall (_ : (list) (Expr)) , Expr := fun (op : Op) => fun (els : (list) (Expr)) => (((logic.ifElse) ((lists.null) (els))) ((cst) (""%string))) ((((logic.ifElse) (((equality.equal) ((lists.length) (els))) ((1)%Z))) ((lists.head) (els))) ((Expr_Seq) ((Build_SeqExpr) (op) (els)))).
+Definition structuralSpaceSep : forall (_ : (list) (Expr)) , Expr := (structuralSep) ((Build_Op) ((sym) (""%string)) ((Build_Padding) ((Ws_Space) (tt)) ((Ws_None) (tt))) ((0)%Z) ((Associativity_None) (tt))).
+Definition suffix : forall (_ : string) , forall (_ : Expr) , Expr := fun (s : string) => fun (expr : Expr) => let sufOp := (Build_Op) ((sym) (s)) ((Build_Padding) ((Ws_None) (tt)) ((Ws_None) (tt))) ((0)%Z) ((Associativity_None) (tt)) in (((ifx) (sufOp)) (expr)) ((cst) (""%string)).
+Definition symbolSep : forall (_ : string) , forall (_ : BlockStyle) , forall (_ : (list) (Expr)) , Expr := fun (symb : string) => fun (style : BlockStyle) => fun (l : (list) (Expr)) => let breakCount := (lists.length) (((lists.filter) (fun (x_ : bool) => x_)) ((cons) ((fun r_ => (blockStyle_newlineBeforeContent) (r_)) (style)) ((cons) ((fun r_ => (blockStyle_newlineAfterContent) (r_)) (style)) (nil)))) in let break := (((logic.ifElse) (((equality.equal) (breakCount)) ((0)%Z))) ((Ws_Space) (tt))) ((((logic.ifElse) (((equality.equal) (breakCount)) ((1)%Z))) ((Ws_Break) (tt))) ((Ws_DoubleBreak) (tt))) in let commaOp := (Build_Op) ((sym) (symb)) ((Build_Padding) ((Ws_None) (tt)) (break)) ((0)%Z) ((Associativity_None) (tt)) in (((maybes.maybe) ((cst) (""%string))) (fun (h : Expr) => (((lists.foldl) (fun (acc : Expr) => fun (el : Expr) => (((ifx) (commaOp)) (acc)) (el))) (h)) (((lists.drop) ((1)%Z)) (l)))) ((lists.safeHead) (l)).
+Definition semicolonSep : forall (_ : (list) (Expr)) , Expr := ((symbolSep) (";"%string)) (inlineStyle).
+Definition unsupportedType : forall (_ : string) , Expr := fun (label : string) => (cst) (((strings.cat2) (((strings.cat2) ("["%string)) (label))) ("]"%string)).
+Definition unsupportedVariant : forall (_ : string) , forall (_ : string) , Expr := fun (label : string) => fun (obj : string) => (cst) (((strings.cat2) (((strings.cat2) (((strings.cat2) (((strings.cat2) ("[unsupported "%string)) (label))) (": "%string))) ((literals.showString) (obj)))) ("]"%string)).
+Definition withComma : forall (_ : Expr) , Expr := fun (e : Expr) => (noSep) ((cons) (e) ((cons) ((cst) (","%string)) (nil))).
+Definition withSemi : forall (_ : Expr) , Expr := fun (e : Expr) => (noSep) ((cons) (e) ((cons) ((cst) (";"%string)) (nil))).
+Definition commaSep : forall (_ : BlockStyle) , forall (_ : (list) (Expr)) , Expr := (symbolSep) (","%string).
+Definition brackets : forall (_ : Brackets) , forall (_ : BlockStyle) , forall (_ : Expr) , Expr := fun (br : Brackets) => fun (style : BlockStyle) => fun (e : Expr) => (Expr_Brackets) ((Build_BracketExpr) (br) (e) (style)).
+Definition curlyBracesList : forall (_ : (option) (string)) , forall (_ : BlockStyle) , forall (_ : (list) (Expr)) , Expr := fun (msymb : (option) (string)) => fun (style : BlockStyle) => fun (els : (list) (Expr)) => (((logic.ifElse) ((lists.null) (els))) ((cst) ("{}"%string))) ((((brackets) (curlyBraces)) (style)) ((((symbolSep) (((maybes.fromMaybe) (","%string)) (msymb))) (style)) (els))).
+Definition curlyBlock : forall (_ : BlockStyle) , forall (_ : Expr) , Expr := fun (style : BlockStyle) => fun (e : Expr) => (((curlyBracesList) (None)) (style)) ((cons) (e) (nil)).
 Definition expressionLength_bundle :=
-  hydra_fix (fun (bundle_ : Expr -> Z) =>
+  hydra_fix (fun (bundle_ : forall (_ : Expr) , Z) =>
     let expressionLength := bundle_ in
     fun (e : Expr) => let wsLength := fun (ws : Ws) => (fun x_ => match x_ with
 | Ws_None _ => (0)%Z
@@ -149,14 +104,12 @@ end) ((fun r_ => (indentedExpression_style) (r_)) (ie)) in let baseLen := (expre
 | Expr_Seq v_ => (fun (se : SeqExpr) => (seqExprLength) (se)) (v_)
 end) (e)).
 
-Definition expressionLength : Expr -> Z :=
+Definition expressionLength : forall (_ : Expr) , Z :=
   expressionLength_bundle.
-Definition parenList : bool -> (list) (Expr) -> Expr :=
-  fun (newlines : bool) => fun (els : (list) (Expr)) => let style := (((logic.ifElse) (((logic.and) (newlines)) (((equality.gt) ((lists.length) (els))) ((1)%Z)))) (halfBlockStyle)) (inlineStyle) in (((logic.ifElse) ((lists.null) (els))) ((cst) ("()"%string))) ((((brackets) (parentheses)) (style)) (((commaSep) (style)) (els))).
-Definition parens : Expr -> Expr :=
-  ((brackets) (parentheses)) (inlineStyle).
+Definition parenList : forall (_ : bool) , forall (_ : (list) (Expr)) , Expr := fun (newlines : bool) => fun (els : (list) (Expr)) => let style := (((logic.ifElse) (((logic.and) (newlines)) (((equality.gt) ((lists.length) (els))) ((1)%Z)))) (halfBlockStyle)) (inlineStyle) in (((logic.ifElse) ((lists.null) (els))) ((cst) ("()"%string))) ((((brackets) (parentheses)) (style)) (((commaSep) (style)) (els))).
+Definition parens : forall (_ : Expr) , Expr := ((brackets) (parentheses)) (inlineStyle).
 Definition parenthesize_bundle :=
-  hydra_fix (fun (bundle_ : Expr -> Expr) =>
+  hydra_fix (fun (bundle_ : forall (_ : Expr) , Expr) =>
     let parenthesize := bundle_ in
     fun (exp : Expr) => let assocRight := fun (a : Associativity) => (fun x_ => match x_ with
 | Associativity_Left _ => false
@@ -186,16 +139,11 @@ end) (comparison)) (v_)
 end) (rhs') in (Expr_Op) ((Build_OpExpr) (op) (lhs2) (rhs2))) (v_)
 end) (exp)).
 
-Definition parenthesize : Expr -> Expr :=
+Definition parenthesize : forall (_ : Expr) , Expr :=
   parenthesize_bundle.
-Definition bracketList : BlockStyle -> (list) (Expr) -> Expr :=
-  fun (style : BlockStyle) => fun (els : (list) (Expr)) => (((logic.ifElse) ((lists.null) (els))) ((cst) ("[]"%string))) ((((brackets) (squareBrackets)) (style)) (((commaSep) (style)) (els))).
-Definition bracketListAdaptive : (list) (Expr) -> Expr :=
-  fun (els : (list) (Expr)) => let inlineList := ((bracketList) (inlineStyle)) (els) in (((logic.ifElse) (((equality.gt) ((expressionLength) (inlineList))) ((70)%Z))) (((bracketList) (halfBlockStyle)) (els))) (inlineList).
-Definition bracesListAdaptive : (list) (Expr) -> Expr :=
-  fun (els : (list) (Expr)) => let inlineList := (((curlyBracesList) (None)) (inlineStyle)) (els) in (((logic.ifElse) (((equality.gt) ((expressionLength) (inlineList))) ((70)%Z))) ((((curlyBracesList) (None)) (halfBlockStyle)) (els))) (inlineList).
-Definition angleBraces : Brackets :=
-  (Build_Brackets) ("<"%string) (">"%string).
-Definition angleBracesList : BlockStyle -> (list) (Expr) -> Expr :=
-  fun (style : BlockStyle) => fun (els : (list) (Expr)) => (((logic.ifElse) ((lists.null) (els))) ((cst) ("<>"%string))) ((((brackets) (angleBraces)) (style)) (((commaSep) (style)) (els))).
+Definition bracketList : forall (_ : BlockStyle) , forall (_ : (list) (Expr)) , Expr := fun (style : BlockStyle) => fun (els : (list) (Expr)) => (((logic.ifElse) ((lists.null) (els))) ((cst) ("[]"%string))) ((((brackets) (squareBrackets)) (style)) (((commaSep) (style)) (els))).
+Definition bracketListAdaptive : forall (_ : (list) (Expr)) , Expr := fun (els : (list) (Expr)) => let inlineList := ((bracketList) (inlineStyle)) (els) in (((logic.ifElse) (((equality.gt) ((expressionLength) (inlineList))) ((70)%Z))) (((bracketList) (halfBlockStyle)) (els))) (inlineList).
+Definition bracesListAdaptive : forall (_ : (list) (Expr)) , Expr := fun (els : (list) (Expr)) => let inlineList := (((curlyBracesList) (None)) (inlineStyle)) (els) in (((logic.ifElse) (((equality.gt) ((expressionLength) (inlineList))) ((70)%Z))) ((((curlyBracesList) (None)) (halfBlockStyle)) (els))) (inlineList).
+Definition angleBraces : Brackets := (Build_Brackets) ("<"%string) (">"%string).
+Definition angleBracesList : forall (_ : BlockStyle) , forall (_ : (list) (Expr)) , Expr := fun (style : BlockStyle) => fun (els : (list) (Expr)) => (((logic.ifElse) ((lists.null) (els))) ((cst) ("<>"%string))) ((((brackets) (angleBraces)) (style)) (((commaSep) (style)) (els))).
 

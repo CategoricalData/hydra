@@ -7,7 +7,7 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 Require Import hydra.core hydra.errors hydra.lib.logic hydra.lib.eithers hydra.lib.maps hydra.lib.sets hydra.lib.maybes hydra.lib.strings hydra.graph hydra.decode.core.
 
 Definition instantiateTemplate_bundle (t0 : Type) :=
-  hydra_fix (fun (bundle_ : t0 -> bool -> (list) ((prod) (Name) (Type_)) -> Name -> Type_ -> (sum) (Error) (Term)) =>
+  hydra_fix (fun (bundle_ : forall (_ : t0) , forall (_ : bool) , forall (_ : (list) ((prod) (Name) (Type_))) , forall (_ : Name) , forall (_ : Type_) , (sum) (Error) (Term)) =>
     let instantiateTemplate := bundle_ in
     fun (cx : t0) => fun (minimal : bool) => fun (schema : (list) ((prod) (Name) (Type_))) => fun (tname : Name) => fun (t : Type_) => let noPoly := fun (t1 : Type) => (inl) ((Error_Extraction) ((ExtractionError_UnexpectedShape) ((Build_UnexpectedShapeError) ("non-polymorphic type"%string) ("polymorphic or function type"%string)))) in let inst := fun (tn : Name) => ((((instantiateTemplate) (cx)) (minimal)) (schema)) (tn) in let forInteger := fun (it : IntegerType) => (fun x_ => match x_ with
 | IntegerType_Bigint _ => (IntegerValue_Bigint) ((0)%Z)
@@ -46,10 +46,9 @@ end) (lt) in (fun x_ => match x_ with
 end) (t)).
 Arguments instantiateTemplate_bundle {t0}.
 
-Definition instantiateTemplate (t0 : Type) : t0 -> bool -> (list) ((prod) (Name) (Type_)) -> Name -> Type_ -> (sum) (Error) (Term) :=
+Definition instantiateTemplate (t0 : Type) : forall (_ : t0) , forall (_ : bool) , forall (_ : (list) ((prod) (Name) (Type_))) , forall (_ : Name) , forall (_ : Type_) , (sum) (Error) (Term) :=
   instantiateTemplate_bundle.
 Arguments instantiateTemplate {t0}.
-Definition graphToSchema (t0 : Type) : t0 -> hydra.graph.Graph -> (list) (Binding) -> (sum) (DecodingError) ((list) ((prod) (Name) (Type_))) :=
-  fun (cx : t0) => fun (graph_ : hydra.graph.Graph) => fun (els : (list) (Binding)) => let toPair := fun (el : Binding) => let name := (fun r_ => (binding_name) (r_)) (el) in ((eithers.bind) (((hydra.decode.core.type) (graph_)) ((fun r_ => (binding_term) (r_)) (el)))) (fun (t : Type_) => (inr) ((pair) (name) (t))) in ((eithers.bind) (((eithers.mapList) (toPair)) (els))) (fun (pairs : (list) ((prod) (Name) (Type_))) => (inr) ((maps.fromList) (pairs))).
+Definition graphToSchema (t0 : Type) : forall (_ : t0) , forall (_ : hydra.graph.Graph) , forall (_ : (list) (Binding)) , (sum) (DecodingError) ((list) ((prod) (Name) (Type_))) := fun (cx : t0) => fun (graph_ : hydra.graph.Graph) => fun (els : (list) (Binding)) => let toPair := fun (el : Binding) => let name := (fun r_ => (binding_name) (r_)) (el) in ((eithers.bind) (((hydra.decode.core.type) (graph_)) ((fun r_ => (binding_term) (r_)) (el)))) (fun (t : Type_) => (inr) ((pair) (name) (t))) in ((eithers.bind) (((eithers.mapList) (toPair)) (els))) (fun (pairs : (list) ((prod) (Name) (Type_))) => (inr) ((maps.fromList) (pairs))).
 Arguments graphToSchema {t0}.
 

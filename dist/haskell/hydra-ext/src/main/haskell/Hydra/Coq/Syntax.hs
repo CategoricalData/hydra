@@ -9,7 +9,7 @@ module Hydra.Coq.Syntax where
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
-data AnnotatedApplication =
+data AnnotatedApplication = 
   AnnotatedApplication {
     annotatedApplicationAnnot :: QualidAnnotated,
     annotatedApplicationTerms :: [Term1]}
@@ -21,7 +21,7 @@ _AnnotatedApplication_annot = Core.Name "annot"
 
 _AnnotatedApplication_terms = Core.Name "terms"
 
-data Application =
+data Application = 
   ApplicationNormal NormalApplication |
   ApplicationAnnotated AnnotatedApplication
   deriving (Eq, Ord, Read, Show)
@@ -32,7 +32,7 @@ _Application_normal = Core.Name "normal"
 
 _Application_annotated = Core.Name "annotated"
 
-data Arg =
+data Arg = 
   ArgIdent IdentArg |
   ArgNatural NaturalArg |
   ArgTerm Term1
@@ -46,7 +46,7 @@ _Arg_natural = Core.Name "natural"
 
 _Arg_term = Core.Name "term"
 
-data Binder =
+data Binder = 
   BinderName Name |
   BinderType TypeBinders |
   BinderTerm LetBinder |
@@ -69,7 +69,7 @@ _Binder_generalizing = Core.Name "generalizing"
 
 _Binder_pattern = Core.Name "pattern"
 
-data CaseItem =
+data CaseItem = 
   CaseItem {
     caseItemTerm :: Term100,
     caseItemAs :: (Maybe Name),
@@ -84,7 +84,7 @@ _CaseItem_as = Core.Name "as"
 
 _CaseItem_in = Core.Name "in"
 
-data Cofix =
+data Cofix = 
   Cofix {
     cofixBody :: CofixBody,
     cofixQual :: (Maybe CofixQual)}
@@ -96,7 +96,7 @@ _Cofix_body = Core.Name "body"
 
 _Cofix_qual = Core.Name "qual"
 
-data CofixBody =
+data CofixBody = 
   CofixBody {
     cofixBodyIdent :: Ident,
     cofixBodyBinders :: [Binder],
@@ -114,7 +114,7 @@ _CofixBody_type = Core.Name "type"
 
 _CofixBody_term = Core.Name "term"
 
-data CofixQual =
+data CofixQual = 
   CofixQualIn Term |
   CofixQualWith CofixWith
   deriving (Eq, Ord, Read, Show)
@@ -125,7 +125,7 @@ _CofixQual_in = Core.Name "in"
 
 _CofixQual_with = Core.Name "with"
 
-data CofixWith =
+data CofixWith = 
   CofixWith {
     cofixWithWith :: [CofixBody],
     cofixWithFor :: (Maybe Ident)}
@@ -137,7 +137,7 @@ _CofixWith_with = Core.Name "with"
 
 _CofixWith_for = Core.Name "for"
 
-data Equation =
+data Equation = 
   Equation {
     equationPattern :: [[Pattern]],
     equationTerm :: Term}
@@ -149,7 +149,7 @@ _Equation_pattern = Core.Name "pattern"
 
 _Equation_term = Core.Name "term"
 
-data ExistentialVariable =
+data ExistentialVariable = 
   ExistentialVariable {
     existentialVariableIdent :: Ident,
     existentialVariableVariant :: ExistentialVariableVariant}
@@ -161,7 +161,7 @@ _ExistentialVariable_ident = Core.Name "ident"
 
 _ExistentialVariable_variant = Core.Name "variant"
 
-data ExistentialVariableVariant =
+data ExistentialVariableVariant = 
   ExistentialVariableVariantPlaceholder  |
   ExistentialVariableVariantInside1  |
   ExistentialVariableVariantInside2  |
@@ -178,14 +178,14 @@ _ExistentialVariableVariant_inside2 = Core.Name "inside2"
 
 _ExistentialVariableVariant_outside = Core.Name "outside"
 
-newtype FieldIdent =
+newtype FieldIdent = 
   FieldIdent {
     unFieldIdent :: Ident}
   deriving (Eq, Ord, Read, Show)
 
 _FieldIdent = Core.Name "hydra.coq.syntax.FieldIdent"
 
-data Fix =
+data Fix = 
   FixDecl Fix_Decl |
   FixQual (Maybe Fix_Qual)
   deriving (Eq, Ord, Read, Show)
@@ -196,7 +196,7 @@ _Fix_decl = Core.Name "decl"
 
 _Fix_qual = Core.Name "qual"
 
-data FixAnnot =
+data FixAnnot = 
   FixAnnotStruct Ident |
   FixAnnotWf FixAnnot_Wf |
   FixAnnotMeasure FixAnnot_Measure
@@ -210,7 +210,7 @@ _FixAnnot_wf = Core.Name "wf"
 
 _FixAnnot_measure = Core.Name "measure"
 
-data FixAnnot_Measure =
+data FixAnnot_Measure = 
   FixAnnot_Measure {
     fixAnnot_MeasureTerm :: OneTerm,
     fixAnnot_MeasureIdent :: (Maybe Ident),
@@ -225,7 +225,7 @@ _FixAnnot_Measure_ident = Core.Name "ident"
 
 _FixAnnot_Measure_term2 = Core.Name "term2"
 
-data FixAnnot_Wf =
+data FixAnnot_Wf = 
   FixAnnot_Wf {
     fixAnnot_WfTerm :: OneTerm,
     fixAnnot_WfIdent :: Ident}
@@ -237,7 +237,7 @@ _FixAnnot_Wf_term = Core.Name "term"
 
 _FixAnnot_Wf_ident = Core.Name "ident"
 
-data Fix_Decl =
+data Fix_Decl = 
   Fix_Decl {
     fix_DeclIdent :: Ident,
     fix_DeclBinders :: [Binder],
@@ -258,7 +258,7 @@ _Fix_Decl_type = Core.Name "type"
 
 _Fix_Decl_term = Core.Name "term"
 
-data Fix_Qual =
+data Fix_Qual = 
   Fix_QualIn Term |
   Fix_QualWith FixWith
   deriving (Eq, Ord, Read, Show)
@@ -269,7 +269,7 @@ _Fix_Qual_in = Core.Name "in"
 
 _Fix_Qual_with = Core.Name "with"
 
-data FixWith =
+data FixWith = 
   FixWith {
     fixWithDecls :: [Fix_Decl],
     fixWithFor :: (Maybe Ident)}
@@ -281,7 +281,7 @@ _FixWith_decls = Core.Name "decls"
 
 _FixWith_for = Core.Name "for"
 
-data Forall =
+data Forall = 
   Forall {
     forallBinders :: OpenBinders,
     forallType :: Type}
@@ -293,7 +293,7 @@ _Forall_binders = Core.Name "binders"
 
 _Forall_type = Core.Name "type"
 
-data ForallOrFun =
+data ForallOrFun = 
   ForallOrFunForall Forall |
   ForallOrFunFun Fun
   deriving (Eq, Ord, Read, Show)
@@ -304,7 +304,7 @@ _ForallOrFun_forall = Core.Name "forall"
 
 _ForallOrFun_fun = Core.Name "fun"
 
-data Fun =
+data Fun = 
   Fun {
     funBinders :: OpenBinders,
     funBody :: Term}
@@ -316,7 +316,7 @@ _Fun_binders = Core.Name "binders"
 
 _Fun_body = Core.Name "body"
 
-data GeneralizingBinder =
+data GeneralizingBinder = 
   -- | Terms surrounded by `( ) introduce their free variables as explicit arguments
   GeneralizingBinderExplicit TypeclassConstraint |
   -- | Terms surrounded by `{ } introduce their free variables as maximally inserted implicit arguments
@@ -333,14 +333,14 @@ _GeneralizingBinder_implicitMaximallyInserted = Core.Name "implicitMaximallyInse
 
 _GeneralizingBinder_implicitNonMaximallyInserted = Core.Name "implicitNonMaximallyInserted"
 
-newtype Ident =
+newtype Ident = 
   Ident {
     unIdent :: String_}
   deriving (Eq, Ord, Read, Show)
 
 _Ident = Core.Name "hydra.coq.syntax.Ident"
 
-data IdentArg =
+data IdentArg = 
   IdentArg {
     identArgIdent :: Ident,
     identArgTerm :: Term}
@@ -353,7 +353,7 @@ _IdentArg_ident = Core.Name "ident"
 _IdentArg_term = Core.Name "term"
 
 -- | Pattern match on boolean values
-data If =
+data If = 
   If {
     ifCondition :: Term,
     ifReturnAs :: (Maybe ReturnAs),
@@ -372,7 +372,7 @@ _If_then = Core.Name "then"
 _If_else = Core.Name "else"
 
 -- | In the context of a function definition, these forms specify that name is an implicit argument.
-data ImplicitBinders =
+data ImplicitBinders = 
   -- | The first form, with curly braces, makes name a maximally inserted implicit argument
   ImplicitBindersMaximallyInserted TypeBinders |
   -- | The second form, with square brackets, makes name a non-maximally inserted implicit argument.
@@ -386,7 +386,7 @@ _ImplicitBinders_maximallyInserted = Core.Name "maximallyInserted"
 _ImplicitBinders_nonMaximallyInserted = Core.Name "nonMaximallyInserted"
 
 -- | A let-in definition
-data Let =
+data Let = 
   Let {
     letBindings :: LetBindings,
     letIn :: Term}
@@ -399,7 +399,7 @@ _Let_bindings = Core.Name "bindings"
 _Let_in = Core.Name "in"
 
 -- | Some constructions allow the binding of a variable to value. This is called a 'let-binder'.
-data LetBinder =
+data LetBinder = 
   LetBinder {
     letBinderName :: Name,
     letBinderType :: (Maybe Type),
@@ -414,7 +414,7 @@ _LetBinder_type = Core.Name "type"
 
 _LetBinder_term = Core.Name "term"
 
-data LetBindings =
+data LetBindings = 
   LetBindingsNamed LetNamed |
   LetBindingsDestructuring LetDestructuring
   deriving (Eq, Ord, Read, Show)
@@ -425,7 +425,7 @@ _LetBindings_named = Core.Name "named"
 
 _LetBindings_destructuring = Core.Name "destructuring"
 
-data LetNamed =
+data LetNamed = 
   LetNamed {
     letNamedBinder :: LetBinder,
     letNamedBinders :: [Binder]}
@@ -437,7 +437,7 @@ _LetNamed_binder = Core.Name "binder"
 
 _LetNamed_binders = Core.Name "binders"
 
-data LetDestructuring =
+data LetDestructuring = 
   LetDestructuringVariant1 LetDestructuring_Variant1 |
   LetDestructuringVariant2 LetDestructuring_Variant2 |
   LetDestructuringVariant3 LetDestructuring_Variant3
@@ -451,7 +451,7 @@ _LetDestructuring_variant2 = Core.Name "variant2"
 
 _LetDestructuring_variant3 = Core.Name "variant3"
 
-data LetDestructuring_Variant1 =
+data LetDestructuring_Variant1 = 
   LetDestructuring_Variant1 {
     letDestructuring_Variant1Names :: [Name],
     letDestructuring_Variant1ReturnAs :: (Maybe ReturnAs),
@@ -466,7 +466,7 @@ _LetDestructuring_Variant1_returnAs = Core.Name "returnAs"
 
 _LetDestructuring_Variant1_term = Core.Name "term"
 
-data LetDestructuring_Variant2 =
+data LetDestructuring_Variant2 = 
   LetDestructuring_Variant2 {
     letDestructuring_Variant2Pattern :: Pattern,
     letDestructuring_Variant2Term :: Term,
@@ -481,7 +481,7 @@ _LetDestructuring_Variant2_term = Core.Name "term"
 
 _LetDestructuring_Variant2_return = Core.Name "return"
 
-data LetDestructuring_Variant3 =
+data LetDestructuring_Variant3 = 
   LetDestructuring_Variant3 {
     letDestructuring_Variant3Pattern1 :: Pattern,
     letDestructuring_Variant3Pattern2 :: Pattern,
@@ -499,7 +499,7 @@ _LetDestructuring_Variant3_term = Core.Name "term"
 
 _LetDestructuring_Variant3_return = Core.Name "return"
 
-data Match =
+data Match = 
   Match {
     matchCaseItems :: [CaseItem],
     matchReturn :: (Maybe Term100),
@@ -517,7 +517,7 @@ _Match_pipe = Core.Name "pipe"
 
 _Match_equations = Core.Name "equations"
 
-newtype Name =
+newtype Name = 
   Name {
     unName :: (Maybe Ident)}
   deriving (Eq, Ord, Read, Show)
@@ -525,14 +525,14 @@ newtype Name =
 _Name = Core.Name "hydra.coq.syntax.Name"
 
 -- | A non-negative arbitrary-precision integer
-newtype Natural =
+newtype Natural = 
   Natural {
     unNatural :: Integer}
   deriving (Eq, Ord, Read, Show)
 
 _Natural = Core.Name "hydra.coq.syntax.Natural"
 
-data NaturalArg =
+data NaturalArg = 
   NaturalArg {
     naturalArgNatural :: Natural,
     naturalArgTerm :: Term}
@@ -544,7 +544,7 @@ _NaturalArg_natural = Core.Name "natural"
 
 _NaturalArg_term = Core.Name "term"
 
-data NormalApplication =
+data NormalApplication = 
   NormalApplication {
     normalApplicationLhs :: Term1,
     normalApplicationRhs :: [Arg]}
@@ -556,14 +556,14 @@ _NormalApplication_lhs = Core.Name "lhs"
 
 _NormalApplication_rhs = Core.Name "rhs"
 
-newtype Number =
+newtype Number = 
   Number {
     unNumber :: Double}
   deriving (Eq, Ord, Read, Show)
 
 _Number = Core.Name "hydra.coq.syntax.Number"
 
-data OneTerm =
+data OneTerm = 
   OneTermExplicit QualidAnnotated |
   OneTermTerm1 Term1
   deriving (Eq, Ord, Read, Show)
@@ -574,7 +574,7 @@ _OneTerm_explicit = Core.Name "explicit"
 
 _OneTerm_term1 = Core.Name "term1"
 
-data OpenBinders =
+data OpenBinders = 
   OpenBindersType TypeBinders |
   OpenBindersBinders [Binder]
   deriving (Eq, Ord, Read, Show)
@@ -585,7 +585,7 @@ _OpenBinders_type = Core.Name "type"
 
 _OpenBinders_binders = Core.Name "binders"
 
-data Pattern =
+data Pattern = 
   PatternPattern Pattern10 |
   PatternTerm (Maybe Term)
   deriving (Eq, Ord, Read, Show)
@@ -596,7 +596,7 @@ _Pattern_pattern = Core.Name "pattern"
 
 _Pattern_term = Core.Name "term"
 
-data Pattern0 =
+data Pattern0 = 
   Pattern0Qualid Qualid |
   Pattern0QualIdAndPattern QualidAndPattern |
   Pattern0Placeholder  |
@@ -619,7 +619,7 @@ _Pattern0_number = Core.Name "number"
 
 _Pattern0_string = Core.Name "string"
 
-data Pattern1 =
+data Pattern1 = 
   Pattern1 {
     pattern1Pattern :: Pattern0,
     pattern1Scope :: (Maybe ScopeKey)}
@@ -631,7 +631,7 @@ _Pattern1_pattern = Core.Name "pattern"
 
 _Pattern1_scope = Core.Name "scope"
 
-data Pattern10 =
+data Pattern10 = 
   Pattern10As Pattern10_As |
   Pattern10Patterns Pattern10_Patterns |
   Pattern10Qualiid Pattern10_Qualid
@@ -645,7 +645,7 @@ _Pattern10_patterns = Core.Name "patterns"
 
 _Pattern10_qualiid = Core.Name "qualiid"
 
-data Pattern10_As =
+data Pattern10_As = 
   Pattern10_As {
     pattern10_AsPattern :: Pattern1,
     pattern10_AsAs :: Name}
@@ -657,7 +657,7 @@ _Pattern10_As_pattern = Core.Name "pattern"
 
 _Pattern10_As_as = Core.Name "as"
 
-data Pattern10_Patterns =
+data Pattern10_Patterns = 
   Pattern10_Patterns {
     pattern10_PatternsPattern :: Pattern1,
     pattern10_PatternsPatterns :: [Pattern1]}
@@ -669,7 +669,7 @@ _Pattern10_Patterns_pattern = Core.Name "pattern"
 
 _Pattern10_Patterns_patterns = Core.Name "patterns"
 
-data Pattern10_Qualid =
+data Pattern10_Qualid = 
   Pattern10_Qualid {
     pattern10_QualidQualid :: Qualid,
     pattern10_QualidPatterns :: [Pattern1]}
@@ -681,7 +681,7 @@ _Pattern10_Qualid_qualid = Core.Name "qualid"
 
 _Pattern10_Qualid_patterns = Core.Name "patterns"
 
-data PrimitiveNotations =
+data PrimitiveNotations = 
   PrimitiveNotationsNumber Number |
   PrimitiveNotationsString String_
   deriving (Eq, Ord, Read, Show)
@@ -693,7 +693,7 @@ _PrimitiveNotations_number = Core.Name "number"
 _PrimitiveNotations_string = Core.Name "string"
 
 -- | A qualified identifier
-data Qualid =
+data Qualid = 
   Qualid {
     qualidId :: Ident,
     qualidFieldIds :: [FieldIdent]}
@@ -705,7 +705,7 @@ _Qualid_id = Core.Name "id"
 
 _Qualid_fieldIds = Core.Name "fieldIds"
 
-data QualidAndPattern =
+data QualidAndPattern = 
   QualidAndPattern {
     qualidAndPatternQualid :: Qualid,
     qualidAndPatternPattern :: Pattern}
@@ -717,7 +717,7 @@ _QualidAndPattern_qualid = Core.Name "qualid"
 
 _QualidAndPattern_pattern = Core.Name "pattern"
 
-data QualidAnnotated =
+data QualidAnnotated = 
   QualidAnnotated {
     qualidAnnotatedQualid :: Qualid,
     qualidAnnotatedUnivAnnot :: (Maybe UnivAnnot)}
@@ -729,7 +729,7 @@ _QualidAnnotated_qualid = Core.Name "qualid"
 
 _QualidAnnotated_univAnnot = Core.Name "univAnnot"
 
-data ReturnAs =
+data ReturnAs = 
   ReturnAs {
     returnAsAs :: (Maybe Name),
     returnAsReturn :: Term100}
@@ -741,7 +741,7 @@ _ReturnAs_as = Core.Name "as"
 
 _ReturnAs_return = Core.Name "return"
 
-newtype ScopeKey =
+newtype ScopeKey = 
   ScopeKey {
     unScopeKey :: Ident}
   deriving (Eq, Ord, Read, Show)
@@ -749,7 +749,7 @@ newtype ScopeKey =
 _ScopeKey = Core.Name "hydra.coq.syntax.ScopeKey"
 
 -- | The types of types are called sorts.
-data Sort =
+data Sort = 
   -- | The sort 𝖲𝖾𝗍 intends to be the type of small sets.
   SortSet  |
   -- | The sort 𝖯𝗋𝗈𝗉 intends to be the type of logical propositions.
@@ -775,14 +775,14 @@ _Sort_typeWithAnyUniverse = Core.Name "typeWithAnyUniverse"
 
 _Sort_typeWithUniverse = Core.Name "typeWithUniverse"
 
-newtype String_ =
+newtype String_ = 
   String_ {
     unString :: String}
   deriving (Eq, Ord, Read, Show)
 
 _String = Core.Name "hydra.coq.syntax.String"
 
-data Term =
+data Term = 
   TermForallOrFun ForallOrFun |
   TermLet Let |
   TermIf If |
@@ -805,7 +805,7 @@ _Term_cofix = Core.Name "cofix"
 
 _Term_term100 = Core.Name "term100"
 
-data Term0 =
+data Term0 = 
   Term0QualidAnnotated QualidAnnotated |
   Term0Sort Sort |
   Term0PrimitiveNotations PrimitiveNotations |
@@ -837,7 +837,7 @@ _Term0_ltac = Core.Name "ltac"
 
 _Term0_parens = Core.Name "parens"
 
-data Term1 =
+data Term1 = 
   Term1Projection  |
   Term1Scope  |
   Term1Term0 Term0
@@ -851,7 +851,7 @@ _Term1_scope = Core.Name "scope"
 
 _Term1_term0 = Core.Name "term0"
 
-data Term10 =
+data Term10 = 
   Term10Application Application |
   Term10OneTerm OneTerm
   deriving (Eq, Ord, Read, Show)
@@ -862,7 +862,7 @@ _Term10_application = Core.Name "application"
 
 _Term10_oneTerm = Core.Name "oneTerm"
 
-data Term100 =
+data Term100 = 
   Term100Cast TypeCast |
   Term100Term10 Term10
   deriving (Eq, Ord, Read, Show)
@@ -873,14 +873,14 @@ _Term100_cast = Core.Name "cast"
 
 _Term100_term10 = Core.Name "term10"
 
-newtype Type =
+newtype Type = 
   Type {
     unType :: Term}
   deriving (Eq, Ord, Read, Show)
 
 _Type = Core.Name "hydra.coq.syntax.Type"
 
-data TypeCast =
+data TypeCast = 
   TypeCast {
     typeCastTerm :: Term10,
     typeCastType :: Type,
@@ -895,13 +895,13 @@ _TypeCast_type = Core.Name "type"
 
 _TypeCast_operator = Core.Name "operator"
 
-data TypeCastOperator =
+data TypeCastOperator = 
   -- | The expression term10 : type is a type cast expression. It enforces the type of term10 to be type.
   TypeCastOperatorNormal  |
   -- | term10 <: type specifies that the virtual machine will be used to type check that term10 has type type (see vm_compute).
   TypeCastOperatorVmCompute  |
   -- | term10 <<: type specifies that compilation to OCaml will be used to type check that term10 has type type (see native_compute).
-  TypeCastOperatorNativeCompute
+  TypeCastOperatorNativeCompute 
   deriving (Eq, Ord, Read, Show)
 
 _TypeCastOperator = Core.Name "hydra.coq.syntax.TypeCastOperator"
@@ -912,7 +912,7 @@ _TypeCastOperator_vmCompute = Core.Name "vmCompute"
 
 _TypeCastOperator_nativeCompute = Core.Name "nativeCompute"
 
-data TypeBinders =
+data TypeBinders = 
   TypeBinders {
     typeBindersNames :: [Name],
     typeBindersType :: Type}
@@ -924,7 +924,7 @@ _TypeBinders_names = Core.Name "names"
 
 _TypeBinders_type = Core.Name "type"
 
-data TypeclassConstraint =
+data TypeclassConstraint = 
   TypeclassConstraint {
     typeclassConstraintName :: (Maybe Name),
     typeclassConstraintGeneralizing :: Bool,
@@ -939,14 +939,14 @@ _TypeclassConstraint_generalizing = Core.Name "generalizing"
 
 _TypeclassConstraint_term = Core.Name "term"
 
-newtype UnivAnnot =
+newtype UnivAnnot = 
   UnivAnnot {
     unUnivAnnot :: [UniverseLevel]}
   deriving (Eq, Ord, Read, Show)
 
 _UnivAnnot = Core.Name "hydra.coq.syntax.UnivAnnot"
 
-data Universe =
+data Universe = 
   UniverseMax [Universe_Expr] |
   UniverseExpr Universe_Expr
   deriving (Eq, Ord, Read, Show)
@@ -957,7 +957,7 @@ _Universe_max = Core.Name "max"
 
 _Universe_expr = Core.Name "expr"
 
-data Universe_Expr =
+data Universe_Expr = 
   Universe_Expr {
     universe_ExprName :: UniverseName,
     universe_ExprNumber :: (Maybe Natural)}
@@ -969,7 +969,7 @@ _Universe_Expr_name = Core.Name "name"
 
 _Universe_Expr_number = Core.Name "number"
 
-data UniverseLevel =
+data UniverseLevel = 
   UniverseLevelSet  |
   UniverseLevelProp  |
   UniverseLevelType  |
@@ -989,10 +989,10 @@ _UniverseLevel_ignored = Core.Name "ignored"
 
 _UniverseLevel_qualid = Core.Name "qualid"
 
-data UniverseName =
+data UniverseName = 
   UniverseNameQualid Qualid |
   UniverseNameSet  |
-  UniverseNameProp
+  UniverseNameProp 
   deriving (Eq, Ord, Read, Show)
 
 _UniverseName = Core.Name "hydra.coq.syntax.UniverseName"
@@ -1003,8 +1003,21 @@ _UniverseName_set = Core.Name "set"
 
 _UniverseName_prop = Core.Name "prop"
 
+-- | An Axiom declaration: `Axiom <name> : <type>.`
+data AxiomDeclaration = 
+  AxiomDeclaration {
+    axiomDeclarationName :: Ident,
+    axiomDeclarationType :: Type}
+  deriving (Eq, Ord, Read, Show)
+
+_AxiomDeclaration = Core.Name "hydra.coq.syntax.AxiomDeclaration"
+
+_AxiomDeclaration_name = Core.Name "name"
+
+_AxiomDeclaration_type = Core.Name "type"
+
 -- | A Coq comment (* ... *)
-newtype Comment =
+newtype Comment = 
   Comment {
     unComment :: String}
   deriving (Eq, Ord, Read, Show)
@@ -1012,7 +1025,7 @@ newtype Comment =
 _Comment = Core.Name "hydra.coq.syntax.Comment"
 
 -- | A constructor in an Inductive definition
-data Constructor =
+data Constructor = 
   Constructor {
     constructorName :: Ident,
     constructorBinders :: [Binder],
@@ -1028,7 +1041,7 @@ _Constructor_binders = Core.Name "binders"
 _Constructor_type = Core.Name "type"
 
 -- | A Definition or Let command: Definition name binders : type := term.
-data Definition =
+data Definition = 
   Definition {
     definitionLocality :: (Maybe Locality),
     definitionName :: Ident,
@@ -1050,7 +1063,7 @@ _Definition_type = Core.Name "type"
 _Definition_body = Core.Name "body"
 
 -- | A complete Coq .v file
-data Document =
+data Document = 
   Document {
     documentSentences :: [Sentence]}
   deriving (Eq, Ord, Read, Show)
@@ -1060,7 +1073,7 @@ _Document = Core.Name "hydra.coq.syntax.Document"
 _Document_sentences = Core.Name "sentences"
 
 -- | A Fixpoint command for recursive definitions
-data FixpointDefinition =
+data FixpointDefinition = 
   FixpointDefinition {
     fixpointDefinitionLocality :: (Maybe Locality),
     fixpointDefinitionName :: Ident,
@@ -1088,9 +1101,9 @@ _FixpointDefinition_body = Core.Name "body"
 _FixpointDefinition_with = Core.Name "with"
 
 -- | Qualification for Require/Import commands
-data ImportQualification =
+data ImportQualification = 
   ImportQualificationImport  |
-  ImportQualificationExport
+  ImportQualificationExport 
   deriving (Eq, Ord, Read, Show)
 
 _ImportQualification = Core.Name "hydra.coq.syntax.ImportQualification"
@@ -1100,7 +1113,7 @@ _ImportQualification_import = Core.Name "import"
 _ImportQualification_export = Core.Name "export"
 
 -- | A single body in an Inductive definition (supports mutual induction via 'with')
-data InductiveBody =
+data InductiveBody = 
   InductiveBody {
     inductiveBodyName :: Ident,
     inductiveBodyBinders :: [Binder],
@@ -1119,7 +1132,7 @@ _InductiveBody_type = Core.Name "type"
 _InductiveBody_constructors = Core.Name "constructors"
 
 -- | An Inductive or CoInductive definition with one or more mutually inductive bodies
-data InductiveDefinition =
+data InductiveDefinition = 
   InductiveDefinition {
     inductiveDefinitionLocality :: (Maybe Locality),
     inductiveDefinitionCoinductive :: Bool,
@@ -1135,9 +1148,9 @@ _InductiveDefinition_coinductive = Core.Name "coinductive"
 _InductiveDefinition_bodies = Core.Name "bodies"
 
 -- | Local or Global qualifier for commands
-data Locality =
+data Locality = 
   LocalityLocal  |
-  LocalityGlobal
+  LocalityGlobal 
   deriving (Eq, Ord, Read, Show)
 
 _Locality = Core.Name "hydra.coq.syntax.Locality"
@@ -1147,7 +1160,7 @@ _Locality_local = Core.Name "local"
 _Locality_global = Core.Name "global"
 
 -- | A Module ... End block
-data ModuleDefinition =
+data ModuleDefinition = 
   ModuleDefinition {
     moduleDefinitionName :: Ident,
     moduleDefinitionSentences :: [Sentence]}
@@ -1160,7 +1173,7 @@ _ModuleDefinition_name = Core.Name "name"
 _ModuleDefinition_sentences = Core.Name "sentences"
 
 -- | A Notation declaration
-data NotationDeclaration =
+data NotationDeclaration = 
   NotationDeclaration {
     notationDeclarationNotation :: String_,
     notationDeclarationDefinition :: Term,
@@ -1179,7 +1192,7 @@ _NotationDeclaration_level = Core.Name "level"
 _NotationDeclaration_associativity = Core.Name "associativity"
 
 -- | The body of a Record definition
-data RecordBody =
+data RecordBody = 
   RecordBody {
     recordBodyConstructor :: (Maybe Ident),
     recordBodyFields :: [RecordField]}
@@ -1192,7 +1205,7 @@ _RecordBody_constructor = Core.Name "constructor"
 _RecordBody_fields = Core.Name "fields"
 
 -- | A Record or Structure definition
-data RecordDefinition =
+data RecordDefinition = 
   RecordDefinition {
     recordDefinitionLocality :: (Maybe Locality),
     recordDefinitionName :: Ident,
@@ -1214,7 +1227,7 @@ _RecordDefinition_sort = Core.Name "sort"
 _RecordDefinition_body = Core.Name "body"
 
 -- | A field in a Record definition
-data RecordField =
+data RecordField = 
   RecordField {
     recordFieldName :: Ident,
     recordFieldType :: Type}
@@ -1227,7 +1240,7 @@ _RecordField_name = Core.Name "name"
 _RecordField_type = Core.Name "type"
 
 -- | A Require Import/Export command
-data RequireImport =
+data RequireImport = 
   RequireImport {
     requireImportFrom :: (Maybe Qualid),
     requireImportRequire :: Bool,
@@ -1246,7 +1259,7 @@ _RequireImport_qualification = Core.Name "qualification"
 _RequireImport_modules = Core.Name "modules"
 
 -- | A Section ... End block
-data SectionDefinition =
+data SectionDefinition = 
   SectionDefinition {
     sectionDefinitionName :: Ident,
     sectionDefinitionSentences :: [Sentence]}
@@ -1259,7 +1272,7 @@ _SectionDefinition_name = Core.Name "name"
 _SectionDefinition_sentences = Core.Name "sentences"
 
 -- | A top-level sentence in a Coq document, optionally preceded by a comment
-data Sentence =
+data Sentence = 
   Sentence {
     sentenceComment :: (Maybe Comment),
     sentenceContent :: SentenceContent}
@@ -1272,7 +1285,8 @@ _Sentence_comment = Core.Name "comment"
 _Sentence_content = Core.Name "content"
 
 -- | The content of a top-level sentence
-data SentenceContent =
+data SentenceContent = 
+  SentenceContentAxiom AxiomDeclaration |
   SentenceContentDefinition Definition |
   SentenceContentFixpoint FixpointDefinition |
   SentenceContentInductive InductiveDefinition |
@@ -1285,6 +1299,8 @@ data SentenceContent =
   deriving (Eq, Ord, Read, Show)
 
 _SentenceContent = Core.Name "hydra.coq.syntax.SentenceContent"
+
+_SentenceContent_axiom = Core.Name "axiom"
 
 _SentenceContent_definition = Core.Name "definition"
 
@@ -1305,7 +1321,7 @@ _SentenceContent_section = Core.Name "section"
 _SentenceContent_theorem = Core.Name "theorem"
 
 -- | A Theorem/Lemma/Proposition with a proof term
-data TheoremBody =
+data TheoremBody = 
   TheoremBody {
     theoremBodyKind :: TheoremKind,
     theoremBodyName :: Ident,
@@ -1327,12 +1343,12 @@ _TheoremBody_type = Core.Name "type"
 _TheoremBody_proof = Core.Name "proof"
 
 -- | The kind of theorem command
-data TheoremKind =
+data TheoremKind = 
   TheoremKindTheorem  |
   TheoremKindLemma  |
   TheoremKindProposition  |
   TheoremKindCorollary  |
-  TheoremKindExample
+  TheoremKindExample 
   deriving (Eq, Ord, Read, Show)
 
 _TheoremKind = Core.Name "hydra.coq.syntax.TheoremKind"

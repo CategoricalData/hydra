@@ -7,7 +7,7 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 Require Import hydra.core hydra.lib.lists hydra.lib.logic hydra.lib.maybes hydra.lib.eithers hydra.lib.pairs hydra.lib.maps hydra.lib.sets hydra.strip hydra.variables hydra.context hydra.graph hydra.errors hydra.show.errors hydra.extract.core hydra.lib.equality hydra.lexical hydra.arity hydra.rewriting hydra.lib.math hydra.lib.strings hydra.lib.literals hydra.checking hydra.scoping hydra.encode.core hydra.resolution.
 
 Definition termIsValue_bundle :=
-  hydra_fix (fun (bundle_ : Term -> bool) =>
+  hydra_fix (fun (bundle_ : forall (_ : Term) , bool) =>
     let termIsValue := bundle_ in
     fun (term_ : Term) => let forList := fun (els : (list) (Term)) => (((lists.foldl) (fun (b : bool) => fun (t : Term) => ((logic.and) (b)) ((termIsValue) (t)))) (true)) (els) in let checkField := fun (f : Field) => (termIsValue) ((fun r_ => (field_term) (r_)) (f)) in let checkFields := fun (fields : (list) (Field)) => (((lists.foldl) (fun (b : bool) => fun (f : Field) => ((logic.and) (b)) ((checkField) (f)))) (true)) (fields) in (fun x_ => match x_ with
 | Term_Application v_ => (fun (_ : Application) => false) (v_)
@@ -28,12 +28,11 @@ Definition termIsValue_bundle :=
 | _ => false
 end) ((deannotateTerm) (term_))).
 
-Definition termIsValue : Term -> bool :=
+Definition termIsValue : forall (_ : Term) , bool :=
   termIsValue_bundle.
-Definition termIsClosed : Term -> bool :=
-  fun (term_ : Term) => (sets.null) ((freeVariablesInTerm) (term_)).
+Definition termIsClosed : forall (_ : Term) , bool := fun (term_ : Term) => (sets.null) ((freeVariablesInTerm) (term_)).
 Definition reduceTerm_bundle :=
-  hydra_fix (fun (bundle_ : Context_ -> hydra.graph.Graph -> bool -> Term -> (sum) (Error) (Term)) =>
+  hydra_fix (fun (bundle_ : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : bool) , forall (_ : Term) , (sum) (Error) (Term)) =>
     let reduceTerm := bundle_ in
     fun (cx : Context_) => fun (graph_ : hydra.graph.Graph) => fun (eager : bool) => fun (term_ : Term) => let reduce := fun (eager2 : bool) => (((reduceTerm) (cx)) (graph_)) (eager2) in let reduceArg := fun (eager2 : bool) => fun (arg : Term) => (((logic.ifElse) (eager2)) ((inr) (arg))) (((reduce) (false)) (arg)) in let mapErrorToString := fun (e : Error) => (Error_Other) ((hydra.show.errors.error) (e)) in let doRecurse := fun (eager2 : bool) => fun (term2 : Term) => let isNonLambdaTerm := (fun x_ => match x_ with
 | Term_Lambda v_ => (fun (_ : Lambda) => false) (v_)
@@ -48,12 +47,12 @@ end) (term2) in ((logic.and) (eager2)) (isNonLambdaTerm) in let applyToArguments
 | Term_Variable v_ => (fun (v : Name) => let mBinding := ((lookupBinding) (graph_)) (v) in (((maybes.maybe) (let mPrim := ((lookupPrimitive) (graph_)) (v) in (((maybes.maybe) ((inr) (((applyToArguments) (original)) (args)))) (fun (prim : Primitive) => let arity := (primitiveArity) (prim) in (((logic.ifElse) (((equality.gt) (arity)) ((lists.length) (args)))) ((inr) (((applyToArguments) (original)) (args)))) ((((forPrimitive) (prim)) (arity)) (args)))) (mPrim))) (fun (binding : Binding) => (((applyIfNullary) (eager2)) ((fun r_ => (binding_term) (r_)) (binding))) (args))) (mBinding)) (v_)
 | Term_Let v_ => (fun (lt : Let) => let substituteBinding := fun (term2 : Term) => fun (b : Binding) => (((replaceFreeTermVariable) ((fun r_ => (binding_name) (r_)) (b))) ((fun r_ => (binding_term) (r_)) (b))) (term2) in let substituteAll := fun (bs : (list) (Binding)) => fun (term2 : Term) => (((lists.foldl) (substituteBinding)) (term2)) (bs) in let letExpr := fun (b : Binding) => (Term_Let) ((Build_Let) ((cons) (b) (nil)) ((Term_Variable) ((fun r_ => (binding_name) (r_)) (b)))) in let expandBinding := fun (b : Binding) => (Build_Binding) ((fun r_ => (binding_name) (r_)) (b)) ((((replaceFreeTermVariable) ((fun r_ => (binding_name) (r_)) (b))) ((letExpr) (b))) ((fun r_ => (binding_term) (r_)) (b))) ((fun r_ => (binding_type) (r_)) (b)) in let body := (fun r_ => (let_body) (r_)) (lt) in let bindings := (fun r_ => (let_bindings) (r_)) (lt) in let expandedBindings := ((lists.map) (expandBinding)) (bindings) in let expandedBody := ((substituteAll) (expandedBindings)) (body) in ((eithers.bind) (((reduce) (eager2)) (expandedBody))) (fun (reducedBody : Term) => (((applyIfNullary) (eager2)) (reducedBody)) (args))) (v_)
 | _ => (inr) (((applyToArguments) (original)) (args))
-end) (stripped)) in let mapping := fun (recurse : Term -> (sum) (Error) (Term)) => fun (mid : Term) => ((eithers.bind) ((((logic.ifElse) (((doRecurse) (eager)) (mid))) ((recurse) (mid))) ((inr) (mid)))) (fun (inner : Term) => (((applyIfNullary) (eager)) (inner)) (nil)) in ((rewriteTermM) (mapping)) (term_)).
+end) (stripped)) in let mapping := fun (recurse : forall (_ : Term) , (sum) (Error) (Term)) => fun (mid : Term) => ((eithers.bind) ((((logic.ifElse) (((doRecurse) (eager)) (mid))) ((recurse) (mid))) ((inr) (mid)))) (fun (inner : Term) => (((applyIfNullary) (eager)) (inner)) (nil)) in ((rewriteTermM) (mapping)) (term_)).
 
-Definition reduceTerm : Context_ -> hydra.graph.Graph -> bool -> Term -> (sum) (Error) (Term) :=
+Definition reduceTerm : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : bool) , forall (_ : Term) , (sum) (Error) (Term) :=
   reduceTerm_bundle.
 Definition etaReduceTerm_bundle :=
-  hydra_fix (fun (bundle_ : Term -> Term) =>
+  hydra_fix (fun (bundle_ : forall (_ : Term) , Term) =>
     let etaReduceTerm := bundle_ in
     fun (term_ : Term) => let noChange := term_ in let reduceLambda := (hydra_fix) (fun reduceLambda => fun (l : Lambda) => let v := (fun r_ => (lambda_parameter) (r_)) (l) in let d := (fun r_ => (lambda_domain) (r_)) (l) in let body := (fun r_ => (lambda_body) (r_)) (l) in (fun x_ => match x_ with
 | Term_Annotated v_ => (fun (at_ : AnnotatedTerm) => (reduceLambda) ((Build_Lambda) (v) (d) ((fun r_ => (annotatedTerm_body) (r_)) (at_)))) (v_)
@@ -69,10 +68,10 @@ end) ((etaReduceTerm) (body))) in (fun x_ => match x_ with
 | _ => noChange
 end) (term_)).
 
-Definition etaReduceTerm : Term -> Term :=
+Definition etaReduceTerm : forall (_ : Term) , Term :=
   etaReduceTerm_bundle.
 Definition etaExpansionArity_bundle :=
-  hydra_fix (fun (bundle_ : hydra.graph.Graph -> Term -> Z) =>
+  hydra_fix (fun (bundle_ : forall (_ : hydra.graph.Graph) , forall (_ : Term) , Z) =>
     let etaExpansionArity := bundle_ in
     fun (graph_ : hydra.graph.Graph) => fun (term_ : Term) => (fun x_ => match x_ with
 | Term_Annotated v_ => (fun (at_ : AnnotatedTerm) => ((etaExpansionArity) (graph_)) ((fun r_ => (annotatedTerm_body) (r_)) (at_))) (v_)
@@ -87,10 +86,9 @@ Definition etaExpansionArity_bundle :=
 | _ => (0)%Z
 end) (term_)).
 
-Definition etaExpansionArity : hydra.graph.Graph -> Term -> Z :=
+Definition etaExpansionArity : forall (_ : hydra.graph.Graph) , forall (_ : Term) , Z :=
   etaExpansionArity_bundle.
-Definition etaExpandTypedTerm : Context_ -> hydra.graph.Graph -> Term -> (sum) (Error) (Term) :=
-  fun (cx : Context_) => fun (tx0 : hydra.graph.Graph) => fun (term0 : Term) => let rewrite := (hydra_fix) (fun rewrite => fun (topLevel : bool) => fun (forced : bool) => fun (typeArgs : (list) (Type_)) => fun (recurse : hydra.graph.Graph -> Term -> (sum) (Error) (Term)) => fun (tx : hydra.graph.Graph) => fun (term_ : Term) => let unwind := fun (term2 : Term) => (((lists.foldl) (fun (e : Term) => fun (t : Type_) => (Term_TypeApplication) ((Build_TypeApplicationTerm) (e) (t)))) (term2)) (typeArgs) in let rewriteSpine := (hydra_fix) (fun rewriteSpine => fun (term2 : Term) => (fun x_ => match x_ with
+Definition etaExpandTypedTerm : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : Term) , (sum) (Error) (Term) := fun (cx : Context_) => fun (tx0 : hydra.graph.Graph) => fun (term0 : Term) => let rewrite := (hydra_fix) (fun rewrite => fun (topLevel : bool) => fun (forced : bool) => fun (typeArgs : (list) (Type_)) => fun (recurse : forall (_ : hydra.graph.Graph) , forall (_ : Term) , (sum) (Error) (Term)) => fun (tx : hydra.graph.Graph) => fun (term_ : Term) => let unwind := fun (term2 : Term) => (((lists.foldl) (fun (e : Term) => fun (t : Type_) => (Term_TypeApplication) ((Build_TypeApplicationTerm) (e) (t)))) (term2)) (typeArgs) in let rewriteSpine := (hydra_fix) (fun rewriteSpine => fun (term2 : Term) => (fun x_ => match x_ with
 | Term_Annotated v_ => (fun (at_ : AnnotatedTerm) => ((eithers.bind) ((rewriteSpine) ((fun r_ => (annotatedTerm_body) (r_)) (at_)))) (fun (body : Term) => let ann := (fun r_ => (annotatedTerm_annotation) (r_)) (at_) in (inr) ((Term_Annotated) ((Build_AnnotatedTerm) (body) (ann))))) (v_)
 | Term_Application v_ => (fun (a : Application) => let l := (((logic.ifElse) (false)) ((cons) ((Type__Literal) ((LiteralType_String) (tt))) (nil))) (nil) in ((eithers.bind) ((rewriteSpine) ((fun r_ => (application_function) (r_)) (a)))) (fun (lhs : Term) => ((eithers.bind) (((((((rewrite) (true)) (false)) (l)) (recurse)) (tx)) ((fun r_ => (application_argument) (r_)) (a)))) (fun (rhs : Term) => (inr) ((Term_Application) ((Build_Application) (lhs) (rhs)))))) (v_)
 | Term_TypeApplication v_ => (fun (tat : TypeApplicationTerm) => ((eithers.bind) ((rewriteSpine) ((fun r_ => (typeApplicationTerm_body) (r_)) (tat)))) (fun (body : Term) => let typ := (fun r_ => (typeApplicationTerm_type) (r_)) (tat) in (inr) ((Term_TypeApplication) ((Build_TypeApplicationTerm) (body) (typ))))) (v_)
@@ -117,18 +115,15 @@ end) (term2)) in (fun x_ => match x_ with
 | Term_TypeLambda v_ => (fun (tl : TypeLambda) => let txt := ((extendGraphForTypeLambda) (tx)) (tl) in ((recurse) (txt)) (term_)) (v_)
 | _ => (recurseOrForce) (term_)
 end) (term_)) in (((rewriteTermWithContextM) ((((rewrite) (true)) (false)) (nil))) (tx0)) (term0).
-Definition countPrimitiveInvocations : bool :=
-  true.
-Definition contractTerm : Term -> Term :=
-  fun (term_ : Term) => let rewrite := fun recurse => fun t => let rec := (recurse) (t) in (fun x_ => match x_ with
+Definition countPrimitiveInvocations : bool := true.
+Definition contractTerm : forall (_ : Term) , Term := fun (term_ : Term) => let rewrite := fun recurse => fun t => let rec := (recurse) (t) in (fun x_ => match x_ with
 | Term_Application v_ => (fun (app : Application) => let rhs := (fun r_ => (application_argument) (r_)) (app) in let lhs := (fun r_ => (application_function) (r_)) (app) in (fun x_ => match x_ with
 | Term_Lambda v_ => (fun (l : Lambda) => let v := (fun r_ => (lambda_parameter) (r_)) (l) in let body := (fun r_ => (lambda_body) (r_)) (l) in (((logic.ifElse) (((isFreeVariableInTerm) (v)) (body))) (body)) ((((replaceFreeTermVariable) (v)) (rhs)) (body))) (v_)
 | _ => rec
 end) ((deannotateTerm) (lhs))) (v_)
 | _ => rec
 end) (rec) in ((rewriteTerm) (rewrite)) (term_).
-Definition etaExpandTerm : hydra.graph.Graph -> Term -> Term :=
-  fun (tx0 : hydra.graph.Graph) => fun (term0 : Term) => let primTypes := (maps.fromList) (((lists.map) (fun (_gpt_p : Primitive) => (pair) ((fun r_ => (primitive_name) (r_)) (_gpt_p)) ((fun r_ => (primitive_type) (r_)) (_gpt_p)))) ((maps.elems) ((fun r_ => (graph_primitives) (r_)) (tx0)))) in let termArityWithContext := (hydra_fix) (fun termArityWithContext => fun (tx : hydra.graph.Graph) => fun (term_ : Term) => (fun x_ => match x_ with
+Definition etaExpandTerm : forall (_ : hydra.graph.Graph) , forall (_ : Term) , Term := fun (tx0 : hydra.graph.Graph) => fun (term0 : Term) => let primTypes := (maps.fromList) (((lists.map) (fun (_gpt_p : Primitive) => (pair) ((fun r_ => (primitive_name) (r_)) (_gpt_p)) ((fun r_ => (primitive_type) (r_)) (_gpt_p)))) ((maps.elems) ((fun r_ => (graph_primitives) (r_)) (tx0)))) in let termArityWithContext := (hydra_fix) (fun termArityWithContext => fun (tx : hydra.graph.Graph) => fun (term_ : Term) => (fun x_ => match x_ with
 | Term_Annotated v_ => (fun (at_ : AnnotatedTerm) => ((termArityWithContext) (tx)) ((fun r_ => (annotatedTerm_body) (r_)) (at_))) (v_)
 | Term_Application v_ => (fun (app : Application) => ((math.sub) (((termArityWithContext) (tx)) ((fun r_ => (application_function) (r_)) (app)))) ((1)%Z)) (v_)
 | Term_Cases v_ => (fun (_ : CaseStatement) => (1)%Z) (v_)
@@ -190,22 +185,21 @@ end) (trm2)) in let recurse := fun (tx1 : hydra.graph.Graph) => fun (term1 : Ter
 | Term_Wrap v_ => (fun (wt : WrappedTerm) => (afterRecursion) ((Term_Wrap) ((Build_WrappedTerm) ((fun r_ => (wrappedTerm_typeName) (r_)) (wt)) (((recurse) (tx)) ((fun r_ => (wrappedTerm_body) (r_)) (wt)))))) (v_)
 end) (term_)) in (contractTerm) ((((rewriteWithArgs) (nil)) (tx0)) (term0)).
 Definition betaReduceType_bundle (t0 : Type) :=
-  hydra_fix (fun (bundle_ : t0 -> hydra.graph.Graph -> Type_ -> (sum) (Error) (Type_)) =>
+  hydra_fix (fun (bundle_ : forall (_ : t0) , forall (_ : hydra.graph.Graph) , forall (_ : Type_) , (sum) (Error) (Type_)) =>
     let betaReduceType := bundle_ in
     fun (cx : t0) => fun (graph_ : hydra.graph.Graph) => fun (typ : Type_) => let reduceApp := (hydra_fix) (fun reduceApp => fun (app : ApplicationType) => let rhs := (fun r_ => (applicationType_argument) (r_)) (app) in let lhs := (fun r_ => (applicationType_function) (r_)) (app) in (fun x_ => match x_ with
 | Type__Annotated v_ => (fun (at_ : AnnotatedType) => ((eithers.bind) ((reduceApp) ((Build_ApplicationType) ((fun r_ => (annotatedType_body) (r_)) (at_)) (rhs)))) (fun (a : Type_) => (inr) ((Type__Annotated) ((Build_AnnotatedType) (a) ((fun r_ => (annotatedType_annotation) (r_)) (at_)))))) (v_)
 | Type__Forall v_ => (fun (ft : ForallType) => (((betaReduceType) (cx)) (graph_)) ((((replaceFreeTypeVariable) ((fun r_ => (forallType_parameter) (r_)) (ft))) (rhs)) ((fun r_ => (forallType_body) (r_)) (ft)))) (v_)
 | Type__Variable v_ => (fun (name : Name) => ((eithers.bind) ((((requireType) (cx)) (graph_)) (name))) (fun (t' : Type_) => (((betaReduceType) (cx)) (graph_)) ((Type__Application) ((Build_ApplicationType) (t') (rhs))))) (v_)
 | _ => hydra_unreachable
-end) (lhs)) in let mapExpr := fun (t1 : Type) => fun (recurse : t1 -> (sum) (Error) (Type_)) => fun (t : t1) => let findApp := fun (r : Type_) => (fun x_ => match x_ with
+end) (lhs)) in let mapExpr := fun (t1 : Type) => fun (recurse : forall (_ : t1) , (sum) (Error) (Type_)) => fun (t : t1) => let findApp := fun (r : Type_) => (fun x_ => match x_ with
 | Type__Application v_ => (fun (a : ApplicationType) => (reduceApp) (a)) (v_)
 | _ => (inr) (r)
 end) (r) in ((eithers.bind) ((recurse) (t))) (fun (r : Type_) => (findApp) (r)) in ((rewriteTypeM) ((mapExpr) (Type_))) (typ)).
 Arguments betaReduceType_bundle {t0}.
 
-Definition betaReduceType (t0 : Type) : t0 -> hydra.graph.Graph -> Type_ -> (sum) (Error) (Type_) :=
+Definition betaReduceType (t0 : Type) : forall (_ : t0) , forall (_ : hydra.graph.Graph) , forall (_ : Type_) , (sum) (Error) (Type_) :=
   betaReduceType_bundle.
 Arguments betaReduceType {t0}.
-Definition alphaConvert : Name -> Name -> Term -> Term :=
-  fun (vold : Name) => fun (vnew : Name) => fun (term_ : Term) => (((replaceFreeTermVariable) (vold)) ((Term_Variable) (vnew))) (term_).
+Definition alphaConvert : forall (_ : Name) , forall (_ : Name) , forall (_ : Term) , Term := fun (vold : Name) => fun (vnew : Name) => fun (term_ : Term) => (((replaceFreeTermVariable) (vold)) ((Term_Variable) (vnew))) (term_).
 

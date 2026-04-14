@@ -68,6 +68,8 @@ import qualified Hydra.Sources.Other.Atlas                 as Atlas
 import qualified Hydra.Sources.Other.AzureDtld             as AzureDtld
 import qualified Hydra.Sources.Other.Coq                   as Coq
 -- import qualified Hydra.Sources.Coq.Coder                   as CoqCoder  -- excluded (see coqModules)
+import qualified Hydra.Sources.Coq.Coder                   as CoqCoder
+import qualified Hydra.Sources.Coq.Environment             as CoqEnvironment
 import qualified Hydra.Sources.Coq.Language                as CoqLanguage
 import qualified Hydra.Sources.Coq.Serde                   as CoqSerde
 import qualified Hydra.Sources.Other.GeoJson               as GeoJson
@@ -231,11 +233,8 @@ otherExtModules = [
 
 coqModules :: [Module]
 coqModules = [
-  -- Note: CoqCoder is excluded from hydraExtModules because the actual Coq term encoder
-  -- (hydra-ext/src/main/haskell/Hydra/Ext/Coq/Coder.hs) is hand-written and more capable
-  -- than what the DSL source can express. The DSL version would overwrite it with a
-  -- simpler (broken) version if included in regeneration.
-  -- CoqCoder.module_,
+  CoqCoder.module_,
+  CoqEnvironment.module_,
   CoqLanguage.module_,
   CoqSerde.module_]
 

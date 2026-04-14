@@ -7,7 +7,7 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 Require Import hydra.core hydra.lib.lists hydra.lib.math hydra.graph.
 
 Definition uncurryType_bundle :=
-  hydra_fix (fun (bundle_ : Type_ -> (list) (Type_)) =>
+  hydra_fix (fun (bundle_ : forall (_ : Type_) , (list) (Type_)) =>
     let uncurryType := bundle_ in
     fun (t : Type_) => (fun x_ => match x_ with
 | Type__Annotated v_ => (fun (arg_ : AnnotatedType) => (uncurryType) ((fun r_ => (annotatedType_body) (r_)) (arg_))) (v_)
@@ -17,10 +17,10 @@ Definition uncurryType_bundle :=
 | _ => (cons) (t) (nil)
 end) (t)).
 
-Definition uncurryType : Type_ -> (list) (Type_) :=
+Definition uncurryType : forall (_ : Type_) , (list) (Type_) :=
   uncurryType_bundle.
 Definition typeArity_bundle :=
-  hydra_fix (fun (bundle_ : Type_ -> Z) =>
+  hydra_fix (fun (bundle_ : forall (_ : Type_) , Z) =>
     let typeArity := bundle_ in
     fun x_ => match x_ with
 | Type__Annotated v_ => (fun (arg_ : AnnotatedType) => (typeArity) ((fun r_ => (annotatedType_body) (r_)) (arg_))) (v_)
@@ -30,12 +30,11 @@ Definition typeArity_bundle :=
 | _ => (0)%Z
 end).
 
-Definition typeArity : Type_ -> Z :=
+Definition typeArity : forall (_ : Type_) , Z :=
   typeArity_bundle.
-Definition typeSchemeArity : TypeScheme -> Z :=
-  fun (arg_ : TypeScheme) => (typeArity) ((fun r_ => (typeScheme_type) (r_)) (arg_)).
+Definition typeSchemeArity : forall (_ : TypeScheme) , Z := fun (arg_ : TypeScheme) => (typeArity) ((fun r_ => (typeScheme_type) (r_)) (arg_)).
 Definition termArity_bundle :=
-  hydra_fix (fun (bundle_ : Term -> Z) =>
+  hydra_fix (fun (bundle_ : forall (_ : Term) , Z) =>
     let termArity := bundle_ in
     fun x_ => match x_ with
 | Term_Application v_ => (fun (arg_ : Application) => (fun (arg_2 : Term) => (fun (xapp : Z) => ((math.sub) (xapp)) ((1)%Z)) ((termArity) (arg_2))) ((fun r_ => (application_function) (r_)) (arg_))) (v_)
@@ -46,8 +45,7 @@ Definition termArity_bundle :=
 | _ => (0)%Z
 end).
 
-Definition termArity : Term -> Z :=
+Definition termArity : forall (_ : Term) , Z :=
   termArity_bundle.
-Definition primitiveArity : Primitive -> Z :=
-  fun (arg_ : Primitive) => (fun (arg_2 : TypeScheme) => (typeArity) ((fun r_ => (typeScheme_type) (r_)) (arg_2))) ((fun r_ => (primitive_type) (r_)) (arg_)).
+Definition primitiveArity : forall (_ : Primitive) , Z := fun (arg_ : Primitive) => (fun (arg_2 : TypeScheme) => (typeArity) ((fun r_ => (typeScheme_type) (r_)) (arg_2))) ((fun r_ => (primitive_type) (r_)) (arg_)).
 

@@ -7,7 +7,7 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 Require Import hydra.graph hydra.core hydra.errors hydra.json.model hydra.lib.eithers hydra.lib.maps hydra.extract.core hydra.lib.maybes hydra.lib.strings.
 
 Definition value_bundle :=
-  hydra_fix (fun (bundle_ : hydra.graph.Graph -> Term -> (sum) (DecodingError) (Value)) =>
+  hydra_fix (fun (bundle_ : forall (_ : hydra.graph.Graph) , forall (_ : Term) , (sum) (DecodingError) (Value)) =>
     let value := bundle_ in
     fun (cx : hydra.graph.Graph) => fun (raw : Term) => (((eithers.either) (fun (err : DecodingError) => (inl) (err))) (fun (stripped : Term) => (fun x_ => match x_ with
 | Term_Inject v_ => (fun (inj : Injection) => let variantMap := (maps.fromList) ((cons) ((pair) ("array"%string) (fun (input : Term) => ((eithers.map) (fun (t : (list) (Value)) => (Value_Array) (t))) ((((decodeList) (value)) (cx)) (input)))) ((cons) ((pair) ("boolean"%string) (fun (input : Term) => ((eithers.map) (fun (t : bool) => (Value_Boolean) (t))) (((fun (cx2 : hydra.graph.Graph) => fun (raw2 : Term) => (((eithers.either) (fun (err : DecodingError) => (inl) (err))) (fun (stripped2 : Term) => (fun x_ => match x_ with
@@ -37,10 +37,10 @@ end) (stripped2))) (((stripWithDecodingError) (cx2)) (raw2)))) (value)) (cx)) (i
 | _ => (inl) ("expected string literal"%string)
 end) (v)) (v_)
 | _ => (inl) ("expected literal"%string)
-end) (stripped2))) (((stripWithDecodingError) (cx2)) (raw2))) (cx)) (input)))) (nil))))))) in let field := (fun r_ => (injection_field) (r_)) (inj) in let fname := (fun r_ => (field_name) (r_)) (field) in let fterm := (fun r_ => (field_term) (r_)) (field) in (((maybes.maybe) ((inl) ((strings.cat) ((cons) ("no such field "%string) ((cons) ((fun w_ => w_) (fname)) ((cons) (" in union"%string) (nil))))))) (fun (f : Term -> (sum) (DecodingError) (Value)) => (f) (fterm))) (((maps.lookup) (fname)) (variantMap))) (v_)
+end) (stripped2))) (((stripWithDecodingError) (cx2)) (raw2))) (cx)) (input)))) (nil))))))) in let field := (fun r_ => (injection_field) (r_)) (inj) in let fname := (fun r_ => (field_name) (r_)) (field) in let fterm := (fun r_ => (field_term) (r_)) (field) in (((maybes.maybe) ((inl) ((strings.cat) ((cons) ("no such field "%string) ((cons) ((fun w_ => w_) (fname)) ((cons) (" in union"%string) (nil))))))) (fun (f : forall (_ : Term) , (sum) (DecodingError) (Value)) => (f) (fterm))) (((maps.lookup) (fname)) (variantMap))) (v_)
 | _ => (inl) ("expected union"%string)
 end) (stripped))) (((stripWithDecodingError) (cx)) (raw))).
 
-Definition value : hydra.graph.Graph -> Term -> (sum) (DecodingError) (Value) :=
+Definition value : forall (_ : hydra.graph.Graph) , forall (_ : Term) , (sum) (DecodingError) (Value) :=
   value_bundle.
 

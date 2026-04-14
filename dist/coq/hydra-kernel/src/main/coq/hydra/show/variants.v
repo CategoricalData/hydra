@@ -6,8 +6,7 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 (* Module dependencies *)
 Require Import hydra.variants.
 
-Definition typeVariant : TypeVariant -> string :=
-  fun x_ => match x_ with
+Definition typeVariant : forall (_ : TypeVariant) , string := fun x_ => match x_ with
 | TypeVariant_Annotated _ => "annotated"%string
 | TypeVariant_Application _ => "application"%string
 | TypeVariant_Either _ => "either"%string
@@ -26,8 +25,7 @@ Definition typeVariant : TypeVariant -> string :=
 | TypeVariant_Void _ => "void"%string
 | TypeVariant_Wrap _ => "wrap"%string
 end.
-Definition termVariant : TermVariant -> string :=
-  fun x_ => match x_ with
+Definition termVariant : forall (_ : TermVariant) , string := fun x_ => match x_ with
 | TermVariant_Annotated _ => "annotated"%string
 | TermVariant_Application _ => "application"%string
 | TermVariant_Cases _ => "cases"%string

@@ -6,10 +6,8 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 (* Module dependencies *)
 Require Import hydra.lib.logic hydra.lib.equality hydra.core hydra.json.model hydra.lib.literals hydra.strip hydra.lib.eithers hydra.lib.sets hydra.lib.maybes hydra.lib.maps hydra.lib.pairs hydra.lib.strings hydra.show.core hydra.lib.lists.
 
-Definition isSpecialFloatString : string -> bool :=
-  fun (s : string) => ((logic.or) (((equality.equal) (s)) ("NaN"%string))) (((logic.or) (((equality.equal) (s)) ("Infinity"%string))) (((logic.or) (((equality.equal) (s)) ("-Infinity"%string))) (((equality.equal) (s)) ("-0.0"%string)))).
-Definition encodeInteger (t0 : Type) : IntegerValue -> (sum) (t0) (Value) :=
-  fun (iv : IntegerValue) => (fun x_ => match x_ with
+Definition isSpecialFloatString : forall (_ : string) , bool := fun (s : string) => ((logic.or) (((equality.equal) (s)) ("NaN"%string))) (((logic.or) (((equality.equal) (s)) ("Infinity"%string))) (((logic.or) (((equality.equal) (s)) ("-Infinity"%string))) (((equality.equal) (s)) ("-0.0"%string)))).
+Definition encodeInteger (t0 : Type) : forall (_ : IntegerValue) , (sum) (t0) (Value) := fun (iv : IntegerValue) => (fun x_ => match x_ with
 | IntegerValue_Bigint v_ => (fun (bi : Z) => (inr) ((Value_String) ((literals.showBigint) (bi)))) (v_)
 | IntegerValue_Int64 v_ => (fun (i : Z) => (inr) ((Value_String) ((literals.showInt64) (i)))) (v_)
 | IntegerValue_Uint32 v_ => (fun (i : Z) => (inr) ((Value_String) ((literals.showUint32) (i)))) (v_)
@@ -21,15 +19,13 @@ Definition encodeInteger (t0 : Type) : IntegerValue -> (sum) (t0) (Value) :=
 | IntegerValue_Uint16 v_ => (fun (i : Z) => (inr) ((Value_Number) ((literals.bigintToBigfloat) ((literals.uint16ToBigint) (i))))) (v_)
 end) (iv).
 Arguments encodeInteger {t0}.
-Definition encodeFloat (t0 : Type) : FloatValue -> (sum) (t0) (Value) :=
-  fun (fv : FloatValue) => (fun x_ => match x_ with
+Definition encodeFloat (t0 : Type) : forall (_ : FloatValue) , (sum) (t0) (Value) := fun (fv : FloatValue) => (fun x_ => match x_ with
 | FloatValue_Bigfloat v_ => (fun (bf : Q) => let s := (literals.showBigfloat) (bf) in (((logic.ifElse) ((isSpecialFloatString) (s))) ((inr) ((Value_String) (s)))) ((inr) ((Value_Number) (bf)))) (v_)
 | FloatValue_Float32 v_ => (fun (f : Q) => (inr) ((Value_String) ((literals.showFloat32) (f)))) (v_)
 | FloatValue_Float64 v_ => (fun (f : Q) => let s := (literals.showFloat64) (f) in (((logic.ifElse) ((isSpecialFloatString) (s))) ((inr) ((Value_String) (s)))) ((inr) ((Value_Number) ((literals.float64ToBigfloat) (f))))) (v_)
 end) (fv).
 Arguments encodeFloat {t0}.
-Definition encodeLiteral (t0 : Type) : Literal -> (sum) (t0) (Value) :=
-  fun (lit : Literal) => (fun x_ => match x_ with
+Definition encodeLiteral (t0 : Type) : forall (_ : Literal) , (sum) (t0) (Value) := fun (lit : Literal) => (fun x_ => match x_ with
 | Literal_Binary v_ => (fun (b : string) => (inr) ((Value_String) ((literals.binaryToString) (b)))) (v_)
 | Literal_Boolean v_ => (fun (b : bool) => (inr) ((Value_Boolean) (b))) (v_)
 | Literal_Float v_ => (fun (f : FloatValue) => (encodeFloat) (f)) (v_)
@@ -38,7 +34,7 @@ Definition encodeLiteral (t0 : Type) : Literal -> (sum) (t0) (Value) :=
 end) (lit).
 Arguments encodeLiteral {t0}.
 Definition toJsonUntyped_bundle :=
-  hydra_fix (fun (bundle_ : Term -> (sum) (string) (Value)) =>
+  hydra_fix (fun (bundle_ : forall (_ : Term) , (sum) (string) (Value)) =>
     let toJsonUntyped := bundle_ in
     fun (term_ : Term) => let stripped := (deannotateTerm) (term_) in (fun x_ => match x_ with
 | Term_Literal v_ => (fun (lit : Literal) => (encodeLiteral) (lit)) (v_)
@@ -55,10 +51,10 @@ Definition toJsonUntyped_bundle :=
 | _ => (inl) ((strings.cat) ((cons) ("unsupported term variant for JSON encoding: "%string) ((cons) ((hydra.show.core.term) (term_)) (nil))))
 end) (stripped)).
 
-Definition toJsonUntyped : Term -> (sum) (string) (Value) :=
+Definition toJsonUntyped : forall (_ : Term) , (sum) (string) (Value) :=
   toJsonUntyped_bundle.
 Definition toJson_bundle :=
-  hydra_fix (fun (bundle_ : (list) ((prod) (Name) (Type_)) -> Name -> Type_ -> Term -> (sum) (string) (Value)) =>
+  hydra_fix (fun (bundle_ : forall (_ : (list) ((prod) (Name) (Type_))) , forall (_ : Name) , forall (_ : Type_) , forall (_ : Term) , (sum) (string) (Value)) =>
     let toJson := bundle_ in
     fun (types : (list) ((prod) (Name) (Type_))) => fun (tname : Name) => fun (typ : Type_) => fun (term_ : Term) => let strippedTerm := (deannotateTerm) (term_) in let stripped := (deannotateType) (typ) in (fun x_ => match x_ with
 | Type__Literal v_ => (fun (_ : LiteralType) => (fun x_ => match x_ with
@@ -121,6 +117,6 @@ end) (strippedTerm)) (v_)
 | _ => (inl) ((strings.cat) ((cons) ("unsupported type for JSON encoding: "%string) ((cons) ((hydra.show.core.type) (typ)) (nil))))
 end) (stripped)).
 
-Definition toJson : (list) ((prod) (Name) (Type_)) -> Name -> Type_ -> Term -> (sum) (string) (Value) :=
+Definition toJson : forall (_ : (list) ((prod) (Name) (Type_))) , forall (_ : Name) , forall (_ : Type_) , forall (_ : Term) , (sum) (string) (Value) :=
   toJson_bundle.
 

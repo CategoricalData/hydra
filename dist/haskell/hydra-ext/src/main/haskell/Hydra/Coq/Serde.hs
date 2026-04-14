@@ -25,7 +25,7 @@ applicationToExpr app =
               identToExpr (Syntax.identArgIdent v1),
               (Serialization.cst ":="),
               (termToExpr (Syntax.identArgTerm v1))])]
-          Syntax.ArgNatural v1 ->
+          Syntax.ArgNatural v1 ->  
             let v = Syntax.unNatural (Syntax.naturalArgNatural v1)
             in (Serialization.cst (Literals.showBigint v))
           Syntax.ArgTerm v1 -> term1ToExpr v1) (Syntax.normalApplicationRhs v0)))]
@@ -33,20 +33,28 @@ applicationToExpr app =
         Serialization.cst "@",
         (qualidToExpr (Syntax.qualidAnnotatedQualid (Syntax.annotatedApplicationAnnot v0)))]
 
+axiomDeclarationToExpr :: Syntax.AxiomDeclaration -> Ast.Expr
+axiomDeclarationToExpr a =
+    Serialization.suffix "." (Serialization.spaceSep [
+      Serialization.cst "Axiom",
+      (identToExpr (Syntax.axiomDeclarationName a)),
+      (Serialization.cst ":"),
+      (typeToExpr (Syntax.axiomDeclarationType a))])
+
 binderToExpr :: Syntax.Binder -> Ast.Expr
 binderToExpr b =
     case b of
       Syntax.BinderName v0 -> Maybes.maybe (Serialization.cst "_") (\i -> identToExpr i) (Syntax.unName v0)
-      Syntax.BinderType v0 ->
+      Syntax.BinderType v0 ->  
         let names =
-                Lists.map (\n -> Maybes.maybe (Serialization.cst "_") (\i -> identToExpr i) (Syntax.unName n)) (Syntax.typeBindersNames v0)
+                Lists.map (\n -> Maybes.maybe (Serialization.cst "_") (\i -> identToExpr i) (Syntax.unName n)) (Syntax.typeBindersNames v0) 
             ty = typeToExpr (Syntax.typeBindersType v0)
         in (Serialization.parens (Serialization.spaceSep [
           Serialization.spaceSep names,
           (Serialization.cst ":"),
           ty]))
-      Syntax.BinderTerm v0 ->
-        let name = Maybes.maybe (Serialization.cst "_") (\i -> identToExpr i) (Syntax.unName (Syntax.letBinderName v0))
+      Syntax.BinderTerm v0 ->  
+        let name = Maybes.maybe (Serialization.cst "_") (\i -> identToExpr i) (Syntax.unName (Syntax.letBinderName v0)) 
             ty =
                     Maybes.maybe [] (\t -> [
                       Serialization.cst ":",
@@ -60,17 +68,17 @@ binderToExpr b =
             Serialization.cst ":=",
             body]])))
       Syntax.BinderImplicit v0 -> case v0 of
-        Syntax.ImplicitBindersMaximallyInserted v1 ->
+        Syntax.ImplicitBindersMaximallyInserted v1 ->  
           let names =
-                  Lists.map (\n -> Maybes.maybe (Serialization.cst "_") (\i -> identToExpr i) (Syntax.unName n)) (Syntax.typeBindersNames v1)
+                  Lists.map (\n -> Maybes.maybe (Serialization.cst "_") (\i -> identToExpr i) (Syntax.unName n)) (Syntax.typeBindersNames v1) 
               ty = typeToExpr (Syntax.typeBindersType v1)
           in (Serialization.brackets Serialization.curlyBraces Serialization.inlineStyle (Serialization.spaceSep [
             Serialization.spaceSep names,
             (Serialization.cst ":"),
             ty]))
-        Syntax.ImplicitBindersNonMaximallyInserted v1 ->
+        Syntax.ImplicitBindersNonMaximallyInserted v1 ->  
           let names =
-                  Lists.map (\n -> Maybes.maybe (Serialization.cst "_") (\i -> identToExpr i) (Syntax.unName n)) (Syntax.typeBindersNames v1)
+                  Lists.map (\n -> Maybes.maybe (Serialization.cst "_") (\i -> identToExpr i) (Syntax.unName n)) (Syntax.typeBindersNames v1) 
               ty = typeToExpr (Syntax.typeBindersType v1)
           in (Serialization.brackets Serialization.squareBrackets Serialization.inlineStyle (Serialization.spaceSep [
             Serialization.spaceSep names,
@@ -91,8 +99,8 @@ commentToExpr c =
 
 constructorToExpr :: Syntax.Constructor -> Ast.Expr
 constructorToExpr c =
-
-      let name = identToExpr (Syntax.constructorName c)
+     
+      let name = identToExpr (Syntax.constructorName c) 
           binders = Lists.map (\b -> binderToExpr b) (Syntax.constructorBinders c)
           ty =
                   Maybes.maybe [] (\t -> [
@@ -107,9 +115,9 @@ constructorToExpr c =
 
 definitionToExpr :: Syntax.Definition -> Ast.Expr
 definitionToExpr d =
-
+     
       let locPart = Maybes.maybe [] (\l -> [
-            localityToExpr l]) (Syntax.definitionLocality d)
+            localityToExpr l]) (Syntax.definitionLocality d) 
           name = identToExpr (Syntax.definitionName d)
           binders = Lists.map (\b -> binderToExpr b) (Syntax.definitionBinders d)
           ty =
@@ -133,9 +141,9 @@ documentToExpr doc = Serialization.doubleNewlineSep (Lists.map (\s -> sentenceTo
 
 fixpointDefinitionToExpr :: Syntax.FixpointDefinition -> Ast.Expr
 fixpointDefinitionToExpr fd =
-
+     
       let locPart = Maybes.maybe [] (\l -> [
-            localityToExpr l]) (Syntax.fixpointDefinitionLocality fd)
+            localityToExpr l]) (Syntax.fixpointDefinitionLocality fd) 
           name = identToExpr (Syntax.fixpointDefinitionName fd)
           binders = Lists.map (\b -> binderToExpr b) (Syntax.fixpointDefinitionBinders fd)
           ty =
@@ -159,8 +167,8 @@ identToExpr ident = Serialization.cst (Syntax.unString (Syntax.unIdent ident))
 
 inductiveBodyToExpr :: Syntax.InductiveBody -> Ast.Expr
 inductiveBodyToExpr ib =
-
-      let name = identToExpr (Syntax.inductiveBodyName ib)
+     
+      let name = identToExpr (Syntax.inductiveBodyName ib) 
           binders = Lists.map (\b -> binderToExpr b) (Syntax.inductiveBodyBinders ib)
           ty =
                   Maybes.maybe [] (\t -> [
@@ -180,19 +188,24 @@ inductiveBodyToExpr ib =
 
 inductiveDefinitionToExpr :: Syntax.InductiveDefinition -> Ast.Expr
 inductiveDefinitionToExpr id =
-
+     
       let locPart = Maybes.maybe [] (\l -> [
-            localityToExpr l]) (Syntax.inductiveDefinitionLocality id)
+            localityToExpr l]) (Syntax.inductiveDefinitionLocality id) 
           kwPart =
                   Logic.ifElse (Syntax.inductiveDefinitionCoinductive id) (Serialization.cst "CoInductive") (Serialization.cst "Inductive")
           bodyExprs = Lists.map (\b -> inductiveBodyToExpr b) (Syntax.inductiveDefinitionBodies id)
-      in (Serialization.suffix "." (Serialization.newlineSep (Lists.concat [
-        [
-          Serialization.spaceSep (Lists.concat [
-            locPart,
-            [
-              kwPart]])],
-        bodyExprs])))
+          firstBody = Lists.head bodyExprs
+          restBodies =
+                  Lists.map (\b -> Serialization.spaceSep [
+                    Serialization.cst "with",
+                    b]) (Lists.tail bodyExprs)
+          firstLine =
+                  Serialization.spaceSep (Lists.concat [
+                    locPart,
+                    [
+                      kwPart,
+                      firstBody]])
+      in (Serialization.suffix "." (Serialization.newlineSep (Lists.cons firstLine restBodies)))
 
 localityToExpr :: Syntax.Locality -> Ast.Expr
 localityToExpr loc =
@@ -202,10 +215,10 @@ localityToExpr loc =
 
 matchToExpr :: Syntax.Match -> Ast.Expr
 matchToExpr m =
-
+     
       let items =
-              Lists.map (\ci ->
-                let t = term100ToExpr (Syntax.caseItemTerm ci)
+              Lists.map (\ci ->  
+                let t = term100ToExpr (Syntax.caseItemTerm ci) 
                     asP =
                             Maybes.maybe [] (\n -> [
                               Serialization.cst "as",
@@ -213,14 +226,15 @@ matchToExpr m =
                 in (Serialization.spaceSep (Lists.concat [
                   [
                     t],
-                  asP]))) (Syntax.matchCaseItems m)
+                  asP]))) (Syntax.matchCaseItems m) 
           ret =
                   Maybes.maybe [] (\r -> [
                     Serialization.cst "return",
                     (term100ToExpr r)]) (Syntax.matchReturn m)
           eqs =
-                  Lists.map (\eq ->
-                    let pats = Serialization.cst "| ..."
+                  Lists.map (\eq ->  
+                    let patGroups = Lists.map (\grp -> Serialization.spaceSep (Lists.map (\p -> patternToExpr p) grp)) (Syntax.equationPattern eq) 
+                        pats = Serialization.infixWsList " | " patGroups
                         body = termToExpr (Syntax.equationTerm eq)
                     in (Serialization.spaceSep [
                       Serialization.cst "|",
@@ -242,8 +256,8 @@ matchToExpr m =
 
 moduleDefinitionToExpr :: Syntax.ModuleDefinition -> Ast.Expr
 moduleDefinitionToExpr md =
-
-      let name = identToExpr (Syntax.moduleDefinitionName md)
+     
+      let name = identToExpr (Syntax.moduleDefinitionName md) 
           sentences = Lists.map (\s -> sentenceToExpr s) (Syntax.moduleDefinitionSentences md)
       in (Serialization.doubleNewlineSep (Lists.concat [
         [
@@ -256,10 +270,50 @@ moduleDefinitionToExpr md =
             Serialization.cst "End",
             name])]]))
 
+pattern0ToExpr :: Syntax.Pattern0 -> Ast.Expr
+pattern0ToExpr p =
+    case p of
+      Syntax.Pattern0Qualid v0 -> qualidToExpr v0
+      Syntax.Pattern0QualIdAndPattern _ -> Serialization.cst "..."
+      Syntax.Pattern0Placeholder -> Serialization.cst "_"
+      Syntax.Pattern0Parens v0 -> Serialization.parens (Serialization.infixWsList ", " (Lists.map (\p2 -> patternToExpr p2) v0))
+      Syntax.Pattern0Number v0 ->  
+        let v = Syntax.unNumber v0
+        in (Serialization.cst (Literals.showBigfloat v))
+      Syntax.Pattern0String v0 -> Serialization.spaceSep [
+        Serialization.cst "\"",
+        (Serialization.cst (Syntax.unString v0)),
+        (Serialization.cst "\"")]
+
+pattern10ToExpr :: Syntax.Pattern10 -> Ast.Expr
+pattern10ToExpr p =
+    case p of
+      Syntax.Pattern10As v0 -> Serialization.spaceSep [
+        pattern1ToExpr (Syntax.pattern10_AsPattern v0),
+        (Serialization.cst "as"),
+        (Maybes.maybe (Serialization.cst "_") (\i -> identToExpr i) (Syntax.unName (Syntax.pattern10_AsAs v0)))]
+      Syntax.Pattern10Patterns v0 ->  
+        let first = pattern1ToExpr (Syntax.pattern10_PatternsPattern v0) 
+            rest = Lists.map (\p2 -> pattern1ToExpr p2) (Syntax.pattern10_PatternsPatterns v0)
+        in (Serialization.spaceSep (Lists.cons first rest))
+      Syntax.Pattern10Qualiid v0 ->  
+        let q = qualidToExpr (Syntax.pattern10_QualidQualid v0) 
+            args = Lists.map (\p2 -> pattern1ToExpr p2) (Syntax.pattern10_QualidPatterns v0)
+        in (Logic.ifElse (Lists.null args) q (Serialization.spaceSep (Lists.cons q args)))
+
+pattern1ToExpr :: Syntax.Pattern1 -> Ast.Expr
+pattern1ToExpr p = pattern0ToExpr (Syntax.pattern1Pattern p)
+
+patternToExpr :: Syntax.Pattern -> Ast.Expr
+patternToExpr p =
+    case p of
+      Syntax.PatternPattern v0 -> pattern10ToExpr v0
+      Syntax.PatternTerm _ -> Serialization.cst "_"
+
 qualidToExpr :: Syntax.Qualid -> Ast.Expr
 qualidToExpr q =
-
-      let idExpr = identToExpr (Syntax.qualidId q)
+     
+      let idExpr = identToExpr (Syntax.qualidId q) 
           fieldIds = Syntax.qualidFieldIds q
           fieldExprs = Lists.map (\f -> identToExpr (Syntax.unFieldIdent f)) fieldIds
       in (Logic.ifElse (Lists.null fieldExprs) idExpr (Serialization.dotSep (Lists.concat2 [
@@ -267,9 +321,9 @@ qualidToExpr q =
 
 recordDefinitionToExpr :: Syntax.RecordDefinition -> Ast.Expr
 recordDefinitionToExpr rd =
-
+     
       let locPart = Maybes.maybe [] (\l -> [
-            localityToExpr l]) (Syntax.recordDefinitionLocality rd)
+            localityToExpr l]) (Syntax.recordDefinitionLocality rd) 
           name = identToExpr (Syntax.recordDefinitionName rd)
           binders = Lists.map (\b -> binderToExpr b) (Syntax.recordDefinitionBinders rd)
           sortPart =
@@ -308,11 +362,11 @@ recordFieldToExpr rf =
 
 requireImportToExpr :: Syntax.RequireImport -> Ast.Expr
 requireImportToExpr ri =
-
+     
       let fromPart =
               Maybes.maybe [] (\q -> [
                 Serialization.cst "From",
-                (qualidToExpr q)]) (Syntax.requireImportFrom ri)
+                (qualidToExpr q)]) (Syntax.requireImportFrom ri) 
           requirePart = Logic.ifElse (Syntax.requireImportRequire ri) [
                 Serialization.cst "Require"] []
           qualPart =
@@ -330,8 +384,8 @@ requireImportToExpr ri =
 
 sectionDefinitionToExpr :: Syntax.SectionDefinition -> Ast.Expr
 sectionDefinitionToExpr sd =
-
-      let name = identToExpr (Syntax.sectionDefinitionName sd)
+     
+      let name = identToExpr (Syntax.sectionDefinitionName sd) 
           sentences = Lists.map (\s -> sentenceToExpr s) (Syntax.sectionDefinitionSentences sd)
       in (Serialization.doubleNewlineSep (Lists.concat [
         [
@@ -347,6 +401,7 @@ sectionDefinitionToExpr sd =
 sentenceContentToExpr :: Syntax.SentenceContent -> Ast.Expr
 sentenceContentToExpr sc =
     case sc of
+      Syntax.SentenceContentAxiom v0 -> axiomDeclarationToExpr v0
       Syntax.SentenceContentDefinition v0 -> definitionToExpr v0
       Syntax.SentenceContentFixpoint v0 -> fixpointDefinitionToExpr v0
       Syntax.SentenceContentInductive v0 -> inductiveDefinitionToExpr v0
@@ -359,9 +414,9 @@ sentenceContentToExpr sc =
 
 sentenceToExpr :: Syntax.Sentence -> Ast.Expr
 sentenceToExpr s =
-
+     
       let cmtPart = Maybes.maybe [] (\c -> [
-            commentToExpr c]) (Syntax.sentenceComment s)
+            commentToExpr c]) (Syntax.sentenceComment s) 
           content = sentenceContentToExpr (Syntax.sentenceContent s)
       in (Serialization.newlineSep (Lists.concat [
         cmtPart,
@@ -387,7 +442,7 @@ term0ToExpr t =
       Syntax.Term0QualidAnnotated v0 -> qualidToExpr (Syntax.qualidAnnotatedQualid v0)
       Syntax.Term0Sort v0 -> sortToExpr v0
       Syntax.Term0PrimitiveNotations v0 -> case v0 of
-        Syntax.PrimitiveNotationsNumber v1 ->
+        Syntax.PrimitiveNotationsNumber v1 ->  
           let v = Syntax.unNumber v1
           in (Serialization.cst (Literals.showBigfloat v))
         Syntax.PrimitiveNotationsString v1 -> Serialization.spaceSep [
@@ -432,9 +487,9 @@ termToExpr t =
         Syntax.ForallOrFunForall v1 -> Serialization.spaceSep [
           Serialization.cst "forall",
           case (Syntax.forallBinders v1) of
-            Syntax.OpenBindersType v2 ->
+            Syntax.OpenBindersType v2 ->  
               let names =
-                      Lists.map (\n -> Maybes.maybe (Serialization.cst "_") (\i -> identToExpr i) (Syntax.unName n)) (Syntax.typeBindersNames v2)
+                      Lists.map (\n -> Maybes.maybe (Serialization.cst "_") (\i -> identToExpr i) (Syntax.unName n)) (Syntax.typeBindersNames v2) 
                   ty = typeToExpr (Syntax.typeBindersType v2)
               in (Serialization.spaceSep [
                 Serialization.parens (Serialization.spaceSep [
@@ -447,9 +502,9 @@ termToExpr t =
         Syntax.ForallOrFunFun v1 -> Serialization.spaceSep [
           Serialization.cst "fun",
           case (Syntax.funBinders v1) of
-            Syntax.OpenBindersType v2 ->
+            Syntax.OpenBindersType v2 ->  
               let names =
-                      Lists.map (\n -> Maybes.maybe (Serialization.cst "_") (\i -> identToExpr i) (Syntax.unName n)) (Syntax.typeBindersNames v2)
+                      Lists.map (\n -> Maybes.maybe (Serialization.cst "_") (\i -> identToExpr i) (Syntax.unName n)) (Syntax.typeBindersNames v2) 
                   ty = typeToExpr (Syntax.typeBindersType v2)
               in (Serialization.spaceSep [
                 Serialization.parens (Serialization.spaceSep [
@@ -459,12 +514,12 @@ termToExpr t =
             Syntax.OpenBindersBinders v2 -> Serialization.spaceSep (Lists.map (\b -> binderToExpr b) v2),
           (Serialization.cst "=>"),
           (termToExpr (Syntax.funBody v1))]
-      Syntax.TermLet v0 ->
-        let bindings = Syntax.letBindings v0
+      Syntax.TermLet v0 ->  
+        let bindings = Syntax.letBindings v0 
             body = termToExpr (Syntax.letIn v0)
         in case bindings of
-          Syntax.LetBindingsNamed v1 ->
-            let binder = Syntax.letNamedBinder v1
+          Syntax.LetBindingsNamed v1 ->  
+            let binder = Syntax.letNamedBinder v1 
                 name = Maybes.maybe (Serialization.cst "_") (\i -> identToExpr i) (Syntax.unName (Syntax.letBinderName binder))
                 binders = Lists.map (\b -> binderToExpr b) (Syntax.letNamedBinders v1)
                 ty =
@@ -490,8 +545,8 @@ termToExpr t =
             (Serialization.cst "..."),
             (Serialization.cst "in"),
             body]
-      Syntax.TermIf v0 ->
-        let cond = termToExpr (Syntax.ifCondition v0)
+      Syntax.TermIf v0 ->  
+        let cond = termToExpr (Syntax.ifCondition v0) 
             thn = termToExpr (Syntax.ifThen v0)
             els = termToExpr (Syntax.ifElse v0)
         in (Serialization.spaceSep [
@@ -504,8 +559,8 @@ termToExpr t =
       Syntax.TermFix v0 -> case v0 of
         Syntax.FixDecl v1 -> Serialization.spaceSep [
           Serialization.cst "fix",
-
-            let name = identToExpr (Syntax.fix_DeclIdent v1)
+           
+            let name = identToExpr (Syntax.fix_DeclIdent v1) 
                 binders = Lists.map (\b -> binderToExpr b) (Syntax.fix_DeclBinders v1)
                 ty =
                         Maybes.maybe [] (\t2 -> [
@@ -528,14 +583,14 @@ termToExpr t =
 
 theoremBodyToExpr :: Syntax.TheoremBody -> Ast.Expr
 theoremBodyToExpr tb =
-
+     
       let kindKw =
               case (Syntax.theoremBodyKind tb) of
                 Syntax.TheoremKindTheorem -> Serialization.cst "Theorem"
                 Syntax.TheoremKindLemma -> Serialization.cst "Lemma"
                 Syntax.TheoremKindProposition -> Serialization.cst "Proposition"
                 Syntax.TheoremKindCorollary -> Serialization.cst "Corollary"
-                Syntax.TheoremKindExample -> Serialization.cst "Example"
+                Syntax.TheoremKindExample -> Serialization.cst "Example" 
           name = identToExpr (Syntax.theoremBodyName tb)
           binders = Lists.map (\b -> binderToExpr b) (Syntax.theoremBodyBinders tb)
           ty = typeToExpr (Syntax.theoremBodyType tb)

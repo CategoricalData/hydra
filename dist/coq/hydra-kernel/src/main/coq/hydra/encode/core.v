@@ -6,14 +6,10 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 (* Module dependencies *)
 Require Import hydra.core hydra.lib.sets hydra.lib.maps hydra.lib.eithers hydra.lib.lists hydra.lib.maybes hydra.lib.pairs.
 
-Definition name : Name -> Term :=
-  fun (x : Name) => (Term_Wrap) ((Build_WrappedTerm) ("Name"%string) ((fun (x2 : string) => (Term_Literal) ((Literal_String) (x2))) ((fun w_ => w_) (x)))).
-Definition projection : Projection -> Term :=
-  fun (x : Projection) => (Term_Record) ((Build_Record_) ("Projection"%string) ((cons) ((Build_Field) ("typeName"%string) ((name) ((fun r_ => (projection_typeName) (r_)) (x)))) ((cons) ((Build_Field) ("field"%string) ((name) ((fun r_ => (projection_field) (r_)) (x)))) (nil)))).
-Definition typeVariableMetadata : TypeVariableMetadata -> Term :=
-  fun (x : TypeVariableMetadata) => (Term_Record) ((Build_Record_) ("TypeVariableMetadata"%string) ((cons) ((Build_Field) ("classes"%string) ((fun (s : (list) (Name)) => (Term_Set) (((sets.map) (name)) (s))) ((fun r_ => (typeVariableMetadata_classes) (r_)) (x)))) (nil))).
-Definition integerValue : IntegerValue -> Term :=
-  fun x_ => match x_ with
+Definition name : forall (_ : Name) , Term := fun (x : Name) => (Term_Wrap) ((Build_WrappedTerm) ("Name"%string) ((fun (x2 : string) => (Term_Literal) ((Literal_String) (x2))) ((fun w_ => w_) (x)))).
+Definition projection : forall (_ : Projection) , Term := fun (x : Projection) => (Term_Record) ((Build_Record_) ("Projection"%string) ((cons) ((Build_Field) ("typeName"%string) ((name) ((fun r_ => (projection_typeName) (r_)) (x)))) ((cons) ((Build_Field) ("field"%string) ((name) ((fun r_ => (projection_field) (r_)) (x)))) (nil)))).
+Definition typeVariableMetadata : forall (_ : TypeVariableMetadata) , Term := fun (x : TypeVariableMetadata) => (Term_Record) ((Build_Record_) ("TypeVariableMetadata"%string) ((cons) ((Build_Field) ("classes"%string) ((fun (s : (list) (Name)) => (Term_Set) (((sets.map) (name)) (s))) ((fun r_ => (typeVariableMetadata_classes) (r_)) (x)))) (nil))).
+Definition integerValue : forall (_ : IntegerValue) , Term := fun x_ => match x_ with
 | IntegerValue_Bigint v_ => (fun (y : Z) => (Term_Inject) ((Build_Injection) ("IntegerValue"%string) ((Build_Field) ("bigint"%string) ((fun (x : Z) => (Term_Literal) ((Literal_Integer) ((IntegerValue_Bigint) (x)))) (y))))) (v_)
 | IntegerValue_Int8 v_ => (fun (y : Z) => (Term_Inject) ((Build_Injection) ("IntegerValue"%string) ((Build_Field) ("int8"%string) ((fun (x : Z) => (Term_Literal) ((Literal_Integer) ((IntegerValue_Int8) (x)))) (y))))) (v_)
 | IntegerValue_Int16 v_ => (fun (y : Z) => (Term_Inject) ((Build_Injection) ("IntegerValue"%string) ((Build_Field) ("int16"%string) ((fun (x : Z) => (Term_Literal) ((Literal_Integer) ((IntegerValue_Int16) (x)))) (y))))) (v_)
@@ -24,8 +20,7 @@ Definition integerValue : IntegerValue -> Term :=
 | IntegerValue_Uint32 v_ => (fun (y : Z) => (Term_Inject) ((Build_Injection) ("IntegerValue"%string) ((Build_Field) ("uint32"%string) ((fun (x : Z) => (Term_Literal) ((Literal_Integer) ((IntegerValue_Uint32) (x)))) (y))))) (v_)
 | IntegerValue_Uint64 v_ => (fun (y : Z) => (Term_Inject) ((Build_Injection) ("IntegerValue"%string) ((Build_Field) ("uint64"%string) ((fun (x : Z) => (Term_Literal) ((Literal_Integer) ((IntegerValue_Uint64) (x)))) (y))))) (v_)
 end.
-Definition integerType : IntegerType -> Term :=
-  fun x_ => match x_ with
+Definition integerType : forall (_ : IntegerType) , Term := fun x_ => match x_ with
 | IntegerType_Bigint v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("IntegerType"%string) ((Build_Field) ("bigint"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | IntegerType_Int8 v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("IntegerType"%string) ((Build_Field) ("int8"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | IntegerType_Int16 v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("IntegerType"%string) ((Build_Field) ("int16"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
@@ -36,28 +31,24 @@ Definition integerType : IntegerType -> Term :=
 | IntegerType_Uint32 v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("IntegerType"%string) ((Build_Field) ("uint32"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | IntegerType_Uint64 v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("IntegerType"%string) ((Build_Field) ("uint64"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 end.
-Definition floatValue : FloatValue -> Term :=
-  fun x_ => match x_ with
+Definition floatValue : forall (_ : FloatValue) , Term := fun x_ => match x_ with
 | FloatValue_Bigfloat v_ => (fun (y : Q) => (Term_Inject) ((Build_Injection) ("FloatValue"%string) ((Build_Field) ("bigfloat"%string) ((fun (x : Q) => (Term_Literal) ((Literal_Float) ((FloatValue_Bigfloat) (x)))) (y))))) (v_)
 | FloatValue_Float32 v_ => (fun (y : Q) => (Term_Inject) ((Build_Injection) ("FloatValue"%string) ((Build_Field) ("float32"%string) ((fun (x : Q) => (Term_Literal) ((Literal_Float) ((FloatValue_Float32) (x)))) (y))))) (v_)
 | FloatValue_Float64 v_ => (fun (y : Q) => (Term_Inject) ((Build_Injection) ("FloatValue"%string) ((Build_Field) ("float64"%string) ((fun (x : Q) => (Term_Literal) ((Literal_Float) ((FloatValue_Float64) (x)))) (y))))) (v_)
 end.
-Definition literal : Literal -> Term :=
-  fun x_ => match x_ with
+Definition literal : forall (_ : Literal) , Term := fun x_ => match x_ with
 | Literal_Binary v_ => (fun (y : string) => (Term_Inject) ((Build_Injection) ("Literal"%string) ((Build_Field) ("binary"%string) ((fun (x : string) => (Term_Literal) ((Literal_Binary) (x))) (y))))) (v_)
 | Literal_Boolean v_ => (fun (y : bool) => (Term_Inject) ((Build_Injection) ("Literal"%string) ((Build_Field) ("boolean"%string) ((fun (x : bool) => (Term_Literal) ((Literal_Boolean) (x))) (y))))) (v_)
 | Literal_Float v_ => (fun (y : FloatValue) => (Term_Inject) ((Build_Injection) ("Literal"%string) ((Build_Field) ("float"%string) ((floatValue) (y))))) (v_)
 | Literal_Integer v_ => (fun (y : IntegerValue) => (Term_Inject) ((Build_Injection) ("Literal"%string) ((Build_Field) ("integer"%string) ((integerValue) (y))))) (v_)
 | Literal_String v_ => (fun (y : string) => (Term_Inject) ((Build_Injection) ("Literal"%string) ((Build_Field) ("string"%string) ((fun (x : string) => (Term_Literal) ((Literal_String) (x))) (y))))) (v_)
 end.
-Definition floatType : FloatType -> Term :=
-  fun x_ => match x_ with
+Definition floatType : forall (_ : FloatType) , Term := fun x_ => match x_ with
 | FloatType_Bigfloat v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("FloatType"%string) ((Build_Field) ("bigfloat"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | FloatType_Float32 v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("FloatType"%string) ((Build_Field) ("float32"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | FloatType_Float64 v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("FloatType"%string) ((Build_Field) ("float64"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 end.
-Definition literalType : LiteralType -> Term :=
-  fun x_ => match x_ with
+Definition literalType : forall (_ : LiteralType) , Term := fun x_ => match x_ with
 | LiteralType_Binary v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("LiteralType"%string) ((Build_Field) ("binary"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | LiteralType_Boolean v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("LiteralType"%string) ((Build_Field) ("boolean"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | LiteralType_Float v_ => (fun (y : FloatType) => (Term_Inject) ((Build_Injection) ("LiteralType"%string) ((Build_Field) ("float"%string) ((floatType) (y))))) (v_)
@@ -65,7 +56,7 @@ Definition literalType : LiteralType -> Term :=
 | LiteralType_String v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("LiteralType"%string) ((Build_Field) ("string"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 end.
 Definition annotatedTerm_term_bundle :=
-  hydra_fix (fun (bundle_ : prod (AnnotatedTerm -> Term) (prod (Term -> Term) (prod (Application -> Term) (prod (CaseStatement -> Term) (prod (Field -> Term) (prod (Injection -> Term) (prod (Lambda -> Term) (prod (Type_ -> Term) (prod (AnnotatedType -> Term) (prod (ApplicationType -> Term) (prod (EitherType -> Term) (prod (FieldType -> Term) (prod (ForallType -> Term) (prod (FunctionType -> Term) (prod (MapType -> Term) (prod (PairType -> Term) (prod (Let -> Term) (prod (Binding -> Term) (prod (TypeScheme -> Term) (prod (Record_ -> Term) (prod (TypeApplicationTerm -> Term) (prod (TypeLambda -> Term) (WrappedTerm -> Term))))))))))))))))))))))) =>
+  hydra_fix (fun (bundle_ : prod (forall (_ : AnnotatedTerm) , Term) (prod (forall (_ : Term) , Term) (prod (forall (_ : Application) , Term) (prod (forall (_ : CaseStatement) , Term) (prod (forall (_ : Field) , Term) (prod (forall (_ : Injection) , Term) (prod (forall (_ : Lambda) , Term) (prod (forall (_ : Type_) , Term) (prod (forall (_ : AnnotatedType) , Term) (prod (forall (_ : ApplicationType) , Term) (prod (forall (_ : EitherType) , Term) (prod (forall (_ : FieldType) , Term) (prod (forall (_ : ForallType) , Term) (prod (forall (_ : FunctionType) , Term) (prod (forall (_ : MapType) , Term) (prod (forall (_ : PairType) , Term) (prod (forall (_ : Let) , Term) (prod (forall (_ : Binding) , Term) (prod (forall (_ : TypeScheme) , Term) (prod (forall (_ : Record_) , Term) (prod (forall (_ : TypeApplicationTerm) , Term) (prod (forall (_ : TypeLambda) , Term) (forall (_ : WrappedTerm) , Term))))))))))))))))))))))) =>
     let annotatedTerm := (fst bundle_) in
     let term := (fst (snd bundle_)) in
     let application := (fst (snd (snd bundle_))) in
@@ -131,50 +122,50 @@ end) ((pair (fun (x : Application) => (Term_Record) ((Build_Record_) ("Applicati
 | Type__Wrap v_ => (fun (y : Type_) => (Term_Inject) ((Build_Injection) ("Type_"%string) ((Build_Field) ("wrap"%string) ((type) (y))))) (v_)
 end) ((pair (fun (x : AnnotatedType) => (Term_Record) ((Build_Record_) ("AnnotatedType"%string) ((cons) ((Build_Field) ("body"%string) ((type) ((fun r_ => (annotatedType_body) (r_)) (x)))) ((cons) ((Build_Field) ("annotation"%string) ((fun (m : (list) ((prod) (Name) (Term))) => (Term_Map) ((((maps.bimap) (name)) (term)) (m))) ((fun r_ => (annotatedType_annotation) (r_)) (x)))) (nil))))) ((pair (fun (x : ApplicationType) => (Term_Record) ((Build_Record_) ("ApplicationType"%string) ((cons) ((Build_Field) ("function"%string) ((type) ((fun r_ => (applicationType_function) (r_)) (x)))) ((cons) ((Build_Field) ("argument"%string) ((type) ((fun r_ => (applicationType_argument) (r_)) (x)))) (nil))))) ((pair (fun (x : EitherType) => (Term_Record) ((Build_Record_) ("EitherType"%string) ((cons) ((Build_Field) ("left"%string) ((type) ((fun r_ => (eitherType_left) (r_)) (x)))) ((cons) ((Build_Field) ("right"%string) ((type) ((fun r_ => (eitherType_right) (r_)) (x)))) (nil))))) ((pair (fun (x : FieldType) => (Term_Record) ((Build_Record_) ("FieldType"%string) ((cons) ((Build_Field) ("name"%string) ((name) ((fun r_ => (fieldType_name) (r_)) (x)))) ((cons) ((Build_Field) ("type"%string) ((type) ((fun r_ => (fieldType_type) (r_)) (x)))) (nil))))) ((pair (fun (x : ForallType) => (Term_Record) ((Build_Record_) ("ForallType"%string) ((cons) ((Build_Field) ("parameter"%string) ((name) ((fun r_ => (forallType_parameter) (r_)) (x)))) ((cons) ((Build_Field) ("body"%string) ((type) ((fun r_ => (forallType_body) (r_)) (x)))) (nil))))) ((pair (fun (x : FunctionType) => (Term_Record) ((Build_Record_) ("FunctionType"%string) ((cons) ((Build_Field) ("domain"%string) ((type) ((fun r_ => (functionType_domain) (r_)) (x)))) ((cons) ((Build_Field) ("codomain"%string) ((type) ((fun r_ => (functionType_codomain) (r_)) (x)))) (nil))))) ((pair (fun (x : MapType) => (Term_Record) ((Build_Record_) ("MapType"%string) ((cons) ((Build_Field) ("keys"%string) ((type) ((fun r_ => (mapType_keys) (r_)) (x)))) ((cons) ((Build_Field) ("values"%string) ((type) ((fun r_ => (mapType_values) (r_)) (x)))) (nil))))) ((pair (fun (x : PairType) => (Term_Record) ((Build_Record_) ("PairType"%string) ((cons) ((Build_Field) ("first"%string) ((type) ((fun r_ => (pairType_first) (r_)) (x)))) ((cons) ((Build_Field) ("second"%string) ((type) ((fun r_ => (pairType_second) (r_)) (x)))) (nil))))) ((pair (fun (x : Let) => (Term_Record) ((Build_Record_) ("Let"%string) ((cons) ((Build_Field) ("bindings"%string) ((fun (xs : (list) (Binding)) => (Term_List) (((lists.map) (binding)) (xs))) ((fun r_ => (let_bindings) (r_)) (x)))) ((cons) ((Build_Field) ("body"%string) ((term) ((fun r_ => (let_body) (r_)) (x)))) (nil))))) ((pair (fun (x : Binding) => (Term_Record) ((Build_Record_) ("Binding"%string) ((cons) ((Build_Field) ("name"%string) ((name) ((fun r_ => (binding_name) (r_)) (x)))) ((cons) ((Build_Field) ("term"%string) ((term) ((fun r_ => (binding_term) (r_)) (x)))) ((cons) ((Build_Field) ("type"%string) ((fun (opt : (option) (TypeScheme)) => (Term_Maybe) (((maybes.map) (typeScheme)) (opt))) ((fun r_ => (binding_type) (r_)) (x)))) (nil)))))) ((pair (fun (x : TypeScheme) => (Term_Record) ((Build_Record_) ("TypeScheme"%string) ((cons) ((Build_Field) ("variables"%string) ((fun (xs : (list) (Name)) => (Term_List) (((lists.map) (name)) (xs))) ((fun r_ => (typeScheme_variables) (r_)) (x)))) ((cons) ((Build_Field) ("type"%string) ((type) ((fun r_ => (typeScheme_type) (r_)) (x)))) ((cons) ((Build_Field) ("constraints"%string) ((fun (opt : (option) ((list) ((prod) (Name) (TypeVariableMetadata)))) => (Term_Maybe) (((maybes.map) (fun (m : (list) ((prod) (Name) (TypeVariableMetadata))) => (Term_Map) ((((maps.bimap) (name)) (typeVariableMetadata)) (m)))) (opt))) ((fun r_ => (typeScheme_constraints) (r_)) (x)))) (nil)))))) ((pair (fun (x : Record_) => (Term_Record) ((Build_Record_) ("Record_"%string) ((cons) ((Build_Field) ("typeName"%string) ((name) ((fun r_ => (record__typeName) (r_)) (x)))) ((cons) ((Build_Field) ("fields"%string) ((fun (xs : (list) (Field)) => (Term_List) (((lists.map) (field)) (xs))) ((fun r_ => (record__fields) (r_)) (x)))) (nil))))) ((pair (fun (x : TypeApplicationTerm) => (Term_Record) ((Build_Record_) ("TypeApplicationTerm"%string) ((cons) ((Build_Field) ("body"%string) ((term) ((fun r_ => (typeApplicationTerm_body) (r_)) (x)))) ((cons) ((Build_Field) ("type"%string) ((type) ((fun r_ => (typeApplicationTerm_type) (r_)) (x)))) (nil))))) ((pair (fun (x : TypeLambda) => (Term_Record) ((Build_Record_) ("TypeLambda"%string) ((cons) ((Build_Field) ("parameter"%string) ((name) ((fun r_ => (typeLambda_parameter) (r_)) (x)))) ((cons) ((Build_Field) ("body"%string) ((term) ((fun r_ => (typeLambda_body) (r_)) (x)))) (nil))))) (fun (x : WrappedTerm) => (Term_Record) ((Build_Record_) ("WrappedTerm"%string) ((cons) ((Build_Field) ("typeName"%string) ((name) ((fun r_ => (wrappedTerm_typeName) (r_)) (x)))) ((cons) ((Build_Field) ("body"%string) ((term) ((fun r_ => (wrappedTerm_body) (r_)) (x)))) (nil))))))))))))))))))))))))))))))))))))))))))))))))).
 
-Definition annotatedTerm : AnnotatedTerm -> Term :=
+Definition annotatedTerm : forall (_ : AnnotatedTerm) , Term :=
   (fst annotatedTerm_term_bundle).
-Definition term : Term -> Term :=
+Definition term : forall (_ : Term) , Term :=
   (fst (snd annotatedTerm_term_bundle)).
-Definition application : Application -> Term :=
+Definition application : forall (_ : Application) , Term :=
   (fst (snd (snd annotatedTerm_term_bundle))).
-Definition caseStatement : CaseStatement -> Term :=
+Definition caseStatement : forall (_ : CaseStatement) , Term :=
   (fst (snd (snd (snd annotatedTerm_term_bundle)))).
-Definition field : Field -> Term :=
+Definition field : forall (_ : Field) , Term :=
   (fst (snd (snd (snd (snd annotatedTerm_term_bundle))))).
-Definition injection : Injection -> Term :=
+Definition injection : forall (_ : Injection) , Term :=
   (fst (snd (snd (snd (snd (snd annotatedTerm_term_bundle)))))).
-Definition lambda : Lambda -> Term :=
+Definition lambda : forall (_ : Lambda) , Term :=
   (fst (snd (snd (snd (snd (snd (snd annotatedTerm_term_bundle))))))).
-Definition type : Type_ -> Term :=
+Definition type : forall (_ : Type_) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd annotatedTerm_term_bundle)))))))).
-Definition annotatedType : AnnotatedType -> Term :=
+Definition annotatedType : forall (_ : AnnotatedType) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd (snd annotatedTerm_term_bundle))))))))).
-Definition applicationType : ApplicationType -> Term :=
+Definition applicationType : forall (_ : ApplicationType) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd (snd (snd annotatedTerm_term_bundle)))))))))).
-Definition eitherType : EitherType -> Term :=
+Definition eitherType : forall (_ : EitherType) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd annotatedTerm_term_bundle))))))))))).
-Definition fieldType : FieldType -> Term :=
+Definition fieldType : forall (_ : FieldType) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd annotatedTerm_term_bundle)))))))))))).
-Definition forallType : ForallType -> Term :=
+Definition forallType : forall (_ : ForallType) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd annotatedTerm_term_bundle))))))))))))).
-Definition functionType : FunctionType -> Term :=
+Definition functionType : forall (_ : FunctionType) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd annotatedTerm_term_bundle)))))))))))))).
-Definition mapType : MapType -> Term :=
+Definition mapType : forall (_ : MapType) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd annotatedTerm_term_bundle))))))))))))))).
-Definition pairType : PairType -> Term :=
+Definition pairType : forall (_ : PairType) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd annotatedTerm_term_bundle)))))))))))))))).
-Definition let_ : Let -> Term :=
+Definition let_ : forall (_ : Let) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd annotatedTerm_term_bundle))))))))))))))))).
-Definition binding : Binding -> Term :=
+Definition binding : forall (_ : Binding) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd annotatedTerm_term_bundle)))))))))))))))))).
-Definition typeScheme : TypeScheme -> Term :=
+Definition typeScheme : forall (_ : TypeScheme) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd annotatedTerm_term_bundle))))))))))))))))))).
-Definition record : Record_ -> Term :=
+Definition record : forall (_ : Record_) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd annotatedTerm_term_bundle)))))))))))))))))))).
-Definition typeApplicationTerm : TypeApplicationTerm -> Term :=
+Definition typeApplicationTerm : forall (_ : TypeApplicationTerm) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd annotatedTerm_term_bundle))))))))))))))))))))).
-Definition typeLambda : TypeLambda -> Term :=
+Definition typeLambda : forall (_ : TypeLambda) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd annotatedTerm_term_bundle)))))))))))))))))))))).
-Definition wrappedTerm : WrappedTerm -> Term :=
+Definition wrappedTerm : forall (_ : WrappedTerm) , Term :=
   (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd annotatedTerm_term_bundle)))))))))))))))))))))).
 

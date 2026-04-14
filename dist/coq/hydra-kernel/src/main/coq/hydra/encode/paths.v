@@ -6,8 +6,7 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 (* Module dependencies *)
 Require Import hydra.paths hydra.core hydra.encode.core hydra.lib.lists.
 
-Definition subtypeStep : SubtypeStep -> Term :=
-  fun x_ => match x_ with
+Definition subtypeStep : forall (_ : SubtypeStep) , Term := fun x_ => match x_ with
 | SubtypeStep_AnnotatedBody v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("SubtypeStep"%string) ((Build_Field) ("annotatedBody"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | SubtypeStep_ApplicationFunction v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("SubtypeStep"%string) ((Build_Field) ("applicationFunction"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | SubtypeStep_ApplicationArgument v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("SubtypeStep"%string) ((Build_Field) ("applicationArgument"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
@@ -27,16 +26,11 @@ Definition subtypeStep : SubtypeStep -> Term :=
 | SubtypeStep_UnionField v_ => (fun (y : Name) => (Term_Inject) ((Build_Injection) ("SubtypeStep"%string) ((Build_Field) ("unionField"%string) ((hydra.encode.core.name) (y))))) (v_)
 | SubtypeStep_WrappedType v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("SubtypeStep"%string) ((Build_Field) ("wrappedType"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 end.
-Definition subtypePath : SubtypePath -> Term :=
-  fun (x : SubtypePath) => (Term_Wrap) ((Build_WrappedTerm) ("SubtypePath"%string) ((fun (xs : (list) (SubtypeStep)) => (Term_List) (((lists.map) (subtypeStep)) (xs))) ((fun w_ => w_) (x)))).
-Definition subtypeNode : SubtypeNode -> Term :=
-  fun (x : SubtypeNode) => (Term_Record) ((Build_Record_) ("SubtypeNode"%string) ((cons) ((Build_Field) ("name"%string) ((hydra.encode.core.name) ((fun r_ => (subtypeNode_name) (r_)) (x)))) ((cons) ((Build_Field) ("label"%string) ((fun (x2 : string) => (Term_Literal) ((Literal_String) (x2))) ((fun r_ => (subtypeNode_label) (r_)) (x)))) ((cons) ((Build_Field) ("id"%string) ((fun (x2 : string) => (Term_Literal) ((Literal_String) (x2))) ((fun r_ => (subtypeNode_id) (r_)) (x)))) (nil))))).
-Definition subtypeEdge : SubtypeEdge -> Term :=
-  fun (x : SubtypeEdge) => (Term_Record) ((Build_Record_) ("SubtypeEdge"%string) ((cons) ((Build_Field) ("source"%string) ((subtypeNode) ((fun r_ => (subtypeEdge_source) (r_)) (x)))) ((cons) ((Build_Field) ("path"%string) ((subtypePath) ((fun r_ => (subtypeEdge_path) (r_)) (x)))) ((cons) ((Build_Field) ("target"%string) ((subtypeNode) ((fun r_ => (subtypeEdge_target) (r_)) (x)))) (nil))))).
-Definition subtypeGraph : SubtypeGraph -> Term :=
-  fun (x : SubtypeGraph) => (Term_Record) ((Build_Record_) ("SubtypeGraph"%string) ((cons) ((Build_Field) ("nodes"%string) ((fun (xs : (list) (SubtypeNode)) => (Term_List) (((lists.map) (subtypeNode)) (xs))) ((fun r_ => (subtypeGraph_nodes) (r_)) (x)))) ((cons) ((Build_Field) ("edges"%string) ((fun (xs : (list) (SubtypeEdge)) => (Term_List) (((lists.map) (subtypeEdge)) (xs))) ((fun r_ => (subtypeGraph_edges) (r_)) (x)))) (nil)))).
-Definition subtermStep : SubtermStep -> Term :=
-  fun x_ => match x_ with
+Definition subtypePath : forall (_ : SubtypePath) , Term := fun (x : SubtypePath) => (Term_Wrap) ((Build_WrappedTerm) ("SubtypePath"%string) ((fun (xs : (list) (SubtypeStep)) => (Term_List) (((lists.map) (subtypeStep)) (xs))) ((fun w_ => w_) (x)))).
+Definition subtypeNode : forall (_ : SubtypeNode) , Term := fun (x : SubtypeNode) => (Term_Record) ((Build_Record_) ("SubtypeNode"%string) ((cons) ((Build_Field) ("name"%string) ((hydra.encode.core.name) ((fun r_ => (subtypeNode_name) (r_)) (x)))) ((cons) ((Build_Field) ("label"%string) ((fun (x2 : string) => (Term_Literal) ((Literal_String) (x2))) ((fun r_ => (subtypeNode_label) (r_)) (x)))) ((cons) ((Build_Field) ("id"%string) ((fun (x2 : string) => (Term_Literal) ((Literal_String) (x2))) ((fun r_ => (subtypeNode_id) (r_)) (x)))) (nil))))).
+Definition subtypeEdge : forall (_ : SubtypeEdge) , Term := fun (x : SubtypeEdge) => (Term_Record) ((Build_Record_) ("SubtypeEdge"%string) ((cons) ((Build_Field) ("source"%string) ((subtypeNode) ((fun r_ => (subtypeEdge_source) (r_)) (x)))) ((cons) ((Build_Field) ("path"%string) ((subtypePath) ((fun r_ => (subtypeEdge_path) (r_)) (x)))) ((cons) ((Build_Field) ("target"%string) ((subtypeNode) ((fun r_ => (subtypeEdge_target) (r_)) (x)))) (nil))))).
+Definition subtypeGraph : forall (_ : SubtypeGraph) , Term := fun (x : SubtypeGraph) => (Term_Record) ((Build_Record_) ("SubtypeGraph"%string) ((cons) ((Build_Field) ("nodes"%string) ((fun (xs : (list) (SubtypeNode)) => (Term_List) (((lists.map) (subtypeNode)) (xs))) ((fun r_ => (subtypeGraph_nodes) (r_)) (x)))) ((cons) ((Build_Field) ("edges"%string) ((fun (xs : (list) (SubtypeEdge)) => (Term_List) (((lists.map) (subtypeEdge)) (xs))) ((fun r_ => (subtypeGraph_edges) (r_)) (x)))) (nil)))).
+Definition subtermStep : forall (_ : SubtermStep) , Term := fun x_ => match x_ with
 | SubtermStep_AnnotatedBody v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("SubtermStep"%string) ((Build_Field) ("annotatedBody"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | SubtermStep_ApplicationFunction v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("SubtermStep"%string) ((Build_Field) ("applicationFunction"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | SubtermStep_ApplicationArgument v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("SubtermStep"%string) ((Build_Field) ("applicationArgument"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
@@ -58,12 +52,8 @@ Definition subtermStep : SubtermStep -> Term :=
 | SubtermStep_InjectionTerm v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("SubtermStep"%string) ((Build_Field) ("injectionTerm"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | SubtermStep_WrappedTerm v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("SubtermStep"%string) ((Build_Field) ("wrappedTerm"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 end.
-Definition subtermPath : SubtermPath -> Term :=
-  fun (x : SubtermPath) => (Term_Wrap) ((Build_WrappedTerm) ("SubtermPath"%string) ((fun (xs : (list) (SubtermStep)) => (Term_List) (((lists.map) (subtermStep)) (xs))) ((fun w_ => w_) (x)))).
-Definition subtermNode : SubtermNode -> Term :=
-  fun (x : SubtermNode) => (Term_Record) ((Build_Record_) ("SubtermNode"%string) ((cons) ((Build_Field) ("name"%string) ((hydra.encode.core.name) ((fun r_ => (subtermNode_name) (r_)) (x)))) ((cons) ((Build_Field) ("label"%string) ((fun (x2 : string) => (Term_Literal) ((Literal_String) (x2))) ((fun r_ => (subtermNode_label) (r_)) (x)))) ((cons) ((Build_Field) ("id"%string) ((fun (x2 : string) => (Term_Literal) ((Literal_String) (x2))) ((fun r_ => (subtermNode_id) (r_)) (x)))) (nil))))).
-Definition subtermEdge : SubtermEdge -> Term :=
-  fun (x : SubtermEdge) => (Term_Record) ((Build_Record_) ("SubtermEdge"%string) ((cons) ((Build_Field) ("source"%string) ((subtermNode) ((fun r_ => (subtermEdge_source) (r_)) (x)))) ((cons) ((Build_Field) ("path"%string) ((subtermPath) ((fun r_ => (subtermEdge_path) (r_)) (x)))) ((cons) ((Build_Field) ("target"%string) ((subtermNode) ((fun r_ => (subtermEdge_target) (r_)) (x)))) (nil))))).
-Definition subtermGraph : SubtermGraph -> Term :=
-  fun (x : SubtermGraph) => (Term_Record) ((Build_Record_) ("SubtermGraph"%string) ((cons) ((Build_Field) ("nodes"%string) ((fun (xs : (list) (SubtermNode)) => (Term_List) (((lists.map) (subtermNode)) (xs))) ((fun r_ => (subtermGraph_nodes) (r_)) (x)))) ((cons) ((Build_Field) ("edges"%string) ((fun (xs : (list) (SubtermEdge)) => (Term_List) (((lists.map) (subtermEdge)) (xs))) ((fun r_ => (subtermGraph_edges) (r_)) (x)))) (nil)))).
+Definition subtermPath : forall (_ : SubtermPath) , Term := fun (x : SubtermPath) => (Term_Wrap) ((Build_WrappedTerm) ("SubtermPath"%string) ((fun (xs : (list) (SubtermStep)) => (Term_List) (((lists.map) (subtermStep)) (xs))) ((fun w_ => w_) (x)))).
+Definition subtermNode : forall (_ : SubtermNode) , Term := fun (x : SubtermNode) => (Term_Record) ((Build_Record_) ("SubtermNode"%string) ((cons) ((Build_Field) ("name"%string) ((hydra.encode.core.name) ((fun r_ => (subtermNode_name) (r_)) (x)))) ((cons) ((Build_Field) ("label"%string) ((fun (x2 : string) => (Term_Literal) ((Literal_String) (x2))) ((fun r_ => (subtermNode_label) (r_)) (x)))) ((cons) ((Build_Field) ("id"%string) ((fun (x2 : string) => (Term_Literal) ((Literal_String) (x2))) ((fun r_ => (subtermNode_id) (r_)) (x)))) (nil))))).
+Definition subtermEdge : forall (_ : SubtermEdge) , Term := fun (x : SubtermEdge) => (Term_Record) ((Build_Record_) ("SubtermEdge"%string) ((cons) ((Build_Field) ("source"%string) ((subtermNode) ((fun r_ => (subtermEdge_source) (r_)) (x)))) ((cons) ((Build_Field) ("path"%string) ((subtermPath) ((fun r_ => (subtermEdge_path) (r_)) (x)))) ((cons) ((Build_Field) ("target"%string) ((subtermNode) ((fun r_ => (subtermEdge_target) (r_)) (x)))) (nil))))).
+Definition subtermGraph : forall (_ : SubtermGraph) , Term := fun (x : SubtermGraph) => (Term_Record) ((Build_Record_) ("SubtermGraph"%string) ((cons) ((Build_Field) ("nodes"%string) ((fun (xs : (list) (SubtermNode)) => (Term_List) (((lists.map) (subtermNode)) (xs))) ((fun r_ => (subtermGraph_nodes) (r_)) (x)))) ((cons) ((Build_Field) ("edges"%string) ((fun (xs : (list) (SubtermEdge)) => (Term_List) (((lists.map) (subtermEdge)) (xs))) ((fun r_ => (subtermGraph_edges) (r_)) (x)))) (nil)))).
 

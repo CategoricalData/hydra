@@ -6,30 +6,24 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 (* Module dependencies *)
 Require Import hydra.lib.logic hydra.lib.equality hydra.lib.literals hydra.json.model hydra.core hydra.lib.eithers hydra.lib.maybes hydra.lib.strings hydra.strip hydra.lib.sets hydra.lib.lists hydra.lib.maps hydra.show.core.
 
-Definition parseSpecialFloat : string -> (option) (Q) :=
-  fun (s : string) => (((logic.ifElse) (((logic.or) (((equality.equal) (s)) ("NaN"%string))) (((logic.or) (((equality.equal) (s)) ("Infinity"%string))) (((logic.or) (((equality.equal) (s)) ("-Infinity"%string))) (((equality.equal) (s)) ("-0.0"%string)))))) ((literals.readFloat64) (s))) (None).
-Definition expectString : Value -> (sum) (string) (string) :=
-  fun (value : Value) => (fun x_ => match x_ with
+Definition parseSpecialFloat : forall (_ : string) , (option) (Q) := fun (s : string) => (((logic.ifElse) (((logic.or) (((equality.equal) (s)) ("NaN"%string))) (((logic.or) (((equality.equal) (s)) ("Infinity"%string))) (((logic.or) (((equality.equal) (s)) ("-Infinity"%string))) (((equality.equal) (s)) ("-0.0"%string)))))) ((literals.readFloat64) (s))) (None).
+Definition expectString : forall (_ : Value) , (sum) (string) (string) := fun (value : Value) => (fun x_ => match x_ with
 | Value_String v_ => (fun (s : string) => (inr) (s)) (v_)
 | _ => (inl) ("expected string"%string)
 end) (value).
-Definition expectObject : Value -> (sum) (string) ((list) ((prod) (string) (Value))) :=
-  fun (value : Value) => (fun x_ => match x_ with
+Definition expectObject : forall (_ : Value) , (sum) (string) ((list) ((prod) (string) (Value))) := fun (value : Value) => (fun x_ => match x_ with
 | Value_Object v_ => (fun (obj : (list) ((prod) (string) (Value))) => (inr) (obj)) (v_)
 | _ => (inl) ("expected object"%string)
 end) (value).
-Definition expectNumber : Value -> (sum) (string) (Q) :=
-  fun (value : Value) => (fun x_ => match x_ with
+Definition expectNumber : forall (_ : Value) , (sum) (string) (Q) := fun (value : Value) => (fun x_ => match x_ with
 | Value_Number v_ => (fun (n : Q) => (inr) (n)) (v_)
 | _ => (inl) ("expected number"%string)
 end) (value).
-Definition expectArray : Value -> (sum) (string) ((list) (Value)) :=
-  fun (value : Value) => (fun x_ => match x_ with
+Definition expectArray : forall (_ : Value) , (sum) (string) ((list) (Value)) := fun (value : Value) => (fun x_ => match x_ with
 | Value_Array v_ => (fun (arr : (list) (Value)) => (inr) (arr)) (v_)
 | _ => (inl) ("expected array"%string)
 end) (value).
-Definition decodeInteger : IntegerType -> Value -> (sum) (string) (Term) :=
-  fun (it : IntegerType) => fun (value : Value) => (fun x_ => match x_ with
+Definition decodeInteger : forall (_ : IntegerType) , forall (_ : Value) , (sum) (string) (Term) := fun (it : IntegerType) => fun (value : Value) => (fun x_ => match x_ with
 | IntegerType_Bigint _ => let strResult := (expectString) (value) in (((eithers.either) (fun (err : string) => (inl) (err))) (fun (s : string) => let parsed := (literals.readBigint) (s) in (((maybes.maybe) ((inl) ((strings.cat) ((cons) ("invalid bigint: "%string) ((cons) (s) (nil)))))) (fun (v : Z) => (inr) ((Term_Literal) ((Literal_Integer) ((IntegerValue_Bigint) (v)))))) (parsed))) (strResult)
 | IntegerType_Int64 _ => let strResult := (expectString) (value) in (((eithers.either) (fun (err : string) => (inl) (err))) (fun (s : string) => let parsed := (literals.readInt64) (s) in (((maybes.maybe) ((inl) ((strings.cat) ((cons) ("invalid int64: "%string) ((cons) (s) (nil)))))) (fun (v : Z) => (inr) ((Term_Literal) ((Literal_Integer) ((IntegerValue_Int64) (v)))))) (parsed))) (strResult)
 | IntegerType_Uint32 _ => let strResult := (expectString) (value) in (((eithers.either) (fun (err : string) => (inl) (err))) (fun (s : string) => let parsed := (literals.readUint32) (s) in (((maybes.maybe) ((inl) ((strings.cat) ((cons) ("invalid uint32: "%string) ((cons) (s) (nil)))))) (fun (v : Z) => (inr) ((Term_Literal) ((Literal_Integer) ((IntegerValue_Uint32) (v)))))) (parsed))) (strResult)
@@ -40,8 +34,7 @@ Definition decodeInteger : IntegerType -> Value -> (sum) (string) (Term) :=
 | IntegerType_Uint8 _ => let numResult := (expectNumber) (value) in ((eithers.map) (fun (n : Q) => (Term_Literal) ((Literal_Integer) ((IntegerValue_Uint8) ((literals.bigintToUint8) ((literals.bigfloatToBigint) (n))))))) (numResult)
 | IntegerType_Uint16 _ => let numResult := (expectNumber) (value) in ((eithers.map) (fun (n : Q) => (Term_Literal) ((Literal_Integer) ((IntegerValue_Uint16) ((literals.bigintToUint16) ((literals.bigfloatToBigint) (n))))))) (numResult)
 end) (it).
-Definition decodeFloat : FloatType -> Value -> (sum) (string) (Term) :=
-  fun (ft : FloatType) => fun (value : Value) => (fun x_ => match x_ with
+Definition decodeFloat : forall (_ : FloatType) , forall (_ : Value) , (sum) (string) (Term) := fun (ft : FloatType) => fun (value : Value) => (fun x_ => match x_ with
 | FloatType_Bigfloat _ => (fun x_ => match x_ with
 | Value_Number v_ => (fun (n : Q) => (inr) ((Term_Literal) ((Literal_Float) ((FloatValue_Bigfloat) (n))))) (v_)
 | _ => (inl) ("expected number for bigfloat"%string)
@@ -53,8 +46,7 @@ end) (value)
 | _ => (inl) ("expected number or special float string for float64"%string)
 end) (value)
 end) (ft).
-Definition decodeLiteral : LiteralType -> Value -> (sum) (string) (Term) :=
-  fun (lt : LiteralType) => fun (value : Value) => (fun x_ => match x_ with
+Definition decodeLiteral : forall (_ : LiteralType) , forall (_ : Value) , (sum) (string) (Term) := fun (lt : LiteralType) => fun (value : Value) => (fun x_ => match x_ with
 | LiteralType_Binary _ => let strResult := (expectString) (value) in ((eithers.map) (fun (s : string) => (Term_Literal) ((Literal_Binary) ((literals.stringToBinary) (s))))) (strResult)
 | LiteralType_Boolean _ => (fun x_ => match x_ with
 | Value_Boolean v_ => (fun (b : bool) => (inr) ((Term_Literal) ((Literal_Boolean) (b)))) (v_)
@@ -65,7 +57,7 @@ end) (value)
 | LiteralType_String _ => let strResult := (expectString) (value) in ((eithers.map) (fun (s : string) => (Term_Literal) ((Literal_String) (s)))) (strResult)
 end) (lt).
 Definition fromJson_bundle :=
-  hydra_fix (fun (bundle_ : (list) ((prod) (Name) (Type_)) -> Name -> Type_ -> Value -> (sum) (string) (Term)) =>
+  hydra_fix (fun (bundle_ : forall (_ : (list) ((prod) (Name) (Type_))) , forall (_ : Name) , forall (_ : Type_) , forall (_ : Value) , (sum) (string) (Term)) =>
     let fromJson := bundle_ in
     fun (types : (list) ((prod) (Name) (Type_))) => fun (tname : Name) => fun (typ : Type_) => fun (value : Value) => let stripped := (deannotateType) (typ) in (fun x_ => match x_ with
 | Type__Literal v_ => (fun (lt : LiteralType) => ((decodeLiteral) (lt)) (value)) (v_)
@@ -93,6 +85,6 @@ end) (value))) (v_)
 | _ => (inl) ((strings.cat) ((cons) ("unsupported type for JSON decoding: "%string) ((cons) ((hydra.show.core.type) (typ)) (nil))))
 end) (stripped)).
 
-Definition fromJson : (list) ((prod) (Name) (Type_)) -> Name -> Type_ -> Value -> (sum) (string) (Term) :=
+Definition fromJson : forall (_ : (list) ((prod) (Name) (Type_))) , forall (_ : Name) , forall (_ : Type_) , forall (_ : Value) , (sum) (string) (Term) :=
   fromJson_bundle.
 

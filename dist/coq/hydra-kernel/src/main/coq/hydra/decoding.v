@@ -7,7 +7,7 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 Require Import hydra.core hydra.context hydra.graph hydra.errors hydra.lib.eithers hydra.predicates hydra.lib.logic hydra.lib.maybes hydra.lib.lists hydra.annotations hydra.packaging hydra.lib.strings hydra.formatting hydra.names hydra.lib.maps hydra.lib.sets hydra.decode.core hydra.encode.core hydra.constants.
 
 Definition prependForallDecoders_bundle :=
-  hydra_fix (fun (bundle_ : Type_ -> Type_ -> Type_) =>
+  hydra_fix (fun (bundle_ : forall (_ : Type_) , forall (_ : Type_) , Type_) =>
     let prependForallDecoders := bundle_ in
     fun (baseType : Type_) => fun (typ : Type_) => (fun x_ => match x_ with
 | Type__Annotated v_ => (fun (at_ : AnnotatedType) => ((prependForallDecoders) (baseType)) ((fun r_ => (annotatedType_body) (r_)) (at_))) (v_)
@@ -15,14 +15,12 @@ Definition prependForallDecoders_bundle :=
 | _ => baseType
 end) (typ)).
 
-Definition prependForallDecoders : Type_ -> Type_ -> Type_ :=
+Definition prependForallDecoders : forall (_ : Type_) , forall (_ : Type_) , Type_ :=
   prependForallDecoders_bundle.
-Definition isDecodableBinding : Context_ -> hydra.graph.Graph -> Binding -> (sum) (Error) ((option) (Binding)) :=
-  fun (cx : Context_) => fun (graph_ : hydra.graph.Graph) => fun (b : Binding) => ((eithers.bind) ((((isSerializableByName) (cx)) (graph_)) ((fun r_ => (binding_name) (r_)) (b)))) (fun (serializable : bool) => (inr) ((((logic.ifElse) (serializable)) ((Some) (b))) (None))).
-Definition filterTypeBindings : Context_ -> hydra.graph.Graph -> (list) (Binding) -> (sum) (Error) ((list) (Binding)) :=
-  fun (cx : Context_) => fun (graph_ : hydra.graph.Graph) => fun (bindings : (list) (Binding)) => ((eithers.map) (maybes.cat)) (((eithers.mapList) (((isDecodableBinding) (cx)) (graph_))) (((lists.filter) (isNativeType)) (bindings))).
+Definition isDecodableBinding : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : Binding) , (sum) (Error) ((option) (Binding)) := fun (cx : Context_) => fun (graph_ : hydra.graph.Graph) => fun (b : Binding) => ((eithers.bind) ((((isSerializableByName) (cx)) (graph_)) ((fun r_ => (binding_name) (r_)) (b)))) (fun (serializable : bool) => (inr) ((((logic.ifElse) (serializable)) ((Some) (b))) (None))).
+Definition filterTypeBindings : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : (list) (Binding)) , (sum) (Error) ((list) (Binding)) := fun (cx : Context_) => fun (graph_ : hydra.graph.Graph) => fun (bindings : (list) (Binding)) => ((eithers.map) (maybes.cat)) (((eithers.mapList) (((isDecodableBinding) (cx)) (graph_))) (((lists.filter) (isNativeType)) (bindings))).
 Definition decoderResultType_bundle :=
-  hydra_fix (fun (bundle_ : Type_ -> Name) =>
+  hydra_fix (fun (bundle_ : forall (_ : Type_) , Name) =>
     let decoderResultType := bundle_ in
     fun (typ : Type_) => (fun x_ => match x_ with
 | Type__Annotated v_ => (fun (at_ : AnnotatedType) => (decoderResultType) ((fun r_ => (annotatedType_body) (r_)) (at_))) (v_)
@@ -35,10 +33,10 @@ Definition decoderResultType_bundle :=
 | _ => "Term"%string
 end) (typ)).
 
-Definition decoderResultType : Type_ -> Name :=
+Definition decoderResultType : forall (_ : Type_) , Name :=
   decoderResultType_bundle.
 Definition decoderFullResultType_bundle :=
-  hydra_fix (fun (bundle_ : Type_ -> Type_) =>
+  hydra_fix (fun (bundle_ : forall (_ : Type_) , Type_) =>
     let decoderFullResultType := bundle_ in
     fun (typ : Type_) => (fun x_ => match x_ with
 | Type__Annotated v_ => (fun (at_ : AnnotatedType) => (decoderFullResultType) ((fun r_ => (annotatedType_body) (r_)) (at_))) (v_)
@@ -60,10 +58,10 @@ Definition decoderFullResultType_bundle :=
 | _ => (Type__Variable) ("Term"%string)
 end) (typ)).
 
-Definition decoderFullResultType : Type_ -> Type_ :=
+Definition decoderFullResultType : forall (_ : Type_) , Type_ :=
   decoderFullResultType_bundle.
 Definition decoderFullResultTypeNamed_bundle :=
-  hydra_fix (fun (bundle_ : Name -> Type_ -> Type_) =>
+  hydra_fix (fun (bundle_ : forall (_ : Name) , forall (_ : Type_) , Type_) =>
     let decoderFullResultTypeNamed := bundle_ in
     fun (ename : Name) => fun (typ : Type_) => (fun x_ => match x_ with
 | Type__Annotated v_ => (fun (at_ : AnnotatedType) => ((decoderFullResultTypeNamed) (ename)) ((fun r_ => (annotatedType_body) (r_)) (at_))) (v_)
@@ -85,18 +83,13 @@ Definition decoderFullResultTypeNamed_bundle :=
 | _ => (Type__Variable) ("Term"%string)
 end) (typ)).
 
-Definition decoderFullResultTypeNamed : Name -> Type_ -> Type_ :=
+Definition decoderFullResultTypeNamed : forall (_ : Name) , forall (_ : Type_) , Type_ :=
   decoderFullResultTypeNamed_bundle.
-Definition decoderTypeNamed : Name -> Type_ -> Type_ :=
-  fun (ename : Name) => fun (typ : Type_) => let resultType := ((decoderFullResultTypeNamed) (ename)) (typ) in let baseType := (Type__Function) ((Build_FunctionType) ((Type__Variable) ("hydra.graph.Graph"%string)) ((Type__Function) ((Build_FunctionType) ((Type__Variable) ("Term"%string)) ((Type__Either) ((Build_EitherType) ((Type__Variable) ("DecodingError"%string)) (resultType)))))) in ((prependForallDecoders) (baseType)) (typ).
-Definition decoderType : Type_ -> Type_ :=
-  fun (typ : Type_) => let resultType := (decoderFullResultType) (typ) in let baseType := (Type__Function) ((Build_FunctionType) ((Type__Variable) ("hydra.graph.Graph"%string)) ((Type__Function) ((Build_FunctionType) ((Type__Variable) ("Term"%string)) ((Type__Either) ((Build_EitherType) ((Type__Variable) ("DecodingError"%string)) (resultType)))))) in ((prependForallDecoders) (baseType)) (typ).
-Definition decodeUnitType : Term :=
-  (Term_Lambda) ((Build_Lambda) ("cx"%string) (None) ((Term_Lambda) ((Build_Lambda) ("t"%string) (None) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("decodeUnit"%string)) ((Term_Variable) ("cx"%string)))) ((Term_Variable) ("t"%string))))))).
-Definition decodeNamespace : Namespace -> Namespace :=
-  fun (ns : Namespace) => (strings.cat) ((cons) ("decode."%string) ((cons) (((strings.intercalate) ("."%string)) ((lists.tail) (((strings.splitOn) ("."%string)) ((fun w_ => w_) (ns))))) (nil))).
-Definition decodeLiteralType : LiteralType -> Term :=
-  fun (lt : LiteralType) => (fun x_ => match x_ with
+Definition decoderTypeNamed : forall (_ : Name) , forall (_ : Type_) , Type_ := fun (ename : Name) => fun (typ : Type_) => let resultType := ((decoderFullResultTypeNamed) (ename)) (typ) in let baseType := (Type__Function) ((Build_FunctionType) ((Type__Variable) ("hydra.graph.Graph"%string)) ((Type__Function) ((Build_FunctionType) ((Type__Variable) ("Term"%string)) ((Type__Either) ((Build_EitherType) ((Type__Variable) ("DecodingError"%string)) (resultType)))))) in ((prependForallDecoders) (baseType)) (typ).
+Definition decoderType : forall (_ : Type_) , Type_ := fun (typ : Type_) => let resultType := (decoderFullResultType) (typ) in let baseType := (Type__Function) ((Build_FunctionType) ((Type__Variable) ("hydra.graph.Graph"%string)) ((Type__Function) ((Build_FunctionType) ((Type__Variable) ("Term"%string)) ((Type__Either) ((Build_EitherType) ((Type__Variable) ("DecodingError"%string)) (resultType)))))) in ((prependForallDecoders) (baseType)) (typ).
+Definition decodeUnitType : Term := (Term_Lambda) ((Build_Lambda) ("cx"%string) (None) ((Term_Lambda) ((Build_Lambda) ("t"%string) (None) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("decodeUnit"%string)) ((Term_Variable) ("cx"%string)))) ((Term_Variable) ("t"%string))))))).
+Definition decodeNamespace : forall (_ : Namespace) , Namespace := fun (ns : Namespace) => (strings.cat) ((cons) ("decode."%string) ((cons) (((strings.intercalate) ("."%string)) ((lists.tail) (((strings.splitOn) ("."%string)) ((fun w_ => w_) (ns))))) (nil))).
+Definition decodeLiteralType : forall (_ : LiteralType) , Term := fun (lt : LiteralType) => (fun x_ => match x_ with
 | LiteralType_Binary _ => (Term_Lambda) ((Build_Lambda) ("cx"%string) (None) ((Term_Lambda) ((Build_Lambda) ("raw"%string) (None) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("eithers.either"%string)) ((Term_Lambda) ((Build_Lambda) ("err"%string) (None) ((Term_Either) ((inl) ((Term_Variable) ("err"%string)))))))) ((Term_Lambda) ((Build_Lambda) ("stripped"%string) (None) ((Term_Application) ((Build_Application) ((Term_Cases) ((Build_CaseStatement) ("Term"%string) ((Some) ((Term_Either) ((inl) ((Term_Wrap) ((Build_WrappedTerm) ("DecodingError"%string) ((Term_Literal) ((Literal_String) ("expected literal"%string)))))))) ((cons) ((Build_Field) ("literal"%string) ((Term_Lambda) ((Build_Lambda) ("v"%string) (None) ((Term_Application) ((Build_Application) ((Term_Cases) ((Build_CaseStatement) ("Literal"%string) ((Some) ((Term_Either) ((inl) ((Term_Wrap) ((Build_WrappedTerm) ("DecodingError"%string) ((Term_Literal) ((Literal_String) ("expected binary literal"%string)))))))) ((cons) ((Build_Field) ("binary"%string) ((Term_Lambda) ((Build_Lambda) ("b"%string) (None) ((Term_Either) ((inr) ((Term_Variable) ("b"%string))))))) (nil)))) ((Term_Variable) ("v"%string))))))) (nil)))) ((Term_Variable) ("stripped"%string)))))))) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("stripWithDecodingError"%string)) ((Term_Variable) ("cx"%string)))) ((Term_Variable) ("raw"%string)))))))))
 | LiteralType_Boolean _ => (Term_Lambda) ((Build_Lambda) ("cx"%string) (None) ((Term_Lambda) ((Build_Lambda) ("raw"%string) (None) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("eithers.either"%string)) ((Term_Lambda) ((Build_Lambda) ("err"%string) (None) ((Term_Either) ((inl) ((Term_Variable) ("err"%string)))))))) ((Term_Lambda) ((Build_Lambda) ("stripped"%string) (None) ((Term_Application) ((Build_Application) ((Term_Cases) ((Build_CaseStatement) ("Term"%string) ((Some) ((Term_Either) ((inl) ((Term_Wrap) ((Build_WrappedTerm) ("DecodingError"%string) ((Term_Literal) ((Literal_String) ("expected literal"%string)))))))) ((cons) ((Build_Field) ("literal"%string) ((Term_Lambda) ((Build_Lambda) ("v"%string) (None) ((Term_Application) ((Build_Application) ((Term_Cases) ((Build_CaseStatement) ("Literal"%string) ((Some) ((Term_Either) ((inl) ((Term_Wrap) ((Build_WrappedTerm) ("DecodingError"%string) ((Term_Literal) ((Literal_String) ("expected boolean literal"%string)))))))) ((cons) ((Build_Field) ("boolean"%string) ((Term_Lambda) ((Build_Lambda) ("b"%string) (None) ((Term_Either) ((inr) ((Term_Variable) ("b"%string))))))) (nil)))) ((Term_Variable) ("v"%string))))))) (nil)))) ((Term_Variable) ("stripped"%string)))))))) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("stripWithDecodingError"%string)) ((Term_Variable) ("cx"%string)))) ((Term_Variable) ("raw"%string)))))))))
 | LiteralType_Float v_ => (fun (ft : FloatType) => (fun x_ => match x_ with
@@ -117,10 +110,9 @@ end) (ft)) (v_)
 end) (it)) (v_)
 | LiteralType_String _ => (Term_Lambda) ((Build_Lambda) ("cx"%string) (None) ((Term_Lambda) ((Build_Lambda) ("raw"%string) (None) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("eithers.either"%string)) ((Term_Lambda) ((Build_Lambda) ("err"%string) (None) ((Term_Either) ((inl) ((Term_Variable) ("err"%string)))))))) ((Term_Lambda) ((Build_Lambda) ("stripped"%string) (None) ((Term_Application) ((Build_Application) ((Term_Cases) ((Build_CaseStatement) ("Term"%string) ((Some) ((Term_Either) ((inl) ((Term_Wrap) ((Build_WrappedTerm) ("DecodingError"%string) ((Term_Literal) ((Literal_String) ("expected literal"%string)))))))) ((cons) ((Build_Field) ("literal"%string) ((Term_Lambda) ((Build_Lambda) ("v"%string) (None) ((Term_Application) ((Build_Application) ((Term_Cases) ((Build_CaseStatement) ("Literal"%string) ((Some) ((Term_Either) ((inl) ((Term_Wrap) ((Build_WrappedTerm) ("DecodingError"%string) ((Term_Literal) ((Literal_String) ("expected string literal"%string)))))))) ((cons) ((Build_Field) ("string"%string) ((Term_Lambda) ((Build_Lambda) ("s"%string) (None) ((Term_Either) ((inr) ((Term_Variable) ("s"%string))))))) (nil)))) ((Term_Variable) ("v"%string))))))) (nil)))) ((Term_Variable) ("stripped"%string)))))))) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("stripWithDecodingError"%string)) ((Term_Variable) ("cx"%string)))) ((Term_Variable) ("raw"%string)))))))))
 end) (lt).
-Definition decodeBindingName : Name -> Name :=
-  fun (n : Name) => (((logic.ifElse) ((logic.not) ((lists.null) ((lists.tail) (((strings.splitOn) ("."%string)) ((fun w_ => w_) (n))))))) (((strings.intercalate) ("."%string)) (((lists.concat2) ((cons) ("hydra"%string) ((cons) ("decode"%string) (nil)))) (((lists.concat2) ((lists.tail) ((lists.init) (((strings.splitOn) ("."%string)) ((fun w_ => w_) (n)))))) ((cons) ((decapitalize) ((localNameOf) (n))) (nil)))))) ((decapitalize) ((localNameOf) (n))).
+Definition decodeBindingName : forall (_ : Name) , Name := fun (n : Name) => (((logic.ifElse) ((logic.not) ((lists.null) ((lists.tail) (((strings.splitOn) ("."%string)) ((fun w_ => w_) (n))))))) (((strings.intercalate) ("."%string)) (((lists.concat2) ((cons) ("hydra"%string) ((cons) ("decode"%string) (nil)))) (((lists.concat2) ((lists.tail) ((lists.init) (((strings.splitOn) ("."%string)) ((fun w_ => w_) (n)))))) ((cons) ((decapitalize) ((localNameOf) (n))) (nil)))))) ((decapitalize) ((localNameOf) (n))).
 Definition decodeType_decodeEitherType_bundle :=
-  hydra_fix (fun (bundle_ : prod (Type_ -> Term) (prod (EitherType -> Term) (prod (ForallType -> Term) (prod (Type_ -> Term) (prod (MapType -> Term) (prod (Type_ -> Term) (prod (PairType -> Term) (prod ((list) (FieldType) -> Term) (prod (Name -> (list) (FieldType) -> Term) (prod (Type_ -> Term) (prod ((list) (FieldType) -> Term) (prod (Name -> (list) (FieldType) -> Term) (prod (Type_ -> Term) (Name -> Type_ -> Term)))))))))))))) =>
+  hydra_fix (fun (bundle_ : prod (forall (_ : Type_) , Term) (prod (forall (_ : EitherType) , Term) (prod (forall (_ : ForallType) , Term) (prod (forall (_ : Type_) , Term) (prod (forall (_ : MapType) , Term) (prod (forall (_ : Type_) , Term) (prod (forall (_ : PairType) , Term) (prod (forall (_ : (list) (FieldType)) , Term) (prod (forall (_ : Name) , forall (_ : (list) (FieldType)) , Term) (prod (forall (_ : Type_) , Term) (prod (forall (_ : (list) (FieldType)) , Term) (prod (forall (_ : Name) , forall (_ : (list) (FieldType)) , Term) (prod (forall (_ : Type_) , Term) (forall (_ : Name) , forall (_ : Type_) , Term)))))))))))))) =>
     let decodeType := (fst bundle_) in
     let decodeEitherType := (fst (snd bundle_)) in
     let decodeForallType := (fst (snd (snd bundle_))) in
@@ -155,38 +147,37 @@ Definition decodeType_decodeEitherType_bundle :=
 | _ => (Term_Lambda) ((Build_Lambda) ("cx"%string) (None) ((Term_Lambda) ((Build_Lambda) ("t"%string) (None) ((Term_Either) ((inl) ((Term_Wrap) ((Build_WrappedTerm) ("DecodingError"%string) ((Term_Literal) ((Literal_String) ("unsupported type variant"%string))))))))))
 end) (typ)) ((pair (fun (et : EitherType) => let rightDecoder := (decodeType) ((fun r_ => (eitherType_right) (r_)) (et)) in let leftDecoder := (decodeType) ((fun r_ => (eitherType_left) (r_)) (et)) in (Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("decodeEither"%string)) (leftDecoder))) (rightDecoder))) ((pair (fun (ft : ForallType) => (Term_Lambda) ((Build_Lambda) ((decodeBindingName) ((fun r_ => (forallType_parameter) (r_)) (ft))) (None) ((decodeType) ((fun r_ => (forallType_body) (r_)) (ft))))) ((pair (fun (elemType : Type_) => let elemDecoder := (decodeType) (elemType) in (Term_Application) ((Build_Application) ((Term_Variable) ("decodeList"%string)) (elemDecoder))) ((pair (fun (mt : MapType) => let valDecoder := (decodeType) ((fun r_ => (mapType_values) (r_)) (mt)) in let keyDecoder := (decodeType) ((fun r_ => (mapType_keys) (r_)) (mt)) in (Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("decodeMap"%string)) (keyDecoder))) (valDecoder))) ((pair (fun (elemType : Type_) => let elemDecoder := (decodeType) (elemType) in (Term_Application) ((Build_Application) ((Term_Variable) ("decodeMaybe"%string)) (elemDecoder))) ((pair (fun (pt : PairType) => let secondDecoder := (decodeType) ((fun r_ => (pairType_second) (r_)) (pt)) in let firstDecoder := (decodeType) ((fun r_ => (pairType_first) (r_)) (pt)) in (Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("decodePair"%string)) (firstDecoder))) (secondDecoder))) ((pair (fun (rt : (list) (FieldType)) => ((decodeRecordTypeImpl) ("unknown"%string)) (rt)) ((pair (fun (tname : Name) => fun (rt : (list) (FieldType)) => let localVarName := fun (ft : FieldType) => (strings.cat) ((cons) ("field_"%string) ((cons) ((fun w_ => w_) ((fun r_ => (fieldType_name) (r_)) (ft))) (nil))) in let toFieldLambda := fun (ft : FieldType) => fun (body : Term) => (Term_Lambda) ((Build_Lambda) ((localVarName) (ft)) (None) (body)) in let decodeFieldTerm := fun (ft : FieldType) => (Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("requireField"%string)) ((Term_Literal) ((Literal_String) ((fun w_ => w_) ((fun r_ => (fieldType_name) (r_)) (ft))))))) ((decodeType) ((fun r_ => (fieldType_type) (r_)) (ft))))) ((Term_Variable) ("fieldMap"%string)))) ((Term_Variable) ("cx"%string))) in let decodeBody := (((lists.foldl) (fun (acc : Term) => fun (ft : FieldType) => (Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("eithers.bind"%string)) ((decodeFieldTerm) (ft)))) (((toFieldLambda) (ft)) (acc))))) ((Term_Either) ((inr) ((Term_Record) ((Build_Record_) (tname) (((lists.map) (fun (ft : FieldType) => (Build_Field) ((fun r_ => (fieldType_name) (r_)) (ft)) ((Term_Variable) ((localVarName) (ft))))) (rt))))))) ((lists.reverse) (rt)) in (Term_Lambda) ((Build_Lambda) ("cx"%string) (None) ((Term_Lambda) ((Build_Lambda) ("raw"%string) (None) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("eithers.either"%string)) ((Term_Lambda) ((Build_Lambda) ("err"%string) (None) ((Term_Either) ((inl) ((Term_Variable) ("err"%string)))))))) ((Term_Lambda) ((Build_Lambda) ("stripped"%string) (None) ((Term_Application) ((Build_Application) ((Term_Cases) ((Build_CaseStatement) ("Term"%string) ((Some) ((Term_Either) ((inl) ((Term_Wrap) ((Build_WrappedTerm) ("DecodingError"%string) ((Term_Literal) ((Literal_String) ("expected record"%string)))))))) ((cons) ((Build_Field) ("record"%string) ((Term_Lambda) ((Build_Lambda) ("record"%string) (None) ((Term_Let) ((Build_Let) ((cons) ((Build_Binding) ("fieldMap"%string) ((Term_Application) ((Build_Application) ((Term_Variable) ("toFieldMap"%string)) ((Term_Variable) ("record"%string)))) (None)) (nil)) (decodeBody)))))) (nil)))) ((Term_Variable) ("stripped"%string)))))))) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("stripWithDecodingError"%string)) ((Term_Variable) ("cx"%string)))) ((Term_Variable) ("raw"%string)))))))))) ((pair (fun (elemType : Type_) => let elemDecoder := (decodeType) (elemType) in (Term_Application) ((Build_Application) ((Term_Variable) ("decodeSet"%string)) (elemDecoder))) ((pair (fun (rt : (list) (FieldType)) => ((decodeUnionTypeNamed) ("unknown"%string)) (rt)) ((pair (fun (ename : Name) => fun (rt : (list) (FieldType)) => let toVariantPair := fun (ft : FieldType) => (Term_Pair) ((pair) ((Term_Wrap) ((Build_WrappedTerm) ("Name"%string) ((Term_Literal) ((Literal_String) ((fun w_ => w_) ((fun r_ => (fieldType_name) (r_)) (ft))))))) ((Term_Lambda) ((Build_Lambda) ("input"%string) (None) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("eithers.map"%string)) ((Term_Lambda) ((Build_Lambda) ("t"%string) (None) ((Term_Inject) ((Build_Injection) (ename) ((Build_Field) ((fun r_ => (fieldType_name) (r_)) (ft)) ((Term_Variable) ("t"%string))))))))) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((decodeType) ((fun r_ => (fieldType_type) (r_)) (ft))) ((Term_Variable) ("cx"%string)))) ((Term_Variable) ("input"%string))))))))) in (Term_Lambda) ((Build_Lambda) ("cx"%string) (None) ((Term_Lambda) ((Build_Lambda) ("raw"%string) (None) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("eithers.either"%string)) ((Term_Lambda) ((Build_Lambda) ("err"%string) (None) ((Term_Either) ((inl) ((Term_Variable) ("err"%string)))))))) ((Term_Lambda) ((Build_Lambda) ("stripped"%string) (None) ((Term_Application) ((Build_Application) ((Term_Cases) ((Build_CaseStatement) ("Term"%string) ((Some) ((Term_Either) ((inl) ((Term_Wrap) ((Build_WrappedTerm) ("DecodingError"%string) ((Term_Literal) ((Literal_String) ("expected union"%string)))))))) ((cons) ((Build_Field) ("inject"%string) ((Term_Lambda) ((Build_Lambda) ("inj"%string) (None) ((Term_Let) ((Build_Let) ((cons) ((Build_Binding) ("field"%string) ((Term_Application) ((Build_Application) ((Term_Project) ((Build_Projection) ("Injection"%string) ("field"%string))) ((Term_Variable) ("inj"%string)))) (None)) ((cons) ((Build_Binding) ("fname"%string) ((Term_Application) ((Build_Application) ((Term_Project) ((Build_Projection) ("Field"%string) ("name"%string))) ((Term_Variable) ("field"%string)))) (None)) ((cons) ((Build_Binding) ("fterm"%string) ((Term_Application) ((Build_Application) ((Term_Project) ((Build_Projection) ("Field"%string) ("term"%string))) ((Term_Variable) ("field"%string)))) (None)) ((cons) ((Build_Binding) ("variantMap"%string) ((Term_Application) ((Build_Application) ((Term_Variable) ("maps.fromList"%string)) ((Term_List) (((lists.map) (toVariantPair)) (rt))))) (None)) (nil))))) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("maybes.maybe"%string)) ((Term_Either) ((inl) ((Term_Wrap) ((Build_WrappedTerm) ("DecodingError"%string) ((Term_Application) ((Build_Application) ((Term_Variable) ("strings.cat"%string)) ((Term_List) ((cons) ((Term_Literal) ((Literal_String) ("no such field "%string))) ((cons) ((Term_Application) ((Build_Application) ((Term_Unwrap) ("Name"%string)) ((Term_Variable) ("fname"%string)))) ((cons) ((Term_Literal) ((Literal_String) (" in union"%string))) (nil))))))))))))) ((Term_Lambda) ((Build_Lambda) ("f"%string) (None) ((Term_Application) ((Build_Application) ((Term_Variable) ("f"%string)) ((Term_Variable) ("fterm"%string)))))))) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("maps.lookup"%string)) ((Term_Variable) ("fname"%string)))) ((Term_Variable) ("variantMap"%string))))))))))) (nil)))) ((Term_Variable) ("stripped"%string)))))))) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("stripWithDecodingError"%string)) ((Term_Variable) ("cx"%string)))) ((Term_Variable) ("raw"%string)))))))))) ((pair (fun (wt : Type_) => ((decodeWrappedTypeNamed) ("unknown"%string)) (wt)) (fun (ename : Name) => fun (wt : Type_) => let bodyDecoder := (decodeType) (wt) in (Term_Lambda) ((Build_Lambda) ("cx"%string) (None) ((Term_Lambda) ((Build_Lambda) ("raw"%string) (None) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("eithers.either"%string)) ((Term_Lambda) ((Build_Lambda) ("err"%string) (None) ((Term_Either) ((inl) ((Term_Variable) ("err"%string)))))))) ((Term_Lambda) ((Build_Lambda) ("stripped"%string) (None) ((Term_Application) ((Build_Application) ((Term_Cases) ((Build_CaseStatement) ("Term"%string) ((Some) ((Term_Either) ((inl) ((Term_Wrap) ((Build_WrappedTerm) ("DecodingError"%string) ((Term_Literal) ((Literal_String) ("expected wrapped type"%string)))))))) ((cons) ((Build_Field) ("wrap"%string) ((Term_Lambda) ((Build_Lambda) ("wrappedTerm"%string) (None) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("eithers.map"%string)) ((Term_Lambda) ((Build_Lambda) ("b"%string) (None) ((Term_Wrap) ((Build_WrappedTerm) (ename) ((Term_Variable) ("b"%string)))))))) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) (bodyDecoder) ((Term_Variable) ("cx"%string)))) ((Term_Application) ((Build_Application) ((Term_Project) ((Build_Projection) ("WrappedTerm"%string) ("body"%string))) ((Term_Variable) ("wrappedTerm"%string))))))))))) (nil)))) ((Term_Variable) ("stripped"%string)))))))) ((Term_Application) ((Build_Application) ((Term_Application) ((Build_Application) ((Term_Variable) ("stripWithDecodingError"%string)) ((Term_Variable) ("cx"%string)))) ((Term_Variable) ("raw"%string)))))))))))))))))))))))))))))))))))).
 
-Definition decodeType : Type_ -> Term :=
+Definition decodeType : forall (_ : Type_) , Term :=
   (fst decodeType_decodeEitherType_bundle).
-Definition decodeEitherType : EitherType -> Term :=
+Definition decodeEitherType : forall (_ : EitherType) , Term :=
   (fst (snd decodeType_decodeEitherType_bundle)).
-Definition decodeForallType : ForallType -> Term :=
+Definition decodeForallType : forall (_ : ForallType) , Term :=
   (fst (snd (snd decodeType_decodeEitherType_bundle))).
-Definition decodeListType : Type_ -> Term :=
+Definition decodeListType : forall (_ : Type_) , Term :=
   (fst (snd (snd (snd decodeType_decodeEitherType_bundle)))).
-Definition decodeMapType : MapType -> Term :=
+Definition decodeMapType : forall (_ : MapType) , Term :=
   (fst (snd (snd (snd (snd decodeType_decodeEitherType_bundle))))).
-Definition decodeMaybeType : Type_ -> Term :=
+Definition decodeMaybeType : forall (_ : Type_) , Term :=
   (fst (snd (snd (snd (snd (snd decodeType_decodeEitherType_bundle)))))).
-Definition decodePairType : PairType -> Term :=
+Definition decodePairType : forall (_ : PairType) , Term :=
   (fst (snd (snd (snd (snd (snd (snd decodeType_decodeEitherType_bundle))))))).
-Definition decodeRecordType : (list) (FieldType) -> Term :=
+Definition decodeRecordType : forall (_ : (list) (FieldType)) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd decodeType_decodeEitherType_bundle)))))))).
-Definition decodeRecordTypeImpl : Name -> (list) (FieldType) -> Term :=
+Definition decodeRecordTypeImpl : forall (_ : Name) , forall (_ : (list) (FieldType)) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd (snd decodeType_decodeEitherType_bundle))))))))).
-Definition decodeSetType : Type_ -> Term :=
+Definition decodeSetType : forall (_ : Type_) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd (snd (snd decodeType_decodeEitherType_bundle)))))))))).
-Definition decodeUnionType : (list) (FieldType) -> Term :=
+Definition decodeUnionType : forall (_ : (list) (FieldType)) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd decodeType_decodeEitherType_bundle))))))))))).
-Definition decodeUnionTypeNamed : Name -> (list) (FieldType) -> Term :=
+Definition decodeUnionTypeNamed : forall (_ : Name) , forall (_ : (list) (FieldType)) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd decodeType_decodeEitherType_bundle)))))))))))).
-Definition decodeWrappedType : Type_ -> Term :=
+Definition decodeWrappedType : forall (_ : Type_) , Term :=
   (fst (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd decodeType_decodeEitherType_bundle))))))))))))).
-Definition decodeWrappedTypeNamed : Name -> Type_ -> Term :=
+Definition decodeWrappedTypeNamed : forall (_ : Name) , forall (_ : Type_) , Term :=
   (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd (snd decodeType_decodeEitherType_bundle))))))))))))).
-Definition decodeRecordTypeNamed : Name -> (list) (FieldType) -> Term :=
-  fun (ename : Name) => fun (rt : (list) (FieldType)) => ((decodeRecordTypeImpl) (ename)) (rt).
+Definition decodeRecordTypeNamed : forall (_ : Name) , forall (_ : (list) (FieldType)) , Term := fun (ename : Name) => fun (rt : (list) (FieldType)) => ((decodeRecordTypeImpl) (ename)) (rt).
 Definition decodeTypeNamed_bundle :=
-  hydra_fix (fun (bundle_ : Name -> Type_ -> Term) =>
+  hydra_fix (fun (bundle_ : forall (_ : Name) , forall (_ : Type_) , Term) =>
     let decodeTypeNamed := bundle_ in
     fun (ename : Name) => fun (typ : Type_) => (fun x_ => match x_ with
 | Type__Annotated v_ => (fun (at_ : AnnotatedType) => ((decodeTypeNamed) (ename)) ((fun r_ => (annotatedType_body) (r_)) (at_))) (v_)
@@ -208,10 +199,10 @@ Definition decodeTypeNamed_bundle :=
 | _ => (Term_Lambda) ((Build_Lambda) ("cx"%string) (None) ((Term_Lambda) ((Build_Lambda) ("t"%string) (None) ((Term_Either) ((inl) ((Term_Wrap) ((Build_WrappedTerm) ("DecodingError"%string) ((Term_Literal) ((Literal_String) ("unsupported type variant"%string))))))))))
 end) (typ)).
 
-Definition decodeTypeNamed : Name -> Type_ -> Term :=
+Definition decodeTypeNamed : forall (_ : Name) , forall (_ : Type_) , Term :=
   decodeTypeNamed_bundle.
 Definition collectTypeVariablesFromType_bundle :=
-  hydra_fix (fun (bundle_ : Type_ -> (list) (Name)) =>
+  hydra_fix (fun (bundle_ : forall (_ : Type_) , (list) (Name)) =>
     let collectTypeVariablesFromType := bundle_ in
     fun (typ : Type_) => (fun x_ => match x_ with
 | Type__Annotated v_ => (fun (at_ : AnnotatedType) => (collectTypeVariablesFromType) ((fun r_ => (annotatedType_body) (r_)) (at_))) (v_)
@@ -230,10 +221,10 @@ Definition collectTypeVariablesFromType_bundle :=
 | _ => nil
 end) (typ)).
 
-Definition collectTypeVariablesFromType : Type_ -> (list) (Name) :=
+Definition collectTypeVariablesFromType : forall (_ : Type_) , (list) (Name) :=
   collectTypeVariablesFromType_bundle.
 Definition collectOrdConstrainedVariables_bundle :=
-  hydra_fix (fun (bundle_ : Type_ -> (list) (Name)) =>
+  hydra_fix (fun (bundle_ : forall (_ : Type_) , (list) (Name)) =>
     let collectOrdConstrainedVariables := bundle_ in
     fun (typ : Type_) => (fun x_ => match x_ with
 | Type__Annotated v_ => (fun (at_ : AnnotatedType) => (collectOrdConstrainedVariables) ((fun r_ => (annotatedType_body) (r_)) (at_))) (v_)
@@ -251,10 +242,10 @@ Definition collectOrdConstrainedVariables_bundle :=
 | _ => nil
 end) (typ)).
 
-Definition collectOrdConstrainedVariables : Type_ -> (list) (Name) :=
+Definition collectOrdConstrainedVariables : forall (_ : Type_) , (list) (Name) :=
   collectOrdConstrainedVariables_bundle.
 Definition collectForallVariables_bundle :=
-  hydra_fix (fun (bundle_ : Type_ -> (list) (Name)) =>
+  hydra_fix (fun (bundle_ : forall (_ : Type_) , (list) (Name)) =>
     let collectForallVariables := bundle_ in
     fun (typ : Type_) => (fun x_ => match x_ with
 | Type__Annotated v_ => (fun (at_ : AnnotatedType) => (collectForallVariables) ((fun r_ => (annotatedType_body) (r_)) (at_))) (v_)
@@ -262,19 +253,14 @@ Definition collectForallVariables_bundle :=
 | _ => nil
 end) (typ)).
 
-Definition collectForallVariables : Type_ -> (list) (Name) :=
+Definition collectForallVariables : forall (_ : Type_) , (list) (Name) :=
   collectForallVariables_bundle.
-Definition collectTypeVariables : Type_ -> (list) (Name) :=
-  fun (typ : Type_) => (collectForallVariables) (typ).
-Definition decoderTypeScheme : Type_ -> TypeScheme :=
-  fun (typ : Type_) => let typeVars := (collectTypeVariables) (typ) in let allOrdVars := (collectOrdConstrainedVariables) (typ) in let ordVars := ((lists.filter) (fun (v : Name) => ((lists.elem) (v)) (typeVars))) (allOrdVars) in let constraints := (((logic.ifElse) ((lists.null) (ordVars))) (None)) ((Some) ((maps.fromList) (((lists.map) (fun (v : Name) => (pair) (v) ((Build_TypeVariableMetadata) ((sets.singleton) ("ordering"%string))))) (ordVars)))) in (Build_TypeScheme) (typeVars) ((decoderType) (typ)) (constraints).
-Definition decoderTypeSchemeNamed : Name -> Type_ -> TypeScheme :=
-  fun (ename : Name) => fun (typ : Type_) => let typeVars := (collectTypeVariables) (typ) in let allOrdVars := (collectOrdConstrainedVariables) (typ) in let ordVars := ((lists.filter) (fun (v : Name) => ((lists.elem) (v)) (typeVars))) (allOrdVars) in let constraints := (((logic.ifElse) ((lists.null) (ordVars))) (None)) ((Some) ((maps.fromList) (((lists.map) (fun (v : Name) => (pair) (v) ((Build_TypeVariableMetadata) ((sets.singleton) ("ordering"%string))))) (ordVars)))) in (Build_TypeScheme) (typeVars) (((decoderTypeNamed) (ename)) (typ)) (constraints).
-Definition decodeBinding (t0 : Type) : t0 -> hydra.graph.Graph -> Binding -> (sum) (DecodingError) (Binding) :=
-  fun (cx : t0) => fun (graph_ : hydra.graph.Graph) => fun (b : Binding) => ((eithers.bind) (((hydra.decode.core.type) (graph_)) ((fun r_ => (binding_term) (r_)) (b)))) (fun (typ : Type_) => (inr) ((Build_Binding) ((decodeBindingName) ((fun r_ => (binding_name) (r_)) (b))) (((decodeTypeNamed) ((fun r_ => (binding_name) (r_)) (b))) (typ)) ((Some) (((decoderTypeSchemeNamed) ((fun r_ => (binding_name) (r_)) (b))) (typ))))).
+Definition collectTypeVariables : forall (_ : Type_) , (list) (Name) := fun (typ : Type_) => (collectForallVariables) (typ).
+Definition decoderTypeScheme : forall (_ : Type_) , TypeScheme := fun (typ : Type_) => let typeVars := (collectTypeVariables) (typ) in let allOrdVars := (collectOrdConstrainedVariables) (typ) in let ordVars := ((lists.filter) (fun (v : Name) => ((lists.elem) (v)) (typeVars))) (allOrdVars) in let constraints := (((logic.ifElse) ((lists.null) (ordVars))) (None)) ((Some) ((maps.fromList) (((lists.map) (fun (v : Name) => (pair) (v) ((Build_TypeVariableMetadata) ((sets.singleton) ("ordering"%string))))) (ordVars)))) in (Build_TypeScheme) (typeVars) ((decoderType) (typ)) (constraints).
+Definition decoderTypeSchemeNamed : forall (_ : Name) , forall (_ : Type_) , TypeScheme := fun (ename : Name) => fun (typ : Type_) => let typeVars := (collectTypeVariables) (typ) in let allOrdVars := (collectOrdConstrainedVariables) (typ) in let ordVars := ((lists.filter) (fun (v : Name) => ((lists.elem) (v)) (typeVars))) (allOrdVars) in let constraints := (((logic.ifElse) ((lists.null) (ordVars))) (None)) ((Some) ((maps.fromList) (((lists.map) (fun (v : Name) => (pair) (v) ((Build_TypeVariableMetadata) ((sets.singleton) ("ordering"%string))))) (ordVars)))) in (Build_TypeScheme) (typeVars) (((decoderTypeNamed) (ename)) (typ)) (constraints).
+Definition decodeBinding (t0 : Type) : forall (_ : t0) , forall (_ : hydra.graph.Graph) , forall (_ : Binding) , (sum) (DecodingError) (Binding) := fun (cx : t0) => fun (graph_ : hydra.graph.Graph) => fun (b : Binding) => ((eithers.bind) (((hydra.decode.core.type) (graph_)) ((fun r_ => (binding_term) (r_)) (b)))) (fun (typ : Type_) => (inr) ((Build_Binding) ((decodeBindingName) ((fun r_ => (binding_name) (r_)) (b))) (((decodeTypeNamed) ((fun r_ => (binding_name) (r_)) (b))) (typ)) ((Some) (((decoderTypeSchemeNamed) ((fun r_ => (binding_name) (r_)) (b))) (typ))))).
 Arguments decodeBinding {t0}.
-Definition decodeModule : Context_ -> hydra.graph.Graph -> Module_ -> (sum) (Error) ((option) (Module_)) :=
-  fun (cx : Context_) => fun (graph_ : hydra.graph.Graph) => fun (mod_ : Module_) => ((eithers.bind) ((((filterTypeBindings) (cx)) (graph_)) ((maybes.cat) (((lists.map) (fun (d : Definition_) => (fun x_ => match x_ with
+Definition decodeModule : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : Module_) , (sum) (Error) ((option) (Module_)) := fun (cx : Context_) => fun (graph_ : hydra.graph.Graph) => fun (mod_ : Module_) => ((eithers.bind) ((((filterTypeBindings) (cx)) (graph_)) ((maybes.cat) (((lists.map) (fun (d : Definition_) => (fun x_ => match x_ with
 | Definition__Type v_ => (fun (td : TypeDefinition) => (Some) (((fun (name : Name) => fun (typ : Type_) => let schemaTerm := (Term_Variable) ("Type_"%string) in let dataTerm := (normalizeTermAnnotations) ((Term_Annotated) ((Build_AnnotatedTerm) ((hydra.encode.core.type) (typ)) ((maps.fromList) ((cons) ((pair) (key_type) (schemaTerm)) (nil))))) in (Build_Binding) (name) (dataTerm) ((Some) ((Build_TypeScheme) (nil) ((Type__Variable) ("Type_"%string)) (None)))) ((fun r_ => (typeDefinition_name) (r_)) (td))) ((fun r_ => (typeScheme_type) (r_)) ((fun r_ => (typeDefinition_type) (r_)) (td))))) (v_)
 | _ => None
 end) (d))) ((fun r_ => (module__definitions) (r_)) (mod_)))))) (fun (typeBindings : (list) (Binding)) => (((logic.ifElse) ((lists.null) (typeBindings))) ((inr) (None))) (((eithers.bind) (((eithers.mapList) (fun (b : Binding) => (((eithers.bimap) (fun (_e : DecodingError) => (Error_Decoding) (_e))) (fun (x : Binding) => x)) ((((decodeBinding) (cx)) (graph_)) (b)))) (typeBindings))) (fun (decodedBindings : (list) (Binding)) => let decodedTypeDeps := ((lists.map) (decodeNamespace)) ((fun r_ => (module__typeDependencies) (r_)) (mod_)) in let decodedTermDeps := ((lists.map) (decodeNamespace)) ((fun r_ => (module__termDependencies) (r_)) (mod_)) in let allDecodedDeps := (lists.nub) (((lists.concat2) (decodedTypeDeps)) (decodedTermDeps)) in (inr) ((Some) ((Build_Module_) ((decodeNamespace) ((fun r_ => (module__namespace) (r_)) (mod_))) (((lists.map) (fun (b : Binding) => (Definition__Term) ((Build_TermDefinition) ((fun r_ => (binding_name) (r_)) (b)) ((fun r_ => (binding_term) (r_)) (b)) ((fun r_ => (binding_type) (r_)) (b))))) (decodedBindings)) (((lists.concat2) ((cons) ("core"%string) ((cons) ("lexical"%string) ((cons) ("rewriting"%string) (nil))))) (allDecodedDeps)) ((cons) ((fun r_ => (module__namespace) (r_)) (mod_)) ((cons) ("util"%string) (nil))) ((Some) ((strings.cat) ((cons) ("Term decoders for "%string) ((cons) ((fun w_ => w_) ((fun r_ => (module__namespace) (r_)) (mod_))) (nil)))))))))).
