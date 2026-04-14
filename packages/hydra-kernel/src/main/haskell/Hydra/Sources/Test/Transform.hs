@@ -130,7 +130,7 @@ encodeCaseConvention :: TTermDefinition (CaseConvention -> Term)
 encodeCaseConvention = define "encodeCaseConvention" $
   doc "Encode CaseConvention as a Term (unit variant)" $
   lambda "conv" $
-    Core.termUnion $ Core.injection
+    Core.termInject $ Core.injection
       (Core.nameLift _CaseConvention)
       (Core.field
         (cases _CaseConvention (var "conv") Nothing [

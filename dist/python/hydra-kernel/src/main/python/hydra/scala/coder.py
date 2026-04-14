@@ -749,7 +749,7 @@ def encode_term(cx: T0, g: hydra.graph.Graph, term0: hydra.core.Term):
         case hydra.core.TermSet(value=s):
             return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda e: encode_term(cx, g, e)), hydra.lib.sets.to_list(s)), (lambda sels: Right(hydra.scala.utils.sapply(hydra.scala.utils.sname("scala.collection.immutable.Set"), sels))))
 
-        case hydra.core.TermUnion(value=inj):
+        case hydra.core.TermInject(value=inj):
             sn = inj.type_name
             fn = inj.field.name
             ft = inj.field.term

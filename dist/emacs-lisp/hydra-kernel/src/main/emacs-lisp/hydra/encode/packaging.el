@@ -18,7 +18,7 @@
 
 (defvar hydra_encode_packaging_type_definition (lambda (x) (list :record (make-hydra_core_record "hydra.packaging.TypeDefinition" (list (make-hydra_core_field "name" (hydra_encode_core_name (funcall (lambda (v) (hydra_packaging_type_definition-name v)) x))) (make-hydra_core_field "type" (hydra_encode_core_type_scheme (funcall (lambda (v) (hydra_packaging_type_definition-type v)) x))))))))
 
-(defvar hydra_encode_packaging_definition (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :term) (funcall (lambda (y) (list :union (make-hydra_core_injection "hydra.packaging.Definition" (make-hydra_core_field "term" (hydra_encode_packaging_term_definition y))))) match_value)) ((equal (car match_target) :type) (funcall (lambda (y) (list :union (make-hydra_core_injection "hydra.packaging.Definition" (make-hydra_core_field "type" (hydra_encode_packaging_type_definition y))))) match_value)))) (cadr match_target))))
+(defvar hydra_encode_packaging_definition (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :term) (funcall (lambda (y) (list :inject (make-hydra_core_injection "hydra.packaging.Definition" (make-hydra_core_field "term" (hydra_encode_packaging_term_definition y))))) match_value)) ((equal (car match_target) :type) (funcall (lambda (y) (list :inject (make-hydra_core_injection "hydra.packaging.Definition" (make-hydra_core_field "type" (hydra_encode_packaging_type_definition y))))) match_value)))) (cadr match_target))))
 
 (defvar hydra_encode_packaging_file_extension (lambda (x) (list :wrap (make-hydra_core_wrapped_term "hydra.packaging.FileExtension" (funcall (lambda (x2) (list :literal (list :string x2))) (funcall (lambda (v) v) x))))))
 

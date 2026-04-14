@@ -205,7 +205,7 @@ toJson = define "toJson" $
     _Type_union>>: "rt" ~>
       cases _Term (var "strippedTerm")
         (Just $ left $ string "expected union term") [
-        _Term_union>>: "inj" ~>
+        _Term_inject>>: "inj" ~>
           "field" <~ (Core.injectionField $ var "inj") $
           "fname" <~ (Core.unName $ Core.fieldName $ var "field") $
           "fterm" <~ (Core.fieldTerm $ var "field") $
@@ -355,7 +355,7 @@ toJsonUntyped = define "toJsonUntyped" $
       Eithers.map ("fs" ~> Json.valueObject $ Maps.fromList $ var "fs") (var "encodedFields"),
 
     -- Unions (single-key object)
-    _Term_union>>: "inj" ~>
+    _Term_inject>>: "inj" ~>
       "field" <~ (Core.injectionField $ var "inj") $
       "fname" <~ (Core.unName $ Core.fieldName $ var "field") $
       "fterm" <~ (Core.fieldTerm $ var "field") $

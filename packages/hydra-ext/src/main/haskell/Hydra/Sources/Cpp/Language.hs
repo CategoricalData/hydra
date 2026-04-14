@@ -138,7 +138,7 @@ cppLanguage = define "cppLanguage" $
     Variants.termVariantPair,        -- std::pair
     Variants.termVariantRecord,      -- struct with named fields
     Variants.termVariantSet,         -- std::set
-    Variants.termVariantUnion,       -- std::inject or enum
+    Variants.termVariantInject,       -- std::inject or enum
     Variants.termVariantVariable,
     Variants.termVariantWrap],       -- wrapper class
   "typeVariants">: Sets.fromList $ list [

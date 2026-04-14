@@ -320,7 +320,7 @@ public interface TermsToElements {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.core.Term>> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.core.Term>> visit(hydra.core.Term.Inject inj) {
           return hydra.lib.logic.IfElse.lazy(
             hydra.lib.equality.Equal.apply(
               (inj).value.field.name.value,

@@ -2021,7 +2021,7 @@ atlasAttributeDefWithValuesMinCount original newVal =
 
 atlasAttributeDef_CardinalityList :: Phantoms.TTerm Atlas.AtlasAttributeDef_Cardinality
 atlasAttributeDef_CardinalityList =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef_Cardinality"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -2029,7 +2029,7 @@ atlasAttributeDef_CardinalityList =
 
 atlasAttributeDef_CardinalitySet :: Phantoms.TTerm Atlas.AtlasAttributeDef_Cardinality
 atlasAttributeDef_CardinalitySet =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef_Cardinality"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),
@@ -2037,7 +2037,7 @@ atlasAttributeDef_CardinalitySet =
 
 atlasAttributeDef_CardinalitySingle :: Phantoms.TTerm Atlas.AtlasAttributeDef_Cardinality
 atlasAttributeDef_CardinalitySingle =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef_Cardinality"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "single"),
@@ -2045,7 +2045,7 @@ atlasAttributeDef_CardinalitySingle =
 
 atlasAttributeDef_IndexTypeDefault :: Phantoms.TTerm Atlas.AtlasAttributeDef_IndexType
 atlasAttributeDef_IndexTypeDefault =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef_IndexType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "default"),
@@ -2053,7 +2053,7 @@ atlasAttributeDef_IndexTypeDefault =
 
 atlasAttributeDef_IndexTypeString :: Phantoms.TTerm Atlas.AtlasAttributeDef_IndexType
 atlasAttributeDef_IndexTypeString =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef_IndexType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -3705,7 +3705,7 @@ atlasStructDefWithAttributeDefs original newVal =
 
 typeCategoryArray :: Phantoms.TTerm Atlas.TypeCategory
 typeCategoryArray =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.atlas.TypeCategory"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "array"),
@@ -3713,7 +3713,7 @@ typeCategoryArray =
 
 typeCategoryBusinessMetadata :: Phantoms.TTerm Atlas.TypeCategory
 typeCategoryBusinessMetadata =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.atlas.TypeCategory"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "businessMetadata"),
@@ -3721,7 +3721,7 @@ typeCategoryBusinessMetadata =
 
 typeCategoryClassification :: Phantoms.TTerm Atlas.TypeCategory
 typeCategoryClassification =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.atlas.TypeCategory"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "classification"),
@@ -3729,7 +3729,7 @@ typeCategoryClassification =
 
 typeCategoryEntity :: Phantoms.TTerm Atlas.TypeCategory
 typeCategoryEntity =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.atlas.TypeCategory"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "entity"),
@@ -3737,7 +3737,7 @@ typeCategoryEntity =
 
 typeCategoryEnum :: Phantoms.TTerm Atlas.TypeCategory
 typeCategoryEnum =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.atlas.TypeCategory"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "enum"),
@@ -3745,7 +3745,7 @@ typeCategoryEnum =
 
 typeCategoryMap :: Phantoms.TTerm Atlas.TypeCategory
 typeCategoryMap =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.atlas.TypeCategory"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -3753,7 +3753,7 @@ typeCategoryMap =
 
 typeCategoryObjectIdType :: Phantoms.TTerm Atlas.TypeCategory
 typeCategoryObjectIdType =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.atlas.TypeCategory"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objectIdType"),
@@ -3761,7 +3761,7 @@ typeCategoryObjectIdType =
 
 typeCategoryPrimitive :: Phantoms.TTerm Atlas.TypeCategory
 typeCategoryPrimitive =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.atlas.TypeCategory"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primitive"),
@@ -3769,7 +3769,7 @@ typeCategoryPrimitive =
 
 typeCategoryRelationship :: Phantoms.TTerm Atlas.TypeCategory
 typeCategoryRelationship =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.atlas.TypeCategory"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "relationship"),
@@ -3777,7 +3777,7 @@ typeCategoryRelationship =
 
 typeCategoryStruct :: Phantoms.TTerm Atlas.TypeCategory
 typeCategoryStruct =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.atlas.TypeCategory"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "struct"),

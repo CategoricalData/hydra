@@ -258,7 +258,7 @@ def termDependencyNames(binds: Boolean)(withPrims: Boolean)(withNoms: Boolean)(t
       case hydra.core.Term.project(v_Term_project_proj) => nominal(v_Term_project_proj.typeName)
       case hydra.core.Term.unwrap(v_Term_unwrap_name) => nominal(v_Term_unwrap_name)
       case hydra.core.Term.record(v_Term_record_record) => nominal(v_Term_record_record.typeName)
-      case hydra.core.Term.union(v_Term_union_injection) => nominal(v_Term_union_injection.typeName)
+      case hydra.core.Term.inject(v_Term_inject_injection) => nominal(v_Term_inject_injection.typeName)
       case hydra.core.Term.variable(v_Term_variable_name) => `var`(v_Term_variable_name)
       case hydra.core.Term.wrap(v_Term_wrap_wrappedTerm) => nominal(v_Term_wrap_wrappedTerm.typeName)
       case _ => names

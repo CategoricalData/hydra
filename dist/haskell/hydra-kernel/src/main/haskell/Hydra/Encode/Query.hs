@@ -5,7 +5,7 @@
 module Hydra.Encode.Query where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Encode.Core as Core_
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Query as Query
@@ -14,32 +14,32 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 comparisonConstraint :: Query.ComparisonConstraint -> Core.Term
 comparisonConstraint x =
     case x of
-      Query.ComparisonConstraintEqual -> Core.TermUnion (Core.Injection {
+      Query.ComparisonConstraintEqual -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.ComparisonConstraint"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "equal"),
           Core.fieldTerm = Core.TermUnit}})
-      Query.ComparisonConstraintNotEqual -> Core.TermUnion (Core.Injection {
+      Query.ComparisonConstraintNotEqual -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.ComparisonConstraint"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "notEqual"),
           Core.fieldTerm = Core.TermUnit}})
-      Query.ComparisonConstraintLessThan -> Core.TermUnion (Core.Injection {
+      Query.ComparisonConstraintLessThan -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.ComparisonConstraint"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "lessThan"),
           Core.fieldTerm = Core.TermUnit}})
-      Query.ComparisonConstraintGreaterThan -> Core.TermUnion (Core.Injection {
+      Query.ComparisonConstraintGreaterThan -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.ComparisonConstraint"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "greaterThan"),
           Core.fieldTerm = Core.TermUnit}})
-      Query.ComparisonConstraintLessThanOrEqual -> Core.TermUnion (Core.Injection {
+      Query.ComparisonConstraintLessThanOrEqual -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.ComparisonConstraint"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "lessThanOrEqual"),
           Core.fieldTerm = Core.TermUnit}})
-      Query.ComparisonConstraintGreaterThanOrEqual -> Core.TermUnion (Core.Injection {
+      Query.ComparisonConstraintGreaterThanOrEqual -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.ComparisonConstraint"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "greaterThanOrEqual"),
@@ -52,13 +52,13 @@ edge x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (EncodeCore.name (Query.edgeType x))},
+          Core.fieldTerm = (Core_.name (Query.edgeType x))},
         Core.Field {
           Core.fieldName = (Core.Name "out"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map EncodeCore.name opt)) (Query.edgeOut x))},
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map Core_.name opt)) (Query.edgeOut x))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map EncodeCore.name opt)) (Query.edgeIn x))}]})
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map Core_.name opt)) (Query.edgeIn x))}]})
 
 graphPattern :: Query.GraphPattern -> Core.Term
 graphPattern x =
@@ -67,7 +67,7 @@ graphPattern x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
-          Core.fieldTerm = (EncodeCore.name (Query.graphPatternGraph x))},
+          Core.fieldTerm = (Core_.name (Query.graphPatternGraph x))},
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map pattern xs)) (Query.graphPatternPatterns x))}]})
@@ -75,17 +75,17 @@ graphPattern x =
 node :: Query.Node -> Core.Term
 node x =
     case x of
-      Query.NodeTerm v0 -> Core.TermUnion (Core.Injection {
+      Query.NodeTerm v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.Node"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "term"),
-          Core.fieldTerm = (EncodeCore.term v0)}})
-      Query.NodeVariable v0 -> Core.TermUnion (Core.Injection {
+          Core.fieldTerm = (Core_.term v0)}})
+      Query.NodeVariable v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.Node"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "variable"),
           Core.fieldTerm = (variable v0)}})
-      Query.NodeWildcard -> Core.TermUnion (Core.Injection {
+      Query.NodeWildcard -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.Node"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "wildcard"),
@@ -94,17 +94,17 @@ node x =
 path :: Query.Path -> Core.Term
 path x =
     case x of
-      Query.PathStep v0 -> Core.TermUnion (Core.Injection {
+      Query.PathStep v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.Path"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "step"),
           Core.fieldTerm = (step v0)}})
-      Query.PathRegex v0 -> Core.TermUnion (Core.Injection {
+      Query.PathRegex v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.Path"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "regex"),
           Core.fieldTerm = (regexSequence v0)}})
-      Query.PathInverse v0 -> Core.TermUnion (Core.Injection {
+      Query.PathInverse v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.Path"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "inverse"),
@@ -125,27 +125,27 @@ pathEquation x =
 pattern :: Query.Pattern -> Core.Term
 pattern x =
     case x of
-      Query.PatternTriple v0 -> Core.TermUnion (Core.Injection {
+      Query.PatternTriple v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.Pattern"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "triple"),
           Core.fieldTerm = (triplePattern v0)}})
-      Query.PatternNegation v0 -> Core.TermUnion (Core.Injection {
+      Query.PatternNegation v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.Pattern"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "negation"),
           Core.fieldTerm = (pattern v0)}})
-      Query.PatternConjunction v0 -> Core.TermUnion (Core.Injection {
+      Query.PatternConjunction v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.Pattern"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "conjunction"),
           Core.fieldTerm = (Core.TermList (Lists.map pattern v0))}})
-      Query.PatternDisjunction v0 -> Core.TermUnion (Core.Injection {
+      Query.PatternDisjunction v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.Pattern"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "disjunction"),
           Core.fieldTerm = (Core.TermList (Lists.map pattern v0))}})
-      Query.PatternGraph v0 -> Core.TermUnion (Core.Injection {
+      Query.PatternGraph v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.Pattern"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "graph"),
@@ -190,37 +190,37 @@ range x =
 regexQuantifier :: Query.RegexQuantifier -> Core.Term
 regexQuantifier x =
     case x of
-      Query.RegexQuantifierOne -> Core.TermUnion (Core.Injection {
+      Query.RegexQuantifierOne -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.RegexQuantifier"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "one"),
           Core.fieldTerm = Core.TermUnit}})
-      Query.RegexQuantifierZeroOrOne -> Core.TermUnion (Core.Injection {
+      Query.RegexQuantifierZeroOrOne -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.RegexQuantifier"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "zeroOrOne"),
           Core.fieldTerm = Core.TermUnit}})
-      Query.RegexQuantifierZeroOrMore -> Core.TermUnion (Core.Injection {
+      Query.RegexQuantifierZeroOrMore -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.RegexQuantifier"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "zeroOrMore"),
           Core.fieldTerm = Core.TermUnit}})
-      Query.RegexQuantifierOneOrMore -> Core.TermUnion (Core.Injection {
+      Query.RegexQuantifierOneOrMore -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.RegexQuantifier"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "oneOrMore"),
           Core.fieldTerm = Core.TermUnit}})
-      Query.RegexQuantifierExactly v0 -> Core.TermUnion (Core.Injection {
+      Query.RegexQuantifierExactly v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.RegexQuantifier"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "exactly"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 v0)))}})
-      Query.RegexQuantifierAtLeast v0 -> Core.TermUnion (Core.Injection {
+      Query.RegexQuantifierAtLeast v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.RegexQuantifier"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "atLeast"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 v0)))}})
-      Query.RegexQuantifierRange v0 -> Core.TermUnion (Core.Injection {
+      Query.RegexQuantifierRange v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.RegexQuantifier"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "range"),
@@ -241,17 +241,17 @@ regexSequence x =
 step :: Query.Step -> Core.Term
 step x =
     case x of
-      Query.StepEdge v0 -> Core.TermUnion (Core.Injection {
+      Query.StepEdge v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.Step"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "edge"),
           Core.fieldTerm = (edge v0)}})
-      Query.StepProject v0 -> Core.TermUnion (Core.Injection {
+      Query.StepProject v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.Step"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "project"),
-          Core.fieldTerm = (EncodeCore.projection v0)}})
-      Query.StepCompare v0 -> Core.TermUnion (Core.Injection {
+          Core.fieldTerm = (Core_.projection v0)}})
+      Query.StepCompare v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.Step"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "compare"),

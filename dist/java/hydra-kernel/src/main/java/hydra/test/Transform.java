@@ -41,7 +41,7 @@ public interface Transform {
   }
 
   static hydra.core.Term encodeCaseConvention(hydra.util.CaseConvention conv) {
-    return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.util.CaseConvention"), new hydra.core.Field((conv).accept(new hydra.util.CaseConvention.PartialVisitor<>() {
+    return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.util.CaseConvention"), new hydra.core.Field((conv).accept(new hydra.util.CaseConvention.PartialVisitor<>() {
       @Override
       public hydra.core.Name visit(hydra.util.CaseConvention.LowerSnake ignored) {
         return new hydra.core.Name("lowerSnake");

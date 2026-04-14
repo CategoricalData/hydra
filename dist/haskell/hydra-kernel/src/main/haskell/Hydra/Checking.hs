@@ -210,7 +210,7 @@ typeOf cx tx typeArgs term =
         Core.TermSet v0 -> typeOfSet cx1 tx typeArgs v0
         Core.TermTypeApplication v0 -> typeOfTypeApplication cx1 tx typeArgs v0
         Core.TermTypeLambda v0 -> typeOfTypeLambda cx1 tx typeArgs v0
-        Core.TermUnion v0 -> typeOfInjection cx1 tx typeArgs v0
+        Core.TermInject v0 -> typeOfInjection cx1 tx typeArgs v0
         Core.TermUnit -> typeOfUnit cx1 tx typeArgs
         Core.TermUnwrap v0 -> typeOfUnwrap cx1 tx typeArgs v0
         Core.TermVariable v0 -> typeOfVariable cx1 tx typeArgs v0

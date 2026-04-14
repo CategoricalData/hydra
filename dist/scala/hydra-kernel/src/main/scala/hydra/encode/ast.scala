@@ -6,10 +6,10 @@ import hydra.core.*
 
 def associativity(v1: hydra.ast.Associativity): hydra.core.Term =
   v1 match
-  case hydra.ast.Associativity.none => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Associativity", hydra.core.Field("none", hydra.core.Term.unit)))
-  case hydra.ast.Associativity.left => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Associativity", hydra.core.Field("left", hydra.core.Term.unit)))
-  case hydra.ast.Associativity.right => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Associativity", hydra.core.Field("right", hydra.core.Term.unit)))
-  case hydra.ast.Associativity.both => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Associativity", hydra.core.Field("both", hydra.core.Term.unit)))
+  case hydra.ast.Associativity.none => hydra.core.Term.inject(hydra.core.Injection("hydra.ast.Associativity", hydra.core.Field("none", hydra.core.Term.unit)))
+  case hydra.ast.Associativity.left => hydra.core.Term.inject(hydra.core.Injection("hydra.ast.Associativity", hydra.core.Field("left", hydra.core.Term.unit)))
+  case hydra.ast.Associativity.right => hydra.core.Term.inject(hydra.core.Injection("hydra.ast.Associativity", hydra.core.Field("right", hydra.core.Term.unit)))
+  case hydra.ast.Associativity.both => hydra.core.Term.inject(hydra.core.Injection("hydra.ast.Associativity", hydra.core.Field("both", hydra.core.Term.unit)))
 
 def blockStyle(x: hydra.ast.BlockStyle): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.ast.BlockStyle", Seq(hydra.core.Field("indent", hydra.core.Term.maybe(hydra.lib.maybes.map[scala.Predef.String,
@@ -27,22 +27,22 @@ def brackets(x: hydra.ast.Brackets): hydra.core.Term =
 
 def expr(v1: hydra.ast.Expr): hydra.core.Term =
   v1 match
-  case hydra.ast.Expr.const(v_Expr_const_y) => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Expr",
+  case hydra.ast.Expr.const(v_Expr_const_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.ast.Expr",
      hydra.core.Field("const", hydra.encode.ast.symbol(v_Expr_const_y))))
-  case hydra.ast.Expr.indent(v_Expr_indent_y) => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Expr",
+  case hydra.ast.Expr.indent(v_Expr_indent_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.ast.Expr",
      hydra.core.Field("indent", hydra.encode.ast.indentedExpression(v_Expr_indent_y))))
-  case hydra.ast.Expr.op(v_Expr_op_y) => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Expr",
+  case hydra.ast.Expr.op(v_Expr_op_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.ast.Expr",
      hydra.core.Field("op", hydra.encode.ast.opExpr(v_Expr_op_y))))
-  case hydra.ast.Expr.brackets(v_Expr_brackets_y) => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Expr",
+  case hydra.ast.Expr.brackets(v_Expr_brackets_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.ast.Expr",
      hydra.core.Field("brackets", hydra.encode.ast.bracketExpr(v_Expr_brackets_y))))
-  case hydra.ast.Expr.seq(v_Expr_seq_y) => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Expr",
+  case hydra.ast.Expr.seq(v_Expr_seq_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.ast.Expr",
      hydra.core.Field("seq", hydra.encode.ast.seqExpr(v_Expr_seq_y))))
 
 def indentStyle(v1: hydra.ast.IndentStyle): hydra.core.Term =
   v1 match
-  case hydra.ast.IndentStyle.allLines(v_IndentStyle_allLines_y) => hydra.core.Term.union(hydra.core.Injection("hydra.ast.IndentStyle",
+  case hydra.ast.IndentStyle.allLines(v_IndentStyle_allLines_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.ast.IndentStyle",
      hydra.core.Field("allLines", hydra.core.Term.literal(hydra.core.Literal.string(v_IndentStyle_allLines_y)))))
-  case hydra.ast.IndentStyle.subsequentLines(v_IndentStyle_subsequentLines_y) => hydra.core.Term.union(hydra.core.Injection("hydra.ast.IndentStyle",
+  case hydra.ast.IndentStyle.subsequentLines(v_IndentStyle_subsequentLines_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.ast.IndentStyle",
      hydra.core.Field("subsequentLines", hydra.core.Term.literal(hydra.core.Literal.string(v_IndentStyle_subsequentLines_y)))))
 
 def indentedExpression(x: hydra.ast.IndentedExpression): hydra.core.Term =
@@ -74,9 +74,9 @@ def symbol(x: hydra.ast.Symbol): hydra.core.Term =
 
 def ws(v1: hydra.ast.Ws): hydra.core.Term =
   v1 match
-  case hydra.ast.Ws.none => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Ws", hydra.core.Field("none", hydra.core.Term.unit)))
-  case hydra.ast.Ws.space => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Ws", hydra.core.Field("space", hydra.core.Term.unit)))
-  case hydra.ast.Ws.break => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Ws", hydra.core.Field("break", hydra.core.Term.unit)))
-  case hydra.ast.Ws.breakAndIndent(v_Ws_breakAndIndent_y) => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Ws",
+  case hydra.ast.Ws.none => hydra.core.Term.inject(hydra.core.Injection("hydra.ast.Ws", hydra.core.Field("none", hydra.core.Term.unit)))
+  case hydra.ast.Ws.space => hydra.core.Term.inject(hydra.core.Injection("hydra.ast.Ws", hydra.core.Field("space", hydra.core.Term.unit)))
+  case hydra.ast.Ws.break => hydra.core.Term.inject(hydra.core.Injection("hydra.ast.Ws", hydra.core.Field("break", hydra.core.Term.unit)))
+  case hydra.ast.Ws.breakAndIndent(v_Ws_breakAndIndent_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.ast.Ws",
      hydra.core.Field("breakAndIndent", hydra.core.Term.literal(hydra.core.Literal.string(v_Ws_breakAndIndent_y)))))
-  case hydra.ast.Ws.doubleBreak => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Ws", hydra.core.Field("doubleBreak", hydra.core.Term.unit)))
+  case hydra.ast.Ws.doubleBreak => hydra.core.Term.inject(hydra.core.Injection("hydra.ast.Ws", hydra.core.Field("doubleBreak", hydra.core.Term.unit)))

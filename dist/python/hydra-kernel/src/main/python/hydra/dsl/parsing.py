@@ -27,10 +27,10 @@ def parse_error_with_remainder(original: hydra.phantoms.TTerm[hydra.parsing.Pars
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.parsing.ParseError"), (hydra.core.Field(hydra.core.Name("message"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermProject(hydra.core.Projection(hydra.core.Name("hydra.parsing.ParseError"), hydra.core.Name("message")))), original.value)))), hydra.core.Field(hydra.core.Name("remainder"), new_val.value))))))
 
 def parse_result_failure(x: hydra.phantoms.TTerm[hydra.parsing.ParseError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.parsing.ParseResult"), hydra.core.Field(hydra.core.Name("failure"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.parsing.ParseResult"), hydra.core.Field(hydra.core.Name("failure"), x.value)))))
 
 def parse_result_success(x: hydra.phantoms.TTerm[hydra.parsing.ParseSuccess[A]]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.parsing.ParseResult"), hydra.core.Field(hydra.core.Name("success"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.parsing.ParseResult"), hydra.core.Field(hydra.core.Name("success"), x.value)))))
 
 def parse_success(value: hydra.phantoms.TTerm[A], remainder: hydra.phantoms.TTerm[str]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.parsing.ParseSuccess"), (hydra.core.Field(hydra.core.Name("value"), value.value), hydra.core.Field(hydra.core.Name("remainder"), remainder.value))))))

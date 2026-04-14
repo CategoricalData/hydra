@@ -134,7 +134,7 @@ haskellLanguage = haskellLanguageDefinition "haskellLanguage" $
     Variants.termVariantSet,
     Variants.termVariantTypeApplication,
     Variants.termVariantTypeLambda,
-    Variants.termVariantUnion,
+    Variants.termVariantInject,
     Variants.termVariantUnit,
     Variants.termVariantUnwrap,
     Variants.termVariantVariable,

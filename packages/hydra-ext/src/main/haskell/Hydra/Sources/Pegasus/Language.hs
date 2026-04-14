@@ -115,7 +115,7 @@ pdlLanguage = define "pdlLanguage" $
     Variants.termVariantWrap,
     Variants.termVariantMaybe,
     Variants.termVariantRecord,
-    Variants.termVariantUnion],
+    Variants.termVariantInject],
   "typeVariants">: Sets.fromList $ list [
     Variants.typeVariantAnnotated,
     Variants.typeVariantEither,

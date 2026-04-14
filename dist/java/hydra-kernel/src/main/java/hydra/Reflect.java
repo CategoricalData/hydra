@@ -392,8 +392,8 @@ public interface Reflect {
       }
 
       @Override
-      public hydra.variants.TermVariant visit(hydra.core.Term.Union ignored) {
-        return new hydra.variants.TermVariant.Union();
+      public hydra.variants.TermVariant visit(hydra.core.Term.Inject ignored) {
+        return new hydra.variants.TermVariant.Inject();
       }
 
       @Override
@@ -436,7 +436,7 @@ public interface Reflect {
       new hydra.variants.TermVariant.Set(),
       new hydra.variants.TermVariant.TypeLambda(),
       new hydra.variants.TermVariant.TypeApplication(),
-      new hydra.variants.TermVariant.Union(),
+      new hydra.variants.TermVariant.Inject(),
       new hydra.variants.TermVariant.Unit(),
       new hydra.variants.TermVariant.Unwrap(),
       new hydra.variants.TermVariant.Variable(),

@@ -131,7 +131,7 @@ parameterWithType original newVal =
 
 primitiveTypeBigint :: Phantoms.TTerm Model.PrimitiveType
 primitiveTypeBigint =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.typeScript.model.PrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bigint"),
@@ -139,7 +139,7 @@ primitiveTypeBigint =
 
 primitiveTypeBoolean :: Phantoms.TTerm Model.PrimitiveType
 primitiveTypeBoolean =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.typeScript.model.PrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -147,7 +147,7 @@ primitiveTypeBoolean =
 
 primitiveTypeNull :: Phantoms.TTerm Model.PrimitiveType
 primitiveTypeNull =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.typeScript.model.PrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "null"),
@@ -155,7 +155,7 @@ primitiveTypeNull =
 
 primitiveTypeNumber :: Phantoms.TTerm Model.PrimitiveType
 primitiveTypeNumber =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.typeScript.model.PrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "number"),
@@ -163,7 +163,7 @@ primitiveTypeNumber =
 
 primitiveTypeObject :: Phantoms.TTerm Model.PrimitiveType
 primitiveTypeObject =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.typeScript.model.PrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "object"),
@@ -171,7 +171,7 @@ primitiveTypeObject =
 
 primitiveTypeString :: Phantoms.TTerm Model.PrimitiveType
 primitiveTypeString =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.typeScript.model.PrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -179,7 +179,7 @@ primitiveTypeString =
 
 primitiveTypeSymbol :: Phantoms.TTerm Model.PrimitiveType
 primitiveTypeSymbol =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.typeScript.model.PrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "symbol"),
@@ -187,7 +187,7 @@ primitiveTypeSymbol =
 
 primitiveTypeUndefined :: Phantoms.TTerm Model.PrimitiveType
 primitiveTypeUndefined =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.typeScript.model.PrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "undefined"),
@@ -195,7 +195,7 @@ primitiveTypeUndefined =
 
 typeArray :: Phantoms.TTerm Model.Type -> Phantoms.TTerm Model.Type
 typeArray x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.typeScript.model.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "array"),
@@ -203,7 +203,7 @@ typeArray x =
 
 typeFunction :: Phantoms.TTerm Model.FunctionType -> Phantoms.TTerm Model.Type
 typeFunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.typeScript.model.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "function"),
@@ -211,7 +211,7 @@ typeFunction x =
 
 typeNever :: Phantoms.TTerm Model.Type
 typeNever =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.typeScript.model.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "never"),
@@ -219,7 +219,7 @@ typeNever =
 
 typeObjectLiteral :: Phantoms.TTerm Model.Type
 typeObjectLiteral =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.typeScript.model.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objectLiteral"),
@@ -227,7 +227,7 @@ typeObjectLiteral =
 
 typePrimitive :: Phantoms.TTerm Model.PrimitiveType -> Phantoms.TTerm Model.Type
 typePrimitive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.typeScript.model.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primitive"),
@@ -235,7 +235,7 @@ typePrimitive x =
 
 typeTuple :: Phantoms.TTerm [Model.Type] -> Phantoms.TTerm Model.Type
 typeTuple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.typeScript.model.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tuple"),
@@ -243,7 +243,7 @@ typeTuple x =
 
 typeUnknown :: Phantoms.TTerm Model.Type
 typeUnknown =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.typeScript.model.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unknown"),
@@ -251,7 +251,7 @@ typeUnknown =
 
 typeVoid :: Phantoms.TTerm Model.Type
 typeVoid =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.typeScript.model.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "void"),

@@ -89,8 +89,8 @@ public interface Variants {
       }
 
       @Override
-      public String visit(hydra.variants.TermVariant.Union ignored) {
-        return "union";
+      public String visit(hydra.variants.TermVariant.Inject ignored) {
+        return "inject";
       }
 
       @Override

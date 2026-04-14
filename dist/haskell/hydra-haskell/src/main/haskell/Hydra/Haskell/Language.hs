@@ -72,7 +72,7 @@ haskellLanguage =
           Variants.TermVariantSet,
           Variants.TermVariantTypeApplication,
           Variants.TermVariantTypeLambda,
-          Variants.TermVariantUnion,
+          Variants.TermVariantInject,
           Variants.TermVariantUnit,
           Variants.TermVariantUnwrap,
           Variants.TermVariantVariable,

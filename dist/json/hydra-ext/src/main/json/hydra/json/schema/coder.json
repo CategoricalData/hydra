@@ -431,7 +431,7 @@
                                                             {
                                                               "list": [
                                                                 {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "title",
                                                                       "term": {
@@ -631,7 +631,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "reference",
                       "term": {

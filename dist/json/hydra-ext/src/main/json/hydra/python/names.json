@@ -31,13 +31,13 @@
                                         "function": {
                                           "application": {
                                             "argument": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "upperSnake", "term": {"unit": {}}},
                                                 "typeName": "hydra.util.CaseConvention"}},
                                             "function": {
                                               "application": {
                                                 "argument": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {"name": "camel", "term": {"unit": {}}},
                                                     "typeName": "hydra.util.CaseConvention"}},
                                                 "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
@@ -112,7 +112,7 @@
             "body": {
               "application": {
                 "argument": {
-                  "union": {
+                  "inject": {
                     "field": {"name": "upperSnake", "term": {"unit": {}}},
                     "typeName": "hydra.util.CaseConvention"}},
                 "function": {
@@ -151,7 +151,7 @@
                             "function": {
                               "application": {
                                 "argument": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "lowerSnake", "term": {"unit": {}}},
                                     "typeName": "hydra.util.CaseConvention"}},
                                 "function": {
@@ -302,7 +302,7 @@
                                                 "function": {
                                                   "application": {
                                                     "argument": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {"name": "camel", "term": {"unit": {}}},
                                                         "typeName": "hydra.util.CaseConvention"}},
                                                     "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
@@ -331,13 +331,13 @@
                                                     "argument": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "lowerSnake", "term": {"unit": {}}},
                                                             "typeName": "hydra.util.CaseConvention"}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {"name": "camel", "term": {"unit": {}}},
                                                                 "typeName": "hydra.util.CaseConvention"}},
                                                             "function": {"variable": "hydra.formatting.convertCase"}}}}},
@@ -779,13 +779,13 @@
                                         "function": {
                                           "application": {
                                             "argument": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "lowerSnake", "term": {"unit": {}}},
                                                 "typeName": "hydra.util.CaseConvention"}},
                                             "function": {
                                               "application": {
                                                 "argument": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {"name": "camel", "term": {"unit": {}}},
                                                     "typeName": "hydra.util.CaseConvention"}},
                                                 "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
@@ -872,7 +872,7 @@
                 "function": {
                   "application": {
                     "argument": {
-                      "union": {
+                      "inject": {
                         "field": {"name": "lowerSnake", "term": {"unit": {}}},
                         "typeName": "hydra.util.CaseConvention"}},
                     "function": {"variable": "hydra.python.names.variableReference"}}}}}}},
@@ -901,7 +901,7 @@
                 "function": {
                   "application": {
                     "argument": {
-                      "union": {
+                      "inject": {
                         "field": {"name": "pascal", "term": {"unit": {}}},
                         "typeName": "hydra.util.CaseConvention"}},
                     "function": {"variable": "hydra.python.names.variableReference"}}}}}}},
@@ -966,7 +966,7 @@
                                   {
                                     "name": "unquoted",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "simple",
                                           "term": {
@@ -978,7 +978,7 @@
                                                       "body": {
                                                         "list": [
                                                           {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "simple",
                                                                 "term": {
@@ -1053,7 +1053,7 @@
                                                                                                                       {
                                                                                                                         "name": "rhs",
                                                                                                                         "term": {
-                                                                                                                          "union": {
+                                                                                                                          "inject": {
                                                                                                                             "field": {
                                                                                                                               "name": "simple",
                                                                                                                               "term": {
@@ -1068,11 +1068,11 @@
                                                                                                                                             {
                                                                                                                                               "name": "primary",
                                                                                                                                               "term": {
-                                                                                                                                                "union": {
+                                                                                                                                                "inject": {
                                                                                                                                                   "field": {
                                                                                                                                                     "name": "simple",
                                                                                                                                                     "term": {
-                                                                                                                                                      "union": {
+                                                                                                                                                      "inject": {
                                                                                                                                                         "field": {"name": "name", "term": {"variable": "pyName"}},
                                                                                                                                                         "typeName": "hydra.python.syntax.Atom"}}},
                                                                                                                                                   "typeName": "hydra.python.syntax.Primary"}}}],
@@ -1196,7 +1196,7 @@
                                     "function": {
                                       "application": {
                                         "argument": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "simple",
                                               "term": {
@@ -1208,7 +1208,7 @@
                                                           "body": {
                                                             "list": [
                                                               {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "simple",
                                                                     "term": {
@@ -1283,7 +1283,7 @@
                                                                                                                           {
                                                                                                                             "name": "rhs",
                                                                                                                             "term": {
-                                                                                                                              "union": {
+                                                                                                                              "inject": {
                                                                                                                                 "field": {
                                                                                                                                   "name": "simple",
                                                                                                                                   "term": {
@@ -1298,11 +1298,11 @@
                                                                                                                                                 {
                                                                                                                                                   "name": "primary",
                                                                                                                                                   "term": {
-                                                                                                                                                    "union": {
+                                                                                                                                                    "inject": {
                                                                                                                                                       "field": {
                                                                                                                                                         "name": "simple",
                                                                                                                                                         "term": {
-                                                                                                                                                          "union": {
+                                                                                                                                                          "inject": {
                                                                                                                                                             "field": {
                                                                                                                                                               "name": "string",
                                                                                                                                                               "term": {
@@ -1317,7 +1317,7 @@
                                                                                                                                                                     {
                                                                                                                                                                       "name": "quoteStyle",
                                                                                                                                                                       "term": {
-                                                                                                                                                                        "union": {
+                                                                                                                                                                        "inject": {
                                                                                                                                                                           "field": {"name": "double", "term": {"unit": {}}},
                                                                                                                                                                           "typeName": "hydra.python.syntax.QuoteStyle"}}}],
                                                                                                                                                                   "typeName": "hydra.python.syntax.String"}}},
@@ -1430,7 +1430,7 @@
                                     "function": {
                                       "application": {
                                         "argument": {
-                                          "union": {
+                                          "inject": {
                                             "field": {"name": "pascal", "term": {"unit": {}}},
                                             "typeName": "hydra.util.CaseConvention"}},
                                         "function": {

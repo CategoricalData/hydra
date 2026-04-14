@@ -429,7 +429,7 @@ term = define "term" $
         string "⟨",
         type_ @@ var "typ",
         string "⟩"],
-    _Term_union>>: injection,
+    _Term_inject>>: injection,
     _Term_unit>>: constant $ string "unit",
     _Term_unwrap>>: "tname" ~> Strings.cat $ list [
       string "unwrap(",

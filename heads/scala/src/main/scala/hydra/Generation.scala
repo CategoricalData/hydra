@@ -70,8 +70,8 @@ object Generation:
       case Term.list(elems) => Term.list(elems.map(e => decodeBinaryLiteralsDepth(e, d)))
       case Term.record(rec) =>
         Term.record(Record(rec.typeName, rec.fields.map(f => Field(f.name, decodeBinaryLiteralsDepth(f.term, d)))))
-      case Term.union(inj) =>
-        Term.union(Injection(inj.typeName, Field(inj.field.name, decodeBinaryLiteralsDepth(inj.field.term, d))))
+      case Term.inject(inj) =>
+        Term.inject(Injection(inj.typeName, Field(inj.field.name, decodeBinaryLiteralsDepth(inj.field.term, d))))
       case Term.annotated(ann) =>
         Term.annotated(AnnotatedTerm(decodeBinaryLiteralsDepth(ann.body, d), ann.annotation))
       case Term.wrap(w) =>

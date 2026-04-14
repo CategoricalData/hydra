@@ -262,7 +262,7 @@ encodeTerm tm =
       Core.TermTypeLambda v0 ->
         let tbody = Core.typeLambdaBody v0
         in (encodeTerm tbody)
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let uname = Core.injectionTypeName v0
             ufield = Core.injectionField v0
             fname = Core.fieldName ufield
@@ -501,7 +501,7 @@ termReferencesVar name tm = case tm of
   Core.TermMaybe v -> maybe False (termReferencesVar name) v
   Core.TermPair v -> termReferencesVar name (fst v) || termReferencesVar name (snd v)
   Core.TermRecord v -> any (\f -> termReferencesVar name (Core.fieldTerm f)) (Core.recordFields v)
-  Core.TermUnion v -> termReferencesVar name (Core.fieldTerm (Core.injectionField v))
+  Core.TermInject v -> termReferencesVar name (Core.fieldTerm (Core.injectionField v))
   Core.TermEither v -> either (termReferencesVar name) (termReferencesVar name) v
   Core.TermTypeApplication v -> termReferencesVar name (Core.typeApplicationTermBody v)
   Core.TermTypeLambda v -> termReferencesVar name (Core.typeLambdaBody v)

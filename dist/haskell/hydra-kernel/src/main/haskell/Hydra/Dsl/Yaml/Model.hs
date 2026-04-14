@@ -12,7 +12,7 @@ import qualified Data.Map as M
 
 nodeMapping :: Phantoms.TTerm (M.Map Model.Node Model.Node) -> Phantoms.TTerm Model.Node
 nodeMapping x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.yaml.model.Node"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mapping"),
@@ -20,7 +20,7 @@ nodeMapping x =
 
 nodeScalar :: Phantoms.TTerm Model.Scalar -> Phantoms.TTerm Model.Node
 nodeScalar x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.yaml.model.Node"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "scalar"),
@@ -28,7 +28,7 @@ nodeScalar x =
 
 nodeSequence :: Phantoms.TTerm [Model.Node] -> Phantoms.TTerm Model.Node
 nodeSequence x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.yaml.model.Node"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sequence"),
@@ -36,7 +36,7 @@ nodeSequence x =
 
 scalarBool :: Phantoms.TTerm Bool -> Phantoms.TTerm Model.Scalar
 scalarBool x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.yaml.model.Scalar"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bool"),
@@ -44,7 +44,7 @@ scalarBool x =
 
 scalarFloat :: Phantoms.TTerm Double -> Phantoms.TTerm Model.Scalar
 scalarFloat x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.yaml.model.Scalar"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
@@ -52,7 +52,7 @@ scalarFloat x =
 
 scalarInt :: Phantoms.TTerm Integer -> Phantoms.TTerm Model.Scalar
 scalarInt x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.yaml.model.Scalar"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int"),
@@ -60,7 +60,7 @@ scalarInt x =
 
 scalarNull :: Phantoms.TTerm Model.Scalar
 scalarNull =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.yaml.model.Scalar"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "null"),
@@ -68,7 +68,7 @@ scalarNull =
 
 scalarStr :: Phantoms.TTerm String -> Phantoms.TTerm Model.Scalar
 scalarStr x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.yaml.model.Scalar"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "str"),

@@ -180,7 +180,7 @@ isEncodedTerm = define "isEncodedTerm" $
   "t" ~> cases _Term (Strip.deannotateTerm @@ var "t") (Just false) [
     _Term_application>>: "a" ~>
       isEncodedTerm @@ (Core.applicationFunction (var "a")),
-    _Term_union>>: "i" ~>
+    _Term_inject>>: "i" ~>
       Equality.equal (string (unName _Term)) (Core.unName (Core.injectionTypeName (var "i")))]
 
 isEncodedType :: TTermDefinition (Term -> Bool)
@@ -189,7 +189,7 @@ isEncodedType = define "isEncodedType" $
   "t" ~> cases _Term (Strip.deannotateTerm @@ var "t") (Just false) [
     _Term_application>>: "a" ~>
       isEncodedType @@ (Core.applicationFunction (var "a")),
-    _Term_union>>: "i" ~>
+    _Term_inject>>: "i" ~>
       Equality.equal (string (unName _Type)) (Core.unName (Core.injectionTypeName (var "i")))]
 
 isEnumRowType :: TTermDefinition ([FieldType] -> Bool)

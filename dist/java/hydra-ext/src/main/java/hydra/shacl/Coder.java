@@ -357,7 +357,7 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.Union inj) {
+      public hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.Inject inj) {
         hydra.core.Field field = (inj).value.field;
         hydra.core.Name rname = (inj).value.typeName;
         return hydra.lib.eithers.Map.apply(

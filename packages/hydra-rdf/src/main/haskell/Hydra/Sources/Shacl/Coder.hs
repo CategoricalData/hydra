@@ -363,7 +363,7 @@ encodeTerm = define "encodeTerm" $
               encodeTerm @@ var "node3" @@ var "t" @@ var "cx3" @@ var "g")
             @@ var "cx"
             @@ (Sets.toList (var "terms"))),
-      _Term_union>>: lambda "inj" $ lets [
+      _Term_inject>>: lambda "inj" $ lets [
         "rname">: Core.injectionTypeName (var "inj"),
         "field">: Core.injectionField (var "inj")] $
         Eithers.map

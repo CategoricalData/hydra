@@ -476,7 +476,7 @@ public interface Core {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.Error_, hydra.core.Field> visit(hydra.core.Term.Union injection) {
+        public hydra.util.Either<hydra.errors.Error_, hydra.core.Field> visit(hydra.core.Term.Inject injection) {
           return hydra.lib.logic.IfElse.lazy(
             hydra.lib.equality.Equal.apply(
               (injection).value.typeName.value,

@@ -10,12 +10,12 @@ public interface Packaging {
     return (v1).accept(new hydra.packaging.Definition.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.packaging.Definition.Term y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.packaging.Definition"), new hydra.core.Field(new hydra.core.Name("term"), hydra.encode.Packaging.termDefinition((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.packaging.Definition"), new hydra.core.Field(new hydra.core.Name("term"), hydra.encode.Packaging.termDefinition((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.packaging.Definition.Type y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.packaging.Definition"), new hydra.core.Field(new hydra.core.Name("type"), hydra.encode.Packaging.typeDefinition((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.packaging.Definition"), new hydra.core.Field(new hydra.core.Name("type"), hydra.encode.Packaging.typeDefinition((y).value))));
       }
     });
   }

@@ -122,7 +122,7 @@ hydraRecord typeName fields = Core.TermRecord $ Core.Record {
   Core.recordFields = [Core.Field (Core.Name n) t | (n, t) <- fields]}
 
 hydraUnionTerm :: String -> String -> Core.Term -> Core.Term
-hydraUnionTerm typeName fieldName value = Core.TermUnion $ Core.Injection {
+hydraUnionTerm typeName fieldName value = Core.TermInject $ Core.Injection {
   Core.injectionTypeName = Core.Name typeName,
   Core.injectionField = Core.Field (Core.Name fieldName) value}
 

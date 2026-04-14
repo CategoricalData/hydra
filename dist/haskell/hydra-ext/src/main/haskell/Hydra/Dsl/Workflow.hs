@@ -72,7 +72,7 @@ hydraSchemaSpecWithTypeName original newVal =
 
 schemaSpecFile :: Phantoms.TTerm String -> Phantoms.TTerm Workflow.SchemaSpec
 schemaSpecFile x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.workflow.SchemaSpec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "file"),
@@ -80,7 +80,7 @@ schemaSpecFile x =
 
 schemaSpecHydra :: Phantoms.TTerm Workflow.HydraSchemaSpec -> Phantoms.TTerm Workflow.SchemaSpec
 schemaSpecHydra x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.workflow.SchemaSpec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hydra"),
@@ -88,7 +88,7 @@ schemaSpecHydra x =
 
 schemaSpecProvided :: Phantoms.TTerm Workflow.SchemaSpec
 schemaSpecProvided =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.workflow.SchemaSpec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "provided"),

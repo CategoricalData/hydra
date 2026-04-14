@@ -130,17 +130,17 @@ fieldType x =
 floatType :: Core.FloatType -> Core.Term
 floatType x =
     case x of
-      Core.FloatTypeBigfloat -> Core.TermUnion (Core.Injection {
+      Core.FloatTypeBigfloat -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.FloatType"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "bigfloat"),
           Core.fieldTerm = Core.TermUnit}})
-      Core.FloatTypeFloat32 -> Core.TermUnion (Core.Injection {
+      Core.FloatTypeFloat32 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.FloatType"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "float32"),
           Core.fieldTerm = Core.TermUnit}})
-      Core.FloatTypeFloat64 -> Core.TermUnion (Core.Injection {
+      Core.FloatTypeFloat64 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.FloatType"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "float64"),
@@ -149,17 +149,17 @@ floatType x =
 floatValue :: Core.FloatValue -> Core.Term
 floatValue x =
     case x of
-      Core.FloatValueBigfloat v0 -> Core.TermUnion (Core.Injection {
+      Core.FloatValueBigfloat v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.FloatValue"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "bigfloat"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat v0)))}})
-      Core.FloatValueFloat32 v0 -> Core.TermUnion (Core.Injection {
+      Core.FloatValueFloat32 v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.FloatValue"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "float32"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 v0)))}})
-      Core.FloatValueFloat64 v0 -> Core.TermUnion (Core.Injection {
+      Core.FloatValueFloat64 v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.FloatValue"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "float64"),
@@ -204,47 +204,47 @@ injection x =
 integerType :: Core.IntegerType -> Core.Term
 integerType x =
     case x of
-      Core.IntegerTypeBigint -> Core.TermUnion (Core.Injection {
+      Core.IntegerTypeBigint -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.IntegerType"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "bigint"),
           Core.fieldTerm = Core.TermUnit}})
-      Core.IntegerTypeInt8 -> Core.TermUnion (Core.Injection {
+      Core.IntegerTypeInt8 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.IntegerType"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "int8"),
           Core.fieldTerm = Core.TermUnit}})
-      Core.IntegerTypeInt16 -> Core.TermUnion (Core.Injection {
+      Core.IntegerTypeInt16 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.IntegerType"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "int16"),
           Core.fieldTerm = Core.TermUnit}})
-      Core.IntegerTypeInt32 -> Core.TermUnion (Core.Injection {
+      Core.IntegerTypeInt32 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.IntegerType"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "int32"),
           Core.fieldTerm = Core.TermUnit}})
-      Core.IntegerTypeInt64 -> Core.TermUnion (Core.Injection {
+      Core.IntegerTypeInt64 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.IntegerType"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "int64"),
           Core.fieldTerm = Core.TermUnit}})
-      Core.IntegerTypeUint8 -> Core.TermUnion (Core.Injection {
+      Core.IntegerTypeUint8 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.IntegerType"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "uint8"),
           Core.fieldTerm = Core.TermUnit}})
-      Core.IntegerTypeUint16 -> Core.TermUnion (Core.Injection {
+      Core.IntegerTypeUint16 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.IntegerType"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "uint16"),
           Core.fieldTerm = Core.TermUnit}})
-      Core.IntegerTypeUint32 -> Core.TermUnion (Core.Injection {
+      Core.IntegerTypeUint32 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.IntegerType"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "uint32"),
           Core.fieldTerm = Core.TermUnit}})
-      Core.IntegerTypeUint64 -> Core.TermUnion (Core.Injection {
+      Core.IntegerTypeUint64 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.IntegerType"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "uint64"),
@@ -253,47 +253,47 @@ integerType x =
 integerValue :: Core.IntegerValue -> Core.Term
 integerValue x =
     case x of
-      Core.IntegerValueBigint v0 -> Core.TermUnion (Core.Injection {
+      Core.IntegerValueBigint v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.IntegerValue"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "bigint"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint v0)))}})
-      Core.IntegerValueInt8 v0 -> Core.TermUnion (Core.Injection {
+      Core.IntegerValueInt8 v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.IntegerValue"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "int8"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt8 v0)))}})
-      Core.IntegerValueInt16 v0 -> Core.TermUnion (Core.Injection {
+      Core.IntegerValueInt16 v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.IntegerValue"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "int16"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt16 v0)))}})
-      Core.IntegerValueInt32 v0 -> Core.TermUnion (Core.Injection {
+      Core.IntegerValueInt32 v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.IntegerValue"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "int32"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 v0)))}})
-      Core.IntegerValueInt64 v0 -> Core.TermUnion (Core.Injection {
+      Core.IntegerValueInt64 v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.IntegerValue"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "int64"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 v0)))}})
-      Core.IntegerValueUint8 v0 -> Core.TermUnion (Core.Injection {
+      Core.IntegerValueUint8 v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.IntegerValue"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "uint8"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint8 v0)))}})
-      Core.IntegerValueUint16 v0 -> Core.TermUnion (Core.Injection {
+      Core.IntegerValueUint16 v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.IntegerValue"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "uint16"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint16 v0)))}})
-      Core.IntegerValueUint32 v0 -> Core.TermUnion (Core.Injection {
+      Core.IntegerValueUint32 v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.IntegerValue"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "uint32"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint32 v0)))}})
-      Core.IntegerValueUint64 v0 -> Core.TermUnion (Core.Injection {
+      Core.IntegerValueUint64 v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.IntegerValue"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "uint64"),
@@ -329,27 +329,27 @@ let_ x =
 literal :: Core.Literal -> Core.Term
 literal x =
     case x of
-      Core.LiteralBinary v0 -> Core.TermUnion (Core.Injection {
+      Core.LiteralBinary v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "binary"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralBinary v0))}})
-      Core.LiteralBoolean v0 -> Core.TermUnion (Core.Injection {
+      Core.LiteralBoolean v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "boolean"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralBoolean v0))}})
-      Core.LiteralFloat v0 -> Core.TermUnion (Core.Injection {
+      Core.LiteralFloat v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "float"),
           Core.fieldTerm = (floatValue v0)}})
-      Core.LiteralInteger v0 -> Core.TermUnion (Core.Injection {
+      Core.LiteralInteger v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "integer"),
           Core.fieldTerm = (integerValue v0)}})
-      Core.LiteralString v0 -> Core.TermUnion (Core.Injection {
+      Core.LiteralString v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "string"),
@@ -358,27 +358,27 @@ literal x =
 literalType :: Core.LiteralType -> Core.Term
 literalType x =
     case x of
-      Core.LiteralTypeBinary -> Core.TermUnion (Core.Injection {
+      Core.LiteralTypeBinary -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.LiteralType"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "binary"),
           Core.fieldTerm = Core.TermUnit}})
-      Core.LiteralTypeBoolean -> Core.TermUnion (Core.Injection {
+      Core.LiteralTypeBoolean -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.LiteralType"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "boolean"),
           Core.fieldTerm = Core.TermUnit}})
-      Core.LiteralTypeFloat v0 -> Core.TermUnion (Core.Injection {
+      Core.LiteralTypeFloat v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.LiteralType"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "float"),
           Core.fieldTerm = (floatType v0)}})
-      Core.LiteralTypeInteger v0 -> Core.TermUnion (Core.Injection {
+      Core.LiteralTypeInteger v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.LiteralType"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "integer"),
           Core.fieldTerm = (integerType v0)}})
-      Core.LiteralTypeString -> Core.TermUnion (Core.Injection {
+      Core.LiteralTypeString -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.LiteralType"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "string"),
@@ -441,107 +441,107 @@ record x =
 term :: Core.Term -> Core.Term
 term x =
     case x of
-      Core.TermAnnotated v0 -> Core.TermUnion (Core.Injection {
+      Core.TermAnnotated v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "annotated"),
           Core.fieldTerm = (annotatedTerm v0)}})
-      Core.TermApplication v0 -> Core.TermUnion (Core.Injection {
+      Core.TermApplication v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "application"),
           Core.fieldTerm = (application v0)}})
-      Core.TermCases v0 -> Core.TermUnion (Core.Injection {
+      Core.TermCases v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = (caseStatement v0)}})
-      Core.TermEither v0 -> Core.TermUnion (Core.Injection {
+      Core.TermEither v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "either"),
           Core.fieldTerm = (Core.TermEither (Eithers.bimap term term v0))}})
-      Core.TermLambda v0 -> Core.TermUnion (Core.Injection {
+      Core.TermInject v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "inject"),
+          Core.fieldTerm = (injection v0)}})
+      Core.TermLambda v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "lambda"),
           Core.fieldTerm = (lambda v0)}})
-      Core.TermLet v0 -> Core.TermUnion (Core.Injection {
+      Core.TermLet v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "let"),
           Core.fieldTerm = (let_ v0)}})
-      Core.TermList v0 -> Core.TermUnion (Core.Injection {
+      Core.TermList v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "list"),
           Core.fieldTerm = (Core.TermList (Lists.map term v0))}})
-      Core.TermLiteral v0 -> Core.TermUnion (Core.Injection {
+      Core.TermLiteral v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "literal"),
           Core.fieldTerm = (literal v0)}})
-      Core.TermMap v0 -> Core.TermUnion (Core.Injection {
+      Core.TermMap v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "map"),
           Core.fieldTerm = (Core.TermMap (Maps.bimap term term v0))}})
-      Core.TermMaybe v0 -> Core.TermUnion (Core.Injection {
+      Core.TermMaybe v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "maybe"),
           Core.fieldTerm = (Core.TermMaybe (Maybes.map term v0))}})
-      Core.TermPair v0 -> Core.TermUnion (Core.Injection {
+      Core.TermPair v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "pair"),
           Core.fieldTerm = (Core.TermPair (Pairs.bimap term term v0))}})
-      Core.TermProject v0 -> Core.TermUnion (Core.Injection {
+      Core.TermProject v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "project"),
           Core.fieldTerm = (projection v0)}})
-      Core.TermRecord v0 -> Core.TermUnion (Core.Injection {
+      Core.TermRecord v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "record"),
           Core.fieldTerm = (record v0)}})
-      Core.TermSet v0 -> Core.TermUnion (Core.Injection {
+      Core.TermSet v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "set"),
           Core.fieldTerm = (Core.TermSet (Sets.map term v0))}})
-      Core.TermTypeApplication v0 -> Core.TermUnion (Core.Injection {
+      Core.TermTypeApplication v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "typeApplication"),
           Core.fieldTerm = (typeApplicationTerm v0)}})
-      Core.TermTypeLambda v0 -> Core.TermUnion (Core.Injection {
+      Core.TermTypeLambda v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "typeLambda"),
           Core.fieldTerm = (typeLambda v0)}})
-      Core.TermUnion v0 -> Core.TermUnion (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.core.Term"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "union"),
-          Core.fieldTerm = (injection v0)}})
-      Core.TermUnit -> Core.TermUnion (Core.Injection {
+      Core.TermUnit -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unit"),
           Core.fieldTerm = Core.TermUnit}})
-      Core.TermUnwrap v0 -> Core.TermUnion (Core.Injection {
+      Core.TermUnwrap v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unwrap"),
           Core.fieldTerm = (name v0)}})
-      Core.TermVariable v0 -> Core.TermUnion (Core.Injection {
+      Core.TermVariable v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "variable"),
           Core.fieldTerm = (name v0)}})
-      Core.TermWrap v0 -> Core.TermUnion (Core.Injection {
+      Core.TermWrap v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "wrap"),
@@ -550,87 +550,87 @@ term x =
 type_ :: Core.Type -> Core.Term
 type_ x =
     case x of
-      Core.TypeAnnotated v0 -> Core.TermUnion (Core.Injection {
+      Core.TypeAnnotated v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Type"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "annotated"),
           Core.fieldTerm = (annotatedType v0)}})
-      Core.TypeApplication v0 -> Core.TermUnion (Core.Injection {
+      Core.TypeApplication v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Type"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "application"),
           Core.fieldTerm = (applicationType v0)}})
-      Core.TypeEither v0 -> Core.TermUnion (Core.Injection {
+      Core.TypeEither v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Type"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "either"),
           Core.fieldTerm = (eitherType v0)}})
-      Core.TypeForall v0 -> Core.TermUnion (Core.Injection {
+      Core.TypeForall v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Type"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "forall"),
           Core.fieldTerm = (forallType v0)}})
-      Core.TypeFunction v0 -> Core.TermUnion (Core.Injection {
+      Core.TypeFunction v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Type"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "function"),
           Core.fieldTerm = (functionType v0)}})
-      Core.TypeList v0 -> Core.TermUnion (Core.Injection {
+      Core.TypeList v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Type"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "list"),
           Core.fieldTerm = (type_ v0)}})
-      Core.TypeLiteral v0 -> Core.TermUnion (Core.Injection {
+      Core.TypeLiteral v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Type"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "literal"),
           Core.fieldTerm = (literalType v0)}})
-      Core.TypeMap v0 -> Core.TermUnion (Core.Injection {
+      Core.TypeMap v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Type"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "map"),
           Core.fieldTerm = (mapType v0)}})
-      Core.TypeMaybe v0 -> Core.TermUnion (Core.Injection {
+      Core.TypeMaybe v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Type"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "maybe"),
           Core.fieldTerm = (type_ v0)}})
-      Core.TypePair v0 -> Core.TermUnion (Core.Injection {
+      Core.TypePair v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Type"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "pair"),
           Core.fieldTerm = (pairType v0)}})
-      Core.TypeRecord v0 -> Core.TermUnion (Core.Injection {
+      Core.TypeRecord v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Type"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "record"),
           Core.fieldTerm = (Core.TermList (Lists.map fieldType v0))}})
-      Core.TypeSet v0 -> Core.TermUnion (Core.Injection {
+      Core.TypeSet v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Type"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "set"),
           Core.fieldTerm = (type_ v0)}})
-      Core.TypeUnion v0 -> Core.TermUnion (Core.Injection {
+      Core.TypeUnion v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Type"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "union"),
           Core.fieldTerm = (Core.TermList (Lists.map fieldType v0))}})
-      Core.TypeUnit -> Core.TermUnion (Core.Injection {
+      Core.TypeUnit -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Type"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unit"),
           Core.fieldTerm = Core.TermUnit}})
-      Core.TypeVariable v0 -> Core.TermUnion (Core.Injection {
+      Core.TypeVariable v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Type"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "variable"),
           Core.fieldTerm = (name v0)}})
-      Core.TypeVoid -> Core.TermUnion (Core.Injection {
+      Core.TypeVoid -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Type"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "void"),
           Core.fieldTerm = Core.TermUnit}})
-      Core.TypeWrap v0 -> Core.TermUnion (Core.Injection {
+      Core.TypeWrap v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Type"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "wrap"),

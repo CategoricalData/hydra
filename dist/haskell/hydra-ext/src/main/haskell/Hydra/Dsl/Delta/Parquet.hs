@@ -71,7 +71,7 @@ arrayTypeWithElementType original newVal =
 
 basePrimitiveTypeBinary :: Phantoms.TTerm Parquet.BasePrimitiveType
 basePrimitiveTypeBinary =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.delta.parquet.BasePrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "binary"),
@@ -79,7 +79,7 @@ basePrimitiveTypeBinary =
 
 basePrimitiveTypeBoolean :: Phantoms.TTerm Parquet.BasePrimitiveType
 basePrimitiveTypeBoolean =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.delta.parquet.BasePrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -87,7 +87,7 @@ basePrimitiveTypeBoolean =
 
 basePrimitiveTypeByte :: Phantoms.TTerm Parquet.BasePrimitiveType
 basePrimitiveTypeByte =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.delta.parquet.BasePrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "byte"),
@@ -95,7 +95,7 @@ basePrimitiveTypeByte =
 
 basePrimitiveTypeDate :: Phantoms.TTerm Parquet.BasePrimitiveType
 basePrimitiveTypeDate =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.delta.parquet.BasePrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "date"),
@@ -103,7 +103,7 @@ basePrimitiveTypeDate =
 
 basePrimitiveTypeDouble :: Phantoms.TTerm Parquet.BasePrimitiveType
 basePrimitiveTypeDouble =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.delta.parquet.BasePrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "double"),
@@ -111,7 +111,7 @@ basePrimitiveTypeDouble =
 
 basePrimitiveTypeFloat :: Phantoms.TTerm Parquet.BasePrimitiveType
 basePrimitiveTypeFloat =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.delta.parquet.BasePrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
@@ -119,7 +119,7 @@ basePrimitiveTypeFloat =
 
 basePrimitiveTypeInteger :: Phantoms.TTerm Parquet.BasePrimitiveType
 basePrimitiveTypeInteger =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.delta.parquet.BasePrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
@@ -127,7 +127,7 @@ basePrimitiveTypeInteger =
 
 basePrimitiveTypeLong :: Phantoms.TTerm Parquet.BasePrimitiveType
 basePrimitiveTypeLong =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.delta.parquet.BasePrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "long"),
@@ -135,7 +135,7 @@ basePrimitiveTypeLong =
 
 basePrimitiveTypeShort :: Phantoms.TTerm Parquet.BasePrimitiveType
 basePrimitiveTypeShort =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.delta.parquet.BasePrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "short"),
@@ -143,7 +143,7 @@ basePrimitiveTypeShort =
 
 basePrimitiveTypeString :: Phantoms.TTerm Parquet.BasePrimitiveType
 basePrimitiveTypeString =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.delta.parquet.BasePrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -151,7 +151,7 @@ basePrimitiveTypeString =
 
 basePrimitiveTypeTimestamp :: Phantoms.TTerm Parquet.BasePrimitiveType
 basePrimitiveTypeTimestamp =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.delta.parquet.BasePrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "timestamp"),
@@ -159,7 +159,7 @@ basePrimitiveTypeTimestamp =
 
 dataTypeArray :: Phantoms.TTerm Parquet.ArrayType -> Phantoms.TTerm Parquet.DataType
 dataTypeArray x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.delta.parquet.DataType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "array"),
@@ -167,7 +167,7 @@ dataTypeArray x =
 
 dataTypeBase :: Phantoms.TTerm Parquet.BasePrimitiveType -> Phantoms.TTerm Parquet.DataType
 dataTypeBase x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.delta.parquet.DataType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "base"),
@@ -175,7 +175,7 @@ dataTypeBase x =
 
 dataTypeDecimal :: Phantoms.TTerm Parquet.DecimalType -> Phantoms.TTerm Parquet.DataType
 dataTypeDecimal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.delta.parquet.DataType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "decimal"),
@@ -183,7 +183,7 @@ dataTypeDecimal x =
 
 dataTypeMap :: Phantoms.TTerm Parquet.MapType -> Phantoms.TTerm Parquet.DataType
 dataTypeMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.delta.parquet.DataType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -191,7 +191,7 @@ dataTypeMap x =
 
 dataTypeStruct :: Phantoms.TTerm Parquet.StructType -> Phantoms.TTerm Parquet.DataType
 dataTypeStruct x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.delta.parquet.DataType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "struct"),

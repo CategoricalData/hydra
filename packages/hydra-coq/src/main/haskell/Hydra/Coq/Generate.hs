@@ -780,7 +780,7 @@ normalizeInnerTypeLambdas term =
           Core.TermPair v -> Core.TermPair (go polyNames (fst v), go polyNames (snd v))
           Core.TermRecord v -> Core.TermRecord v { Core.recordFields = map (\f -> f { Core.fieldTerm = go polyNames (Core.fieldTerm f) }) (Core.recordFields v) }
           Core.TermSet s -> Core.TermSet (Set.map (go polyNames) s)
-          Core.TermUnion v -> Core.TermUnion v { Core.injectionField = (Core.injectionField v) { Core.fieldTerm = go polyNames (Core.fieldTerm (Core.injectionField v)) } }
+          Core.TermInject v -> Core.TermInject v { Core.injectionField = (Core.injectionField v) { Core.fieldTerm = go polyNames (Core.fieldTerm (Core.injectionField v)) } }
           Core.TermTypeLambda tl ->
             -- Inner type lambda: convert to regular lambda with Type domain
             let param = Core.typeLambdaParameter tl
@@ -877,7 +877,7 @@ reorderLetBindings = go
       Core.TermMaybe m -> Core.TermMaybe (fmap go m)
       Core.TermPair p -> Core.TermPair (go (fst p), go (snd p))
       Core.TermRecord r -> Core.TermRecord r { Core.recordFields = map (\f -> f { Core.fieldTerm = go (Core.fieldTerm f) }) (Core.recordFields r) }
-      Core.TermUnion inj -> Core.TermUnion inj { Core.injectionField = (Core.injectionField inj) { Core.fieldTerm = go (Core.fieldTerm (Core.injectionField inj)) } }
+      Core.TermInject inj -> Core.TermInject inj { Core.injectionField = (Core.injectionField inj) { Core.fieldTerm = go (Core.fieldTerm (Core.injectionField inj)) } }
       Core.TermTypeLambda tl -> Core.TermTypeLambda tl { Core.typeLambdaBody = go (Core.typeLambdaBody tl) }
       Core.TermWrap w -> Core.TermWrap w { Core.wrappedTermBody = go (Core.wrappedTermBody w) }
       _ -> tm
@@ -907,7 +907,7 @@ reorderLetBindings = go
       Core.TermMaybe m -> Core.TermMaybe (fmap (renameVar oldName newName) m)
       Core.TermPair p -> Core.TermPair (renameVar oldName newName (fst p), renameVar oldName newName (snd p))
       Core.TermRecord r -> Core.TermRecord r { Core.recordFields = map (\f -> f { Core.fieldTerm = renameVar oldName newName (Core.fieldTerm f) }) (Core.recordFields r) }
-      Core.TermUnion inj -> Core.TermUnion inj { Core.injectionField = (Core.injectionField inj) { Core.fieldTerm = renameVar oldName newName (Core.fieldTerm (Core.injectionField inj)) } }
+      Core.TermInject inj -> Core.TermInject inj { Core.injectionField = (Core.injectionField inj) { Core.fieldTerm = renameVar oldName newName (Core.fieldTerm (Core.injectionField inj)) } }
       Core.TermTypeLambda tl -> Core.TermTypeLambda tl { Core.typeLambdaBody = renameVar oldName newName (Core.typeLambdaBody tl) }
       Core.TermTypeApplication ta -> Core.TermTypeApplication ta { Core.typeApplicationTermBody = renameVar oldName newName (Core.typeApplicationTermBody ta) }
       Core.TermWrap w -> Core.TermWrap w { Core.wrappedTermBody = renameVar oldName newName (Core.wrappedTermBody w) }
@@ -1049,7 +1049,7 @@ reorderLetBindings = go
       Core.TermMaybe m -> maybe Set.empty freeVars m
       Core.TermPair p -> Set.union (freeVars (fst p)) (freeVars (snd p))
       Core.TermRecord r -> Set.unions (map (\f -> freeVars (Core.fieldTerm f)) (Core.recordFields r))
-      Core.TermUnion inj -> freeVars (Core.fieldTerm (Core.injectionField inj))
+      Core.TermInject inj -> freeVars (Core.fieldTerm (Core.injectionField inj))
       Core.TermTypeLambda tl -> freeVars (Core.typeLambdaBody tl)
       Core.TermTypeApplication ta -> freeVars (Core.typeApplicationTermBody ta)
       Core.TermWrap w -> freeVars (Core.wrappedTermBody w)
@@ -1097,7 +1097,7 @@ eraseUnboundTypeVarDomains initialBoundVars = go initialBoundVars
       Core.TermMaybe m -> Core.TermMaybe (fmap (go boundVars) m)
       Core.TermPair p -> Core.TermPair (go boundVars (fst p), go boundVars (snd p))
       Core.TermRecord r -> Core.TermRecord r { Core.recordFields = map (\f -> f { Core.fieldTerm = go boundVars (Core.fieldTerm f) }) (Core.recordFields r) }
-      Core.TermUnion inj -> Core.TermUnion inj { Core.injectionField = (Core.injectionField inj) { Core.fieldTerm = go boundVars (Core.fieldTerm (Core.injectionField inj)) } }
+      Core.TermInject inj -> Core.TermInject inj { Core.injectionField = (Core.injectionField inj) { Core.fieldTerm = go boundVars (Core.fieldTerm (Core.injectionField inj)) } }
       Core.TermTypeLambda tl ->
         -- Type lambda: the Coder strips it, so the parameter becomes unbound in Coq.
         -- Don't add it to boundVars.
@@ -1158,7 +1158,7 @@ collectFreeTypeVars = collectFromTerm
       Core.TermList ts -> Set.unions (map collectFromTerm ts)
       Core.TermPair p -> Set.union (collectFromTerm (fst p)) (collectFromTerm (snd p))
       Core.TermRecord r -> Set.unions (map (\f -> collectFromTerm (Core.fieldTerm f)) (Core.recordFields r))
-      Core.TermUnion inj -> collectFromTerm (Core.fieldTerm (Core.injectionField inj))
+      Core.TermInject inj -> collectFromTerm (Core.fieldTerm (Core.injectionField inj))
       Core.TermTypeLambda tl ->
         Set.delete (Core.unName (Core.typeLambdaParameter tl))
                    (collectFromTerm (Core.typeLambdaBody tl))
@@ -1675,7 +1675,7 @@ rewriteTermFields fm = go
       Core.TermMaybe v -> Core.TermMaybe (fmap go v)
       Core.TermPair v -> Core.TermPair (go (fst v), go (snd v))
       Core.TermRecord v -> Core.TermRecord v { Core.recordFields = map (\f -> f { Core.fieldTerm = go (Core.fieldTerm f) }) (Core.recordFields v) }
-      Core.TermUnion v -> Core.TermUnion v { Core.injectionField = (Core.injectionField v) { Core.fieldTerm = go (Core.fieldTerm (Core.injectionField v)) } }
+      Core.TermInject v -> Core.TermInject v { Core.injectionField = (Core.injectionField v) { Core.fieldTerm = go (Core.fieldTerm (Core.injectionField v)) } }
       Core.TermTypeApplication v -> Core.TermTypeApplication v { Core.typeApplicationTermBody = go (Core.typeApplicationTermBody v) }
       Core.TermTypeLambda v -> Core.TermTypeLambda v { Core.typeLambdaBody = go (Core.typeLambdaBody v) }
       Core.TermWrap v -> Core.TermWrap v { Core.wrappedTermBody = go (Core.wrappedTermBody v) }
@@ -1795,7 +1795,7 @@ termRefs locals ns tm = case tm of
   Core.TermSet _ -> Set.empty
   Core.TermTypeApplication v -> termRefs locals ns (Core.typeApplicationTermBody v)
   Core.TermTypeLambda v -> termRefs locals ns (Core.typeLambdaBody v)
-  Core.TermUnion v -> termRefs locals ns (Core.fieldTerm (Core.injectionField v))
+  Core.TermInject v -> termRefs locals ns (Core.fieldTerm (Core.injectionField v))
   Core.TermUnit -> Set.empty
   Core.TermVariable v ->
     let raw = Core.unName v

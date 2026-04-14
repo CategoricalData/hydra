@@ -26,7 +26,7 @@
                                 "term": {
                                   "lambda": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "bigfloat", "term": {"variable": "bf"}},
                                         "typeName": "hydra.core.FloatValue"}},
                                     "domain": {"unit": {}},
@@ -36,7 +36,7 @@
                                 "term": {
                                   "lambda": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "float32",
                                           "term": {
@@ -51,7 +51,7 @@
                                 "term": {
                                   "lambda": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "float64",
                                           "term": {
@@ -101,7 +101,7 @@
                                 "term": {
                                   "lambda": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "bigint", "term": {"variable": "bi"}},
                                         "typeName": "hydra.core.IntegerValue"}},
                                     "domain": {"unit": {}},
@@ -111,7 +111,7 @@
                                 "term": {
                                   "lambda": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "int8",
                                           "term": {
@@ -126,7 +126,7 @@
                                 "term": {
                                   "lambda": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "int16",
                                           "term": {
@@ -141,7 +141,7 @@
                                 "term": {
                                   "lambda": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "int32",
                                           "term": {
@@ -156,7 +156,7 @@
                                 "term": {
                                   "lambda": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "int64",
                                           "term": {
@@ -171,7 +171,7 @@
                                 "term": {
                                   "lambda": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "uint8",
                                           "term": {
@@ -186,7 +186,7 @@
                                 "term": {
                                   "lambda": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "uint16",
                                           "term": {
@@ -201,7 +201,7 @@
                                 "term": {
                                   "lambda": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "uint32",
                                           "term": {
@@ -216,7 +216,7 @@
                                 "term": {
                                   "lambda": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "uint64",
                                           "term": {

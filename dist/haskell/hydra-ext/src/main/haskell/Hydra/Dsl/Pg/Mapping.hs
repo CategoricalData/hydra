@@ -2035,7 +2035,7 @@ edgeSpecWithProperties original newVal =
 
 elementSpecEdge :: Phantoms.TTerm Mapping.EdgeSpec -> Phantoms.TTerm Mapping.ElementSpec
 elementSpecEdge x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.mapping.ElementSpec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edge"),
@@ -2043,7 +2043,7 @@ elementSpecEdge x =
 
 elementSpecVertex :: Phantoms.TTerm Mapping.VertexSpec -> Phantoms.TTerm Mapping.ElementSpec
 elementSpecVertex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.mapping.ElementSpec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "vertex"),
@@ -2801,7 +2801,7 @@ schemaWithVertexIds original newVal =
 
 valueSpecPattern :: Phantoms.TTerm String -> Phantoms.TTerm Mapping.ValueSpec
 valueSpecPattern x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.mapping.ValueSpec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pattern"),
@@ -2809,7 +2809,7 @@ valueSpecPattern x =
 
 valueSpecValue :: Phantoms.TTerm Mapping.ValueSpec
 valueSpecValue =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.mapping.ValueSpec"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),

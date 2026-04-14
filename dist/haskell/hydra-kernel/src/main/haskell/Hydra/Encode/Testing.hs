@@ -19,7 +19,7 @@ tag x =
 testCase :: Testing.TestCase -> Core.Term
 testCase x =
     case x of
-      Testing.TestCaseUniversal v0 -> Core.TermUnion (Core.Injection {
+      Testing.TestCaseUniversal v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "universal"),

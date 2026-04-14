@@ -101,7 +101,7 @@
                                                                     "body": {
                                                                       "either": {
                                                                         "@right": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {"name": "unit", "term": {"unit": {}}},
                                                                             "typeName": "hydra.core.Type"}}}},
                                                                     "type": {"variable": "hydra.errors.Error"}}},
@@ -155,11 +155,11 @@
                                                                     "body": {
                                                                       "either": {
                                                                         "@right": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "literal",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {"name": "string", "term": {"variable": "s"}},
                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                             "typeName": "hydra.core.Term"}}}},
@@ -211,7 +211,7 @@
                                                                     "body": {
                                                                       "either": {
                                                                         "@right": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {"name": "unit", "term": {"unit": {}}},
                                                                             "typeName": "hydra.core.Type"}}}},
                                                                     "type": {"variable": "hydra.errors.Error"}}},
@@ -265,11 +265,11 @@
                                                                     "body": {
                                                                       "either": {
                                                                         "@right": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "literal",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {"name": "string", "term": {"variable": "s"}},
                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                             "typeName": "hydra.core.Term"}}}},
@@ -321,7 +321,7 @@
                                                                     "body": {
                                                                       "either": {
                                                                         "@right": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {"name": "unit", "term": {"unit": {}}},
                                                                             "typeName": "hydra.core.Type"}}}},
                                                                     "type": {"variable": "hydra.errors.Error"}}},
@@ -375,11 +375,11 @@
                                                                     "body": {
                                                                       "either": {
                                                                         "@right": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "literal",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {"name": "string", "term": {"variable": "s"}},
                                                                                   "typeName": "hydra.core.Literal"}}},
                                                                             "typeName": "hydra.core.Term"}}}},
@@ -559,7 +559,7 @@
                                     "body": {
                                       "typeApplication": {
                                         "body": {
-                                          "union": {
+                                          "inject": {
                                             "field": {"name": "edge", "term": {"variable": "x"}},
                                             "typeName": "hydra.pg.model.Element"}},
                                         "type": {"variable": "t0"}}},
@@ -600,7 +600,7 @@
                                         "body": {
                                           "typeApplication": {
                                             "body": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "vertex", "term": {"variable": "x"}},
                                                 "typeName": "hydra.pg.model.Element"}},
                                             "type": {"variable": "t0"}}},
@@ -691,7 +691,7 @@
                                                                       {
                                                                         "name": "labelJson",
                                                                         "term": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "string",
                                                                               "term": {
@@ -800,7 +800,7 @@
                                                                                                                                                             "argument": {"variable": "key"},
                                                                                                                                                             "function": {"unwrap": "hydra.pg.model.PropertyKey"}}},
                                                                                                                                                         "@second": {
-                                                                                                                                                          "union": {
+                                                                                                                                                          "inject": {
                                                                                                                                                             "field": {
                                                                                                                                                               "name": "string",
                                                                                                                                                               "term": {
@@ -895,7 +895,7 @@
                                                                                                                             "pair": {
                                                                                                                               "@first": {"literal": {"string": "properties"}},
                                                                                                                               "@second": {
-                                                                                                                                "union": {
+                                                                                                                                "inject": {
                                                                                                                                   "field": {
                                                                                                                                     "name": "object",
                                                                                                                                     "term": {
@@ -1002,7 +1002,7 @@
                                                                             "argument": {
                                                                               "lambda": {
                                                                                 "body": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "object",
                                                                                       "term": {
@@ -1031,7 +1031,7 @@
                                                                                                               "pair": {
                                                                                                                 "@first": {"literal": {"string": "id"}},
                                                                                                                 "@second": {
-                                                                                                                  "union": {
+                                                                                                                  "inject": {
                                                                                                                     "field": {
                                                                                                                       "name": "string",
                                                                                                                       "term": {
@@ -1153,7 +1153,7 @@
                                                                                       {
                                                                                         "name": "labelJson",
                                                                                         "term": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "string",
                                                                                               "term": {
@@ -1262,7 +1262,7 @@
                                                                                                                                                                             "argument": {"variable": "key"},
                                                                                                                                                                             "function": {"unwrap": "hydra.pg.model.PropertyKey"}}},
                                                                                                                                                                         "@second": {
-                                                                                                                                                                          "union": {
+                                                                                                                                                                          "inject": {
                                                                                                                                                                             "field": {
                                                                                                                                                                               "name": "string",
                                                                                                                                                                               "term": {
@@ -1357,7 +1357,7 @@
                                                                                                                                             "pair": {
                                                                                                                                               "@first": {"literal": {"string": "properties"}},
                                                                                                                                               "@second": {
-                                                                                                                                                "union": {
+                                                                                                                                                "inject": {
                                                                                                                                                   "field": {
                                                                                                                                                     "name": "object",
                                                                                                                                                     "term": {
@@ -1464,7 +1464,7 @@
                                                                                             "argument": {
                                                                                               "lambda": {
                                                                                                 "body": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {
                                                                                                       "name": "object",
                                                                                                       "term": {
@@ -1493,7 +1493,7 @@
                                                                                                                               "pair": {
                                                                                                                                 "@first": {"literal": {"string": "id"}},
                                                                                                                                 "@second": {
-                                                                                                                                  "union": {
+                                                                                                                                  "inject": {
                                                                                                                                     "field": {
                                                                                                                                       "name": "string",
                                                                                                                                       "term": {
@@ -1512,7 +1512,7 @@
                                                                                                                               "pair": {
                                                                                                                                 "@first": {"literal": {"string": "out"}},
                                                                                                                                 "@second": {
-                                                                                                                                  "union": {
+                                                                                                                                  "inject": {
                                                                                                                                     "field": {
                                                                                                                                       "name": "string",
                                                                                                                                       "term": {
@@ -1531,7 +1531,7 @@
                                                                                                                               "pair": {
                                                                                                                                 "@first": {"literal": {"string": "in"}},
                                                                                                                                 "@second": {
-                                                                                                                                  "union": {
+                                                                                                                                  "inject": {
                                                                                                                                     "field": {
                                                                                                                                       "name": "string",
                                                                                                                                       "term": {
@@ -1852,7 +1852,7 @@
                                             "argument": {
                                               "lambda": {
                                                 "body": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {"name": "array", "term": {"variable": "els'"}},
                                                     "typeName": "hydra.json.model.Value"}},
                                                 "domain": {"list": {"variable": "hydra.json.model.Value"}},
@@ -1960,7 +1960,7 @@
                                     "body": {
                                       "typeApplication": {
                                         "body": {
-                                          "union": {
+                                          "inject": {
                                             "field": {"name": "edge", "term": {"variable": "x"}},
                                             "typeName": "hydra.pg.model.Element"}},
                                         "type": {"variable": "t0"}}},
@@ -2012,7 +2012,7 @@
                                         "body": {
                                           "typeApplication": {
                                             "body": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "vertex", "term": {"variable": "x"}},
                                                 "typeName": "hydra.pg.model.Element"}},
                                             "type": {"variable": "t0"}}},

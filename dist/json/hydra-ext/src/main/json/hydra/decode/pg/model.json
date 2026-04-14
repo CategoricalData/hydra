@@ -386,7 +386,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -459,7 +459,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "out", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.pg.model.Direction"}},
                                                                                         "domain": {"unit": {}},
@@ -520,7 +520,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "in", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.pg.model.Direction"}},
                                                                                         "domain": {"unit": {}},
@@ -583,7 +583,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "both", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.pg.model.Direction"}},
                                                                                         "domain": {"unit": {}},
@@ -646,7 +646,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "undirected", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.pg.model.Direction"}},
                                                                                         "domain": {"unit": {}},
@@ -1895,7 +1895,7 @@
                                           "cases": {
                                             "cases": [
                                               {
-                                                "name": "union",
+                                                "name": "inject",
                                                 "term": {
                                                   "lambda": {
                                                     "body": {
@@ -1962,7 +1962,7 @@
                                                                                                 "body": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {"name": "vertex", "term": {"variable": "t"}},
                                                                                                         "typeName": "hydra.pg.model.Element"}},
                                                                                                     "type": {"variable": "t0"}}},
@@ -2034,7 +2034,7 @@
                                                                                                 "body": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {"name": "edge", "term": {"variable": "t"}},
                                                                                                         "typeName": "hydra.pg.model.Element"}},
                                                                                                     "type": {"variable": "t0"}}},
@@ -2315,7 +2315,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -2388,7 +2388,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "vertex", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.pg.model.ElementKind"}},
                                                                                         "domain": {"unit": {}},
@@ -2451,7 +2451,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "edge", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.pg.model.ElementKind"}},
                                                                                         "domain": {"unit": {}},
@@ -2956,7 +2956,7 @@
                                           "cases": {
                                             "cases": [
                                               {
-                                                "name": "union",
+                                                "name": "inject",
                                                 "term": {
                                                   "lambda": {
                                                     "body": {
@@ -3023,7 +3023,7 @@
                                                                                                 "body": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {"name": "vertex", "term": {"variable": "t"}},
                                                                                                         "typeName": "hydra.pg.model.ElementType"}},
                                                                                                     "type": {"variable": "t0"}}},
@@ -3095,7 +3095,7 @@
                                                                                                 "body": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {"name": "edge", "term": {"variable": "t"}},
                                                                                                         "typeName": "hydra.pg.model.ElementType"}},
                                                                                                     "type": {"variable": "t0"}}},
@@ -4325,7 +4325,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -4384,7 +4384,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "vertex", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.pg.model.Label"}},
                                                                                         "domain": {"variable": "hydra.pg.model.VertexLabel"},
@@ -4435,7 +4435,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "edge", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.pg.model.Label"}},
                                                                                         "domain": {"variable": "hydra.pg.model.EdgeLabel"},

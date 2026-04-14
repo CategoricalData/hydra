@@ -115,8 +115,8 @@ def checkTerm(typed: Boolean)(path: hydra.paths.SubtermPath)(cx: hydra.graph.Gra
            uvName))))))(bindings)))(None)))
     }
   }
-  case hydra.core.Term.union(v_Term_union_inj) => {
-    lazy val tname: hydra.core.Name = (v_Term_union_inj.typeName)
+  case hydra.core.Term.inject(v_Term_inject_inj) => {
+    lazy val tname: hydra.core.Name = (v_Term_inject_inj.typeName)
     hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.lib.equality.equal[scala.Predef.String](tname)(""))(Some(hydra.error.core.InvalidTermError.emptyTypeNameInTerm(hydra.error.core.EmptyTypeNameInTermError(path))))(None)
   }
   case hydra.core.Term.lambda(v_Term_lambda_lam) => {

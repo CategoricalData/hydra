@@ -351,7 +351,7 @@ public interface Encode {
           }
 
           @Override
-          public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Union inj) {
+          public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Inject inj) {
             hydra.core.Field field = (inj).value.field;
             String fname = (field).name.value;
             java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.core.FieldType>, hydra.util.Either<String, hydra.core.Type>>> findFieldType = new java.util.concurrent.atomic.AtomicReference<>();
@@ -613,7 +613,7 @@ public interface Encode {
       }
 
       @Override
-      public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Union inj) {
+      public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Inject inj) {
         hydra.core.Field field = (inj).value.field;
         hydra.core.Term fterm = (field).term;
         hydra.util.Either<String, hydra.json.model.Value> encodedUnion = hydra.json.Encode.toJsonUntyped(fterm);

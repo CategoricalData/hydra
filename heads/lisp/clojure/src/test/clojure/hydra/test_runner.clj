@@ -16,7 +16,7 @@
 (defn- is-meta-annotated? [t]
   "Check if term is a meta-encoded annotated term:
    (:union {:type_name \"hydra.core.Term\" :field {:name \"annotated\" :term ...}})"
-  (and (sequential? t) (= (first t) :union)
+  (and (sequential? t) (= (first t) :inject)
        (let [m (second t)]
          (and (= (:type_name m) "hydra.core.Term")
               (= (:name (:field m)) "annotated")))))
@@ -179,9 +179,9 @@
                            (sequential? (second inner)) (= (first (second inner)) :string))
                     (second (second inner))
                     (str inner))]
-            (list :union (->hydra_core_injection "hydra.core.Term"
+            (list :inject (->hydra_core_injection "hydra.core.Term"
                            (->hydra_core_field "literal"
-                             (list :union (->hydra_core_injection "hydra.core.Literal"
+                             (list :inject (->hydra_core_injection "hydra.core.Literal"
                                             (->hydra_core_field "string"
                                               (list :literal (list :string s))))))))))
         desc-key (list :wrap (->hydra_core_wrapped_term "hydra.core.Name"
@@ -196,7 +196,7 @@
         ;; Peel type lambdas/applications (meta-encoded)
         peeled (loop [t term]
                  (cond
-                   (and (sequential? t) (= (first t) :union)
+                   (and (sequential? t) (= (first t) :inject)
                         (= (:type_name (second t)) "hydra.core.Term")
                         (= (:name (:field (second t))) "typeLambda"))
                    (let [rec (:term (:field (second t)))]
@@ -205,7 +205,7 @@
                              body-field (first (filter #(= (:name %) "body") fields))]
                          (recur (:term body-field)))
                        t))
-                   (and (sequential? t) (= (first t) :union)
+                   (and (sequential? t) (= (first t) :inject)
                         (= (:type_name (second t)) "hydra.core.Term")
                         (= (:name (:field (second t))) "typeApplication"))
                    (let [rec (:term (:field (second t)))]
@@ -233,7 +233,7 @@
       ;; It should be (:union {:type_name "hydra.core.Term" :field {:name "literal" :term
       ;;   (:union {:type_name "hydra.core.Literal" :field {:name "string" :term (:literal (:string S))}})}})
       (let [extract-str (fn [t]
-                          (when (and (sequential? t) (= (first t) :union)
+                          (when (and (sequential? t) (= (first t) :inject)
                                      (= (:name (:field (second t))) "literal"))
                             (let [lit (:term (:field (second t)))]
                               (when (and (sequential? lit) (= (first lit) :union)

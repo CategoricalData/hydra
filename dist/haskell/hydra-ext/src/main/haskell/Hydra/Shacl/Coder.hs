@@ -180,7 +180,7 @@ encodeTerm subject term cx g =
             node3 = Pairs.first pair3
             cx3 = Pairs.second pair3
         in (encodeTerm node3 t cx3 g)) cx (Sets.toList v0))
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let rname = Core.injectionTypeName v0
             field = Core.injectionField v0
         in (Eithers.map (\_r -> ([

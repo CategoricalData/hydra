@@ -16,14 +16,14 @@ public interface Parsing {
     return ((java.util.function.Function<hydra.parsing.ParseResult<T0>, hydra.core.Term>) ((java.util.function.Function<hydra.parsing.ParseResult<T0>, hydra.core.Term>) (u -> (u).accept(new hydra.parsing.ParseResult.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.parsing.ParseResult.Success<T0> y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.parsing.ParseResult"), new hydra.core.Field(new hydra.core.Name("success"), hydra.encode.Parsing.<T0>parseSuccess(
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.parsing.ParseResult"), new hydra.core.Field(new hydra.core.Name("success"), hydra.encode.Parsing.<T0>parseSuccess(
           a,
           (y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.parsing.ParseResult.Failure<T0> y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.parsing.ParseResult"), new hydra.core.Field(new hydra.core.Name("failure"), hydra.encode.Parsing.parseError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.parsing.ParseResult"), new hydra.core.Field(new hydra.core.Name("failure"), hydra.encode.Parsing.parseError((y).value))));
       }
     })))).apply(v1);
   }

@@ -21,22 +21,22 @@ public interface Model {
     return (v1).accept(new hydra.pg.model.Direction.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.pg.model.Direction.Out y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.Direction"), new hydra.core.Field(new hydra.core.Name("out"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.Direction"), new hydra.core.Field(new hydra.core.Name("out"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.pg.model.Direction.In y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.Direction"), new hydra.core.Field(new hydra.core.Name("in"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.Direction"), new hydra.core.Field(new hydra.core.Name("in"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.pg.model.Direction.Both y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.Direction"), new hydra.core.Field(new hydra.core.Name("both"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.Direction"), new hydra.core.Field(new hydra.core.Name("both"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.pg.model.Direction.Undirected y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.Direction"), new hydra.core.Field(new hydra.core.Name("undirected"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.Direction"), new hydra.core.Field(new hydra.core.Name("undirected"), new hydra.core.Term.Unit())));
       }
     });
   }
@@ -74,14 +74,14 @@ public interface Model {
     return ((java.util.function.Function<hydra.pg.model.Element<T0>, hydra.core.Term>) ((java.util.function.Function<hydra.pg.model.Element<T0>, hydra.core.Term>) (u -> (u).accept(new hydra.pg.model.Element.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.pg.model.Element.Vertex<T0> y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.Element"), new hydra.core.Field(new hydra.core.Name("vertex"), hydra.encode.pg.Model.<T0>vertex(
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.Element"), new hydra.core.Field(new hydra.core.Name("vertex"), hydra.encode.pg.Model.<T0>vertex(
           v,
           (y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.pg.model.Element.Edge<T0> y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.Element"), new hydra.core.Field(new hydra.core.Name("edge"), hydra.encode.pg.Model.<T0>edge(
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.Element"), new hydra.core.Field(new hydra.core.Name("edge"), hydra.encode.pg.Model.<T0>edge(
           v,
           (y).value))));
       }
@@ -92,12 +92,12 @@ public interface Model {
     return (v1).accept(new hydra.pg.model.ElementKind.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.pg.model.ElementKind.Vertex y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.ElementKind"), new hydra.core.Field(new hydra.core.Name("vertex"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.ElementKind"), new hydra.core.Field(new hydra.core.Name("vertex"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.pg.model.ElementKind.Edge y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.ElementKind"), new hydra.core.Field(new hydra.core.Name("edge"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.ElementKind"), new hydra.core.Field(new hydra.core.Name("edge"), new hydra.core.Term.Unit())));
       }
     });
   }
@@ -118,14 +118,14 @@ public interface Model {
     return ((java.util.function.Function<hydra.pg.model.ElementType<T0>, hydra.core.Term>) ((java.util.function.Function<hydra.pg.model.ElementType<T0>, hydra.core.Term>) (u -> (u).accept(new hydra.pg.model.ElementType.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.pg.model.ElementType.Vertex<T0> y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.ElementType"), new hydra.core.Field(new hydra.core.Name("vertex"), hydra.encode.pg.Model.<T0>vertexType(
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.ElementType"), new hydra.core.Field(new hydra.core.Name("vertex"), hydra.encode.pg.Model.<T0>vertexType(
           t,
           (y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.pg.model.ElementType.Edge<T0> y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.ElementType"), new hydra.core.Field(new hydra.core.Name("edge"), hydra.encode.pg.Model.<T0>edgeType(
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.ElementType"), new hydra.core.Field(new hydra.core.Name("edge"), hydra.encode.pg.Model.<T0>edgeType(
           t,
           (y).value))));
       }
@@ -180,12 +180,12 @@ public interface Model {
     return (v1).accept(new hydra.pg.model.Label.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.pg.model.Label.Vertex y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.Label"), new hydra.core.Field(new hydra.core.Name("vertex"), hydra.encode.pg.Model.vertexLabel((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.Label"), new hydra.core.Field(new hydra.core.Name("vertex"), hydra.encode.pg.Model.vertexLabel((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.pg.model.Label.Edge y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.Label"), new hydra.core.Field(new hydra.core.Name("edge"), hydra.encode.pg.Model.edgeLabel((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.pg.model.Label"), new hydra.core.Field(new hydra.core.Name("edge"), hydra.encode.pg.Model.edgeLabel((y).value))));
       }
     });
   }

@@ -110,7 +110,7 @@ def differentiateTerm(dx: hydra.core.Name)(term: hydra.core.Term): hydra.core.Te
   case hydra.core.Term.map(v_Term_map__) => hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0)))
   case hydra.core.Term.either(v_Term_either__) => hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0)))
   case hydra.core.Term.maybe(v_Term_maybe__) => hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0)))
-  case hydra.core.Term.union(v_Term_union__) => hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0)))
+  case hydra.core.Term.inject(v_Term_inject__) => hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0)))
   case hydra.core.Term.wrap(v_Term_wrap__) => hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0)))
 
 def gradient(typeName: hydra.core.Name)(vars: Seq[hydra.core.Name])(term: hydra.core.Term): hydra.core.Term =

@@ -11,7 +11,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 
 abbreviatedEdgePatternLeftArrow :: Phantoms.TTerm Grammar.AbbreviatedEdgePattern
 abbreviatedEdgePatternLeftArrow =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.AbbreviatedEdgePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "leftArrow"),
@@ -19,7 +19,7 @@ abbreviatedEdgePatternLeftArrow =
 
 abbreviatedEdgePatternLeftArrowTilde :: Phantoms.TTerm Grammar.AbbreviatedEdgePattern
 abbreviatedEdgePatternLeftArrowTilde =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.AbbreviatedEdgePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "leftArrowTilde"),
@@ -27,7 +27,7 @@ abbreviatedEdgePatternLeftArrowTilde =
 
 abbreviatedEdgePatternLeftMinusRight :: Phantoms.TTerm Grammar.AbbreviatedEdgePattern
 abbreviatedEdgePatternLeftMinusRight =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.AbbreviatedEdgePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "leftMinusRight"),
@@ -35,7 +35,7 @@ abbreviatedEdgePatternLeftMinusRight =
 
 abbreviatedEdgePatternMinusSign :: Phantoms.TTerm Grammar.AbbreviatedEdgePattern
 abbreviatedEdgePatternMinusSign =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.AbbreviatedEdgePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "minusSign"),
@@ -43,7 +43,7 @@ abbreviatedEdgePatternMinusSign =
 
 abbreviatedEdgePatternRightArrow :: Phantoms.TTerm Grammar.AbbreviatedEdgePattern
 abbreviatedEdgePatternRightArrow =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.AbbreviatedEdgePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rightArrow"),
@@ -51,7 +51,7 @@ abbreviatedEdgePatternRightArrow =
 
 abbreviatedEdgePatternTilde :: Phantoms.TTerm Grammar.AbbreviatedEdgePattern
 abbreviatedEdgePatternTilde =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.AbbreviatedEdgePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tilde"),
@@ -59,7 +59,7 @@ abbreviatedEdgePatternTilde =
 
 abbreviatedEdgePatternTildeRightArrow :: Phantoms.TTerm Grammar.AbbreviatedEdgePattern
 abbreviatedEdgePatternTildeRightArrow =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.AbbreviatedEdgePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tildeRightArrow"),
@@ -67,7 +67,7 @@ abbreviatedEdgePatternTildeRightArrow =
 
 absoluteCatalogSchemaReferenceDirectoryAndSchema :: Phantoms.TTerm Grammar.AbsoluteDirectoryAndSchema -> Phantoms.TTerm Grammar.AbsoluteCatalogSchemaReference
 absoluteCatalogSchemaReferenceDirectoryAndSchema x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.AbsoluteCatalogSchemaReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "directoryAndSchema"),
@@ -75,7 +75,7 @@ absoluteCatalogSchemaReferenceDirectoryAndSchema x =
 
 absoluteCatalogSchemaReferenceRoot :: Phantoms.TTerm Grammar.AbsoluteCatalogSchemaReference
 absoluteCatalogSchemaReferenceRoot =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.AbsoluteCatalogSchemaReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "root"),
@@ -359,7 +359,7 @@ addSubtractExprWithRight original newVal =
 
 addSubtractOperatorAdd :: Phantoms.TTerm Grammar.AddSubtractOperator
 addSubtractOperatorAdd =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.AddSubtractOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "add"),
@@ -367,7 +367,7 @@ addSubtractOperatorAdd =
 
 addSubtractOperatorSubtract :: Phantoms.TTerm Grammar.AddSubtractOperator
 addSubtractOperatorSubtract =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.AddSubtractOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "subtract"),
@@ -375,7 +375,7 @@ addSubtractOperatorSubtract =
 
 aggregateFunctionBinarySetFunction :: Phantoms.TTerm Grammar.BinarySetFunction -> Phantoms.TTerm Grammar.AggregateFunction
 aggregateFunctionBinarySetFunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.AggregateFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "binarySetFunction"),
@@ -383,7 +383,7 @@ aggregateFunctionBinarySetFunction x =
 
 aggregateFunctionCountAll :: Phantoms.TTerm Grammar.AggregateFunction
 aggregateFunctionCountAll =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.AggregateFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "countAll"),
@@ -391,7 +391,7 @@ aggregateFunctionCountAll =
 
 aggregateFunctionGeneralSetFunction :: Phantoms.TTerm Grammar.GeneralSetFunction -> Phantoms.TTerm Grammar.AggregateFunction
 aggregateFunctionGeneralSetFunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.AggregateFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "generalSetFunction"),
@@ -665,7 +665,7 @@ ambientLinearDataModifyingStatementBodyWithSimpleAccess original newVal =
 
 ambientLinearDataModifyingStatementNested :: Phantoms.TTerm Grammar.NestedDataModifyingProcedureSpecification -> Phantoms.TTerm Grammar.AmbientLinearDataModifyingStatement
 ambientLinearDataModifyingStatementNested x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.AmbientLinearDataModifyingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nested"),
@@ -673,7 +673,7 @@ ambientLinearDataModifyingStatementNested x =
 
 ambientLinearDataModifyingStatementSimple :: Phantoms.TTerm Grammar.AmbientLinearDataModifyingStatementBody -> Phantoms.TTerm Grammar.AmbientLinearDataModifyingStatement
 ambientLinearDataModifyingStatementSimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.AmbientLinearDataModifyingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -681,7 +681,7 @@ ambientLinearDataModifyingStatementSimple x =
 
 ambientLinearQueryStatementNested :: Phantoms.TTerm Grammar.NestedQuerySpecification -> Phantoms.TTerm Grammar.AmbientLinearQueryStatement
 ambientLinearQueryStatementNested x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.AmbientLinearQueryStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nested"),
@@ -689,7 +689,7 @@ ambientLinearQueryStatementNested x =
 
 ambientLinearQueryStatementSimple :: Phantoms.TTerm Grammar.AmbientLinearQueryStatementSimpleAndPrimitiveResult -> Phantoms.TTerm Grammar.AmbientLinearQueryStatement
 ambientLinearQueryStatementSimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.AmbientLinearQueryStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -985,7 +985,7 @@ anyShortestPathSearchWithOrPaths original newVal =
 
 approximateNumericLiteralCommonWithSuffix :: Phantoms.TTerm String -> Phantoms.TTerm Grammar.ApproximateNumericLiteral
 approximateNumericLiteralCommonWithSuffix x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ApproximateNumericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "commonWithSuffix"),
@@ -993,7 +993,7 @@ approximateNumericLiteralCommonWithSuffix x =
 
 approximateNumericLiteralIntegerWithSuffix :: Phantoms.TTerm String -> Phantoms.TTerm Grammar.ApproximateNumericLiteral
 approximateNumericLiteralIntegerWithSuffix x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ApproximateNumericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integerWithSuffix"),
@@ -1001,7 +1001,7 @@ approximateNumericLiteralIntegerWithSuffix x =
 
 approximateNumericLiteralScientificWithSuffix :: Phantoms.TTerm String -> Phantoms.TTerm Grammar.ApproximateNumericLiteral
 approximateNumericLiteralScientificWithSuffix x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ApproximateNumericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "scientificWithSuffix"),
@@ -1009,7 +1009,7 @@ approximateNumericLiteralScientificWithSuffix x =
 
 approximateNumericLiteralScientificWithoutSuffix :: Phantoms.TTerm String -> Phantoms.TTerm Grammar.ApproximateNumericLiteral
 approximateNumericLiteralScientificWithoutSuffix x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ApproximateNumericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "scientificWithoutSuffix"),
@@ -1017,7 +1017,7 @@ approximateNumericLiteralScientificWithoutSuffix x =
 
 approximateNumericTypeDoubleWithPrecision :: Phantoms.TTerm Grammar.DoubleTypeWithPrecision -> Phantoms.TTerm Grammar.ApproximateNumericType
 approximateNumericTypeDoubleWithPrecision x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ApproximateNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "doubleWithPrecision"),
@@ -1025,7 +1025,7 @@ approximateNumericTypeDoubleWithPrecision x =
 
 approximateNumericTypeFloat128 :: Phantoms.TTerm Grammar.Float128Type -> Phantoms.TTerm Grammar.ApproximateNumericType
 approximateNumericTypeFloat128 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ApproximateNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float128"),
@@ -1033,7 +1033,7 @@ approximateNumericTypeFloat128 x =
 
 approximateNumericTypeFloat16 :: Phantoms.TTerm Grammar.Float16Type -> Phantoms.TTerm Grammar.ApproximateNumericType
 approximateNumericTypeFloat16 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ApproximateNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float16"),
@@ -1041,7 +1041,7 @@ approximateNumericTypeFloat16 x =
 
 approximateNumericTypeFloat256 :: Phantoms.TTerm Grammar.Float256Type -> Phantoms.TTerm Grammar.ApproximateNumericType
 approximateNumericTypeFloat256 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ApproximateNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float256"),
@@ -1049,7 +1049,7 @@ approximateNumericTypeFloat256 x =
 
 approximateNumericTypeFloat32 :: Phantoms.TTerm Grammar.Float32Type -> Phantoms.TTerm Grammar.ApproximateNumericType
 approximateNumericTypeFloat32 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ApproximateNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float32"),
@@ -1057,7 +1057,7 @@ approximateNumericTypeFloat32 x =
 
 approximateNumericTypeFloat64 :: Phantoms.TTerm Grammar.Float64Type -> Phantoms.TTerm Grammar.ApproximateNumericType
 approximateNumericTypeFloat64 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ApproximateNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float64"),
@@ -1065,7 +1065,7 @@ approximateNumericTypeFloat64 x =
 
 approximateNumericTypeFloatWithPrecision :: Phantoms.TTerm Grammar.FloatTypeWithPrecision -> Phantoms.TTerm Grammar.ApproximateNumericType
 approximateNumericTypeFloatWithPrecision x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ApproximateNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "floatWithPrecision"),
@@ -1073,7 +1073,7 @@ approximateNumericTypeFloatWithPrecision x =
 
 approximateNumericTypeReal :: Phantoms.TTerm Grammar.RealType -> Phantoms.TTerm Grammar.ApproximateNumericType
 approximateNumericTypeReal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ApproximateNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "real"),
@@ -1133,7 +1133,7 @@ bigIntegerTypeWithNotNull original newVal =
 
 binaryExactNumericTypeSigned :: Phantoms.TTerm Grammar.SignedBinaryExactNumericType -> Phantoms.TTerm Grammar.BinaryExactNumericType
 binaryExactNumericTypeSigned x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.BinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "signed"),
@@ -1141,7 +1141,7 @@ binaryExactNumericTypeSigned x =
 
 binaryExactNumericTypeUnsigned :: Phantoms.TTerm Grammar.UnsignedBinaryExactNumericType -> Phantoms.TTerm Grammar.BinaryExactNumericType
 binaryExactNumericTypeUnsigned x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.BinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unsigned"),
@@ -1188,7 +1188,7 @@ binarySetFunctionIndependentValue x =
 
 binarySetFunctionTypePercentileCont :: Phantoms.TTerm Grammar.BinarySetFunctionType
 binarySetFunctionTypePercentileCont =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.BinarySetFunctionType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "percentileCont"),
@@ -1196,7 +1196,7 @@ binarySetFunctionTypePercentileCont =
 
 binarySetFunctionTypePercentileDisc :: Phantoms.TTerm Grammar.BinarySetFunctionType
 binarySetFunctionTypePercentileDisc =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.BinarySetFunctionType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "percentileDisc"),
@@ -1393,7 +1393,7 @@ bindingEqualsValueWithValue original newVal =
 
 bindingTableExpressionName :: Phantoms.TTerm Grammar.ObjectNameOrBindingVariable -> Phantoms.TTerm Grammar.BindingTableExpression
 bindingTableExpressionName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.BindingTableExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "name"),
@@ -1401,7 +1401,7 @@ bindingTableExpressionName x =
 
 bindingTableExpressionNested :: Phantoms.TTerm Grammar.NestedBindingTableQuerySpecification -> Phantoms.TTerm Grammar.BindingTableExpression
 bindingTableExpressionNested x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.BindingTableExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nested"),
@@ -1409,7 +1409,7 @@ bindingTableExpressionNested x =
 
 bindingTableExpressionObject :: Phantoms.TTerm Grammar.ObjectExpressionPrimary -> Phantoms.TTerm Grammar.BindingTableExpression
 bindingTableExpressionObject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.BindingTableExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "object"),
@@ -1417,7 +1417,7 @@ bindingTableExpressionObject x =
 
 bindingTableExpressionTable :: Phantoms.TTerm Grammar.BindingTableReference -> Phantoms.TTerm Grammar.BindingTableExpression
 bindingTableExpressionTable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.BindingTableExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "table"),
@@ -1425,7 +1425,7 @@ bindingTableExpressionTable x =
 
 bindingTableNameDelimitedBindingTableName :: Phantoms.TTerm Grammar.DelimitedBindingTableName -> Phantoms.TTerm Grammar.BindingTableName
 bindingTableNameDelimitedBindingTableName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.BindingTableName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "delimitedBindingTableName"),
@@ -1433,7 +1433,7 @@ bindingTableNameDelimitedBindingTableName x =
 
 bindingTableNameRegularIdentifier :: Phantoms.TTerm String -> Phantoms.TTerm Grammar.BindingTableName
 bindingTableNameRegularIdentifier x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.BindingTableName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "regularIdentifier"),
@@ -1441,7 +1441,7 @@ bindingTableNameRegularIdentifier x =
 
 bindingTableReferenceDelimitedBindingTableName :: Phantoms.TTerm Grammar.DelimitedBindingTableName -> Phantoms.TTerm Grammar.BindingTableReference
 bindingTableReferenceDelimitedBindingTableName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.BindingTableReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "delimitedBindingTableName"),
@@ -1449,7 +1449,7 @@ bindingTableReferenceDelimitedBindingTableName x =
 
 bindingTableReferenceParameterSpecification :: Phantoms.TTerm Grammar.ReferenceParameterSpecification -> Phantoms.TTerm Grammar.BindingTableReference
 bindingTableReferenceParameterSpecification x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.BindingTableReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parameterSpecification"),
@@ -1457,7 +1457,7 @@ bindingTableReferenceParameterSpecification x =
 
 bindingTableReferenceParentAndTableName :: Phantoms.TTerm Grammar.ParentAndTableName -> Phantoms.TTerm Grammar.BindingTableReference
 bindingTableReferenceParentAndTableName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.BindingTableReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parentAndTableName"),
@@ -1693,7 +1693,7 @@ bindingTableVariableDefinitionWithVariable original newVal =
 
 bindingVariableDefinitionGraph :: Phantoms.TTerm Grammar.GraphVariableDefinition -> Phantoms.TTerm Grammar.BindingVariableDefinition
 bindingVariableDefinitionGraph x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.BindingVariableDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "graph"),
@@ -1701,7 +1701,7 @@ bindingVariableDefinitionGraph x =
 
 bindingVariableDefinitionTable :: Phantoms.TTerm Grammar.BindingTableVariableDefinition -> Phantoms.TTerm Grammar.BindingVariableDefinition
 bindingVariableDefinitionTable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.BindingVariableDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "table"),
@@ -1709,7 +1709,7 @@ bindingVariableDefinitionTable x =
 
 bindingVariableDefinitionValue :: Phantoms.TTerm Grammar.ValueVariableDefinition -> Phantoms.TTerm Grammar.BindingVariableDefinition
 bindingVariableDefinitionValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.BindingVariableDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -1717,7 +1717,7 @@ bindingVariableDefinitionValue x =
 
 booleanLiteralFalse :: Phantoms.TTerm Grammar.BooleanLiteral
 booleanLiteralFalse =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.BooleanLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "false"),
@@ -1725,7 +1725,7 @@ booleanLiteralFalse =
 
 booleanLiteralTrue :: Phantoms.TTerm Grammar.BooleanLiteral
 booleanLiteralTrue =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.BooleanLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "true"),
@@ -1733,7 +1733,7 @@ booleanLiteralTrue =
 
 booleanLiteralUnknown :: Phantoms.TTerm Grammar.BooleanLiteral
 booleanLiteralUnknown =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.BooleanLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unknown"),
@@ -1767,7 +1767,7 @@ booleanTypeWithNotNull original newVal =
 
 byteStringTypeBinaryType :: Phantoms.TTerm Grammar.BinaryType -> Phantoms.TTerm Grammar.ByteStringType
 byteStringTypeBinaryType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ByteStringType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "binaryType"),
@@ -1775,7 +1775,7 @@ byteStringTypeBinaryType x =
 
 byteStringTypeBytesType :: Phantoms.TTerm Grammar.BytesType -> Phantoms.TTerm Grammar.ByteStringType
 byteStringTypeBytesType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ByteStringType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bytesType"),
@@ -1783,7 +1783,7 @@ byteStringTypeBytesType x =
 
 byteStringTypeVarbinaryType :: Phantoms.TTerm Grammar.VarbinaryType -> Phantoms.TTerm Grammar.ByteStringType
 byteStringTypeVarbinaryType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ByteStringType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "varbinaryType"),
@@ -1959,7 +1959,7 @@ callProcedureStatementWithOptional original newVal =
 
 cardinalityExpressionCardinality :: Phantoms.TTerm Grammar.CardinalityArgumentExpression -> Phantoms.TTerm Grammar.CardinalityExpression
 cardinalityExpressionCardinality x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CardinalityExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cardinality"),
@@ -1967,7 +1967,7 @@ cardinalityExpressionCardinality x =
 
 cardinalityExpressionSize :: Phantoms.TTerm Grammar.ListValueExpression -> Phantoms.TTerm Grammar.CardinalityExpression
 cardinalityExpressionSize x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CardinalityExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "size"),
@@ -1975,7 +1975,7 @@ cardinalityExpressionSize x =
 
 caseAbbreviationCoalesce :: Phantoms.TTerm [Grammar.ValueExpression] -> Phantoms.TTerm Grammar.CaseAbbreviation
 caseAbbreviationCoalesce x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CaseAbbreviation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "coalesce"),
@@ -1983,7 +1983,7 @@ caseAbbreviationCoalesce x =
 
 caseAbbreviationNullIf :: Phantoms.TTerm Grammar.NullIfAbbreviation -> Phantoms.TTerm Grammar.CaseAbbreviation
 caseAbbreviationNullIf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CaseAbbreviation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nullIf"),
@@ -1991,7 +1991,7 @@ caseAbbreviationNullIf x =
 
 caseExpressionAbbreviation :: Phantoms.TTerm Grammar.CaseAbbreviation -> Phantoms.TTerm Grammar.CaseExpression
 caseExpressionAbbreviation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CaseExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "abbreviation"),
@@ -1999,7 +1999,7 @@ caseExpressionAbbreviation x =
 
 caseExpressionSpecification :: Phantoms.TTerm Grammar.CaseSpecification -> Phantoms.TTerm Grammar.CaseExpression
 caseExpressionSpecification x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CaseExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "specification"),
@@ -2007,7 +2007,7 @@ caseExpressionSpecification x =
 
 caseLower :: Phantoms.TTerm Grammar.Case
 caseLower =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Case"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lower"),
@@ -2015,7 +2015,7 @@ caseLower =
 
 caseOperandElementReference :: Phantoms.TTerm Grammar.ElementVariableReference -> Phantoms.TTerm Grammar.CaseOperand
 caseOperandElementReference x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CaseOperand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "elementReference"),
@@ -2023,7 +2023,7 @@ caseOperandElementReference x =
 
 caseOperandValueExpression :: Phantoms.TTerm Grammar.NonParenthesizedPrimaryValueExpression -> Phantoms.TTerm Grammar.CaseOperand
 caseOperandValueExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CaseOperand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "valueExpression"),
@@ -2031,7 +2031,7 @@ caseOperandValueExpression x =
 
 caseSpecificationSearched :: Phantoms.TTerm Grammar.SearchedCase -> Phantoms.TTerm Grammar.CaseSpecification
 caseSpecificationSearched x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CaseSpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "searched"),
@@ -2039,7 +2039,7 @@ caseSpecificationSearched x =
 
 caseSpecificationSimple :: Phantoms.TTerm Grammar.SimpleCase -> Phantoms.TTerm Grammar.CaseSpecification
 caseSpecificationSimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CaseSpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -2047,7 +2047,7 @@ caseSpecificationSimple x =
 
 caseUpper :: Phantoms.TTerm Grammar.Case
 caseUpper =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Case"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "upper"),
@@ -2055,7 +2055,7 @@ caseUpper =
 
 castOperandNullLiteral :: Phantoms.TTerm Grammar.CastOperand
 castOperandNullLiteral =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CastOperand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nullLiteral"),
@@ -2063,7 +2063,7 @@ castOperandNullLiteral =
 
 castOperandValueExpression :: Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.CastOperand
 castOperandValueExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CastOperand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "valueExpression"),
@@ -2251,7 +2251,7 @@ catalogGraphTypeParentAndNameWithParentReference original newVal =
 
 catalogObjectParentReferenceObjectsOnly :: Phantoms.TTerm [Grammar.ObjectName] -> Phantoms.TTerm Grammar.CatalogObjectParentReference
 catalogObjectParentReferenceObjectsOnly x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CatalogObjectParentReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objectsOnly"),
@@ -2259,7 +2259,7 @@ catalogObjectParentReferenceObjectsOnly x =
 
 catalogObjectParentReferenceSchemaAndObjects :: Phantoms.TTerm Grammar.SchemaAndObjects -> Phantoms.TTerm Grammar.CatalogObjectParentReference
 catalogObjectParentReferenceSchemaAndObjects x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CatalogObjectParentReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "schemaAndObjects"),
@@ -2387,7 +2387,7 @@ charTypeWithNotNull original newVal =
 
 characterOrByteStringFunctionFold :: Phantoms.TTerm Grammar.FoldCharacterString -> Phantoms.TTerm Grammar.CharacterOrByteStringFunction
 characterOrByteStringFunctionFold x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CharacterOrByteStringFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fold"),
@@ -2395,7 +2395,7 @@ characterOrByteStringFunctionFold x =
 
 characterOrByteStringFunctionNormalize :: Phantoms.TTerm Grammar.NormalizeCharacterString -> Phantoms.TTerm Grammar.CharacterOrByteStringFunction
 characterOrByteStringFunctionNormalize x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CharacterOrByteStringFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "normalize"),
@@ -2403,7 +2403,7 @@ characterOrByteStringFunctionNormalize x =
 
 characterOrByteStringFunctionSub :: Phantoms.TTerm Grammar.SubCharacterOrByteString -> Phantoms.TTerm Grammar.CharacterOrByteStringFunction
 characterOrByteStringFunctionSub x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CharacterOrByteStringFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sub"),
@@ -2411,7 +2411,7 @@ characterOrByteStringFunctionSub x =
 
 characterOrByteStringFunctionTrimMultiCharacter :: Phantoms.TTerm Grammar.TrimMultiCharacterCharacterString -> Phantoms.TTerm Grammar.CharacterOrByteStringFunction
 characterOrByteStringFunctionTrimMultiCharacter x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CharacterOrByteStringFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "trimMultiCharacter"),
@@ -2419,7 +2419,7 @@ characterOrByteStringFunctionTrimMultiCharacter x =
 
 characterOrByteStringFunctionTrimSingle :: Phantoms.TTerm Grammar.TrimSingleCharacterOrByteString -> Phantoms.TTerm Grammar.CharacterOrByteStringFunction
 characterOrByteStringFunctionTrimSingle x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CharacterOrByteStringFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "trimSingle"),
@@ -2427,7 +2427,7 @@ characterOrByteStringFunctionTrimSingle x =
 
 characterStringTypeCharType :: Phantoms.TTerm Grammar.CharType -> Phantoms.TTerm Grammar.CharacterStringType
 characterStringTypeCharType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CharacterStringType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "charType"),
@@ -2435,7 +2435,7 @@ characterStringTypeCharType x =
 
 characterStringTypeStringType :: Phantoms.TTerm Grammar.StringType -> Phantoms.TTerm Grammar.CharacterStringType
 characterStringTypeStringType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CharacterStringType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "stringType"),
@@ -2443,7 +2443,7 @@ characterStringTypeStringType x =
 
 characterStringTypeVarcharType :: Phantoms.TTerm Grammar.VarcharType -> Phantoms.TTerm Grammar.CharacterStringType
 characterStringTypeVarcharType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CharacterStringType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "varcharType"),
@@ -2765,7 +2765,7 @@ closedNodeReferenceValueTypeWithNotNull original newVal =
 
 compOpEquals :: Phantoms.TTerm Grammar.CompOp
 compOpEquals =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CompOp"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "equals"),
@@ -2773,7 +2773,7 @@ compOpEquals =
 
 compOpGreaterThan :: Phantoms.TTerm Grammar.CompOp
 compOpGreaterThan =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CompOp"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "greaterThan"),
@@ -2781,7 +2781,7 @@ compOpGreaterThan =
 
 compOpGreaterThanOrEquals :: Phantoms.TTerm Grammar.CompOp
 compOpGreaterThanOrEquals =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CompOp"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "greaterThanOrEquals"),
@@ -2789,7 +2789,7 @@ compOpGreaterThanOrEquals =
 
 compOpLessThan :: Phantoms.TTerm Grammar.CompOp
 compOpLessThan =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CompOp"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThan"),
@@ -2797,7 +2797,7 @@ compOpLessThan =
 
 compOpLessThanOrEquals :: Phantoms.TTerm Grammar.CompOp
 compOpLessThanOrEquals =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CompOp"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThanOrEquals"),
@@ -2805,7 +2805,7 @@ compOpLessThanOrEquals =
 
 compOpNotEquals :: Phantoms.TTerm Grammar.CompOp
 compOpNotEquals =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CompOp"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notEquals"),
@@ -3041,7 +3041,7 @@ compositeQueryExpressionConjunctionWithRight original newVal =
 
 compositeQueryExpressionPrimary :: Phantoms.TTerm Grammar.CompositeQueryPrimary -> Phantoms.TTerm Grammar.CompositeQueryExpression
 compositeQueryExpressionPrimary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CompositeQueryExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primary"),
@@ -3049,7 +3049,7 @@ compositeQueryExpressionPrimary x =
 
 compositeQueryExpressionSimple :: Phantoms.TTerm Grammar.CompositeQueryExpressionConjunction -> Phantoms.TTerm Grammar.CompositeQueryExpression
 compositeQueryExpressionSimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CompositeQueryExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -3237,7 +3237,7 @@ conjunctiveExprWithRight original newVal =
 
 connectorPointingRightRightArrow :: Phantoms.TTerm Grammar.ConnectorPointingRight
 connectorPointingRightRightArrow =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ConnectorPointingRight"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rightArrow"),
@@ -3245,7 +3245,7 @@ connectorPointingRightRightArrow =
 
 connectorPointingRightTo :: Phantoms.TTerm Grammar.ConnectorPointingRight
 connectorPointingRightTo =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ConnectorPointingRight"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "to"),
@@ -3253,7 +3253,7 @@ connectorPointingRightTo =
 
 connectorUndirectedTilde :: Phantoms.TTerm Grammar.ConnectorUndirected
 connectorUndirectedTilde =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ConnectorUndirected"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tilde"),
@@ -3261,7 +3261,7 @@ connectorUndirectedTilde =
 
 connectorUndirectedTo :: Phantoms.TTerm Grammar.ConnectorUndirected
 connectorUndirectedTo =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ConnectorUndirected"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "to"),
@@ -3547,7 +3547,7 @@ countedShortestPathSearchWithOrPaths original newVal =
 
 createGraphOptionGraphIfNotExists :: Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.CreateGraphOption
 createGraphOptionGraphIfNotExists x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CreateGraphOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "graphIfNotExists"),
@@ -3555,7 +3555,7 @@ createGraphOptionGraphIfNotExists x =
 
 createGraphOptionOrReplace :: Phantoms.TTerm Grammar.CreateGraphOption
 createGraphOptionOrReplace =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CreateGraphOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "orReplace"),
@@ -3733,7 +3733,7 @@ createGraphStatementWithType original newVal =
 
 createGraphTypeOptionOrReplace :: Phantoms.TTerm Grammar.CreateGraphTypeOption
 createGraphTypeOptionOrReplace =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CreateGraphTypeOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "orReplace"),
@@ -3741,7 +3741,7 @@ createGraphTypeOptionOrReplace =
 
 createGraphTypeOptionTypeIfNotExists :: Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.CreateGraphTypeOption
 createGraphTypeOptionTypeIfNotExists x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CreateGraphTypeOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeIfNotExists"),
@@ -3917,7 +3917,7 @@ createSchemaStatementWithParentAndName original newVal =
 
 currentGraphGraph :: Phantoms.TTerm Grammar.CurrentGraph
 currentGraphGraph =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CurrentGraph"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "graph"),
@@ -3925,7 +3925,7 @@ currentGraphGraph =
 
 currentGraphPropertyGraph :: Phantoms.TTerm Grammar.CurrentGraph
 currentGraphPropertyGraph =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.CurrentGraph"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "propertyGraph"),
@@ -3933,7 +3933,7 @@ currentGraphPropertyGraph =
 
 dateFunctionCurrentDate :: Phantoms.TTerm Grammar.DateFunction
 dateFunctionCurrentDate =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DateFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "currentDate"),
@@ -3941,7 +3941,7 @@ dateFunctionCurrentDate =
 
 dateFunctionDateWithParams :: Phantoms.TTerm (Maybe Grammar.DateFunctionParameters) -> Phantoms.TTerm Grammar.DateFunction
 dateFunctionDateWithParams x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DateFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dateWithParams"),
@@ -3949,7 +3949,7 @@ dateFunctionDateWithParams x =
 
 dateFunctionParametersDateString :: Phantoms.TTerm Grammar.DateString -> Phantoms.TTerm Grammar.DateFunctionParameters
 dateFunctionParametersDateString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DateFunctionParameters"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dateString"),
@@ -3957,7 +3957,7 @@ dateFunctionParametersDateString x =
 
 dateFunctionParametersRecordConstructor :: Phantoms.TTerm Grammar.RecordConstructor -> Phantoms.TTerm Grammar.DateFunctionParameters
 dateFunctionParametersRecordConstructor x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DateFunctionParameters"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "recordConstructor"),
@@ -3991,7 +3991,7 @@ dateTypeWithNotNull original newVal =
 
 datetimeFunctionCurrentTimestamp :: Phantoms.TTerm Grammar.DatetimeFunction
 datetimeFunctionCurrentTimestamp =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DatetimeFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "currentTimestamp"),
@@ -3999,7 +3999,7 @@ datetimeFunctionCurrentTimestamp =
 
 datetimeFunctionParametersDatetimeString :: Phantoms.TTerm Grammar.DatetimeString -> Phantoms.TTerm Grammar.DatetimeFunctionParameters
 datetimeFunctionParametersDatetimeString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DatetimeFunctionParameters"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "datetimeString"),
@@ -4007,7 +4007,7 @@ datetimeFunctionParametersDatetimeString x =
 
 datetimeFunctionParametersRecordConstructor :: Phantoms.TTerm Grammar.RecordConstructor -> Phantoms.TTerm Grammar.DatetimeFunctionParameters
 datetimeFunctionParametersRecordConstructor x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DatetimeFunctionParameters"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "recordConstructor"),
@@ -4015,7 +4015,7 @@ datetimeFunctionParametersRecordConstructor x =
 
 datetimeFunctionZonedDatetimeWithParams :: Phantoms.TTerm (Maybe Grammar.DatetimeFunctionParameters) -> Phantoms.TTerm Grammar.DatetimeFunction
 datetimeFunctionZonedDatetimeWithParams x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DatetimeFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "zonedDatetimeWithParams"),
@@ -4143,7 +4143,7 @@ datetimeSubtractionWithTemporalDurationQualifier original newVal =
 
 datetimeTypeTimestampWithTimeZone :: Phantoms.TTerm Grammar.TimestampWithTimeZoneType -> Phantoms.TTerm Grammar.DatetimeType
 datetimeTypeTimestampWithTimeZone x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DatetimeType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "timestampWithTimeZone"),
@@ -4151,7 +4151,7 @@ datetimeTypeTimestampWithTimeZone x =
 
 datetimeTypeZonedDatetime :: Phantoms.TTerm Grammar.ZonedDatetimeType -> Phantoms.TTerm Grammar.DatetimeType
 datetimeTypeZonedDatetime x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DatetimeType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "zonedDatetime"),
@@ -4159,7 +4159,7 @@ datetimeTypeZonedDatetime x =
 
 datetimeValueFunctionDateFunction :: Phantoms.TTerm Grammar.DateFunction -> Phantoms.TTerm Grammar.DatetimeValueFunction
 datetimeValueFunctionDateFunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DatetimeValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dateFunction"),
@@ -4167,7 +4167,7 @@ datetimeValueFunctionDateFunction x =
 
 datetimeValueFunctionDatetimeFunction :: Phantoms.TTerm Grammar.DatetimeFunction -> Phantoms.TTerm Grammar.DatetimeValueFunction
 datetimeValueFunctionDatetimeFunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DatetimeValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "datetimeFunction"),
@@ -4175,7 +4175,7 @@ datetimeValueFunctionDatetimeFunction x =
 
 datetimeValueFunctionLocaldatetimeFunction :: Phantoms.TTerm Grammar.LocaldatetimeFunction -> Phantoms.TTerm Grammar.DatetimeValueFunction
 datetimeValueFunctionLocaldatetimeFunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DatetimeValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "localdatetimeFunction"),
@@ -4183,7 +4183,7 @@ datetimeValueFunctionLocaldatetimeFunction x =
 
 datetimeValueFunctionLocaltimeFunction :: Phantoms.TTerm Grammar.LocaltimeFunction -> Phantoms.TTerm Grammar.DatetimeValueFunction
 datetimeValueFunctionLocaltimeFunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DatetimeValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "localtimeFunction"),
@@ -4191,7 +4191,7 @@ datetimeValueFunctionLocaltimeFunction x =
 
 datetimeValueFunctionTimeFunction :: Phantoms.TTerm Grammar.TimeFunction -> Phantoms.TTerm Grammar.DatetimeValueFunction
 datetimeValueFunctionTimeFunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DatetimeValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "timeFunction"),
@@ -4319,7 +4319,7 @@ dependentValueExpressionWithSetQuantifier original newVal =
 
 destinationNodeTypeReferenceAlias :: Phantoms.TTerm Grammar.DestinationNodeTypeAlias -> Phantoms.TTerm Grammar.DestinationNodeTypeReference
 destinationNodeTypeReferenceAlias x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DestinationNodeTypeReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "alias"),
@@ -4327,7 +4327,7 @@ destinationNodeTypeReferenceAlias x =
 
 destinationNodeTypeReferenceFiller :: Phantoms.TTerm (Maybe Grammar.NodeTypeFiller) -> Phantoms.TTerm Grammar.DestinationNodeTypeReference
 destinationNodeTypeReferenceFiller x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DestinationNodeTypeReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "filler"),
@@ -4443,7 +4443,7 @@ destinationPredicateWithNot original newVal =
 
 detachOptionDetach :: Phantoms.TTerm Grammar.DetachOption
 detachOptionDetach =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DetachOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "detach"),
@@ -4451,7 +4451,7 @@ detachOptionDetach =
 
 detachOptionNoDetach :: Phantoms.TTerm Grammar.DetachOption
 detachOptionNoDetach =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DetachOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "noDetach"),
@@ -4713,7 +4713,7 @@ disjunctiveExprWithRight original newVal =
 
 disjunctiveOperatorOr :: Phantoms.TTerm Grammar.DisjunctiveOperator
 disjunctiveOperatorOr =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DisjunctiveOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "or"),
@@ -4721,7 +4721,7 @@ disjunctiveOperatorOr =
 
 disjunctiveOperatorXor :: Phantoms.TTerm Grammar.DisjunctiveOperator
 disjunctiveOperatorXor =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DisjunctiveOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "xor"),
@@ -4969,7 +4969,7 @@ dropSchemaStatementWithParentAndName original newVal =
 
 durationFunctionParametersDurationString :: Phantoms.TTerm Grammar.DurationString -> Phantoms.TTerm Grammar.DurationFunctionParameters
 durationFunctionParametersDurationString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DurationFunctionParameters"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "durationString"),
@@ -4977,7 +4977,7 @@ durationFunctionParametersDurationString x =
 
 durationFunctionParametersRecordConstructor :: Phantoms.TTerm Grammar.RecordConstructor -> Phantoms.TTerm Grammar.DurationFunctionParameters
 durationFunctionParametersRecordConstructor x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DurationFunctionParameters"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "recordConstructor"),
@@ -4985,7 +4985,7 @@ durationFunctionParametersRecordConstructor x =
 
 durationValueFunctionAbsoluteValue :: Phantoms.TTerm Grammar.AbsoluteValueExpression -> Phantoms.TTerm Grammar.DurationValueFunction
 durationValueFunctionAbsoluteValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DurationValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "absoluteValue"),
@@ -4993,7 +4993,7 @@ durationValueFunctionAbsoluteValue x =
 
 durationValueFunctionDurationFunction :: Phantoms.TTerm Grammar.DurationFunction -> Phantoms.TTerm Grammar.DurationValueFunction
 durationValueFunctionDurationFunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.DurationValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "durationFunction"),
@@ -5171,7 +5171,7 @@ dynamicPropertyValueTypeWithValue original newVal =
 
 edgeBindingsOrEdgesEdgeBindings :: Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.EdgeBindingsOrEdges
 edgeBindingsOrEdgesEdgeBindings x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeBindingsOrEdges"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edgeBindings"),
@@ -5179,7 +5179,7 @@ edgeBindingsOrEdgesEdgeBindings x =
 
 edgeBindingsOrEdgesEdges :: Phantoms.TTerm Grammar.EdgeBindingsOrEdges
 edgeBindingsOrEdgesEdges =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeBindingsOrEdges"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edges"),
@@ -5355,7 +5355,7 @@ edgeKindAndSynonymWithTypeName original newVal =
 
 edgeKindDirected :: Phantoms.TTerm Grammar.EdgeKind
 edgeKindDirected =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "directed"),
@@ -5363,7 +5363,7 @@ edgeKindDirected =
 
 edgeKindUndirected :: Phantoms.TTerm Grammar.EdgeKind
 edgeKindUndirected =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "undirected"),
@@ -5431,7 +5431,7 @@ edgeLabelSetWithPropertiesWithPropertyTypes original newVal =
 
 edgePatternAbbreviatedEdge :: Phantoms.TTerm Grammar.AbbreviatedEdgePattern -> Phantoms.TTerm Grammar.EdgePattern
 edgePatternAbbreviatedEdge x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "abbreviatedEdge"),
@@ -5439,7 +5439,7 @@ edgePatternAbbreviatedEdge x =
 
 edgePatternFullEdge :: Phantoms.TTerm Grammar.FullEdgePattern -> Phantoms.TTerm Grammar.EdgePattern
 edgePatternFullEdge x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fullEdge"),
@@ -5447,7 +5447,7 @@ edgePatternFullEdge x =
 
 edgeReferenceValueTypeClosed :: Phantoms.TTerm Grammar.ClosedEdgeReferenceValueType -> Phantoms.TTerm Grammar.EdgeReferenceValueType
 edgeReferenceValueTypeClosed x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeReferenceValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "closed"),
@@ -5455,7 +5455,7 @@ edgeReferenceValueTypeClosed x =
 
 edgeReferenceValueTypeOpen :: Phantoms.TTerm Grammar.OpenEdgeReferenceValueType -> Phantoms.TTerm Grammar.EdgeReferenceValueType
 edgeReferenceValueTypeOpen x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeReferenceValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "open"),
@@ -5463,7 +5463,7 @@ edgeReferenceValueTypeOpen x =
 
 edgeSynonymEdge :: Phantoms.TTerm Grammar.EdgeSynonym
 edgeSynonymEdge =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeSynonym"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edge"),
@@ -5471,7 +5471,7 @@ edgeSynonymEdge =
 
 edgeSynonymRelationship :: Phantoms.TTerm Grammar.EdgeSynonym
 edgeSynonymRelationship =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeSynonym"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "relationship"),
@@ -5479,7 +5479,7 @@ edgeSynonymRelationship =
 
 edgeTypeFillerImpliedContent :: Phantoms.TTerm Grammar.EdgeTypeImpliedContent -> Phantoms.TTerm Grammar.EdgeTypeFiller
 edgeTypeFillerImpliedContent x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeTypeFiller"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "impliedContent"),
@@ -5487,7 +5487,7 @@ edgeTypeFillerImpliedContent x =
 
 edgeTypeFillerKeyLabelSetWithContent :: Phantoms.TTerm Grammar.EdgeKeyLabelSetWithContent -> Phantoms.TTerm Grammar.EdgeTypeFiller
 edgeTypeFillerKeyLabelSetWithContent x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeTypeFiller"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "keyLabelSetWithContent"),
@@ -5495,7 +5495,7 @@ edgeTypeFillerKeyLabelSetWithContent x =
 
 edgeTypeImpliedContentLabelSet :: Phantoms.TTerm Grammar.EdgeTypeLabelSet -> Phantoms.TTerm Grammar.EdgeTypeImpliedContent
 edgeTypeImpliedContentLabelSet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeTypeImpliedContent"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "labelSet"),
@@ -5503,7 +5503,7 @@ edgeTypeImpliedContentLabelSet x =
 
 edgeTypeImpliedContentLabelSetWithProperties :: Phantoms.TTerm Grammar.EdgeLabelSetWithProperties -> Phantoms.TTerm Grammar.EdgeTypeImpliedContent
 edgeTypeImpliedContentLabelSetWithProperties x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeTypeImpliedContent"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "labelSetWithProperties"),
@@ -5511,7 +5511,7 @@ edgeTypeImpliedContentLabelSetWithProperties x =
 
 edgeTypeImpliedContentPropertyTypes :: Phantoms.TTerm Grammar.EdgeTypePropertyTypes -> Phantoms.TTerm Grammar.EdgeTypeImpliedContent
 edgeTypeImpliedContentPropertyTypes x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeTypeImpliedContent"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "propertyTypes"),
@@ -5591,7 +5591,7 @@ edgeTypePattern kindAndSynonym patternType =
 
 edgeTypePatternDirectedPointingLeft :: Phantoms.TTerm Grammar.EdgeTypePatternPointingLeft -> Phantoms.TTerm Grammar.EdgeTypePatternDirected
 edgeTypePatternDirectedPointingLeft x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternDirected"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pointingLeft"),
@@ -5599,7 +5599,7 @@ edgeTypePatternDirectedPointingLeft x =
 
 edgeTypePatternDirectedPointingRight :: Phantoms.TTerm Grammar.EdgeTypePatternPointingRight -> Phantoms.TTerm Grammar.EdgeTypePatternDirected
 edgeTypePatternDirectedPointingRight x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternDirected"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pointingRight"),
@@ -5839,7 +5839,7 @@ edgeTypePatternPointingRightWithSource original newVal =
 
 edgeTypePatternTypeDirected :: Phantoms.TTerm Grammar.EdgeTypePatternDirected -> Phantoms.TTerm Grammar.EdgeTypePatternType
 edgeTypePatternTypeDirected x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "directed"),
@@ -5847,7 +5847,7 @@ edgeTypePatternTypeDirected x =
 
 edgeTypePatternTypeUndirected :: Phantoms.TTerm Grammar.EdgeTypePatternUndirected -> Phantoms.TTerm Grammar.EdgeTypePatternType
 edgeTypePatternTypeUndirected x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "undirected"),
@@ -6021,7 +6021,7 @@ edgeTypePhraseEndpointPair x =
 
 edgeTypePhraseFillerFillerOnly :: Phantoms.TTerm Grammar.EdgeTypeFiller -> Phantoms.TTerm Grammar.EdgeTypePhraseFiller
 edgeTypePhraseFillerFillerOnly x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeTypePhraseFiller"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fillerOnly"),
@@ -6029,7 +6029,7 @@ edgeTypePhraseFillerFillerOnly x =
 
 edgeTypePhraseFillerTypeNameWithFiller :: Phantoms.TTerm Grammar.EdgeTypeNameWithFiller -> Phantoms.TTerm Grammar.EdgeTypePhraseFiller
 edgeTypePhraseFillerTypeNameWithFiller x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeTypePhraseFiller"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeNameWithFiller"),
@@ -6181,7 +6181,7 @@ edgeTypePhraseWithTypeNameAndFiller original newVal =
 
 edgeTypeSpecificationPattern :: Phantoms.TTerm Grammar.EdgeTypePattern -> Phantoms.TTerm Grammar.EdgeTypeSpecification
 edgeTypeSpecificationPattern x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeTypeSpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pattern"),
@@ -6189,7 +6189,7 @@ edgeTypeSpecificationPattern x =
 
 edgeTypeSpecificationPhrase :: Phantoms.TTerm Grammar.EdgeTypePhrase -> Phantoms.TTerm Grammar.EdgeTypeSpecification
 edgeTypeSpecificationPhrase x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgeTypeSpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "phrase"),
@@ -6197,7 +6197,7 @@ edgeTypeSpecificationPhrase x =
 
 edgesSynonymEdges :: Phantoms.TTerm Grammar.EdgesSynonym
 edgesSynonymEdges =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgesSynonym"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edges"),
@@ -6205,7 +6205,7 @@ edgesSynonymEdges =
 
 edgesSynonymRelationships :: Phantoms.TTerm Grammar.EdgesSynonym
 edgesSynonymRelationships =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EdgesSynonym"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "relationships"),
@@ -6213,7 +6213,7 @@ edgesSynonymRelationships =
 
 elementBindingsOrElementsElementBindings :: Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.ElementBindingsOrElements
 elementBindingsOrElementsElementBindings x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ElementBindingsOrElements"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "elementBindings"),
@@ -6221,7 +6221,7 @@ elementBindingsOrElementsElementBindings x =
 
 elementBindingsOrElementsElements :: Phantoms.TTerm Grammar.ElementBindingsOrElements
 elementBindingsOrElementsElements =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ElementBindingsOrElements"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "elements"),
@@ -6229,7 +6229,7 @@ elementBindingsOrElementsElements =
 
 elementPatternEdge :: Phantoms.TTerm Grammar.EdgePattern -> Phantoms.TTerm Grammar.ElementPattern
 elementPatternEdge x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ElementPattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edge"),
@@ -6345,7 +6345,7 @@ elementPatternFillerWithVariableDeclaration original newVal =
 
 elementPatternNode :: Phantoms.TTerm Grammar.NodePattern -> Phantoms.TTerm Grammar.ElementPattern
 elementPatternNode x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ElementPattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "node"),
@@ -6353,7 +6353,7 @@ elementPatternNode x =
 
 elementPatternPredicatePropertySpecification :: Phantoms.TTerm Grammar.ElementPropertySpecification -> Phantoms.TTerm Grammar.ElementPatternPredicate
 elementPatternPredicatePropertySpecification x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ElementPatternPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "propertySpecification"),
@@ -6361,7 +6361,7 @@ elementPatternPredicatePropertySpecification x =
 
 elementPatternPredicateWhereClause :: Phantoms.TTerm Grammar.ElementPatternWhereClause -> Phantoms.TTerm Grammar.ElementPatternPredicate
 elementPatternPredicateWhereClause x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ElementPatternPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "whereClause"),
@@ -6369,7 +6369,7 @@ elementPatternPredicateWhereClause x =
 
 elementTypeSpecificationEdgeType :: Phantoms.TTerm Grammar.EdgeTypeSpecification -> Phantoms.TTerm Grammar.ElementTypeSpecification
 elementTypeSpecificationEdgeType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ElementTypeSpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edgeType"),
@@ -6377,7 +6377,7 @@ elementTypeSpecificationEdgeType x =
 
 elementTypeSpecificationNodeType :: Phantoms.TTerm Grammar.NodeTypeSpecification -> Phantoms.TTerm Grammar.ElementTypeSpecification
 elementTypeSpecificationNodeType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ElementTypeSpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nodeType"),
@@ -6445,7 +6445,7 @@ elementVariableDeclarationWithVariable original newVal =
 
 endTransactionCommandCommit :: Phantoms.TTerm Grammar.CommitCommand -> Phantoms.TTerm Grammar.EndTransactionCommand
 endTransactionCommandCommit x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EndTransactionCommand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "commit"),
@@ -6453,7 +6453,7 @@ endTransactionCommandCommit x =
 
 endTransactionCommandRollback :: Phantoms.TTerm Grammar.RollbackCommand -> Phantoms.TTerm Grammar.EndTransactionCommand
 endTransactionCommandRollback x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EndTransactionCommand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rollback"),
@@ -6461,7 +6461,7 @@ endTransactionCommandRollback x =
 
 endpointPairDirectedPair :: Phantoms.TTerm Grammar.EndpointPairDirected -> Phantoms.TTerm Grammar.EndpointPair
 endpointPairDirectedPair x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EndpointPair"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "directedPair"),
@@ -6469,7 +6469,7 @@ endpointPairDirectedPair x =
 
 endpointPairDirectedPointingLeft :: Phantoms.TTerm Grammar.EndpointPairPointingLeft -> Phantoms.TTerm Grammar.EndpointPairDirected
 endpointPairDirectedPointingLeft x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EndpointPairDirected"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pointingLeft"),
@@ -6477,7 +6477,7 @@ endpointPairDirectedPointingLeft x =
 
 endpointPairDirectedPointingRight :: Phantoms.TTerm Grammar.EndpointPairPointingRight -> Phantoms.TTerm Grammar.EndpointPairDirected
 endpointPairDirectedPointingRight x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EndpointPairDirected"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pointingRight"),
@@ -6684,7 +6684,7 @@ endpointPairUndirectedDestinationAlias x =
 
 endpointPairUndirectedPair :: Phantoms.TTerm Grammar.EndpointPairUndirected -> Phantoms.TTerm Grammar.EndpointPair
 endpointPairUndirectedPair x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.EndpointPair"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "undirectedPair"),
@@ -6769,7 +6769,7 @@ endpointPairUndirectedWithSourceAlias original newVal =
 
 exactNumericLiteralCommonWithSuffix :: Phantoms.TTerm String -> Phantoms.TTerm Grammar.ExactNumericLiteral
 exactNumericLiteralCommonWithSuffix x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ExactNumericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "commonWithSuffix"),
@@ -6777,7 +6777,7 @@ exactNumericLiteralCommonWithSuffix x =
 
 exactNumericLiteralCommonWithoutSuffix :: Phantoms.TTerm String -> Phantoms.TTerm Grammar.ExactNumericLiteral
 exactNumericLiteralCommonWithoutSuffix x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ExactNumericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "commonWithoutSuffix"),
@@ -6785,7 +6785,7 @@ exactNumericLiteralCommonWithoutSuffix x =
 
 exactNumericLiteralIntegerWithSuffix :: Phantoms.TTerm String -> Phantoms.TTerm Grammar.ExactNumericLiteral
 exactNumericLiteralIntegerWithSuffix x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ExactNumericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integerWithSuffix"),
@@ -6793,7 +6793,7 @@ exactNumericLiteralIntegerWithSuffix x =
 
 exactNumericLiteralScientificWithSuffix :: Phantoms.TTerm String -> Phantoms.TTerm Grammar.ExactNumericLiteral
 exactNumericLiteralScientificWithSuffix x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ExactNumericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "scientificWithSuffix"),
@@ -6801,7 +6801,7 @@ exactNumericLiteralScientificWithSuffix x =
 
 exactNumericLiteralUnsignedInteger :: Phantoms.TTerm Grammar.UnsignedInteger -> Phantoms.TTerm Grammar.ExactNumericLiteral
 exactNumericLiteralUnsignedInteger x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ExactNumericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unsignedInteger"),
@@ -6809,7 +6809,7 @@ exactNumericLiteralUnsignedInteger x =
 
 exactNumericTypeBinary :: Phantoms.TTerm Grammar.BinaryExactNumericType -> Phantoms.TTerm Grammar.ExactNumericType
 exactNumericTypeBinary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "binary"),
@@ -6817,7 +6817,7 @@ exactNumericTypeBinary x =
 
 exactNumericTypeDecimal :: Phantoms.TTerm Grammar.DecimalExactNumericType -> Phantoms.TTerm Grammar.ExactNumericType
 exactNumericTypeDecimal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "decimal"),
@@ -6825,7 +6825,7 @@ exactNumericTypeDecimal x =
 
 existsPredicateGraphPatternBrace :: Phantoms.TTerm Grammar.GraphPattern -> Phantoms.TTerm Grammar.ExistsPredicate
 existsPredicateGraphPatternBrace x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ExistsPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "graphPatternBrace"),
@@ -6833,7 +6833,7 @@ existsPredicateGraphPatternBrace x =
 
 existsPredicateGraphPatternParen :: Phantoms.TTerm Grammar.GraphPattern -> Phantoms.TTerm Grammar.ExistsPredicate
 existsPredicateGraphPatternParen x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ExistsPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "graphPatternParen"),
@@ -6841,7 +6841,7 @@ existsPredicateGraphPatternParen x =
 
 existsPredicateMatchBlockBrace :: Phantoms.TTerm Grammar.MatchStatementBlock -> Phantoms.TTerm Grammar.ExistsPredicate
 existsPredicateMatchBlockBrace x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ExistsPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "matchBlockBrace"),
@@ -6849,7 +6849,7 @@ existsPredicateMatchBlockBrace x =
 
 existsPredicateMatchBlockParen :: Phantoms.TTerm Grammar.MatchStatementBlock -> Phantoms.TTerm Grammar.ExistsPredicate
 existsPredicateMatchBlockParen x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ExistsPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "matchBlockParen"),
@@ -6857,7 +6857,7 @@ existsPredicateMatchBlockParen x =
 
 existsPredicateNestedQuery :: Phantoms.TTerm Grammar.NestedQuerySpecification -> Phantoms.TTerm Grammar.ExistsPredicate
 existsPredicateNestedQuery x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ExistsPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nestedQuery"),
@@ -7033,7 +7033,7 @@ fieldWithValue original newVal =
 
 filterStatementSearchCondition :: Phantoms.TTerm Grammar.SearchCondition -> Phantoms.TTerm Grammar.FilterStatement
 filterStatementSearchCondition x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.FilterStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "searchCondition"),
@@ -7041,7 +7041,7 @@ filterStatementSearchCondition x =
 
 filterStatementWhereClause :: Phantoms.TTerm Grammar.WhereClause -> Phantoms.TTerm Grammar.FilterStatement
 filterStatementWhereClause x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.FilterStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "whereClause"),
@@ -7347,7 +7347,7 @@ focusedLinearDataModifyingStatementBodyWithUseGraph original newVal =
 
 focusedLinearDataModifyingStatementNested :: Phantoms.TTerm Grammar.FocusedNestedDataModifyingProcedureSpecification -> Phantoms.TTerm Grammar.FocusedLinearDataModifyingStatement
 focusedLinearDataModifyingStatementNested x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.FocusedLinearDataModifyingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nested"),
@@ -7355,7 +7355,7 @@ focusedLinearDataModifyingStatementNested x =
 
 focusedLinearDataModifyingStatementSimple :: Phantoms.TTerm Grammar.FocusedLinearDataModifyingStatementBody -> Phantoms.TTerm Grammar.FocusedLinearDataModifyingStatement
 focusedLinearDataModifyingStatementSimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.FocusedLinearDataModifyingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -7471,7 +7471,7 @@ focusedLinearQueryAndPrimitiveResultStatementPartWithUseGraph original newVal =
 
 focusedLinearQueryStatementNested :: Phantoms.TTerm Grammar.FocusedNestedQuerySpecification -> Phantoms.TTerm Grammar.FocusedLinearQueryStatement
 focusedLinearQueryStatementNested x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nested"),
@@ -7539,7 +7539,7 @@ focusedLinearQueryStatementPartWithUseGraph original newVal =
 
 focusedLinearQueryStatementParts :: Phantoms.TTerm Grammar.FocusedLinearQueryStatementPartsAndResult -> Phantoms.TTerm Grammar.FocusedLinearQueryStatement
 focusedLinearQueryStatementParts x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parts"),
@@ -7607,7 +7607,7 @@ focusedLinearQueryStatementPartsAndResultWithResult original newVal =
 
 focusedLinearQueryStatementPrimitive :: Phantoms.TTerm Grammar.FocusedPrimitiveResultStatement -> Phantoms.TTerm Grammar.FocusedLinearQueryStatement
 focusedLinearQueryStatementPrimitive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primitive"),
@@ -7615,7 +7615,7 @@ focusedLinearQueryStatementPrimitive x =
 
 focusedLinearQueryStatementSelect :: Phantoms.TTerm Grammar.SelectStatement -> Phantoms.TTerm Grammar.FocusedLinearQueryStatement
 focusedLinearQueryStatementSelect x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "select"),
@@ -8043,7 +8043,7 @@ forStatementWithOrdinalityOrOffset original newVal =
 
 fullEdgePatternAnyDirection :: Phantoms.TTerm Grammar.FullEdgeAnyDirection -> Phantoms.TTerm Grammar.FullEdgePattern
 fullEdgePatternAnyDirection x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.FullEdgePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "anyDirection"),
@@ -8051,7 +8051,7 @@ fullEdgePatternAnyDirection x =
 
 fullEdgePatternLeftOrRight :: Phantoms.TTerm Grammar.FullEdgeLeftOrRight -> Phantoms.TTerm Grammar.FullEdgePattern
 fullEdgePatternLeftOrRight x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.FullEdgePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "leftOrRight"),
@@ -8059,7 +8059,7 @@ fullEdgePatternLeftOrRight x =
 
 fullEdgePatternLeftOrUndirected :: Phantoms.TTerm Grammar.FullEdgeLeftOrUndirected -> Phantoms.TTerm Grammar.FullEdgePattern
 fullEdgePatternLeftOrUndirected x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.FullEdgePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "leftOrUndirected"),
@@ -8067,7 +8067,7 @@ fullEdgePatternLeftOrUndirected x =
 
 fullEdgePatternPointingLeft :: Phantoms.TTerm Grammar.FullEdgePointingLeft -> Phantoms.TTerm Grammar.FullEdgePattern
 fullEdgePatternPointingLeft x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.FullEdgePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pointingLeft"),
@@ -8075,7 +8075,7 @@ fullEdgePatternPointingLeft x =
 
 fullEdgePatternPointingRight :: Phantoms.TTerm Grammar.FullEdgePointingRight -> Phantoms.TTerm Grammar.FullEdgePattern
 fullEdgePatternPointingRight x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.FullEdgePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pointingRight"),
@@ -8083,7 +8083,7 @@ fullEdgePatternPointingRight x =
 
 fullEdgePatternUndirected :: Phantoms.TTerm Grammar.FullEdgeUndirected -> Phantoms.TTerm Grammar.FullEdgePattern
 fullEdgePatternUndirected x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.FullEdgePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "undirected"),
@@ -8091,7 +8091,7 @@ fullEdgePatternUndirected x =
 
 fullEdgePatternUndirectedOrRight :: Phantoms.TTerm Grammar.FullEdgeUndirectedOrRight -> Phantoms.TTerm Grammar.FullEdgePattern
 fullEdgePatternUndirectedOrRight x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.FullEdgePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "undirectedOrRight"),
@@ -8099,7 +8099,7 @@ fullEdgePatternUndirectedOrRight x =
 
 generalLiteralBoolean :: Phantoms.TTerm Grammar.BooleanLiteral -> Phantoms.TTerm Grammar.GeneralLiteral
 generalLiteralBoolean x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GeneralLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -8107,7 +8107,7 @@ generalLiteralBoolean x =
 
 generalLiteralByteString :: Phantoms.TTerm Grammar.ByteStringLiteral -> Phantoms.TTerm Grammar.GeneralLiteral
 generalLiteralByteString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GeneralLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "byteString"),
@@ -8115,7 +8115,7 @@ generalLiteralByteString x =
 
 generalLiteralCharacterString :: Phantoms.TTerm Grammar.CharacterStringLiteral -> Phantoms.TTerm Grammar.GeneralLiteral
 generalLiteralCharacterString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GeneralLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "characterString"),
@@ -8123,7 +8123,7 @@ generalLiteralCharacterString x =
 
 generalLiteralDuration :: Phantoms.TTerm Grammar.DurationLiteral -> Phantoms.TTerm Grammar.GeneralLiteral
 generalLiteralDuration x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GeneralLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "duration"),
@@ -8131,7 +8131,7 @@ generalLiteralDuration x =
 
 generalLiteralList :: Phantoms.TTerm Grammar.ListLiteral -> Phantoms.TTerm Grammar.GeneralLiteral
 generalLiteralList x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GeneralLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -8139,7 +8139,7 @@ generalLiteralList x =
 
 generalLiteralNullLiteral :: Phantoms.TTerm Grammar.NullLiteral -> Phantoms.TTerm Grammar.GeneralLiteral
 generalLiteralNullLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GeneralLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nullLiteral"),
@@ -8147,7 +8147,7 @@ generalLiteralNullLiteral x =
 
 generalLiteralRecord :: Phantoms.TTerm Grammar.RecordLiteral -> Phantoms.TTerm Grammar.GeneralLiteral
 generalLiteralRecord x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GeneralLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "record"),
@@ -8155,7 +8155,7 @@ generalLiteralRecord x =
 
 generalLiteralTemporal :: Phantoms.TTerm Grammar.TemporalLiteral -> Phantoms.TTerm Grammar.GeneralLiteral
 generalLiteralTemporal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GeneralLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "temporal"),
@@ -8314,7 +8314,7 @@ generalSetFunctionSetQuantifier x =
 
 generalSetFunctionTypeAvg :: Phantoms.TTerm Grammar.GeneralSetFunctionType
 generalSetFunctionTypeAvg =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GeneralSetFunctionType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "avg"),
@@ -8322,7 +8322,7 @@ generalSetFunctionTypeAvg =
 
 generalSetFunctionTypeCollectList :: Phantoms.TTerm Grammar.GeneralSetFunctionType
 generalSetFunctionTypeCollectList =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GeneralSetFunctionType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "collectList"),
@@ -8330,7 +8330,7 @@ generalSetFunctionTypeCollectList =
 
 generalSetFunctionTypeCount :: Phantoms.TTerm Grammar.GeneralSetFunctionType
 generalSetFunctionTypeCount =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GeneralSetFunctionType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "count"),
@@ -8338,7 +8338,7 @@ generalSetFunctionTypeCount =
 
 generalSetFunctionTypeMax :: Phantoms.TTerm Grammar.GeneralSetFunctionType
 generalSetFunctionTypeMax =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GeneralSetFunctionType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "max"),
@@ -8346,7 +8346,7 @@ generalSetFunctionTypeMax =
 
 generalSetFunctionTypeMin :: Phantoms.TTerm Grammar.GeneralSetFunctionType
 generalSetFunctionTypeMin =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GeneralSetFunctionType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "min"),
@@ -8354,7 +8354,7 @@ generalSetFunctionTypeMin =
 
 generalSetFunctionTypeStddevPop :: Phantoms.TTerm Grammar.GeneralSetFunctionType
 generalSetFunctionTypeStddevPop =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GeneralSetFunctionType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "stddevPop"),
@@ -8362,7 +8362,7 @@ generalSetFunctionTypeStddevPop =
 
 generalSetFunctionTypeStddevSamp :: Phantoms.TTerm Grammar.GeneralSetFunctionType
 generalSetFunctionTypeStddevSamp =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GeneralSetFunctionType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "stddevSamp"),
@@ -8370,7 +8370,7 @@ generalSetFunctionTypeStddevSamp =
 
 generalSetFunctionTypeSum :: Phantoms.TTerm Grammar.GeneralSetFunctionType
 generalSetFunctionTypeSum =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GeneralSetFunctionType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sum"),
@@ -8455,7 +8455,7 @@ generalSetFunctionWithValueExpression original newVal =
 
 generalValueSpecificationDynamicParameterSpecification :: Phantoms.TTerm Grammar.DynamicParameterSpecification -> Phantoms.TTerm Grammar.GeneralValueSpecification
 generalValueSpecificationDynamicParameterSpecification x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GeneralValueSpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dynamicParameterSpecification"),
@@ -8463,7 +8463,7 @@ generalValueSpecificationDynamicParameterSpecification x =
 
 generalValueSpecificationSessionUser :: Phantoms.TTerm Grammar.GeneralValueSpecification
 generalValueSpecificationSessionUser =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GeneralValueSpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sessionUser"),
@@ -8591,7 +8591,7 @@ graphAndNestedQuerySpecificationWithNested original newVal =
 
 graphExpressionCurrent :: Phantoms.TTerm Grammar.CurrentGraph -> Phantoms.TTerm Grammar.GraphExpression
 graphExpressionCurrent x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "current"),
@@ -8599,7 +8599,7 @@ graphExpressionCurrent x =
 
 graphExpressionName :: Phantoms.TTerm Grammar.ObjectNameOrBindingVariable -> Phantoms.TTerm Grammar.GraphExpression
 graphExpressionName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "name"),
@@ -8607,7 +8607,7 @@ graphExpressionName x =
 
 graphExpressionObject :: Phantoms.TTerm Grammar.ObjectExpressionPrimary -> Phantoms.TTerm Grammar.GraphExpression
 graphExpressionObject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "object"),
@@ -8615,7 +8615,7 @@ graphExpressionObject x =
 
 graphExpressionReference :: Phantoms.TTerm Grammar.GraphReference -> Phantoms.TTerm Grammar.GraphExpression
 graphExpressionReference x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "reference"),
@@ -8725,7 +8725,7 @@ graphPatternPathPatterns x =
 
 graphPatternQuantifierAsterisk :: Phantoms.TTerm Grammar.GraphPatternQuantifier
 graphPatternQuantifierAsterisk =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphPatternQuantifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "asterisk"),
@@ -8733,7 +8733,7 @@ graphPatternQuantifierAsterisk =
 
 graphPatternQuantifierFixed :: Phantoms.TTerm Grammar.FixedQuantifier -> Phantoms.TTerm Grammar.GraphPatternQuantifier
 graphPatternQuantifierFixed x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphPatternQuantifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fixed"),
@@ -8741,7 +8741,7 @@ graphPatternQuantifierFixed x =
 
 graphPatternQuantifierGeneral :: Phantoms.TTerm Grammar.GeneralQuantifier -> Phantoms.TTerm Grammar.GraphPatternQuantifier
 graphPatternQuantifierGeneral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphPatternQuantifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "general"),
@@ -8749,7 +8749,7 @@ graphPatternQuantifierGeneral x =
 
 graphPatternQuantifierPlusSign :: Phantoms.TTerm Grammar.GraphPatternQuantifier
 graphPatternQuantifierPlusSign =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphPatternQuantifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "plusSign"),
@@ -8885,7 +8885,7 @@ graphPatternWithWhereClause original newVal =
 
 graphPatternYieldItemListItems :: Phantoms.TTerm [Grammar.GraphPatternYieldItem] -> Phantoms.TTerm Grammar.GraphPatternYieldItemList
 graphPatternYieldItemListItems x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphPatternYieldItemList"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "items"),
@@ -8893,7 +8893,7 @@ graphPatternYieldItemListItems x =
 
 graphPatternYieldItemListNoBindings :: Phantoms.TTerm Grammar.GraphPatternYieldItemList
 graphPatternYieldItemListNoBindings =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphPatternYieldItemList"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "noBindings"),
@@ -8901,7 +8901,7 @@ graphPatternYieldItemListNoBindings =
 
 graphReferenceDelimitedGraphName :: Phantoms.TTerm Grammar.DelimitedGraphName -> Phantoms.TTerm Grammar.GraphReference
 graphReferenceDelimitedGraphName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "delimitedGraphName"),
@@ -8909,7 +8909,7 @@ graphReferenceDelimitedGraphName x =
 
 graphReferenceHomeGraph :: Phantoms.TTerm Grammar.HomeGraph -> Phantoms.TTerm Grammar.GraphReference
 graphReferenceHomeGraph x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "homeGraph"),
@@ -8917,7 +8917,7 @@ graphReferenceHomeGraph x =
 
 graphReferenceParameterSpecification :: Phantoms.TTerm Grammar.ReferenceParameterSpecification -> Phantoms.TTerm Grammar.GraphReference
 graphReferenceParameterSpecification x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parameterSpecification"),
@@ -8925,7 +8925,7 @@ graphReferenceParameterSpecification x =
 
 graphReferenceParentAndGraphName :: Phantoms.TTerm Grammar.ParentAndGraphName -> Phantoms.TTerm Grammar.GraphReference
 graphReferenceParentAndGraphName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parentAndGraphName"),
@@ -8933,7 +8933,7 @@ graphReferenceParentAndGraphName x =
 
 graphReferenceValueTypeClosed :: Phantoms.TTerm Grammar.ClosedGraphReferenceValueType -> Phantoms.TTerm Grammar.GraphReferenceValueType
 graphReferenceValueTypeClosed x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphReferenceValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "closed"),
@@ -8941,7 +8941,7 @@ graphReferenceValueTypeClosed x =
 
 graphReferenceValueTypeOpen :: Phantoms.TTerm Grammar.OpenGraphReferenceValueType -> Phantoms.TTerm Grammar.GraphReferenceValueType
 graphReferenceValueTypeOpen x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphReferenceValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "open"),
@@ -8949,7 +8949,7 @@ graphReferenceValueTypeOpen x =
 
 graphTypeOptionOfGraphType :: Phantoms.TTerm Grammar.OfGraphType -> Phantoms.TTerm Grammar.GraphTypeOption
 graphTypeOptionOfGraphType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphTypeOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ofGraphType"),
@@ -8957,7 +8957,7 @@ graphTypeOptionOfGraphType x =
 
 graphTypeOptionOpenGraphType :: Phantoms.TTerm Grammar.OpenGraphType -> Phantoms.TTerm Grammar.GraphTypeOption
 graphTypeOptionOpenGraphType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphTypeOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "openGraphType"),
@@ -8965,7 +8965,7 @@ graphTypeOptionOpenGraphType x =
 
 graphTypeReferenceParameterSpecification :: Phantoms.TTerm Grammar.ReferenceParameterSpecification -> Phantoms.TTerm Grammar.GraphTypeReference
 graphTypeReferenceParameterSpecification x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphTypeReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parameterSpecification"),
@@ -8973,7 +8973,7 @@ graphTypeReferenceParameterSpecification x =
 
 graphTypeReferenceParentAndTypeName :: Phantoms.TTerm Grammar.CatalogGraphTypeParentAndName -> Phantoms.TTerm Grammar.GraphTypeReference
 graphTypeReferenceParentAndTypeName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphTypeReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parentAndTypeName"),
@@ -8981,7 +8981,7 @@ graphTypeReferenceParentAndTypeName x =
 
 graphTypeSourceCopyOf :: Phantoms.TTerm Grammar.CopyOfGraphType -> Phantoms.TTerm Grammar.GraphTypeSource
 graphTypeSourceCopyOf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphTypeSource"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "copyOf"),
@@ -8989,7 +8989,7 @@ graphTypeSourceCopyOf x =
 
 graphTypeSourceLikeGraph :: Phantoms.TTerm Grammar.GraphTypeLikeGraph -> Phantoms.TTerm Grammar.GraphTypeSource
 graphTypeSourceLikeGraph x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphTypeSource"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "likeGraph"),
@@ -8997,7 +8997,7 @@ graphTypeSourceLikeGraph x =
 
 graphTypeSourceNestedSpecification :: Phantoms.TTerm Grammar.NestedGraphTypeSpecification -> Phantoms.TTerm Grammar.GraphTypeSource
 graphTypeSourceNestedSpecification x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GraphTypeSource"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nestedSpecification"),
@@ -9065,7 +9065,7 @@ graphVariableDefinitionWithVariable original newVal =
 
 groupingElementListElements :: Phantoms.TTerm [Grammar.GroupingElement] -> Phantoms.TTerm Grammar.GroupingElementList
 groupingElementListElements x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GroupingElementList"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "elements"),
@@ -9073,7 +9073,7 @@ groupingElementListElements x =
 
 groupingElementListEmptySet :: Phantoms.TTerm Grammar.GroupingElementList
 groupingElementListEmptySet =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.GroupingElementList"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "emptySet"),
@@ -9081,7 +9081,7 @@ groupingElementListEmptySet =
 
 homeGraphHomeGraph :: Phantoms.TTerm Grammar.HomeGraph
 homeGraphHomeGraph =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.HomeGraph"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "homeGraph"),
@@ -9089,7 +9089,7 @@ homeGraphHomeGraph =
 
 homeGraphHomePropertyGraph :: Phantoms.TTerm Grammar.HomeGraph
 homeGraphHomePropertyGraph =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.HomeGraph"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "homePropertyGraph"),
@@ -9097,7 +9097,7 @@ homeGraphHomePropertyGraph =
 
 immaterialValueTypeEmptyType :: Phantoms.TTerm Grammar.EmptyType -> Phantoms.TTerm Grammar.ImmaterialValueType
 immaterialValueTypeEmptyType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ImmaterialValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "emptyType"),
@@ -9105,7 +9105,7 @@ immaterialValueTypeEmptyType x =
 
 immaterialValueTypeNullType :: Phantoms.TTerm Grammar.NullType -> Phantoms.TTerm Grammar.ImmaterialValueType
 immaterialValueTypeNullType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ImmaterialValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nullType"),
@@ -9113,7 +9113,7 @@ immaterialValueTypeNullType x =
 
 impliesImplies :: Phantoms.TTerm Grammar.Implies
 impliesImplies =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Implies"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "implies"),
@@ -9121,7 +9121,7 @@ impliesImplies =
 
 impliesRightDoubleArrow :: Phantoms.TTerm Grammar.Implies
 impliesRightDoubleArrow =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Implies"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rightDoubleArrow"),
@@ -9249,7 +9249,7 @@ insertEdgeAndNodeWithNode original newVal =
 
 insertEdgePatternPointingLeft :: Phantoms.TTerm Grammar.InsertEdgePointingLeft -> Phantoms.TTerm Grammar.InsertEdgePattern
 insertEdgePatternPointingLeft x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.InsertEdgePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pointingLeft"),
@@ -9257,7 +9257,7 @@ insertEdgePatternPointingLeft x =
 
 insertEdgePatternPointingRight :: Phantoms.TTerm Grammar.InsertEdgePointingRight -> Phantoms.TTerm Grammar.InsertEdgePattern
 insertEdgePatternPointingRight x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.InsertEdgePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pointingRight"),
@@ -9265,7 +9265,7 @@ insertEdgePatternPointingRight x =
 
 insertEdgePatternUndirected :: Phantoms.TTerm Grammar.InsertEdgeUndirected -> Phantoms.TTerm Grammar.InsertEdgePattern
 insertEdgePatternUndirected x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.InsertEdgePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "undirected"),
@@ -9885,7 +9885,7 @@ isLabelExpressionWithLabel original newVal =
 
 isLabeledOrColonColon :: Phantoms.TTerm Grammar.IsLabeledOrColon
 isLabeledOrColonColon =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.IsLabeledOrColon"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "colon"),
@@ -9893,7 +9893,7 @@ isLabeledOrColonColon =
 
 isLabeledOrColonNot :: Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.IsLabeledOrColon
 isLabeledOrColonNot x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.IsLabeledOrColon"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "not"),
@@ -10009,7 +10009,7 @@ isNotExprWithValueExpression original newVal =
 
 isOrColonColon :: Phantoms.TTerm Grammar.IsOrColon
 isOrColonColon =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.IsOrColon"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "colon"),
@@ -10017,7 +10017,7 @@ isOrColonColon =
 
 isOrColonIs :: Phantoms.TTerm Grammar.IsOrColon
 isOrColonIs =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.IsOrColon"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "is"),
@@ -10193,7 +10193,7 @@ labelAndPropertySetSpecificationWithPropertySpecification original newVal =
 
 labelExpressionConjunction :: Phantoms.TTerm Grammar.ConjunctionLabelExpression -> Phantoms.TTerm Grammar.LabelExpression
 labelExpressionConjunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LabelExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "conjunction"),
@@ -10201,7 +10201,7 @@ labelExpressionConjunction x =
 
 labelExpressionDisjunction :: Phantoms.TTerm Grammar.DisjunctionLabelExpression -> Phantoms.TTerm Grammar.LabelExpression
 labelExpressionDisjunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LabelExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "disjunction"),
@@ -10209,7 +10209,7 @@ labelExpressionDisjunction x =
 
 labelExpressionName :: Phantoms.TTerm Grammar.LabelName -> Phantoms.TTerm Grammar.LabelExpression
 labelExpressionName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LabelExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "name"),
@@ -10217,7 +10217,7 @@ labelExpressionName x =
 
 labelExpressionNegation :: Phantoms.TTerm Grammar.LabelExpression -> Phantoms.TTerm Grammar.LabelExpression
 labelExpressionNegation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LabelExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "negation"),
@@ -10225,7 +10225,7 @@ labelExpressionNegation x =
 
 labelExpressionParenthesized :: Phantoms.TTerm Grammar.LabelExpression -> Phantoms.TTerm Grammar.LabelExpression
 labelExpressionParenthesized x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LabelExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parenthesized"),
@@ -10233,7 +10233,7 @@ labelExpressionParenthesized x =
 
 labelExpressionWildcard :: Phantoms.TTerm Grammar.LabelExpression
 labelExpressionWildcard =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LabelExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "wildcard"),
@@ -10241,7 +10241,7 @@ labelExpressionWildcard =
 
 labelSetPhraseIsOrColonWithLabels :: Phantoms.TTerm Grammar.IsOrColonWithLabels -> Phantoms.TTerm Grammar.LabelSetPhrase
 labelSetPhraseIsOrColonWithLabels x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LabelSetPhrase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "isOrColonWithLabels"),
@@ -10249,7 +10249,7 @@ labelSetPhraseIsOrColonWithLabels x =
 
 labelSetPhraseMultipleLabels :: Phantoms.TTerm Grammar.LabelSetSpecification -> Phantoms.TTerm Grammar.LabelSetPhrase
 labelSetPhraseMultipleLabels x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LabelSetPhrase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multipleLabels"),
@@ -10257,7 +10257,7 @@ labelSetPhraseMultipleLabels x =
 
 labelSetPhraseSingleLabel :: Phantoms.TTerm Grammar.LabelName -> Phantoms.TTerm Grammar.LabelSetPhrase
 labelSetPhraseSingleLabel x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LabelSetPhrase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "singleLabel"),
@@ -10385,7 +10385,7 @@ labeledPredicateWithLabeledPart original newVal =
 
 lengthExpressionByte :: Phantoms.TTerm Grammar.ByteLengthExpression -> Phantoms.TTerm Grammar.LengthExpression
 lengthExpressionByte x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LengthExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "byte"),
@@ -10393,7 +10393,7 @@ lengthExpressionByte x =
 
 lengthExpressionChar :: Phantoms.TTerm Grammar.CharLengthExpression -> Phantoms.TTerm Grammar.LengthExpression
 lengthExpressionChar x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LengthExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "char"),
@@ -10401,7 +10401,7 @@ lengthExpressionChar x =
 
 lengthExpressionPath :: Phantoms.TTerm Grammar.PathLengthExpression -> Phantoms.TTerm Grammar.LengthExpression
 lengthExpressionPath x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LengthExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "path"),
@@ -10469,7 +10469,7 @@ letValueExpressionWithValueExpression original newVal =
 
 letVariableDefinitionBindingEqualsValue :: Phantoms.TTerm Grammar.BindingEqualsValue -> Phantoms.TTerm Grammar.LetVariableDefinition
 letVariableDefinitionBindingEqualsValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LetVariableDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bindingEqualsValue"),
@@ -10477,7 +10477,7 @@ letVariableDefinitionBindingEqualsValue x =
 
 letVariableDefinitionValueVariable :: Phantoms.TTerm Grammar.ValueVariableDefinition -> Phantoms.TTerm Grammar.LetVariableDefinition
 letVariableDefinitionValueVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LetVariableDefinition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "valueVariable"),
@@ -10485,7 +10485,7 @@ letVariableDefinitionValueVariable x =
 
 linearDataModifyingStatementAmbient :: Phantoms.TTerm Grammar.AmbientLinearDataModifyingStatement -> Phantoms.TTerm Grammar.LinearDataModifyingStatement
 linearDataModifyingStatementAmbient x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LinearDataModifyingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ambient"),
@@ -10493,7 +10493,7 @@ linearDataModifyingStatementAmbient x =
 
 linearDataModifyingStatementFocused :: Phantoms.TTerm Grammar.FocusedLinearDataModifyingStatement -> Phantoms.TTerm Grammar.LinearDataModifyingStatement
 linearDataModifyingStatementFocused x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LinearDataModifyingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "focused"),
@@ -10501,7 +10501,7 @@ linearDataModifyingStatementFocused x =
 
 linearQueryStatementAmbient :: Phantoms.TTerm Grammar.AmbientLinearQueryStatement -> Phantoms.TTerm Grammar.LinearQueryStatement
 linearQueryStatementAmbient x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LinearQueryStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ambient"),
@@ -10509,7 +10509,7 @@ linearQueryStatementAmbient x =
 
 linearQueryStatementFocused :: Phantoms.TTerm Grammar.FocusedLinearQueryStatement -> Phantoms.TTerm Grammar.LinearQueryStatement
 linearQueryStatementFocused x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LinearQueryStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "focused"),
@@ -10577,7 +10577,7 @@ listValueConstructorByEnumerationWithListValueTypeName original newVal =
 
 listValueFunctionElements :: Phantoms.TTerm Grammar.ElementsFunction -> Phantoms.TTerm Grammar.ListValueFunction
 listValueFunctionElements x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ListValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "elements"),
@@ -10585,7 +10585,7 @@ listValueFunctionElements x =
 
 listValueFunctionTrim :: Phantoms.TTerm Grammar.TrimListFunction -> Phantoms.TTerm Grammar.ListValueFunction
 listValueFunctionTrim x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ListValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "trim"),
@@ -11069,7 +11069,7 @@ listValueTypeNameSynonym x =
 
 listValueTypeNameSynonymArray :: Phantoms.TTerm Grammar.ListValueTypeNameSynonym
 listValueTypeNameSynonymArray =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ListValueTypeNameSynonym"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "array"),
@@ -11077,7 +11077,7 @@ listValueTypeNameSynonymArray =
 
 listValueTypeNameSynonymList :: Phantoms.TTerm Grammar.ListValueTypeNameSynonym
 listValueTypeNameSynonymList =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ListValueTypeNameSynonym"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -11169,7 +11169,7 @@ localTimeTypeWithNotNull original newVal =
 
 localdatetimeFunctionLocalDatetimeWithParams :: Phantoms.TTerm (Maybe Grammar.DatetimeFunctionParameters) -> Phantoms.TTerm Grammar.LocaldatetimeFunction
 localdatetimeFunctionLocalDatetimeWithParams x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LocaldatetimeFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "localDatetimeWithParams"),
@@ -11177,7 +11177,7 @@ localdatetimeFunctionLocalDatetimeWithParams x =
 
 localdatetimeFunctionLocalTimestamp :: Phantoms.TTerm Grammar.LocaldatetimeFunction
 localdatetimeFunctionLocalTimestamp =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LocaldatetimeFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "localTimestamp"),
@@ -11185,7 +11185,7 @@ localdatetimeFunctionLocalTimestamp =
 
 localdatetimeTypeLocalDatetime :: Phantoms.TTerm Grammar.LocalDatetimeType -> Phantoms.TTerm Grammar.LocaldatetimeType
 localdatetimeTypeLocalDatetime x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LocaldatetimeType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "localDatetime"),
@@ -11193,7 +11193,7 @@ localdatetimeTypeLocalDatetime x =
 
 localdatetimeTypeTimestampWithoutTimeZone :: Phantoms.TTerm Grammar.TimestampWithoutTimeZoneType -> Phantoms.TTerm Grammar.LocaldatetimeType
 localdatetimeTypeTimestampWithoutTimeZone x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LocaldatetimeType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "timestampWithoutTimeZone"),
@@ -11201,7 +11201,7 @@ localdatetimeTypeTimestampWithoutTimeZone x =
 
 localtimeTypeLocalTime :: Phantoms.TTerm Grammar.LocalTimeType -> Phantoms.TTerm Grammar.LocaltimeType
 localtimeTypeLocalTime x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LocaltimeType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "localTime"),
@@ -11209,7 +11209,7 @@ localtimeTypeLocalTime x =
 
 localtimeTypeTimeWithoutTimeZone :: Phantoms.TTerm Grammar.TimeWithoutTimeZoneType -> Phantoms.TTerm Grammar.LocaltimeType
 localtimeTypeTimeWithoutTimeZone x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.LocaltimeType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "timeWithoutTimeZone"),
@@ -11217,7 +11217,7 @@ localtimeTypeTimeWithoutTimeZone x =
 
 matchModeDifferentEdges :: Phantoms.TTerm Grammar.DifferentEdgesMatchMode -> Phantoms.TTerm Grammar.MatchMode
 matchModeDifferentEdges x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.MatchMode"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "differentEdges"),
@@ -11225,7 +11225,7 @@ matchModeDifferentEdges x =
 
 matchModeRepeatableElements :: Phantoms.TTerm Grammar.RepeatableElementsMatchMode -> Phantoms.TTerm Grammar.MatchMode
 matchModeRepeatableElements x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.MatchMode"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "repeatableElements"),
@@ -11233,7 +11233,7 @@ matchModeRepeatableElements x =
 
 matchStatementOptional :: Phantoms.TTerm Grammar.OptionalMatchStatement -> Phantoms.TTerm Grammar.MatchStatement
 matchStatementOptional x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.MatchStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "optional"),
@@ -11241,7 +11241,7 @@ matchStatementOptional x =
 
 matchStatementSimple :: Phantoms.TTerm Grammar.SimpleMatchStatement -> Phantoms.TTerm Grammar.MatchStatement
 matchStatementSimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.MatchStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -11525,7 +11525,7 @@ multDivExprWithRight original newVal =
 
 multDivOperatorDivide :: Phantoms.TTerm Grammar.MultDivOperator
 multDivOperatorDivide =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.MultDivOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "divide"),
@@ -11533,7 +11533,7 @@ multDivOperatorDivide =
 
 multDivOperatorMultiply :: Phantoms.TTerm Grammar.MultDivOperator
 multDivOperatorMultiply =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.MultDivOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multiply"),
@@ -11829,7 +11829,7 @@ nodeLabelSetWithPropertiesWithPropertyTypes original newVal =
 
 nodeReferenceValueTypeClosed :: Phantoms.TTerm Grammar.ClosedNodeReferenceValueType -> Phantoms.TTerm Grammar.NodeReferenceValueType
 nodeReferenceValueTypeClosed x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NodeReferenceValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "closed"),
@@ -11837,7 +11837,7 @@ nodeReferenceValueTypeClosed x =
 
 nodeReferenceValueTypeOpen :: Phantoms.TTerm Grammar.OpenNodeReferenceValueType -> Phantoms.TTerm Grammar.NodeReferenceValueType
 nodeReferenceValueTypeOpen x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NodeReferenceValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "open"),
@@ -11905,7 +11905,7 @@ nodeSynonymAndTypeNameWithTypeName original newVal =
 
 nodeSynonymNode :: Phantoms.TTerm Grammar.NodeSynonym
 nodeSynonymNode =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NodeSynonym"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "node"),
@@ -11913,7 +11913,7 @@ nodeSynonymNode =
 
 nodeSynonymVertex :: Phantoms.TTerm Grammar.NodeSynonym
 nodeSynonymVertex =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NodeSynonym"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "vertex"),
@@ -11921,7 +11921,7 @@ nodeSynonymVertex =
 
 nodeTypeFillerImpliedContent :: Phantoms.TTerm Grammar.NodeTypeImpliedContent -> Phantoms.TTerm Grammar.NodeTypeFiller
 nodeTypeFillerImpliedContent x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NodeTypeFiller"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "impliedContent"),
@@ -11929,7 +11929,7 @@ nodeTypeFillerImpliedContent x =
 
 nodeTypeFillerKeyLabelSet :: Phantoms.TTerm Grammar.NodeKeyLabelSetWithContent -> Phantoms.TTerm Grammar.NodeTypeFiller
 nodeTypeFillerKeyLabelSet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NodeTypeFiller"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "keyLabelSet"),
@@ -11937,7 +11937,7 @@ nodeTypeFillerKeyLabelSet x =
 
 nodeTypeImpliedContentLabelSet :: Phantoms.TTerm Grammar.NodeTypeLabelSet -> Phantoms.TTerm Grammar.NodeTypeImpliedContent
 nodeTypeImpliedContentLabelSet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NodeTypeImpliedContent"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "labelSet"),
@@ -11945,7 +11945,7 @@ nodeTypeImpliedContentLabelSet x =
 
 nodeTypeImpliedContentLabelSetWithProperties :: Phantoms.TTerm Grammar.NodeLabelSetWithProperties -> Phantoms.TTerm Grammar.NodeTypeImpliedContent
 nodeTypeImpliedContentLabelSetWithProperties x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NodeTypeImpliedContent"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "labelSetWithProperties"),
@@ -11953,7 +11953,7 @@ nodeTypeImpliedContentLabelSetWithProperties x =
 
 nodeTypeImpliedContentPropertyTypes :: Phantoms.TTerm Grammar.NodeTypePropertyTypes -> Phantoms.TTerm Grammar.NodeTypeImpliedContent
 nodeTypeImpliedContentPropertyTypes x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NodeTypeImpliedContent"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "propertyTypes"),
@@ -12152,7 +12152,7 @@ nodeTypePhraseAlias x =
 
 nodeTypePhraseFillerFillerOnly :: Phantoms.TTerm Grammar.NodeTypeFiller -> Phantoms.TTerm Grammar.NodeTypePhraseFiller
 nodeTypePhraseFillerFillerOnly x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NodeTypePhraseFiller"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fillerOnly"),
@@ -12160,7 +12160,7 @@ nodeTypePhraseFillerFillerOnly x =
 
 nodeTypePhraseFillerTypeName :: Phantoms.TTerm Grammar.NodeTypeNameWithFiller -> Phantoms.TTerm Grammar.NodeTypePhraseFiller
 nodeTypePhraseFillerTypeName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NodeTypePhraseFiller"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeName"),
@@ -12253,7 +12253,7 @@ nodeTypePhraseWithTypePhraseFiller original newVal =
 
 nodeTypeSpecificationPattern :: Phantoms.TTerm Grammar.NodeTypePattern -> Phantoms.TTerm Grammar.NodeTypeSpecification
 nodeTypeSpecificationPattern x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NodeTypeSpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pattern"),
@@ -12261,7 +12261,7 @@ nodeTypeSpecificationPattern x =
 
 nodeTypeSpecificationPhrase :: Phantoms.TTerm Grammar.NodeTypePhrase -> Phantoms.TTerm Grammar.NodeTypeSpecification
 nodeTypeSpecificationPhrase x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NodeTypeSpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "phrase"),
@@ -12269,7 +12269,7 @@ nodeTypeSpecificationPhrase x =
 
 nonNegativeIntegerSpecificationDynamicParameterSpecification :: Phantoms.TTerm Grammar.DynamicParameterSpecification -> Phantoms.TTerm Grammar.NonNegativeIntegerSpecification
 nonNegativeIntegerSpecificationDynamicParameterSpecification x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NonNegativeIntegerSpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dynamicParameterSpecification"),
@@ -12277,7 +12277,7 @@ nonNegativeIntegerSpecificationDynamicParameterSpecification x =
 
 nonNegativeIntegerSpecificationUnsignedInteger :: Phantoms.TTerm Grammar.UnsignedInteger -> Phantoms.TTerm Grammar.NonNegativeIntegerSpecification
 nonNegativeIntegerSpecificationUnsignedInteger x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NonNegativeIntegerSpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unsignedInteger"),
@@ -12285,7 +12285,7 @@ nonNegativeIntegerSpecificationUnsignedInteger x =
 
 nonParenthesizedPrimaryValueExpressionBindingVariable :: Phantoms.TTerm Grammar.BindingVariableReference -> Phantoms.TTerm Grammar.NonParenthesizedPrimaryValueExpression
 nonParenthesizedPrimaryValueExpressionBindingVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NonParenthesizedPrimaryValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bindingVariable"),
@@ -12293,7 +12293,7 @@ nonParenthesizedPrimaryValueExpressionBindingVariable x =
 
 nonParenthesizedPrimaryValueExpressionSpecial :: Phantoms.TTerm Grammar.NonParenthesizedPrimaryValueExpressionSpecialCase -> Phantoms.TTerm Grammar.NonParenthesizedPrimaryValueExpression
 nonParenthesizedPrimaryValueExpressionSpecial x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NonParenthesizedPrimaryValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "special"),
@@ -12301,7 +12301,7 @@ nonParenthesizedPrimaryValueExpressionSpecial x =
 
 nonParenthesizedPrimaryValueExpressionSpecialCaseAggregateFunction :: Phantoms.TTerm Grammar.AggregateFunction -> Phantoms.TTerm Grammar.NonParenthesizedPrimaryValueExpressionSpecialCase
 nonParenthesizedPrimaryValueExpressionSpecialCaseAggregateFunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NonParenthesizedPrimaryValueExpressionSpecialCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "aggregateFunction"),
@@ -12309,7 +12309,7 @@ nonParenthesizedPrimaryValueExpressionSpecialCaseAggregateFunction x =
 
 nonParenthesizedPrimaryValueExpressionSpecialCaseCaseExpression :: Phantoms.TTerm Grammar.CaseExpression -> Phantoms.TTerm Grammar.NonParenthesizedPrimaryValueExpressionSpecialCase
 nonParenthesizedPrimaryValueExpressionSpecialCaseCaseExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NonParenthesizedPrimaryValueExpressionSpecialCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "caseExpression"),
@@ -12317,7 +12317,7 @@ nonParenthesizedPrimaryValueExpressionSpecialCaseCaseExpression x =
 
 nonParenthesizedPrimaryValueExpressionSpecialCaseCastSpecification :: Phantoms.TTerm Grammar.CastSpecification -> Phantoms.TTerm Grammar.NonParenthesizedPrimaryValueExpressionSpecialCase
 nonParenthesizedPrimaryValueExpressionSpecialCaseCastSpecification x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NonParenthesizedPrimaryValueExpressionSpecialCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "castSpecification"),
@@ -12325,7 +12325,7 @@ nonParenthesizedPrimaryValueExpressionSpecialCaseCastSpecification x =
 
 nonParenthesizedPrimaryValueExpressionSpecialCaseElementIdFunction :: Phantoms.TTerm Grammar.ElementIdFunction -> Phantoms.TTerm Grammar.NonParenthesizedPrimaryValueExpressionSpecialCase
 nonParenthesizedPrimaryValueExpressionSpecialCaseElementIdFunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NonParenthesizedPrimaryValueExpressionSpecialCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "elementIdFunction"),
@@ -12333,7 +12333,7 @@ nonParenthesizedPrimaryValueExpressionSpecialCaseElementIdFunction x =
 
 nonParenthesizedPrimaryValueExpressionSpecialCaseLetValueExpression :: Phantoms.TTerm Grammar.LetValueExpression -> Phantoms.TTerm Grammar.NonParenthesizedPrimaryValueExpressionSpecialCase
 nonParenthesizedPrimaryValueExpressionSpecialCaseLetValueExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NonParenthesizedPrimaryValueExpressionSpecialCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "letValueExpression"),
@@ -12341,7 +12341,7 @@ nonParenthesizedPrimaryValueExpressionSpecialCaseLetValueExpression x =
 
 nonParenthesizedPrimaryValueExpressionSpecialCasePathValueConstructor :: Phantoms.TTerm Grammar.PathValueConstructor -> Phantoms.TTerm Grammar.NonParenthesizedPrimaryValueExpressionSpecialCase
 nonParenthesizedPrimaryValueExpressionSpecialCasePathValueConstructor x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NonParenthesizedPrimaryValueExpressionSpecialCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pathValueConstructor"),
@@ -12349,7 +12349,7 @@ nonParenthesizedPrimaryValueExpressionSpecialCasePathValueConstructor x =
 
 nonParenthesizedPrimaryValueExpressionSpecialCasePropertyReference :: Phantoms.TTerm Grammar.PropertyReference -> Phantoms.TTerm Grammar.NonParenthesizedPrimaryValueExpressionSpecialCase
 nonParenthesizedPrimaryValueExpressionSpecialCasePropertyReference x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NonParenthesizedPrimaryValueExpressionSpecialCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "propertyReference"),
@@ -12357,7 +12357,7 @@ nonParenthesizedPrimaryValueExpressionSpecialCasePropertyReference x =
 
 nonParenthesizedPrimaryValueExpressionSpecialCaseUnsignedValueSpecification :: Phantoms.TTerm Grammar.UnsignedValueSpecification -> Phantoms.TTerm Grammar.NonParenthesizedPrimaryValueExpressionSpecialCase
 nonParenthesizedPrimaryValueExpressionSpecialCaseUnsignedValueSpecification x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NonParenthesizedPrimaryValueExpressionSpecialCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unsignedValueSpecification"),
@@ -12365,7 +12365,7 @@ nonParenthesizedPrimaryValueExpressionSpecialCaseUnsignedValueSpecification x =
 
 nonParenthesizedPrimaryValueExpressionSpecialCaseValueQueryExpression :: Phantoms.TTerm Grammar.ValueQueryExpression -> Phantoms.TTerm Grammar.NonParenthesizedPrimaryValueExpressionSpecialCase
 nonParenthesizedPrimaryValueExpressionSpecialCaseValueQueryExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NonParenthesizedPrimaryValueExpressionSpecialCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "valueQueryExpression"),
@@ -12373,7 +12373,7 @@ nonParenthesizedPrimaryValueExpressionSpecialCaseValueQueryExpression x =
 
 normalFormNfc :: Phantoms.TTerm Grammar.NormalForm
 normalFormNfc =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NormalForm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nfc"),
@@ -12381,7 +12381,7 @@ normalFormNfc =
 
 normalFormNfd :: Phantoms.TTerm Grammar.NormalForm
 normalFormNfd =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NormalForm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nfd"),
@@ -12389,7 +12389,7 @@ normalFormNfd =
 
 normalFormNfkc :: Phantoms.TTerm Grammar.NormalForm
 normalFormNfkc =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NormalForm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nfkc"),
@@ -12397,7 +12397,7 @@ normalFormNfkc =
 
 normalFormNfkd :: Phantoms.TTerm Grammar.NormalForm
 normalFormNfkd =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NormalForm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nfkd"),
@@ -12645,7 +12645,7 @@ nullIfAbbreviationWithSecond original newVal =
 
 nullOrderingNullsFirst :: Phantoms.TTerm Grammar.NullOrdering
 nullOrderingNullsFirst =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NullOrdering"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nullsFirst"),
@@ -12653,7 +12653,7 @@ nullOrderingNullsFirst =
 
 nullOrderingNullsLast :: Phantoms.TTerm Grammar.NullOrdering
 nullOrderingNullsLast =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NullOrdering"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nullsLast"),
@@ -12747,7 +12747,7 @@ nullPredicateWithValueExpression original newVal =
 
 numericTypeApproximate :: Phantoms.TTerm Grammar.ApproximateNumericType -> Phantoms.TTerm Grammar.NumericType
 numericTypeApproximate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "approximate"),
@@ -12755,7 +12755,7 @@ numericTypeApproximate x =
 
 numericTypeExact :: Phantoms.TTerm Grammar.ExactNumericType -> Phantoms.TTerm Grammar.NumericType
 numericTypeExact x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "exact"),
@@ -12763,7 +12763,7 @@ numericTypeExact x =
 
 numericValueExpressionAdditionOrSubtraction :: Phantoms.TTerm Grammar.AddSubNumericValueExpression -> Phantoms.TTerm Grammar.NumericValueExpression
 numericValueExpressionAdditionOrSubtraction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NumericValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "additionOrSubtraction"),
@@ -12771,7 +12771,7 @@ numericValueExpressionAdditionOrSubtraction x =
 
 numericValueExpressionFunction :: Phantoms.TTerm Grammar.NumericValueFunction -> Phantoms.TTerm Grammar.NumericValueExpression
 numericValueExpressionFunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NumericValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "function"),
@@ -12779,7 +12779,7 @@ numericValueExpressionFunction x =
 
 numericValueExpressionMultiplicationOrDivision :: Phantoms.TTerm Grammar.MulDivNumericValueExpression -> Phantoms.TTerm Grammar.NumericValueExpression
 numericValueExpressionMultiplicationOrDivision x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NumericValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multiplicationOrDivision"),
@@ -12787,7 +12787,7 @@ numericValueExpressionMultiplicationOrDivision x =
 
 numericValueExpressionPrimary :: Phantoms.TTerm Grammar.PrimaryValueExpression -> Phantoms.TTerm Grammar.NumericValueExpression
 numericValueExpressionPrimary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NumericValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primary"),
@@ -12795,7 +12795,7 @@ numericValueExpressionPrimary x =
 
 numericValueExpressionSigned :: Phantoms.TTerm Grammar.SignedNumericValueExpression -> Phantoms.TTerm Grammar.NumericValueExpression
 numericValueExpressionSigned x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NumericValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "signed"),
@@ -12803,7 +12803,7 @@ numericValueExpressionSigned x =
 
 numericValueFunctionAbsoluteValue :: Phantoms.TTerm Grammar.AbsoluteValueExpression -> Phantoms.TTerm Grammar.NumericValueFunction
 numericValueFunctionAbsoluteValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NumericValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "absoluteValue"),
@@ -12811,7 +12811,7 @@ numericValueFunctionAbsoluteValue x =
 
 numericValueFunctionCardinality :: Phantoms.TTerm Grammar.CardinalityExpression -> Phantoms.TTerm Grammar.NumericValueFunction
 numericValueFunctionCardinality x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NumericValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cardinality"),
@@ -12819,7 +12819,7 @@ numericValueFunctionCardinality x =
 
 numericValueFunctionCeiling :: Phantoms.TTerm Grammar.CeilingFunction -> Phantoms.TTerm Grammar.NumericValueFunction
 numericValueFunctionCeiling x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NumericValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ceiling"),
@@ -12827,7 +12827,7 @@ numericValueFunctionCeiling x =
 
 numericValueFunctionCommonLogarithm :: Phantoms.TTerm Grammar.CommonLogarithm -> Phantoms.TTerm Grammar.NumericValueFunction
 numericValueFunctionCommonLogarithm x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NumericValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "commonLogarithm"),
@@ -12835,7 +12835,7 @@ numericValueFunctionCommonLogarithm x =
 
 numericValueFunctionExponential :: Phantoms.TTerm Grammar.ExponentialFunction -> Phantoms.TTerm Grammar.NumericValueFunction
 numericValueFunctionExponential x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NumericValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "exponential"),
@@ -12843,7 +12843,7 @@ numericValueFunctionExponential x =
 
 numericValueFunctionFloor :: Phantoms.TTerm Grammar.FloorFunction -> Phantoms.TTerm Grammar.NumericValueFunction
 numericValueFunctionFloor x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NumericValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "floor"),
@@ -12851,7 +12851,7 @@ numericValueFunctionFloor x =
 
 numericValueFunctionLength :: Phantoms.TTerm Grammar.LengthExpression -> Phantoms.TTerm Grammar.NumericValueFunction
 numericValueFunctionLength x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NumericValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "length"),
@@ -12859,7 +12859,7 @@ numericValueFunctionLength x =
 
 numericValueFunctionLogarithm :: Phantoms.TTerm Grammar.GeneralLogarithmFunction -> Phantoms.TTerm Grammar.NumericValueFunction
 numericValueFunctionLogarithm x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NumericValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "logarithm"),
@@ -12867,7 +12867,7 @@ numericValueFunctionLogarithm x =
 
 numericValueFunctionModulus :: Phantoms.TTerm Grammar.ModulusExpression -> Phantoms.TTerm Grammar.NumericValueFunction
 numericValueFunctionModulus x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NumericValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "modulus"),
@@ -12875,7 +12875,7 @@ numericValueFunctionModulus x =
 
 numericValueFunctionNaturalLogarithm :: Phantoms.TTerm Grammar.NaturalLogarithm -> Phantoms.TTerm Grammar.NumericValueFunction
 numericValueFunctionNaturalLogarithm x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NumericValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "naturalLogarithm"),
@@ -12883,7 +12883,7 @@ numericValueFunctionNaturalLogarithm x =
 
 numericValueFunctionPower :: Phantoms.TTerm Grammar.PowerFunction -> Phantoms.TTerm Grammar.NumericValueFunction
 numericValueFunctionPower x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NumericValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "power"),
@@ -12891,7 +12891,7 @@ numericValueFunctionPower x =
 
 numericValueFunctionSquareRoot :: Phantoms.TTerm Grammar.SquareRoot -> Phantoms.TTerm Grammar.NumericValueFunction
 numericValueFunctionSquareRoot x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NumericValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "squareRoot"),
@@ -12899,7 +12899,7 @@ numericValueFunctionSquareRoot x =
 
 numericValueFunctionTrigonometric :: Phantoms.TTerm Grammar.TrigonometricFunction -> Phantoms.TTerm Grammar.NumericValueFunction
 numericValueFunctionTrigonometric x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.NumericValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "trigonometric"),
@@ -12907,7 +12907,7 @@ numericValueFunctionTrigonometric x =
 
 objectExpressionPrimaryNonParenthesized :: Phantoms.TTerm Grammar.NonParenthesizedPrimaryValueExpressionSpecialCase -> Phantoms.TTerm Grammar.ObjectExpressionPrimary
 objectExpressionPrimaryNonParenthesized x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ObjectExpressionPrimary"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nonParenthesized"),
@@ -12915,7 +12915,7 @@ objectExpressionPrimaryNonParenthesized x =
 
 objectExpressionPrimaryParenthesized :: Phantoms.TTerm Grammar.ParenthesizedValueExpression -> Phantoms.TTerm Grammar.ObjectExpressionPrimary
 objectExpressionPrimaryParenthesized x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ObjectExpressionPrimary"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parenthesized"),
@@ -12923,7 +12923,7 @@ objectExpressionPrimaryParenthesized x =
 
 objectExpressionPrimaryVariable :: Phantoms.TTerm Grammar.PrimaryValueExpression -> Phantoms.TTerm Grammar.ObjectExpressionPrimary
 objectExpressionPrimaryVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ObjectExpressionPrimary"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -12931,7 +12931,7 @@ objectExpressionPrimaryVariable x =
 
 ofGraphTypeLikeGraph :: Phantoms.TTerm Grammar.GraphTypeLikeGraph -> Phantoms.TTerm Grammar.OfGraphType
 ofGraphTypeLikeGraph x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.OfGraphType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "likeGraph"),
@@ -12939,7 +12939,7 @@ ofGraphTypeLikeGraph x =
 
 ofGraphTypeNested :: Phantoms.TTerm Grammar.TypedNestedGraphTypeSpecification -> Phantoms.TTerm Grammar.OfGraphType
 ofGraphTypeNested x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.OfGraphType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nested"),
@@ -12947,7 +12947,7 @@ ofGraphTypeNested x =
 
 ofGraphTypeReference :: Phantoms.TTerm Grammar.TypedGraphTypeReference -> Phantoms.TTerm Grammar.OfGraphType
 ofGraphTypeReference x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.OfGraphType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "reference"),
@@ -13075,7 +13075,7 @@ offsetClauseWithValue original newVal =
 
 offsetSynonymOffset :: Phantoms.TTerm Grammar.OffsetSynonym
 offsetSynonymOffset =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.OffsetSynonym"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "offset"),
@@ -13083,7 +13083,7 @@ offsetSynonymOffset =
 
 offsetSynonymSkipReservedWord :: Phantoms.TTerm Grammar.OffsetSynonym
 offsetSynonymSkipReservedWord =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.OffsetSynonym"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "skipReservedWord"),
@@ -13715,7 +13715,7 @@ optTypedValueInitializerWithType original newVal =
 
 optionalOperandBraceBlock :: Phantoms.TTerm Grammar.MatchStatementBlock -> Phantoms.TTerm Grammar.OptionalOperand
 optionalOperandBraceBlock x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.OptionalOperand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "braceBlock"),
@@ -13723,7 +13723,7 @@ optionalOperandBraceBlock x =
 
 optionalOperandParenBlock :: Phantoms.TTerm Grammar.MatchStatementBlock -> Phantoms.TTerm Grammar.OptionalOperand
 optionalOperandParenBlock x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.OptionalOperand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parenBlock"),
@@ -13731,7 +13731,7 @@ optionalOperandParenBlock x =
 
 optionalOperandSimple :: Phantoms.TTerm Grammar.SimpleMatchStatement -> Phantoms.TTerm Grammar.OptionalOperand
 optionalOperandSimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.OptionalOperand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -13847,7 +13847,7 @@ orderByAndOptionalOffsetAndLimitWithOrderBy original newVal =
 
 orderByAndPageStatementLimitOnly :: Phantoms.TTerm Grammar.LimitClause -> Phantoms.TTerm Grammar.OrderByAndPageStatement
 orderByAndPageStatementLimitOnly x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.OrderByAndPageStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "limitOnly"),
@@ -13855,7 +13855,7 @@ orderByAndPageStatementLimitOnly x =
 
 orderByAndPageStatementOffsetAndOptionalLimit :: Phantoms.TTerm Grammar.OffsetAndOptionalLimit -> Phantoms.TTerm Grammar.OrderByAndPageStatement
 orderByAndPageStatementOffsetAndOptionalLimit x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.OrderByAndPageStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "offsetAndOptionalLimit"),
@@ -13863,7 +13863,7 @@ orderByAndPageStatementOffsetAndOptionalLimit x =
 
 orderByAndPageStatementOrderByAndOptionalOffsetAndLimit :: Phantoms.TTerm Grammar.OrderByAndOptionalOffsetAndLimit -> Phantoms.TTerm Grammar.OrderByAndPageStatement
 orderByAndPageStatementOrderByAndOptionalOffsetAndLimit x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.OrderByAndPageStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "orderByAndOptionalOffsetAndLimit"),
@@ -13871,7 +13871,7 @@ orderByAndPageStatementOrderByAndOptionalOffsetAndLimit x =
 
 orderingSpecificationAscending :: Phantoms.TTerm Grammar.OrderingSpecification
 orderingSpecificationAscending =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.OrderingSpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ascending"),
@@ -13879,7 +13879,7 @@ orderingSpecificationAscending =
 
 orderingSpecificationDescending :: Phantoms.TTerm Grammar.OrderingSpecification
 orderingSpecificationDescending =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.OrderingSpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "descending"),
@@ -13887,7 +13887,7 @@ orderingSpecificationDescending =
 
 ordinalityOrOffsetTypeOffset :: Phantoms.TTerm Grammar.OrdinalityOrOffsetType
 ordinalityOrOffsetTypeOffset =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.OrdinalityOrOffsetType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "offset"),
@@ -13895,7 +13895,7 @@ ordinalityOrOffsetTypeOffset =
 
 ordinalityOrOffsetTypeOrdinality :: Phantoms.TTerm Grammar.OrdinalityOrOffsetType
 ordinalityOrOffsetTypeOrdinality =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.OrdinalityOrOffsetType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ordinality"),
@@ -13963,7 +13963,7 @@ parameterSessionSpecificationWithSessionParameterSpecification original newVal =
 
 parametersOrCharacteristicsCharacteristics :: Phantoms.TTerm Grammar.ParametersOrCharacteristics
 parametersOrCharacteristicsCharacteristics =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ParametersOrCharacteristics"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "characteristics"),
@@ -13971,7 +13971,7 @@ parametersOrCharacteristicsCharacteristics =
 
 parametersOrCharacteristicsParameters :: Phantoms.TTerm Grammar.ParametersOrCharacteristics
 parametersOrCharacteristicsParameters =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ParametersOrCharacteristics"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parameters"),
@@ -14389,7 +14389,7 @@ pathElementListWithSteps original newVal =
 
 pathFactorPrimary :: Phantoms.TTerm Grammar.PathPrimary -> Phantoms.TTerm Grammar.PathFactor
 pathFactorPrimary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PathFactor"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primary"),
@@ -14397,7 +14397,7 @@ pathFactorPrimary x =
 
 pathFactorQuantifiedPrimary :: Phantoms.TTerm Grammar.QuantifiedPathPrimary -> Phantoms.TTerm Grammar.PathFactor
 pathFactorQuantifiedPrimary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PathFactor"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "quantifiedPrimary"),
@@ -14405,7 +14405,7 @@ pathFactorQuantifiedPrimary x =
 
 pathFactorQuestionedPrimary :: Phantoms.TTerm Grammar.QuestionedPathPrimary -> Phantoms.TTerm Grammar.PathFactor
 pathFactorQuestionedPrimary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PathFactor"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "questionedPrimary"),
@@ -14413,7 +14413,7 @@ pathFactorQuestionedPrimary x =
 
 pathModeAcyclic :: Phantoms.TTerm Grammar.PathMode
 pathModeAcyclic =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PathMode"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "acyclic"),
@@ -14481,7 +14481,7 @@ pathModePrefixWithOrPaths original newVal =
 
 pathModeSimple :: Phantoms.TTerm Grammar.PathMode
 pathModeSimple =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PathMode"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -14489,7 +14489,7 @@ pathModeSimple =
 
 pathModeTrail :: Phantoms.TTerm Grammar.PathMode
 pathModeTrail =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PathMode"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "trail"),
@@ -14497,7 +14497,7 @@ pathModeTrail =
 
 pathModeWalk :: Phantoms.TTerm Grammar.PathMode
 pathModeWalk =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PathMode"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "walk"),
@@ -14505,7 +14505,7 @@ pathModeWalk =
 
 pathOrPathsPath :: Phantoms.TTerm Grammar.PathOrPaths
 pathOrPathsPath =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PathOrPaths"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "path"),
@@ -14513,7 +14513,7 @@ pathOrPathsPath =
 
 pathOrPathsPaths :: Phantoms.TTerm Grammar.PathOrPaths
 pathOrPathsPaths =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PathOrPaths"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "paths"),
@@ -14544,7 +14544,7 @@ pathPatternExpression x =
 
 pathPatternExpressionMultisetAlternation :: Phantoms.TTerm [Grammar.PathTerm] -> Phantoms.TTerm Grammar.PathPatternExpression
 pathPatternExpressionMultisetAlternation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PathPatternExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multisetAlternation"),
@@ -14552,7 +14552,7 @@ pathPatternExpressionMultisetAlternation x =
 
 pathPatternExpressionPatternUnion :: Phantoms.TTerm [Grammar.PathTerm] -> Phantoms.TTerm Grammar.PathPatternExpression
 pathPatternExpressionPatternUnion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PathPatternExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "patternUnion"),
@@ -14560,7 +14560,7 @@ pathPatternExpressionPatternUnion x =
 
 pathPatternExpressionTerm :: Phantoms.TTerm Grammar.PathTerm -> Phantoms.TTerm Grammar.PathPatternExpression
 pathPatternExpressionTerm x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PathPatternExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "term"),
@@ -14576,7 +14576,7 @@ pathPatternPrefix x =
 
 pathPatternPrefixModePrefix :: Phantoms.TTerm Grammar.PathModePrefix -> Phantoms.TTerm Grammar.PathPatternPrefix
 pathPatternPrefixModePrefix x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PathPatternPrefix"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "modePrefix"),
@@ -14584,7 +14584,7 @@ pathPatternPrefixModePrefix x =
 
 pathPatternPrefixSearchPrefix :: Phantoms.TTerm Grammar.PathSearchPrefix -> Phantoms.TTerm Grammar.PathPatternPrefix
 pathPatternPrefixSearchPrefix x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PathPatternPrefix"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "searchPrefix"),
@@ -14669,7 +14669,7 @@ pathPatternWithVariableDeclaration original newVal =
 
 pathPrimaryElementPattern :: Phantoms.TTerm Grammar.ElementPattern -> Phantoms.TTerm Grammar.PathPrimary
 pathPrimaryElementPattern x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PathPrimary"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "elementPattern"),
@@ -14677,7 +14677,7 @@ pathPrimaryElementPattern x =
 
 pathPrimaryParenthesizedExpression :: Phantoms.TTerm Grammar.ParenthesizedPathPatternExpression -> Phantoms.TTerm Grammar.PathPrimary
 pathPrimaryParenthesizedExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PathPrimary"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parenthesizedExpression"),
@@ -14685,7 +14685,7 @@ pathPrimaryParenthesizedExpression x =
 
 pathPrimarySimplifiedExpression :: Phantoms.TTerm Grammar.SimplifiedPathPatternExpression -> Phantoms.TTerm Grammar.PathPrimary
 pathPrimarySimplifiedExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PathPrimary"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simplifiedExpression"),
@@ -14693,7 +14693,7 @@ pathPrimarySimplifiedExpression x =
 
 pathSearchPrefixAll :: Phantoms.TTerm Grammar.AllPathSearch -> Phantoms.TTerm Grammar.PathSearchPrefix
 pathSearchPrefixAll x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PathSearchPrefix"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "all"),
@@ -14701,7 +14701,7 @@ pathSearchPrefixAll x =
 
 pathSearchPrefixAny :: Phantoms.TTerm Grammar.AnyPathSearch -> Phantoms.TTerm Grammar.PathSearchPrefix
 pathSearchPrefixAny x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PathSearchPrefix"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "any"),
@@ -14709,7 +14709,7 @@ pathSearchPrefixAny x =
 
 pathSearchPrefixShortest :: Phantoms.TTerm Grammar.ShortestPathSearch -> Phantoms.TTerm Grammar.PathSearchPrefix
 pathSearchPrefixShortest x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PathSearchPrefix"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "shortest"),
@@ -14911,7 +14911,7 @@ precisionAndScaleWithScale original newVal =
 
 predefinedSchemaReferenceCurrentSchema :: Phantoms.TTerm Grammar.PredefinedSchemaReference
 predefinedSchemaReferenceCurrentSchema =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PredefinedSchemaReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "currentSchema"),
@@ -14919,7 +14919,7 @@ predefinedSchemaReferenceCurrentSchema =
 
 predefinedSchemaReferenceHomeSchema :: Phantoms.TTerm Grammar.PredefinedSchemaReference
 predefinedSchemaReferenceHomeSchema =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PredefinedSchemaReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "homeSchema"),
@@ -14927,7 +14927,7 @@ predefinedSchemaReferenceHomeSchema =
 
 predefinedSchemaReferencePeriod :: Phantoms.TTerm Grammar.PredefinedSchemaReference
 predefinedSchemaReferencePeriod =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PredefinedSchemaReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "period"),
@@ -14935,7 +14935,7 @@ predefinedSchemaReferencePeriod =
 
 predefinedTypeBooleanType :: Phantoms.TTerm Grammar.BooleanType -> Phantoms.TTerm Grammar.PredefinedType
 predefinedTypeBooleanType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PredefinedType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "booleanType"),
@@ -14943,7 +14943,7 @@ predefinedTypeBooleanType x =
 
 predefinedTypeByteStringType :: Phantoms.TTerm Grammar.ByteStringType -> Phantoms.TTerm Grammar.PredefinedType
 predefinedTypeByteStringType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PredefinedType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "byteStringType"),
@@ -14951,7 +14951,7 @@ predefinedTypeByteStringType x =
 
 predefinedTypeCharacterStringType :: Phantoms.TTerm Grammar.CharacterStringType -> Phantoms.TTerm Grammar.PredefinedType
 predefinedTypeCharacterStringType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PredefinedType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "characterStringType"),
@@ -14959,7 +14959,7 @@ predefinedTypeCharacterStringType x =
 
 predefinedTypeImmaterialValueType :: Phantoms.TTerm Grammar.ImmaterialValueType -> Phantoms.TTerm Grammar.PredefinedType
 predefinedTypeImmaterialValueType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PredefinedType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "immaterialValueType"),
@@ -14967,7 +14967,7 @@ predefinedTypeImmaterialValueType x =
 
 predefinedTypeNumericType :: Phantoms.TTerm Grammar.NumericType -> Phantoms.TTerm Grammar.PredefinedType
 predefinedTypeNumericType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PredefinedType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "numericType"),
@@ -14975,7 +14975,7 @@ predefinedTypeNumericType x =
 
 predefinedTypeReferenceValueType :: Phantoms.TTerm Grammar.ReferenceValueType -> Phantoms.TTerm Grammar.PredefinedType
 predefinedTypeReferenceValueType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PredefinedType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "referenceValueType"),
@@ -14983,7 +14983,7 @@ predefinedTypeReferenceValueType x =
 
 predefinedTypeTemporalType :: Phantoms.TTerm Grammar.TemporalType -> Phantoms.TTerm Grammar.PredefinedType
 predefinedTypeTemporalType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PredefinedType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "temporalType"),
@@ -14991,7 +14991,7 @@ predefinedTypeTemporalType x =
 
 predicateAllDifferentPredicate :: Phantoms.TTerm Grammar.AllDifferentPredicate -> Phantoms.TTerm Grammar.Predicate
 predicateAllDifferentPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Predicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "allDifferentPredicate"),
@@ -14999,7 +14999,7 @@ predicateAllDifferentPredicate x =
 
 predicateDirectedPredicate :: Phantoms.TTerm Grammar.DirectedPredicate -> Phantoms.TTerm Grammar.Predicate
 predicateDirectedPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Predicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "directedPredicate"),
@@ -15007,7 +15007,7 @@ predicateDirectedPredicate x =
 
 predicateExistsPredicate :: Phantoms.TTerm Grammar.ExistsPredicate -> Phantoms.TTerm Grammar.Predicate
 predicateExistsPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Predicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "existsPredicate"),
@@ -15015,7 +15015,7 @@ predicateExistsPredicate x =
 
 predicateLabeledPredicate :: Phantoms.TTerm Grammar.LabeledPredicate -> Phantoms.TTerm Grammar.Predicate
 predicateLabeledPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Predicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "labeledPredicate"),
@@ -15023,7 +15023,7 @@ predicateLabeledPredicate x =
 
 predicateNullPredicate :: Phantoms.TTerm Grammar.NullPredicate -> Phantoms.TTerm Grammar.Predicate
 predicateNullPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Predicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nullPredicate"),
@@ -15031,7 +15031,7 @@ predicateNullPredicate x =
 
 predicatePropertyExistsPredicate :: Phantoms.TTerm Grammar.PropertyExistsPredicate -> Phantoms.TTerm Grammar.Predicate
 predicatePropertyExistsPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Predicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "propertyExistsPredicate"),
@@ -15039,7 +15039,7 @@ predicatePropertyExistsPredicate x =
 
 predicateSamePredicate :: Phantoms.TTerm Grammar.SamePredicate -> Phantoms.TTerm Grammar.Predicate
 predicateSamePredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Predicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "samePredicate"),
@@ -15047,7 +15047,7 @@ predicateSamePredicate x =
 
 predicateSourceDestinationPredicate :: Phantoms.TTerm Grammar.SourceDestinationPredicate -> Phantoms.TTerm Grammar.Predicate
 predicateSourceDestinationPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Predicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sourceDestinationPredicate"),
@@ -15055,7 +15055,7 @@ predicateSourceDestinationPredicate x =
 
 predicateValueTypePredicate :: Phantoms.TTerm Grammar.ValueTypePredicate -> Phantoms.TTerm Grammar.Predicate
 predicateValueTypePredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Predicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "valueTypePredicate"),
@@ -15063,7 +15063,7 @@ predicateValueTypePredicate x =
 
 primaryValueExpressionAggregateFunction :: Phantoms.TTerm Grammar.AggregateFunction -> Phantoms.TTerm Grammar.PrimaryValueExpression
 primaryValueExpressionAggregateFunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimaryValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "aggregateFunction"),
@@ -15071,7 +15071,7 @@ primaryValueExpressionAggregateFunction x =
 
 primaryValueExpressionBindingVariableReference :: Phantoms.TTerm Grammar.BindingVariableReference -> Phantoms.TTerm Grammar.PrimaryValueExpression
 primaryValueExpressionBindingVariableReference x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimaryValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bindingVariableReference"),
@@ -15079,7 +15079,7 @@ primaryValueExpressionBindingVariableReference x =
 
 primaryValueExpressionCaseExpression :: Phantoms.TTerm Grammar.CaseExpression -> Phantoms.TTerm Grammar.PrimaryValueExpression
 primaryValueExpressionCaseExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimaryValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "caseExpression"),
@@ -15087,7 +15087,7 @@ primaryValueExpressionCaseExpression x =
 
 primaryValueExpressionCastSpecification :: Phantoms.TTerm Grammar.CastSpecification -> Phantoms.TTerm Grammar.PrimaryValueExpression
 primaryValueExpressionCastSpecification x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimaryValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "castSpecification"),
@@ -15095,7 +15095,7 @@ primaryValueExpressionCastSpecification x =
 
 primaryValueExpressionElementIdFunction :: Phantoms.TTerm Grammar.ElementIdFunction -> Phantoms.TTerm Grammar.PrimaryValueExpression
 primaryValueExpressionElementIdFunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimaryValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "elementIdFunction"),
@@ -15103,7 +15103,7 @@ primaryValueExpressionElementIdFunction x =
 
 primaryValueExpressionLetValueExpression :: Phantoms.TTerm Grammar.LetValueExpression -> Phantoms.TTerm Grammar.PrimaryValueExpression
 primaryValueExpressionLetValueExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimaryValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "letValueExpression"),
@@ -15111,7 +15111,7 @@ primaryValueExpressionLetValueExpression x =
 
 primaryValueExpressionParenthesized :: Phantoms.TTerm Grammar.ParenthesizedValueExpression -> Phantoms.TTerm Grammar.PrimaryValueExpression
 primaryValueExpressionParenthesized x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimaryValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parenthesized"),
@@ -15119,7 +15119,7 @@ primaryValueExpressionParenthesized x =
 
 primaryValueExpressionPathValueConstructor :: Phantoms.TTerm Grammar.PathValueConstructor -> Phantoms.TTerm Grammar.PrimaryValueExpression
 primaryValueExpressionPathValueConstructor x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimaryValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pathValueConstructor"),
@@ -15127,7 +15127,7 @@ primaryValueExpressionPathValueConstructor x =
 
 primaryValueExpressionPropertyReference :: Phantoms.TTerm Grammar.PropertyReference -> Phantoms.TTerm Grammar.PrimaryValueExpression
 primaryValueExpressionPropertyReference x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimaryValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "propertyReference"),
@@ -15135,7 +15135,7 @@ primaryValueExpressionPropertyReference x =
 
 primaryValueExpressionUnsignedValueSpecification :: Phantoms.TTerm Grammar.UnsignedValueSpecification -> Phantoms.TTerm Grammar.PrimaryValueExpression
 primaryValueExpressionUnsignedValueSpecification x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimaryValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unsignedValueSpecification"),
@@ -15143,7 +15143,7 @@ primaryValueExpressionUnsignedValueSpecification x =
 
 primaryValueExpressionValueQueryExpression :: Phantoms.TTerm Grammar.ValueQueryExpression -> Phantoms.TTerm Grammar.PrimaryValueExpression
 primaryValueExpressionValueQueryExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimaryValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "valueQueryExpression"),
@@ -15151,7 +15151,7 @@ primaryValueExpressionValueQueryExpression x =
 
 primitiveCatalogModifyingStatementCreateGraph :: Phantoms.TTerm Grammar.CreateGraphStatement -> Phantoms.TTerm Grammar.PrimitiveCatalogModifyingStatement
 primitiveCatalogModifyingStatementCreateGraph x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimitiveCatalogModifyingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "createGraph"),
@@ -15159,7 +15159,7 @@ primitiveCatalogModifyingStatementCreateGraph x =
 
 primitiveCatalogModifyingStatementCreateGraphType :: Phantoms.TTerm Grammar.CreateGraphTypeStatement -> Phantoms.TTerm Grammar.PrimitiveCatalogModifyingStatement
 primitiveCatalogModifyingStatementCreateGraphType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimitiveCatalogModifyingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "createGraphType"),
@@ -15167,7 +15167,7 @@ primitiveCatalogModifyingStatementCreateGraphType x =
 
 primitiveCatalogModifyingStatementCreateSchema :: Phantoms.TTerm Grammar.CreateSchemaStatement -> Phantoms.TTerm Grammar.PrimitiveCatalogModifyingStatement
 primitiveCatalogModifyingStatementCreateSchema x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimitiveCatalogModifyingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "createSchema"),
@@ -15175,7 +15175,7 @@ primitiveCatalogModifyingStatementCreateSchema x =
 
 primitiveCatalogModifyingStatementDropGraph :: Phantoms.TTerm Grammar.DropGraphStatement -> Phantoms.TTerm Grammar.PrimitiveCatalogModifyingStatement
 primitiveCatalogModifyingStatementDropGraph x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimitiveCatalogModifyingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dropGraph"),
@@ -15183,7 +15183,7 @@ primitiveCatalogModifyingStatementDropGraph x =
 
 primitiveCatalogModifyingStatementDropGraphType :: Phantoms.TTerm Grammar.DropGraphTypeStatement -> Phantoms.TTerm Grammar.PrimitiveCatalogModifyingStatement
 primitiveCatalogModifyingStatementDropGraphType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimitiveCatalogModifyingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dropGraphType"),
@@ -15191,7 +15191,7 @@ primitiveCatalogModifyingStatementDropGraphType x =
 
 primitiveCatalogModifyingStatementDropSchema :: Phantoms.TTerm Grammar.DropSchemaStatement -> Phantoms.TTerm Grammar.PrimitiveCatalogModifyingStatement
 primitiveCatalogModifyingStatementDropSchema x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimitiveCatalogModifyingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dropSchema"),
@@ -15199,7 +15199,7 @@ primitiveCatalogModifyingStatementDropSchema x =
 
 primitiveDataModifyingStatementDelete :: Phantoms.TTerm Grammar.DeleteStatement -> Phantoms.TTerm Grammar.PrimitiveDataModifyingStatement
 primitiveDataModifyingStatementDelete x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimitiveDataModifyingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "delete"),
@@ -15207,7 +15207,7 @@ primitiveDataModifyingStatementDelete x =
 
 primitiveDataModifyingStatementInsert :: Phantoms.TTerm Grammar.InsertStatement -> Phantoms.TTerm Grammar.PrimitiveDataModifyingStatement
 primitiveDataModifyingStatementInsert x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimitiveDataModifyingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "insert"),
@@ -15215,7 +15215,7 @@ primitiveDataModifyingStatementInsert x =
 
 primitiveDataModifyingStatementRemove :: Phantoms.TTerm Grammar.RemoveStatement -> Phantoms.TTerm Grammar.PrimitiveDataModifyingStatement
 primitiveDataModifyingStatementRemove x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimitiveDataModifyingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "remove"),
@@ -15223,7 +15223,7 @@ primitiveDataModifyingStatementRemove x =
 
 primitiveDataModifyingStatementSet :: Phantoms.TTerm Grammar.SetStatement -> Phantoms.TTerm Grammar.PrimitiveDataModifyingStatement
 primitiveDataModifyingStatementSet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimitiveDataModifyingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),
@@ -15231,7 +15231,7 @@ primitiveDataModifyingStatementSet x =
 
 primitiveQueryStatementFilter :: Phantoms.TTerm Grammar.FilterStatement -> Phantoms.TTerm Grammar.PrimitiveQueryStatement
 primitiveQueryStatementFilter x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimitiveQueryStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "filter"),
@@ -15239,7 +15239,7 @@ primitiveQueryStatementFilter x =
 
 primitiveQueryStatementFor :: Phantoms.TTerm Grammar.ForStatement -> Phantoms.TTerm Grammar.PrimitiveQueryStatement
 primitiveQueryStatementFor x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimitiveQueryStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "for"),
@@ -15247,7 +15247,7 @@ primitiveQueryStatementFor x =
 
 primitiveQueryStatementLet :: Phantoms.TTerm Grammar.LetStatement -> Phantoms.TTerm Grammar.PrimitiveQueryStatement
 primitiveQueryStatementLet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimitiveQueryStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "let"),
@@ -15255,7 +15255,7 @@ primitiveQueryStatementLet x =
 
 primitiveQueryStatementMatch :: Phantoms.TTerm Grammar.MatchStatement -> Phantoms.TTerm Grammar.PrimitiveQueryStatement
 primitiveQueryStatementMatch x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimitiveQueryStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "match"),
@@ -15263,7 +15263,7 @@ primitiveQueryStatementMatch x =
 
 primitiveQueryStatementOrderByAndPage :: Phantoms.TTerm Grammar.OrderByAndPageStatement -> Phantoms.TTerm Grammar.PrimitiveQueryStatement
 primitiveQueryStatementOrderByAndPage x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimitiveQueryStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "orderByAndPage"),
@@ -15271,7 +15271,7 @@ primitiveQueryStatementOrderByAndPage x =
 
 primitiveResultStatementFinish :: Phantoms.TTerm Grammar.PrimitiveResultStatement
 primitiveResultStatementFinish =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimitiveResultStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "finish"),
@@ -15279,7 +15279,7 @@ primitiveResultStatementFinish =
 
 primitiveResultStatementReturnAndOptionalOrderBy :: Phantoms.TTerm Grammar.ReturnAndOptionalOrderByAndPage -> Phantoms.TTerm Grammar.PrimitiveResultStatement
 primitiveResultStatementReturnAndOptionalOrderBy x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.PrimitiveResultStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "returnAndOptionalOrderBy"),
@@ -15455,7 +15455,7 @@ procedureBodyWithStatements original newVal =
 
 procedureCallInline :: Phantoms.TTerm Grammar.InlineProcedureCall -> Phantoms.TTerm Grammar.ProcedureCall
 procedureCallInline x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ProcedureCall"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inline"),
@@ -15463,7 +15463,7 @@ procedureCallInline x =
 
 procedureCallNamed :: Phantoms.TTerm Grammar.NamedProcedureCall -> Phantoms.TTerm Grammar.ProcedureCall
 procedureCallNamed x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ProcedureCall"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "named"),
@@ -15471,7 +15471,7 @@ procedureCallNamed x =
 
 procedureReferenceParameterSpecification :: Phantoms.TTerm Grammar.ReferenceParameterSpecification -> Phantoms.TTerm Grammar.ProcedureReference
 procedureReferenceParameterSpecification x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ProcedureReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parameterSpecification"),
@@ -15479,7 +15479,7 @@ procedureReferenceParameterSpecification x =
 
 procedureReferenceParentAndProcedureName :: Phantoms.TTerm Grammar.CatalogProcedureParentAndName -> Phantoms.TTerm Grammar.ProcedureReference
 procedureReferenceParentAndProcedureName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ProcedureReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parentAndProcedureName"),
@@ -15487,7 +15487,7 @@ procedureReferenceParentAndProcedureName x =
 
 programActivitySession :: Phantoms.TTerm Grammar.SessionActivity -> Phantoms.TTerm Grammar.ProgramActivity
 programActivitySession x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ProgramActivity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "session"),
@@ -15495,7 +15495,7 @@ programActivitySession x =
 
 programActivityTransaction :: Phantoms.TTerm Grammar.TransactionActivity -> Phantoms.TTerm Grammar.ProgramActivity
 programActivityTransaction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ProgramActivity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "transaction"),
@@ -15851,7 +15851,7 @@ quantifiedPathPrimaryWithQuantifier original newVal =
 
 queryConjunctionOtherwise :: Phantoms.TTerm Grammar.QueryConjunction
 queryConjunctionOtherwise =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.QueryConjunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "otherwise"),
@@ -15859,7 +15859,7 @@ queryConjunctionOtherwise =
 
 queryConjunctionSetOperator :: Phantoms.TTerm Grammar.SetOperator -> Phantoms.TTerm Grammar.QueryConjunction
 queryConjunctionSetOperator x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.QueryConjunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "setOperator"),
@@ -15893,7 +15893,7 @@ realTypeWithNotNull original newVal =
 
 recordTypeAnyRecord :: Phantoms.TTerm Grammar.AnyRecordType -> Phantoms.TTerm Grammar.RecordType
 recordTypeAnyRecord x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.RecordType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "anyRecord"),
@@ -15901,7 +15901,7 @@ recordTypeAnyRecord x =
 
 recordTypeSpecifiedRecord :: Phantoms.TTerm Grammar.SpecifiedRecordType -> Phantoms.TTerm Grammar.RecordType
 recordTypeSpecifiedRecord x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.RecordType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "specifiedRecord"),
@@ -15909,7 +15909,7 @@ recordTypeSpecifiedRecord x =
 
 referenceValueTypeBindingTable :: Phantoms.TTerm Grammar.BindingTableReferenceValueType -> Phantoms.TTerm Grammar.ReferenceValueType
 referenceValueTypeBindingTable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ReferenceValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bindingTable"),
@@ -15917,7 +15917,7 @@ referenceValueTypeBindingTable x =
 
 referenceValueTypeEdge :: Phantoms.TTerm Grammar.EdgeReferenceValueType -> Phantoms.TTerm Grammar.ReferenceValueType
 referenceValueTypeEdge x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ReferenceValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edge"),
@@ -15925,7 +15925,7 @@ referenceValueTypeEdge x =
 
 referenceValueTypeGraph :: Phantoms.TTerm Grammar.GraphReferenceValueType -> Phantoms.TTerm Grammar.ReferenceValueType
 referenceValueTypeGraph x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ReferenceValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "graph"),
@@ -15933,7 +15933,7 @@ referenceValueTypeGraph x =
 
 referenceValueTypeNode :: Phantoms.TTerm Grammar.NodeReferenceValueType -> Phantoms.TTerm Grammar.ReferenceValueType
 referenceValueTypeNode x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ReferenceValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "node"),
@@ -15941,7 +15941,7 @@ referenceValueTypeNode x =
 
 relativeCatalogSchemaReferenceDirectoryAndSchema :: Phantoms.TTerm Grammar.RelativeDirectoryAndSchema -> Phantoms.TTerm Grammar.RelativeCatalogSchemaReference
 relativeCatalogSchemaReferenceDirectoryAndSchema x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.RelativeCatalogSchemaReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "directoryAndSchema"),
@@ -15949,7 +15949,7 @@ relativeCatalogSchemaReferenceDirectoryAndSchema x =
 
 relativeCatalogSchemaReferencePredefinedReference :: Phantoms.TTerm Grammar.PredefinedSchemaReference -> Phantoms.TTerm Grammar.RelativeCatalogSchemaReference
 relativeCatalogSchemaReferencePredefinedReference x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.RelativeCatalogSchemaReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predefinedReference"),
@@ -16077,7 +16077,7 @@ relativeDirectoryPathWithSimplePath original newVal =
 
 removeItemLabel :: Phantoms.TTerm Grammar.RemoveLabelItem -> Phantoms.TTerm Grammar.RemoveItem
 removeItemLabel x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.RemoveItem"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "label"),
@@ -16085,7 +16085,7 @@ removeItemLabel x =
 
 removeItemProperty :: Phantoms.TTerm Grammar.RemovePropertyItem -> Phantoms.TTerm Grammar.RemoveItem
 removeItemProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.RemoveItem"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "property"),
@@ -16261,7 +16261,7 @@ removePropertyItemWithVariable original newVal =
 
 resultNullLiteral :: Phantoms.TTerm Grammar.Result
 resultNullLiteral =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Result"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nullLiteral"),
@@ -16269,7 +16269,7 @@ resultNullLiteral =
 
 resultSimple :: Phantoms.TTerm Grammar.ResultExpression -> Phantoms.TTerm Grammar.Result
 resultSimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Result"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -16505,7 +16505,7 @@ returnItemsAndGroupByWithQuantifier original newVal =
 
 returnItemsAsterisk :: Phantoms.TTerm Grammar.ReturnItems
 returnItemsAsterisk =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ReturnItems"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "asterisk"),
@@ -16513,7 +16513,7 @@ returnItemsAsterisk =
 
 returnItemsItemList :: Phantoms.TTerm Grammar.ReturnItemList -> Phantoms.TTerm Grammar.ReturnItems
 returnItemsItemList x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ReturnItems"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "itemList"),
@@ -16521,7 +16521,7 @@ returnItemsItemList x =
 
 returnStatementBodyItems :: Phantoms.TTerm Grammar.ReturnItemsAndGroupBy -> Phantoms.TTerm Grammar.ReturnStatementBody
 returnStatementBodyItems x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ReturnStatementBody"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "items"),
@@ -16529,7 +16529,7 @@ returnStatementBodyItems x =
 
 returnStatementBodyNoBindings :: Phantoms.TTerm Grammar.ReturnStatementBody
 returnStatementBodyNoBindings =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ReturnStatementBody"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "noBindings"),
@@ -16623,7 +16623,7 @@ schemaAndObjectsWithSchemaReference original newVal =
 
 schemaReferenceAbsoluteReference :: Phantoms.TTerm Grammar.AbsoluteCatalogSchemaReference -> Phantoms.TTerm Grammar.SchemaReference
 schemaReferenceAbsoluteReference x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SchemaReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "absoluteReference"),
@@ -16631,7 +16631,7 @@ schemaReferenceAbsoluteReference x =
 
 schemaReferenceParameterSpecification :: Phantoms.TTerm Grammar.ReferenceParameterSpecification -> Phantoms.TTerm Grammar.SchemaReference
 schemaReferenceParameterSpecification x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SchemaReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parameterSpecification"),
@@ -16639,7 +16639,7 @@ schemaReferenceParameterSpecification x =
 
 schemaReferenceRelativeReference :: Phantoms.TTerm Grammar.RelativeCatalogSchemaReference -> Phantoms.TTerm Grammar.SchemaReference
 schemaReferenceRelativeReference x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SchemaReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "relativeReference"),
@@ -16887,7 +16887,7 @@ selectItemWithExpression original newVal =
 
 selectItemsAsterisk :: Phantoms.TTerm Grammar.SelectItems
 selectItemsAsterisk =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SelectItems"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "asterisk"),
@@ -16895,7 +16895,7 @@ selectItemsAsterisk =
 
 selectItemsItemList :: Phantoms.TTerm Grammar.SelectItemList -> Phantoms.TTerm Grammar.SelectItems
 selectItemsItemList x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SelectItems"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "itemList"),
@@ -16903,7 +16903,7 @@ selectItemsItemList x =
 
 selectQuerySpecificationGraphAndNested :: Phantoms.TTerm Grammar.GraphAndNestedQuerySpecification -> Phantoms.TTerm Grammar.SelectQuerySpecification
 selectQuerySpecificationGraphAndNested x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SelectQuerySpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "graphAndNested"),
@@ -16911,7 +16911,7 @@ selectQuerySpecificationGraphAndNested x =
 
 selectQuerySpecificationNested :: Phantoms.TTerm Grammar.NestedQuerySpecification -> Phantoms.TTerm Grammar.SelectQuerySpecification
 selectQuerySpecificationNested x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SelectQuerySpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nested"),
@@ -17382,7 +17382,7 @@ selectStatementBodyAndClausesWithWhere original newVal =
 
 selectStatementBodyGraphMatchList :: Phantoms.TTerm Grammar.SelectGraphMatchList -> Phantoms.TTerm Grammar.SelectStatementBody
 selectStatementBodyGraphMatchList x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SelectStatementBody"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "graphMatchList"),
@@ -17390,7 +17390,7 @@ selectStatementBodyGraphMatchList x =
 
 selectStatementBodyQuerySpecification :: Phantoms.TTerm Grammar.SelectQuerySpecification -> Phantoms.TTerm Grammar.SelectStatementBody
 selectStatementBodyQuerySpecification x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SelectStatementBody"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "querySpecification"),
@@ -17483,7 +17483,7 @@ selectStatementWithQuantifier original newVal =
 
 sessionActivityReset :: Phantoms.TTerm [Grammar.SessionResetCommand] -> Phantoms.TTerm Grammar.SessionActivity
 sessionActivityReset x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SessionActivity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "reset"),
@@ -17491,7 +17491,7 @@ sessionActivityReset x =
 
 sessionActivitySetAndResetCommands :: Phantoms.TTerm Grammar.SessionSetAndResetCommands -> Phantoms.TTerm Grammar.SessionActivity
 sessionActivitySetAndResetCommands x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SessionActivity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "setAndResetCommands"),
@@ -17499,7 +17499,7 @@ sessionActivitySetAndResetCommands x =
 
 sessionResetArgumentsGraph :: Phantoms.TTerm Grammar.SessionResetArguments
 sessionResetArgumentsGraph =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SessionResetArguments"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "graph"),
@@ -17507,7 +17507,7 @@ sessionResetArgumentsGraph =
 
 sessionResetArgumentsParameterSessionSpecification :: Phantoms.TTerm Grammar.ParameterSessionSpecification -> Phantoms.TTerm Grammar.SessionResetArguments
 sessionResetArgumentsParameterSessionSpecification x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SessionResetArguments"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parameterSessionSpecification"),
@@ -17515,7 +17515,7 @@ sessionResetArgumentsParameterSessionSpecification x =
 
 sessionResetArgumentsParametersOrCharacteristics :: Phantoms.TTerm Grammar.AllParametersOrCharacteristics -> Phantoms.TTerm Grammar.SessionResetArguments
 sessionResetArgumentsParametersOrCharacteristics x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SessionResetArguments"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parametersOrCharacteristics"),
@@ -17523,7 +17523,7 @@ sessionResetArgumentsParametersOrCharacteristics x =
 
 sessionResetArgumentsSchema :: Phantoms.TTerm Grammar.SessionResetArguments
 sessionResetArgumentsSchema =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SessionResetArguments"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "schema"),
@@ -17531,7 +17531,7 @@ sessionResetArgumentsSchema =
 
 sessionResetArgumentsTimeZone :: Phantoms.TTerm Grammar.SessionResetArguments
 sessionResetArgumentsTimeZone =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SessionResetArguments"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "timeZone"),
@@ -17707,7 +17707,7 @@ sessionSetBindingTableParameterClauseWithParam original newVal =
 
 sessionSetCommandGraph :: Phantoms.TTerm Grammar.SessionSetGraphClause -> Phantoms.TTerm Grammar.SessionSetCommand
 sessionSetCommandGraph x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SessionSetCommand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "graph"),
@@ -17715,7 +17715,7 @@ sessionSetCommandGraph x =
 
 sessionSetCommandParameter :: Phantoms.TTerm Grammar.SessionSetParameterClause -> Phantoms.TTerm Grammar.SessionSetCommand
 sessionSetCommandParameter x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SessionSetCommand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parameter"),
@@ -17723,7 +17723,7 @@ sessionSetCommandParameter x =
 
 sessionSetCommandSchema :: Phantoms.TTerm Grammar.SessionSetSchemaClause -> Phantoms.TTerm Grammar.SessionSetCommand
 sessionSetCommandSchema x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SessionSetCommand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "schema"),
@@ -17731,7 +17731,7 @@ sessionSetCommandSchema x =
 
 sessionSetCommandTimeZone :: Phantoms.TTerm Grammar.SessionSetTimeZoneClause -> Phantoms.TTerm Grammar.SessionSetCommand
 sessionSetCommandTimeZone x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SessionSetCommand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "timeZone"),
@@ -17799,7 +17799,7 @@ sessionSetGraphParameterClauseWithInitializer original newVal =
 
 sessionSetParameterClauseBindings :: Phantoms.TTerm Grammar.SessionSetBindingTableParameterClause -> Phantoms.TTerm Grammar.SessionSetParameterClause
 sessionSetParameterClauseBindings x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SessionSetParameterClause"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bindings"),
@@ -17807,7 +17807,7 @@ sessionSetParameterClauseBindings x =
 
 sessionSetParameterClauseGraph :: Phantoms.TTerm Grammar.SessionSetGraphParameterClause -> Phantoms.TTerm Grammar.SessionSetParameterClause
 sessionSetParameterClauseGraph x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SessionSetParameterClause"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "graph"),
@@ -17815,7 +17815,7 @@ sessionSetParameterClauseGraph x =
 
 sessionSetParameterClauseValue :: Phantoms.TTerm Grammar.SessionSetValueParameterClause -> Phantoms.TTerm Grammar.SessionSetParameterClause
 sessionSetParameterClauseValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SessionSetParameterClause"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -18003,7 +18003,7 @@ setAllPropertiesItemWithVariable original newVal =
 
 setItemAllProperties :: Phantoms.TTerm Grammar.SetAllPropertiesItem -> Phantoms.TTerm Grammar.SetItem
 setItemAllProperties x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SetItem"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "allProperties"),
@@ -18011,7 +18011,7 @@ setItemAllProperties x =
 
 setItemLabel :: Phantoms.TTerm Grammar.SetLabelItem -> Phantoms.TTerm Grammar.SetItem
 setItemLabel x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SetItem"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "label"),
@@ -18019,7 +18019,7 @@ setItemLabel x =
 
 setItemProperty :: Phantoms.TTerm Grammar.SetPropertyItem -> Phantoms.TTerm Grammar.SetItem
 setItemProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SetItem"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "property"),
@@ -18163,7 +18163,7 @@ setOperatorQuantifier x =
 
 setOperatorTypeExcept :: Phantoms.TTerm Grammar.SetOperatorType
 setOperatorTypeExcept =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SetOperatorType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "except"),
@@ -18171,7 +18171,7 @@ setOperatorTypeExcept =
 
 setOperatorTypeIntersect :: Phantoms.TTerm Grammar.SetOperatorType
 setOperatorTypeIntersect =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SetOperatorType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "intersect"),
@@ -18179,7 +18179,7 @@ setOperatorTypeIntersect =
 
 setOperatorTypeUnion :: Phantoms.TTerm Grammar.SetOperatorType
 setOperatorTypeUnion =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SetOperatorType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "union"),
@@ -18327,7 +18327,7 @@ setPropertyItemWithVariable original newVal =
 
 setQuantifierAll :: Phantoms.TTerm Grammar.SetQuantifier
 setQuantifierAll =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SetQuantifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "all"),
@@ -18335,7 +18335,7 @@ setQuantifierAll =
 
 setQuantifierDistinct :: Phantoms.TTerm Grammar.SetQuantifier
 setQuantifierDistinct =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SetQuantifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "distinct"),
@@ -18343,7 +18343,7 @@ setQuantifierDistinct =
 
 shortestPathSearchAllShortest :: Phantoms.TTerm Grammar.AllShortestPathSearch -> Phantoms.TTerm Grammar.ShortestPathSearch
 shortestPathSearchAllShortest x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ShortestPathSearch"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "allShortest"),
@@ -18351,7 +18351,7 @@ shortestPathSearchAllShortest x =
 
 shortestPathSearchAnyShortest :: Phantoms.TTerm Grammar.AnyShortestPathSearch -> Phantoms.TTerm Grammar.ShortestPathSearch
 shortestPathSearchAnyShortest x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ShortestPathSearch"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "anyShortest"),
@@ -18359,7 +18359,7 @@ shortestPathSearchAnyShortest x =
 
 shortestPathSearchCountedShortest :: Phantoms.TTerm Grammar.CountedShortestPathSearch -> Phantoms.TTerm Grammar.ShortestPathSearch
 shortestPathSearchCountedShortest x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ShortestPathSearch"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "countedShortest"),
@@ -18367,7 +18367,7 @@ shortestPathSearchCountedShortest x =
 
 shortestPathSearchCountedShortestGroup :: Phantoms.TTerm Grammar.CountedShortestGroupSearch -> Phantoms.TTerm Grammar.ShortestPathSearch
 shortestPathSearchCountedShortestGroup x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ShortestPathSearch"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "countedShortestGroup"),
@@ -18375,7 +18375,7 @@ shortestPathSearchCountedShortestGroup x =
 
 sideLeft :: Phantoms.TTerm Grammar.Side
 sideLeft =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Side"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "left"),
@@ -18383,7 +18383,7 @@ sideLeft =
 
 sideRight :: Phantoms.TTerm Grammar.Side
 sideRight =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Side"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "right"),
@@ -18391,7 +18391,7 @@ sideRight =
 
 signMinus :: Phantoms.TTerm Grammar.Sign
 signMinus =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Sign"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "minus"),
@@ -18399,7 +18399,7 @@ signMinus =
 
 signPlus :: Phantoms.TTerm Grammar.Sign
 signPlus =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Sign"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "plus"),
@@ -18407,7 +18407,7 @@ signPlus =
 
 signedBinaryExactNumericTypeBigInt :: Phantoms.TTerm Grammar.BigIntType -> Phantoms.TTerm Grammar.SignedBinaryExactNumericType
 signedBinaryExactNumericTypeBigInt x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SignedBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bigInt"),
@@ -18415,7 +18415,7 @@ signedBinaryExactNumericTypeBigInt x =
 
 signedBinaryExactNumericTypeInt128 :: Phantoms.TTerm Grammar.Int128Type -> Phantoms.TTerm Grammar.SignedBinaryExactNumericType
 signedBinaryExactNumericTypeInt128 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SignedBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int128"),
@@ -18423,7 +18423,7 @@ signedBinaryExactNumericTypeInt128 x =
 
 signedBinaryExactNumericTypeInt16 :: Phantoms.TTerm Grammar.Int16Type -> Phantoms.TTerm Grammar.SignedBinaryExactNumericType
 signedBinaryExactNumericTypeInt16 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SignedBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int16"),
@@ -18431,7 +18431,7 @@ signedBinaryExactNumericTypeInt16 x =
 
 signedBinaryExactNumericTypeInt256 :: Phantoms.TTerm Grammar.Int256Type -> Phantoms.TTerm Grammar.SignedBinaryExactNumericType
 signedBinaryExactNumericTypeInt256 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SignedBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int256"),
@@ -18439,7 +18439,7 @@ signedBinaryExactNumericTypeInt256 x =
 
 signedBinaryExactNumericTypeInt32 :: Phantoms.TTerm Grammar.Int32Type -> Phantoms.TTerm Grammar.SignedBinaryExactNumericType
 signedBinaryExactNumericTypeInt32 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SignedBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int32"),
@@ -18447,7 +18447,7 @@ signedBinaryExactNumericTypeInt32 x =
 
 signedBinaryExactNumericTypeInt64 :: Phantoms.TTerm Grammar.Int64Type -> Phantoms.TTerm Grammar.SignedBinaryExactNumericType
 signedBinaryExactNumericTypeInt64 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SignedBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int64"),
@@ -18455,7 +18455,7 @@ signedBinaryExactNumericTypeInt64 x =
 
 signedBinaryExactNumericTypeInt8 :: Phantoms.TTerm Grammar.Int8Type -> Phantoms.TTerm Grammar.SignedBinaryExactNumericType
 signedBinaryExactNumericTypeInt8 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SignedBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int8"),
@@ -18463,7 +18463,7 @@ signedBinaryExactNumericTypeInt8 x =
 
 signedBinaryExactNumericTypeIntWithPrecision :: Phantoms.TTerm Grammar.IntWithPrecision -> Phantoms.TTerm Grammar.SignedBinaryExactNumericType
 signedBinaryExactNumericTypeIntWithPrecision x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SignedBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "intWithPrecision"),
@@ -18471,7 +18471,7 @@ signedBinaryExactNumericTypeIntWithPrecision x =
 
 signedBinaryExactNumericTypeSignedVerboseType :: Phantoms.TTerm Grammar.SignedVerboseBinaryExactNumericType -> Phantoms.TTerm Grammar.SignedBinaryExactNumericType
 signedBinaryExactNumericTypeSignedVerboseType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SignedBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "signedVerboseType"),
@@ -18479,7 +18479,7 @@ signedBinaryExactNumericTypeSignedVerboseType x =
 
 signedBinaryExactNumericTypeSmallInt :: Phantoms.TTerm Grammar.SmallIntType -> Phantoms.TTerm Grammar.SignedBinaryExactNumericType
 signedBinaryExactNumericTypeSmallInt x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SignedBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "smallInt"),
@@ -18775,7 +18775,7 @@ simpleCaseWithWhenClauses original newVal =
 
 simpleCatalogModifyingStatementCallProcedure :: Phantoms.TTerm Grammar.CallCatalogModifyingProcedureStatement -> Phantoms.TTerm Grammar.SimpleCatalogModifyingStatement
 simpleCatalogModifyingStatementCallProcedure x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimpleCatalogModifyingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "callProcedure"),
@@ -18783,7 +18783,7 @@ simpleCatalogModifyingStatementCallProcedure x =
 
 simpleCatalogModifyingStatementPrimitive :: Phantoms.TTerm Grammar.PrimitiveCatalogModifyingStatement -> Phantoms.TTerm Grammar.SimpleCatalogModifyingStatement
 simpleCatalogModifyingStatementPrimitive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimpleCatalogModifyingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primitive"),
@@ -18791,7 +18791,7 @@ simpleCatalogModifyingStatementPrimitive x =
 
 simpleDataAccessingStatementModifying :: Phantoms.TTerm Grammar.SimpleDataModifyingStatement -> Phantoms.TTerm Grammar.SimpleDataAccessingStatement
 simpleDataAccessingStatementModifying x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimpleDataAccessingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "modifying"),
@@ -18799,7 +18799,7 @@ simpleDataAccessingStatementModifying x =
 
 simpleDataAccessingStatementQuery :: Phantoms.TTerm Grammar.SimpleQueryStatement -> Phantoms.TTerm Grammar.SimpleDataAccessingStatement
 simpleDataAccessingStatementQuery x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimpleDataAccessingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "query"),
@@ -18807,7 +18807,7 @@ simpleDataAccessingStatementQuery x =
 
 simpleDataModifyingStatementCallProcedure :: Phantoms.TTerm Grammar.CallDataModifyingProcedureStatement -> Phantoms.TTerm Grammar.SimpleDataModifyingStatement
 simpleDataModifyingStatementCallProcedure x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimpleDataModifyingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "callProcedure"),
@@ -18815,7 +18815,7 @@ simpleDataModifyingStatementCallProcedure x =
 
 simpleDataModifyingStatementPrimitive :: Phantoms.TTerm Grammar.PrimitiveDataModifyingStatement -> Phantoms.TTerm Grammar.SimpleDataModifyingStatement
 simpleDataModifyingStatementPrimitive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimpleDataModifyingStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primitive"),
@@ -18823,7 +18823,7 @@ simpleDataModifyingStatementPrimitive x =
 
 simpleQueryStatementCall :: Phantoms.TTerm Grammar.CallQueryStatement -> Phantoms.TTerm Grammar.SimpleQueryStatement
 simpleQueryStatementCall x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimpleQueryStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "call"),
@@ -18831,7 +18831,7 @@ simpleQueryStatementCall x =
 
 simpleQueryStatementPrimitive :: Phantoms.TTerm Grammar.PrimitiveQueryStatement -> Phantoms.TTerm Grammar.SimpleQueryStatement
 simpleQueryStatementPrimitive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimpleQueryStatement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primitive"),
@@ -19019,7 +19019,7 @@ simplifiedConjunctionWithRight original newVal =
 
 simplifiedContentsMultisetAlternation :: Phantoms.TTerm Grammar.SimplifiedMultisetAlternation -> Phantoms.TTerm Grammar.SimplifiedContents
 simplifiedContentsMultisetAlternation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedContents"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multisetAlternation"),
@@ -19027,7 +19027,7 @@ simplifiedContentsMultisetAlternation x =
 
 simplifiedContentsPathUnion :: Phantoms.TTerm Grammar.SimplifiedPathUnion -> Phantoms.TTerm Grammar.SimplifiedContents
 simplifiedContentsPathUnion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedContents"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pathUnion"),
@@ -19035,7 +19035,7 @@ simplifiedContentsPathUnion x =
 
 simplifiedContentsTerm :: Phantoms.TTerm Grammar.SimplifiedTerm -> Phantoms.TTerm Grammar.SimplifiedContents
 simplifiedContentsTerm x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedContents"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "term"),
@@ -19043,7 +19043,7 @@ simplifiedContentsTerm x =
 
 simplifiedDirectionOverrideOverrideAnyDirection :: Phantoms.TTerm Grammar.SimplifiedOverrideAnyDirection -> Phantoms.TTerm Grammar.SimplifiedDirectionOverride
 simplifiedDirectionOverrideOverrideAnyDirection x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedDirectionOverride"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "overrideAnyDirection"),
@@ -19051,7 +19051,7 @@ simplifiedDirectionOverrideOverrideAnyDirection x =
 
 simplifiedDirectionOverrideOverrideLeft :: Phantoms.TTerm Grammar.SimplifiedOverrideLeft -> Phantoms.TTerm Grammar.SimplifiedDirectionOverride
 simplifiedDirectionOverrideOverrideLeft x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedDirectionOverride"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "overrideLeft"),
@@ -19059,7 +19059,7 @@ simplifiedDirectionOverrideOverrideLeft x =
 
 simplifiedDirectionOverrideOverrideLeftOrRight :: Phantoms.TTerm Grammar.SimplifiedOverrideLeftOrRight -> Phantoms.TTerm Grammar.SimplifiedDirectionOverride
 simplifiedDirectionOverrideOverrideLeftOrRight x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedDirectionOverride"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "overrideLeftOrRight"),
@@ -19067,7 +19067,7 @@ simplifiedDirectionOverrideOverrideLeftOrRight x =
 
 simplifiedDirectionOverrideOverrideLeftOrUndirected :: Phantoms.TTerm Grammar.SimplifiedOverrideLeftOrUndirected -> Phantoms.TTerm Grammar.SimplifiedDirectionOverride
 simplifiedDirectionOverrideOverrideLeftOrUndirected x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedDirectionOverride"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "overrideLeftOrUndirected"),
@@ -19075,7 +19075,7 @@ simplifiedDirectionOverrideOverrideLeftOrUndirected x =
 
 simplifiedDirectionOverrideOverrideRight :: Phantoms.TTerm Grammar.SimplifiedOverrideRight -> Phantoms.TTerm Grammar.SimplifiedDirectionOverride
 simplifiedDirectionOverrideOverrideRight x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedDirectionOverride"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "overrideRight"),
@@ -19083,7 +19083,7 @@ simplifiedDirectionOverrideOverrideRight x =
 
 simplifiedDirectionOverrideOverrideUndirected :: Phantoms.TTerm Grammar.SimplifiedOverrideUndirected -> Phantoms.TTerm Grammar.SimplifiedDirectionOverride
 simplifiedDirectionOverrideOverrideUndirected x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedDirectionOverride"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "overrideUndirected"),
@@ -19091,7 +19091,7 @@ simplifiedDirectionOverrideOverrideUndirected x =
 
 simplifiedDirectionOverrideOverrideUndirectedOrRight :: Phantoms.TTerm Grammar.SimplifiedOverrideUndirectedOrRight -> Phantoms.TTerm Grammar.SimplifiedDirectionOverride
 simplifiedDirectionOverrideOverrideUndirectedOrRight x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedDirectionOverride"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "overrideUndirectedOrRight"),
@@ -19099,7 +19099,7 @@ simplifiedDirectionOverrideOverrideUndirectedOrRight x =
 
 simplifiedFactorHighQuantified :: Phantoms.TTerm Grammar.SimplifiedQuantified -> Phantoms.TTerm Grammar.SimplifiedFactorHigh
 simplifiedFactorHighQuantified x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedFactorHigh"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "quantified"),
@@ -19107,7 +19107,7 @@ simplifiedFactorHighQuantified x =
 
 simplifiedFactorHighQuestioned :: Phantoms.TTerm Grammar.SimplifiedQuestioned -> Phantoms.TTerm Grammar.SimplifiedFactorHigh
 simplifiedFactorHighQuestioned x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedFactorHigh"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "questioned"),
@@ -19115,7 +19115,7 @@ simplifiedFactorHighQuestioned x =
 
 simplifiedFactorHighTertiary :: Phantoms.TTerm Grammar.SimplifiedTertiary -> Phantoms.TTerm Grammar.SimplifiedFactorHigh
 simplifiedFactorHighTertiary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedFactorHigh"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tertiary"),
@@ -19123,7 +19123,7 @@ simplifiedFactorHighTertiary x =
 
 simplifiedFactorLowConjunction :: Phantoms.TTerm Grammar.SimplifiedConjunction -> Phantoms.TTerm Grammar.SimplifiedFactorLow
 simplifiedFactorLowConjunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedFactorLow"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "conjunction"),
@@ -19131,7 +19131,7 @@ simplifiedFactorLowConjunction x =
 
 simplifiedFactorLowFactorHigh :: Phantoms.TTerm Grammar.SimplifiedFactorHigh -> Phantoms.TTerm Grammar.SimplifiedFactorLow
 simplifiedFactorLowFactorHigh x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedFactorLow"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "factorHigh"),
@@ -19139,7 +19139,7 @@ simplifiedFactorLowFactorHigh x =
 
 simplifiedPathPatternExpressionAnyDirection :: Phantoms.TTerm Grammar.SimplifiedDefaultingAnyDirection -> Phantoms.TTerm Grammar.SimplifiedPathPatternExpression
 simplifiedPathPatternExpressionAnyDirection x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedPathPatternExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "anyDirection"),
@@ -19147,7 +19147,7 @@ simplifiedPathPatternExpressionAnyDirection x =
 
 simplifiedPathPatternExpressionLeft :: Phantoms.TTerm Grammar.SimplifiedDefaultingLeft -> Phantoms.TTerm Grammar.SimplifiedPathPatternExpression
 simplifiedPathPatternExpressionLeft x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedPathPatternExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "left"),
@@ -19155,7 +19155,7 @@ simplifiedPathPatternExpressionLeft x =
 
 simplifiedPathPatternExpressionLeftOrRight :: Phantoms.TTerm Grammar.SimplifiedDefaultingLeftOrRight -> Phantoms.TTerm Grammar.SimplifiedPathPatternExpression
 simplifiedPathPatternExpressionLeftOrRight x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedPathPatternExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "leftOrRight"),
@@ -19163,7 +19163,7 @@ simplifiedPathPatternExpressionLeftOrRight x =
 
 simplifiedPathPatternExpressionLeftOrUndirected :: Phantoms.TTerm Grammar.SimplifiedDefaultingLeftOrUndirected -> Phantoms.TTerm Grammar.SimplifiedPathPatternExpression
 simplifiedPathPatternExpressionLeftOrUndirected x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedPathPatternExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "leftOrUndirected"),
@@ -19171,7 +19171,7 @@ simplifiedPathPatternExpressionLeftOrUndirected x =
 
 simplifiedPathPatternExpressionRight :: Phantoms.TTerm Grammar.SimplifiedDefaultingRight -> Phantoms.TTerm Grammar.SimplifiedPathPatternExpression
 simplifiedPathPatternExpressionRight x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedPathPatternExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "right"),
@@ -19179,7 +19179,7 @@ simplifiedPathPatternExpressionRight x =
 
 simplifiedPathPatternExpressionUndirected :: Phantoms.TTerm Grammar.SimplifiedDefaultingUndirected -> Phantoms.TTerm Grammar.SimplifiedPathPatternExpression
 simplifiedPathPatternExpressionUndirected x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedPathPatternExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "undirected"),
@@ -19187,7 +19187,7 @@ simplifiedPathPatternExpressionUndirected x =
 
 simplifiedPathPatternExpressionUndirectedOrRight :: Phantoms.TTerm Grammar.SimplifiedDefaultingUndirectedOrRight -> Phantoms.TTerm Grammar.SimplifiedPathPatternExpression
 simplifiedPathPatternExpressionUndirectedOrRight x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedPathPatternExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "undirectedOrRight"),
@@ -19195,7 +19195,7 @@ simplifiedPathPatternExpressionUndirectedOrRight x =
 
 simplifiedPrimaryLabelName :: Phantoms.TTerm Grammar.LabelName -> Phantoms.TTerm Grammar.SimplifiedPrimary
 simplifiedPrimaryLabelName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedPrimary"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "labelName"),
@@ -19203,7 +19203,7 @@ simplifiedPrimaryLabelName x =
 
 simplifiedPrimaryParenthesizedContents :: Phantoms.TTerm Grammar.SimplifiedContents -> Phantoms.TTerm Grammar.SimplifiedPrimary
 simplifiedPrimaryParenthesizedContents x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedPrimary"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parenthesizedContents"),
@@ -19271,7 +19271,7 @@ simplifiedQuantifiedWithTertiary original newVal =
 
 simplifiedSecondaryNegation :: Phantoms.TTerm Grammar.SimplifiedNegation -> Phantoms.TTerm Grammar.SimplifiedSecondary
 simplifiedSecondaryNegation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedSecondary"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "negation"),
@@ -19279,7 +19279,7 @@ simplifiedSecondaryNegation x =
 
 simplifiedSecondaryPrimary :: Phantoms.TTerm Grammar.SimplifiedPrimary -> Phantoms.TTerm Grammar.SimplifiedSecondary
 simplifiedSecondaryPrimary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedSecondary"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primary"),
@@ -19287,7 +19287,7 @@ simplifiedSecondaryPrimary x =
 
 simplifiedTermConcatenation :: Phantoms.TTerm Grammar.SimplifiedConcatenation -> Phantoms.TTerm Grammar.SimplifiedTerm
 simplifiedTermConcatenation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedTerm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "concatenation"),
@@ -19295,7 +19295,7 @@ simplifiedTermConcatenation x =
 
 simplifiedTermFactorLow :: Phantoms.TTerm Grammar.SimplifiedFactorLow -> Phantoms.TTerm Grammar.SimplifiedTerm
 simplifiedTermFactorLow x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedTerm"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "factorLow"),
@@ -19303,7 +19303,7 @@ simplifiedTermFactorLow x =
 
 simplifiedTertiaryDirectionOverride :: Phantoms.TTerm Grammar.SimplifiedDirectionOverride -> Phantoms.TTerm Grammar.SimplifiedTertiary
 simplifiedTertiaryDirectionOverride x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedTertiary"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "directionOverride"),
@@ -19311,7 +19311,7 @@ simplifiedTertiaryDirectionOverride x =
 
 simplifiedTertiarySecondary :: Phantoms.TTerm Grammar.SimplifiedSecondary -> Phantoms.TTerm Grammar.SimplifiedTertiary
 simplifiedTertiarySecondary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SimplifiedTertiary"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "secondary"),
@@ -19479,7 +19479,7 @@ sortSpecificationWithSortKey original newVal =
 
 sourceDestinationPredicateDestinationPredicate :: Phantoms.TTerm Grammar.DestinationPredicate -> Phantoms.TTerm Grammar.SourceDestinationPredicate
 sourceDestinationPredicateDestinationPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SourceDestinationPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "destinationPredicate"),
@@ -19487,7 +19487,7 @@ sourceDestinationPredicateDestinationPredicate x =
 
 sourceDestinationPredicateSourcePredicate :: Phantoms.TTerm Grammar.SourcePredicate -> Phantoms.TTerm Grammar.SourceDestinationPredicate
 sourceDestinationPredicateSourcePredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SourceDestinationPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sourcePredicate"),
@@ -19495,7 +19495,7 @@ sourceDestinationPredicateSourcePredicate x =
 
 sourceNodeTypeReferenceAlias :: Phantoms.TTerm Grammar.SourceNodeTypeAlias -> Phantoms.TTerm Grammar.SourceNodeTypeReference
 sourceNodeTypeReferenceAlias x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SourceNodeTypeReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "alias"),
@@ -19503,7 +19503,7 @@ sourceNodeTypeReferenceAlias x =
 
 sourceNodeTypeReferenceFiller :: Phantoms.TTerm (Maybe Grammar.NodeTypeFiller) -> Phantoms.TTerm Grammar.SourceNodeTypeReference
 sourceNodeTypeReferenceFiller x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.SourceNodeTypeReference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "filler"),
@@ -19799,7 +19799,7 @@ statementBlockWithStatement original newVal =
 
 statementCompositeQuery :: Phantoms.TTerm Grammar.CompositeQueryStatement -> Phantoms.TTerm Grammar.Statement
 statementCompositeQuery x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Statement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "compositeQuery"),
@@ -19807,7 +19807,7 @@ statementCompositeQuery x =
 
 statementLinearCatalogModifying :: Phantoms.TTerm Grammar.LinearCatalogModifyingStatement -> Phantoms.TTerm Grammar.Statement
 statementLinearCatalogModifying x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Statement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "linearCatalogModifying"),
@@ -19815,7 +19815,7 @@ statementLinearCatalogModifying x =
 
 statementLinearDataModifying :: Phantoms.TTerm Grammar.LinearDataModifyingStatement -> Phantoms.TTerm Grammar.Statement
 statementLinearDataModifying x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.Statement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "linearDataModifying"),
@@ -20039,7 +20039,7 @@ subCharacterOrByteStringWithValueExpression original newVal =
 
 temporalDurationQualifierDayToSecond :: Phantoms.TTerm Grammar.TemporalDurationQualifier
 temporalDurationQualifierDayToSecond =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TemporalDurationQualifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dayToSecond"),
@@ -20047,7 +20047,7 @@ temporalDurationQualifierDayToSecond =
 
 temporalDurationQualifierYearToMonth :: Phantoms.TTerm Grammar.TemporalDurationQualifier
 temporalDurationQualifierYearToMonth =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TemporalDurationQualifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "yearToMonth"),
@@ -20115,7 +20115,7 @@ temporalDurationTypeWithQualifier original newVal =
 
 temporalInstantTypeDateType :: Phantoms.TTerm Grammar.DateType -> Phantoms.TTerm Grammar.TemporalInstantType
 temporalInstantTypeDateType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TemporalInstantType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dateType"),
@@ -20123,7 +20123,7 @@ temporalInstantTypeDateType x =
 
 temporalInstantTypeDatetimeType :: Phantoms.TTerm Grammar.DatetimeType -> Phantoms.TTerm Grammar.TemporalInstantType
 temporalInstantTypeDatetimeType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TemporalInstantType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "datetimeType"),
@@ -20131,7 +20131,7 @@ temporalInstantTypeDatetimeType x =
 
 temporalInstantTypeLocaldatetimeType :: Phantoms.TTerm Grammar.LocaldatetimeType -> Phantoms.TTerm Grammar.TemporalInstantType
 temporalInstantTypeLocaldatetimeType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TemporalInstantType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "localdatetimeType"),
@@ -20139,7 +20139,7 @@ temporalInstantTypeLocaldatetimeType x =
 
 temporalInstantTypeLocaltimeType :: Phantoms.TTerm Grammar.LocaltimeType -> Phantoms.TTerm Grammar.TemporalInstantType
 temporalInstantTypeLocaltimeType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TemporalInstantType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "localtimeType"),
@@ -20147,7 +20147,7 @@ temporalInstantTypeLocaltimeType x =
 
 temporalInstantTypeTimeType :: Phantoms.TTerm Grammar.TimeType -> Phantoms.TTerm Grammar.TemporalInstantType
 temporalInstantTypeTimeType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TemporalInstantType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "timeType"),
@@ -20155,7 +20155,7 @@ temporalInstantTypeTimeType x =
 
 temporalLiteralDate :: Phantoms.TTerm Grammar.DateLiteral -> Phantoms.TTerm Grammar.TemporalLiteral
 temporalLiteralDate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TemporalLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "date"),
@@ -20163,7 +20163,7 @@ temporalLiteralDate x =
 
 temporalLiteralDatetime :: Phantoms.TTerm Grammar.DatetimeLiteral -> Phantoms.TTerm Grammar.TemporalLiteral
 temporalLiteralDatetime x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TemporalLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "datetime"),
@@ -20171,7 +20171,7 @@ temporalLiteralDatetime x =
 
 temporalLiteralTime :: Phantoms.TTerm Grammar.TimeLiteral -> Phantoms.TTerm Grammar.TemporalLiteral
 temporalLiteralTime x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TemporalLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "time"),
@@ -20179,7 +20179,7 @@ temporalLiteralTime x =
 
 temporalTypeDurationType :: Phantoms.TTerm Grammar.TemporalDurationType -> Phantoms.TTerm Grammar.TemporalType
 temporalTypeDurationType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TemporalType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "durationType"),
@@ -20187,7 +20187,7 @@ temporalTypeDurationType x =
 
 temporalTypeInstantType :: Phantoms.TTerm Grammar.TemporalInstantType -> Phantoms.TTerm Grammar.TemporalType
 temporalTypeInstantType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TemporalType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "instantType"),
@@ -20195,7 +20195,7 @@ temporalTypeInstantType x =
 
 timeFunctionCurrentTime :: Phantoms.TTerm Grammar.TimeFunction
 timeFunctionCurrentTime =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TimeFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "currentTime"),
@@ -20203,7 +20203,7 @@ timeFunctionCurrentTime =
 
 timeFunctionParametersRecordConstructor :: Phantoms.TTerm Grammar.RecordConstructor -> Phantoms.TTerm Grammar.TimeFunctionParameters
 timeFunctionParametersRecordConstructor x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TimeFunctionParameters"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "recordConstructor"),
@@ -20211,7 +20211,7 @@ timeFunctionParametersRecordConstructor x =
 
 timeFunctionParametersTimeString :: Phantoms.TTerm Grammar.TimeString -> Phantoms.TTerm Grammar.TimeFunctionParameters
 timeFunctionParametersTimeString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TimeFunctionParameters"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "timeString"),
@@ -20219,7 +20219,7 @@ timeFunctionParametersTimeString x =
 
 timeFunctionZonedTimeWithParams :: Phantoms.TTerm (Maybe Grammar.TimeFunctionParameters) -> Phantoms.TTerm Grammar.TimeFunction
 timeFunctionZonedTimeWithParams x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TimeFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "zonedTimeWithParams"),
@@ -20227,7 +20227,7 @@ timeFunctionZonedTimeWithParams x =
 
 timeTypeTimeWithTimeZone :: Phantoms.TTerm Grammar.TimeWithTimeZoneType -> Phantoms.TTerm Grammar.TimeType
 timeTypeTimeWithTimeZone x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TimeType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "timeWithTimeZone"),
@@ -20235,7 +20235,7 @@ timeTypeTimeWithTimeZone x =
 
 timeTypeZonedTime :: Phantoms.TTerm Grammar.ZonedTimeType -> Phantoms.TTerm Grammar.TimeType
 timeTypeZonedTime x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TimeType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "zonedTime"),
@@ -20347,7 +20347,7 @@ timestampWithoutTimeZoneTypeWithNotNull original newVal =
 
 transactionAccessModeReadOnly :: Phantoms.TTerm Grammar.TransactionAccessMode
 transactionAccessModeReadOnly =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TransactionAccessMode"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "readOnly"),
@@ -20355,7 +20355,7 @@ transactionAccessModeReadOnly =
 
 transactionAccessModeReadWrite :: Phantoms.TTerm Grammar.TransactionAccessMode
 transactionAccessModeReadWrite =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TransactionAccessMode"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "readWrite"),
@@ -20363,7 +20363,7 @@ transactionAccessModeReadWrite =
 
 transactionActivityEnd :: Phantoms.TTerm Grammar.EndTransactionCommand -> Phantoms.TTerm Grammar.TransactionActivity
 transactionActivityEnd x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TransactionActivity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "end"),
@@ -20371,7 +20371,7 @@ transactionActivityEnd x =
 
 transactionActivityProcedure :: Phantoms.TTerm Grammar.ProcedureAndMaybeEnd -> Phantoms.TTerm Grammar.TransactionActivity
 transactionActivityProcedure x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TransactionActivity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "procedure"),
@@ -20379,7 +20379,7 @@ transactionActivityProcedure x =
 
 transactionActivityStart :: Phantoms.TTerm Grammar.StartAndMaybeProcedureAndMaybeEnd -> Phantoms.TTerm Grammar.TransactionActivity
 transactionActivityStart x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TransactionActivity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "start"),
@@ -20407,7 +20407,7 @@ trigonometricFunctionName x =
 
 trigonometricFunctionNameAcos :: Phantoms.TTerm Grammar.TrigonometricFunctionName
 trigonometricFunctionNameAcos =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TrigonometricFunctionName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "acos"),
@@ -20415,7 +20415,7 @@ trigonometricFunctionNameAcos =
 
 trigonometricFunctionNameAsin :: Phantoms.TTerm Grammar.TrigonometricFunctionName
 trigonometricFunctionNameAsin =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TrigonometricFunctionName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "asin"),
@@ -20423,7 +20423,7 @@ trigonometricFunctionNameAsin =
 
 trigonometricFunctionNameAtan :: Phantoms.TTerm Grammar.TrigonometricFunctionName
 trigonometricFunctionNameAtan =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TrigonometricFunctionName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "atan"),
@@ -20431,7 +20431,7 @@ trigonometricFunctionNameAtan =
 
 trigonometricFunctionNameCos :: Phantoms.TTerm Grammar.TrigonometricFunctionName
 trigonometricFunctionNameCos =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TrigonometricFunctionName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cos"),
@@ -20439,7 +20439,7 @@ trigonometricFunctionNameCos =
 
 trigonometricFunctionNameCosh :: Phantoms.TTerm Grammar.TrigonometricFunctionName
 trigonometricFunctionNameCosh =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TrigonometricFunctionName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cosh"),
@@ -20447,7 +20447,7 @@ trigonometricFunctionNameCosh =
 
 trigonometricFunctionNameCot :: Phantoms.TTerm Grammar.TrigonometricFunctionName
 trigonometricFunctionNameCot =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TrigonometricFunctionName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cot"),
@@ -20455,7 +20455,7 @@ trigonometricFunctionNameCot =
 
 trigonometricFunctionNameDegrees :: Phantoms.TTerm Grammar.TrigonometricFunctionName
 trigonometricFunctionNameDegrees =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TrigonometricFunctionName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "degrees"),
@@ -20463,7 +20463,7 @@ trigonometricFunctionNameDegrees =
 
 trigonometricFunctionNameRadians :: Phantoms.TTerm Grammar.TrigonometricFunctionName
 trigonometricFunctionNameRadians =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TrigonometricFunctionName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "radians"),
@@ -20471,7 +20471,7 @@ trigonometricFunctionNameRadians =
 
 trigonometricFunctionNameSin :: Phantoms.TTerm Grammar.TrigonometricFunctionName
 trigonometricFunctionNameSin =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TrigonometricFunctionName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sin"),
@@ -20479,7 +20479,7 @@ trigonometricFunctionNameSin =
 
 trigonometricFunctionNameSinh :: Phantoms.TTerm Grammar.TrigonometricFunctionName
 trigonometricFunctionNameSinh =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TrigonometricFunctionName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sinh"),
@@ -20487,7 +20487,7 @@ trigonometricFunctionNameSinh =
 
 trigonometricFunctionNameTan :: Phantoms.TTerm Grammar.TrigonometricFunctionName
 trigonometricFunctionNameTan =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TrigonometricFunctionName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tan"),
@@ -20495,7 +20495,7 @@ trigonometricFunctionNameTan =
 
 trigonometricFunctionNameTanh :: Phantoms.TTerm Grammar.TrigonometricFunctionName
 trigonometricFunctionNameTanh =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TrigonometricFunctionName"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tanh"),
@@ -20819,7 +20819,7 @@ trimOperandsWithSpecification original newVal =
 
 trimSpecificationBoth :: Phantoms.TTerm Grammar.TrimSpecification
 trimSpecificationBoth =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TrimSpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "both"),
@@ -20827,7 +20827,7 @@ trimSpecificationBoth =
 
 trimSpecificationLeading :: Phantoms.TTerm Grammar.TrimSpecification
 trimSpecificationLeading =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TrimSpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "leading"),
@@ -20835,7 +20835,7 @@ trimSpecificationLeading =
 
 trimSpecificationTrailing :: Phantoms.TTerm Grammar.TrimSpecification
 trimSpecificationTrailing =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TrimSpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "trailing"),
@@ -20843,7 +20843,7 @@ trimSpecificationTrailing =
 
 trimTypeBtrim :: Phantoms.TTerm Grammar.TrimType
 trimTypeBtrim =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TrimType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "btrim"),
@@ -20851,7 +20851,7 @@ trimTypeBtrim =
 
 trimTypeLtrim :: Phantoms.TTerm Grammar.TrimType
 trimTypeLtrim =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TrimType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ltrim"),
@@ -20859,7 +20859,7 @@ trimTypeLtrim =
 
 trimTypeRtrim :: Phantoms.TTerm Grammar.TrimType
 trimTypeRtrim =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TrimType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rtrim"),
@@ -21483,7 +21483,7 @@ uintWithPrecisionWithPrecision original newVal =
 
 unsignedBinaryExactNumericTypeUBigInt :: Phantoms.TTerm Grammar.UBigIntType -> Phantoms.TTerm Grammar.UnsignedBinaryExactNumericType
 unsignedBinaryExactNumericTypeUBigInt x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.UnsignedBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uBigInt"),
@@ -21491,7 +21491,7 @@ unsignedBinaryExactNumericTypeUBigInt x =
 
 unsignedBinaryExactNumericTypeUSmallInt :: Phantoms.TTerm Grammar.USmallIntType -> Phantoms.TTerm Grammar.UnsignedBinaryExactNumericType
 unsignedBinaryExactNumericTypeUSmallInt x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.UnsignedBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uSmallInt"),
@@ -21499,7 +21499,7 @@ unsignedBinaryExactNumericTypeUSmallInt x =
 
 unsignedBinaryExactNumericTypeUint128 :: Phantoms.TTerm Grammar.Uint128Type -> Phantoms.TTerm Grammar.UnsignedBinaryExactNumericType
 unsignedBinaryExactNumericTypeUint128 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.UnsignedBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uint128"),
@@ -21507,7 +21507,7 @@ unsignedBinaryExactNumericTypeUint128 x =
 
 unsignedBinaryExactNumericTypeUint16 :: Phantoms.TTerm Grammar.Uint16Type -> Phantoms.TTerm Grammar.UnsignedBinaryExactNumericType
 unsignedBinaryExactNumericTypeUint16 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.UnsignedBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uint16"),
@@ -21515,7 +21515,7 @@ unsignedBinaryExactNumericTypeUint16 x =
 
 unsignedBinaryExactNumericTypeUint256 :: Phantoms.TTerm Grammar.Uint256Type -> Phantoms.TTerm Grammar.UnsignedBinaryExactNumericType
 unsignedBinaryExactNumericTypeUint256 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.UnsignedBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uint256"),
@@ -21523,7 +21523,7 @@ unsignedBinaryExactNumericTypeUint256 x =
 
 unsignedBinaryExactNumericTypeUint32 :: Phantoms.TTerm Grammar.Uint32Type -> Phantoms.TTerm Grammar.UnsignedBinaryExactNumericType
 unsignedBinaryExactNumericTypeUint32 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.UnsignedBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uint32"),
@@ -21531,7 +21531,7 @@ unsignedBinaryExactNumericTypeUint32 x =
 
 unsignedBinaryExactNumericTypeUint64 :: Phantoms.TTerm Grammar.Uint64Type -> Phantoms.TTerm Grammar.UnsignedBinaryExactNumericType
 unsignedBinaryExactNumericTypeUint64 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.UnsignedBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uint64"),
@@ -21539,7 +21539,7 @@ unsignedBinaryExactNumericTypeUint64 x =
 
 unsignedBinaryExactNumericTypeUint8 :: Phantoms.TTerm Grammar.Uint8Type -> Phantoms.TTerm Grammar.UnsignedBinaryExactNumericType
 unsignedBinaryExactNumericTypeUint8 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.UnsignedBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uint8"),
@@ -21547,7 +21547,7 @@ unsignedBinaryExactNumericTypeUint8 x =
 
 unsignedBinaryExactNumericTypeUintWithPrecision :: Phantoms.TTerm Grammar.UintWithPrecision -> Phantoms.TTerm Grammar.UnsignedBinaryExactNumericType
 unsignedBinaryExactNumericTypeUintWithPrecision x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.UnsignedBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uintWithPrecision"),
@@ -21555,7 +21555,7 @@ unsignedBinaryExactNumericTypeUintWithPrecision x =
 
 unsignedBinaryExactNumericTypeUnsigned :: Phantoms.TTerm Grammar.VerboseBinaryExactNumericType -> Phantoms.TTerm Grammar.UnsignedBinaryExactNumericType
 unsignedBinaryExactNumericTypeUnsigned x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.UnsignedBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unsigned"),
@@ -21563,7 +21563,7 @@ unsignedBinaryExactNumericTypeUnsigned x =
 
 unsignedIntegerBinary :: Phantoms.TTerm String -> Phantoms.TTerm Grammar.UnsignedInteger
 unsignedIntegerBinary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.UnsignedInteger"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "binary"),
@@ -21571,7 +21571,7 @@ unsignedIntegerBinary x =
 
 unsignedIntegerDecimal :: Phantoms.TTerm String -> Phantoms.TTerm Grammar.UnsignedInteger
 unsignedIntegerDecimal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.UnsignedInteger"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "decimal"),
@@ -21579,7 +21579,7 @@ unsignedIntegerDecimal x =
 
 unsignedIntegerHexadecimal :: Phantoms.TTerm String -> Phantoms.TTerm Grammar.UnsignedInteger
 unsignedIntegerHexadecimal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.UnsignedInteger"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hexadecimal"),
@@ -21587,7 +21587,7 @@ unsignedIntegerHexadecimal x =
 
 unsignedIntegerOctal :: Phantoms.TTerm String -> Phantoms.TTerm Grammar.UnsignedInteger
 unsignedIntegerOctal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.UnsignedInteger"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "octal"),
@@ -21595,7 +21595,7 @@ unsignedIntegerOctal x =
 
 unsignedLiteralGeneral :: Phantoms.TTerm Grammar.GeneralLiteral -> Phantoms.TTerm Grammar.UnsignedLiteral
 unsignedLiteralGeneral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.UnsignedLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "general"),
@@ -21603,7 +21603,7 @@ unsignedLiteralGeneral x =
 
 unsignedLiteralNumeric :: Phantoms.TTerm Grammar.UnsignedNumericLiteral -> Phantoms.TTerm Grammar.UnsignedLiteral
 unsignedLiteralNumeric x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.UnsignedLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "numeric"),
@@ -21611,7 +21611,7 @@ unsignedLiteralNumeric x =
 
 unsignedNumericLiteralApproximate :: Phantoms.TTerm Grammar.ApproximateNumericLiteral -> Phantoms.TTerm Grammar.UnsignedNumericLiteral
 unsignedNumericLiteralApproximate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.UnsignedNumericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "approximate"),
@@ -21619,7 +21619,7 @@ unsignedNumericLiteralApproximate x =
 
 unsignedNumericLiteralExact :: Phantoms.TTerm Grammar.ExactNumericLiteral -> Phantoms.TTerm Grammar.UnsignedNumericLiteral
 unsignedNumericLiteralExact x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.UnsignedNumericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "exact"),
@@ -21627,7 +21627,7 @@ unsignedNumericLiteralExact x =
 
 unsignedValueSpecificationGeneralValueSpecification :: Phantoms.TTerm Grammar.GeneralValueSpecification -> Phantoms.TTerm Grammar.UnsignedValueSpecification
 unsignedValueSpecificationGeneralValueSpecification x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.UnsignedValueSpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "generalValueSpecification"),
@@ -21635,7 +21635,7 @@ unsignedValueSpecificationGeneralValueSpecification x =
 
 unsignedValueSpecificationUnsignedLiteral :: Phantoms.TTerm Grammar.UnsignedLiteral -> Phantoms.TTerm Grammar.UnsignedValueSpecification
 unsignedValueSpecificationUnsignedLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.UnsignedValueSpecification"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unsignedLiteral"),
@@ -21643,7 +21643,7 @@ unsignedValueSpecificationUnsignedLiteral x =
 
 valueExpressionAddSubtract :: Phantoms.TTerm Grammar.AddSubtractExpr -> Phantoms.TTerm Grammar.ValueExpression
 valueExpressionAddSubtract x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "addSubtract"),
@@ -21651,7 +21651,7 @@ valueExpressionAddSubtract x =
 
 valueExpressionBindingTable :: Phantoms.TTerm Grammar.BindingTableExpression -> Phantoms.TTerm Grammar.ValueExpression
 valueExpressionBindingTable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bindingTable"),
@@ -21659,7 +21659,7 @@ valueExpressionBindingTable x =
 
 valueExpressionComparison :: Phantoms.TTerm Grammar.ComparisonExpr -> Phantoms.TTerm Grammar.ValueExpression
 valueExpressionComparison x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "comparison"),
@@ -21667,7 +21667,7 @@ valueExpressionComparison x =
 
 valueExpressionConcatenation :: Phantoms.TTerm Grammar.ConcatenationExpr -> Phantoms.TTerm Grammar.ValueExpression
 valueExpressionConcatenation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "concatenation"),
@@ -21675,7 +21675,7 @@ valueExpressionConcatenation x =
 
 valueExpressionConjunctive :: Phantoms.TTerm Grammar.ConjunctiveExpr -> Phantoms.TTerm Grammar.ValueExpression
 valueExpressionConjunctive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "conjunctive"),
@@ -21683,7 +21683,7 @@ valueExpressionConjunctive x =
 
 valueExpressionDisjunctive :: Phantoms.TTerm Grammar.DisjunctiveExpr -> Phantoms.TTerm Grammar.ValueExpression
 valueExpressionDisjunctive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "disjunctive"),
@@ -21691,7 +21691,7 @@ valueExpressionDisjunctive x =
 
 valueExpressionIsNot :: Phantoms.TTerm Grammar.IsNotExpr -> Phantoms.TTerm Grammar.ValueExpression
 valueExpressionIsNot x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "isNot"),
@@ -21699,7 +21699,7 @@ valueExpressionIsNot x =
 
 valueExpressionMultDiv :: Phantoms.TTerm Grammar.MultDivExpr -> Phantoms.TTerm Grammar.ValueExpression
 valueExpressionMultDiv x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multDiv"),
@@ -21707,7 +21707,7 @@ valueExpressionMultDiv x =
 
 valueExpressionNormalizedPredicate :: Phantoms.TTerm Grammar.NormalizedPredicateExpr -> Phantoms.TTerm Grammar.ValueExpression
 valueExpressionNormalizedPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "normalizedPredicate"),
@@ -21715,7 +21715,7 @@ valueExpressionNormalizedPredicate x =
 
 valueExpressionNot :: Phantoms.TTerm Grammar.NotExpr -> Phantoms.TTerm Grammar.ValueExpression
 valueExpressionNot x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "not"),
@@ -21723,7 +21723,7 @@ valueExpressionNot x =
 
 valueExpressionPredicate :: Phantoms.TTerm Grammar.Predicate -> Phantoms.TTerm Grammar.ValueExpression
 valueExpressionPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predicate"),
@@ -21731,7 +21731,7 @@ valueExpressionPredicate x =
 
 valueExpressionPrimary :: Phantoms.TTerm Grammar.PrimaryValueExpression -> Phantoms.TTerm Grammar.ValueExpression
 valueExpressionPrimary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primary"),
@@ -21739,7 +21739,7 @@ valueExpressionPrimary x =
 
 valueExpressionPropertyGraph :: Phantoms.TTerm Grammar.GraphExpression -> Phantoms.TTerm Grammar.ValueExpression
 valueExpressionPropertyGraph x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "propertyGraph"),
@@ -21747,7 +21747,7 @@ valueExpressionPropertyGraph x =
 
 valueExpressionSigned :: Phantoms.TTerm Grammar.SignedExpr -> Phantoms.TTerm Grammar.ValueExpression
 valueExpressionSigned x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "signed"),
@@ -21755,7 +21755,7 @@ valueExpressionSigned x =
 
 valueExpressionValueFunction :: Phantoms.TTerm Grammar.ValueFunction -> Phantoms.TTerm Grammar.ValueExpression
 valueExpressionValueFunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "valueFunction"),
@@ -21763,7 +21763,7 @@ valueExpressionValueFunction x =
 
 valueFunctionCharacterOrByteString :: Phantoms.TTerm Grammar.CharacterOrByteStringFunction -> Phantoms.TTerm Grammar.ValueFunction
 valueFunctionCharacterOrByteString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "characterOrByteString"),
@@ -21771,7 +21771,7 @@ valueFunctionCharacterOrByteString x =
 
 valueFunctionDatetime :: Phantoms.TTerm Grammar.DatetimeValueFunction -> Phantoms.TTerm Grammar.ValueFunction
 valueFunctionDatetime x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "datetime"),
@@ -21779,7 +21779,7 @@ valueFunctionDatetime x =
 
 valueFunctionDatetimeSubtraction :: Phantoms.TTerm Grammar.DatetimeSubtraction -> Phantoms.TTerm Grammar.ValueFunction
 valueFunctionDatetimeSubtraction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "datetimeSubtraction"),
@@ -21787,7 +21787,7 @@ valueFunctionDatetimeSubtraction x =
 
 valueFunctionDuration :: Phantoms.TTerm Grammar.DurationValueFunction -> Phantoms.TTerm Grammar.ValueFunction
 valueFunctionDuration x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "duration"),
@@ -21795,7 +21795,7 @@ valueFunctionDuration x =
 
 valueFunctionList :: Phantoms.TTerm Grammar.ListValueFunction -> Phantoms.TTerm Grammar.ValueFunction
 valueFunctionList x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -21803,7 +21803,7 @@ valueFunctionList x =
 
 valueFunctionNumeric :: Phantoms.TTerm Grammar.NumericValueFunction -> Phantoms.TTerm Grammar.ValueFunction
 valueFunctionNumeric x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "numeric"),
@@ -21811,7 +21811,7 @@ valueFunctionNumeric x =
 
 valueTypeClosedDynamicUnionTypeAlt1 :: Phantoms.TTerm Grammar.ClosedDynamicUnionTypeAlt1 -> Phantoms.TTerm Grammar.ValueType
 valueTypeClosedDynamicUnionTypeAlt1 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "closedDynamicUnionTypeAlt1"),
@@ -21819,7 +21819,7 @@ valueTypeClosedDynamicUnionTypeAlt1 x =
 
 valueTypeClosedDynamicUnionTypeAlt2 :: Phantoms.TTerm Grammar.ClosedDynamicUnionTypeAlt2 -> Phantoms.TTerm Grammar.ValueType
 valueTypeClosedDynamicUnionTypeAlt2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "closedDynamicUnionTypeAlt2"),
@@ -21827,7 +21827,7 @@ valueTypeClosedDynamicUnionTypeAlt2 x =
 
 valueTypeDynamicPropertyValueType :: Phantoms.TTerm Grammar.DynamicPropertyValueType -> Phantoms.TTerm Grammar.ValueType
 valueTypeDynamicPropertyValueType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dynamicPropertyValueType"),
@@ -21835,7 +21835,7 @@ valueTypeDynamicPropertyValueType x =
 
 valueTypeListValueTypeAlt1 :: Phantoms.TTerm Grammar.ListValueTypeAlt1 -> Phantoms.TTerm Grammar.ValueType
 valueTypeListValueTypeAlt1 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "listValueTypeAlt1"),
@@ -21843,7 +21843,7 @@ valueTypeListValueTypeAlt1 x =
 
 valueTypeListValueTypeAlt2 :: Phantoms.TTerm Grammar.ListValueTypeAlt2 -> Phantoms.TTerm Grammar.ValueType
 valueTypeListValueTypeAlt2 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "listValueTypeAlt2"),
@@ -21851,7 +21851,7 @@ valueTypeListValueTypeAlt2 x =
 
 valueTypeListValueTypeAlt3 :: Phantoms.TTerm Grammar.ListValueTypeAlt3 -> Phantoms.TTerm Grammar.ValueType
 valueTypeListValueTypeAlt3 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "listValueTypeAlt3"),
@@ -21859,7 +21859,7 @@ valueTypeListValueTypeAlt3 x =
 
 valueTypeOpenDynamicUnionType :: Phantoms.TTerm Grammar.OpenDynamicUnionType -> Phantoms.TTerm Grammar.ValueType
 valueTypeOpenDynamicUnionType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "openDynamicUnionType"),
@@ -21867,7 +21867,7 @@ valueTypeOpenDynamicUnionType x =
 
 valueTypePathValueType :: Phantoms.TTerm Grammar.PathValueType -> Phantoms.TTerm Grammar.ValueType
 valueTypePathValueType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pathValueType"),
@@ -21875,7 +21875,7 @@ valueTypePathValueType x =
 
 valueTypePredefinedType :: Phantoms.TTerm Grammar.PredefinedType -> Phantoms.TTerm Grammar.ValueType
 valueTypePredefinedType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predefinedType"),
@@ -22051,7 +22051,7 @@ valueTypePredicateWithValueTypePart original newVal =
 
 valueTypeRecordType :: Phantoms.TTerm Grammar.RecordType -> Phantoms.TTerm Grammar.ValueType
 valueTypeRecordType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.ValueType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "recordType"),
@@ -22239,7 +22239,7 @@ varcharTypeWithNotNull original newVal =
 
 verboseBinaryExactNumericTypeBigInteger :: Phantoms.TTerm Grammar.BigIntegerType -> Phantoms.TTerm Grammar.VerboseBinaryExactNumericType
 verboseBinaryExactNumericTypeBigInteger x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.VerboseBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bigInteger"),
@@ -22247,7 +22247,7 @@ verboseBinaryExactNumericTypeBigInteger x =
 
 verboseBinaryExactNumericTypeInteger128 :: Phantoms.TTerm Grammar.Integer128Type -> Phantoms.TTerm Grammar.VerboseBinaryExactNumericType
 verboseBinaryExactNumericTypeInteger128 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.VerboseBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer128"),
@@ -22255,7 +22255,7 @@ verboseBinaryExactNumericTypeInteger128 x =
 
 verboseBinaryExactNumericTypeInteger16 :: Phantoms.TTerm Grammar.Integer16Type -> Phantoms.TTerm Grammar.VerboseBinaryExactNumericType
 verboseBinaryExactNumericTypeInteger16 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.VerboseBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer16"),
@@ -22263,7 +22263,7 @@ verboseBinaryExactNumericTypeInteger16 x =
 
 verboseBinaryExactNumericTypeInteger256 :: Phantoms.TTerm Grammar.Integer256Type -> Phantoms.TTerm Grammar.VerboseBinaryExactNumericType
 verboseBinaryExactNumericTypeInteger256 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.VerboseBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer256"),
@@ -22271,7 +22271,7 @@ verboseBinaryExactNumericTypeInteger256 x =
 
 verboseBinaryExactNumericTypeInteger32 :: Phantoms.TTerm Grammar.Integer32Type -> Phantoms.TTerm Grammar.VerboseBinaryExactNumericType
 verboseBinaryExactNumericTypeInteger32 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.VerboseBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer32"),
@@ -22279,7 +22279,7 @@ verboseBinaryExactNumericTypeInteger32 x =
 
 verboseBinaryExactNumericTypeInteger64 :: Phantoms.TTerm Grammar.Integer64Type -> Phantoms.TTerm Grammar.VerboseBinaryExactNumericType
 verboseBinaryExactNumericTypeInteger64 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.VerboseBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer64"),
@@ -22287,7 +22287,7 @@ verboseBinaryExactNumericTypeInteger64 x =
 
 verboseBinaryExactNumericTypeInteger8 :: Phantoms.TTerm Grammar.Integer8Type -> Phantoms.TTerm Grammar.VerboseBinaryExactNumericType
 verboseBinaryExactNumericTypeInteger8 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.VerboseBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer8"),
@@ -22295,7 +22295,7 @@ verboseBinaryExactNumericTypeInteger8 x =
 
 verboseBinaryExactNumericTypeIntegerWithPrecision :: Phantoms.TTerm Grammar.IntegerWithPrecision -> Phantoms.TTerm Grammar.VerboseBinaryExactNumericType
 verboseBinaryExactNumericTypeIntegerWithPrecision x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.VerboseBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integerWithPrecision"),
@@ -22303,7 +22303,7 @@ verboseBinaryExactNumericTypeIntegerWithPrecision x =
 
 verboseBinaryExactNumericTypeSmallInteger :: Phantoms.TTerm Grammar.SmallIntegerType -> Phantoms.TTerm Grammar.VerboseBinaryExactNumericType
 verboseBinaryExactNumericTypeSmallInteger x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.VerboseBinaryExactNumericType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "smallInteger"),
@@ -22311,7 +22311,7 @@ verboseBinaryExactNumericTypeSmallInteger x =
 
 whenOperandComparison :: Phantoms.TTerm Grammar.ComparisonPredicatePart2 -> Phantoms.TTerm Grammar.WhenOperand
 whenOperandComparison x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.WhenOperand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "comparison"),
@@ -22319,7 +22319,7 @@ whenOperandComparison x =
 
 whenOperandDestinationPredicate :: Phantoms.TTerm Grammar.DestinationPredicate -> Phantoms.TTerm Grammar.WhenOperand
 whenOperandDestinationPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.WhenOperand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "destinationPredicate"),
@@ -22327,7 +22327,7 @@ whenOperandDestinationPredicate x =
 
 whenOperandDirectedPredicate :: Phantoms.TTerm Grammar.DirectedPredicatePart2 -> Phantoms.TTerm Grammar.WhenOperand
 whenOperandDirectedPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.WhenOperand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "directedPredicate"),
@@ -22335,7 +22335,7 @@ whenOperandDirectedPredicate x =
 
 whenOperandLabeledPredicate :: Phantoms.TTerm Grammar.LabeledPredicatePart2 -> Phantoms.TTerm Grammar.WhenOperand
 whenOperandLabeledPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.WhenOperand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "labeledPredicate"),
@@ -22343,7 +22343,7 @@ whenOperandLabeledPredicate x =
 
 whenOperandNormalizedPredicate :: Phantoms.TTerm Grammar.NormalizedPredicatePart2 -> Phantoms.TTerm Grammar.WhenOperand
 whenOperandNormalizedPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.WhenOperand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "normalizedPredicate"),
@@ -22351,7 +22351,7 @@ whenOperandNormalizedPredicate x =
 
 whenOperandNullPredicate :: Phantoms.TTerm Grammar.NullPredicatePart2 -> Phantoms.TTerm Grammar.WhenOperand
 whenOperandNullPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.WhenOperand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nullPredicate"),
@@ -22359,7 +22359,7 @@ whenOperandNullPredicate x =
 
 whenOperandSourcePredicate :: Phantoms.TTerm Grammar.SourcePredicate -> Phantoms.TTerm Grammar.WhenOperand
 whenOperandSourcePredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.WhenOperand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sourcePredicate"),
@@ -22367,7 +22367,7 @@ whenOperandSourcePredicate x =
 
 whenOperandValueExpression :: Phantoms.TTerm Grammar.NonParenthesizedPrimaryValueExpression -> Phantoms.TTerm Grammar.WhenOperand
 whenOperandValueExpression x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.WhenOperand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "valueExpression"),
@@ -22375,7 +22375,7 @@ whenOperandValueExpression x =
 
 whenOperandValueTypePredicate :: Phantoms.TTerm Grammar.ValueTypePredicatePart2 -> Phantoms.TTerm Grammar.WhenOperand
 whenOperandValueTypePredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.WhenOperand"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "valueTypePredicate"),

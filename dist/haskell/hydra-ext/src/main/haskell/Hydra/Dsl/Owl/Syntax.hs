@@ -206,7 +206,7 @@ annotationAssertionWithValue original newVal =
 
 annotationAxiomAnnotationAssertion :: Phantoms.TTerm OwlSyntax.AnnotationAssertion -> Phantoms.TTerm OwlSyntax.AnnotationAxiom
 annotationAxiomAnnotationAssertion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.AnnotationAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotationAssertion"),
@@ -214,7 +214,7 @@ annotationAxiomAnnotationAssertion x =
 
 annotationAxiomAnnotationPropertyDomain :: Phantoms.TTerm OwlSyntax.AnnotationPropertyDomain -> Phantoms.TTerm OwlSyntax.AnnotationAxiom
 annotationAxiomAnnotationPropertyDomain x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.AnnotationAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotationPropertyDomain"),
@@ -222,7 +222,7 @@ annotationAxiomAnnotationPropertyDomain x =
 
 annotationAxiomAnnotationPropertyRange :: Phantoms.TTerm OwlSyntax.AnnotationPropertyRange -> Phantoms.TTerm OwlSyntax.AnnotationAxiom
 annotationAxiomAnnotationPropertyRange x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.AnnotationAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotationPropertyRange"),
@@ -230,7 +230,7 @@ annotationAxiomAnnotationPropertyRange x =
 
 annotationAxiomSubAnnotationPropertyOf :: Phantoms.TTerm OwlSyntax.SubAnnotationPropertyOf -> Phantoms.TTerm OwlSyntax.AnnotationAxiom
 annotationAxiomSubAnnotationPropertyOf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.AnnotationAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "subAnnotationPropertyOf"),
@@ -468,7 +468,7 @@ annotationProperty_ x =
 
 annotationSubjectAnonymousIndividual :: Phantoms.TTerm OwlSyntax.AnonymousIndividual -> Phantoms.TTerm OwlSyntax.AnnotationSubject
 annotationSubjectAnonymousIndividual x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.AnnotationSubject"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "anonymousIndividual"),
@@ -476,7 +476,7 @@ annotationSubjectAnonymousIndividual x =
 
 annotationSubjectIri :: Phantoms.TTerm RdfSyntax.Iri -> Phantoms.TTerm OwlSyntax.AnnotationSubject
 annotationSubjectIri x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.AnnotationSubject"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "iri"),
@@ -492,7 +492,7 @@ annotationValue x =
 
 annotationValueAnonymousIndividual :: Phantoms.TTerm OwlSyntax.AnonymousIndividual -> Phantoms.TTerm OwlSyntax.AnnotationValue
 annotationValueAnonymousIndividual x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.AnnotationValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "anonymousIndividual"),
@@ -500,7 +500,7 @@ annotationValueAnonymousIndividual x =
 
 annotationValueIri :: Phantoms.TTerm RdfSyntax.Iri -> Phantoms.TTerm OwlSyntax.AnnotationValue
 annotationValueIri x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.AnnotationValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "iri"),
@@ -508,7 +508,7 @@ annotationValueIri x =
 
 annotationValueLiteral :: Phantoms.TTerm RdfSyntax.Literal -> Phantoms.TTerm OwlSyntax.AnnotationValue
 annotationValueLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.AnnotationValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
@@ -591,7 +591,7 @@ anonymousIndividual x =
 
 assertionClassAssertion :: Phantoms.TTerm OwlSyntax.ClassAssertion -> Phantoms.TTerm OwlSyntax.Assertion
 assertionClassAssertion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Assertion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "classAssertion"),
@@ -599,7 +599,7 @@ assertionClassAssertion x =
 
 assertionDataPropertyAssertion :: Phantoms.TTerm OwlSyntax.DataPropertyAssertion -> Phantoms.TTerm OwlSyntax.Assertion
 assertionDataPropertyAssertion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Assertion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dataPropertyAssertion"),
@@ -607,7 +607,7 @@ assertionDataPropertyAssertion x =
 
 assertionDifferentIndividuals :: Phantoms.TTerm OwlSyntax.DifferentIndividuals -> Phantoms.TTerm OwlSyntax.Assertion
 assertionDifferentIndividuals x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Assertion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "differentIndividuals"),
@@ -615,7 +615,7 @@ assertionDifferentIndividuals x =
 
 assertionNegativeDataPropertyAssertion :: Phantoms.TTerm OwlSyntax.NegativeDataPropertyAssertion -> Phantoms.TTerm OwlSyntax.Assertion
 assertionNegativeDataPropertyAssertion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Assertion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "negativeDataPropertyAssertion"),
@@ -623,7 +623,7 @@ assertionNegativeDataPropertyAssertion x =
 
 assertionNegativeObjectPropertyAssertion :: Phantoms.TTerm OwlSyntax.NegativeObjectPropertyAssertion -> Phantoms.TTerm OwlSyntax.Assertion
 assertionNegativeObjectPropertyAssertion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Assertion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "negativeObjectPropertyAssertion"),
@@ -631,7 +631,7 @@ assertionNegativeObjectPropertyAssertion x =
 
 assertionObjectPropertyAssertion :: Phantoms.TTerm OwlSyntax.ObjectPropertyAssertion -> Phantoms.TTerm OwlSyntax.Assertion
 assertionObjectPropertyAssertion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Assertion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objectPropertyAssertion"),
@@ -639,7 +639,7 @@ assertionObjectPropertyAssertion x =
 
 assertionSameIndividual :: Phantoms.TTerm OwlSyntax.SameIndividual -> Phantoms.TTerm OwlSyntax.Assertion
 assertionSameIndividual x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Assertion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sameIndividual"),
@@ -707,7 +707,7 @@ asymmetricObjectPropertyWithProperty original newVal =
 
 axiomAnnotationAxiom :: Phantoms.TTerm OwlSyntax.AnnotationAxiom -> Phantoms.TTerm OwlSyntax.Axiom
 axiomAnnotationAxiom x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Axiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotationAxiom"),
@@ -715,7 +715,7 @@ axiomAnnotationAxiom x =
 
 axiomAssertion :: Phantoms.TTerm OwlSyntax.Assertion -> Phantoms.TTerm OwlSyntax.Axiom
 axiomAssertion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Axiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "assertion"),
@@ -723,7 +723,7 @@ axiomAssertion x =
 
 axiomClassAxiom :: Phantoms.TTerm OwlSyntax.ClassAxiom -> Phantoms.TTerm OwlSyntax.Axiom
 axiomClassAxiom x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Axiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "classAxiom"),
@@ -731,7 +731,7 @@ axiomClassAxiom x =
 
 axiomDataPropertyAxiom :: Phantoms.TTerm OwlSyntax.DataPropertyAxiom -> Phantoms.TTerm OwlSyntax.Axiom
 axiomDataPropertyAxiom x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Axiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dataPropertyAxiom"),
@@ -739,7 +739,7 @@ axiomDataPropertyAxiom x =
 
 axiomDatatypeDefinition :: Phantoms.TTerm OwlSyntax.DatatypeDefinition -> Phantoms.TTerm OwlSyntax.Axiom
 axiomDatatypeDefinition x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Axiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "datatypeDefinition"),
@@ -747,7 +747,7 @@ axiomDatatypeDefinition x =
 
 axiomDeclaration :: Phantoms.TTerm OwlSyntax.Declaration -> Phantoms.TTerm OwlSyntax.Axiom
 axiomDeclaration x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Axiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "declaration"),
@@ -755,7 +755,7 @@ axiomDeclaration x =
 
 axiomHasKey :: Phantoms.TTerm OwlSyntax.HasKey -> Phantoms.TTerm OwlSyntax.Axiom
 axiomHasKey x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Axiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hasKey"),
@@ -763,7 +763,7 @@ axiomHasKey x =
 
 axiomObjectPropertyAxiom :: Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom -> Phantoms.TTerm OwlSyntax.Axiom
 axiomObjectPropertyAxiom x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Axiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objectPropertyAxiom"),
@@ -885,7 +885,7 @@ classAssertionWithIndividual original newVal =
 
 classAxiomDisjointClasses :: Phantoms.TTerm OwlSyntax.DisjointClasses -> Phantoms.TTerm OwlSyntax.ClassAxiom
 classAxiomDisjointClasses x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "disjointClasses"),
@@ -893,7 +893,7 @@ classAxiomDisjointClasses x =
 
 classAxiomDisjointUnion :: Phantoms.TTerm OwlSyntax.DisjointUnion -> Phantoms.TTerm OwlSyntax.ClassAxiom
 classAxiomDisjointUnion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "disjointUnion"),
@@ -901,7 +901,7 @@ classAxiomDisjointUnion x =
 
 classAxiomEquivalentClasses :: Phantoms.TTerm OwlSyntax.EquivalentClasses -> Phantoms.TTerm OwlSyntax.ClassAxiom
 classAxiomEquivalentClasses x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "equivalentClasses"),
@@ -909,7 +909,7 @@ classAxiomEquivalentClasses x =
 
 classAxiomSubClassOf :: Phantoms.TTerm OwlSyntax.SubClassOf -> Phantoms.TTerm OwlSyntax.ClassAxiom
 classAxiomSubClassOf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "subClassOf"),
@@ -917,7 +917,7 @@ classAxiomSubClassOf x =
 
 classExpressionClass :: Phantoms.TTerm OwlSyntax.Class -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionClass x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "class"),
@@ -925,7 +925,7 @@ classExpressionClass x =
 
 classExpressionDataAllValuesFrom :: Phantoms.TTerm OwlSyntax.DataAllValuesFrom -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionDataAllValuesFrom x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dataAllValuesFrom"),
@@ -933,7 +933,7 @@ classExpressionDataAllValuesFrom x =
 
 classExpressionDataExactCardinality :: Phantoms.TTerm OwlSyntax.DataExactCardinality -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionDataExactCardinality x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dataExactCardinality"),
@@ -941,7 +941,7 @@ classExpressionDataExactCardinality x =
 
 classExpressionDataHasValue :: Phantoms.TTerm OwlSyntax.DataHasValue -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionDataHasValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dataHasValue"),
@@ -949,7 +949,7 @@ classExpressionDataHasValue x =
 
 classExpressionDataMaxCardinality :: Phantoms.TTerm OwlSyntax.DataMaxCardinality -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionDataMaxCardinality x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dataMaxCardinality"),
@@ -957,7 +957,7 @@ classExpressionDataMaxCardinality x =
 
 classExpressionDataMinCardinality :: Phantoms.TTerm OwlSyntax.DataMinCardinality -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionDataMinCardinality x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dataMinCardinality"),
@@ -965,7 +965,7 @@ classExpressionDataMinCardinality x =
 
 classExpressionDataSomeValuesFrom :: Phantoms.TTerm OwlSyntax.DataSomeValuesFrom -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionDataSomeValuesFrom x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dataSomeValuesFrom"),
@@ -973,7 +973,7 @@ classExpressionDataSomeValuesFrom x =
 
 classExpressionObjectAllValuesFrom :: Phantoms.TTerm OwlSyntax.ObjectAllValuesFrom -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionObjectAllValuesFrom x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objectAllValuesFrom"),
@@ -981,7 +981,7 @@ classExpressionObjectAllValuesFrom x =
 
 classExpressionObjectExactCardinality :: Phantoms.TTerm OwlSyntax.ObjectExactCardinality -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionObjectExactCardinality x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objectExactCardinality"),
@@ -989,7 +989,7 @@ classExpressionObjectExactCardinality x =
 
 classExpressionObjectHasSelf :: Phantoms.TTerm OwlSyntax.ObjectHasSelf -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionObjectHasSelf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objectHasSelf"),
@@ -997,7 +997,7 @@ classExpressionObjectHasSelf x =
 
 classExpressionObjectHasValue :: Phantoms.TTerm OwlSyntax.ObjectHasValue -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionObjectHasValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objectHasValue"),
@@ -1005,7 +1005,7 @@ classExpressionObjectHasValue x =
 
 classExpressionObjectIntersectionOf :: Phantoms.TTerm OwlSyntax.ObjectIntersectionOf -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionObjectIntersectionOf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objectIntersectionOf"),
@@ -1013,7 +1013,7 @@ classExpressionObjectIntersectionOf x =
 
 classExpressionObjectMaxCardinality :: Phantoms.TTerm OwlSyntax.ObjectMaxCardinality -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionObjectMaxCardinality x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objectMaxCardinality"),
@@ -1021,7 +1021,7 @@ classExpressionObjectMaxCardinality x =
 
 classExpressionObjectMinCardinality :: Phantoms.TTerm OwlSyntax.ObjectMinCardinality -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionObjectMinCardinality x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objectMinCardinality"),
@@ -1029,7 +1029,7 @@ classExpressionObjectMinCardinality x =
 
 classExpressionObjectOneOf :: Phantoms.TTerm OwlSyntax.ObjectOneOf -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionObjectOneOf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objectOneOf"),
@@ -1037,7 +1037,7 @@ classExpressionObjectOneOf x =
 
 classExpressionObjectSomeValuesFrom :: Phantoms.TTerm OwlSyntax.ObjectSomeValuesFrom -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionObjectSomeValuesFrom x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objectSomeValuesFrom"),
@@ -1045,7 +1045,7 @@ classExpressionObjectSomeValuesFrom x =
 
 classExpressionObjectUnionOf :: Phantoms.TTerm OwlSyntax.ObjectUnionOf -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionObjectUnionOf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objectUnionOf"),
@@ -1691,7 +1691,7 @@ dataPropertyAssertionWithTarget original newVal =
 
 dataPropertyAxiomDataPropertyAxiom :: Phantoms.TTerm OwlSyntax.DataPropertyAxiom -> Phantoms.TTerm OwlSyntax.DataPropertyAxiom
 dataPropertyAxiomDataPropertyAxiom x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataPropertyAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dataPropertyAxiom"),
@@ -1699,7 +1699,7 @@ dataPropertyAxiomDataPropertyAxiom x =
 
 dataPropertyAxiomDataPropertyRange :: Phantoms.TTerm OwlSyntax.DataPropertyRange -> Phantoms.TTerm OwlSyntax.DataPropertyAxiom
 dataPropertyAxiomDataPropertyRange x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataPropertyAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dataPropertyRange"),
@@ -1707,7 +1707,7 @@ dataPropertyAxiomDataPropertyRange x =
 
 dataPropertyAxiomDisjointDataProperties :: Phantoms.TTerm OwlSyntax.DisjointDataProperties -> Phantoms.TTerm OwlSyntax.DataPropertyAxiom
 dataPropertyAxiomDisjointDataProperties x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataPropertyAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "disjointDataProperties"),
@@ -1715,7 +1715,7 @@ dataPropertyAxiomDisjointDataProperties x =
 
 dataPropertyAxiomEquivalentDataProperties :: Phantoms.TTerm OwlSyntax.EquivalentDataProperties -> Phantoms.TTerm OwlSyntax.DataPropertyAxiom
 dataPropertyAxiomEquivalentDataProperties x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataPropertyAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "equivalentDataProperties"),
@@ -1723,7 +1723,7 @@ dataPropertyAxiomEquivalentDataProperties x =
 
 dataPropertyAxiomFunctionalDataProperty :: Phantoms.TTerm OwlSyntax.FunctionalDataProperty -> Phantoms.TTerm OwlSyntax.DataPropertyAxiom
 dataPropertyAxiomFunctionalDataProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataPropertyAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "functionalDataProperty"),
@@ -1731,7 +1731,7 @@ dataPropertyAxiomFunctionalDataProperty x =
 
 dataPropertyAxiomSubDataPropertyOf :: Phantoms.TTerm OwlSyntax.SubDataPropertyOf -> Phantoms.TTerm OwlSyntax.DataPropertyAxiom
 dataPropertyAxiomSubDataPropertyOf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataPropertyAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "subDataPropertyOf"),
@@ -1961,7 +1961,7 @@ dataPropertyRangeWithRange original newVal =
 
 dataRangeDataComplementOf :: Phantoms.TTerm OwlSyntax.DataComplementOf -> Phantoms.TTerm OwlSyntax.DataRange
 dataRangeDataComplementOf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataRange"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dataComplementOf"),
@@ -1969,7 +1969,7 @@ dataRangeDataComplementOf x =
 
 dataRangeDataIntersectionOf :: Phantoms.TTerm OwlSyntax.DataIntersectionOf -> Phantoms.TTerm OwlSyntax.DataRange
 dataRangeDataIntersectionOf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataRange"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dataIntersectionOf"),
@@ -1977,7 +1977,7 @@ dataRangeDataIntersectionOf x =
 
 dataRangeDataOneOf :: Phantoms.TTerm OwlSyntax.DataOneOf -> Phantoms.TTerm OwlSyntax.DataRange
 dataRangeDataOneOf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataRange"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dataOneOf"),
@@ -1985,7 +1985,7 @@ dataRangeDataOneOf x =
 
 dataRangeDataUnionOf :: Phantoms.TTerm OwlSyntax.DataUnionOf -> Phantoms.TTerm OwlSyntax.DataRange
 dataRangeDataUnionOf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataRange"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dataUnionOf"),
@@ -1993,7 +1993,7 @@ dataRangeDataUnionOf x =
 
 dataRangeDatatype :: Phantoms.TTerm OwlSyntax.Datatype -> Phantoms.TTerm OwlSyntax.DataRange
 dataRangeDatatype x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataRange"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "datatype"),
@@ -2001,7 +2001,7 @@ dataRangeDatatype x =
 
 dataRangeDatatypeRestriction :: Phantoms.TTerm OwlSyntax.DatatypeRestriction -> Phantoms.TTerm OwlSyntax.DataRange
 dataRangeDatatypeRestriction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataRange"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "datatypeRestriction"),
@@ -2183,7 +2183,7 @@ datatypeDefinitionWithRange original newVal =
 
 datatypeOther :: Phantoms.TTerm RdfSyntax.Iri -> Phantoms.TTerm OwlSyntax.Datatype
 datatypeOther x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "other"),
@@ -2251,7 +2251,7 @@ datatypeRestrictionWithDatatype original newVal =
 
 datatypeRestriction_ConstrainingFacetOther :: Phantoms.TTerm RdfSyntax.Iri -> Phantoms.TTerm OwlSyntax.DatatypeRestriction_ConstrainingFacet
 datatypeRestriction_ConstrainingFacetOther x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DatatypeRestriction_ConstrainingFacet"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "other"),
@@ -2259,7 +2259,7 @@ datatypeRestriction_ConstrainingFacetOther x =
 
 datatypeRestriction_ConstrainingFacetXmlSchema :: Phantoms.TTerm Schema.ConstrainingFacet -> Phantoms.TTerm OwlSyntax.DatatypeRestriction_ConstrainingFacet
 datatypeRestriction_ConstrainingFacetXmlSchema x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DatatypeRestriction_ConstrainingFacet"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "xmlSchema"),
@@ -2327,7 +2327,7 @@ datatypeRestriction_ConstraintWithRestrictionValue original newVal =
 
 datatypeXmlSchema :: Phantoms.TTerm Schema.Datatype -> Phantoms.TTerm OwlSyntax.Datatype
 datatypeXmlSchema x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "xmlSchema"),
@@ -2743,7 +2743,7 @@ disjointUnionWithClasses original newVal =
 
 entityAnnotationProperty :: Phantoms.TTerm OwlSyntax.AnnotationProperty -> Phantoms.TTerm OwlSyntax.Entity
 entityAnnotationProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Entity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotationProperty"),
@@ -2751,7 +2751,7 @@ entityAnnotationProperty x =
 
 entityClass :: Phantoms.TTerm OwlSyntax.Class -> Phantoms.TTerm OwlSyntax.Entity
 entityClass x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Entity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "class"),
@@ -2759,7 +2759,7 @@ entityClass x =
 
 entityDataProperty :: Phantoms.TTerm OwlSyntax.DataProperty -> Phantoms.TTerm OwlSyntax.Entity
 entityDataProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Entity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dataProperty"),
@@ -2767,7 +2767,7 @@ entityDataProperty x =
 
 entityDatatype :: Phantoms.TTerm OwlSyntax.Datatype -> Phantoms.TTerm OwlSyntax.Entity
 entityDatatype x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Entity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "datatype"),
@@ -2775,7 +2775,7 @@ entityDatatype x =
 
 entityNamedIndividual :: Phantoms.TTerm OwlSyntax.NamedIndividual -> Phantoms.TTerm OwlSyntax.Entity
 entityNamedIndividual x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Entity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "namedIndividual"),
@@ -2783,7 +2783,7 @@ entityNamedIndividual x =
 
 entityObjectProperty :: Phantoms.TTerm OwlSyntax.ObjectProperty -> Phantoms.TTerm OwlSyntax.Entity
 entityObjectProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Entity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objectProperty"),
@@ -3261,7 +3261,7 @@ hasKeyWithObjectProperties original newVal =
 
 individualAnonymous :: Phantoms.TTerm OwlSyntax.AnonymousIndividual -> Phantoms.TTerm OwlSyntax.Individual
 individualAnonymous x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Individual"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "anonymous"),
@@ -3269,7 +3269,7 @@ individualAnonymous x =
 
 individualNamed :: Phantoms.TTerm OwlSyntax.NamedIndividual -> Phantoms.TTerm OwlSyntax.Individual
 individualNamed x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Individual"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "named"),
@@ -4501,7 +4501,7 @@ objectPropertyAssertionWithTarget original newVal =
 
 objectPropertyAxiomAsymmetricObjectProperty :: Phantoms.TTerm OwlSyntax.AsymmetricObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomAsymmetricObjectProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "asymmetricObjectProperty"),
@@ -4509,7 +4509,7 @@ objectPropertyAxiomAsymmetricObjectProperty x =
 
 objectPropertyAxiomDisjointObjectProperties :: Phantoms.TTerm OwlSyntax.DisjointObjectProperties -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomDisjointObjectProperties x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "disjointObjectProperties"),
@@ -4517,7 +4517,7 @@ objectPropertyAxiomDisjointObjectProperties x =
 
 objectPropertyAxiomEquivalentObjectProperties :: Phantoms.TTerm OwlSyntax.EquivalentObjectProperties -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomEquivalentObjectProperties x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "equivalentObjectProperties"),
@@ -4525,7 +4525,7 @@ objectPropertyAxiomEquivalentObjectProperties x =
 
 objectPropertyAxiomFunctionalObjectProperty :: Phantoms.TTerm OwlSyntax.FunctionalObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomFunctionalObjectProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "functionalObjectProperty"),
@@ -4533,7 +4533,7 @@ objectPropertyAxiomFunctionalObjectProperty x =
 
 objectPropertyAxiomInverseFunctionalObjectProperty :: Phantoms.TTerm OwlSyntax.InverseFunctionalObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomInverseFunctionalObjectProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inverseFunctionalObjectProperty"),
@@ -4541,7 +4541,7 @@ objectPropertyAxiomInverseFunctionalObjectProperty x =
 
 objectPropertyAxiomInverseObjectProperties :: Phantoms.TTerm OwlSyntax.InverseObjectProperties -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomInverseObjectProperties x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inverseObjectProperties"),
@@ -4549,7 +4549,7 @@ objectPropertyAxiomInverseObjectProperties x =
 
 objectPropertyAxiomIrreflexiveObjectProperty :: Phantoms.TTerm OwlSyntax.IrreflexiveObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomIrreflexiveObjectProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "irreflexiveObjectProperty"),
@@ -4557,7 +4557,7 @@ objectPropertyAxiomIrreflexiveObjectProperty x =
 
 objectPropertyAxiomObjectPropertyDomain :: Phantoms.TTerm OwlSyntax.ObjectPropertyDomain -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomObjectPropertyDomain x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objectPropertyDomain"),
@@ -4565,7 +4565,7 @@ objectPropertyAxiomObjectPropertyDomain x =
 
 objectPropertyAxiomObjectPropertyRange :: Phantoms.TTerm OwlSyntax.ObjectPropertyRange -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomObjectPropertyRange x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objectPropertyRange"),
@@ -4573,7 +4573,7 @@ objectPropertyAxiomObjectPropertyRange x =
 
 objectPropertyAxiomReflexiveObjectProperty :: Phantoms.TTerm OwlSyntax.ReflexiveObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomReflexiveObjectProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "reflexiveObjectProperty"),
@@ -4581,7 +4581,7 @@ objectPropertyAxiomReflexiveObjectProperty x =
 
 objectPropertyAxiomSubObjectPropertyOf :: Phantoms.TTerm OwlSyntax.SubObjectPropertyOf -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomSubObjectPropertyOf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "subObjectPropertyOf"),
@@ -4589,7 +4589,7 @@ objectPropertyAxiomSubObjectPropertyOf x =
 
 objectPropertyAxiomSymmetricObjectProperty :: Phantoms.TTerm OwlSyntax.SymmetricObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomSymmetricObjectProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "symmetricObjectProperty"),
@@ -4597,7 +4597,7 @@ objectPropertyAxiomSymmetricObjectProperty x =
 
 objectPropertyAxiomTransitiveObjectProperty :: Phantoms.TTerm OwlSyntax.TransitiveObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomTransitiveObjectProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "transitiveObjectProperty"),
@@ -4713,7 +4713,7 @@ objectPropertyDomainWithProperty original newVal =
 
 objectPropertyExpressionInverseObject :: Phantoms.TTerm OwlSyntax.InverseObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 objectPropertyExpressionInverseObject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inverseObject"),
@@ -4721,7 +4721,7 @@ objectPropertyExpressionInverseObject x =
 
 objectPropertyExpressionObject :: Phantoms.TTerm OwlSyntax.ObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 objectPropertyExpressionObject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "object"),

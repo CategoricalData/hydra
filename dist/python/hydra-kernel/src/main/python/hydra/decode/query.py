@@ -20,7 +20,7 @@ import hydra.query
 def comparison_constraint(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_comparison_constraint_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -73,7 +73,7 @@ def variable(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def node(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_node_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -144,7 +144,7 @@ def range_(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def regex_quantifier(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_regex_quantifier_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -202,7 +202,7 @@ def regex_quantifier(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def step(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_step_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -218,7 +218,7 @@ def step(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def path(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_path_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -273,7 +273,7 @@ def graph_pattern(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def pattern(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_pattern_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term

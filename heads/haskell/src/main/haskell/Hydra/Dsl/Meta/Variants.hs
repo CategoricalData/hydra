@@ -39,7 +39,7 @@ termVariant v = injectUnit _TermVariant $ case v of
   TermVariantSet -> _TermVariant_set
   TermVariantTypeLambda -> _TermVariant_typeLambda
   TermVariantTypeApplication -> _TermVariant_typeApplication
-  TermVariantUnion -> _TermVariant_union
+  TermVariantInject -> _TermVariant_inject
   TermVariantUnit -> _TermVariant_unit
   TermVariantUnwrap -> _TermVariant_unwrap
   TermVariantVariable -> _TermVariant_variable

@@ -160,7 +160,7 @@ public interface Environment {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.TypeScheme>> visit(hydra.core.Term.Union i) {
+        public hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.TypeScheme>> visit(hydra.core.Term.Inject i) {
           return hydra.lib.logic.IfElse.lazy(
             hydra.lib.equality.Equal.apply(
               (i).value.typeName,

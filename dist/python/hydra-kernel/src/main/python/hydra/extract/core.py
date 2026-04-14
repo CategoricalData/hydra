@@ -302,7 +302,7 @@ def function_type(typ: hydra.core.Type) -> Either[hydra.errors.Error, hydra.core
 def injection(expected: hydra.core.Name, graph: hydra.graph.Graph, term0: hydra.core.Term):
     def _hoist_hydra_extract_core_injection_1(expected, term, v1):
         match v1:
-            case hydra.core.TermUnion(value=injection):
+            case hydra.core.TermInject(value=injection):
                 return hydra.lib.logic.if_else(hydra.lib.equality.equal(injection.type_name.value, expected.value), (lambda : Right(injection.field)), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2("injection of type ", expected.value), injection.type_name.value))))))))
 
             case _:

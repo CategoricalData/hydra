@@ -71,7 +71,7 @@ addOrSubtractExpressionWithRight original newVal =
 
 addOrSubtractOperatorAdd :: Phantoms.TTerm OpenCypher.AddOrSubtractOperator
 addOrSubtractOperatorAdd =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.AddOrSubtractOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "add"),
@@ -79,7 +79,7 @@ addOrSubtractOperatorAdd =
 
 addOrSubtractOperatorSubtract :: Phantoms.TTerm OpenCypher.AddOrSubtractOperator
 addOrSubtractOperatorSubtract =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.AddOrSubtractOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "subtract"),
@@ -159,7 +159,7 @@ anonymousPatternPart x =
 
 atomCase :: Phantoms.TTerm OpenCypher.CaseExpression -> Phantoms.TTerm OpenCypher.Atom
 atomCase x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "case"),
@@ -167,7 +167,7 @@ atomCase x =
 
 atomCountStar :: Phantoms.TTerm OpenCypher.Atom
 atomCountStar =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "countStar"),
@@ -175,7 +175,7 @@ atomCountStar =
 
 atomExistentialSubquery :: Phantoms.TTerm OpenCypher.ExistentialSubquery -> Phantoms.TTerm OpenCypher.Atom
 atomExistentialSubquery x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "existentialSubquery"),
@@ -183,7 +183,7 @@ atomExistentialSubquery x =
 
 atomFunctionInvocation :: Phantoms.TTerm OpenCypher.FunctionInvocation -> Phantoms.TTerm OpenCypher.Atom
 atomFunctionInvocation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "functionInvocation"),
@@ -191,7 +191,7 @@ atomFunctionInvocation x =
 
 atomListComprehension :: Phantoms.TTerm OpenCypher.ListComprehension -> Phantoms.TTerm OpenCypher.Atom
 atomListComprehension x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "listComprehension"),
@@ -199,7 +199,7 @@ atomListComprehension x =
 
 atomLiteral :: Phantoms.TTerm OpenCypher.Literal -> Phantoms.TTerm OpenCypher.Atom
 atomLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
@@ -207,7 +207,7 @@ atomLiteral x =
 
 atomParameter :: Phantoms.TTerm OpenCypher.Parameter -> Phantoms.TTerm OpenCypher.Atom
 atomParameter x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parameter"),
@@ -215,7 +215,7 @@ atomParameter x =
 
 atomParenthesized :: Phantoms.TTerm OpenCypher.ParenthesizedExpression -> Phantoms.TTerm OpenCypher.Atom
 atomParenthesized x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parenthesized"),
@@ -223,7 +223,7 @@ atomParenthesized x =
 
 atomPatternComprehension :: Phantoms.TTerm OpenCypher.PatternComprehension -> Phantoms.TTerm OpenCypher.Atom
 atomPatternComprehension x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "patternComprehension"),
@@ -231,7 +231,7 @@ atomPatternComprehension x =
 
 atomPatternPredicate :: Phantoms.TTerm OpenCypher.PatternPredicate -> Phantoms.TTerm OpenCypher.Atom
 atomPatternPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "patternPredicate"),
@@ -239,7 +239,7 @@ atomPatternPredicate x =
 
 atomQuantifier :: Phantoms.TTerm OpenCypher.Quantifier -> Phantoms.TTerm OpenCypher.Atom
 atomQuantifier x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "quantifier"),
@@ -247,7 +247,7 @@ atomQuantifier x =
 
 atomVariable :: Phantoms.TTerm OpenCypher.Variable -> Phantoms.TTerm OpenCypher.Atom
 atomVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -483,7 +483,7 @@ comparisonExpressionWithRight original newVal =
 
 comparisonOperatorEq :: Phantoms.TTerm OpenCypher.ComparisonOperator
 comparisonOperatorEq =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "eq"),
@@ -491,7 +491,7 @@ comparisonOperatorEq =
 
 comparisonOperatorGt :: Phantoms.TTerm OpenCypher.ComparisonOperator
 comparisonOperatorGt =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "gt"),
@@ -499,7 +499,7 @@ comparisonOperatorGt =
 
 comparisonOperatorGte :: Phantoms.TTerm OpenCypher.ComparisonOperator
 comparisonOperatorGte =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "gte"),
@@ -507,7 +507,7 @@ comparisonOperatorGte =
 
 comparisonOperatorLt :: Phantoms.TTerm OpenCypher.ComparisonOperator
 comparisonOperatorLt =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lt"),
@@ -515,7 +515,7 @@ comparisonOperatorLt =
 
 comparisonOperatorLte :: Phantoms.TTerm OpenCypher.ComparisonOperator
 comparisonOperatorLte =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lte"),
@@ -523,7 +523,7 @@ comparisonOperatorLte =
 
 comparisonOperatorNeq :: Phantoms.TTerm OpenCypher.ComparisonOperator
 comparisonOperatorNeq =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "neq"),
@@ -597,7 +597,7 @@ deleteWithExpressions original newVal =
 
 existentialSubqueryPattern :: Phantoms.TTerm OpenCypher.PatternWhere -> Phantoms.TTerm OpenCypher.ExistentialSubquery
 existentialSubqueryPattern x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ExistentialSubquery"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pattern"),
@@ -605,7 +605,7 @@ existentialSubqueryPattern x =
 
 existentialSubqueryRegular :: Phantoms.TTerm OpenCypher.RegularQuery -> Phantoms.TTerm OpenCypher.ExistentialSubquery
 existentialSubqueryRegular x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ExistentialSubquery"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "regular"),
@@ -1105,7 +1105,7 @@ listLiteral x =
 
 listOperatorExpressionOrPropertyLookupList :: Phantoms.TTerm OpenCypher.ListOperatorExpression -> Phantoms.TTerm OpenCypher.ListOperatorExpressionOrPropertyLookup
 listOperatorExpressionOrPropertyLookupList x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ListOperatorExpressionOrPropertyLookup"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -1113,7 +1113,7 @@ listOperatorExpressionOrPropertyLookupList x =
 
 listOperatorExpressionOrPropertyLookupProperty :: Phantoms.TTerm OpenCypher.PropertyLookup -> Phantoms.TTerm OpenCypher.ListOperatorExpressionOrPropertyLookup
 listOperatorExpressionOrPropertyLookupProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ListOperatorExpressionOrPropertyLookup"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "property"),
@@ -1121,7 +1121,7 @@ listOperatorExpressionOrPropertyLookupProperty x =
 
 listOperatorExpressionRange :: Phantoms.TTerm OpenCypher.RangeExpression -> Phantoms.TTerm OpenCypher.ListOperatorExpression
 listOperatorExpressionRange x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ListOperatorExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "range"),
@@ -1129,7 +1129,7 @@ listOperatorExpressionRange x =
 
 listOperatorExpressionSingle :: Phantoms.TTerm OpenCypher.Expression -> Phantoms.TTerm OpenCypher.ListOperatorExpression
 listOperatorExpressionSingle x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ListOperatorExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "single"),
@@ -1143,7 +1143,7 @@ listPredicateExpression x =
 
 literalBoolean :: Phantoms.TTerm Bool -> Phantoms.TTerm OpenCypher.Literal
 literalBoolean x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -1151,7 +1151,7 @@ literalBoolean x =
 
 literalList :: Phantoms.TTerm OpenCypher.ListLiteral -> Phantoms.TTerm OpenCypher.Literal
 literalList x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -1159,7 +1159,7 @@ literalList x =
 
 literalMap :: Phantoms.TTerm OpenCypher.MapLiteral -> Phantoms.TTerm OpenCypher.Literal
 literalMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -1167,7 +1167,7 @@ literalMap x =
 
 literalNull :: Phantoms.TTerm OpenCypher.Literal
 literalNull =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "null"),
@@ -1175,7 +1175,7 @@ literalNull =
 
 literalNumber :: Phantoms.TTerm OpenCypher.NumberLiteral -> Phantoms.TTerm OpenCypher.Literal
 literalNumber x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "number"),
@@ -1183,7 +1183,7 @@ literalNumber x =
 
 literalString :: Phantoms.TTerm OpenCypher.StringLiteral -> Phantoms.TTerm OpenCypher.Literal
 literalString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -1220,7 +1220,7 @@ matchOptional x =
 
 matchOrCreateCreate :: Phantoms.TTerm OpenCypher.MatchOrCreate
 matchOrCreateCreate =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.MatchOrCreate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "create"),
@@ -1228,7 +1228,7 @@ matchOrCreateCreate =
 
 matchOrCreateMatch :: Phantoms.TTerm OpenCypher.MatchOrCreate
 matchOrCreateMatch =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.MatchOrCreate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "match"),
@@ -1561,7 +1561,7 @@ multiplyDivideModuloExpressionWithRight original newVal =
 
 multiplyDivideModuloOperatorDivide :: Phantoms.TTerm OpenCypher.MultiplyDivideModuloOperator
 multiplyDivideModuloOperatorDivide =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.MultiplyDivideModuloOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "divide"),
@@ -1569,7 +1569,7 @@ multiplyDivideModuloOperatorDivide =
 
 multiplyDivideModuloOperatorModulo :: Phantoms.TTerm OpenCypher.MultiplyDivideModuloOperator
 multiplyDivideModuloOperatorModulo =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.MultiplyDivideModuloOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "modulo"),
@@ -1577,7 +1577,7 @@ multiplyDivideModuloOperatorModulo =
 
 multiplyDivideModuloOperatorMultiply :: Phantoms.TTerm OpenCypher.MultiplyDivideModuloOperator
 multiplyDivideModuloOperatorMultiply =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.MultiplyDivideModuloOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multiply"),
@@ -1999,7 +1999,7 @@ nullPredicateExpression x =
 
 numberLiteralDouble :: Phantoms.TTerm Double -> Phantoms.TTerm OpenCypher.NumberLiteral
 numberLiteralDouble x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.NumberLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "double"),
@@ -2007,7 +2007,7 @@ numberLiteralDouble x =
 
 numberLiteralInteger :: Phantoms.TTerm Integer -> Phantoms.TTerm OpenCypher.NumberLiteral
 numberLiteralInteger x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.NumberLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
@@ -2027,7 +2027,7 @@ order x =
 
 parameterInteger :: Phantoms.TTerm Integer -> Phantoms.TTerm OpenCypher.Parameter
 parameterInteger x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Parameter"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
@@ -2035,7 +2035,7 @@ parameterInteger x =
 
 parameterSymbolic :: Phantoms.TTerm String -> Phantoms.TTerm OpenCypher.Parameter
 parameterSymbolic x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Parameter"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "symbolic"),
@@ -2345,7 +2345,7 @@ patternElementChainWithRelationship original newVal =
 
 patternElementChained :: Phantoms.TTerm OpenCypher.NodePatternChain -> Phantoms.TTerm OpenCypher.PatternElement
 patternElementChained x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternElement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "chained"),
@@ -2353,7 +2353,7 @@ patternElementChained x =
 
 patternElementParenthesized :: Phantoms.TTerm OpenCypher.PatternElement -> Phantoms.TTerm OpenCypher.PatternElement
 patternElementParenthesized x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.PatternElement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parenthesized"),
@@ -2493,7 +2493,7 @@ powerOfExpression x =
 
 procedureInvocationExplicit :: Phantoms.TTerm OpenCypher.ExplicitProcedureInvocation -> Phantoms.TTerm OpenCypher.ProcedureInvocation
 procedureInvocationExplicit x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ProcedureInvocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "explicit"),
@@ -2501,7 +2501,7 @@ procedureInvocationExplicit x =
 
 procedureInvocationImplicit :: Phantoms.TTerm OpenCypher.ImplicitProcedureInvocation -> Phantoms.TTerm OpenCypher.ProcedureInvocation
 procedureInvocationImplicit x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ProcedureInvocation"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "implicit"),
@@ -2881,7 +2881,7 @@ projectionItemsWithStar original newVal =
 
 propertiesMap :: Phantoms.TTerm OpenCypher.MapLiteral -> Phantoms.TTerm OpenCypher.Properties
 propertiesMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Properties"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -2889,7 +2889,7 @@ propertiesMap x =
 
 propertiesParameter :: Phantoms.TTerm OpenCypher.Parameter -> Phantoms.TTerm OpenCypher.Properties
 propertiesParameter x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Properties"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parameter"),
@@ -3117,7 +3117,7 @@ quantifierOperator x =
 
 quantifierOperatorAll :: Phantoms.TTerm OpenCypher.QuantifierOperator
 quantifierOperatorAll =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.QuantifierOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "all"),
@@ -3125,7 +3125,7 @@ quantifierOperatorAll =
 
 quantifierOperatorAny :: Phantoms.TTerm OpenCypher.QuantifierOperator
 quantifierOperatorAny =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.QuantifierOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "any"),
@@ -3133,7 +3133,7 @@ quantifierOperatorAny =
 
 quantifierOperatorNone :: Phantoms.TTerm OpenCypher.QuantifierOperator
 quantifierOperatorNone =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.QuantifierOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "none"),
@@ -3141,7 +3141,7 @@ quantifierOperatorNone =
 
 quantifierOperatorSingle :: Phantoms.TTerm OpenCypher.QuantifierOperator
 quantifierOperatorSingle =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.QuantifierOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "single"),
@@ -3181,7 +3181,7 @@ quantifierWithOperator original newVal =
 
 queryRegular :: Phantoms.TTerm OpenCypher.RegularQuery -> Phantoms.TTerm OpenCypher.Query
 queryRegular x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Query"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "regular"),
@@ -3189,7 +3189,7 @@ queryRegular x =
 
 queryStandalone :: Phantoms.TTerm OpenCypher.StandaloneCall -> Phantoms.TTerm OpenCypher.Query
 queryStandalone x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.Query"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "standalone"),
@@ -3317,7 +3317,7 @@ rangeLiteralWithStart original newVal =
 
 readingClauseInQueryCall :: Phantoms.TTerm OpenCypher.InQueryCall -> Phantoms.TTerm OpenCypher.ReadingClause
 readingClauseInQueryCall x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ReadingClause"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inQueryCall"),
@@ -3325,7 +3325,7 @@ readingClauseInQueryCall x =
 
 readingClauseMatch :: Phantoms.TTerm OpenCypher.Match -> Phantoms.TTerm OpenCypher.ReadingClause
 readingClauseMatch x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ReadingClause"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "match"),
@@ -3333,7 +3333,7 @@ readingClauseMatch x =
 
 readingClauseUnwind :: Phantoms.TTerm OpenCypher.Unwind -> Phantoms.TTerm OpenCypher.ReadingClause
 readingClauseUnwind x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.ReadingClause"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unwind"),
@@ -3757,7 +3757,7 @@ remove x =
 
 removeItemProperty :: Phantoms.TTerm OpenCypher.PropertyExpression -> Phantoms.TTerm OpenCypher.RemoveItem
 removeItemProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.RemoveItem"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "property"),
@@ -3765,7 +3765,7 @@ removeItemProperty x =
 
 removeItemVariableLabels :: Phantoms.TTerm OpenCypher.VariableAndNodeLabels -> Phantoms.TTerm OpenCypher.RemoveItem
 removeItemVariableLabels x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.RemoveItem"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variableLabels"),
@@ -3785,7 +3785,7 @@ set x =
 
 setItemProperty :: Phantoms.TTerm OpenCypher.PropertyEquals -> Phantoms.TTerm OpenCypher.SetItem
 setItemProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.SetItem"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "property"),
@@ -3793,7 +3793,7 @@ setItemProperty x =
 
 setItemVariableEqual :: Phantoms.TTerm OpenCypher.VariableEquals -> Phantoms.TTerm OpenCypher.SetItem
 setItemVariableEqual x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.SetItem"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variableEqual"),
@@ -3801,7 +3801,7 @@ setItemVariableEqual x =
 
 setItemVariableLabels :: Phantoms.TTerm OpenCypher.VariableAndNodeLabels -> Phantoms.TTerm OpenCypher.SetItem
 setItemVariableLabels x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.SetItem"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variableLabels"),
@@ -3809,7 +3809,7 @@ setItemVariableLabels x =
 
 setItemVariablePlusEqual :: Phantoms.TTerm OpenCypher.VariablePlusEquals -> Phantoms.TTerm OpenCypher.SetItem
 setItemVariablePlusEqual x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.SetItem"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variablePlusEqual"),
@@ -3925,7 +3925,7 @@ singlePartQueryWithUpdating original newVal =
 
 singleQueryMultiPart :: Phantoms.TTerm OpenCypher.MultiPartQuery -> Phantoms.TTerm OpenCypher.SingleQuery
 singleQueryMultiPart x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.SingleQuery"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multiPart"),
@@ -3933,7 +3933,7 @@ singleQueryMultiPart x =
 
 singleQuerySinglePart :: Phantoms.TTerm OpenCypher.SinglePartQuery -> Phantoms.TTerm OpenCypher.SingleQuery
 singleQuerySinglePart x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.SingleQuery"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "singlePart"),
@@ -4007,7 +4007,7 @@ sortItemWithOrder original newVal =
 
 sortOrderAscending :: Phantoms.TTerm OpenCypher.SortOrder
 sortOrderAscending =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.SortOrder"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ascending"),
@@ -4015,7 +4015,7 @@ sortOrderAscending =
 
 sortOrderDescending :: Phantoms.TTerm OpenCypher.SortOrder
 sortOrderDescending =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.SortOrder"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "descending"),
@@ -4083,7 +4083,7 @@ standaloneCallYieldItems x =
 
 starOrYieldItemsItems :: Phantoms.TTerm OpenCypher.YieldItems -> Phantoms.TTerm OpenCypher.StarOrYieldItems
 starOrYieldItemsItems x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.StarOrYieldItems"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "items"),
@@ -4091,7 +4091,7 @@ starOrYieldItemsItems x =
 
 starOrYieldItemsStar :: Phantoms.TTerm OpenCypher.StarOrYieldItems
 starOrYieldItemsStar =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.StarOrYieldItems"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "star"),
@@ -4159,7 +4159,7 @@ stringListNullPredicateExpressionWithRight original newVal =
 
 stringListNullPredicateRightHandSideList :: Phantoms.TTerm OpenCypher.ListPredicateExpression -> Phantoms.TTerm OpenCypher.StringListNullPredicateRightHandSide
 stringListNullPredicateRightHandSideList x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.StringListNullPredicateRightHandSide"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -4167,7 +4167,7 @@ stringListNullPredicateRightHandSideList x =
 
 stringListNullPredicateRightHandSideNull :: Phantoms.TTerm OpenCypher.NullPredicateExpression -> Phantoms.TTerm OpenCypher.StringListNullPredicateRightHandSide
 stringListNullPredicateRightHandSideNull x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.StringListNullPredicateRightHandSide"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "null"),
@@ -4175,7 +4175,7 @@ stringListNullPredicateRightHandSideNull x =
 
 stringListNullPredicateRightHandSideString :: Phantoms.TTerm OpenCypher.StringPredicateExpression -> Phantoms.TTerm OpenCypher.StringListNullPredicateRightHandSide
 stringListNullPredicateRightHandSideString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.StringListNullPredicateRightHandSide"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -4249,7 +4249,7 @@ stringPredicateExpressionWithOperator original newVal =
 
 stringPredicateOperatorContains :: Phantoms.TTerm OpenCypher.StringPredicateOperator
 stringPredicateOperatorContains =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.StringPredicateOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "contains"),
@@ -4257,7 +4257,7 @@ stringPredicateOperatorContains =
 
 stringPredicateOperatorEndsWith :: Phantoms.TTerm OpenCypher.StringPredicateOperator
 stringPredicateOperatorEndsWith =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.StringPredicateOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "endsWith"),
@@ -4265,7 +4265,7 @@ stringPredicateOperatorEndsWith =
 
 stringPredicateOperatorStartsWith :: Phantoms.TTerm OpenCypher.StringPredicateOperator
 stringPredicateOperatorStartsWith =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.StringPredicateOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "startsWith"),
@@ -4639,7 +4639,7 @@ unwindWithVariable original newVal =
 
 updatingClauseCreate :: Phantoms.TTerm OpenCypher.Create -> Phantoms.TTerm OpenCypher.UpdatingClause
 updatingClauseCreate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.UpdatingClause"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "create"),
@@ -4647,7 +4647,7 @@ updatingClauseCreate x =
 
 updatingClauseDelete :: Phantoms.TTerm OpenCypher.Delete -> Phantoms.TTerm OpenCypher.UpdatingClause
 updatingClauseDelete x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.UpdatingClause"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "delete"),
@@ -4655,7 +4655,7 @@ updatingClauseDelete x =
 
 updatingClauseMerge :: Phantoms.TTerm OpenCypher.Merge -> Phantoms.TTerm OpenCypher.UpdatingClause
 updatingClauseMerge x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.UpdatingClause"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "merge"),
@@ -4663,7 +4663,7 @@ updatingClauseMerge x =
 
 updatingClauseRemove :: Phantoms.TTerm OpenCypher.Remove -> Phantoms.TTerm OpenCypher.UpdatingClause
 updatingClauseRemove x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.UpdatingClause"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "remove"),
@@ -4671,7 +4671,7 @@ updatingClauseRemove x =
 
 updatingClauseSet :: Phantoms.TTerm OpenCypher.Set -> Phantoms.TTerm OpenCypher.UpdatingClause
 updatingClauseSet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.cypher.openCypher.UpdatingClause"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),

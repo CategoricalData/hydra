@@ -142,7 +142,7 @@ termLabel compact namespaces term =
         Core.TermRecord v0 -> simpleLabel (Strings.cat2 "\8743" (Names.compactName namespaces (Core.recordTypeName v0)))
         Core.TermTypeLambda _ -> simpleLabel "tyabs"
         Core.TermTypeApplication _ -> simpleLabel "tyapp"
-        Core.TermUnion v0 -> simpleLabel (Strings.cat2 "\8891" (Names.compactName namespaces (Core.injectionTypeName v0)))
+        Core.TermInject v0 -> simpleLabel (Strings.cat2 "\8891" (Names.compactName namespaces (Core.injectionTypeName v0)))
         Core.TermVariable v0 -> simpleLabel (Names.compactName namespaces v0)
         Core.TermWrap v0 -> simpleLabel (Strings.cat [
           "(",

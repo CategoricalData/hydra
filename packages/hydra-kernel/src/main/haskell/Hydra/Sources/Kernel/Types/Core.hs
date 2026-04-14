@@ -399,6 +399,9 @@ term = define "Term" $
     "either">:
       doc "An either value" $
       T.either_ term term,
+    "inject">:
+      doc "An injection; an instance of a union type"
+      injection,
     "lambda">:
       doc "A function abstraction (lambda)"
       lambda,
@@ -435,9 +438,6 @@ term = define "Term" $
     "typeLambda">:
       doc "A System F type abstraction term"
       typeLambda,
-    "union">:
-      doc "An injection; an instance of a union type"
-      injection,
     "unit">:
       doc "A unit value; a term with no value" $
       T.unit,

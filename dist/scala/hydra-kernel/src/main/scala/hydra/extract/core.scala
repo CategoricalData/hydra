@@ -205,9 +205,9 @@ def functionType(typ: hydra.core.Type): Either[hydra.errors.Error, hydra.core.Fu
 def injection(expected: hydra.core.Name)(graph: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.errors.Error, hydra.core.Field] =
   hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Field](hydra.lexical.stripAndDereferenceTerm(graph)(term0))((term: hydra.core.Term) =>
   term match
-  case hydra.core.Term.union(v_Term_union_injection) => hydra.lib.logic.ifElse[Either[hydra.errors.Error,
-     hydra.core.Field]](hydra.lib.equality.equal[scala.Predef.String](v_Term_union_injection.typeName)(expected))(Right(v_Term_union_injection.field))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2("injection of type ")(expected),
-     (v_Term_union_injection.typeName))))))
+  case hydra.core.Term.inject(v_Term_inject_injection) => hydra.lib.logic.ifElse[Either[hydra.errors.Error,
+     hydra.core.Field]](hydra.lib.equality.equal[scala.Predef.String](v_Term_inject_injection.typeName)(expected))(Right(v_Term_inject_injection.field))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2("injection of type ")(expected),
+     (v_Term_inject_injection.typeName))))))
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("injection",
      hydra.show.core.term(term))))))
 

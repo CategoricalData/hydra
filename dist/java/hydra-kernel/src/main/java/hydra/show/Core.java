@@ -602,7 +602,7 @@ public interface Core {
       }
 
       @Override
-      public String visit(hydra.core.Term.Union v1) {
+      public String visit(hydra.core.Term.Inject v1) {
         return hydra.show.Core.injection((v1).value);
       }
 

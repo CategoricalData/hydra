@@ -527,7 +527,7 @@ def encode_term(depth: int, namespaces: hydra.packaging.Namespaces[hydra.haskell
             term1 = typed.body
             return encode(term1)
 
-        case hydra.core.TermUnion(value=injection):
+        case hydra.core.TermInject(value=injection):
             sname = injection.type_name
             field = injection.field
             fn = field.name
@@ -765,7 +765,7 @@ def type_decl(namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.Module
         @lru_cache(1)
         def variant_result() -> Maybe[hydra.core.Field]:
             match hydra.strip.deannotate_term(term):
-                case hydra.core.TermUnion(value=inj):
+                case hydra.core.TermInject(value=inj):
                     return hydra.lib.logic.if_else(hydra.lib.equality.equal(inj.type_name, hydra.core.Name("hydra.core.Type")), (lambda : Just(inj.field)), (lambda : Nothing()))
 
                 case _:

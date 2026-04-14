@@ -666,7 +666,7 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.errors.Error_, hydra.haskell.syntax.Expression> visit(hydra.core.Term.Union injection) {
+      public hydra.util.Either<hydra.errors.Error_, hydra.haskell.syntax.Expression> visit(hydra.core.Term.Inject injection) {
         hydra.core.Field field = (injection).value.field;
         hydra.core.Term ft = (field).term;
         hydra.core.Name fn = (field).name;
@@ -1728,7 +1728,7 @@ public interface Coder {
         }
 
         @Override
-        public hydra.util.Maybe<hydra.core.Field> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Maybe<hydra.core.Field> visit(hydra.core.Term.Inject inj) {
           return hydra.lib.logic.IfElse.lazy(
             hydra.lib.equality.Equal.apply(
               (inj).value.typeName,

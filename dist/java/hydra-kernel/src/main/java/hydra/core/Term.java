@@ -18,6 +18,8 @@ public abstract class Term implements Serializable, Comparable<Term> {
 
   public static final hydra.core.Name EITHER = new hydra.core.Name("either");
 
+  public static final hydra.core.Name INJECT = new hydra.core.Name("inject");
+
   public static final hydra.core.Name LAMBDA = new hydra.core.Name("lambda");
 
   public static final hydra.core.Name LET = new hydra.core.Name("let");
@@ -42,8 +44,6 @@ public abstract class Term implements Serializable, Comparable<Term> {
 
   public static final hydra.core.Name TYPE_LAMBDA = new hydra.core.Name("typeLambda");
 
-  public static final hydra.core.Name UNION = new hydra.core.Name("union");
-
   public static final hydra.core.Name UNIT = new hydra.core.Name("unit");
 
   public static final hydra.core.Name UNWRAP = new hydra.core.Name("unwrap");
@@ -66,6 +66,8 @@ public abstract class Term implements Serializable, Comparable<Term> {
     R visit(Cases instance) ;
 
     R visit(Either instance) ;
+
+    R visit(Inject instance) ;
 
     R visit(Lambda instance) ;
 
@@ -90,8 +92,6 @@ public abstract class Term implements Serializable, Comparable<Term> {
     R visit(TypeApplication instance) ;
 
     R visit(TypeLambda instance) ;
-
-    R visit(Union instance) ;
 
     R visit(Unit instance) ;
 
@@ -120,6 +120,10 @@ public abstract class Term implements Serializable, Comparable<Term> {
     }
 
     default R visit(Either instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Inject instance) {
       return otherwise(instance);
     }
 
@@ -168,10 +172,6 @@ public abstract class Term implements Serializable, Comparable<Term> {
     }
 
     default R visit(TypeLambda instance) {
-      return otherwise(instance);
-    }
-
-    default R visit(Union instance) {
       return otherwise(instance);
     }
 
@@ -364,6 +364,51 @@ public abstract class Term implements Serializable, Comparable<Term> {
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  /**
+   * An injection; an instance of a union type
+   */
+  public static final class Inject extends hydra.core.Term implements Serializable {
+    public final hydra.core.Injection value;
+
+    public Inject (hydra.core.Injection value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Inject)) {
+        return false;
+      }
+      Inject o = (Inject) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Inject o = (Inject) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -901,51 +946,6 @@ public abstract class Term implements Serializable, Comparable<Term> {
         return tagCmp;
       }
       TypeLambda o = (TypeLambda) other;
-      return hydra.util.Comparing.compare(
-        value,
-        o.value);
-    }
-
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-
-  /**
-   * An injection; an instance of a union type
-   */
-  public static final class Union extends hydra.core.Term implements Serializable {
-    public final hydra.core.Injection value;
-
-    public Union (hydra.core.Injection value) {
-      this.value = value;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Union)) {
-        return false;
-      }
-      Union o = (Union) other;
-      return java.util.Objects.equals(
-        this.value,
-        o.value);
-    }
-
-    @Override
-    public int hashCode() {
-      return 2 * java.util.Objects.hashCode(value);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public int compareTo(Term other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
-      if (tagCmp != 0) {
-        return tagCmp;
-      }
-      Union o = (Union) other;
       return hydra.util.Comparing.compare(
         value,
         o.value);

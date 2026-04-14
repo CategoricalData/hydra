@@ -592,7 +592,7 @@ def unary_function(f) -> TTerm[A]:
             return TTerm[A](lhs)
         case terms.TermMaybe(Just(_)):
             return TTerm[A](terms.primitive(Name("hydra.lib.maybes.pure")))
-        case terms.TermUnion(terms.Injection(tname, Field(fname, _))):
+        case terms.TermInject(terms.Injection(tname, Field(fname, _))):
             return lam("x", inject(tname, fname, var("x")))
         case terms.TermWrap(terms.WrappedTerm(tname, _)):
             return lam("x", wrap(tname, var("x")))

@@ -10,13 +10,13 @@ from typing import cast
 import hydra.core
 import hydra.phantoms
 
-associativity_both = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Associativity"), hydra.core.Field(hydra.core.Name("both"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+associativity_both = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.ast.Associativity"), hydra.core.Field(hydra.core.Name("both"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
-associativity_left = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Associativity"), hydra.core.Field(hydra.core.Name("left"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+associativity_left = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.ast.Associativity"), hydra.core.Field(hydra.core.Name("left"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
-associativity_none = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Associativity"), hydra.core.Field(hydra.core.Name("none"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+associativity_none = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.ast.Associativity"), hydra.core.Field(hydra.core.Name("none"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
-associativity_right = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Associativity"), hydra.core.Field(hydra.core.Name("right"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+associativity_right = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.ast.Associativity"), hydra.core.Field(hydra.core.Name("right"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
 def block_style(indent: hydra.phantoms.TTerm[Maybe[str]], newline_before_content: hydra.phantoms.TTerm[bool], newline_after_content: hydra.phantoms.TTerm[bool]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.ast.BlockStyle"), (hydra.core.Field(hydra.core.Name("indent"), indent.value), hydra.core.Field(hydra.core.Name("newlineBeforeContent"), newline_before_content.value), hydra.core.Field(hydra.core.Name("newlineAfterContent"), newline_after_content.value))))))
@@ -76,25 +76,25 @@ def brackets_with_open(original: hydra.phantoms.TTerm[hydra.ast.Brackets], new_v
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.ast.Brackets"), (hydra.core.Field(hydra.core.Name("open"), new_val.value), hydra.core.Field(hydra.core.Name("close"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermProject(hydra.core.Projection(hydra.core.Name("hydra.ast.Brackets"), hydra.core.Name("close")))), original.value)))))))))
 
 def expr_brackets(x: hydra.phantoms.TTerm[hydra.ast.BracketExpr]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Expr"), hydra.core.Field(hydra.core.Name("brackets"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.ast.Expr"), hydra.core.Field(hydra.core.Name("brackets"), x.value)))))
 
 def expr_const(x: hydra.phantoms.TTerm[hydra.ast.Symbol]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Expr"), hydra.core.Field(hydra.core.Name("const"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.ast.Expr"), hydra.core.Field(hydra.core.Name("const"), x.value)))))
 
 def expr_indent(x: hydra.phantoms.TTerm[hydra.ast.IndentedExpression]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Expr"), hydra.core.Field(hydra.core.Name("indent"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.ast.Expr"), hydra.core.Field(hydra.core.Name("indent"), x.value)))))
 
 def expr_op(x: hydra.phantoms.TTerm[hydra.ast.OpExpr]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Expr"), hydra.core.Field(hydra.core.Name("op"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.ast.Expr"), hydra.core.Field(hydra.core.Name("op"), x.value)))))
 
 def expr_seq(x: hydra.phantoms.TTerm[hydra.ast.SeqExpr]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Expr"), hydra.core.Field(hydra.core.Name("seq"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.ast.Expr"), hydra.core.Field(hydra.core.Name("seq"), x.value)))))
 
 def indent_style_all_lines(x: hydra.phantoms.TTerm[str]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.IndentStyle"), hydra.core.Field(hydra.core.Name("allLines"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.ast.IndentStyle"), hydra.core.Field(hydra.core.Name("allLines"), x.value)))))
 
 def indent_style_subsequent_lines(x: hydra.phantoms.TTerm[str]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.IndentStyle"), hydra.core.Field(hydra.core.Name("subsequentLines"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.ast.IndentStyle"), hydra.core.Field(hydra.core.Name("subsequentLines"), x.value)))))
 
 def indented_expression(style: hydra.phantoms.TTerm[hydra.ast.IndentStyle], expr: hydra.phantoms.TTerm[hydra.ast.Expr]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.ast.IndentedExpression"), (hydra.core.Field(hydra.core.Name("style"), style.value), hydra.core.Field(hydra.core.Name("expr"), expr.value))))))
@@ -201,13 +201,13 @@ def un_precedence(x: hydra.phantoms.TTerm[hydra.ast.Precedence]) -> hydra.phanto
 def un_symbol(x: hydra.phantoms.TTerm[hydra.ast.Symbol]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermUnwrap(hydra.core.Name("hydra.ast.Symbol"))), x.value))))
 
-ws_break = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Ws"), hydra.core.Field(hydra.core.Name("break"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+ws_break = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.ast.Ws"), hydra.core.Field(hydra.core.Name("break"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
 def ws_break_and_indent(x: hydra.phantoms.TTerm[str]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Ws"), hydra.core.Field(hydra.core.Name("breakAndIndent"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.ast.Ws"), hydra.core.Field(hydra.core.Name("breakAndIndent"), x.value)))))
 
-ws_double_break = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Ws"), hydra.core.Field(hydra.core.Name("doubleBreak"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+ws_double_break = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.ast.Ws"), hydra.core.Field(hydra.core.Name("doubleBreak"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
-ws_none = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Ws"), hydra.core.Field(hydra.core.Name("none"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+ws_none = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.ast.Ws"), hydra.core.Field(hydra.core.Name("none"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
-ws_space = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Ws"), hydra.core.Field(hydra.core.Name("space"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+ws_space = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.ast.Ws"), hydra.core.Field(hydra.core.Name("space"), cast(hydra.core.Term, hydra.core.TermUnit()))))))

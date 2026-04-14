@@ -57,7 +57,7 @@ protobufLanguage =
           Variants.TermVariantPair,
           Variants.TermVariantRecord,
           Variants.TermVariantSet,
-          Variants.TermVariantUnion,
+          Variants.TermVariantInject,
           Variants.TermVariantUnit,
           Variants.TermVariantWrap]
     typeVariants =

@@ -125,10 +125,10 @@
                         "domain": {"unit": {}},
                         "parameter": "_"}}},
                   {
-                    "name": "union",
+                    "name": "inject",
                     "term": {
                       "lambda": {
-                        "body": {"literal": {"string": "union"}},
+                        "body": {"literal": {"string": "inject"}},
                         "domain": {"unit": {}},
                         "parameter": "_"}}},
                   {

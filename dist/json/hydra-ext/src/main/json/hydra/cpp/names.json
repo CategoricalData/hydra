@@ -49,11 +49,11 @@
                               {
                                 "name": "baseType",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "basic",
                                       "term": {
-                                        "union": {
+                                        "inject": {
                                           "field": {
                                             "name": "named",
                                             "term": {
@@ -65,7 +65,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "pascal", "term": {"unit": {}}},
                                                             "typeName": "hydra.util.CaseConvention"}},
                                                         "function": {
@@ -124,7 +124,7 @@
             "body": {
               "application": {
                 "argument": {
-                  "union": {
+                  "inject": {
                     "field": {"name": "upperSnake", "term": {"unit": {}}},
                     "typeName": "hydra.util.CaseConvention"}},
                 "function": {
@@ -163,7 +163,7 @@
                             "function": {
                               "application": {
                                 "argument": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "lowerSnake", "term": {"unit": {}}},
                                     "typeName": "hydra.util.CaseConvention"}},
                                 "function": {
@@ -296,7 +296,7 @@
                                                 "function": {
                                                   "application": {
                                                     "argument": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {"name": "camel", "term": {"unit": {}}},
                                                         "typeName": "hydra.util.CaseConvention"}},
                                                     "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
@@ -325,13 +325,13 @@
                                                     "argument": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "lowerSnake", "term": {"unit": {}}},
                                                             "typeName": "hydra.util.CaseConvention"}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {"name": "camel", "term": {"unit": {}}},
                                                                 "typeName": "hydra.util.CaseConvention"}},
                                                             "function": {"variable": "hydra.formatting.convertCase"}}}}},
@@ -676,13 +676,13 @@
                             "argument": {
                               "application": {
                                 "argument": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "lowerSnake", "term": {"unit": {}}},
                                     "typeName": "hydra.util.CaseConvention"}},
                                 "function": {
                                   "application": {
                                     "argument": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "camel", "term": {"unit": {}}},
                                         "typeName": "hydra.util.CaseConvention"}},
                                     "function": {"variable": "hydra.formatting.convertCase"}}}}},
@@ -775,7 +775,7 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "namespace",
                           "term": {
@@ -866,7 +866,7 @@
             "body": {
               "application": {
                 "argument": {
-                  "union": {
+                  "inject": {
                     "field": {"name": "lowerSnake", "term": {"unit": {}}},
                     "typeName": "hydra.util.CaseConvention"}},
                 "function": {"variable": "hydra.cpp.names.variableReference"}}}}},
@@ -893,11 +893,11 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "basic",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "named",
                                 "term": {
@@ -909,7 +909,7 @@
                                         "function": {
                                           "application": {
                                             "argument": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "pascal", "term": {"unit": {}}},
                                                 "typeName": "hydra.util.CaseConvention"}},
                                             "function": {

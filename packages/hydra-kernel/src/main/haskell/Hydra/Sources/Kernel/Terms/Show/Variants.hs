@@ -88,7 +88,7 @@ termVariant = define "termVariant" $
     _TermVariant_set>>: constant $ string "set",
     _TermVariant_typeLambda>>: constant $ string "typeLambda",
     _TermVariant_typeApplication>>: constant $ string "typeApplication",
-    _TermVariant_union>>: constant $ string "union",
+    _TermVariant_inject>>: constant $ string "inject",
     _TermVariant_unit>>: constant $ string "unit",
     _TermVariant_unwrap>>: constant $ string "unwrap",
     _TermVariant_variable>>: constant $ string "variable",

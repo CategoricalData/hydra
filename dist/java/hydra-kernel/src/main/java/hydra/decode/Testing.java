@@ -62,7 +62,7 @@ public interface Testing {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.testing.TestCase> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.testing.TestCase> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;

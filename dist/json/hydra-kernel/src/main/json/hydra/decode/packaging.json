@@ -27,7 +27,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -86,7 +86,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "term", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.packaging.Definition"}},
                                                                                         "domain": {"variable": "hydra.packaging.TermDefinition"},
@@ -137,7 +137,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "type", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.packaging.Definition"}},
                                                                                         "domain": {"variable": "hydra.packaging.TypeDefinition"},

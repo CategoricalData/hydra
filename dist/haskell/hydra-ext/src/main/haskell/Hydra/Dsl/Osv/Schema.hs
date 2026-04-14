@@ -1435,7 +1435,7 @@ entryWithdrawn x =
 
 eventFixed :: Phantoms.TTerm Schema.Version -> Phantoms.TTerm Schema.Event
 eventFixed x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.osv.schema.Event"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fixed"),
@@ -1443,7 +1443,7 @@ eventFixed x =
 
 eventIntroduced :: Phantoms.TTerm Schema.VersionOrZero -> Phantoms.TTerm Schema.Event
 eventIntroduced x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.osv.schema.Event"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "introduced"),
@@ -1451,7 +1451,7 @@ eventIntroduced x =
 
 eventLastAffected :: Phantoms.TTerm Schema.Version -> Phantoms.TTerm Schema.Event
 eventLastAffected x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.osv.schema.Event"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lastAffected"),
@@ -1459,7 +1459,7 @@ eventLastAffected x =
 
 eventLimit :: Phantoms.TTerm Schema.VersionOrStar -> Phantoms.TTerm Schema.Event
 eventLimit x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.osv.schema.Event"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "limit"),

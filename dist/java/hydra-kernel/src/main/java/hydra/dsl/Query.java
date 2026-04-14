@@ -7,27 +7,27 @@ package hydra.dsl;
  */
 public interface Query {
   static hydra.phantoms.TTerm<hydra.query.ComparisonConstraint> comparisonConstraintEqual() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("equal"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("equal"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.ComparisonConstraint> comparisonConstraintGreaterThan() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("greaterThan"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("greaterThan"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.ComparisonConstraint> comparisonConstraintGreaterThanOrEqual() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("greaterThanOrEqual"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("greaterThanOrEqual"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.ComparisonConstraint> comparisonConstraintLessThan() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("lessThan"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("lessThan"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.ComparisonConstraint> comparisonConstraintLessThanOrEqual() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("lessThanOrEqual"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("lessThanOrEqual"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.ComparisonConstraint> comparisonConstraintNotEqual() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("notEqual"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.ComparisonConstraint"), new hydra.core.Field(new hydra.core.Name("notEqual"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.Edge> edge(hydra.phantoms.TTerm<hydra.core.Name> type, hydra.phantoms.TTerm<hydra.util.Maybe<hydra.core.Name>> out, hydra.phantoms.TTerm<hydra.util.Maybe<hydra.core.Name>> in) {
@@ -97,15 +97,15 @@ public interface Query {
   }
 
   static hydra.phantoms.TTerm<hydra.query.Node> nodeTerm(hydra.phantoms.TTerm<hydra.core.Term> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Node"), new hydra.core.Field(new hydra.core.Name("term"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.Node"), new hydra.core.Field(new hydra.core.Name("term"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.Node> nodeVariable(hydra.phantoms.TTerm<hydra.query.Variable> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Node"), new hydra.core.Field(new hydra.core.Name("variable"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.Node"), new hydra.core.Field(new hydra.core.Name("variable"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.Node> nodeWildcard() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Node"), new hydra.core.Field(new hydra.core.Name("wildcard"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.Node"), new hydra.core.Field(new hydra.core.Name("wildcard"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.PathEquation> pathEquation(hydra.phantoms.TTerm<hydra.query.Path> left, hydra.phantoms.TTerm<hydra.query.Path> right) {
@@ -135,27 +135,27 @@ public interface Query {
   }
 
   static hydra.phantoms.TTerm<hydra.query.Path> pathInverse(hydra.phantoms.TTerm<hydra.query.Path> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Path"), new hydra.core.Field(new hydra.core.Name("inverse"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.Path"), new hydra.core.Field(new hydra.core.Name("inverse"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.Path> pathRegex(hydra.phantoms.TTerm<hydra.query.RegexSequence> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Path"), new hydra.core.Field(new hydra.core.Name("regex"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.Path"), new hydra.core.Field(new hydra.core.Name("regex"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.Path> pathStep(hydra.phantoms.TTerm<hydra.query.Step> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Path"), new hydra.core.Field(new hydra.core.Name("step"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.Path"), new hydra.core.Field(new hydra.core.Name("step"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.Pattern> patternConjunction(hydra.phantoms.TTerm<java.util.List<hydra.query.Pattern>> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Pattern"), new hydra.core.Field(new hydra.core.Name("conjunction"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.Pattern"), new hydra.core.Field(new hydra.core.Name("conjunction"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.Pattern> patternDisjunction(hydra.phantoms.TTerm<java.util.List<hydra.query.Pattern>> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Pattern"), new hydra.core.Field(new hydra.core.Name("disjunction"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.Pattern"), new hydra.core.Field(new hydra.core.Name("disjunction"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.Pattern> patternGraph(hydra.phantoms.TTerm<hydra.query.GraphPattern> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Pattern"), new hydra.core.Field(new hydra.core.Name("graph"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.Pattern"), new hydra.core.Field(new hydra.core.Name("graph"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.PatternImplication> patternImplication(hydra.phantoms.TTerm<hydra.query.Pattern> antecedent, hydra.phantoms.TTerm<hydra.query.Pattern> consequent) {
@@ -185,11 +185,11 @@ public interface Query {
   }
 
   static hydra.phantoms.TTerm<hydra.query.Pattern> patternNegation(hydra.phantoms.TTerm<hydra.query.Pattern> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Pattern"), new hydra.core.Field(new hydra.core.Name("negation"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.Pattern"), new hydra.core.Field(new hydra.core.Name("negation"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.Pattern> patternTriple(hydra.phantoms.TTerm<hydra.query.TriplePattern> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Pattern"), new hydra.core.Field(new hydra.core.Name("triple"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.Pattern"), new hydra.core.Field(new hydra.core.Name("triple"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.Query> query(hydra.phantoms.TTerm<java.util.List<hydra.query.Variable>> variables, hydra.phantoms.TTerm<java.util.List<hydra.query.Pattern>> patterns) {
@@ -245,31 +245,31 @@ public interface Query {
   }
 
   static hydra.phantoms.TTerm<hydra.query.RegexQuantifier> regexQuantifierAtLeast(hydra.phantoms.TTerm<Integer> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("atLeast"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("atLeast"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.RegexQuantifier> regexQuantifierExactly(hydra.phantoms.TTerm<Integer> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("exactly"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("exactly"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.RegexQuantifier> regexQuantifierOne() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("one"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("one"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.RegexQuantifier> regexQuantifierOneOrMore() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("oneOrMore"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("oneOrMore"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.RegexQuantifier> regexQuantifierRange(hydra.phantoms.TTerm<hydra.query.Range> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("range"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("range"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.RegexQuantifier> regexQuantifierZeroOrMore() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("zeroOrMore"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("zeroOrMore"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.RegexQuantifier> regexQuantifierZeroOrOne() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("zeroOrOne"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.RegexQuantifier"), new hydra.core.Field(new hydra.core.Name("zeroOrOne"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.RegexSequence> regexSequence(hydra.phantoms.TTerm<hydra.query.Path> path, hydra.phantoms.TTerm<hydra.query.RegexQuantifier> quantifier) {
@@ -299,15 +299,15 @@ public interface Query {
   }
 
   static hydra.phantoms.TTerm<hydra.query.Step> stepCompare(hydra.phantoms.TTerm<hydra.query.ComparisonConstraint> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Step"), new hydra.core.Field(new hydra.core.Name("compare"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.Step"), new hydra.core.Field(new hydra.core.Name("compare"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.Step> stepEdge(hydra.phantoms.TTerm<hydra.query.Edge> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Step"), new hydra.core.Field(new hydra.core.Name("edge"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.Step"), new hydra.core.Field(new hydra.core.Name("edge"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.Step> stepProject(hydra.phantoms.TTerm<hydra.core.Projection> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Step"), new hydra.core.Field(new hydra.core.Name("project"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.query.Step"), new hydra.core.Field(new hydra.core.Name("project"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.TriplePattern> triplePattern(hydra.phantoms.TTerm<hydra.query.Node> subject, hydra.phantoms.TTerm<hydra.query.Path> predicate, hydra.phantoms.TTerm<hydra.query.Node> object) {

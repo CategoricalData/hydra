@@ -518,6 +518,9 @@ public interface Bootstrap {
           new hydra.core.FieldType(new hydra.core.Name("either"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Either(new hydra.core.EitherType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")))), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("An either value")))))))),
+          new hydra.core.FieldType(new hydra.core.Name("inject"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Injection")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("An injection; an instance of a union type")))))))),
           new hydra.core.FieldType(new hydra.core.Name("lambda"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Lambda")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A function abstraction (lambda)")))))))),
@@ -554,9 +557,6 @@ public interface Bootstrap {
           new hydra.core.FieldType(new hydra.core.Name("typeLambda"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.TypeLambda")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A System F type abstraction term")))))))),
-          new hydra.core.FieldType(new hydra.core.Name("union"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Injection")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("An injection; an instance of a union type")))))))),
           new hydra.core.FieldType(new hydra.core.Name("unit"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Unit(), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A unit value; a term with no value")))))))),

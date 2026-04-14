@@ -98,7 +98,7 @@ public interface Parsing {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseResult<T0>> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseResult<T0>> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;

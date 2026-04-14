@@ -84,9 +84,9 @@ def coder(encode: hydra.phantoms.TTerm[Callable[[hydra.context.Context, V1], Eit
 def coder_decode(x: hydra.phantoms.TTerm[hydra.coders.Coder[V1, V2]]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermProject(hydra.core.Projection(hydra.core.Name("hydra.coders.Coder"), hydra.core.Name("decode")))), x.value))))
 
-coder_direction_decode = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.coders.CoderDirection"), hydra.core.Field(hydra.core.Name("decode"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+coder_direction_decode = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.coders.CoderDirection"), hydra.core.Field(hydra.core.Name("decode"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
-coder_direction_encode = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.coders.CoderDirection"), hydra.core.Field(hydra.core.Name("encode"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+coder_direction_encode = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.coders.CoderDirection"), hydra.core.Field(hydra.core.Name("encode"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
 def coder_encode(x: hydra.phantoms.TTerm[hydra.coders.Coder[V1, V2]]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermProject(hydra.core.Projection(hydra.core.Name("hydra.coders.Coder"), hydra.core.Name("encode")))), x.value))))
@@ -166,9 +166,9 @@ def language_with_constraints(original: hydra.phantoms.TTerm[hydra.coders.Langua
 def language_with_name(original: hydra.phantoms.TTerm[hydra.coders.Language], new_val: hydra.phantoms.TTerm[hydra.coders.LanguageName]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.coders.Language"), (hydra.core.Field(hydra.core.Name("name"), new_val.value), hydra.core.Field(hydra.core.Name("constraints"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermProject(hydra.core.Projection(hydra.core.Name("hydra.coders.Language"), hydra.core.Name("constraints")))), original.value)))))))))
 
-traversal_order_post = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.coders.TraversalOrder"), hydra.core.Field(hydra.core.Name("post"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+traversal_order_post = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.coders.TraversalOrder"), hydra.core.Field(hydra.core.Name("post"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
-traversal_order_pre = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.coders.TraversalOrder"), hydra.core.Field(hydra.core.Name("pre"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+traversal_order_pre = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.coders.TraversalOrder"), hydra.core.Field(hydra.core.Name("pre"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
 def un_language_name(x: hydra.phantoms.TTerm[hydra.coders.LanguageName]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermUnwrap(hydra.core.Name("hydra.coders.LanguageName"))), x.value))))

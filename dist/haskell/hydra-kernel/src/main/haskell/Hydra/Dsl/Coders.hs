@@ -375,7 +375,7 @@ coderDecode x =
 
 coderDirectionDecode :: Phantoms.TTerm Coders.CoderDirection
 coderDirectionDecode =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.coders.CoderDirection"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "decode"),
@@ -383,7 +383,7 @@ coderDirectionDecode =
 
 coderDirectionEncode :: Phantoms.TTerm Coders.CoderDirection
 coderDirectionEncode =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.coders.CoderDirection"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "encode"),
@@ -1055,7 +1055,7 @@ languageWithName original newVal =
 
 traversalOrderPost :: Phantoms.TTerm Coders.TraversalOrder
 traversalOrderPost =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.coders.TraversalOrder"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "post"),
@@ -1063,7 +1063,7 @@ traversalOrderPost =
 
 traversalOrderPre :: Phantoms.TTerm Coders.TraversalOrder
 traversalOrderPre =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.coders.TraversalOrder"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pre"),

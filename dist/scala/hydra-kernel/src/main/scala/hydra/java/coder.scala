@@ -947,10 +947,10 @@ def declarationForUnionType(isSer: Boolean)(aliases: hydra.java.environment.Alia
 
 def decodeTypeFromTerm(term: hydra.core.Term): Option[hydra.core.Type] =
   hydra.strip.deannotateTerm(term) match
-  case hydra.core.Term.union(v_Term_union_inj) => hydra.lib.logic.ifElse[Option[hydra.core.Type]](hydra.lib.equality.equal[hydra.core.Name](v_Term_union_inj.typeName)("hydra.core.Type"))({
-    lazy val fname: scala.Predef.String = (v_Term_union_inj.field.name)
+  case hydra.core.Term.inject(v_Term_inject_inj) => hydra.lib.logic.ifElse[Option[hydra.core.Type]](hydra.lib.equality.equal[hydra.core.Name](v_Term_inject_inj.typeName)("hydra.core.Type"))({
+    lazy val fname: scala.Predef.String = (v_Term_inject_inj.field.name)
     {
-      lazy val fterm: hydra.core.Term = (v_Term_union_inj.field.term)
+      lazy val fterm: hydra.core.Term = (v_Term_inject_inj.field.term)
       hydra.lib.logic.ifElse[Option[hydra.core.Type]](hydra.lib.equality.equal[scala.Predef.String](fname)("variable"))(fterm match
         case hydra.core.Term.wrap(v_Term_wrap_wt) => v_Term_wrap_wt.body match
           case hydra.core.Term.literal(v_Term_literal_lit) => v_Term_literal_lit match
@@ -975,7 +975,7 @@ def decodeTypeFromTerm(term: hydra.core.Term): Option[hydra.core.Type] =
           hydra.lib.maybes.map[hydra.core.Type, hydra.core.Type]((cod: hydra.core.Type) => hydra.core.Type.function(hydra.core.FunctionType(dom,
              cod)))(hydra.java.coder.decodeTypeFromTerm(codField.term)))))
         case _ => None)(hydra.lib.logic.ifElse[Option[hydra.core.Type]](hydra.lib.equality.equal[scala.Predef.String](fname)("literal"))(fterm match
-        case hydra.core.Term.union(v_Term_union_litInj) => hydra.lib.logic.ifElse[Option[hydra.core.Type]](hydra.lib.equality.equal[scala.Predef.String](v_Term_union_litInj.field.name)("string"))(Some(hydra.core.Type.literal(hydra.core.LiteralType.string)))(None)
+        case hydra.core.Term.inject(v_Term_inject_litInj) => hydra.lib.logic.ifElse[Option[hydra.core.Type]](hydra.lib.equality.equal[scala.Predef.String](v_Term_inject_litInj.field.name)("string"))(Some(hydra.core.Type.literal(hydra.core.LiteralType.string)))(None)
         case _ => None)(None)))))
     }
   })(None)
@@ -2073,10 +2073,10 @@ def encodeTermInternal(env: hydra.java.environment.JavaEnvironment)(anns: Seq[Ma
         hydra.java.coder.encodeTerm(env2)(annotatedBody)(cx)(g)
       })
     })
-    case hydra.core.Term.union(v_Term_union_inj) => {
-      lazy val injTypeName: hydra.core.Name = (v_Term_union_inj.typeName)
+    case hydra.core.Term.inject(v_Term_inject_inj) => {
+      lazy val injTypeName: hydra.core.Name = (v_Term_inject_inj.typeName)
       {
-        lazy val injField: hydra.core.Field = (v_Term_union_inj.field)
+        lazy val injField: hydra.core.Field = (v_Term_inject_inj.field)
         {
           lazy val injFieldName: hydra.core.Name = (injField.name)
           {

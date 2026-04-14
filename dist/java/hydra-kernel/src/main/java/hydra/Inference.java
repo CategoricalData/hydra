@@ -711,7 +711,7 @@ public interface Inference {
                       fcx3.get(),
                       hydra.Inference.buildTypeApplicationTerm(
                         svars,
-                        new hydra.core.Term.Union(new hydra.core.Injection(tname, new hydra.core.Field(fname, iterm)))),
+                        new hydra.core.Term.Inject(new hydra.core.Injection(tname, new hydra.core.Field(fname, iterm)))),
                       hydra.Resolution.nominalApplication(
                         tname,
                         hydra.lib.lists.Map.apply(
@@ -1461,7 +1461,7 @@ public interface Inference {
       }
 
       @Override
-      public hydra.util.Either<hydra.errors.Error_, hydra.typing.InferenceResult> visit(hydra.core.Term.Union i) {
+      public hydra.util.Either<hydra.errors.Error_, hydra.typing.InferenceResult> visit(hydra.core.Term.Inject i) {
         return hydra.Inference.inferTypeOfInjection(
           fcx2.get(),
           cx,

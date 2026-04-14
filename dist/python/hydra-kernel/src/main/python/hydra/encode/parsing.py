@@ -21,10 +21,10 @@ def parse_result(a: Callable[[T0], hydra.core.Term]):
     def _hoist_hydra_encode_parsing_parse_result_1(a, v1):
         match v1:
             case hydra.parsing.ParseResultSuccess(value=y):
-                return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.parsing.ParseResult"), hydra.core.Field(hydra.core.Name("success"), parse_success(a, y)))))
+                return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.parsing.ParseResult"), hydra.core.Field(hydra.core.Name("success"), parse_success(a, y)))))
 
             case hydra.parsing.ParseResultFailure(value=y):
-                return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.parsing.ParseResult"), hydra.core.Field(hydra.core.Name("failure"), parse_error(y)))))
+                return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.parsing.ParseResult"), hydra.core.Field(hydra.core.Name("failure"), parse_error(y)))))
 
             case _:
                 raise AssertionError("Unreachable: all variants handled")

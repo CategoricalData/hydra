@@ -16,7 +16,7 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "application",
                           "term": {
@@ -293,7 +293,7 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "application",
                           "term": {
@@ -330,7 +330,7 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "lambda",
                           "term": {
@@ -341,7 +341,7 @@
                                   "term": {
                                     "list": [
                                       {
-                                        "union": {
+                                        "inject": {
                                           "field": {"name": "name", "term": {"variable": "name"}},
                                           "typeName": "hydra.haskell.syntax.Pattern"}}]}},
                                 {"name": "inner", "term": {"variable": "rhs"}}],
@@ -372,7 +372,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {"name": "literal", "term": {"variable": "lit"}},
                     "typeName": "hydra.haskell.syntax.Expression"}},
                 "domain": {"variable": "hydra.haskell.syntax.Literal"},
@@ -396,7 +396,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "variable",
                       "term": {
@@ -2221,7 +2221,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "normal",
                       "term": {
@@ -2445,7 +2445,7 @@
                               {
                                 "name": "pat",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "application",
                                       "term": {
@@ -2473,7 +2473,7 @@
                                   "type": {"variable": "hydra.haskell.syntax.RightHandSide"},
                                   "variables": []}}],
                             "body": {
-                              "union": {
+                              "inject": {
                                 "field": {
                                   "name": "simple",
                                   "term": {
@@ -2533,7 +2533,7 @@
                                 "function": {
                                   "application": {
                                     "argument": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "application",
                                           "term": {

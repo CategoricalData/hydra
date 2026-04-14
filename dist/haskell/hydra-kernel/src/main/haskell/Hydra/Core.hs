@@ -482,6 +482,8 @@ data Term =
   TermCases CaseStatement |
   -- | An either value
   TermEither (Either Term Term) |
+  -- | An injection; an instance of a union type
+  TermInject Injection |
   -- | A function abstraction (lambda)
   TermLambda Lambda |
   -- | A 'let' term, which binds variables to terms
@@ -506,8 +508,6 @@ data Term =
   TermTypeApplication TypeApplicationTerm |
   -- | A System F type abstraction term
   TermTypeLambda TypeLambda |
-  -- | An injection; an instance of a union type
-  TermUnion Injection |
   -- | A unit value; a term with no value
   TermUnit  |
   -- | An unwrap elimination; the inverse of a wrap
@@ -527,6 +527,8 @@ _Term_application = Name "application"
 _Term_cases = Name "cases"
 
 _Term_either = Name "either"
+
+_Term_inject = Name "inject"
 
 _Term_lambda = Name "lambda"
 
@@ -551,8 +553,6 @@ _Term_set = Name "set"
 _Term_typeApplication = Name "typeApplication"
 
 _Term_typeLambda = Name "typeLambda"
-
-_Term_union = Name "union"
 
 _Term_unit = Name "unit"
 

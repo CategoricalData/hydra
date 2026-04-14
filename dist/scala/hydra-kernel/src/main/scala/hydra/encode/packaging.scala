@@ -6,9 +6,9 @@ import hydra.packaging.*
 
 def definition(v1: hydra.packaging.Definition): hydra.core.Term =
   v1 match
-  case hydra.packaging.Definition.term(v_Definition_term_y) => hydra.core.Term.union(hydra.core.Injection("hydra.packaging.Definition",
+  case hydra.packaging.Definition.term(v_Definition_term_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.packaging.Definition",
      hydra.core.Field("term", hydra.encode.packaging.termDefinition(v_Definition_term_y))))
-  case hydra.packaging.Definition.`type`(v_Definition_type_y) => hydra.core.Term.union(hydra.core.Injection("hydra.packaging.Definition",
+  case hydra.packaging.Definition.`type`(v_Definition_type_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.packaging.Definition",
      hydra.core.Field("type", hydra.encode.packaging.typeDefinition(v_Definition_type_y))))
 
 def fileExtension(x: hydra.packaging.FileExtension): hydra.core.Term =

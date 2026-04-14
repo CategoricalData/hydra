@@ -20,7 +20,7 @@ decodingError x =
 
 errorChecking :: Phantoms.TTerm Checking.CheckingError -> Phantoms.TTerm Errors.Error
 errorChecking x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "checking"),
@@ -28,7 +28,7 @@ errorChecking x =
 
 errorDecoding :: Phantoms.TTerm Errors.DecodingError -> Phantoms.TTerm Errors.Error
 errorDecoding x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "decoding"),
@@ -36,7 +36,7 @@ errorDecoding x =
 
 errorDuplicateBinding :: Phantoms.TTerm ErrorCore.DuplicateBindingError -> Phantoms.TTerm Errors.Error
 errorDuplicateBinding x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "duplicateBinding"),
@@ -44,7 +44,7 @@ errorDuplicateBinding x =
 
 errorDuplicateField :: Phantoms.TTerm ErrorCore.DuplicateFieldError -> Phantoms.TTerm Errors.Error
 errorDuplicateField x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "duplicateField"),
@@ -52,7 +52,7 @@ errorDuplicateField x =
 
 errorExtraction :: Phantoms.TTerm Errors.ExtractionError -> Phantoms.TTerm Errors.Error
 errorExtraction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "extraction"),
@@ -60,7 +60,7 @@ errorExtraction x =
 
 errorInference :: Phantoms.TTerm Errors.InferenceError -> Phantoms.TTerm Errors.Error
 errorInference x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inference"),
@@ -68,7 +68,7 @@ errorInference x =
 
 errorOther :: Phantoms.TTerm Errors.OtherError -> Phantoms.TTerm Errors.Error
 errorOther x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "other"),
@@ -76,7 +76,7 @@ errorOther x =
 
 errorResolution :: Phantoms.TTerm Errors.ResolutionError -> Phantoms.TTerm Errors.Error
 errorResolution x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "resolution"),
@@ -84,7 +84,7 @@ errorResolution x =
 
 errorUndefinedField :: Phantoms.TTerm ErrorCore.UndefinedFieldError -> Phantoms.TTerm Errors.Error
 errorUndefinedField x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "undefinedField"),
@@ -92,7 +92,7 @@ errorUndefinedField x =
 
 errorUndefinedTermVariable :: Phantoms.TTerm ErrorCore.UndefinedTermVariableError -> Phantoms.TTerm Errors.Error
 errorUndefinedTermVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "undefinedTermVariable"),
@@ -100,7 +100,7 @@ errorUndefinedTermVariable x =
 
 errorUnexpectedTermVariant :: Phantoms.TTerm ErrorCore.UnexpectedTermVariantError -> Phantoms.TTerm Errors.Error
 errorUnexpectedTermVariant x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unexpectedTermVariant"),
@@ -108,7 +108,7 @@ errorUnexpectedTermVariant x =
 
 errorUnexpectedTypeVariant :: Phantoms.TTerm ErrorCore.UnexpectedTypeVariantError -> Phantoms.TTerm Errors.Error
 errorUnexpectedTypeVariant x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unexpectedTypeVariant"),
@@ -116,7 +116,7 @@ errorUnexpectedTypeVariant x =
 
 errorUnification :: Phantoms.TTerm Errors.UnificationError -> Phantoms.TTerm Errors.Error
 errorUnification x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unification"),
@@ -124,7 +124,7 @@ errorUnification x =
 
 errorUntypedTermVariable :: Phantoms.TTerm ErrorCore.UntypedTermVariableError -> Phantoms.TTerm Errors.Error
 errorUntypedTermVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "untypedTermVariable"),
@@ -132,7 +132,7 @@ errorUntypedTermVariable x =
 
 extractionErrorEmptyList :: Phantoms.TTerm Errors.EmptyListError -> Phantoms.TTerm Errors.ExtractionError
 extractionErrorEmptyList x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.ExtractionError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "emptyList"),
@@ -140,7 +140,7 @@ extractionErrorEmptyList x =
 
 extractionErrorMultipleBindings :: Phantoms.TTerm Errors.MultipleBindingsError -> Phantoms.TTerm Errors.ExtractionError
 extractionErrorMultipleBindings x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.ExtractionError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multipleBindings"),
@@ -148,7 +148,7 @@ extractionErrorMultipleBindings x =
 
 extractionErrorMultipleFields :: Phantoms.TTerm Errors.MultipleFieldsError -> Phantoms.TTerm Errors.ExtractionError
 extractionErrorMultipleFields x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.ExtractionError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multipleFields"),
@@ -156,7 +156,7 @@ extractionErrorMultipleFields x =
 
 extractionErrorNoMatchingField :: Phantoms.TTerm Errors.NoMatchingFieldError -> Phantoms.TTerm Errors.ExtractionError
 extractionErrorNoMatchingField x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.ExtractionError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "noMatchingField"),
@@ -164,7 +164,7 @@ extractionErrorNoMatchingField x =
 
 extractionErrorNoSuchBinding :: Phantoms.TTerm Errors.NoSuchBindingError -> Phantoms.TTerm Errors.ExtractionError
 extractionErrorNoSuchBinding x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.ExtractionError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "noSuchBinding"),
@@ -172,7 +172,7 @@ extractionErrorNoSuchBinding x =
 
 extractionErrorNotEnoughCases :: Phantoms.TTerm Errors.NotEnoughCasesError -> Phantoms.TTerm Errors.ExtractionError
 extractionErrorNotEnoughCases x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.ExtractionError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notEnoughCases"),
@@ -180,7 +180,7 @@ extractionErrorNotEnoughCases x =
 
 extractionErrorUnexpectedShape :: Phantoms.TTerm Errors.UnexpectedShapeError -> Phantoms.TTerm Errors.ExtractionError
 extractionErrorUnexpectedShape x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.ExtractionError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unexpectedShape"),
@@ -188,7 +188,7 @@ extractionErrorUnexpectedShape x =
 
 inferenceErrorChecking :: Phantoms.TTerm Checking.CheckingError -> Phantoms.TTerm Errors.InferenceError
 inferenceErrorChecking x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.InferenceError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "checking"),
@@ -196,7 +196,7 @@ inferenceErrorChecking x =
 
 inferenceErrorOther :: Phantoms.TTerm Errors.OtherInferenceError -> Phantoms.TTerm Errors.InferenceError
 inferenceErrorOther x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.InferenceError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "other"),
@@ -204,7 +204,7 @@ inferenceErrorOther x =
 
 inferenceErrorUnification :: Phantoms.TTerm Errors.UnificationInferenceError -> Phantoms.TTerm Errors.InferenceError
 inferenceErrorUnification x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.InferenceError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unification"),
@@ -414,7 +414,7 @@ otherResolutionError x =
 
 resolutionErrorNoMatchingField :: Phantoms.TTerm Errors.NoMatchingFieldError -> Phantoms.TTerm Errors.ResolutionError
 resolutionErrorNoMatchingField x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.ResolutionError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "noMatchingField"),
@@ -422,7 +422,7 @@ resolutionErrorNoMatchingField x =
 
 resolutionErrorNoSuchBinding :: Phantoms.TTerm Errors.NoSuchBindingError -> Phantoms.TTerm Errors.ResolutionError
 resolutionErrorNoSuchBinding x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.ResolutionError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "noSuchBinding"),
@@ -430,7 +430,7 @@ resolutionErrorNoSuchBinding x =
 
 resolutionErrorNoSuchPrimitive :: Phantoms.TTerm Errors.NoSuchPrimitiveError -> Phantoms.TTerm Errors.ResolutionError
 resolutionErrorNoSuchPrimitive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.ResolutionError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "noSuchPrimitive"),
@@ -438,7 +438,7 @@ resolutionErrorNoSuchPrimitive x =
 
 resolutionErrorOther :: Phantoms.TTerm Errors.OtherResolutionError -> Phantoms.TTerm Errors.ResolutionError
 resolutionErrorOther x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.ResolutionError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "other"),
@@ -446,7 +446,7 @@ resolutionErrorOther x =
 
 resolutionErrorUnexpectedShape :: Phantoms.TTerm Errors.UnexpectedShapeError -> Phantoms.TTerm Errors.ResolutionError
 resolutionErrorUnexpectedShape x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.ResolutionError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unexpectedShape"),

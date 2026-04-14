@@ -13,7 +13,7 @@ import qualified Data.Map as M
 
 definitionTerm :: Phantoms.TTerm Packaging.TermDefinition -> Phantoms.TTerm Packaging.Definition
 definitionTerm x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.packaging.Definition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "term"),
@@ -21,7 +21,7 @@ definitionTerm x =
 
 definitionType :: Phantoms.TTerm Packaging.TypeDefinition -> Phantoms.TTerm Packaging.Definition
 definitionType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.packaging.Definition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "type"),

@@ -14,7 +14,7 @@
                (list (make-hydra_core_binding name val '()))
                body)))
 (define (t-inject type-name field-name term)
-  (list 'union (make-hydra_core_injection type-name
+  (list 'inject (make-hydra_core_injection type-name
                  (make-hydra_core_field field-name term))))
 (define (t-record type-name fields)
   (list 'record (make-hydra_core_record type-name fields)))

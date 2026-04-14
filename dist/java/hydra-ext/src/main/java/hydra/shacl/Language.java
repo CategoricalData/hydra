@@ -26,7 +26,7 @@ public interface Language {
       new hydra.variants.TermVariant.Maybe(),
       new hydra.variants.TermVariant.Record(),
       new hydra.variants.TermVariant.Set(),
-      new hydra.variants.TermVariant.Union())));
+      new hydra.variants.TermVariant.Inject())));
     hydra.util.Lazy<java.util.Set<hydra.variants.TypeVariant>> typeVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.variants.TypeVariant.Annotated(),
       new hydra.variants.TypeVariant.List(),

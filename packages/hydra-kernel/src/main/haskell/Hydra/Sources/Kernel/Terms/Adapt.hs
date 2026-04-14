@@ -546,7 +546,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
       _Term_typeLambda>>: "ta" ~> Core.termTypeLambda $ Core.typeLambda
         (Core.typeLambdaParameter $ var "ta")
         (var "go" @@ (Core.typeLambdaBody $ var "ta")),
-      _Term_union>>: "i" ~> Core.termUnion $ Core.injection
+      _Term_inject>>: "i" ~> Core.termInject $ Core.injection
         (Core.injectionTypeName $ var "i")
         (var "forField" @@ (Core.injectionField $ var "i")),
       _Term_unit>>: constant Core.termUnit,
@@ -751,7 +751,7 @@ termAlternatives = define "termAlternatives" $
     _Term_typeApplication>>: "ta" ~>
       "term2" <~ Core.typeApplicationTermBody (var "ta") $
       right $ list [var "term2"],
-    _Term_union>>: "inj" ~>
+    _Term_inject>>: "inj" ~>
       "tname" <~ Core.injectionTypeName (var "inj") $
       "field" <~ Core.injectionField (var "inj") $
       "fname" <~ Core.fieldName (var "field") $

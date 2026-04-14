@@ -27,7 +27,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -100,7 +100,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "equal", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.ComparisonConstraint"}},
                                                                                         "domain": {"unit": {}},
@@ -163,7 +163,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "notEqual", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.ComparisonConstraint"}},
                                                                                         "domain": {"unit": {}},
@@ -226,7 +226,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "lessThan", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.ComparisonConstraint"}},
                                                                                         "domain": {"unit": {}},
@@ -289,7 +289,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "greaterThan", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.ComparisonConstraint"}},
                                                                                         "domain": {"unit": {}},
@@ -352,7 +352,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "lessThanOrEqual", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.ComparisonConstraint"}},
                                                                                         "domain": {"unit": {}},
@@ -415,7 +415,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "greaterThanOrEqual", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.ComparisonConstraint"}},
                                                                                         "domain": {"unit": {}},
@@ -1079,7 +1079,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -1138,7 +1138,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "term", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.Node"}},
                                                                                         "domain": {"variable": "hydra.core.Term"},
@@ -1189,7 +1189,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "variable", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.Node"}},
                                                                                         "domain": {"variable": "hydra.query.Variable"},
@@ -1254,7 +1254,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "wildcard", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.Node"}},
                                                                                         "domain": {"unit": {}},
@@ -1463,7 +1463,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -1522,7 +1522,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "step", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.Path"}},
                                                                                         "domain": {"variable": "hydra.query.Step"},
@@ -1573,7 +1573,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "regex", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.Path"}},
                                                                                         "domain": {"variable": "hydra.query.RegexSequence"},
@@ -1624,7 +1624,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "inverse", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.Path"}},
                                                                                         "domain": {"variable": "hydra.query.Path"},
@@ -2033,7 +2033,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -2092,7 +2092,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "triple", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.Pattern"}},
                                                                                         "domain": {"variable": "hydra.query.TriplePattern"},
@@ -2143,7 +2143,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "negation", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.Pattern"}},
                                                                                         "domain": {"variable": "hydra.query.Pattern"},
@@ -2200,7 +2200,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "conjunction", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.Pattern"}},
                                                                                         "domain": {"list": {"variable": "hydra.query.Pattern"}},
@@ -2257,7 +2257,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "disjunction", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.Pattern"}},
                                                                                         "domain": {"list": {"variable": "hydra.query.Pattern"}},
@@ -2308,7 +2308,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "graph", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.Pattern"}},
                                                                                         "domain": {"variable": "hydra.query.GraphPattern"},
@@ -3371,7 +3371,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -3444,7 +3444,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "one", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.RegexQuantifier"}},
                                                                                         "domain": {"unit": {}},
@@ -3507,7 +3507,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "zeroOrOne", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.RegexQuantifier"}},
                                                                                         "domain": {"unit": {}},
@@ -3570,7 +3570,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "zeroOrMore", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.RegexQuantifier"}},
                                                                                         "domain": {"unit": {}},
@@ -3633,7 +3633,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "oneOrMore", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.RegexQuantifier"}},
                                                                                         "domain": {"unit": {}},
@@ -3805,7 +3805,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "exactly", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.RegexQuantifier"}},
                                                                                         "domain": {"literal": {"integer": {"int32": {}}}},
@@ -3979,7 +3979,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "atLeast", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.RegexQuantifier"}},
                                                                                         "domain": {"literal": {"integer": {"int32": {}}}},
@@ -4030,7 +4030,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "range", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.RegexQuantifier"}},
                                                                                         "domain": {"variable": "hydra.query.Range"},
@@ -4439,7 +4439,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -4498,7 +4498,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "edge", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.Step"}},
                                                                                         "domain": {"variable": "hydra.query.Edge"},
@@ -4549,7 +4549,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "project", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.Step"}},
                                                                                         "domain": {"variable": "hydra.core.Projection"},
@@ -4600,7 +4600,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "compare", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.query.Step"}},
                                                                                         "domain": {"variable": "hydra.query.ComparisonConstraint"},

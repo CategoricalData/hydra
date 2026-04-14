@@ -134,41 +134,41 @@
                (body (hydra_core_annotated_term-body at))
                (ann (hydra_core_annotated_term-annotation at))
                (ann-term (if (and (consp ann) (eq (car ann) :map)) ann (list :map ann))))
-          (list :union (hydra--make-injection "hydra.core.Term" "annotated"
+          (list :inject (hydra--make-injection "hydra.core.Term" "annotated"
                          (list :record (hydra--make-record "hydra.core.AnnotatedTerm"
                                          (list (hydra--make-field "body" (hydra--term-to-meta body))
                                                (hydra--make-field "annotation" (hydra--term-to-meta-map ann-term)))))))))
        ((eq tag :literal)
-        (list :union (hydra--make-injection "hydra.core.Term" "literal"
+        (list :inject (hydra--make-injection "hydra.core.Term" "literal"
                        (hydra--literal-to-meta (cadr term)))))
        ((eq tag :application)
         (let ((app (cadr term)))
-          (list :union (hydra--make-injection "hydra.core.Term" "application"
+          (list :inject (hydra--make-injection "hydra.core.Term" "application"
                          (list :record (hydra--make-record "hydra.core.Application"
                                          (list (hydra--make-field "function" (hydra--term-to-meta (hydra_core_application-function app)))
                                                (hydra--make-field "argument" (hydra--term-to-meta (hydra_core_application-argument app))))))))))
        ((eq tag :variable)
-        (list :union (hydra--make-injection "hydra.core.Term" "variable"
+        (list :inject (hydra--make-injection "hydra.core.Term" "variable"
                        (list :wrap (make-hydra_core_wrapped_term "hydra.core.Name"
                                      (list :literal (list :string (cadr term))))))))
        ((eq tag :wrap)
         (let ((wt (cadr term)))
-          (list :union (hydra--make-injection "hydra.core.Term" "wrap"
+          (list :inject (hydra--make-injection "hydra.core.Term" "wrap"
                          (list :record (hydra--make-record "hydra.core.WrappedTerm"
                                          (list (hydra--make-field "typeName"
                                                  (list :wrap (make-hydra_core_wrapped_term "hydra.core.Name"
                                                                (list :literal (list :string (hydra_core_wrapped_term-type_name wt))))))
                                                (hydra--make-field "body" (hydra--term-to-meta (hydra_core_wrapped_term-body wt))))))))))
        ((eq tag :maybe)
-        (list :union (hydra--make-injection "hydra.core.Term" "maybe"
+        (list :inject (hydra--make-injection "hydra.core.Term" "maybe"
                        (if (cadr term)
                            (list :maybe (hydra--term-to-meta (cadr term)))
                          (list :maybe nil)))))
        ((eq tag :list)
-        (list :union (hydra--make-injection "hydra.core.Term" "list"
+        (list :inject (hydra--make-injection "hydra.core.Term" "list"
                        (list :list (mapcar #'hydra--term-to-meta (cadr term))))))
        ((eq tag :map)
-        (list :union (hydra--make-injection "hydra.core.Term" "map"
+        (list :inject (hydra--make-injection "hydra.core.Term" "map"
                        (hydra--term-to-meta-map term))))
        ;; Already meta-encoded or unknown — pass through
        (t term)))))
@@ -177,27 +177,27 @@
   (if (not (consp lit)) lit
     (let ((tag (car lit)))
       (cond
-       ((eq tag :string) (list :union (hydra--make-injection "hydra.core.Literal" "string"
+       ((eq tag :string) (list :inject (hydra--make-injection "hydra.core.Literal" "string"
                                         (list :literal lit))))
-       ((eq tag :boolean) (list :union (hydra--make-injection "hydra.core.Literal" "boolean"
+       ((eq tag :boolean) (list :inject (hydra--make-injection "hydra.core.Literal" "boolean"
                                          (list :literal lit))))
        ((eq tag :integer) (hydra--integer-to-meta (cadr lit)))
        ((eq tag :float) (hydra--float-to-meta (cadr lit)))
-       (t (list :union (hydra--make-injection "hydra.core.Literal"
+       (t (list :inject (hydra--make-injection "hydra.core.Literal"
                           (downcase (symbol-name tag))
                           (list :literal lit))))))))
 
 (defun hydra--integer-to-meta (ival)
   (if (not (consp ival)) ival
-    (list :union (hydra--make-injection "hydra.core.Literal" "integer"
-                   (list :union (hydra--make-injection "hydra.core.IntegerValue"
+    (list :inject (hydra--make-injection "hydra.core.Literal" "integer"
+                   (list :inject (hydra--make-injection "hydra.core.IntegerValue"
                                   (downcase (symbol-name (car ival)))
                                   (list :literal (list :integer ival))))))))
 
 (defun hydra--float-to-meta (fval)
   (if (not (consp fval)) fval
-    (list :union (hydra--make-injection "hydra.core.Literal" "float"
-                   (list :union (hydra--make-injection "hydra.core.FloatValue"
+    (list :inject (hydra--make-injection "hydra.core.Literal" "float"
+                   (list :inject (hydra--make-injection "hydra.core.FloatValue"
                                   (downcase (symbol-name (car fval)))
                                   (list :literal (list :float fval))))))))
 
@@ -217,7 +217,7 @@
 
 (defun hydra--make-annotated (body anns)
   "Build a meta-encoded annotated term."
-  (list :union (hydra--make-injection "hydra.core.Term" "annotated"
+  (list :inject (hydra--make-injection "hydra.core.Term" "annotated"
                  (list :record (hydra--make-record "hydra.core.AnnotatedTerm"
                                  (list (hydra--make-field "body" (hydra--term-to-meta body))
                                        (hydra--make-field "annotation"

@@ -849,7 +849,7 @@
                             "body": {
                               "pair": {
                                 "@first": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "bnode",
                                       "term": {
@@ -1023,7 +1023,7 @@
                             "term": {
                               "lambda": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "iri", "term": {"variable": "i"}},
                                     "typeName": "hydra.rdf.syntax.Node"}},
                                 "domain": {"variable": "hydra.rdf.syntax.Iri"},
@@ -1033,7 +1033,7 @@
                             "term": {
                               "lambda": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "bnode", "term": {"variable": "b"}},
                                     "typeName": "hydra.rdf.syntax.Node"}},
                                 "domain": {"variable": "hydra.rdf.syntax.BlankNode"},

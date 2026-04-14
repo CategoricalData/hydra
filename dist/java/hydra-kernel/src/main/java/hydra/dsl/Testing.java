@@ -11,7 +11,7 @@ public interface Testing {
   }
 
   static hydra.phantoms.TTerm<hydra.testing.TestCase> testCaseUniversal(hydra.phantoms.TTerm<hydra.testing.UniversalTestCase> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("universal"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("universal"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.testing.TestCaseWithMetadata> testCaseWithMetadata(hydra.phantoms.TTerm<String> name, hydra.phantoms.TTerm<hydra.testing.TestCase> case_, hydra.phantoms.TTerm<hydra.util.Maybe<String>> description, hydra.phantoms.TTerm<java.util.List<hydra.testing.Tag>> tags) {

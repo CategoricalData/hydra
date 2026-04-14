@@ -248,7 +248,7 @@ termDependencyNames binds withPrims withNoms term0 =
                   Core.TermProject v0 -> nominal (Core.projectionTypeName v0)
                   Core.TermUnwrap v0 -> nominal v0
                   Core.TermRecord v0 -> nominal (Core.recordTypeName v0)
-                  Core.TermUnion v0 -> nominal (Core.injectionTypeName v0)
+                  Core.TermInject v0 -> nominal (Core.injectionTypeName v0)
                   Core.TermVariable v0 -> var v0
                   Core.TermWrap v0 -> nominal (Core.wrappedTermTypeName v0)
                   _ -> names

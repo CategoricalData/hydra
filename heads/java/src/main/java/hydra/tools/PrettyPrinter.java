@@ -344,8 +344,8 @@ public class PrettyPrinter {
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Union instance) {
-                    return notImplemented("union");
+                public Consumer<StringBuilder> visit(Term.Inject instance) {
+                    return notImplemented("inject");
                 }
 
                 @Override

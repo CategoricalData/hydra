@@ -228,8 +228,8 @@ def eliminate_unit_var(v: hydra.core.Name, term0: hydra.core.Term) -> hydra.core
             case hydra.core.TermSet(value=s):
                 return cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.map(recurse, s)))
 
-            case hydra.core.TermUnion(value=inj):
-                return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(inj.type_name, rewrite_field(recurse, inj.field))))
+            case hydra.core.TermInject(value=inj):
+                return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(inj.type_name, rewrite_field(recurse, inj.field))))
 
             case hydra.core.TermMaybe(value=mt):
                 return cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map(recurse, mt)))
@@ -956,7 +956,7 @@ def encode_term_inline(cx: hydra.context.Context, env: hydra.python.environment.
             body = tl.body
             return with_type_lambda(env, tl, (lambda env2: encode_term_inline(cx, env2, no_cast, body)))
 
-        case hydra.core.TermUnion(value=inj):
+        case hydra.core.TermInject(value=inj):
             tname = inj.type_name
             field = inj.field
             return hydra.lib.eithers.bind(hydra.resolution.require_union_type(cx, python_environment_get_graph(env), tname), (lambda rt: hydra.lib.logic.if_else(hydra.predicates.is_enum_row_type(rt), (lambda : Right(hydra.python.utils.project_from_expression(hydra.python.utils.py_name_to_py_expression(hydra.python.names.encode_name_qualified(env, tname)), hydra.python.names.encode_enum_value(env, field.name)))), (lambda : (fname := field.name, (is_unit_variant := hydra.lib.maybes.maybe((lambda : False), (lambda ft: hydra.predicates.is_unit_type(hydra.strip.deannotate_type(ft.type))), hydra.lib.lists.find((lambda ft: hydra.lib.equality.equal(ft.name.value, fname.value)), rt)), hydra.lib.eithers.bind(hydra.lib.logic.if_else(hydra.lib.logic.or_(hydra.predicates.is_unit_term(field.term), is_unit_variant), (lambda : Right(())), (lambda : hydra.lib.eithers.bind(encode(field.term), (lambda parg: Right((parg,)))))), (lambda args: (deconflicted_name := deconflict_variant_name(True, env, tname, fname, env.graph), Right(hydra.python.utils.cast_to(hydra.python.names.type_variable_reference(env, tname), hydra.python.utils.function_call(hydra.python.utils.py_name_to_py_primary(deconflicted_name), args))))[1])))[1])[1]))))
@@ -1557,7 +1557,7 @@ def extend_meta_for_term(top_level: bool, meta0: hydra.python.environment.Python
             case hydra.core.TermMaybe(value=m):
                 return hydra.lib.maybes.maybe((lambda : set_meta_uses_nothing(meta, True)), (lambda _: set_meta_uses_just(meta, True)), m)
 
-            case hydra.core.TermUnion():
+            case hydra.core.TermInject():
                 return set_meta_uses_cast(True, meta)
 
             case _:

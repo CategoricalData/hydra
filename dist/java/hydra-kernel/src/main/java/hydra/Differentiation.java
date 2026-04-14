@@ -262,7 +262,7 @@ public interface Differentiation {
       }
 
       @Override
-      public hydra.core.Term visit(hydra.core.Term.Union ignored) {
+      public hydra.core.Term visit(hydra.core.Term.Inject ignored) {
         return new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(0.0)));
       }
 

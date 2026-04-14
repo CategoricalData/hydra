@@ -709,7 +709,7 @@ invalidLetBindingNameErrorWithName original newVal =
 
 invalidTermErrorConstantCondition :: Phantoms.TTerm ErrorCore.ConstantConditionError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorConstantCondition x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "constantCondition"),
@@ -717,7 +717,7 @@ invalidTermErrorConstantCondition x =
 
 invalidTermErrorDuplicateBinding :: Phantoms.TTerm ErrorCore.DuplicateBindingError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorDuplicateBinding x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "duplicateBinding"),
@@ -725,7 +725,7 @@ invalidTermErrorDuplicateBinding x =
 
 invalidTermErrorDuplicateField :: Phantoms.TTerm ErrorCore.DuplicateFieldError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorDuplicateField x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "duplicateField"),
@@ -733,7 +733,7 @@ invalidTermErrorDuplicateField x =
 
 invalidTermErrorEmptyCaseStatement :: Phantoms.TTerm ErrorCore.EmptyCaseStatementError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorEmptyCaseStatement x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "emptyCaseStatement"),
@@ -741,7 +741,7 @@ invalidTermErrorEmptyCaseStatement x =
 
 invalidTermErrorEmptyLetBindings :: Phantoms.TTerm ErrorCore.EmptyLetBindingsError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorEmptyLetBindings x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "emptyLetBindings"),
@@ -749,7 +749,7 @@ invalidTermErrorEmptyLetBindings x =
 
 invalidTermErrorEmptyTermAnnotation :: Phantoms.TTerm ErrorCore.EmptyTermAnnotationError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorEmptyTermAnnotation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "emptyTermAnnotation"),
@@ -757,7 +757,7 @@ invalidTermErrorEmptyTermAnnotation x =
 
 invalidTermErrorEmptyTypeNameInTerm :: Phantoms.TTerm ErrorCore.EmptyTypeNameInTermError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorEmptyTypeNameInTerm x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "emptyTypeNameInTerm"),
@@ -765,7 +765,7 @@ invalidTermErrorEmptyTypeNameInTerm x =
 
 invalidTermErrorInvalidLambdaParameterName :: Phantoms.TTerm ErrorCore.InvalidLambdaParameterNameError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorInvalidLambdaParameterName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "invalidLambdaParameterName"),
@@ -773,7 +773,7 @@ invalidTermErrorInvalidLambdaParameterName x =
 
 invalidTermErrorInvalidLetBindingName :: Phantoms.TTerm ErrorCore.InvalidLetBindingNameError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorInvalidLetBindingName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "invalidLetBindingName"),
@@ -781,7 +781,7 @@ invalidTermErrorInvalidLetBindingName x =
 
 invalidTermErrorInvalidTypeLambdaParameterName :: Phantoms.TTerm ErrorCore.InvalidTypeLambdaParameterNameError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorInvalidTypeLambdaParameterName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "invalidTypeLambdaParameterName"),
@@ -789,7 +789,7 @@ invalidTermErrorInvalidTypeLambdaParameterName x =
 
 invalidTermErrorNestedTermAnnotation :: Phantoms.TTerm ErrorCore.NestedTermAnnotationError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorNestedTermAnnotation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nestedTermAnnotation"),
@@ -797,7 +797,7 @@ invalidTermErrorNestedTermAnnotation x =
 
 invalidTermErrorRedundantWrapUnwrap :: Phantoms.TTerm ErrorCore.RedundantWrapUnwrapError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorRedundantWrapUnwrap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "redundantWrapUnwrap"),
@@ -805,7 +805,7 @@ invalidTermErrorRedundantWrapUnwrap x =
 
 invalidTermErrorSelfApplication :: Phantoms.TTerm ErrorCore.SelfApplicationError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorSelfApplication x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "selfApplication"),
@@ -813,7 +813,7 @@ invalidTermErrorSelfApplication x =
 
 invalidTermErrorTermVariableShadowing :: Phantoms.TTerm ErrorCore.TermVariableShadowingError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorTermVariableShadowing x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "termVariableShadowing"),
@@ -821,7 +821,7 @@ invalidTermErrorTermVariableShadowing x =
 
 invalidTermErrorTypeVariableShadowingInTypeLambda :: Phantoms.TTerm ErrorCore.TypeVariableShadowingInTypeLambdaError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorTypeVariableShadowingInTypeLambda x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeVariableShadowingInTypeLambda"),
@@ -829,7 +829,7 @@ invalidTermErrorTypeVariableShadowingInTypeLambda x =
 
 invalidTermErrorUndefinedTermVariable :: Phantoms.TTerm ErrorCore.UndefinedTermVariableError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorUndefinedTermVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "undefinedTermVariable"),
@@ -837,7 +837,7 @@ invalidTermErrorUndefinedTermVariable x =
 
 invalidTermErrorUndefinedTypeVariableInBindingType :: Phantoms.TTerm ErrorCore.UndefinedTypeVariableInBindingTypeError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorUndefinedTypeVariableInBindingType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "undefinedTypeVariableInBindingType"),
@@ -845,7 +845,7 @@ invalidTermErrorUndefinedTypeVariableInBindingType x =
 
 invalidTermErrorUndefinedTypeVariableInLambdaDomain :: Phantoms.TTerm ErrorCore.UndefinedTypeVariableInLambdaDomainError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorUndefinedTypeVariableInLambdaDomain x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "undefinedTypeVariableInLambdaDomain"),
@@ -853,7 +853,7 @@ invalidTermErrorUndefinedTypeVariableInLambdaDomain x =
 
 invalidTermErrorUndefinedTypeVariableInTypeApplication :: Phantoms.TTerm ErrorCore.UndefinedTypeVariableInTypeApplicationError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorUndefinedTypeVariableInTypeApplication x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "undefinedTypeVariableInTypeApplication"),
@@ -861,7 +861,7 @@ invalidTermErrorUndefinedTypeVariableInTypeApplication x =
 
 invalidTermErrorUnknownPrimitiveName :: Phantoms.TTerm ErrorCore.UnknownPrimitiveNameError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorUnknownPrimitiveName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unknownPrimitiveName"),
@@ -869,7 +869,7 @@ invalidTermErrorUnknownPrimitiveName x =
 
 invalidTermErrorUnnecessaryIdentityApplication :: Phantoms.TTerm ErrorCore.UnnecessaryIdentityApplicationError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorUnnecessaryIdentityApplication x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unnecessaryIdentityApplication"),
@@ -877,7 +877,7 @@ invalidTermErrorUnnecessaryIdentityApplication x =
 
 invalidTermErrorUntypedTermVariable :: Phantoms.TTerm ErrorCore.UntypedTermVariableError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorUntypedTermVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "untypedTermVariable"),
@@ -885,7 +885,7 @@ invalidTermErrorUntypedTermVariable x =
 
 invalidTypeErrorDuplicateRecordTypeFieldNames :: Phantoms.TTerm ErrorCore.DuplicateRecordTypeFieldNamesError -> Phantoms.TTerm ErrorCore.InvalidTypeError
 invalidTypeErrorDuplicateRecordTypeFieldNames x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "duplicateRecordTypeFieldNames"),
@@ -893,7 +893,7 @@ invalidTypeErrorDuplicateRecordTypeFieldNames x =
 
 invalidTypeErrorDuplicateUnionTypeFieldNames :: Phantoms.TTerm ErrorCore.DuplicateUnionTypeFieldNamesError -> Phantoms.TTerm ErrorCore.InvalidTypeError
 invalidTypeErrorDuplicateUnionTypeFieldNames x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "duplicateUnionTypeFieldNames"),
@@ -901,7 +901,7 @@ invalidTypeErrorDuplicateUnionTypeFieldNames x =
 
 invalidTypeErrorEmptyRecordType :: Phantoms.TTerm ErrorCore.EmptyRecordTypeError -> Phantoms.TTerm ErrorCore.InvalidTypeError
 invalidTypeErrorEmptyRecordType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "emptyRecordType"),
@@ -909,7 +909,7 @@ invalidTypeErrorEmptyRecordType x =
 
 invalidTypeErrorEmptyTypeAnnotation :: Phantoms.TTerm ErrorCore.EmptyTypeAnnotationError -> Phantoms.TTerm ErrorCore.InvalidTypeError
 invalidTypeErrorEmptyTypeAnnotation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "emptyTypeAnnotation"),
@@ -917,7 +917,7 @@ invalidTypeErrorEmptyTypeAnnotation x =
 
 invalidTypeErrorEmptyUnionType :: Phantoms.TTerm ErrorCore.EmptyUnionTypeError -> Phantoms.TTerm ErrorCore.InvalidTypeError
 invalidTypeErrorEmptyUnionType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "emptyUnionType"),
@@ -925,7 +925,7 @@ invalidTypeErrorEmptyUnionType x =
 
 invalidTypeErrorInvalidForallParameterName :: Phantoms.TTerm ErrorCore.InvalidForallParameterNameError -> Phantoms.TTerm ErrorCore.InvalidTypeError
 invalidTypeErrorInvalidForallParameterName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "invalidForallParameterName"),
@@ -933,7 +933,7 @@ invalidTypeErrorInvalidForallParameterName x =
 
 invalidTypeErrorInvalidTypeSchemeVariableName :: Phantoms.TTerm ErrorCore.InvalidTypeSchemeVariableNameError -> Phantoms.TTerm ErrorCore.InvalidTypeError
 invalidTypeErrorInvalidTypeSchemeVariableName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "invalidTypeSchemeVariableName"),
@@ -941,7 +941,7 @@ invalidTypeErrorInvalidTypeSchemeVariableName x =
 
 invalidTypeErrorNestedTypeAnnotation :: Phantoms.TTerm ErrorCore.NestedTypeAnnotationError -> Phantoms.TTerm ErrorCore.InvalidTypeError
 invalidTypeErrorNestedTypeAnnotation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nestedTypeAnnotation"),
@@ -949,7 +949,7 @@ invalidTypeErrorNestedTypeAnnotation x =
 
 invalidTypeErrorNonComparableMapKeyType :: Phantoms.TTerm ErrorCore.NonComparableMapKeyTypeError -> Phantoms.TTerm ErrorCore.InvalidTypeError
 invalidTypeErrorNonComparableMapKeyType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nonComparableMapKeyType"),
@@ -957,7 +957,7 @@ invalidTypeErrorNonComparableMapKeyType x =
 
 invalidTypeErrorNonComparableSetElementType :: Phantoms.TTerm ErrorCore.NonComparableSetElementTypeError -> Phantoms.TTerm ErrorCore.InvalidTypeError
 invalidTypeErrorNonComparableSetElementType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nonComparableSetElementType"),
@@ -965,7 +965,7 @@ invalidTypeErrorNonComparableSetElementType x =
 
 invalidTypeErrorSingleVariantUnion :: Phantoms.TTerm ErrorCore.SingleVariantUnionError -> Phantoms.TTerm ErrorCore.InvalidTypeError
 invalidTypeErrorSingleVariantUnion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "singleVariantUnion"),
@@ -973,7 +973,7 @@ invalidTypeErrorSingleVariantUnion x =
 
 invalidTypeErrorTypeVariableShadowingInForall :: Phantoms.TTerm ErrorCore.TypeVariableShadowingInForallError -> Phantoms.TTerm ErrorCore.InvalidTypeError
 invalidTypeErrorTypeVariableShadowingInForall x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeVariableShadowingInForall"),
@@ -981,7 +981,7 @@ invalidTypeErrorTypeVariableShadowingInForall x =
 
 invalidTypeErrorUndefinedTypeVariable :: Phantoms.TTerm ErrorCore.UndefinedTypeVariableError -> Phantoms.TTerm ErrorCore.InvalidTypeError
 invalidTypeErrorUndefinedTypeVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "undefinedTypeVariable"),
@@ -989,7 +989,7 @@ invalidTypeErrorUndefinedTypeVariable x =
 
 invalidTypeErrorVoidInNonBottomPosition :: Phantoms.TTerm ErrorCore.VoidInNonBottomPositionError -> Phantoms.TTerm ErrorCore.InvalidTypeError
 invalidTypeErrorVoidInNonBottomPosition x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "voidInNonBottomPosition"),

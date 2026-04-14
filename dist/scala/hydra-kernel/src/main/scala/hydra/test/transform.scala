@@ -34,7 +34,7 @@ def encodeAdjacencyList(pairs: Seq[Tuple2[Int, Seq[Int]]]): hydra.core.Term =
      Seq[Int]](p))))))(pairs))
 
 def encodeCaseConvention(conv: hydra.util.CaseConvention): hydra.core.Term =
-  hydra.core.Term.union(hydra.core.Injection("hydra.util.CaseConvention", hydra.core.Field(conv match
+  hydra.core.Term.inject(hydra.core.Injection("hydra.util.CaseConvention", hydra.core.Field(conv match
   case hydra.util.CaseConvention.lowerSnake => "lowerSnake"
   case hydra.util.CaseConvention.upperSnake => "upperSnake"
   case hydra.util.CaseConvention.camel => "camel"
