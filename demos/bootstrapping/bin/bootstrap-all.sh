@@ -145,13 +145,13 @@ if $NEED_STACK; then
     fi
 fi
 
-# --- Java 17+ (for Java host or target) ---
+# --- Java 11+ (for Java host or target) ---
 if $NEED_JAVA; then
-    # Try to locate a Java 17+ JDK and set JAVA_HOME.
-    if [ -n "${JAVA_HOME:-}" ] && "$JAVA_HOME/bin/java" -version 2>&1 | grep -qE '"(17|18|19|2[0-9])\.' ; then
+    # Try to locate a Java 11+ JDK and set JAVA_HOME.
+    if [ -n "${JAVA_HOME:-}" ] && "$JAVA_HOME/bin/java" -version 2>&1 | grep -qE '"(1[1-9]|2[0-9])\.' ; then
         export JAVA_HOME
     elif command -v /usr/libexec/java_home > /dev/null 2>&1; then
-        JAVA_HOME=$(/usr/libexec/java_home -v 17 2>/dev/null || true)
+        JAVA_HOME=$(/usr/libexec/java_home -v 11 2>/dev/null || true)
         if [ -n "${JAVA_HOME:-}" ]; then
             export JAVA_HOME
         fi
@@ -168,10 +168,16 @@ if $NEED_JAVA; then
         fi
     fi
 
-    # Warn if running an x86_64 JDK under Rosetta on Apple Silicon (causes ~20x slowdown)
+    # Block Rosetta-2 x86_64 JDKs on Apple Silicon (causes ~20x slowdown and bogus
+    # benchmark timings). Set HYDRA_ALLOW_ROSETTA_JDK=1 to proceed anyway.
     if [ "$(uname -s)" = "Darwin" ] && [ "$(uname -m)" = "arm64" ]; then
         if command -v "$JAVA_CMD" > /dev/null 2>&1 && file "$(command -v "$JAVA_CMD")" | grep -q x86_64; then
-            ENV_WARNINGS+=("x86_64 JDK detected on Apple Silicon. This runs under Rosetta 2 and will be ~20x slower than a native arm64 JDK. Current: $("$JAVA_CMD" -version 2>&1 | head -1)")
+            ROSETTA_MSG="x86_64 JDK detected on Apple Silicon (runs under Rosetta 2, ~20x slower than a native arm64 JDK). Current: $("$JAVA_CMD" -version 2>&1 | head -1)"
+            if [ "${HYDRA_ALLOW_ROSETTA_JDK:-}" = "1" ]; then
+                ENV_WARNINGS+=("$ROSETTA_MSG")
+            else
+                ENV_ERRORS+=("$ROSETTA_MSG. Point JAVA_HOME at a native arm64 JDK, or set HYDRA_ALLOW_ROSETTA_JDK=1 to proceed anyway.")
+            fi
         fi
     fi
 fi
