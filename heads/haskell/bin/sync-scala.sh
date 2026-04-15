@@ -74,15 +74,6 @@ step 3 $TOTAL_STEPS "Generating Scala test modules"
 echo ""
 stack exec update-scala-tests -- $RTS_FLAGS
 
-# Post-process generated test files
-if [ -d "$DIST_SCALA/src/test/scala" ]; then
-    # Replace unresolved inference type variables (T0-T99) with Any.
-    # These appear in type parameter positions like [T0], [Int, T1], [T2, String].
-    echo "  Post-processing: replacing inference type variables with Any..."
-    find "$DIST_SCALA/src/test/scala" -name "*.scala" -exec \
-        perl -pi -e 's/\bT(\d+)\b/Any/g' {} +
-fi
-
 # Patch testGraph.scala to use a graph populated with primitives instead of emptyGraph.
 # Without this, evaluation tests produce "<<eval error>>" because no primitives are registered.
 TESTGRAPH_FILE="$DIST_SCALA/src/test/scala/hydra/test/testGraph.scala"
