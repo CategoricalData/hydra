@@ -127,10 +127,19 @@ jsonString :: TTermDefinition (String -> String)
 jsonString = jsonSerdeDefinition "jsonString" $
   doc "Escape and quote a string for JSON output" $
   "s" ~>
+  -- hexChar: look up the hex-digit character at index i in "0..9a..f",
+  -- returning "?" as an unreachable fallback when the index is out of range
+  -- (only called with i in [0, 16) below, so the fallback never fires).
+  "hexChar" <~ ("i" ~>
+    Maybes.fromMaybe (string "?") $
+      Maybes.map ("ch" ~> Strings.fromList (Lists.pure (var "ch")))
+        (Strings.maybeCharAt (var "i") hexDigits)) $
   -- hexEscape: encode a control character as \\u00XX
   "hexEscape" <~ ("c" ~>
-    "hi" <~ Strings.fromList (Lists.pure (Strings.charAt (Math.div (var "c") (int32 16)) hexDigits)) $
-    "lo" <~ Strings.fromList (Lists.pure (Strings.charAt (Math.mod (var "c") (int32 16)) hexDigits)) $
+    "hi" <~ (Maybes.fromMaybe (string "?") $
+      Maybes.map (var "hexChar") (Math.maybeDiv (var "c") (int32 16))) $
+    "lo" <~ (Maybes.fromMaybe (string "?") $
+      Maybes.map (var "hexChar") (Math.maybeMod (var "c") (int32 16))) $
     string "\\u00" ++ var "hi" ++ var "lo") $
   -- escape function takes a codepoint (Int) and returns a String
   "escape" <~ ("c" ~>

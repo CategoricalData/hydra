@@ -530,16 +530,19 @@ escapeControlCharsInJson = define "escapeControlCharsInJson" $
     Logic.ifElse (Equality.lt (var "n") (int32 10))
       (Math.add (int32 0x30) (var "n"))       -- '0' + n
       (Math.add (int32 0x61) (Math.sub (var "n") (int32 10)))) $ -- 'a' + (n - 10)
+  -- Divisor is a literal 16 (non-zero), so maybeDiv/maybeMod always succeed;
+  -- the 0 fallback is unreachable.
   "escapeToUnicode" <~ ("b" ~>
     list [int32 0x5C, int32 0x75, int32 0x30, int32 0x30,
-          var "hexDigit" @@ Math.div (var "b") (int32 16),
-          var "hexDigit" @@ Math.mod (var "b") (int32 16)]) $
+          var "hexDigit" @@ (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "b") (int32 16))),
+          var "hexDigit" @@ (Maybes.fromMaybe (int32 0) (Math.maybeMod (var "b") (int32 16)))]) $
   -- go :: Bool -> Bool -> [Int32] -> [Int32]
   "go" <~ ("inStr" ~> "esc" ~> "bytes" ~>
-    Logic.ifElse (Lists.null $ var "bytes")
+    Maybes.maybe
       (TTerm (Terms.list []) :: TTerm [Int])
-      ("b" <~ Lists.head (var "bytes") $
-       "bs" <~ Lists.tail (var "bytes") $
+      ("uc" ~>
+       "b" <~ Pairs.first (var "uc") $
+       "bs" <~ Pairs.second (var "uc") $
        Logic.ifElse (var "esc")
          -- after backslash, pass through next byte
          (Lists.cons (var "b") (var "go" @@ var "inStr" @@ boolean False @@ var "bs"))
@@ -553,7 +556,8 @@ escapeControlCharsInJson = define "escapeControlCharsInJson" $
                -- control char: replace with \uXXXX
                (Lists.concat2 (var "escapeToUnicode" @@ var "b") (var "go" @@ var "inStr" @@ boolean False @@ var "bs"))
                -- normal byte
-               (Lists.cons (var "b") (var "go" @@ var "inStr" @@ boolean False @@ var "bs"))))))) $
+               (Lists.cons (var "b") (var "go" @@ var "inStr" @@ boolean False @@ var "bs"))))))
+      (Lists.uncons $ var "bytes")) $
   var "go" @@ boolean False @@ boolean False @@ var "input"
 
 -- | Decode a single module from a JSON value.

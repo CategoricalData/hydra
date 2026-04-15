@@ -384,14 +384,15 @@ adaptTerm = define "adaptTerm" $
           (var "term")
           (Core.termLiteral $ adaptLiteralValue @@ var "litmap" @@ var "lt" @@ var "l")]),
     "forUnsupported">: ("term" ~> lets [
-      "forNonNull">: ("alts" ~>
-        "mterm" <<~ var "tryTerm" @@ Lists.head (var "alts") $
-        optCases (var "mterm")
-          (var "tryAlts" @@ Lists.tail (var "alts"))
-          ("t" ~> right $ just $ var "t")),
-      "tryAlts">: ("alts" ~> Logic.ifElse (Lists.null $ var "alts")
-        (right nothing)
-        (var "forNonNull" @@ var "alts"))] $
+      "tryAlts">: ("alts" ~>
+        Maybes.maybe
+          (right nothing)
+          ("uc" ~>
+            "mterm" <<~ var "tryTerm" @@ (Pairs.first $ var "uc") $
+            optCases (var "mterm")
+              (var "tryAlts" @@ (Pairs.second $ var "uc"))
+              ("t" ~> right $ just $ var "t"))
+          (Lists.uncons $ var "alts"))] $
       "alts0" <<~ termAlternatives @@ var "cx" @@ var "graph" @@ var "term" $
       var "tryAlts" @@ var "alts0"),
     "tryTerm">: ("term" ~>
@@ -432,11 +433,11 @@ adaptType = define "adaptType" $
         (just $ Core.typeLiteral Core.literalTypeString)
         ("lt2" ~> just $ Core.typeLiteral $ var "lt2"))]),
   "forUnsupported">: ("typ" ~>
-    "tryAlts" <~ ("alts" ~> Logic.ifElse (Lists.null $ var "alts")
-      nothing
-      (optCases (var "tryType" @@ Lists.head (var "alts"))
-        (var "tryAlts" @@ Lists.tail (var "alts"))
-        ("t" ~> just $ var "t"))) $
+    "tryAlts" <~ ("alts" ~>
+      Maybes.bind (Lists.uncons $ var "alts") $
+        "uc" ~> optCases (var "tryType" @@ (Pairs.first $ var "uc"))
+          (var "tryAlts" @@ (Pairs.second $ var "uc"))
+          ("t" ~> just $ var "t")) $
     "alts0" <~ typeAlternatives @@ var "typ" $
     var "tryAlts" @@ var "alts0"),
   "tryType">: ("typ" ~>
@@ -729,7 +730,12 @@ schemaGraphToDefinitions = define "schemaGraphToDefinitions" $
     (var "tmap1")
     (Lists.map
       ("names" ~> Lists.map (var "toDef") $
-        Lists.map ("n" ~> pair (var "n") (Maybes.fromJust $ Maps.lookup (var "n") (var "tmap1"))) (var "names"))
+        -- Drop names that aren't present in tmap1. The caller is expected to
+        -- pass only names that exist in the schema graph, so the filter is
+        -- a no-op in practice.
+        Maybes.mapMaybe
+          ("n" ~> Maybes.map ("t" ~> pair (var "n") (var "t")) (Maps.lookup (var "n") (var "tmap1")))
+          (var "names"))
       (var "nameLists"))
 
 termAlternatives :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either Error [Term])

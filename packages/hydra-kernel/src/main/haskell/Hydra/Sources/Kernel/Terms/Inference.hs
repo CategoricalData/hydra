@@ -345,18 +345,22 @@ inferTypeOf = define "inferTypeOf" $
   "finalized" <<~ finalizeInferredTerm @@ var "fcx2" @@ var "cx" @@ Typing.inferenceResultTerm (var "result") $
   "letResult" <<~ ExtractCore.let_ @@ var "cx" @@ var "finalized" $
   "bindings" <~ Core.letBindings (var "letResult") $
+  "wrongCount" <~ (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [
+      (string "Expected a single binding with a type scheme, but got: "),
+      Literals.showInt32 $ Lists.length $ var "bindings",
+      (string " bindings")])) (var "fcx2")) $
   Logic.ifElse (Equality.equal (int32 1) (Lists.length $ var "bindings"))
-    ("binding" <~ Lists.head (var "bindings") $
-     "term1" <~ Core.bindingTerm (var "binding") $
-     "mts" <~ Core.bindingType (var "binding") $
-     Maybes.maybe
-       (Ctx.failInContext (Error.errorOther $ Error.otherError (string "Expected a type scheme")) (var "fcx2"))
-       ("ts" ~> right $ pair (pair (var "term1") (var "ts")) (var "fcx2"))
-       (var "mts"))
-    (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [
-        (string "Expected a single binding with a type scheme, but got: "),
-        Literals.showInt32 $ Lists.length $ var "bindings",
-        (string " bindings")])) (var "fcx2"))
+    (Maybes.maybe
+      (var "wrongCount")
+      ("binding" ~>
+        "term1" <~ Core.bindingTerm (var "binding") $
+        "mts" <~ Core.bindingType (var "binding") $
+        Maybes.maybe
+          (Ctx.failInContext (Error.errorOther $ Error.otherError (string "Expected a type scheme")) (var "fcx2"))
+          ("ts" ~> right $ pair (pair (var "term1") (var "ts")) (var "fcx2"))
+          (var "mts"))
+      (Lists.maybeHead (var "bindings")))
+    (var "wrongCount")
 
 
 inferTypeOfLiteral :: TTermDefinition (Context -> Literal -> InferenceResult)
@@ -791,9 +795,7 @@ inferTypeOfOptional :: TTermDefinition (Context -> Graph -> Maybe Term -> Prelud
 inferTypeOfOptional = define "inferTypeOfOptional" $
   doc "Infer the type of a Maybe value" $
   "fcx" ~> "cx" ~> "m" ~>
-  "trmCons" <~ ("terms" ~> Logic.ifElse (Lists.null $ var "terms")
-    (Core.termMaybe nothing)
-    (Core.termMaybe $ just $ Lists.head $ var "terms")) $
+  "trmCons" <~ ("terms" ~> Core.termMaybe (Lists.maybeHead $ var "terms")) $
   inferTypeOfCollection
     @@ var "fcx"
     @@ var "cx"
@@ -816,20 +818,37 @@ inferTypeOfPair = define "inferTypeOfPair" $
   "itypes" <~ Pairs.first (Pairs.second $ var "results") $
   "isubst" <~ Pairs.first (Pairs.second $ Pairs.second $ var "results") $
   "pairElemConstraints" <~ Pairs.second (Pairs.second $ Pairs.second $ var "results") $
-  "ifst" <~ Lists.head (var "iterms") $
-  "isnd" <~ Lists.head (Lists.tail $ var "iterms") $
-  "tyFst" <~ Lists.head (var "itypes") $
-  "tySnd" <~ Lists.head (Lists.tail $ var "itypes") $
-  "pairTerm" <~ (Core.termPair $ pair (var "ifst") (var "isnd")) $
-  "termWithTypes" <~ (Core.termTypeApplication $ Core.typeApplicationTerm
-    (Core.termTypeApplication $ Core.typeApplicationTerm (var "pairTerm") (var "tyFst"))
-    (var "tySnd")) $
-  right (yieldWithConstraints
-    @@ var "fcx2"
-    @@ var "termWithTypes"
-    @@ (Core.typePair $ Core.pairType (var "tyFst") (var "tySnd"))
-    @@ var "isubst"
-    @@ var "pairElemConstraints")
+  -- inferMany with two inputs returns exactly two elements in iterms/itypes;
+  -- this error path is unreachable when inferMany behaves.
+  "arityErr" <~ (Ctx.failInContext
+    (Error.errorOther $ Error.otherError (string "inferTypeOfPair: expected 2 inferred terms/types"))
+    (var "fcx2")) $
+  Maybes.maybe (var "arityErr")
+    ("termsUc" ~>
+      "ifst" <~ Pairs.first (var "termsUc") $
+      Maybes.maybe (var "arityErr")
+        ("termsUc2" ~>
+          "isnd" <~ Pairs.first (var "termsUc2") $
+          Maybes.maybe (var "arityErr")
+            ("typesUc" ~>
+              "tyFst" <~ Pairs.first (var "typesUc") $
+              Maybes.maybe (var "arityErr")
+                ("typesUc2" ~>
+                  "tySnd" <~ Pairs.first (var "typesUc2") $
+                  "pairTerm" <~ (Core.termPair $ pair (var "ifst") (var "isnd")) $
+                  "termWithTypes" <~ (Core.termTypeApplication $ Core.typeApplicationTerm
+                    (Core.termTypeApplication $ Core.typeApplicationTerm (var "pairTerm") (var "tyFst"))
+                    (var "tySnd")) $
+                  right (yieldWithConstraints
+                    @@ var "fcx2"
+                    @@ var "termWithTypes"
+                    @@ (Core.typePair $ Core.pairType (var "tyFst") (var "tySnd"))
+                    @@ var "isubst"
+                    @@ var "pairElemConstraints"))
+                (Lists.uncons (Pairs.second $ var "typesUc")))
+            (Lists.uncons (var "itypes")))
+        (Lists.uncons (Pairs.second $ var "termsUc")))
+    (Lists.uncons (var "iterms"))
 
 inferTypeOfPrimitive :: TTermDefinition (Context -> Graph -> Name -> Prelude.Either Error InferenceResult)
 inferTypeOfPrimitive = define "inferTypeOfPrimitive" $
@@ -1236,13 +1255,13 @@ inferTypesOfTemporaryBindings :: TTermDefinition (Context -> Graph -> [Binding] 
 inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
   doc "Infer types for temporary let bindings (Either version)" $
   "fcx" ~> "cx" ~> "bins" ~>
-  Logic.ifElse (Lists.null $ var "bins")
-    (right $ pair (pair (list ([] :: [TTerm Term])) (pair (list ([] :: [TTerm Type])) (pair (Substitution.idTypeSubst) Maps.empty))) (var "fcx"))
-    ("dflt" <~ (
-    "binding" <~ Lists.head (var "bins") $
+  "emptyResult" <~ (right $ pair (pair (list ([] :: [TTerm Term])) (pair (list ([] :: [TTerm Type])) (pair (Substitution.idTypeSubst) Maps.empty))) (var "fcx")) $
+  Maybes.maybe (var "emptyResult")
+    ("binsUc" ~>
+    "binding" <~ Pairs.first (var "binsUc") $
+    "tl" <~ Pairs.second (var "binsUc") $
     "k" <~ Core.bindingName (var "binding") $
     "v" <~ Core.bindingTerm (var "binding") $
-    "tl" <~ Lists.tail (var "bins") $
     "result1" <<~ inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ var "v" @@
       (Strings.cat $ list [
         (string "temporary let binding '"),
@@ -1292,19 +1311,20 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
       (Lists.cons (Substitution.substTypesInTerm @@ var "r" @@ var "j") (var "h"))
       (pair
         (Lists.cons (Substitution.substInType @@ var "r" @@ var "u_prime") (var "r_prime"))
-        (pair (Substitution.composeTypeSubst @@ var "u" @@ var "r") (var "mergedConstraints")))) (var "fcx3")) $
-  var "dflt")
+        (pair (Substitution.composeTypeSubst @@ var "u" @@ var "r") (var "mergedConstraints")))) (var "fcx3"))
+    (Lists.uncons (var "bins"))
 
 inferMany :: TTermDefinition (Context -> Graph -> [(Term, String)] -> Prelude.Either Error (([Term], ([Type], (TypeSubst, M.Map Name TypeVariableMetadata))), Context))
 inferMany = define "inferMany" $
   doc "Infer types for multiple terms, propagating class constraints from sub-expressions" $
   "fcx" ~> "cx" ~> "pairs" ~>
-  Logic.ifElse (Lists.null $ var "pairs")
-    (right $ pair (pair (list ([] :: [TTerm Term])) $ pair (list ([] :: [TTerm Type])) (pair Substitution.idTypeSubst Maps.empty)) (var "fcx"))
-    ("dflt" <~ (
-    "e" <~ Pairs.first (Lists.head $ var "pairs") $
-    "desc" <~ Pairs.second (Lists.head $ var "pairs") $
-    "tl" <~ Lists.tail (var "pairs") $
+  "emptyResult" <~ (right $ pair (pair (list ([] :: [TTerm Term])) $ pair (list ([] :: [TTerm Type])) (pair Substitution.idTypeSubst Maps.empty)) (var "fcx")) $
+  Maybes.maybe (var "emptyResult")
+    ("pairsUc" ~>
+    "headPair" <~ Pairs.first (var "pairsUc") $
+    "tl" <~ Pairs.second (var "pairsUc") $
+    "e" <~ Pairs.first (var "headPair") $
+    "desc" <~ Pairs.second (var "headPair") $
     "result1" <<~ inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ var "e" @@ var "desc" $
     "fcx2" <~ Typing.inferenceResultContext (var "result1") $
     "e1" <~ Typing.inferenceResultTerm (var "result1") $
@@ -1324,8 +1344,8 @@ inferMany = define "inferMany" $
       (Lists.cons (Substitution.substTypesInTerm @@ var "s2" @@ var "e1") (var "e2"))
       (pair
         (Lists.cons (Substitution.substInType @@ var "s2" @@ var "t1") (var "t2"))
-        (pair (Substitution.composeTypeSubst @@ var "s1" @@ var "s2") (var "mergedConstraints")))) (var "fcx3")) $
-  var "dflt")
+        (pair (Substitution.composeTypeSubst @@ var "s1" @@ var "s2") (var "mergedConstraints")))) (var "fcx3"))
+    (Lists.uncons (var "pairs"))
 
 yieldDebug :: TTermDefinition (Context -> Graph -> String -> Term -> Type -> TypeSubst -> Prelude.Either Error InferenceResult)
 yieldDebug = define "yieldDebug" $
