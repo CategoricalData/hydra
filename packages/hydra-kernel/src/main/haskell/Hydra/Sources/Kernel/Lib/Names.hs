@@ -114,6 +114,7 @@ module_ = Module ns definitions
       toDefinition listsTail,
       toDefinition listsTake,
       toDefinition listsTranspose,
+      toDefinition listsUncons,
       toDefinition listsZip,
       toDefinition listsZipWith,
 
@@ -457,6 +458,7 @@ listsSpan        = defineName "listsSpan" "hydra.lib.lists" "span"
 listsTail        = defineName "listsTail" "hydra.lib.lists" "tail"
 listsTake        = defineName "listsTake" "hydra.lib.lists" "take"
 listsTranspose   = defineName "listsTranspose" "hydra.lib.lists" "transpose"
+listsUncons      = defineName "listsUncons" "hydra.lib.lists" "uncons"
 listsZip         = defineName "listsZip" "hydra.lib.lists" "zip"
 listsZipWith     = defineName "listsZipWith" "hydra.lib.lists" "zipWith"
 

@@ -60,5 +60,6 @@ object lists:
       (0 until maxLen).map { i =>
         xss.flatMap(row => if i < row.length then Some(row(i)) else None)
       }.toSeq
+  def uncons[A](xs: Seq[A]): Option[(A, Seq[A])] = if xs.isEmpty then None else Some((xs.head, xs.tail))
   def zip[A, B](xs: Seq[A])(ys: Seq[B]): Seq[(A, B)] = xs.zip(ys)
   def zipWith[A, B, C](f: A => B => C)(xs: Seq[A])(ys: Seq[B]): Seq[C] = xs.zip(ys).map((a, b) => f(a)(b))

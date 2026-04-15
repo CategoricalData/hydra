@@ -356,6 +356,14 @@
   (lambda (xss)
     (transpose-helper xss)))
 
+;; uncons :: [a] -> Maybe (a, [a])
+;; Split a list into its head and tail, returning Nothing if the list is empty.
+(defvar hydra_lib_lists_uncons
+  (lambda (xs)
+    (if (null xs)
+        (list :nothing)
+        (list :just (list (car xs) (cdr xs))))))
+
 ;; zip :: [a] -> [b] -> [Pair a b]
 ;; Zip two lists into pairs.
 (defvar hydra_lib_lists_zip

@@ -54,8 +54,18 @@ def filter(f: TTerm, values: TTerm) -> TTerm:
     return primitive2(f, values)
 
 
+def find(predicate: TTerm, values: TTerm) -> TTerm:
+    """Find the first element matching a predicate, returning Nothing if none matches."""
+    return primitive2(predicate, values)
+
+
 def foldl(f: TTerm, initial: TTerm, values: TTerm) -> TTerm:
     """Fold a list from the left."""
+    return primitive3(f, initial, values)
+
+
+def foldr(f: TTerm, initial: TTerm, values: TTerm) -> TTerm:
+    """Fold a list from the right."""
     return primitive3(f, initial, values)
 
 
@@ -99,6 +109,31 @@ def map(f: TTerm, values: TTerm) -> TTerm:
     return primitive2(f, values)
 
 
+def maybe_at(i: TTerm, values: TTerm) -> TTerm:
+    """Get the element at a specified index, returning Nothing if out of bounds."""
+    return primitive2(i, values)
+
+
+def maybe_head(values: TTerm) -> TTerm:
+    """Get the first element of a list, returning Nothing if the list is empty."""
+    return primitive1(values)
+
+
+def maybe_init(values: TTerm) -> TTerm:
+    """Return all elements except the last, returning Nothing if the list is empty."""
+    return primitive1(values)
+
+
+def maybe_last(values: TTerm) -> TTerm:
+    """Get the last element of a list, returning Nothing if the list is empty."""
+    return primitive1(values)
+
+
+def maybe_tail(values: TTerm) -> TTerm:
+    """Get all elements except the first, returning Nothing if the list is empty."""
+    return primitive1(values)
+
+
 def nub(values: TTerm) -> TTerm:
     """Remove duplicate elements from a list."""
     return primitive1(values)
@@ -107,6 +142,11 @@ def nub(values: TTerm) -> TTerm:
 def null(values: TTerm) -> TTerm:
     """Check if a list is empty."""
     return primitive1(values)
+
+
+def partition(predicate: TTerm, values: TTerm) -> TTerm:
+    """Partition a list into elements that satisfy a predicate and elements that do not."""
+    return primitive2(predicate, values)
 
 
 def pure(value: TTerm) -> TTerm:
@@ -161,6 +201,11 @@ def take(n: TTerm, values: TTerm) -> TTerm:
 
 def transpose(values: TTerm) -> TTerm:
     """Transpose a list of lists."""
+    return primitive1(values)
+
+
+def uncons(values: TTerm) -> TTerm:
+    """Decompose a list into its head and tail, returning Nothing if the list is empty."""
     return primitive1(values)
 
 

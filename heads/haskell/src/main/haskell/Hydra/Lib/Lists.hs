@@ -182,6 +182,11 @@ take = L.take
 transpose :: [[a]] -> [[a]]
 transpose = L.transpose
 
+-- | Decompose a list into its head and tail, returning Nothing if the list is empty.
+uncons :: [a] -> Maybe (a, [a])
+uncons [] = Nothing
+uncons (x:xs) = Just (x, xs)
+
 -- | Zip two lists into pairs.
 zip :: [a] -> [b] -> [(a, b)]
 zip = L.zip

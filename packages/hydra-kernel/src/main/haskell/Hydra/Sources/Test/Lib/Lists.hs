@@ -49,6 +49,10 @@ optionalIntList :: Maybe [Int] -> TTerm Term
 optionalIntList Nothing = Core.termMaybe nothing
 optionalIntList (Just xs) = Core.termMaybe $ just (intList xs)
 
+optionalIntAndIntList :: Maybe (Int, [Int]) -> TTerm Term
+optionalIntAndIntList Nothing = Core.termMaybe nothing
+optionalIntAndIntList (Just (x, xs)) = Core.termMaybe $ just (pair (int32 x) (intList xs))
+
 optionalString :: Maybe String -> TTerm Term
 optionalString Nothing = Core.termMaybe nothing
 optionalString (Just x) = Core.termMaybe  $ just (string x)
@@ -100,6 +104,7 @@ allTests = define "allTests" $
       listsTail,
       listsTake,
       listsTranspose,
+      listsUncons,
       listsZip,
       listsZipWith]
     where
@@ -478,7 +483,14 @@ allTests = define "allTests" $
         test "ragged matrix" [[1, 2], [3], [4, 5, 6]] [[1, 3, 4], [2, 5], [6]]]
         where
           test name matrix result = primCase name _lists_transpose [intListList matrix] (intListList result)
-  
+
+      listsUncons = subgroup "uncons" [
+        test "three elements" [1, 2, 3] (Just (1, [2, 3])),
+        test "single element" [42] (Just (42, [])),
+        test "empty list" [] Nothing]
+        where
+          test name lst result = primCase name _lists_uncons [intList lst] (optionalIntAndIntList result)
+
       listsZip = subgroup "zip" [
         test "equal length lists" [1, 2, 3] ["a", "b", "c"] [(1, "a"), (2, "b"), (3, "c")],
         test "first list shorter" [1, 2] ["a", "b", "c"] [(1, "a"), (2, "b")],

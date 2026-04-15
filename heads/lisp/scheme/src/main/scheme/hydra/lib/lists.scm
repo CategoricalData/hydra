@@ -37,6 +37,7 @@
           hydra_lib_lists_tail
           hydra_lib_lists_take
           hydra_lib_lists_transpose
+          hydra_lib_lists_uncons
           hydra_lib_lists_apply
           hydra_lib_lists_bind
           hydra_lib_lists_group
@@ -377,6 +378,13 @@
               '()
               (cons (map car non-empty)
                     (hydra_lib_lists_transpose (map cdr non-empty)))))))
+
+    ;; uncons :: [a] -> Maybe (a, [a])
+    (define hydra_lib_lists_uncons
+      (lambda (xs)
+        (if (null? xs)
+            (list 'nothing)
+            (list 'just (list (car xs) (cdr xs))))))
 
     ;; zip :: [a] -> [b] -> [Pair a b]
     (define hydra_lib_lists_zip

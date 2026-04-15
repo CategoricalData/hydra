@@ -208,6 +208,7 @@
                                               hydra_lib_lists_take
                                               nil (tc-int32) (tc-list a) (tc-list a)))
       (cons (qname ns_ "transpose")  (prim1 (qname ns_ "transpose")  hydra_lib_lists_transpose  nil (tc-list (tc-list a)) (tc-list (tc-list a))))
+      (cons (qname ns_ "uncons")     (prim1 (qname ns_ "uncons")     hydra_lib_lists_uncons     nil (tc-list a) (tc-optional (tc-pair a (tc-list a)))))
       (cons (qname ns_ "zip")        (prim2 (qname ns_ "zip")
                                               hydra_lib_lists_zip
                                               nil (tc-list a) (tc-list b) (tc-list (tc-pair a b))))

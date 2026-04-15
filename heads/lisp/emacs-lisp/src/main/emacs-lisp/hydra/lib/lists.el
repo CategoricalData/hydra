@@ -367,6 +367,14 @@
     "Transpose a list of lists."
     (transpose-helper xss)))
 
+;; uncons :: [a] -> Maybe (a, [a])
+(defvar hydra_lib_lists_uncons
+  (lambda (xs)
+    "Split a list into its head and tail, returning Nothing if the list is empty."
+    (if (null xs)
+        (list :nothing)
+        (list :just (list (car xs) (cdr xs))))))
+
 ;; zip :: [a] -> [b] -> [Pair a b]
 (defvar hydra_lib_lists_zip
   (lambda (xs)
