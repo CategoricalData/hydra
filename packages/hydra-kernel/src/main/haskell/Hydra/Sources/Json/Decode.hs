@@ -413,16 +413,19 @@ decodeFloat = define "decodeFloat" $
             ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ var "v")
             (parseSpecialFloat @@ var "s")]]
 
--- | Parse a string as a non-finite float sentinel ("NaN", "Infinity", "-Infinity") to a float64.
--- Returns Nothing if the string is not a recognized sentinel.
+-- | Parse a string as an IEEE sentinel float that the JSON number grammar cannot express:
+-- "NaN", "Infinity", "-Infinity", or "-0.0". Returns Nothing for unrecognized strings.
+-- The -0.0 case is here so that IEEE negative zero survives a round trip through JSON via
+-- the encoder's string-escape path; Scientific-backed number decoding would normalize it to 0.
 parseSpecialFloat :: TTermDefinition (String -> Maybe Double)
 parseSpecialFloat = define "parseSpecialFloat" $
-  doc "Parse a non-finite float sentinel string to a float64. Returns Nothing for unrecognized strings." $
+  doc "Parse an IEEE sentinel string (NaN, Infinity, -Infinity, -0.0) to a float64. Returns Nothing for unrecognized strings." $
   "s" ~>
     Logic.ifElse
       (Logic.or (Equality.equal (var "s") (string "NaN")) $
-       Logic.or (Equality.equal (var "s") (string "Infinity"))
-                (Equality.equal (var "s") (string "-Infinity")))
+       Logic.or (Equality.equal (var "s") (string "Infinity")) $
+       Logic.or (Equality.equal (var "s") (string "-Infinity"))
+                (Equality.equal (var "s") (string "-0.0")))
       (Literals.readFloat64 $ var "s")
       Phantoms.nothing
 

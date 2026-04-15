@@ -57,7 +57,7 @@ module_ = Module ns definitions
     definitions = [
       toDefinition yamlCoder,
       toDefinition literalYamlCoder,
-      toDefinition isNonFiniteFloatString,
+      toDefinition requiresYamlStringSentinel,
       toDefinition recordCoder,
       toDefinition encodeRecord,
       toDefinition decodeRecord,
@@ -116,8 +116,8 @@ literalYamlCoder = define "literalYamlCoder" $
         "f" <<~ ExtractCore.floatLiteral @@ var "lit" $
         "bf" <<~ ExtractCore.bigfloatValue @@ var "f" $
         "shown" <~ (Literals.showBigfloat $ var "bf") $
-        Logic.ifElse (isNonFiniteFloatString @@ var "shown")
-          (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "YAML cannot represent non-finite float: ", var "shown"])) (var "cx"))
+        Logic.ifElse (requiresYamlStringSentinel @@ var "shown")
+          (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "YAML cannot represent bigfloat value: ", var "shown"])) (var "cx"))
           (right (Yaml.scalarFloat $ var "bf")))
       (var "decodeFloat"),
     _LiteralType_integer>>: constant $ Coders.coder
@@ -133,13 +133,16 @@ literalYamlCoder = define "literalYamlCoder" $
       (var "decodeString")]) $
   right $ var "encoded"
 
--- | Check whether a float's string form is one of the non-finite sentinels: NaN, Infinity, -Infinity.
-isNonFiniteFloatString :: TTermDefinition (String -> Bool)
-isNonFiniteFloatString = define "isNonFiniteFloatString" $
-  doc "Check whether a string is one of the non-finite float sentinels: NaN, Infinity, -Infinity." $
+-- | Check whether a float's string form is an IEEE value that Hydra YAML cannot represent
+-- as a plain scalar: NaN, Infinity, -Infinity, or -0.0. Hydra YAML's float scalar deliberately
+-- excludes these (see Yaml.Model) so the encoder must refuse them rather than silently coerce.
+requiresYamlStringSentinel :: TTermDefinition (String -> Bool)
+requiresYamlStringSentinel = define "requiresYamlStringSentinel" $
+  doc "True for IEEE sentinel strings that Hydra YAML cannot represent as a float scalar." $
   "s" ~> Logic.or (Equality.equal (var "s") (string "NaN")) $
-         Logic.or (Equality.equal (var "s") (string "Infinity"))
-                  (Equality.equal (var "s") (string "-Infinity"))
+         Logic.or (Equality.equal (var "s") (string "Infinity")) $
+         Logic.or (Equality.equal (var "s") (string "-Infinity"))
+                  (Equality.equal (var "s") (string "-0.0"))
 
 recordCoder :: TTermDefinition (Name -> [FieldType] -> Context -> Graph -> Either Error (Coder Term YM.Node))
 recordCoder = define "recordCoder" $

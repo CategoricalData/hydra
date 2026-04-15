@@ -101,7 +101,7 @@ module_ = Module ns definitions
       toDefinition encodeLiteral,
       toDefinition encodeFloat,
       toDefinition encodeInteger,
-      toDefinition isNonFiniteFloatString]
+      toDefinition requiresJsonStringSentinel]
 
 -- | Encode a Term to a JSON Value, given a type and type lookup table.
 -- Returns Left with an error message for unsupported term constructs.
@@ -431,35 +431,38 @@ encodeLiteral = define "encodeLiteral" $
     _Literal_string>>: "s" ~> right $ Json.valueString $ var "s"]
 
 -- | Encode a float value to JSON.
--- Bigfloat uses native JSON numbers (lossless for finite values via Scientific). Bigfloat cannot
--- represent non-finite values after this migration because several target types (Java BigDecimal,
--- Python Decimal) have no NaN or infinity in their value space, so non-finite bigfloat inputs
--- produce an error. Float32 and Float64 serialize non-finite values as JSON string sentinels
--- because their host representations (IEEE 754) carry NaN/Inf natively and round-trip losslessly.
--- Float32 always uses string to preserve exact source precision.
+-- Bigfloat uses native JSON numbers (lossless for finite values via Scientific). Bigfloat
+-- rejects every IEEE value that cannot be represented by its target types (Java BigDecimal,
+-- Python Decimal cannot hold NaN, ±Infinity, or -0.0 at all), so those produce an error.
+-- Float32 always uses a JSON string to preserve exact source precision. Float64 encodes via
+-- a JSON number for finite, non-negative-zero values and via a JSON string for the values
+-- that the JSON grammar cannot express (NaN, ±Infinity, -0.0) — keeping those IEEE values
+-- round-trippable through JSON.
 encodeFloat :: TTermDefinition (FloatValue -> Either String Value)
 encodeFloat = define "encodeFloat" $
-  doc "Encode a float value to JSON. Bigfloat rejects non-finite; Float64 encodes sentinels as strings; Float32 always strings." $
+  doc "Encode a float value to JSON. Bigfloat rejects anything the decimal space can't hold; Float64 uses string sentinels for NaN/Inf/-0.0; Float32 always strings." $
   "fv" ~> cases _FloatValue (var "fv") Nothing [
     _FloatValue_bigfloat>>: "bf" ~>
       "s" <~ (Literals.showBigfloat $ var "bf") $
-      Logic.ifElse (isNonFiniteFloatString @@ var "s")
-        (left $ Strings.cat $ list [string "JSON cannot represent non-finite bigfloat: ", var "s"])
+      Logic.ifElse (requiresJsonStringSentinel @@ var "s")
+        (left $ Strings.cat $ list [string "JSON cannot represent bigfloat value: ", var "s"])
         (right $ Json.valueNumber $ Literals.float64ToDecimal $ Literals.bigfloatToFloat64 $ var "bf"),
     _FloatValue_float32>>: "f" ~> right $ Json.valueString $ Literals.showFloat32 $ var "f",
     _FloatValue_float64>>: "f" ~>
       "s" <~ (Literals.showFloat64 $ var "f") $
-      Logic.ifElse (isNonFiniteFloatString @@ var "s")
+      Logic.ifElse (requiresJsonStringSentinel @@ var "s")
         (right $ Json.valueString $ var "s")
         (right $ Json.valueNumber $ Literals.float64ToDecimal $ var "f")]
 
--- | Check whether a float's string form is one of the non-finite sentinels: NaN, Infinity, -Infinity.
-isNonFiniteFloatString :: TTermDefinition (String -> Bool)
-isNonFiniteFloatString = define "isNonFiniteFloatString" $
-  doc "Check whether a string is one of the non-finite float sentinels: NaN, Infinity, -Infinity." $
+-- | Check whether a float's string form is an IEEE value that the JSON number grammar or
+-- Scientific-backed decoding cannot round-trip: NaN, Infinity, -Infinity, or -0.0.
+requiresJsonStringSentinel :: TTermDefinition (String -> Bool)
+requiresJsonStringSentinel = define "requiresJsonStringSentinel" $
+  doc "True for IEEE sentinel strings that JSON must escape as a string to preserve." $
   "s" ~> Logic.or (Equality.equal (var "s") (string "NaN")) $
-         Logic.or (Equality.equal (var "s") (string "Infinity"))
-                  (Equality.equal (var "s") (string "-Infinity"))
+         Logic.or (Equality.equal (var "s") (string "Infinity")) $
+         Logic.or (Equality.equal (var "s") (string "-Infinity"))
+                  (Equality.equal (var "s") (string "-0.0"))
 
 -- | Encode an integer value to JSON
 -- Small integers (int8, int16, int32, uint8, uint16) use native JSON numbers
