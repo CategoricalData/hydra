@@ -40,5 +40,30 @@ if [ "${1:-}" = "dashboard" ]; then
     exit 0
 fi
 
-# Pass all arguments through to bootstrap-all.sh
-"$DEMO_DIR/bootstrap-all.sh" "$@"
+# Scope the scratch directory to this worktree so parallel sessions in other
+# worktrees don't write into the same /tmp subtree and clobber each other's
+# builds. Only injected when the caller didn't pass --output explicitly.
+# bootstrap-all.sh expects an optional subcommand (generate|test|display) as
+# its first positional argument, so we preserve it at the front and splice
+# --output in right after.
+has_output_flag=false
+for arg in "$@"; do
+    case "$arg" in
+        --output|--output=*) has_output_flag=true; break ;;
+    esac
+done
+
+subcommand=""
+case "${1:-}" in
+    generate|test|display)
+        subcommand="$1"
+        shift
+        ;;
+esac
+
+if $has_output_flag; then
+    "$DEMO_DIR/bootstrap-all.sh" ${subcommand:+"$subcommand"} "$@"
+else
+    scope="$(basename "$REPO_ROOT")"
+    "$DEMO_DIR/bootstrap-all.sh" ${subcommand:+"$subcommand"} --output "/tmp/hydra-bootstrapping-demo-$scope" "$@"
+fi
