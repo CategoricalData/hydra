@@ -6,6 +6,7 @@ module Hydra.Eval.Lib.Equality where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Interpreter-friendly identity function.
 identity :: t0 -> t1 -> t2 -> Either t3 t2

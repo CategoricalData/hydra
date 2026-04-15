@@ -112,6 +112,7 @@ public interface Coder {
           "map",
           "pure",
           "sum"))))),
+        java.util.Arrays.asList((hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, java.util.List<String>>) ((hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, java.util.List<String>>) (new hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, java.util.List<String>>((hydra.util.Pair<String, hydra.util.Maybe<String>>) ((hydra.util.Pair<String, hydra.util.Maybe<String>>) (new hydra.util.Pair<String, hydra.util.Maybe<String>>("Data.Scientific", hydra.util.Maybe.just("Sci")))), (java.util.List<String>) (java.util.Collections.<String>emptyList()))))),
         hydra.haskell.Coder.constructModule_condImport(
           (meta).usesByteString,
           (hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, java.util.List<String>>) ((hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, java.util.List<String>>) (new hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, java.util.List<String>>((hydra.util.Pair<String, hydra.util.Maybe<String>>) ((hydra.util.Pair<String, hydra.util.Maybe<String>>) (new hydra.util.Pair<String, hydra.util.Maybe<String>>("Data.ByteString", hydra.util.Maybe.just("B")))), (java.util.List<String>) (java.util.Collections.<String>emptyList()))))),
@@ -125,7 +126,9 @@ public interface Coder {
           (meta).usesSet,
           (hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, java.util.List<String>>) ((hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, java.util.List<String>>) (new hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, java.util.List<String>>((hydra.util.Pair<String, hydra.util.Maybe<String>>) ((hydra.util.Pair<String, hydra.util.Maybe<String>>) (new hydra.util.Pair<String, hydra.util.Maybe<String>>("Data.Set", hydra.util.Maybe.just("S")))), (java.util.List<String>) (java.util.Collections.<String>emptyList()))))),
         hydra.lib.logic.IfElse.lazy(
-          hydra.Analysis.moduleContainsBinaryLiterals(mod),
+          hydra.lib.logic.Or.apply(
+            hydra.Analysis.moduleContainsBinaryLiterals(mod),
+            hydra.Analysis.moduleContainsDecimalLiterals(mod)),
           () -> java.util.Arrays.asList((hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, java.util.List<String>>) ((hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, java.util.List<String>>) (new hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, java.util.List<String>>((hydra.util.Pair<String, hydra.util.Maybe<String>>) ((hydra.util.Pair<String, hydra.util.Maybe<String>>) (new hydra.util.Pair<String, hydra.util.Maybe<String>>("Hydra.Lib.Literals", hydra.util.Maybe.just("Literals")))), (java.util.List<String>) (java.util.Collections.<String>emptyList()))))),
           () -> (java.util.List<hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, java.util.List<String>>>) (java.util.Collections.<hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, java.util.List<String>>>emptyList()))))));
     hydra.util.Lazy<java.util.List<hydra.haskell.syntax.Import>> imports = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
@@ -296,6 +299,13 @@ public interface Coder {
           (b).value,
           () -> "True",
           () -> "False")));
+      }
+
+      @Override
+      public hydra.util.Either<hydra.errors.Error_, hydra.haskell.syntax.Expression> visit(hydra.core.Literal.Decimal d) {
+        return hydra.util.Either.<hydra.errors.Error_, hydra.haskell.syntax.Expression>right(hydra.haskell.Utils.hsapp(
+          hydra.haskell.Utils.hsvar("Literals.stringToDecimal"),
+          hydra.haskell.Utils.hslit(new hydra.haskell.syntax.Literal.String_(hydra.lib.literals.ShowDecimal.apply((d).value)))));
       }
 
       @Override
@@ -811,6 +821,11 @@ public interface Coder {
           @Override
           public hydra.util.Either<hydra.errors.Error_, hydra.haskell.syntax.Type> visit(hydra.core.LiteralType.Boolean_ ignored) {
             return hydra.util.Either.<hydra.errors.Error_, hydra.haskell.syntax.Type>right(new hydra.haskell.syntax.Type.Variable(hydra.haskell.Utils.rawName("Bool")));
+          }
+
+          @Override
+          public hydra.util.Either<hydra.errors.Error_, hydra.haskell.syntax.Type> visit(hydra.core.LiteralType.Decimal ignored) {
+            return hydra.util.Either.<hydra.errors.Error_, hydra.haskell.syntax.Type>right(new hydra.haskell.syntax.Type.Variable(hydra.haskell.Utils.rawName("Sci.Scientific")));
           }
 
           @Override

@@ -297,6 +297,39 @@ def module_contains_binary_literals(mod: hydra.packaging.Module) -> bool:
         return hydra.lib.maybes.cat(hydra.lib.lists.map((lambda d: _hoist_def_terms_1(d)), mod.definitions))
     return hydra.lib.lists.foldl((lambda acc, t: hydra.lib.logic.or_(acc, term_contains_binary(t))), False, def_terms())
 
+def module_contains_decimal_literals(mod: hydra.packaging.Module) -> bool:
+    r"""Check whether a module contains any decimal literal values."""
+
+    def check_term(found: bool, term: hydra.core.Term):
+        def _hoist_check_term_1(v1):
+            match v1:
+                case hydra.core.LiteralDecimal():
+                    return True
+
+                case _:
+                    return False
+        def _hoist_check_term_2(v1):
+            match v1:
+                case hydra.core.TermLiteral(value=lit):
+                    return _hoist_check_term_1(lit)
+
+                case _:
+                    return False
+        return hydra.lib.logic.or_(found, _hoist_check_term_2(term))
+    def term_contains_decimal(term: hydra.core.Term) -> bool:
+        return hydra.rewriting.fold_over_term(hydra.coders.TraversalOrder.PRE, (lambda x1, x2: check_term(x1, x2)), False, term)
+    @lru_cache(1)
+    def def_terms():
+        def _hoist_def_terms_1(v1):
+            match v1:
+                case hydra.packaging.DefinitionTerm(value=td):
+                    return Just(td.term)
+
+                case _:
+                    return Nothing()
+        return hydra.lib.maybes.cat(hydra.lib.lists.map((lambda d: _hoist_def_terms_1(d)), mod.definitions))
+    return hydra.lib.lists.foldl((lambda acc, t: hydra.lib.logic.or_(acc, term_contains_decimal(t))), False, def_terms())
+
 def module_dependency_namespaces(cx: T0, graph: hydra.graph.Graph, binds: bool, with_prims: bool, with_noms: bool, with_schema: bool, mod: hydra.packaging.Module) -> Either[hydra.errors.Error, frozenset[hydra.packaging.Namespace]]:
     r"""Find dependency namespaces in all elements of a module, excluding the module's own namespace (Either version)."""
 

@@ -317,6 +317,11 @@ public interface Core {
       }
 
       @Override
+      public String visit(hydra.core.Literal.Decimal d) {
+        return hydra.lib.literals.ShowDecimal.apply((d).value);
+      }
+
+      @Override
       public String visit(hydra.core.Literal.Float_ fv) {
         return hydra.show.Core.float_((fv).value);
       }
@@ -343,6 +348,11 @@ public interface Core {
       @Override
       public String visit(hydra.core.LiteralType.Boolean_ ignored) {
         return "boolean";
+      }
+
+      @Override
+      public String visit(hydra.core.LiteralType.Decimal ignored) {
+        return "decimal";
       }
 
       @Override

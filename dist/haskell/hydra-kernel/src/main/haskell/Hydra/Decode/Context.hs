@@ -12,6 +12,7 @@ import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 context :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Context.Context
 context cx raw =

@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Pg.Model as Model
 import qualified Hydra.Rdf.Syntax as Syntax
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | The environment for property graph to RDF mapping
 data PgRdfEnvironment v =

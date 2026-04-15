@@ -12,6 +12,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 tBinding :: t0 -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Phantoms.TBinding t1)
 tBinding a cx raw =

@@ -190,6 +190,8 @@ def encodeLetAsNative[T0, T1, T2](dialect: hydra.lisp.syntax.Dialect)(cx: T0)(g:
 def encodeLiteral(lit: hydra.core.Literal): hydra.lisp.syntax.Expression =
   lit match
   case hydra.core.Literal.boolean(v_Literal_boolean_b) => hydra.lisp.syntax.Expression.literal(hydra.lisp.syntax.Literal.boolean(v_Literal_boolean_b))
+  case hydra.core.Literal.decimal(v_Literal_decimal_d) => hydra.lisp.syntax.Expression.literal(hydra.lisp.syntax.Literal.float(hydra.lisp.syntax.FloatLiteral(hydra.lib.literals.float64ToBigfloat(hydra.lib.literals.decimalToFloat64(v_Literal_decimal_d)),
+     None)))
   case hydra.core.Literal.string(v_Literal_string_s) => hydra.lisp.syntax.Expression.literal(hydra.lisp.syntax.Literal.string(v_Literal_string_s))
   case hydra.core.Literal.float(v_Literal_float_fv) => v_Literal_float_fv match
     case hydra.core.FloatValue.float32(v_FloatValue_float32_f) => hydra.lisp.syntax.Expression.literal(hydra.lisp.syntax.Literal.float(hydra.lisp.syntax.FloatLiteral(hydra.lib.literals.float32ToBigfloat(v_FloatValue_float32_f),
@@ -357,6 +359,7 @@ def encodeType[T0, T1, T2](cx: T0)(g: T1)(t: hydra.core.Type): Either[T2, hydra.
     case hydra.core.Type.literal(v_Type_literal_lt) => Right(v_Type_literal_lt match
       case hydra.core.LiteralType.binary => hydra.lisp.syntax.TypeSpecifier.named("ByteArray")
       case hydra.core.LiteralType.boolean => hydra.lisp.syntax.TypeSpecifier.named("Boolean")
+      case hydra.core.LiteralType.decimal => hydra.lisp.syntax.TypeSpecifier.named("Decimal")
       case hydra.core.LiteralType.float(v_LiteralType_float__) => hydra.lisp.syntax.TypeSpecifier.named("Float")
       case hydra.core.LiteralType.integer(v_LiteralType_integer__) => hydra.lisp.syntax.TypeSpecifier.named("Integer")
       case hydra.core.LiteralType.string => hydra.lisp.syntax.TypeSpecifier.named("String"))

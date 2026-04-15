@@ -12,6 +12,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 functionStructure :: (t0 -> Core.Term) -> Typing.FunctionStructure t0 -> Core.Term
 functionStructure env x =

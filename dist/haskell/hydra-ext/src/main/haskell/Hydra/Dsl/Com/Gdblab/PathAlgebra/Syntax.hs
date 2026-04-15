@@ -8,6 +8,7 @@ import qualified Com.Gdblab.PathAlgebra.Syntax as Syntax
 import qualified Hydra.Core as Core
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 alternation :: Phantoms.TTerm Syntax.Rpq -> Phantoms.TTerm Syntax.Rpq -> Phantoms.TTerm Syntax.Alternation
 alternation left right =

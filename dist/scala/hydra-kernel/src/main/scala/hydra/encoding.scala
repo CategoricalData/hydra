@@ -64,6 +64,9 @@ def encodeLiteralType(v1: hydra.core.LiteralType): hydra.core.Term =
   case hydra.core.LiteralType.boolean => hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("literal", hydra.core.Term.inject(hydra.core.Injection("hydra.core.Literal", hydra.core.Field("boolean",
      hydra.core.Term.variable("x")))))))))
+  case hydra.core.LiteralType.decimal => hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
+     hydra.core.Field("literal", hydra.core.Term.inject(hydra.core.Injection("hydra.core.Literal", hydra.core.Field("decimal",
+     hydra.core.Term.variable("x")))))))))
   case hydra.core.LiteralType.string => hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("literal", hydra.core.Term.inject(hydra.core.Injection("hydra.core.Literal", hydra.core.Field("string",
      hydra.core.Term.variable("x")))))))))

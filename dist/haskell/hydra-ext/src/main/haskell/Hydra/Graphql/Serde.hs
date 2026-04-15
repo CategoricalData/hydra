@@ -10,11 +10,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Serialization as Serialization
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
+import qualified Data.Scientific as Sci
 
 -- | Convert a GraphQL definition to an expression
 exprDefinition :: Syntax.Definition -> Ast.Expr

@@ -287,6 +287,25 @@ def moduleContainsBinaryLiterals(mod: hydra.packaging.Module): Boolean =
     (t: hydra.core.Term) => hydra.lib.logic.or(acc)(termContainsBinary(t)))(false)(defTerms)
 }
 
+def moduleContainsDecimalLiterals(mod: hydra.packaging.Module): Boolean =
+  {
+  def checkTerm(found: Boolean)(term: hydra.core.Term): Boolean =
+    hydra.lib.logic.or(found)(term match
+    case hydra.core.Term.literal(v_Term_literal_lit) => v_Term_literal_lit match
+      case hydra.core.Literal.decimal(v_Literal_decimal__) => true
+      case _ => false
+    case _ => false)
+  def termContainsDecimal(term: hydra.core.Term): Boolean =
+    hydra.rewriting.foldOverTerm(hydra.coders.TraversalOrder.pre)(checkTerm)(false)(term)
+  lazy val defTerms: Seq[hydra.core.Term] = hydra.lib.maybes.cat[hydra.core.Term](hydra.lib.lists.map[hydra.packaging.Definition,
+     Option[hydra.core.Term]]((d: hydra.packaging.Definition) =>
+    d match
+    case hydra.packaging.Definition.term(v_Definition_term_td) => Some(v_Definition_term_td.term)
+    case _ => None)(mod.definitions))
+  hydra.lib.lists.foldl[Boolean, hydra.core.Term]((acc: Boolean) =>
+    (t: hydra.core.Term) => hydra.lib.logic.or(acc)(termContainsDecimal(t)))(false)(defTerms)
+}
+
 def moduleDependencyNamespaces[T0](cx: T0)(graph: hydra.graph.Graph)(binds: Boolean)(withPrims: Boolean)(withNoms: Boolean)(withSchema: Boolean)(mod: hydra.packaging.Module): Either[hydra.errors.Error,
    scala.collection.immutable.Set[hydra.packaging.Namespace]] =
   {

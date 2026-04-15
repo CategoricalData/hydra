@@ -35,6 +35,8 @@ class LiteralVariant(Enum):
 
     BOOLEAN = hydra.core.Name("boolean")
 
+    DECIMAL = hydra.core.Name("decimal")
+
     FLOAT = hydra.core.Name("float")
 
     INTEGER = hydra.core.Name("integer")

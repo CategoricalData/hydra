@@ -417,6 +417,13 @@ def literal(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.De
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.boolean(v_Literal_boolean_b) => Right(v_Literal_boolean_b)
         case _ => Left("expected boolean literal")
+      case _ => Left("expected literal"))(hydra.extract.core.stripWithDecodingError(cx)(input)))), Tuple2("decimal", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[BigDecimal, hydra.core.Literal, hydra.errors.DecodingError]((t: BigDecimal) => hydra.core.Literal.decimal(t))(hydra.lib.eithers.either[hydra.errors.DecodingError,
+         hydra.core.Term, Either[hydra.errors.DecodingError, BigDecimal]]((err: hydra.errors.DecodingError) => Left(err))((stripped2: hydra.core.Term) =>
+      stripped2 match
+      case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
+        case hydra.core.Literal.decimal(v_Literal_decimal_d) => Right(v_Literal_decimal_d)
+        case _ => Left("expected decimal literal")
       case _ => Left("expected literal"))(hydra.extract.core.stripWithDecodingError(cx)(input)))), Tuple2("float", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.core.FloatValue, hydra.core.Literal, hydra.errors.DecodingError]((t: hydra.core.FloatValue) => hydra.core.Literal.float(t))(hydra.decode.core.floatValue(cx)(input))),
          Tuple2("integer", (input: hydra.core.Term) =>
@@ -450,6 +457,8 @@ def literalType(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
       hydra.lib.eithers.map[Unit, hydra.core.LiteralType, hydra.errors.DecodingError]((t: Unit) => hydra.core.LiteralType.binary)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("boolean", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.core.LiteralType, hydra.errors.DecodingError]((t: Unit) => hydra.core.LiteralType.boolean)(hydra.extract.core.decodeUnit(cx)(input))),
+         Tuple2("decimal", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.core.LiteralType, hydra.errors.DecodingError]((t: Unit) => hydra.core.LiteralType.decimal)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("float", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.core.FloatType, hydra.core.LiteralType, hydra.errors.DecodingError]((t: hydra.core.FloatType) => hydra.core.LiteralType.float(t))(hydra.decode.core.floatType(cx)(input))),
          Tuple2("integer", (input: hydra.core.Term) =>

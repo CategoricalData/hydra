@@ -32,6 +32,7 @@ import qualified Hydra.Strip as Strip
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 
 -- | Add names to existing namespaces mapping
@@ -250,6 +251,23 @@ moduleContainsBinaryLiterals mod =
                     Packaging.DefinitionTerm v0 -> Just (Packaging.termDefinitionTerm v0)
                     _ -> Nothing) (Packaging.moduleDefinitions mod))
       in (Lists.foldl (\acc -> \t -> Logic.or acc (termContainsBinary t)) False defTerms)
+
+-- | Check whether a module contains any decimal literal values
+moduleContainsDecimalLiterals :: Packaging.Module -> Bool
+moduleContainsDecimalLiterals mod =
+
+      let checkTerm =
+              \found -> \term -> Logic.or found (case term of
+                Core.TermLiteral v0 -> case v0 of
+                  Core.LiteralDecimal _ -> True
+                  _ -> False
+                _ -> False)
+          termContainsDecimal = \term -> Rewriting.foldOverTerm Coders.TraversalOrderPre checkTerm False term
+          defTerms =
+                  Maybes.cat (Lists.map (\d -> case d of
+                    Packaging.DefinitionTerm v0 -> Just (Packaging.termDefinitionTerm v0)
+                    _ -> Nothing) (Packaging.moduleDefinitions mod))
+      in (Lists.foldl (\acc -> \t -> Logic.or acc (termContainsDecimal t)) False defTerms)
 
 -- | Find dependency namespaces in all elements of a module, excluding the module's own namespace (Either version)
 moduleDependencyNamespaces :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> Packaging.Module -> Either Errors.Error (S.Set Packaging.Namespace)

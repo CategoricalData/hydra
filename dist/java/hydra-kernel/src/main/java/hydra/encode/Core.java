@@ -258,6 +258,11 @@ public interface Core {
       }
 
       @Override
+      public hydra.core.Term visit(hydra.core.Literal.Decimal y) {
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("decimal"), new hydra.core.Term.Literal(new hydra.core.Literal.Decimal((y).value)))));
+      }
+
+      @Override
       public hydra.core.Term visit(hydra.core.Literal.Float_ y) {
         return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("float"), hydra.encode.Core.floatValue((y).value))));
       }
@@ -284,6 +289,11 @@ public interface Core {
       @Override
       public hydra.core.Term visit(hydra.core.LiteralType.Boolean_ y) {
         return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("boolean"), new hydra.core.Term.Unit())));
+      }
+
+      @Override
+      public hydra.core.Term visit(hydra.core.LiteralType.Decimal y) {
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("decimal"), new hydra.core.Term.Unit())));
       }
 
       @Override

@@ -13,6 +13,7 @@ import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Extract a comparison from a term
 comparison :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Util.Comparison

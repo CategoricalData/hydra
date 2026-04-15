@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 caseConventionCamel :: Phantoms.TTerm Util.CaseConvention
 caseConventionCamel =

@@ -235,6 +235,7 @@ def encodeLiteral[T0, T1](cx: T0)(g: T1)(av: hydra.core.Literal): Either[hydra.e
   av match
   case hydra.core.Literal.binary(v_Literal_binary_b) => Right(hydra.scala.syntax.Lit.bytes(hydra.lib.literals.binaryToBytes(v_Literal_binary_b)))
   case hydra.core.Literal.boolean(v_Literal_boolean_b) => Right(hydra.scala.syntax.Lit.boolean(v_Literal_boolean_b))
+  case hydra.core.Literal.decimal(v_Literal_decimal_d) => Right(hydra.scala.syntax.Lit.string(hydra.lib.literals.showDecimal(v_Literal_decimal_d)))
   case hydra.core.Literal.float(v_Literal_float_fv) => v_Literal_float_fv match
     case hydra.core.FloatValue.bigfloat(v_FloatValue_bigfloat_bf) => Right(hydra.scala.syntax.Lit.double(hydra.lib.literals.bigfloatToFloat64(v_FloatValue_bigfloat_bf)))
     case hydra.core.FloatValue.float32(v_FloatValue_float32_f) => Right(hydra.scala.syntax.Lit.float(v_FloatValue_float32_f))
@@ -375,6 +376,7 @@ def encodeTerm[T0](cx: T0)(g: hydra.graph.Graph)(term0: hydra.core.Term): Either
       {
       lazy val litData: hydra.scala.syntax.Data = hydra.scala.syntax.Data.lit(slit)
       v_Term_literal_v match
+        case hydra.core.Literal.decimal(v_Literal_decimal__) => Right(hydra.scala.utils.sapply(hydra.scala.utils.sname("BigDecimal"))(Seq(litData)))
         case hydra.core.Literal.integer(v_Literal_integer_iv) => v_Literal_integer_iv match
           case hydra.core.IntegerValue.bigint(v_IntegerValue_bigint_bi) => Right(hydra.scala.utils.sapply(hydra.scala.utils.sname("BigInt"))(Seq(hydra.scala.syntax.Data.lit(hydra.scala.syntax.Lit.string(hydra.lib.literals.showBigint(v_IntegerValue_bigint_bi))))))
           case hydra.core.IntegerValue.uint64(v_IntegerValue_uint64_ui) => Right(hydra.scala.utils.sapply(hydra.scala.utils.sname("BigInt"))(Seq(hydra.scala.syntax.Data.lit(hydra.scala.syntax.Lit.string(hydra.lib.literals.showBigint(hydra.lib.literals.uint64ToBigint(v_IntegerValue_uint64_ui)))))))
@@ -524,6 +526,7 @@ def encodeType[T0, T1](cx: T0)(g: T1)(t: hydra.core.Type): Either[hydra.errors.E
   case hydra.core.Type.literal(v_Type_literal_lt) => v_Type_literal_lt match
     case hydra.core.LiteralType.binary => Right(hydra.scala.utils.stapply(hydra.scala.syntax.Type.ref(hydra.scala.syntax.Type_Ref.name(hydra.scala.syntax.Type_Name("Array"))))(Seq(hydra.scala.syntax.Type.ref(hydra.scala.syntax.Type_Ref.name(hydra.scala.syntax.Type_Name("Byte"))))))
     case hydra.core.LiteralType.boolean => Right(hydra.scala.syntax.Type.ref(hydra.scala.syntax.Type_Ref.name(hydra.scala.syntax.Type_Name("Boolean"))))
+    case hydra.core.LiteralType.decimal => Right(hydra.scala.syntax.Type.ref(hydra.scala.syntax.Type_Ref.name(hydra.scala.syntax.Type_Name("BigDecimal"))))
     case hydra.core.LiteralType.float(v_LiteralType_float_ft) => v_LiteralType_float_ft match
       case hydra.core.FloatType.bigfloat => Right(hydra.scala.syntax.Type.ref(hydra.scala.syntax.Type_Ref.name(hydra.scala.syntax.Type_Name("BigDecimal"))))
       case hydra.core.FloatType.float32 => Right(hydra.scala.syntax.Type.ref(hydra.scala.syntax.Type_Ref.name(hydra.scala.syntax.Type_Name("Float"))))

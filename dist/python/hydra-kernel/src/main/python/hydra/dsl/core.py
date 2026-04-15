@@ -305,6 +305,9 @@ def literal_binary(x: hydra.phantoms.TTerm[bytes]) -> hydra.phantoms.TTerm:
 def literal_boolean(x: hydra.phantoms.TTerm[bool]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("boolean"), x.value)))))
 
+def literal_decimal(x: hydra.phantoms.TTerm[Decimal]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("decimal"), x.value)))))
+
 def literal_float(x: hydra.phantoms.TTerm[hydra.core.FloatValue]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("float"), x.value)))))
 
@@ -317,6 +320,8 @@ def literal_string(x: hydra.phantoms.TTerm[str]) -> hydra.phantoms.TTerm:
 literal_type_binary = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("binary"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
 literal_type_boolean = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("boolean"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+
+literal_type_decimal = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("decimal"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
 def literal_type_float(x: hydra.phantoms.TTerm[hydra.core.FloatType]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("float"), x.value)))))

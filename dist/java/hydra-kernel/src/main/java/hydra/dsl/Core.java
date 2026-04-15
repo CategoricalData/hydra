@@ -516,6 +516,10 @@ public interface Core {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("boolean"), (x).value))));
   }
 
+  static hydra.phantoms.TTerm<hydra.core.Literal> literalDecimal(hydra.phantoms.TTerm<java.math.BigDecimal> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("decimal"), (x).value))));
+  }
+
   static hydra.phantoms.TTerm<hydra.core.Literal> literalFloat(hydra.phantoms.TTerm<hydra.core.FloatValue> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("float"), (x).value))));
   }
@@ -534,6 +538,10 @@ public interface Core {
 
   static hydra.phantoms.TTerm<hydra.core.LiteralType> literalTypeBoolean() {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("boolean"), new hydra.core.Term.Unit()))));
+  }
+
+  static hydra.phantoms.TTerm<hydra.core.LiteralType> literalTypeDecimal() {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("decimal"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.LiteralType> literalTypeFloat(hydra.phantoms.TTerm<hydra.core.FloatType> x) {

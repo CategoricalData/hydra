@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Protobuf.SourceContext as SourceContext
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 sourceContext :: Phantoms.TTerm String -> Phantoms.TTerm SourceContext.SourceContext
 sourceContext fileName =

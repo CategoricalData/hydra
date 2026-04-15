@@ -321,6 +321,9 @@ def encode_literal_type(lt: hydra.core.LiteralType, cx: T0, g: T1):
         case hydra.core.LiteralTypeBoolean():
             return encode_literal_type_simple("Boolean", cx, g)
 
+        case hydra.core.LiteralTypeDecimal():
+            return Right(hydra.java.utils.java_ref_type((), Just(hydra.java.names.java_package_name(("java", "math"))), "BigDecimal"))
+
         case hydra.core.LiteralTypeFloat(value=ft):
             return _hoist_hydra_java_coder_encode_literal_type_1(cx, g, ft)
 
@@ -1187,6 +1190,9 @@ def encode_literal(lit: hydra.core.Literal) -> hydra.java.syntax.Expression:
 
         case hydra.core.LiteralBoolean(value=b):
             return encode_literal_lit_exp(hydra.java.utils.java_boolean(b))
+
+        case hydra.core.LiteralDecimal(value=v):
+            return hydra.java.utils.java_constructor_call(hydra.java.utils.java_constructor_name(hydra.java.syntax.Identifier("java.math.BigDecimal"), Nothing()), (encode_literal(cast(hydra.core.Literal, hydra.core.LiteralString(hydra.lib.literals.show_decimal(v)))),), Nothing())
 
         case hydra.core.LiteralFloat(value=f):
             return encode_literal_encode_float(f)
@@ -2177,6 +2183,9 @@ def is_big_numeric_type(typ: hydra.core.Type):
                 return False
     def _hoist_hydra_java_coder_is_big_numeric_type_3(v1):
         match v1:
+            case hydra.core.LiteralTypeDecimal():
+                return True
+
             case hydra.core.LiteralTypeFloat(value=ft):
                 return _hoist_hydra_java_coder_is_big_numeric_type_1(ft)
 

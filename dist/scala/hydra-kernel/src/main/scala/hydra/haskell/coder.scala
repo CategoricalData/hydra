@@ -79,10 +79,11 @@ def constructModule(namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.
     hydra.lib.lists.map[Tuple2[Tuple2[scala.Predef.String, Option[scala.Predef.String]], Seq[scala.Predef.String]],
        hydra.haskell.syntax.Import](toImport)(hydra.lib.lists.concat[Tuple2[Tuple2[scala.Predef.String,
        Option[scala.Predef.String]], Seq[scala.Predef.String]]](Seq(Seq(Tuple2(Tuple2("Prelude", None),
-       Seq("Enum", "Ordering", "decodeFloat", "encodeFloat", "fail", "map", "pure", "sum"))), condImport(meta.usesByteString)(Tuple2(Tuple2("Data.ByteString",
-       Some("B")), Seq())), condImport(meta.usesInt)(Tuple2(Tuple2("Data.Int", Some("I")), Seq())), condImport(meta.usesMap)(Tuple2(Tuple2("Data.Map",
+       Seq("Enum", "Ordering", "decodeFloat", "encodeFloat", "fail", "map", "pure", "sum"))), Seq(Tuple2(Tuple2("Data.Scientific",
+       Some("Sci")), Seq())), condImport(meta.usesByteString)(Tuple2(Tuple2("Data.ByteString", Some("B")),
+       Seq())), condImport(meta.usesInt)(Tuple2(Tuple2("Data.Int", Some("I")), Seq())), condImport(meta.usesMap)(Tuple2(Tuple2("Data.Map",
        Some("M")), Seq())), condImport(meta.usesSet)(Tuple2(Tuple2("Data.Set", Some("S")), Seq())), hydra.lib.logic.ifElse[Seq[Tuple2[Tuple2[scala.Predef.String,
-       Option[scala.Predef.String]], Seq[scala.Predef.String]]]](hydra.analysis.moduleContainsBinaryLiterals(mod))(Seq(Tuple2(Tuple2("Hydra.Lib.Literals",
+       Option[scala.Predef.String]], Seq[scala.Predef.String]]]](hydra.lib.logic.or(hydra.analysis.moduleContainsBinaryLiterals(mod))(hydra.analysis.moduleContainsDecimalLiterals(mod)))(Seq(Tuple2(Tuple2("Hydra.Lib.Literals",
        Some("Literals")), Seq())))(Seq()))))
   }
   hydra.lib.eithers.bind[hydra.errors.Error, Seq[Seq[hydra.haskell.syntax.DeclarationWithComments]], hydra.haskell.syntax.Module](hydra.lib.eithers.mapList[hydra.packaging.Definition,
@@ -164,6 +165,7 @@ def encodeLiteral[T0](l: hydra.core.Literal)(cx: T0): Either[hydra.errors.Error,
   l match
   case hydra.core.Literal.binary(v_Literal_binary_bs) => Right(hydra.haskell.utils.hsapp(hydra.haskell.utils.hsvar("Literals.stringToBinary"))(hydra.haskell.utils.hslit(hydra.haskell.syntax.Literal.string(hydra.lib.literals.binaryToString(v_Literal_binary_bs)))))
   case hydra.core.Literal.boolean(v_Literal_boolean_b) => Right(hydra.haskell.utils.hsvar(hydra.lib.logic.ifElse[scala.Predef.String](v_Literal_boolean_b)("True")("False")))
+  case hydra.core.Literal.decimal(v_Literal_decimal_d) => Right(hydra.haskell.utils.hsapp(hydra.haskell.utils.hsvar("Literals.stringToDecimal"))(hydra.haskell.utils.hslit(hydra.haskell.syntax.Literal.string(hydra.lib.literals.showDecimal(v_Literal_decimal_d)))))
   case hydra.core.Literal.float(v_Literal_float_fv) => v_Literal_float_fv match
     case hydra.core.FloatValue.float32(v_FloatValue_float32_f) => Right(hydra.haskell.utils.hslit(hydra.haskell.syntax.Literal.float(v_FloatValue_float32_f)))
     case hydra.core.FloatValue.float64(v_FloatValue_float64_f) => Right(hydra.haskell.utils.hslit(hydra.haskell.syntax.Literal.double(v_FloatValue_float64_f)))
@@ -377,6 +379,7 @@ def encodeType[T0, T1](namespaces: hydra.packaging.Namespaces[hydra.haskell.synt
     case hydra.core.Type.literal(v_Type_literal_lt) => v_Type_literal_lt match
       case hydra.core.LiteralType.binary => Right(hydra.haskell.syntax.Type.variable(hydra.haskell.utils.rawName("B.ByteString")))
       case hydra.core.LiteralType.boolean => Right(hydra.haskell.syntax.Type.variable(hydra.haskell.utils.rawName("Bool")))
+      case hydra.core.LiteralType.decimal => Right(hydra.haskell.syntax.Type.variable(hydra.haskell.utils.rawName("Sci.Scientific")))
       case hydra.core.LiteralType.float(v_LiteralType_float_ft) => v_LiteralType_float_ft match
         case hydra.core.FloatType.float32 => Right(hydra.haskell.syntax.Type.variable(hydra.haskell.utils.rawName("Float")))
         case hydra.core.FloatType.float64 => Right(hydra.haskell.syntax.Type.variable(hydra.haskell.utils.rawName("Double")))

@@ -48,6 +48,7 @@ import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
 
@@ -806,6 +807,8 @@ encodeLiteral lit =
         in (Right (Utils.functionCall (Syntax.PrimarySimple (Syntax.AtomName (Syntax.Name "bytes"))) [
           Utils.pyAtomToPyExpression (Syntax.AtomList (Utils.pyList (Lists.map (\byteVal -> Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberInteger (Literals.int32ToBigint byteVal)))) byteValues)))]))
       Core.LiteralBoolean v0 -> Right (Utils.pyAtomToPyExpression (Logic.ifElse v0 Syntax.AtomTrue Syntax.AtomFalse))
+      Core.LiteralDecimal v0 -> Right (Utils.functionCall (Utils.pyNameToPyPrimary (Syntax.Name "Decimal")) [
+        Utils.singleQuotedString (Literals.showDecimal v0)])
       Core.LiteralFloat v0 -> encodeFloatValue v0
       Core.LiteralInteger v0 -> encodeIntegerValue v0
       Core.LiteralString v0 -> Right (Utils.stringToPyExpression Syntax.QuoteStyleDouble v0)
@@ -818,6 +821,7 @@ encodeLiteralType lt =
               case lt of
                 Core.LiteralTypeBinary -> "bytes"
                 Core.LiteralTypeBoolean -> "bool"
+                Core.LiteralTypeDecimal -> "Decimal"
                 Core.LiteralTypeFloat v0 -> case v0 of
                   Core.FloatTypeBigfloat -> "Decimal"
                   Core.FloatTypeFloat32 -> "float"

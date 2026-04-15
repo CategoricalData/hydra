@@ -118,6 +118,8 @@ def literal(v1: hydra.core.Literal): hydra.core.Term =
      hydra.core.Field("binary", hydra.core.Term.literal(hydra.core.Literal.binary(v_Literal_binary_y)))))
   case hydra.core.Literal.boolean(v_Literal_boolean_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Literal",
      hydra.core.Field("boolean", hydra.core.Term.literal(hydra.core.Literal.boolean(v_Literal_boolean_y)))))
+  case hydra.core.Literal.decimal(v_Literal_decimal_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Literal",
+     hydra.core.Field("decimal", hydra.core.Term.literal(hydra.core.Literal.decimal(v_Literal_decimal_y)))))
   case hydra.core.Literal.float(v_Literal_float_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Literal",
      hydra.core.Field("float", hydra.encode.core.floatValue(v_Literal_float_y))))
   case hydra.core.Literal.integer(v_Literal_integer_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.Literal",
@@ -130,6 +132,8 @@ def literalType(v1: hydra.core.LiteralType): hydra.core.Term =
   case hydra.core.LiteralType.binary => hydra.core.Term.inject(hydra.core.Injection("hydra.core.LiteralType", hydra.core.Field("binary", hydra.core.Term.unit)))
   case hydra.core.LiteralType.boolean => hydra.core.Term.inject(hydra.core.Injection("hydra.core.LiteralType",
      hydra.core.Field("boolean", hydra.core.Term.unit)))
+  case hydra.core.LiteralType.decimal => hydra.core.Term.inject(hydra.core.Injection("hydra.core.LiteralType",
+     hydra.core.Field("decimal", hydra.core.Term.unit)))
   case hydra.core.LiteralType.float(v_LiteralType_float_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.LiteralType",
      hydra.core.Field("float", hydra.encode.core.floatType(v_LiteralType_float_y))))
   case hydra.core.LiteralType.integer(v_LiteralType_integer_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.core.LiteralType",

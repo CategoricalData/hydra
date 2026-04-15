@@ -7,6 +7,7 @@ module Hydra.Shacl.Model where
 import qualified Hydra.Core as Core
 import qualified Hydra.Rdf.Syntax as Syntax
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 
 -- | See https://www.w3.org/TR/shacl/#ClosedPatterConstraintComponent

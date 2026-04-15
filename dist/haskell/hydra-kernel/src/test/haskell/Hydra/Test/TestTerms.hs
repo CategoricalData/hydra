@@ -7,6 +7,7 @@ module Hydra.Test.TestTerms where
 import qualified Hydra.Core as Core
 import qualified Hydra.Test.TestTypes as TestTypes
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 latlonRecord :: Float -> Float -> Core.Term
 latlonRecord lat lon =

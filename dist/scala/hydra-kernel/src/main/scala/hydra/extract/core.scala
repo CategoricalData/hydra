@@ -62,6 +62,15 @@ def cases(name: hydra.core.Name)(graph: hydra.graph.Graph)(term0: hydra.core.Ter
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("case statement",
      hydra.show.core.term(term))))))
 
+def decimal(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.errors.Error, BigDecimal] =
+  hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Literal, BigDecimal](hydra.extract.core.literal(graph)(t))((l: hydra.core.Literal) => hydra.extract.core.decimalLiteral(l))
+
+def decimalLiteral(v: hydra.core.Literal): Either[hydra.errors.Error, BigDecimal] =
+  v match
+  case hydra.core.Literal.decimal(v_Literal_decimal_d) => Right(v_Literal_decimal_d)
+  case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("decimal",
+     hydra.show.core.literal(v)))))
+
 def decodeEither[T0, T1](leftDecoder: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError,
    T0]))(rightDecoder: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError, T1]))(g: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.DecodingError,
    Either[T0, T1]] =

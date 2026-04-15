@@ -13,6 +13,7 @@ import qualified Hydra.Test.Inference.KernelExamples as KernelExamples
 import qualified Hydra.Test.Inference.NominalTypes as NominalTypes
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | The group of all inference tests
 allTests :: Testing.TestGroup

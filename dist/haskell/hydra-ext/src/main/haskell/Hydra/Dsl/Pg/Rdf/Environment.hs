@@ -10,6 +10,7 @@ import qualified Hydra.Pg.Rdf.Environment as Environment
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Rdf.Syntax as Syntax
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 pgRdfEnvironment :: Phantoms.TTerm (v -> Syntax.Iri) -> Phantoms.TTerm (Model.VertexLabel -> Syntax.Iri) -> Phantoms.TTerm (v -> Syntax.Iri) -> Phantoms.TTerm (Model.EdgeLabel -> Syntax.Iri) -> Phantoms.TTerm (Model.PropertyKey -> Syntax.Iri) -> Phantoms.TTerm (v -> Syntax.Literal) -> Phantoms.TTerm (Environment.PgRdfEnvironment v)
 pgRdfEnvironment encodeVertexId encodeVertexLabel encodeEdgeId encodeEdgeLabel encodePropertyKey encodePropertyValue =

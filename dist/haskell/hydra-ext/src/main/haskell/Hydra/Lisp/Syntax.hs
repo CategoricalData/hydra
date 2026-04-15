@@ -6,6 +6,7 @@ module Hydra.Lisp.Syntax where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | A Lisp program, consisting of a sequence of top-level forms
 data Program =

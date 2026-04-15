@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 tag :: Phantoms.TTerm String -> Phantoms.TTerm Testing.Tag
 tag x =

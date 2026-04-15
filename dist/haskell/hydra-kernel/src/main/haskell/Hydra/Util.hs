@@ -6,6 +6,7 @@ module Hydra.Util where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | A naming convention for symbols, such as camelCase or snake_case
 data CaseConvention =

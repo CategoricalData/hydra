@@ -168,6 +168,9 @@ def literal_type(v1: hydra.core.Literal) -> hydra.core.LiteralType:
         case hydra.core.LiteralBoolean():
             return cast(hydra.core.LiteralType, hydra.core.LiteralTypeBoolean())
 
+        case hydra.core.LiteralDecimal():
+            return cast(hydra.core.LiteralType, hydra.core.LiteralTypeDecimal())
+
         case hydra.core.LiteralFloat(value=arg_):
             return cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(float_value_type(arg_)))
 
@@ -190,6 +193,9 @@ def literal_type_variant(v1: hydra.core.LiteralType) -> hydra.variants.LiteralVa
         case hydra.core.LiteralTypeBoolean():
             return hydra.variants.LiteralVariant.BOOLEAN
 
+        case hydra.core.LiteralTypeDecimal():
+            return hydra.variants.LiteralVariant.DECIMAL
+
         case hydra.core.LiteralTypeFloat():
             return hydra.variants.LiteralVariant.FLOAT
 
@@ -206,7 +212,7 @@ def literal_type_variant(v1: hydra.core.LiteralType) -> hydra.variants.LiteralVa
 def literal_types() -> frozenlist[hydra.core.LiteralType]:
     r"""All literal types, in a canonical order."""
 
-    return hydra.lib.lists.concat(((cast(hydra.core.LiteralType, hydra.core.LiteralTypeBinary()), cast(hydra.core.LiteralType, hydra.core.LiteralTypeBoolean())), hydra.lib.lists.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(x))), float_types), hydra.lib.lists.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeInteger(x))), integer_types), (cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()),)))
+    return hydra.lib.lists.concat(((cast(hydra.core.LiteralType, hydra.core.LiteralTypeBinary()), cast(hydra.core.LiteralType, hydra.core.LiteralTypeBoolean()), cast(hydra.core.LiteralType, hydra.core.LiteralTypeDecimal())), hydra.lib.lists.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(x))), float_types), hydra.lib.lists.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeInteger(x))), integer_types), (cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()),)))
 
 def literal_variant(arg_: hydra.core.Literal) -> hydra.variants.LiteralVariant:
     r"""Find the literal inject (constructor) for a given literal value."""
@@ -214,7 +220,7 @@ def literal_variant(arg_: hydra.core.Literal) -> hydra.variants.LiteralVariant:
     return literal_type_variant(literal_type(arg_))
 
 # All literal variants, in a canonical order.
-literal_variants = (hydra.variants.LiteralVariant.BINARY, hydra.variants.LiteralVariant.BOOLEAN, hydra.variants.LiteralVariant.FLOAT, hydra.variants.LiteralVariant.INTEGER, hydra.variants.LiteralVariant.STRING)
+literal_variants = (hydra.variants.LiteralVariant.BINARY, hydra.variants.LiteralVariant.BOOLEAN, hydra.variants.LiteralVariant.DECIMAL, hydra.variants.LiteralVariant.FLOAT, hydra.variants.LiteralVariant.INTEGER, hydra.variants.LiteralVariant.STRING)
 
 def term_variant(v1: hydra.core.Term) -> hydra.variants.TermVariant:
     r"""Find the term inject (constructor) for a given term."""

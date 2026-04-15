@@ -10,6 +10,7 @@ import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 context :: Context.Context -> Core.Term
 context x =

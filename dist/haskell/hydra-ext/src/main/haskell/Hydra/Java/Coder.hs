@@ -50,6 +50,7 @@ import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
 
@@ -1170,6 +1171,8 @@ encodeLiteral lit =
         let byteValues = Literals.binaryToBytes v0
         in (Utils.javaArrayCreation Utils.javaBytePrimitiveType (Just (Utils.javaArrayInitializer (Lists.map (\w -> Utils.javaLiteralToJavaExpression (Syntax.LiteralInteger (Syntax.IntegerLiteral (Literals.int32ToBigint w)))) byteValues))))
       Core.LiteralBoolean v0 -> encodeLiteral_litExp (Utils.javaBoolean v0)
+      Core.LiteralDecimal v0 -> Utils.javaConstructorCall (Utils.javaConstructorName (Syntax.Identifier "java.math.BigDecimal") Nothing) [
+        encodeLiteral (Core.LiteralString (Literals.showDecimal v0))] Nothing
       Core.LiteralFloat v0 -> encodeLiteral_encodeFloat v0
       Core.LiteralInteger v0 -> encodeLiteral_encodeInteger v0
       Core.LiteralString v0 -> encodeLiteral_litExp (Utils.javaString v0)
@@ -1184,6 +1187,9 @@ encodeLiteralType lt cx g =
           Syntax.primitiveTypeWithAnnotationsType = (Syntax.PrimitiveTypeNumeric (Syntax.NumericTypeIntegral Syntax.IntegralTypeByte)),
           Syntax.primitiveTypeWithAnnotationsAnnotations = []}))})))
       Core.LiteralTypeBoolean -> encodeLiteralType_simple "Boolean" cx g
+      Core.LiteralTypeDecimal -> Right (Utils.javaRefType [] (Just (JavaNames.javaPackageName [
+        "java",
+        "math"])) "BigDecimal")
       Core.LiteralTypeFloat v0 -> case v0 of
         Core.FloatTypeBigfloat -> Right (Utils.javaRefType [] (Just (JavaNames.javaPackageName [
           "java",
@@ -2133,6 +2139,7 @@ isBigNumericType :: Core.Type -> Bool
 isBigNumericType typ =
     case (Strip.deannotateType typ) of
       Core.TypeLiteral v0 -> case v0 of
+        Core.LiteralTypeDecimal -> True
         Core.LiteralTypeFloat v1 -> case v1 of
           Core.FloatTypeBigfloat -> True
           _ -> False

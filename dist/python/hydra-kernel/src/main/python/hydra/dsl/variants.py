@@ -22,6 +22,8 @@ literal_variant_binary = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.T
 
 literal_variant_boolean = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.variants.LiteralVariant"), hydra.core.Field(hydra.core.Name("boolean"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
+literal_variant_decimal = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.variants.LiteralVariant"), hydra.core.Field(hydra.core.Name("decimal"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+
 literal_variant_float = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.variants.LiteralVariant"), hydra.core.Field(hydra.core.Name("float"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
 literal_variant_integer = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.variants.LiteralVariant"), hydra.core.Field(hydra.core.Name("integer"), cast(hydra.core.Term, hydra.core.TermUnit()))))))

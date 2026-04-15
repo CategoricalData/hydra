@@ -122,7 +122,7 @@ def encode_literal(lit: hydra.core.Literal):
             return hydra.rdf.syntax.Literal(s2, xml_schema_datatype_iri("string"), Nothing())
 
         case _:
-            raise AssertionError("Unreachable: all variants handled")
+            raise TypeError("Unsupported Literal")
 
 def for_objects(subj: hydra.rdf.syntax.Resource, pred: hydra.rdf.syntax.Iri, objs: frozenlist[hydra.rdf.syntax.Node_]) -> frozenlist[hydra.rdf.syntax.Triple]:
     r"""Create triples from a subject, predicate, and list of object nodes."""

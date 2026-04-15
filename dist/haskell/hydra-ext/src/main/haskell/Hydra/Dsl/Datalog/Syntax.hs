@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Datalog.Syntax as Syntax
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 atom :: Phantoms.TTerm Syntax.Relation -> Phantoms.TTerm Syntax.TermList -> Phantoms.TTerm Syntax.Atom
 atom relation termList =
