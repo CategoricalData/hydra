@@ -8,6 +8,7 @@ import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Test cases for hydra.formatting
 allTests :: Testing.TestGroup

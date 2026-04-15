@@ -1272,6 +1272,34 @@ public interface Core {
                 hydra.extract.Core.stripWithDecodingError(
                   cx,
                   input))))))),
+            (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Literal>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Literal>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Literal>>>(new hydra.core.Name("decimal"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Literal>>) (input -> hydra.lib.eithers.Map.apply(
+              (java.util.function.Function<java.math.BigDecimal, hydra.core.Literal>) (t -> new hydra.core.Literal.Decimal(t)),
+              hydra.lib.eithers.Either.apply(
+                (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, java.math.BigDecimal>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, java.math.BigDecimal>left(err)),
+                (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.math.BigDecimal>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
+                  @Override
+                  public hydra.util.Either<hydra.errors.DecodingError, java.math.BigDecimal> otherwise(hydra.core.Term instance) {
+                    return hydra.util.Either.<hydra.errors.DecodingError, java.math.BigDecimal>left(new hydra.errors.DecodingError("expected literal"));
+                  }
+
+                  @Override
+                  public hydra.util.Either<hydra.errors.DecodingError, java.math.BigDecimal> visit(hydra.core.Term.Literal v) {
+                    return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
+                      @Override
+                      public hydra.util.Either<hydra.errors.DecodingError, java.math.BigDecimal> otherwise(hydra.core.Literal instance) {
+                        return hydra.util.Either.<hydra.errors.DecodingError, java.math.BigDecimal>left(new hydra.errors.DecodingError("expected decimal literal"));
+                      }
+
+                      @Override
+                      public hydra.util.Either<hydra.errors.DecodingError, java.math.BigDecimal> visit(hydra.core.Literal.Decimal d) {
+                        return hydra.util.Either.<hydra.errors.DecodingError, java.math.BigDecimal>right((d).value);
+                      }
+                    });
+                  }
+                })),
+                hydra.extract.Core.stripWithDecodingError(
+                  cx,
+                  input))))))),
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Literal>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Literal>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Literal>>>(new hydra.core.Name("float"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Literal>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<hydra.core.FloatValue, hydra.core.Literal>) (t -> new hydra.core.Literal.Float_(t)),
               hydra.decode.Core.floatValue(
@@ -1348,6 +1376,11 @@ public interface Core {
                 input)))))),
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.LiteralType>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.LiteralType>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.LiteralType>>>(new hydra.core.Name("boolean"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.LiteralType>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<java.lang.Void, hydra.core.LiteralType>) (t -> new hydra.core.LiteralType.Boolean_()),
+              hydra.extract.Core.decodeUnit(
+                cx,
+                input)))))),
+            (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.LiteralType>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.LiteralType>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.LiteralType>>>(new hydra.core.Name("decimal"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.LiteralType>>) (input -> hydra.lib.eithers.Map.apply(
+              (java.util.function.Function<java.lang.Void, hydra.core.LiteralType>) (t -> new hydra.core.LiteralType.Decimal()),
               hydra.extract.Core.decodeUnit(
                 cx,
                 input)))))),

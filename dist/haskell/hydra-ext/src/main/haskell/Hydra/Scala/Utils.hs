@@ -19,6 +19,7 @@ import qualified Hydra.Scala.Language as Language
 import qualified Hydra.Scala.Syntax as Syntax
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 
 -- | Extract the name from a type, if it is a named type

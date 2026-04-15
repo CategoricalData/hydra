@@ -124,6 +124,9 @@ def encode_type(cx: T0, g: T1, t: hydra.core.Type):
             case hydra.core.LiteralTypeBoolean():
                 return Right(cast(hydra.scala.syntax.Type, hydra.scala.syntax.TypeRef(cast(hydra.scala.syntax.Type_Ref, hydra.scala.syntax.Type_RefName(hydra.scala.syntax.Type_Name("Boolean"))))))
 
+            case hydra.core.LiteralTypeDecimal():
+                return Right(cast(hydra.scala.syntax.Type, hydra.scala.syntax.TypeRef(cast(hydra.scala.syntax.Type_Ref, hydra.scala.syntax.Type_RefName(hydra.scala.syntax.Type_Name("BigDecimal"))))))
+
             case hydra.core.LiteralTypeFloat(value=ft):
                 return _hoist_hydra_scala_coder_encode_type_1(ft)
 
@@ -291,6 +294,9 @@ def encode_literal(cx: T0, g: T1, av: hydra.core.Literal):
 
         case hydra.core.LiteralBoolean(value=b2):
             return Right(cast(hydra.scala.syntax.Lit, hydra.scala.syntax.LitBoolean(b2)))
+
+        case hydra.core.LiteralDecimal(value=d):
+            return Right(cast(hydra.scala.syntax.Lit, hydra.scala.syntax.LitString(hydra.lib.literals.show_decimal(d))))
 
         case hydra.core.LiteralFloat(value=fv):
             return _hoist_hydra_scala_coder_encode_literal_1(fv)
@@ -727,7 +733,7 @@ def encode_term(cx: T0, g: hydra.graph.Graph, term0: hydra.core.Term):
             return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda e: encode_term(cx, g, e)), els), (lambda sels: Right(hydra.scala.utils.sapply(hydra.scala.utils.sname("Seq"), sels))))
 
         case hydra.core.TermLiteral(value=v):
-            return hydra.lib.eithers.bind(encode_literal(cx, g, v), (lambda slit: (lit_data := cast(hydra.scala.syntax.Data, hydra.scala.syntax.DataLit(slit)), _hoist_lit_data_body_1 := (lambda v1: (lambda bi: Right(hydra.scala.utils.sapply(hydra.scala.utils.sname("BigInt"), (cast(hydra.scala.syntax.Data, hydra.scala.syntax.DataLit(cast(hydra.scala.syntax.Lit, hydra.scala.syntax.LitString(hydra.lib.literals.show_bigint(bi))))),))))(v1.value) if isinstance(v1, hydra.core.IntegerValueBigint) else (lambda ui: Right(hydra.scala.utils.sapply(hydra.scala.utils.sname("BigInt"), (cast(hydra.scala.syntax.Data, hydra.scala.syntax.DataLit(cast(hydra.scala.syntax.Lit, hydra.scala.syntax.LitString(hydra.lib.literals.show_bigint(hydra.lib.literals.uint64_to_bigint(ui)))))),))))(v1.value) if isinstance(v1, hydra.core.IntegerValueUint64) else Right(lit_data)), _hoist_lit_data_body_2 := (lambda v1: (lambda _: Right(hydra.scala.utils.sapply(hydra.scala.utils.sname("BigDecimal"), (lit_data,))))(v1.value) if isinstance(v1, hydra.core.FloatValueBigfloat) else Right(lit_data)), _hoist_lit_data_body_3 := (lambda v1: (lambda iv: _hoist_lit_data_body_1(iv))(v1.value) if isinstance(v1, hydra.core.LiteralInteger) else (lambda fv: _hoist_lit_data_body_2(fv))(v1.value) if isinstance(v1, hydra.core.LiteralFloat) else Right(lit_data)), _hoist_lit_data_body_3(v))[4]))
+            return hydra.lib.eithers.bind(encode_literal(cx, g, v), (lambda slit: (lit_data := cast(hydra.scala.syntax.Data, hydra.scala.syntax.DataLit(slit)), _hoist_lit_data_body_1 := (lambda v1: (lambda bi: Right(hydra.scala.utils.sapply(hydra.scala.utils.sname("BigInt"), (cast(hydra.scala.syntax.Data, hydra.scala.syntax.DataLit(cast(hydra.scala.syntax.Lit, hydra.scala.syntax.LitString(hydra.lib.literals.show_bigint(bi))))),))))(v1.value) if isinstance(v1, hydra.core.IntegerValueBigint) else (lambda ui: Right(hydra.scala.utils.sapply(hydra.scala.utils.sname("BigInt"), (cast(hydra.scala.syntax.Data, hydra.scala.syntax.DataLit(cast(hydra.scala.syntax.Lit, hydra.scala.syntax.LitString(hydra.lib.literals.show_bigint(hydra.lib.literals.uint64_to_bigint(ui)))))),))))(v1.value) if isinstance(v1, hydra.core.IntegerValueUint64) else Right(lit_data)), _hoist_lit_data_body_2 := (lambda v1: (lambda _: Right(hydra.scala.utils.sapply(hydra.scala.utils.sname("BigDecimal"), (lit_data,))))(v1.value) if isinstance(v1, hydra.core.FloatValueBigfloat) else Right(lit_data)), _hoist_lit_data_body_3 := (lambda v1: (lambda _: Right(hydra.scala.utils.sapply(hydra.scala.utils.sname("BigDecimal"), (lit_data,))))(v1.value) if isinstance(v1, hydra.core.LiteralDecimal) else (lambda iv: _hoist_lit_data_body_1(iv))(v1.value) if isinstance(v1, hydra.core.LiteralInteger) else (lambda fv: _hoist_lit_data_body_2(fv))(v1.value) if isinstance(v1, hydra.core.LiteralFloat) else Right(lit_data)), _hoist_lit_data_body_3(v))[4]))
 
         case hydra.core.TermMap(value=m):
             return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda kv: hydra.lib.eithers.bind(encode_term(cx, g, hydra.lib.pairs.first(kv)), (lambda sk: hydra.lib.eithers.bind(encode_term(cx, g, hydra.lib.pairs.second(kv)), (lambda sv: Right(hydra.scala.utils.sassign(sk, sv))))))), hydra.lib.maps.to_list(m)), (lambda spairs: Right(hydra.scala.utils.sapply(hydra.scala.utils.sname("Map"), spairs))))

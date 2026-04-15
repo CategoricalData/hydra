@@ -9,6 +9,7 @@ import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 conflictingModuleNamespaceError :: Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm ErrorPackaging.ConflictingModuleNamespaceError
 conflictingModuleNamespaceError first second =

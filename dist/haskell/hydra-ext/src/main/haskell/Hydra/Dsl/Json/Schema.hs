@@ -9,6 +9,7 @@ import qualified Hydra.Json.Model as Model
 import qualified Hydra.Json.Schema as Schema
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 additionalItemsAny :: Phantoms.TTerm Bool -> Phantoms.TTerm Schema.AdditionalItems

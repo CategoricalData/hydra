@@ -166,6 +166,8 @@ lazy val literalsBigfloatToFloat64: hydra.core.Name = "hydra.lib.literals.bigflo
 
 lazy val literalsBigintToBigfloat: hydra.core.Name = "hydra.lib.literals.bigintToBigfloat"
 
+lazy val literalsBigintToDecimal: hydra.core.Name = "hydra.lib.literals.bigintToDecimal"
+
 lazy val literalsBigintToInt16: hydra.core.Name = "hydra.lib.literals.bigintToInt16"
 
 lazy val literalsBigintToInt32: hydra.core.Name = "hydra.lib.literals.bigintToInt32"
@@ -186,9 +188,19 @@ lazy val literalsBinaryToBytes: hydra.core.Name = "hydra.lib.literals.binaryToBy
 
 lazy val literalsBinaryToString: hydra.core.Name = "hydra.lib.literals.binaryToString"
 
+lazy val literalsDecimalToBigint: hydra.core.Name = "hydra.lib.literals.decimalToBigint"
+
+lazy val literalsDecimalToFloat32: hydra.core.Name = "hydra.lib.literals.decimalToFloat32"
+
+lazy val literalsDecimalToFloat64: hydra.core.Name = "hydra.lib.literals.decimalToFloat64"
+
 lazy val literalsFloat32ToBigfloat: hydra.core.Name = "hydra.lib.literals.float32ToBigfloat"
 
+lazy val literalsFloat32ToDecimal: hydra.core.Name = "hydra.lib.literals.float32ToDecimal"
+
 lazy val literalsFloat64ToBigfloat: hydra.core.Name = "hydra.lib.literals.float64ToBigfloat"
+
+lazy val literalsFloat64ToDecimal: hydra.core.Name = "hydra.lib.literals.float64ToDecimal"
 
 lazy val literalsInt16ToBigint: hydra.core.Name = "hydra.lib.literals.int16ToBigint"
 
@@ -203,6 +215,8 @@ lazy val literalsReadBigfloat: hydra.core.Name = "hydra.lib.literals.readBigfloa
 lazy val literalsReadBigint: hydra.core.Name = "hydra.lib.literals.readBigint"
 
 lazy val literalsReadBoolean: hydra.core.Name = "hydra.lib.literals.readBoolean"
+
+lazy val literalsReadDecimal: hydra.core.Name = "hydra.lib.literals.readDecimal"
 
 lazy val literalsReadFloat32: hydra.core.Name = "hydra.lib.literals.readFloat32"
 
@@ -231,6 +245,8 @@ lazy val literalsShowBigfloat: hydra.core.Name = "hydra.lib.literals.showBigfloa
 lazy val literalsShowBigint: hydra.core.Name = "hydra.lib.literals.showBigint"
 
 lazy val literalsShowBoolean: hydra.core.Name = "hydra.lib.literals.showBoolean"
+
+lazy val literalsShowDecimal: hydra.core.Name = "hydra.lib.literals.showDecimal"
 
 lazy val literalsShowFloat32: hydra.core.Name = "hydra.lib.literals.showFloat32"
 

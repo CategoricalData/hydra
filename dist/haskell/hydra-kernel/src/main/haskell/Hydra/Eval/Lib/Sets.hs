@@ -12,6 +12,7 @@ import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Sets as Sets
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Interpreter-friendly set difference.
 difference :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term

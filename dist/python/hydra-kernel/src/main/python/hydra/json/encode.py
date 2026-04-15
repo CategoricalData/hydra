@@ -96,6 +96,9 @@ def encode_literal(lit: hydra.core.Literal) -> Either[T0, hydra.json.model.Value
         case hydra.core.LiteralBoolean(value=b2):
             return Right(cast(hydra.json.model.Value, hydra.json.model.ValueBoolean(b2)))
 
+        case hydra.core.LiteralDecimal(value=d):
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.float64_to_bigfloat(hydra.lib.literals.decimal_to_float64(d)))))
+
         case hydra.core.LiteralFloat(value=f):
             return encode_float(f)
 

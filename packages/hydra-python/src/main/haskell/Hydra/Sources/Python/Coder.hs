@@ -1258,6 +1258,10 @@ encodeLiteral = def "encodeLiteral" $
       _Literal_boolean>>: "b" ~>
         right $ PyUtils.pyAtomToPyExpression @@
           Logic.ifElse (var "b") PyDsl.atomTrue PyDsl.atomFalse,
+      _Literal_decimal>>: "d" ~>
+        right $ PyUtils.functionCall @@
+          (PyUtils.pyNameToPyPrimary @@ (PyDsl.name $ string "Decimal")) @@
+          list [PyUtils.singleQuotedString @@ (Literals.showDecimal $ var "d")],
       _Literal_float>>: "f" ~> encodeFloatValue @@ var "f",
       _Literal_integer>>: "i" ~> encodeIntegerValue @@ var "i",
       _Literal_string>>: "s" ~>
@@ -1271,6 +1275,7 @@ encodeLiteralType = def "encodeLiteralType" $
     "findName" <~ (cases _LiteralType (var "lt") Nothing [
       _LiteralType_binary>>: constant $ string "bytes",
       _LiteralType_boolean>>: constant $ string "bool",
+      _LiteralType_decimal>>: constant $ string "Decimal",
       _LiteralType_float>>: "ft" ~>
         cases _FloatType (var "ft") Nothing [
           _FloatType_bigfloat>>: constant $ string "Decimal",

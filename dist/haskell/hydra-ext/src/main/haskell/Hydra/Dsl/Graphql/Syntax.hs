@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Graphql.Syntax as Syntax
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 aliasColon :: Phantoms.TTerm Syntax.Alias
 aliasColon =

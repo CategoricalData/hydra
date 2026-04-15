@@ -6,6 +6,7 @@ module Hydra.Json.Bootstrap where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 typesByName :: M.Map Core.Name Core.Type
@@ -752,6 +753,12 @@ typesByName =
               Core.annotatedTypeAnnotation = (M.fromList [
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A boolean literal")))])}))},
           Core.FieldType {
+            Core.fieldTypeName = (Core.Name "decimal"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeLiteral Core.LiteralTypeDecimal),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An arbitrary-precision decimal literal")))])}))},
+          Core.FieldType {
             Core.fieldTypeName = (Core.Name "float"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
               Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.FloatValue")),
@@ -785,6 +792,12 @@ typesByName =
               Core.annotatedTypeBody = Core.TypeUnit,
               Core.annotatedTypeAnnotation = (M.fromList [
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The type of a boolean (true/false) value")))])}))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "decimal"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = Core.TypeUnit,
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The type of an arbitrary-precision decimal value")))])}))},
           Core.FieldType {
             Core.fieldTypeName = (Core.Name "float"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {

@@ -324,6 +324,7 @@ literal = define "literal" $
   "l" ~> cases _Literal (var "l") Nothing [
     _Literal_binary>>: constant $ string "[binary]",
     _Literal_boolean>>: "b" ~> Logic.ifElse (var "b") (string "true") (string "false"),
+    _Literal_decimal>>: "d" ~> Literals.showDecimal $ var "d",
     _Literal_float>>: "fv" ~> floatValue @@ var "fv",
     _Literal_integer>>: "iv" ~> integerValue @@ var "iv",
     _Literal_string>>: "s" ~> Literals.showString $ var "s"]
@@ -334,6 +335,7 @@ literalType = define "literalType" $
   "lt" ~> cases _LiteralType (var "lt") Nothing [
     _LiteralType_binary>>: constant $ string "binary",
     _LiteralType_boolean>>: constant $ string "boolean",
+    _LiteralType_decimal>>: constant $ string "decimal",
     _LiteralType_float>>: "ft" ~> floatType @@ var "ft",
     _LiteralType_integer>>: "it" ~> integerType @@ var "it",
     _LiteralType_string>>: constant $ string "string"]

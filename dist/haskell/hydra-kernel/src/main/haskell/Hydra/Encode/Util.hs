@@ -7,6 +7,7 @@ module Hydra.Encode.Util where
 import qualified Hydra.Core as Core
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 caseConvention :: Util.CaseConvention -> Core.Term
 caseConvention x =

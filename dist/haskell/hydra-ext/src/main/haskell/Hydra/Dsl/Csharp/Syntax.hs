@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Csharp.Syntax as Syntax
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 accessorBodyBlock :: Phantoms.TTerm Syntax.Block -> Phantoms.TTerm Syntax.AccessorBody
 accessorBodyBlock x =

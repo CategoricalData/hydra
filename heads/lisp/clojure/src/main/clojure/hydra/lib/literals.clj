@@ -13,6 +13,7 @@
 
 ;; BigInt conversions
 (def hydra_lib_literals_bigint_to_bigfloat (fn [x] (double x)))
+(def hydra_lib_literals_bigint_to_decimal (fn [x] (bigdec x)))
 (def hydra_lib_literals_bigint_to_int8 (fn [x] (byte x)))
 (def hydra_lib_literals_bigint_to_int16 (fn [x] (short x)))
 (def hydra_lib_literals_bigint_to_int32 (fn [x] (int x)))
@@ -22,9 +23,16 @@
 (def hydra_lib_literals_bigint_to_uint32 (fn [x] (long x)))
 (def hydra_lib_literals_bigint_to_uint64 (fn [x] (long x)))
 
+;; Decimal conversions
+(def hydra_lib_literals_decimal_to_bigint (fn [x] (long (.setScale (bigdec x) 0 java.math.RoundingMode/HALF_EVEN))))
+(def hydra_lib_literals_decimal_to_float32 (fn [x] (float (.doubleValue (bigdec x)))))
+(def hydra_lib_literals_decimal_to_float64 (fn [x] (double (.doubleValue (bigdec x)))))
+
 ;; Float conversions
 (def hydra_lib_literals_float32_to_bigfloat (fn [x] (double x)))
+(def hydra_lib_literals_float32_to_decimal (fn [x] (bigdec (Float/toString (float x)))))
 (def hydra_lib_literals_float64_to_bigfloat (fn [x] (double x)))
+(def hydra_lib_literals_float64_to_decimal (fn [x] (bigdec (str x))))
 
 ;; Integer to BigInt conversions
 (def hydra_lib_literals_int8_to_bigint (fn [x] (long x)))
@@ -189,6 +197,31 @@
       (= s "true") (list :just true)
       (= s "false") (list :just false)
       :else (list :nothing))))
+
+;; read_decimal :: String -> Maybe Decimal
+(def hydra_lib_literals_read_decimal
+  (fn [s] (try (list :just (bigdec s))
+               (catch Exception _ (list :nothing)))))
+
+;; show_decimal :: Decimal -> String
+;; Match Haskell's Data.Scientific show: "42.0", "3.14", "1.0e20", "1.0e-10".
+(def hydra_lib_literals_show_decimal
+  (fn [x]
+    (let [bd (.stripTrailingZeros (bigdec x))]
+      (if (zero? (.signum bd))
+        "0.0"
+        (let [precision (.precision bd)
+              scale (.scale bd)
+              e (- precision scale 1)
+              sign (if (neg? (.signum bd)) "-" "")
+              plain (.toString (.abs (.unscaledValue bd)))]
+          (if (or (>= e 7) (< e -3))
+            (let [mantissa (if (= (count plain) 1)
+                             (str plain ".0")
+                             (str (subs plain 0 1) "." (subs plain 1)))]
+              (str sign mantissa "e" e))
+            (let [s (.toPlainString bd)]
+              (if (.contains s ".") s (str s ".0")))))))))
 
 ;; read_float64 :: String -> Maybe Float64
 (def hydra_lib_literals_read_float64

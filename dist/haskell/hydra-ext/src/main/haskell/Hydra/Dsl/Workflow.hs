@@ -9,6 +9,7 @@ import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Workflow as Workflow
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 hydraSchemaSpec :: Phantoms.TTerm [Packaging.Module] -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Workflow.HydraSchemaSpec
 hydraSchemaSpec modules typeName =

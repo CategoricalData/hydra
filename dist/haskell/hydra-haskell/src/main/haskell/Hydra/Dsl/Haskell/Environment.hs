@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Haskell.Environment as Environment
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 haskellModuleMetadata :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.HaskellModuleMetadata
 haskellModuleMetadata usesByteString usesInt usesMap usesSet =

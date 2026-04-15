@@ -15,6 +15,7 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
 
@@ -193,6 +194,7 @@ literal l =
     case l of
       Core.LiteralBinary _ -> "[binary]"
       Core.LiteralBoolean v0 -> Logic.ifElse v0 "true" "false"
+      Core.LiteralDecimal v0 -> Literals.showDecimal v0
       Core.LiteralFloat v0 -> float v0
       Core.LiteralInteger v0 -> integer v0
       Core.LiteralString v0 -> Literals.showString v0
@@ -203,6 +205,7 @@ literalType lt =
     case lt of
       Core.LiteralTypeBinary -> "binary"
       Core.LiteralTypeBoolean -> "boolean"
+      Core.LiteralTypeDecimal -> "decimal"
       Core.LiteralTypeFloat v0 -> floatType v0
       Core.LiteralTypeInteger v0 -> integerType v0
       Core.LiteralTypeString -> "string"

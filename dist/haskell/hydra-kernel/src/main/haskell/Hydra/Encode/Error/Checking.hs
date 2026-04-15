@@ -13,6 +13,7 @@ import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Sets as Sets
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 checkingError :: Checking.CheckingError -> Core.Term
 checkingError x =

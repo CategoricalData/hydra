@@ -12,6 +12,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 
 -- | Round-trip test cases for JSON encoding and decoding

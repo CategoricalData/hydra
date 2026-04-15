@@ -45,6 +45,7 @@ import qualified Hydra.Strip as Strip
 import qualified Hydra.Util as Util
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
 
@@ -130,11 +131,13 @@ constructModule namespaces mod defs cx g =
                           "map",
                           "pure",
                           "sum"])],
+                      [
+                        (("Data.Scientific", (Just "Sci")), [])],
                       (condImport (Environment.haskellModuleMetadataUsesByteString meta) (("Data.ByteString", (Just "B")), [])),
                       (condImport (Environment.haskellModuleMetadataUsesInt meta) (("Data.Int", (Just "I")), [])),
                       (condImport (Environment.haskellModuleMetadataUsesMap meta) (("Data.Map", (Just "M")), [])),
                       (condImport (Environment.haskellModuleMetadataUsesSet meta) (("Data.Set", (Just "S")), [])),
-                      (Logic.ifElse (Analysis.moduleContainsBinaryLiterals mod) [
+                      (Logic.ifElse (Logic.or (Analysis.moduleContainsBinaryLiterals mod) (Analysis.moduleContainsDecimalLiterals mod)) [
                         (("Hydra.Lib.Literals", (Just "Literals")), [])] [])]))
       in (Eithers.bind (Eithers.mapList createDeclarations defs) (\declLists ->
         let decls = Lists.concat declLists
@@ -219,6 +222,7 @@ encodeLiteral l cx =
     case l of
       Core.LiteralBinary v0 -> Right (Utils.hsapp (Utils.hsvar "Literals.stringToBinary") (Utils.hslit (Syntax.LiteralString (Literals.binaryToString v0))))
       Core.LiteralBoolean v0 -> Right (Utils.hsvar (Logic.ifElse v0 "True" "False"))
+      Core.LiteralDecimal v0 -> Right (Utils.hsapp (Utils.hsvar "Literals.stringToDecimal") (Utils.hslit (Syntax.LiteralString (Literals.showDecimal v0))))
       Core.LiteralFloat v0 -> case v0 of
         Core.FloatValueFloat32 v1 -> Right (Utils.hslit (Syntax.LiteralFloat v1))
         Core.FloatValueFloat64 v1 -> Right (Utils.hslit (Syntax.LiteralDouble v1))
@@ -392,6 +396,7 @@ encodeType namespaces typ cx g =
         Core.TypeLiteral v0 -> case v0 of
           Core.LiteralTypeBinary -> Right (Syntax.TypeVariable (Utils.rawName "B.ByteString"))
           Core.LiteralTypeBoolean -> Right (Syntax.TypeVariable (Utils.rawName "Bool"))
+          Core.LiteralTypeDecimal -> Right (Syntax.TypeVariable (Utils.rawName "Sci.Scientific"))
           Core.LiteralTypeFloat v1 -> case v1 of
             Core.FloatTypeFloat32 -> Right (Syntax.TypeVariable (Utils.rawName "Float"))
             Core.FloatTypeFloat64 -> Right (Syntax.TypeVariable (Utils.rawName "Double"))

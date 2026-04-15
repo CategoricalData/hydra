@@ -6,6 +6,7 @@ module Hydra.Show.Util where
 
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Show a case convention as a string
 caseConvention :: Util.CaseConvention -> String

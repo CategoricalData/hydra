@@ -8,6 +8,7 @@ import qualified Com.Gdblab.PathAlgebra.Expressions as Expressions
 import qualified Hydra.Core as Core
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 andCondition :: Phantoms.TTerm Expressions.SelectionCondition -> Phantoms.TTerm Expressions.SelectionCondition -> Phantoms.TTerm Expressions.AndCondition
 andCondition left right =

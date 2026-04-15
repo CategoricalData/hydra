@@ -72,6 +72,8 @@ def literalVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.er
       hydra.lib.eithers.map[Unit, hydra.variants.LiteralVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.LiteralVariant.binary)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("boolean", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.variants.LiteralVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.LiteralVariant.boolean)(hydra.extract.core.decodeUnit(cx)(input))),
+         Tuple2("decimal", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.variants.LiteralVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.LiteralVariant.decimal)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("float", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.variants.LiteralVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.LiteralVariant.float)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("integer", (input: hydra.core.Term) =>

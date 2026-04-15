@@ -46,6 +46,15 @@ public interface LiteralTypes {
     }
 
     /**
+     * Create a decimal literal type.
+     *
+     * @return a decimal literal type
+     */
+    static LiteralType decimal() {
+        return new LiteralType.Decimal();
+    }
+
+    /**
      * Create a float32 literal type.
      *
      * @return a float32 literal type
@@ -179,6 +188,11 @@ public interface LiteralTypes {
             @Override
             public String visit(LiteralType.Boolean_ instance) {
                 return "boolean";
+            }
+
+            @Override
+            public String visit(LiteralType.Decimal instance) {
+                return "decimal";
             }
 
             @Override

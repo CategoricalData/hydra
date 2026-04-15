@@ -5,6 +5,7 @@
 module Hydra.Core where
 
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.Map as M
@@ -373,6 +374,8 @@ data Literal =
   LiteralBinary B.ByteString |
   -- | A boolean literal
   LiteralBoolean Bool |
+  -- | An arbitrary-precision decimal literal
+  LiteralDecimal Sci.Scientific |
   -- | A floating-point literal
   LiteralFloat FloatValue |
   -- | An integer literal
@@ -387,6 +390,8 @@ _Literal_binary = Name "binary"
 
 _Literal_boolean = Name "boolean"
 
+_Literal_decimal = Name "decimal"
+
 _Literal_float = Name "float"
 
 _Literal_integer = Name "integer"
@@ -399,6 +404,8 @@ data LiteralType =
   LiteralTypeBinary  |
   -- | The type of a boolean (true/false) value
   LiteralTypeBoolean  |
+  -- | The type of an arbitrary-precision decimal value
+  LiteralTypeDecimal  |
   -- | The type of a floating-point value
   LiteralTypeFloat FloatType |
   -- | The type of an integer value
@@ -412,6 +419,8 @@ _LiteralType = Name "hydra.core.LiteralType"
 _LiteralType_binary = Name "binary"
 
 _LiteralType_boolean = Name "boolean"
+
+_LiteralType_decimal = Name "decimal"
 
 _LiteralType_float = Name "float"
 

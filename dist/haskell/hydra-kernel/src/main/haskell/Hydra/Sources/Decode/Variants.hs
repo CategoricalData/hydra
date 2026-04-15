@@ -7,6 +7,7 @@ module Hydra.Sources.Decode.Variants where
 import qualified Hydra.Core as Core
 import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 module_ :: Packaging.Module
 module_ =
@@ -484,6 +485,37 @@ module_ =
                                                   Core.injectionTypeName = (Core.Name "hydra.variants.LiteralVariant"),
                                                   Core.injectionField = Core.Field {
                                                     Core.fieldName = (Core.Name "boolean"),
+                                                    Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))}))})),
+                                            Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                                Core.applicationFunction = (Core.TermLambda (Core.Lambda {
+                                                  Core.lambdaParameter = (Core.Name "cx"),
+                                                  Core.lambdaDomain = Nothing,
+                                                  Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+                                                    Core.lambdaParameter = (Core.Name "t"),
+                                                    Core.lambdaDomain = Nothing,
+                                                    Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeUnit")),
+                                                        Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
+                                                      Core.applicationArgument = (Core.TermVariable (Core.Name "t"))}))}))})),
+                                                Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
+                                              Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
+                                        (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
+                                          Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "decimal"))}), (Core.TermLambda (Core.Lambda {
+                                          Core.lambdaParameter = (Core.Name "input"),
+                                          Core.lambdaDomain = Nothing,
+                                          Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                            Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.map")),
+                                              Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                                                Core.lambdaParameter = (Core.Name "t"),
+                                                Core.lambdaDomain = Nothing,
+                                                Core.lambdaBody = (Core.TermInject (Core.Injection {
+                                                  Core.injectionTypeName = (Core.Name "hydra.variants.LiteralVariant"),
+                                                  Core.injectionField = Core.Field {
+                                                    Core.fieldName = (Core.Name "decimal"),
                                                     Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))}))})),
                                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                                               Core.applicationFunction = (Core.TermApplication (Core.Application {

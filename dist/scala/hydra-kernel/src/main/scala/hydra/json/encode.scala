@@ -32,6 +32,7 @@ def encodeLiteral[T0](lit: hydra.core.Literal): Either[T0, hydra.json.model.Valu
   lit match
   case hydra.core.Literal.binary(v_Literal_binary_b) => Right(hydra.json.model.Value.string(hydra.lib.literals.binaryToString(v_Literal_binary_b)))
   case hydra.core.Literal.boolean(v_Literal_boolean_b) => Right(hydra.json.model.Value.boolean(v_Literal_boolean_b))
+  case hydra.core.Literal.decimal(v_Literal_decimal_d) => Right(hydra.json.model.Value.number(hydra.lib.literals.float64ToBigfloat(hydra.lib.literals.decimalToFloat64(v_Literal_decimal_d))))
   case hydra.core.Literal.float(v_Literal_float_f) => hydra.json.encode.encodeFloat(v_Literal_float_f)
   case hydra.core.Literal.integer(v_Literal_integer_i) => hydra.json.encode.encodeInteger(v_Literal_integer_i)
   case hydra.core.Literal.string(v_Literal_string_s) => Right(hydra.json.model.Value.string(v_Literal_string_s))

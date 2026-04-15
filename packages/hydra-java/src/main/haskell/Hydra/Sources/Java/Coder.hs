@@ -2239,6 +2239,12 @@ encodeLiteral = def "encodeLiteral" $
               (var "byteValues"))),
       _Literal_boolean>>: "b" ~>
         encodeLiteral_litExp @@ (JavaUtilsSource.javaBoolean @@ var "b"),
+      _Literal_decimal>>: "v" ~>
+        JavaUtilsSource.javaConstructorCall @@
+          (JavaUtilsSource.javaConstructorName @@
+            (JavaDsl.identifier $ string "java.math.BigDecimal") @@ nothing) @@
+          list [encodeLiteral @@ inject _Literal _Literal_string (Literals.showDecimal $ var "v")] @@
+          nothing,
       _Literal_float>>: "f" ~> encodeLiteral_encodeFloat @@ var "f",
       _Literal_integer>>: "i" ~> encodeLiteral_encodeInteger @@ var "i",
       _Literal_string>>: "s" ~>
@@ -2397,6 +2403,11 @@ encodeLiteralType = def "encodeLiteralType" $
                 (list ([] :: [TTerm Java.Annotation]))))))),
     _LiteralType_boolean>>: constant $
       encodeLiteralType_simple @@ string "Boolean" @@ var "cx" @@ var "g",
+    _LiteralType_decimal>>: constant $
+      right (JavaUtilsSource.javaRefType
+        @@ list ([] :: [TTerm Java.ReferenceType])
+        @@ just (JavaNamesSource.javaPackageName @@ list [string "java", string "math"])
+        @@ string "BigDecimal"),
     _LiteralType_float>>: lambda "ft" $
       cases _FloatType (var "ft") Nothing [
         _FloatType_bigfloat>>: constant $
@@ -4054,6 +4065,7 @@ isBigNumericType = def "isBigNumericType" $
     (Just $ boolean False) [
     _Type_literal>>: lambda "lt" $
       cases _LiteralType (var "lt") (Just $ boolean False) [
+        _LiteralType_decimal>>: constant $ boolean True,
         _LiteralType_float>>: lambda "ft" $
           cases _FloatType (var "ft") (Just $ boolean False) [
             _FloatType_bigfloat>>: constant $ boolean True],

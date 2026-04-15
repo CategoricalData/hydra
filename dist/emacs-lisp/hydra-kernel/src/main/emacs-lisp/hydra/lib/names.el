@@ -166,6 +166,8 @@
 
 (defvar hydra_lib_names_literals_bigint_to_bigfloat "hydra.lib.literals.bigintToBigfloat")
 
+(defvar hydra_lib_names_literals_bigint_to_decimal "hydra.lib.literals.bigintToDecimal")
+
 (defvar hydra_lib_names_literals_bigint_to_int16 "hydra.lib.literals.bigintToInt16")
 
 (defvar hydra_lib_names_literals_bigint_to_int32 "hydra.lib.literals.bigintToInt32")
@@ -186,9 +188,19 @@
 
 (defvar hydra_lib_names_literals_binary_to_string "hydra.lib.literals.binaryToString")
 
+(defvar hydra_lib_names_literals_decimal_to_bigint "hydra.lib.literals.decimalToBigint")
+
+(defvar hydra_lib_names_literals_decimal_to_float32 "hydra.lib.literals.decimalToFloat32")
+
+(defvar hydra_lib_names_literals_decimal_to_float64 "hydra.lib.literals.decimalToFloat64")
+
 (defvar hydra_lib_names_literals_float32_to_bigfloat "hydra.lib.literals.float32ToBigfloat")
 
+(defvar hydra_lib_names_literals_float32_to_decimal "hydra.lib.literals.float32ToDecimal")
+
 (defvar hydra_lib_names_literals_float64_to_bigfloat "hydra.lib.literals.float64ToBigfloat")
+
+(defvar hydra_lib_names_literals_float64_to_decimal "hydra.lib.literals.float64ToDecimal")
 
 (defvar hydra_lib_names_literals_int16_to_bigint "hydra.lib.literals.int16ToBigint")
 
@@ -203,6 +215,8 @@
 (defvar hydra_lib_names_literals_read_bigint "hydra.lib.literals.readBigint")
 
 (defvar hydra_lib_names_literals_read_boolean "hydra.lib.literals.readBoolean")
+
+(defvar hydra_lib_names_literals_read_decimal "hydra.lib.literals.readDecimal")
 
 (defvar hydra_lib_names_literals_read_float32 "hydra.lib.literals.readFloat32")
 
@@ -231,6 +245,8 @@
 (defvar hydra_lib_names_literals_show_bigint "hydra.lib.literals.showBigint")
 
 (defvar hydra_lib_names_literals_show_boolean "hydra.lib.literals.showBoolean")
+
+(defvar hydra_lib_names_literals_show_decimal "hydra.lib.literals.showDecimal")
 
 (defvar hydra_lib_names_literals_show_float32 "hydra.lib.literals.showFloat32")
 

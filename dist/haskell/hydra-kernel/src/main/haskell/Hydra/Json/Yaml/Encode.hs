@@ -13,6 +13,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Yaml.Model as YamlModel
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 -- | Convert a JSON value to a YAML node. Always succeeds since YAML is a superset of JSON.

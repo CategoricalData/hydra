@@ -13,6 +13,7 @@ import qualified Hydra.Show.Errors as Errors
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Run type inference on a single term
 inferTerm :: Graph.Graph -> Core.Term -> Either String Core.Term

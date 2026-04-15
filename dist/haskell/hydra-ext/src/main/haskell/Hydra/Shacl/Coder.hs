@@ -29,6 +29,7 @@ import qualified Hydra.Rdf.Utils as Utils
 import qualified Hydra.Shacl.Model as Model
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Construct CommonProperties from a list of constraints, using defaults for other fields
 common :: [Model.CommonConstraint] -> Model.CommonProperties
