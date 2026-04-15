@@ -46,6 +46,11 @@ cp -r "$HYDRA_HASKELL_HEAD_DIR/src/main/haskell/Hydra" "$OUTPUT_DIR/src/main/has
 # Remove ext-related sources not needed for the bootstrap target
 rm -f "$OUTPUT_DIR/src/main/haskell/Hydra/ExtGeneration.hs"
 rm -f "$OUTPUT_DIR/src/main/haskell/Hydra/Sources/Ext.hs"
+# Hydra.Coq.GenerateDriver imports the DSL-generated Hydra.Coq.Generate module,
+# which lives under dist/haskell/hydra-ext/ and is not part of the kernel
+# bootstrap. Drop the whole directory — the Coq target is not reachable
+# from the Haskell bootstrap pipeline.
+rm -rf "$OUTPUT_DIR/src/main/haskell/Hydra/Coq"
 # Overlay kernel DSL sources (Hydra.Sources.Kernel.*, Hydra.Sources.Decode.*, Hydra.Sources.Encode.*, ...)
 if [ -d "$HYDRA_KERNEL_DIR/src/main/haskell/Hydra" ]; then
     cp -r "$HYDRA_KERNEL_DIR/src/main/haskell/Hydra/." "$OUTPUT_DIR/src/main/haskell/Hydra/"
