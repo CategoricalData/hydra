@@ -1549,7 +1549,8 @@ def encodeLiteralType[T0, T1, T2](lt: hydra.core.LiteralType)(cx: T0)(g: T1): Ei
      hydra.java.syntax.ArrayType_Variant.primitive(hydra.java.syntax.PrimitiveTypeWithAnnotations(hydra.java.syntax.PrimitiveType.numeric(hydra.java.syntax.NumericType.integral(hydra.java.syntax.IntegralType.byte)),
      Seq()))))))
   case hydra.core.LiteralType.boolean => hydra.java.coder.encodeLiteralType_simple("Boolean")(cx)(g)
-  case hydra.core.LiteralType.decimal => Right(hydra.java.utils.javaRefType(Seq())(Some(hydra.java.names.javaPackageName(Seq("java", "math"))))("BigDecimal"))
+  case hydra.core.LiteralType.decimal => Right(hydra.java.utils.javaRefType(Seq())(Some(hydra.java.names.javaPackageName(Seq("java",
+     "math"))))("BigDecimal"))
   case hydra.core.LiteralType.float(v_LiteralType_float_ft) => v_LiteralType_float_ft match
     case hydra.core.FloatType.bigfloat => Right(hydra.java.utils.javaRefType(Seq())(Some(hydra.java.names.javaPackageName(Seq("java",
        "math"))))("BigDecimal"))
