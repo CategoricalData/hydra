@@ -22,47 +22,51 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
--- | Encode a float value to JSON. Float64/Bigfloat use native numbers; Float32 uses string. NaN/Inf always encoded as strings.
-encodeFloat :: Core.FloatValue -> Either t0 Model.Value
+-- | Encode a float value to JSON. Bigfloat rejects non-finite; Float64 encodes sentinels as strings; Float32 always strings.
+encodeFloat :: Core.FloatValue -> Either String Model.Value
 encodeFloat fv =
     case fv of
       Core.FloatValueBigfloat v0 ->
         let s = Literals.showBigfloat v0
-        in (Logic.ifElse (isSpecialFloatString s) (Right (Model.ValueString s)) (Right (Model.ValueNumber v0)))
+        in (Logic.ifElse (isNonFiniteFloatString s)
+              (Left (Strings.cat ["JSON cannot represent non-finite bigfloat: ", s]))
+              (Right (Model.ValueNumber (Literals.float64ToDecimal (Literals.bigfloatToFloat64 v0)))))
       Core.FloatValueFloat32 v0 -> Right (Model.ValueString (Literals.showFloat32 v0))
       Core.FloatValueFloat64 v0 ->
         let s = Literals.showFloat64 v0
-        in (Logic.ifElse (isSpecialFloatString s) (Right (Model.ValueString s)) (Right (Model.ValueNumber (Literals.float64ToBigfloat v0))))
+        in (Logic.ifElse (isNonFiniteFloatString s)
+              (Right (Model.ValueString s))
+              (Right (Model.ValueNumber (Literals.float64ToDecimal v0))))
 
 -- | Encode an integer value to JSON. Small ints use native numbers; large ints use strings.
-encodeInteger :: Core.IntegerValue -> Either t0 Model.Value
+encodeInteger :: Core.IntegerValue -> Either String Model.Value
 encodeInteger iv =
     case iv of
       Core.IntegerValueBigint v0 -> Right (Model.ValueString (Literals.showBigint v0))
       Core.IntegerValueInt64 v0 -> Right (Model.ValueString (Literals.showInt64 v0))
       Core.IntegerValueUint32 v0 -> Right (Model.ValueString (Literals.showUint32 v0))
       Core.IntegerValueUint64 v0 -> Right (Model.ValueString (Literals.showUint64 v0))
-      Core.IntegerValueInt8 v0 -> Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int8ToBigint v0)))
-      Core.IntegerValueInt16 v0 -> Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int16ToBigint v0)))
-      Core.IntegerValueInt32 v0 -> Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint v0)))
-      Core.IntegerValueUint8 v0 -> Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.uint8ToBigint v0)))
-      Core.IntegerValueUint16 v0 -> Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.uint16ToBigint v0)))
+      Core.IntegerValueInt8 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.int8ToBigint v0)))
+      Core.IntegerValueInt16 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.int16ToBigint v0)))
+      Core.IntegerValueInt32 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint v0)))
+      Core.IntegerValueUint8 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.uint8ToBigint v0)))
+      Core.IntegerValueUint16 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.uint16ToBigint v0)))
 
 -- | Encode a Hydra literal to a JSON value
-encodeLiteral :: Core.Literal -> Either t0 Model.Value
+encodeLiteral :: Core.Literal -> Either String Model.Value
 encodeLiteral lit =
     case lit of
       Core.LiteralBinary v0 -> Right (Model.ValueString (Literals.binaryToString v0))
       Core.LiteralBoolean v0 -> Right (Model.ValueBoolean v0)
-      Core.LiteralDecimal v0 -> Right (Model.ValueNumber (Literals.float64ToBigfloat (Literals.decimalToFloat64 v0)))
+      Core.LiteralDecimal v0 -> Right (Model.ValueNumber v0)
       Core.LiteralFloat v0 -> encodeFloat v0
       Core.LiteralInteger v0 -> encodeInteger v0
       Core.LiteralString v0 -> Right (Model.ValueString v0)
 
--- | Check whether a string is one of the special float sentinels: NaN, Infinity, -Infinity, -0.0.
-isSpecialFloatString :: String -> Bool
-isSpecialFloatString s =
-    Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))
+-- | Check whether a string is one of the non-finite float sentinels: NaN, Infinity, -Infinity.
+isNonFiniteFloatString :: String -> Bool
+isNonFiniteFloatString s =
+    Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Equality.equal s "-Infinity"))
 
 -- | Encode a Hydra term to a JSON value given a type and type name. Returns Left for unsupported constructs.
 toJson :: M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Core.Term -> Either String Model.Value

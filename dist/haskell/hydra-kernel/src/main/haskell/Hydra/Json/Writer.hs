@@ -63,8 +63,8 @@ valueToExpr value =
       Model.ValueBoolean v0 -> Serialization.cst (Logic.ifElse v0 "true" "false")
       Model.ValueNull -> Serialization.cst "null"
       Model.ValueNumber v0 ->
-        let rounded = Literals.bigfloatToBigint v0
-            shown = Literals.showBigfloat v0
-        in (Serialization.cst (Logic.ifElse (Logic.and (Equality.equal v0 (Literals.bigintToBigfloat rounded)) (Logic.not (Equality.equal shown "-0.0"))) (Literals.showBigint rounded) shown))
+        let rounded = Literals.decimalToBigint v0
+            shown = Literals.showDecimal v0
+        in (Serialization.cst (Logic.ifElse (Equality.equal v0 (Literals.bigintToDecimal rounded)) (Literals.showBigint rounded) shown))
       Model.ValueObject v0 -> Serialization.bracesListAdaptive (Lists.map keyValueToExpr (Maps.toList v0))
       Model.ValueString v0 -> Serialization.cst (jsonString v0)
