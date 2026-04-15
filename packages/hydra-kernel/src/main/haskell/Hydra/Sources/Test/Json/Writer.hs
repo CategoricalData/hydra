@@ -71,15 +71,19 @@ primitivesGroup = subgroup "primitives" [
     writerCase "true" (Json.valueBoolean $ Phantoms.boolean True) "true",
     writerCase "false" (Json.valueBoolean $ Phantoms.boolean False) "false",
 
-    -- Numbers - integers (whole numbers are formatted without decimal point)
+    -- Numbers - whole-valued decimals print in plain form when that's shorter than
+    -- scientific notation; fractional values use Scientific's canonical form.
     writerCase "zero" (Json.valueNumber $ Phantoms.decimal 0.0) "0",
     writerCase "positive integer" (Json.valueNumber $ Phantoms.decimal 42.0) "42",
     writerCase "negative integer" (Json.valueNumber $ Phantoms.decimal (-17.0)) "-17",
     writerCase "large integer" (Json.valueNumber $ Phantoms.decimal 1000000.0) "1000000",
 
-    -- Numbers - decimals
+    -- Numbers - fractions. showDecimal (Scientific's Show) stays plain only in the
+    -- narrow [0.1, 1) ∪ whole-ish band; values like 0.01 and 0.001 come out in
+    -- scientific form. This is imperfect but uniform across all Hydra hosts.
     writerCase "decimal" (Json.valueNumber $ Phantoms.decimal 3.14) "3.14",
     writerCase "negative decimal" (Json.valueNumber $ Phantoms.decimal (-2.5)) "-2.5",
+    writerCase "hundredth" (Json.valueNumber $ Phantoms.decimal 0.01) "1.0e-2",
     writerCase "small decimal" (Json.valueNumber $ Phantoms.decimal 0.001) "1.0e-3"]
 
 -- | Precision tests: values that bigfloat (Double) could not represent faithfully.
@@ -87,24 +91,22 @@ primitivesGroup = subgroup "primitives" [
 -- the dedicated decimalRoundtripGroup in Test.Json.Roundtrip covers parse-then-write.
 decimalPrecisionGroup :: TTerm TestGroup
 decimalPrecisionGroup = subgroup "decimal precision" [
-    -- Very large integer that a Double cannot represent exactly.
-    -- Whole-number shortcut in the writer routes this to showBigint.
+    -- Very large integer that a Double cannot represent exactly. Plain form wins the
+    -- "shortest of plain vs scientific" race because all digits are significant.
     writerCase "large integer exact"
       (Json.valueNumber $ Phantoms.decimal (Sci.scientific 100000000000000000001 0))
       "100000000000000000001",
-    -- Negative large integer, same path.
     writerCase "large negative integer exact"
       (Json.valueNumber $ Phantoms.decimal (Sci.scientific (-100000000000000000001) 0))
       "-100000000000000000001",
-    -- Tiny exponent value — Scientific's Show emits scientific notation (not a whole number).
+    -- Tiny and huge exponents stay in scientific notation (plain would be 20+ digits
+    -- of zeroes, which no human can parse reliably).
     writerCase "tiny exponent"
       (Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 (-20)))
       "1.0e-20",
-    -- Large exponent value: the writer's whole-number shortcut detects this as an integer
-    -- and prints it in plain form rather than scientific notation.
     writerCase "huge exponent"
       (Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 20))
-      "100000000000000000000"]
+      "1.0e20"]
 
 stringsGroup :: TTerm TestGroup
 stringsGroup = subgroup "strings" [
