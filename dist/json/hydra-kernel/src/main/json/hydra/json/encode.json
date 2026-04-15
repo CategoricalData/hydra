@@ -62,10 +62,7 @@
                                                                     "body": {
                                                                       "application": {
                                                                         "argument": {"variable": "lit"},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {"variable": "hydra.json.encode.encodeLiteral"},
-                                                                            "type": {"literal": {"string": {}}}}}}},
+                                                                        "function": {"variable": "hydra.json.encode.encodeLiteral"}}},
                                                                     "domain": {"variable": "hydra.core.Literal"},
                                                                     "parameter": "lit"}}}],
                                                             "default": {
@@ -2198,10 +2195,7 @@
                                     "body": {
                                       "application": {
                                         "argument": {"variable": "lit"},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.json.encode.encodeLiteral"},
-                                            "type": {"literal": {"string": {}}}}}}},
+                                        "function": {"variable": "hydra.json.encode.encodeLiteral"}}},
                                     "domain": {"variable": "hydra.core.Literal"},
                                     "parameter": "lit"}}},
                               {
@@ -3337,181 +3331,187 @@
       "term": {
         "name": "hydra.json.encode.encodeLiteral",
         "term": {
-          "typeLambda": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {"literal": {"string": "Encode a Hydra literal to a JSON value"}}}],
             "body": {
-              "annotated": {
-                "annotation": [
-                  {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Encode a Hydra literal to a JSON value"}}}],
+              "lambda": {
                 "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {"variable": "lit"},
-                        "function": {
-                          "cases": {
-                            "cases": [
-                              {
-                                "name": "binary",
-                                "term": {
-                                  "lambda": {
+                  "application": {
+                    "argument": {"variable": "lit"},
+                    "function": {
+                      "cases": {
+                        "cases": [
+                          {
+                            "name": "binary",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "typeApplication": {
                                     "body": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "either": {
-                                                "@right": {
-                                                  "inject": {
-                                                    "field": {
-                                                      "name": "string",
-                                                      "term": {
-                                                        "application": {
-                                                          "argument": {"variable": "b"},
-                                                          "function": {"variable": "hydra.lib.literals.binaryToString"}}}},
-                                                    "typeName": "hydra.json.model.Value"}}}},
-                                            "type": {"variable": "t0"}}},
-                                        "type": {"variable": "hydra.json.model.Value"}}},
-                                    "domain": {"literal": {"binary": {}}},
-                                    "parameter": "b"}}},
-                              {
-                                "name": "boolean",
-                                "term": {
-                                  "lambda": {
+                                          "either": {
+                                            "@right": {
+                                              "inject": {
+                                                "field": {
+                                                  "name": "string",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {"variable": "b"},
+                                                      "function": {"variable": "hydra.lib.literals.binaryToString"}}}},
+                                                "typeName": "hydra.json.model.Value"}}}},
+                                        "type": {"literal": {"string": {}}}}},
+                                    "type": {"variable": "hydra.json.model.Value"}}},
+                                "domain": {"literal": {"binary": {}}},
+                                "parameter": "b"}}},
+                          {
+                            "name": "boolean",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "typeApplication": {
                                     "body": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "either": {
-                                                "@right": {
-                                                  "inject": {
-                                                    "field": {"name": "boolean", "term": {"variable": "b"}},
-                                                    "typeName": "hydra.json.model.Value"}}}},
-                                            "type": {"variable": "t0"}}},
-                                        "type": {"variable": "hydra.json.model.Value"}}},
-                                    "domain": {"literal": {"boolean": {}}},
-                                    "parameter": "b"}}},
-                              {
-                                "name": "decimal",
-                                "term": {
-                                  "lambda": {
+                                          "either": {
+                                            "@right": {
+                                              "inject": {
+                                                "field": {"name": "boolean", "term": {"variable": "b"}},
+                                                "typeName": "hydra.json.model.Value"}}}},
+                                        "type": {"literal": {"string": {}}}}},
+                                    "type": {"variable": "hydra.json.model.Value"}}},
+                                "domain": {"literal": {"boolean": {}}},
+                                "parameter": "b"}}},
+                          {
+                            "name": "decimal",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "typeApplication": {
                                     "body": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "either": {
-                                                "@right": {
-                                                  "inject": {
-                                                    "field": {
-                                                      "name": "number",
-                                                      "term": {
-                                                        "application": {
-                                                          "argument": {
-                                                            "application": {
-                                                              "argument": {"variable": "d"},
-                                                              "function": {"variable": "hydra.lib.literals.decimalToFloat64"}}},
-                                                          "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}}},
-                                                    "typeName": "hydra.json.model.Value"}}}},
-                                            "type": {"variable": "t0"}}},
-                                        "type": {"variable": "hydra.json.model.Value"}}},
-                                    "domain": {"literal": {"decimal": {}}},
-                                    "parameter": "d"}}},
-                              {
-                                "name": "float",
-                                "term": {
-                                  "lambda": {
-                                    "body": {
-                                      "application": {
-                                        "argument": {"variable": "f"},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.json.encode.encodeFloat"},
-                                            "type": {"variable": "t0"}}}}},
-                                    "domain": {"variable": "hydra.core.FloatValue"},
-                                    "parameter": "f"}}},
-                              {
-                                "name": "integer",
-                                "term": {
-                                  "lambda": {
-                                    "body": {
-                                      "application": {
-                                        "argument": {"variable": "i"},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.json.encode.encodeInteger"},
-                                            "type": {"variable": "t0"}}}}},
-                                    "domain": {"variable": "hydra.core.IntegerValue"},
-                                    "parameter": "i"}}},
-                              {
-                                "name": "string",
-                                "term": {
-                                  "lambda": {
+                                          "either": {
+                                            "@right": {
+                                              "inject": {
+                                                "field": {"name": "number", "term": {"variable": "d"}},
+                                                "typeName": "hydra.json.model.Value"}}}},
+                                        "type": {"literal": {"string": {}}}}},
+                                    "type": {"variable": "hydra.json.model.Value"}}},
+                                "domain": {"literal": {"decimal": {}}},
+                                "parameter": "d"}}},
+                          {
+                            "name": "float",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"variable": "f"},
+                                    "function": {"variable": "hydra.json.encode.encodeFloat"}}},
+                                "domain": {"variable": "hydra.core.FloatValue"},
+                                "parameter": "f"}}},
+                          {
+                            "name": "integer",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"variable": "i"},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.json.encode.encodeInteger"},
+                                        "type": {"literal": {"string": {}}}}}}},
+                                "domain": {"variable": "hydra.core.IntegerValue"},
+                                "parameter": "i"}}},
+                          {
+                            "name": "string",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "typeApplication": {
                                     "body": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "either": {
-                                                "@right": {
-                                                  "inject": {
-                                                    "field": {"name": "string", "term": {"variable": "s"}},
-                                                    "typeName": "hydra.json.model.Value"}}}},
-                                            "type": {"variable": "t0"}}},
-                                        "type": {"variable": "hydra.json.model.Value"}}},
-                                    "domain": {"literal": {"string": {}}},
-                                    "parameter": "s"}}}],
-                            "typeName": "hydra.core.Literal"}}}},
-                    "domain": {"variable": "hydra.core.Literal"},
-                    "parameter": "lit"}}}},
-            "parameter": "t0"}},
+                                          "either": {
+                                            "@right": {
+                                              "inject": {
+                                                "field": {"name": "string", "term": {"variable": "s"}},
+                                                "typeName": "hydra.json.model.Value"}}}},
+                                        "type": {"literal": {"string": {}}}}},
+                                    "type": {"variable": "hydra.json.model.Value"}}},
+                                "domain": {"literal": {"string": {}}},
+                                "parameter": "s"}}}],
+                        "typeName": "hydra.core.Literal"}}}},
+                "domain": {"variable": "hydra.core.Literal"},
+                "parameter": "lit"}}}},
         "type": {
           "type": {
             "function": {
               "codomain": {
                 "either": {
-                  "left": {"variable": "t0"},
+                  "left": {"literal": {"string": {}}},
                   "right": {"variable": "hydra.json.model.Value"}}},
               "domain": {"variable": "hydra.core.Literal"}}},
-          "variables": ["t0"]}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.json.encode.encodeFloat",
         "term": {
-          "typeLambda": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "Encode a float value to JSON. Bigfloat rejects non-finite; Float64 encodes sentinels as strings; Float32 always strings."}}}],
             "body": {
-              "annotated": {
-                "annotation": [
-                  {
-                    "@key": "description",
-                    "@value": {
-                      "literal": {
-                        "string": "Encode a float value to JSON. Float64/Bigfloat use native numbers; Float32 uses string. NaN/Inf always encoded as strings."}}}],
+              "lambda": {
                 "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {"variable": "fv"},
-                        "function": {
-                          "cases": {
-                            "cases": [
-                              {
-                                "name": "bigfloat",
-                                "term": {
-                                  "lambda": {
+                  "application": {
+                    "argument": {"variable": "fv"},
+                    "function": {
+                      "cases": {
+                        "cases": [
+                          {
+                            "name": "bigfloat",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "s",
+                                        "term": {
+                                          "application": {
+                                            "argument": {"variable": "bf"},
+                                            "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
+                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
-                                      "let": {
-                                        "bindings": [
-                                          {
-                                            "name": "s",
-                                            "term": {
-                                              "application": {
-                                                "argument": {"variable": "bf"},
-                                                "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
-                                            "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
-                                        "body": {
+                                      "application": {
+                                        "argument": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "either": {
+                                                    "@right": {
+                                                      "inject": {
+                                                        "field": {
+                                                          "name": "number",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {"variable": "bf"},
+                                                                  "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}},
+                                                              "function": {"variable": "hydra.lib.literals.float64ToDecimal"}}}},
+                                                        "typeName": "hydra.json.model.Value"}}}},
+                                                "type": {"literal": {"string": {}}}}},
+                                            "type": {"variable": "hydra.json.model.Value"}}},
+                                        "function": {
                                           "application": {
                                             "argument": {
                                               "typeApplication": {
@@ -3519,79 +3519,87 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "either": {
-                                                        "@right": {
-                                                          "inject": {
-                                                            "field": {"name": "number", "term": {"variable": "bf"}},
-                                                            "typeName": "hydra.json.model.Value"}}}},
-                                                    "type": {"variable": "t0"}}},
+                                                        "@left": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "list": [
+                                                                {"literal": {"string": "JSON cannot represent non-finite bigfloat: "}},
+                                                                {"variable": "s"}]},
+                                                            "function": {"variable": "hydra.lib.strings.cat"}}}}},
+                                                    "type": {"literal": {"string": {}}}}},
                                                 "type": {"variable": "hydra.json.model.Value"}}},
                                             "function": {
                                               "application": {
                                                 "argument": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "either": {
-                                                            "@right": {
-                                                              "inject": {
-                                                                "field": {"name": "string", "term": {"variable": "s"}},
-                                                                "typeName": "hydra.json.model.Value"}}}},
-                                                        "type": {"variable": "t0"}}},
-                                                    "type": {"variable": "hydra.json.model.Value"}}},
-                                                "function": {
                                                   "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "s"},
-                                                        "function": {"variable": "hydra.json.encode.isSpecialFloatString"}}},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                        "type": {
-                                                          "either": {
-                                                            "left": {"variable": "t0"},
-                                                            "right": {"variable": "hydra.json.model.Value"}}}}}}}}}}}}},
-                                    "domain": {"literal": {"float": {"bigfloat": {}}}},
-                                    "parameter": "bf"}}},
-                              {
-                                "name": "float32",
-                                "term": {
-                                  "lambda": {
+                                                    "argument": {"variable": "s"},
+                                                    "function": {"variable": "hydra.json.encode.isNonFiniteFloatString"}}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                    "type": {
+                                                      "either": {
+                                                        "left": {"literal": {"string": {}}},
+                                                        "right": {"variable": "hydra.json.model.Value"}}}}}}}}}}}}},
+                                "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                "parameter": "bf"}}},
+                          {
+                            "name": "float32",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "typeApplication": {
                                     "body": {
                                       "typeApplication": {
                                         "body": {
+                                          "either": {
+                                            "@right": {
+                                              "inject": {
+                                                "field": {
+                                                  "name": "string",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {"variable": "f"},
+                                                      "function": {"variable": "hydra.lib.literals.showFloat32"}}}},
+                                                "typeName": "hydra.json.model.Value"}}}},
+                                        "type": {"literal": {"string": {}}}}},
+                                    "type": {"variable": "hydra.json.model.Value"}}},
+                                "domain": {"literal": {"float": {"float32": {}}}},
+                                "parameter": "f"}}},
+                          {
+                            "name": "float64",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "s",
+                                        "term": {
+                                          "application": {
+                                            "argument": {"variable": "f"},
+                                            "function": {"variable": "hydra.lib.literals.showFloat64"}}},
+                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                    "body": {
+                                      "application": {
+                                        "argument": {
                                           "typeApplication": {
                                             "body": {
-                                              "either": {
-                                                "@right": {
-                                                  "inject": {
-                                                    "field": {
-                                                      "name": "string",
-                                                      "term": {
-                                                        "application": {
-                                                          "argument": {"variable": "f"},
-                                                          "function": {"variable": "hydra.lib.literals.showFloat32"}}}},
-                                                    "typeName": "hydra.json.model.Value"}}}},
-                                            "type": {"variable": "t0"}}},
-                                        "type": {"variable": "hydra.json.model.Value"}}},
-                                    "domain": {"literal": {"float": {"float32": {}}}},
-                                    "parameter": "f"}}},
-                              {
-                                "name": "float64",
-                                "term": {
-                                  "lambda": {
-                                    "body": {
-                                      "let": {
-                                        "bindings": [
-                                          {
-                                            "name": "s",
-                                            "term": {
-                                              "application": {
-                                                "argument": {"variable": "f"},
-                                                "function": {"variable": "hydra.lib.literals.showFloat64"}}},
-                                            "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
-                                        "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "either": {
+                                                    "@right": {
+                                                      "inject": {
+                                                        "field": {
+                                                          "name": "number",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {"variable": "f"},
+                                                              "function": {"variable": "hydra.lib.literals.float64ToDecimal"}}}},
+                                                        "typeName": "hydra.json.model.Value"}}}},
+                                                "type": {"literal": {"string": {}}}}},
+                                            "type": {"variable": "hydra.json.model.Value"}}},
+                                        "function": {
                                           "application": {
                                             "argument": {
                                               "typeApplication": {
@@ -3601,57 +3609,37 @@
                                                       "either": {
                                                         "@right": {
                                                           "inject": {
-                                                            "field": {
-                                                              "name": "number",
-                                                              "term": {
-                                                                "application": {
-                                                                  "argument": {"variable": "f"},
-                                                                  "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}}},
+                                                            "field": {"name": "string", "term": {"variable": "s"}},
                                                             "typeName": "hydra.json.model.Value"}}}},
-                                                    "type": {"variable": "t0"}}},
+                                                    "type": {"literal": {"string": {}}}}},
                                                 "type": {"variable": "hydra.json.model.Value"}}},
                                             "function": {
                                               "application": {
                                                 "argument": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "either": {
-                                                            "@right": {
-                                                              "inject": {
-                                                                "field": {"name": "string", "term": {"variable": "s"}},
-                                                                "typeName": "hydra.json.model.Value"}}}},
-                                                        "type": {"variable": "t0"}}},
-                                                    "type": {"variable": "hydra.json.model.Value"}}},
-                                                "function": {
                                                   "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "s"},
-                                                        "function": {"variable": "hydra.json.encode.isSpecialFloatString"}}},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                        "type": {
-                                                          "either": {
-                                                            "left": {"variable": "t0"},
-                                                            "right": {"variable": "hydra.json.model.Value"}}}}}}}}}}}}},
-                                    "domain": {"literal": {"float": {"float64": {}}}},
-                                    "parameter": "f"}}}],
-                            "typeName": "hydra.core.FloatValue"}}}},
-                    "domain": {"variable": "hydra.core.FloatValue"},
-                    "parameter": "fv"}}}},
-            "parameter": "t0"}},
+                                                    "argument": {"variable": "s"},
+                                                    "function": {"variable": "hydra.json.encode.isNonFiniteFloatString"}}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                    "type": {
+                                                      "either": {
+                                                        "left": {"literal": {"string": {}}},
+                                                        "right": {"variable": "hydra.json.model.Value"}}}}}}}}}}}}},
+                                "domain": {"literal": {"float": {"float64": {}}}},
+                                "parameter": "f"}}}],
+                        "typeName": "hydra.core.FloatValue"}}}},
+                "domain": {"variable": "hydra.core.FloatValue"},
+                "parameter": "fv"}}}},
         "type": {
           "type": {
             "function": {
               "codomain": {
                 "either": {
-                  "left": {"variable": "t0"},
+                  "left": {"literal": {"string": {}}},
                   "right": {"variable": "hydra.json.model.Value"}}},
               "domain": {"variable": "hydra.core.FloatValue"}}},
-          "variables": ["t0"]}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.json.encode.encodeInteger",
@@ -3785,7 +3773,7 @@
                                                             "application": {
                                                               "argument": {"variable": "i"},
                                                               "function": {"variable": "hydra.lib.literals.int8ToBigint"}}},
-                                                          "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
+                                                          "function": {"variable": "hydra.lib.literals.bigintToDecimal"}}}},
                                                     "typeName": "hydra.json.model.Value"}}}},
                                             "type": {"variable": "t0"}}},
                                         "type": {"variable": "hydra.json.model.Value"}}},
@@ -3811,7 +3799,7 @@
                                                             "application": {
                                                               "argument": {"variable": "i"},
                                                               "function": {"variable": "hydra.lib.literals.int16ToBigint"}}},
-                                                          "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
+                                                          "function": {"variable": "hydra.lib.literals.bigintToDecimal"}}}},
                                                     "typeName": "hydra.json.model.Value"}}}},
                                             "type": {"variable": "t0"}}},
                                         "type": {"variable": "hydra.json.model.Value"}}},
@@ -3837,7 +3825,7 @@
                                                             "application": {
                                                               "argument": {"variable": "i"},
                                                               "function": {"variable": "hydra.lib.literals.int32ToBigint"}}},
-                                                          "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
+                                                          "function": {"variable": "hydra.lib.literals.bigintToDecimal"}}}},
                                                     "typeName": "hydra.json.model.Value"}}}},
                                             "type": {"variable": "t0"}}},
                                         "type": {"variable": "hydra.json.model.Value"}}},
@@ -3863,7 +3851,7 @@
                                                             "application": {
                                                               "argument": {"variable": "i"},
                                                               "function": {"variable": "hydra.lib.literals.uint8ToBigint"}}},
-                                                          "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
+                                                          "function": {"variable": "hydra.lib.literals.bigintToDecimal"}}}},
                                                     "typeName": "hydra.json.model.Value"}}}},
                                             "type": {"variable": "t0"}}},
                                         "type": {"variable": "hydra.json.model.Value"}}},
@@ -3889,7 +3877,7 @@
                                                             "application": {
                                                               "argument": {"variable": "i"},
                                                               "function": {"variable": "hydra.lib.literals.uint16ToBigint"}}},
-                                                          "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
+                                                          "function": {"variable": "hydra.lib.literals.bigintToDecimal"}}}},
                                                     "typeName": "hydra.json.model.Value"}}}},
                                             "type": {"variable": "t0"}}},
                                         "type": {"variable": "hydra.json.model.Value"}}},
@@ -3910,7 +3898,7 @@
           "variables": ["t0"]}}},
     {
       "term": {
-        "name": "hydra.json.encode.isSpecialFloatString",
+        "name": "hydra.json.encode.isNonFiniteFloatString",
         "term": {
           "annotated": {
             "annotation": [
@@ -3918,7 +3906,7 @@
                 "@key": "description",
                 "@value": {
                   "literal": {
-                    "string": "Check whether a string is one of the special float sentinels: NaN, Infinity, -Infinity, -0.0."}}}],
+                    "string": "Check whether a string is one of the non-finite float sentinels: NaN, Infinity, -Infinity."}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3927,29 +3915,14 @@
                       "application": {
                         "argument": {
                           "application": {
-                            "argument": {
-                              "application": {
-                                "argument": {"literal": {"string": "-0.0"}},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "s"},
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {"variable": "hydra.lib.equality.equal"},
-                                        "type": {"literal": {"string": {}}}}}}}}},
+                            "argument": {"literal": {"string": "-Infinity"}},
                             "function": {
                               "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {"literal": {"string": "-Infinity"}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"variable": "s"},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.equality.equal"},
-                                            "type": {"literal": {"string": {}}}}}}}}},
-                                "function": {"variable": "hydra.lib.logic.or"}}}}},
+                                "argument": {"variable": "s"},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.lib.equality.equal"},
+                                    "type": {"literal": {"string": {}}}}}}}}},
                         "function": {
                           "application": {
                             "argument": {

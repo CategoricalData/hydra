@@ -273,7 +273,7 @@ fromJson types tname typ value =
           "unsupported type for JSON decoding: ",
           (ShowCore.type_ typ)])
 
--- | Parse a special float sentinel string to a float64. Returns Nothing for unrecognized strings.
+-- | Parse a non-finite float sentinel string to a float64. Returns Nothing for unrecognized strings.
 parseSpecialFloat :: String -> Maybe Double
 parseSpecialFloat s =
     Logic.ifElse (Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Equality.equal s "-Infinity"))) (Literals.readFloat64 s) Nothing

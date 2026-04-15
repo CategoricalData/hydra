@@ -573,7 +573,7 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "n"},
-                                            "function": {"variable": "hydra.lib.literals.bigfloatToBigint"}}},
+                                            "function": {"variable": "hydra.lib.literals.decimalToBigint"}}},
                                         "type": {"type": {"literal": {"integer": {"bigint": {}}}}, "variables": []}}],
                                     "body": {
                                       "let": {
@@ -583,7 +583,7 @@
                                             "term": {
                                               "application": {
                                                 "argument": {"variable": "n"},
-                                                "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
+                                                "function": {"variable": "hydra.lib.literals.showDecimal"}}},
                                             "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
                                         "body": {
                                           "application": {
@@ -602,39 +602,21 @@
                                                           "application": {
                                                             "argument": {
                                                               "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {"literal": {"string": "-0.0"}},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "shown"},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {"variable": "hydra.lib.equality.equal"},
-                                                                            "type": {"literal": {"string": {}}}}}}}}},
-                                                                "function": {"variable": "hydra.lib.logic.not"}}},
+                                                                "argument": {"variable": "rounded"},
+                                                                "function": {"variable": "hydra.lib.literals.bigintToDecimal"}}},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "rounded"},
-                                                                        "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "n"},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {"variable": "hydra.lib.equality.equal"},
-                                                                            "type": {"literal": {"float": {"bigfloat": {}}}}}}}}}},
-                                                                "function": {"variable": "hydra.lib.logic.and"}}}}},
+                                                                "argument": {"variable": "n"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.equality.equal"},
+                                                                    "type": {"literal": {"decimal": {}}}}}}}}},
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {"variable": "hydra.lib.logic.ifElse"},
                                                             "type": {"literal": {"string": {}}}}}}}}}}},
                                             "function": {"variable": "hydra.serialization.cst"}}}}}}},
-                                "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                "domain": {"literal": {"decimal": {}}},
                                 "parameter": "n"}}},
                           {
                             "name": "object",

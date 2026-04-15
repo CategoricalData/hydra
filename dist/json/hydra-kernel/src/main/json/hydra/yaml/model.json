@@ -67,6 +67,17 @@
                             "@value": {"literal": {"string": "Represents a true/false value"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
+                    "name": "decimal",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "An arbitrary-precision decimal number (lexically a valid JSON number)"}}}],
+                        "body": {"literal": {"decimal": {}}}}}},
+                  {
                     "name": "float",
                     "type": {
                       "annotated": {

@@ -322,6 +322,7 @@
     "hydra.test.formatting",
     "hydra.test.json.roundtrip",
     "hydra.test.json.writer",
+    "hydra.test.json.yaml",
     "hydra.test.reduction",
     "hydra.test.rewriting",
     "hydra.test.serialization",

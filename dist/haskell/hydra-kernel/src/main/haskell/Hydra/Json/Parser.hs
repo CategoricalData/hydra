@@ -16,6 +16,7 @@ import qualified Hydra.Parsers as Parsers
 import qualified Hydra.Parsing as Parsing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+import qualified Hydra.Lib.Literals as Literals
 
 -- | Parse a single digit (0-9)
 digit :: Parsing.Parser Int
@@ -77,7 +78,7 @@ jsonNumber =
     token (Parsers.bind jsonIntegerPart (\intPart -> Parsers.bind jsonFractionPart (\fracPart -> Parsers.bind jsonExponentPart (\expPart ->
       let numStr =
               Strings.cat2 (Strings.cat2 intPart (Maybes.maybe "" Equality.identity fracPart)) (Maybes.maybe "" Equality.identity expPart)
-      in (Parsers.pure (Model.ValueNumber (Maybes.maybe 0 Equality.identity (Literals.readDecimal numStr))))))))
+      in (Parsers.pure (Model.ValueNumber (Maybes.maybe (Literals.stringToDecimal "0.0") Equality.identity (Literals.readDecimal numStr))))))))
 
 -- | Parse a JSON object
 jsonObject :: Parsing.Parser Model.Value

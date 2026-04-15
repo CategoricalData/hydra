@@ -256,9 +256,9 @@ module_ =
                                                                           Core.Field {
                                                                             Core.fieldName = (Core.Name "decimal"),
                                                                             Core.fieldTerm = (Core.TermLambda (Core.Lambda {
-                                                                              Core.lambdaParameter = (Core.Name "f"),
+                                                                              Core.lambdaParameter = (Core.Name "d"),
                                                                               Core.lambdaDomain = Nothing,
-                                                                              Core.lambdaBody = (Core.TermEither (Right (Core.TermVariable (Core.Name "f"))))}))}]})),
+                                                                              Core.lambdaBody = (Core.TermEither (Right (Core.TermVariable (Core.Name "d"))))}))}]})),
                                                                       Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))}))}]})),
                                                             Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))}))})),
                                                       Core.applicationArgument = (Core.TermApplication (Core.Application {

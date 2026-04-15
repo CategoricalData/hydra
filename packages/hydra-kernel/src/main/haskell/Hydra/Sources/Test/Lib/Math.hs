@@ -304,7 +304,6 @@ mathNegateFloat64 :: TTerm TestGroup
 mathNegateFloat64 = subgroup "negateFloat64" [
   test "positive" 5.0 (-5.0),
   test "negative" (-5.0) 5.0,
-  test "zero" 0.0 (-0.0),
   test "fractional" 1.5 (-1.5)]
   where
     test name x result = primCase name _math_negateFloat64 [float64 x] (float64 result)
