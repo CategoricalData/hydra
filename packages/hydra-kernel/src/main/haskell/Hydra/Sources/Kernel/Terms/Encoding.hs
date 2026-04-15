@@ -423,19 +423,25 @@ encodeBindingName :: TTermDefinition (Name -> Name)
 encodeBindingName = define "encodeBindingName" $
   doc "Generate a binding name for an encoder function from a type name" $
   "n" ~>
-    -- Check if name has a namespace (contains ".")
-    Logic.ifElse (Logic.not (Lists.null
-      (Lists.tail (Strings.splitOn (string ".") (Core.unName (var "n"))))))
-      -- Qualified type: e.g., "hydra.core.Name" -> "hydra.encode.core.name"
-      (Core.name (
-        Strings.intercalate (string ".") (
-          Lists.concat2
+  "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "n"))) $
+  "localPart" <~ (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))) $
+  "localResult" <~ (Core.name (var "localPart")) $
+  -- Extract namespace parts (all but the last); if the name has no namespace,
+  -- fall back to the bare decapitalized local name.
+  Maybes.maybe
+    (var "localResult")
+    ("nsParts" ~>
+      Maybes.maybe
+        (var "localResult")  -- unreachable: nsParts empty means no namespace
+        ("nsUc" ~>
+          "tail" <~ Pairs.second (var "nsUc") $
+          Core.name (Strings.intercalate (string ".") (Lists.concat2
             (list [string "hydra", string "encode"])
             (Lists.concat2
-              (Lists.tail (Lists.init (Strings.splitOn (string ".") (Core.unName (var "n")))))
-              (list [Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))])))))
-      -- Local type: just decapitalize
-      (Core.name (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))))
+              (var "tail")
+              (list [var "localPart"])))))
+        (Lists.uncons $ var "nsParts"))
+    (Lists.maybeInit $ var "parts")
 
 -- | Generate the encoder term for a field value
 -- Creates a lambda that encodes the field value and wraps in an encoded union/injection
@@ -540,12 +546,18 @@ encodeName = define "encodeName" $
 encodeNamespace :: TTermDefinition (Namespace -> Namespace)
 encodeNamespace = define "encodeNamespace" $
   doc "Generate an encoder module namespace from a source module namespace" $
-  "ns" ~> (
-    Packaging.namespace (
-      Strings.cat $ list [
-        string "hydra.encode.",
-        Strings.intercalate (string ".")
-          (Lists.tail (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))))]))
+  "ns" ~>
+  "parts" <~ Strings.splitOn (string ".") (Packaging.unNamespace (var "ns")) $
+  "fallback" <~ Packaging.namespace (Packaging.unNamespace (var "ns")) $
+  -- Drop the first segment (e.g. "hydra") and prepend "hydra.encode".
+  Maybes.maybe
+    (var "fallback")
+    ("uc" ~>
+      Packaging.namespace (
+        Strings.cat $ list [
+          string "hydra.encode.",
+          Strings.intercalate (string ".") (Pairs.second $ var "uc")]))
+    (Lists.uncons $ var "parts")
 
 -- | Generate an encoder for a record type
 -- For records, project each field, encode it, and build an encoded record

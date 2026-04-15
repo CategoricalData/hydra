@@ -211,7 +211,7 @@ customIndentBlock = define "customIndentBlock" $
       ("head" ~> Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
         (var "head")
         (ifx @@ var "idtOp" @@ var "head" @@ (newlineSep @@ Lists.drop (int32 1) (var "els"))))
-      (Lists.safeHead $ var "els")
+      (Lists.maybeHead $ var "els")
 
 customIndent :: TTermDefinition (String -> String -> String)
 customIndent = define "customIndent" $
@@ -386,7 +386,7 @@ orSep = define "orSep" $
     "newlines" <~ Ast.blockStyleNewlineBeforeContent (var "style") $
     Maybes.maybe (cst @@ string "")
       ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ (orOp @@ var "newlines") @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "l")))
-      (Lists.safeHead $ var "l")
+      (Lists.maybeHead $ var "l")
 
 parenList :: TTermDefinition (Bool -> [Expr] -> Expr)
 parenList = define "parenList" $
@@ -499,7 +499,11 @@ printExpr = define "printExpr" $
         _IndentStyle_subsequentLines>>: "idt" ~>
           Logic.ifElse (Equality.equal (Lists.length $ var "lns") (int32 1))
             (var "lns")
-            (Lists.cons (Lists.head $ var "lns") $ Lists.map ("line" ~> var "idt" ++ var "line") $ Lists.tail $ var "lns")] $
+            (Maybes.fromMaybe (var "lns") $
+              Maybes.map
+                ("uc" ~> Lists.cons (Pairs.first $ var "uc") $
+                  Lists.map ("line" ~> var "idt" ++ var "line") (Pairs.second $ var "uc"))
+                (Lists.uncons $ var "lns"))] $
       Strings.intercalate (string "\n") (var "ilns"),
     _Expr_seq>>: "seqExpr" ~>
       "sop" <~ Ast.seqExprOp (var "seqExpr") $
@@ -546,7 +550,7 @@ sep = define "sep" $
   "op" ~> "els" ~>
     Maybes.maybe (cst @@ string "")
       ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ var "op" @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "els")))
-      (Lists.safeHead $ var "els")
+      (Lists.maybeHead $ var "els")
 
 spaceSep :: TTermDefinition ([Expr] -> Expr)
 spaceSep = define "spaceSep" $
@@ -563,7 +567,7 @@ structuralSep = define "structuralSep" $
     Logic.ifElse (Lists.null $ var "els")
       (cst @@ string "")
       (Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
-        (Lists.head $ var "els")
+        (Maybes.fromMaybe (cst @@ string "") (Lists.maybeHead $ var "els"))
         (Ast.exprSeq $ Ast.seqExpr (var "op") (var "els")))
 
 structuralSpaceSep :: TTermDefinition ([Expr] -> Expr)
@@ -612,7 +616,7 @@ symbolSep = define "symbolSep" $
       Ast.associativityNone) $
     Maybes.maybe (cst @@ string "")
       ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ var "commaOp" @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "l")))
-      (Lists.safeHead $ var "l")
+      (Lists.maybeHead $ var "l")
 
 tabIndent :: TTermDefinition (Expr -> Expr)
 tabIndent = define "tabIndent" $

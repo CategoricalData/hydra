@@ -100,7 +100,11 @@ convertCase = define "convertCase" $
       "byCaps">: lets [
         "splitOnUppercase">: lambda "acc" $ lambda "c" $ Lists.concat2
           (Logic.ifElse (Chars.isUpper $ var "c") emptyParts (list ([] :: [TTerm [Char]])))
-          (Lists.cons (Lists.cons (var "c") (Lists.head $ var "acc")) (Lists.tail $ var "acc"))]
+          (Maybes.fromMaybe (var "acc") $
+            Maybes.map ("uc" ~>
+              Lists.cons (Lists.cons (var "c") (Pairs.first $ var "uc"))
+                (Pairs.second $ var "uc"))
+              (Lists.uncons $ var "acc"))]
         $ Lists.map (primitive _strings_fromList) $ Lists.foldl (var "splitOnUppercase") emptyParts
           $ Lists.reverse $ Strings.toList (decapitalize @@ var "original"),
       "byUnderscores">: Strings.splitOn (string "_") $ var "original"]
@@ -175,8 +179,11 @@ mapFirstLetter = define "mapFirstLetter" $
     (Strings.null $ var "s")
     (var "s")
     ("list" <~ Strings.toList (var "s") $
-     "firstLetter" <~ var "mapping" @@ (Strings.fromList (Lists.pure (Lists.head $ var "list"))) $
-     Strings.cat2 (var "firstLetter") (Strings.fromList (Lists.tail $ var "list")))
+     Maybes.fromMaybe (var "s") $
+       Maybes.map ("uc" ~>
+         "firstLetter" <~ (var "mapping" @@ Strings.fromList (Lists.pure (Pairs.first $ var "uc"))) $
+         Strings.cat2 (var "firstLetter") (Strings.fromList (Pairs.second $ var "uc")))
+         (Lists.uncons $ var "list"))
 
 normalizeComment :: TTermDefinition (String -> String)
 normalizeComment = define "normalizeComment" $
@@ -186,14 +193,18 @@ normalizeComment = define "normalizeComment" $
   Logic.ifElse
     (Strings.null (var "stripped"))
     (string "")
-    -- Get the last character by using charAt with (length - 1)
-    -- Code point 46 is '.'
+    -- Get the last character by using maybeCharAt with (length - 1).
+    -- Code point 46 is '.'. Nothing is unreachable here: stripped is non-empty
+    -- by the null check above, so lastIdx is a valid index.
     ("lastIdx" <~ Math.sub (Strings.length (var "stripped")) (int32 1) $
-     "lastChar" <~ Strings.charAt (var "lastIdx") (var "stripped") $
-     Logic.ifElse
-       (Equality.equal (var "lastChar") (int32 46))
-       (var "stripped")
-       (Strings.cat2 (var "stripped") (string ".")))
+     "appended" <~ Strings.cat2 (var "stripped") (string ".") $
+     Maybes.maybe
+       (var "appended")
+       ("lastChar" ~> Logic.ifElse
+         (Equality.equal (var "lastChar") (int32 46))
+         (var "stripped")
+         (var "appended"))
+       (Strings.maybeCharAt (var "lastIdx") (var "stripped")))
 
 nonAlnumToUnderscores :: TTermDefinition (String -> String)
 nonAlnumToUnderscores = define "nonAlnumToUnderscores" $
@@ -294,5 +305,10 @@ wrapLine = define "wrapLine" $
         (Lists.reverse $ Lists.cons (var "rem") (var "prev"))
         (Logic.ifElse (Lists.null $ var "prefix")
           (var "helper" @@ (Lists.cons (var "trunc") (var "prev")) @@ (Lists.drop (var "maxlen") (var "rem")))
-          (var "helper" @@ (Lists.cons (Lists.init $ var "prefix") (var "prev")) @@ (Lists.concat2 (var "suffix") ((Lists.drop (var "maxlen") (var "rem"))))))]
+          -- prefix is non-empty here (guarded above), so maybeInit is always Just.
+          (Maybes.fromMaybe
+            (var "helper" @@ (Lists.cons (var "trunc") (var "prev")) @@ (Lists.drop (var "maxlen") (var "rem")))
+            (Maybes.map
+              ("pfxInit" ~> var "helper" @@ (Lists.cons (var "pfxInit") (var "prev")) @@ (Lists.concat2 (var "suffix") ((Lists.drop (var "maxlen") (var "rem")))))
+              (Lists.maybeInit $ var "prefix"))))]
     $ Strings.fromList $ Lists.intercalate (list [char '\n']) $ var "helper" @@ (list ([] :: [TTerm Char])) @@ (Strings.toList $ var "input")

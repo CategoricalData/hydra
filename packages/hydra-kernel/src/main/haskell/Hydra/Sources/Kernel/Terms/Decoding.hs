@@ -524,19 +524,23 @@ decodeBindingName :: TTermDefinition (Name -> Name)
 decodeBindingName = define "decodeBindingName" $
   doc "Generate a binding name for a decoder function from a type name" $
   "n" ~>
-    -- Check if name has a namespace (contains ".")
-    Logic.ifElse (Logic.not (Lists.null
-      (Lists.tail (Strings.splitOn (string ".") (Core.unName (var "n"))))))
-      -- Qualified type: e.g., "hydra.util.CaseConvention" -> "hydra.decode.util.caseConvention"
-      (Core.name (
-        Strings.intercalate (string ".") (
-          Lists.concat2
+  "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "n"))) $
+  "localPart" <~ (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))) $
+  "localResult" <~ (Core.name (var "localPart")) $
+  Maybes.maybe
+    (var "localResult")
+    ("nsParts" ~>
+      Maybes.maybe
+        (var "localResult")
+        ("nsUc" ~>
+          "tail" <~ Pairs.second (var "nsUc") $
+          Core.name (Strings.intercalate (string ".") (Lists.concat2
             (list [string "hydra", string "decode"])
             (Lists.concat2
-              (Lists.tail (Lists.init (Strings.splitOn (string ".") (Core.unName (var "n")))))
-              (list [Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))])))))
-      -- Local type: just decapitalize
-      (Core.name (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))))
+              (var "tail")
+              (list [var "localPart"])))))
+        (Lists.uncons $ var "nsParts"))
+    (Lists.maybeInit $ var "parts")
 
 -- | Generate a decoder for a literal type
 -- Match on the LiteralType to generate type-specific decoders
@@ -658,12 +662,17 @@ decodeModule = define "decodeModule" $
 decodeNamespace :: TTermDefinition (Namespace -> Namespace)
 decodeNamespace = define "decodeNamespace" $
   doc "Generate a decoder module namespace from a source module namespace" $
-  "ns" ~> (
-    Packaging.namespace (
-      Strings.cat $ list [
-        string "hydra.decode.",
-        Strings.intercalate (string ".")
-          (Lists.tail (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))))]))
+  "ns" ~>
+  "parts" <~ Strings.splitOn (string ".") (Packaging.unNamespace (var "ns")) $
+  "fallback" <~ Packaging.namespace (Packaging.unNamespace (var "ns")) $
+  Maybes.maybe
+    (var "fallback")
+    ("uc" ~>
+      Packaging.namespace (
+        Strings.cat $ list [
+          string "hydra.decode.",
+          Strings.intercalate (string ".") (Pairs.second $ var "uc")]))
+    (Lists.uncons $ var "parts")
 
 -- | Generate a decoder for a record type with element name
 decodeRecordTypeNamed :: TTermDefinition (Name -> [FieldType] -> Term)
