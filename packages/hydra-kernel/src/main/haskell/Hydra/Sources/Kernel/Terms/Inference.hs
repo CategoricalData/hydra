@@ -3,10 +3,11 @@ module Hydra.Sources.Kernel.Terms.Inference where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
+  atOrFail,
   bindConstraints, bindUnboundTypeVariables, buildTypeApplicationTerm,
   extendContext, finalizeInferredTerm,
   forInferredTerm, freeVariablesInContext, freshVariableType,
-  generalize, inferGraphTypes, inferInGraphContext, inferMany,
+  generalize, headOrFail, inferGraphTypes, inferInGraphContext, inferMany,
   inferTypeOf, inferTypeOfAnnotatedTerm, inferTypeOfApplication,
   inferTypeOfCaseStatement, inferTypeOfCollection,
   inferTypeOfEither, inferTypeOfInjection,
@@ -101,6 +102,7 @@ module_ = Module ns definitions
     Just "Type inference following Algorithm W, extended for nominal terms and types"
   where
     definitions = [
+      toDefinition atOrFail,
       toDefinition bindConstraints,
       toDefinition bindUnboundTypeVariables,
       toDefinition buildTypeApplicationTerm,
@@ -110,6 +112,7 @@ module_ = Module ns definitions
       toDefinition freeVariablesInContext,
       toDefinition freshVariableType,
       toDefinition generalize,
+      toDefinition headOrFail,
       toDefinition inferGraphTypes,
       toDefinition inferInGraphContext,
       toDefinition inferMany,
@@ -162,6 +165,18 @@ formatError :: TTerm (Error -> String)
 formatError = "e" ~> ShowError.error_ @@ var "e"
 
 --
+
+-- | Return the element at the given index, or Left(Other) with the given
+-- description if the index is out of range. Used to destructure lists of
+-- statically known length in Either-returning contexts.
+atOrFail :: TTermDefinition (Int -> String -> [a] -> Prelude.Either Error a)
+atOrFail = define "atOrFail" $
+  doc "Return the element at the given index, or Left(Other) with the given description if out of range" $
+  "i" ~> "desc" ~> "xs" ~>
+  Maybes.maybe
+    (left $ Error.errorOther $ Error.otherError $ (string "atOrFail: ") ++ var "desc")
+    (unaryFunction right)
+    (Lists.maybeAt (var "i") (var "xs"))
 
 bindConstraints :: TTermDefinition (Context -> Graph -> [TypeConstraint] -> Either Error TypeSubst)
 bindConstraints = define "bindConstraints" $
@@ -314,6 +329,18 @@ generalize = define "generalize" $
   "constraintsMaybe" <~ Logic.ifElse (Maps.null $ var "relevantConstraints") Phantoms.nothing (just $ var "relevantConstraints") $
   Core.typeScheme (var "vars") (var "typ") (var "constraintsMaybe")
 
+-- | Extract the first element of a list, or fail with a descriptive error if
+-- the list is empty. Used to destructure lists whose non-emptiness is
+-- structurally guaranteed by the caller but not expressible in the type.
+headOrFail :: TTermDefinition (String -> [a] -> Prelude.Either Error a)
+headOrFail = define "headOrFail" $
+  doc "Return the first element of a list, or Left(Other) with the given description if the list is empty" $
+  "desc" ~> "xs" ~>
+  Maybes.maybe
+    (left $ Error.errorOther $ Error.otherError $ (string "headOrFail: ") ++ var "desc")
+    (unaryFunction right)
+    (Lists.maybeHead $ var "xs")
+
 inferGraphTypes :: TTermDefinition (Context -> [Binding] -> Graph -> Prelude.Either Error ((Graph, [Binding]), Context))
 inferGraphTypes = define "inferGraphTypes" $
   doc ("Infer types for all elements in a graph, using the provided ordered bindings."
@@ -358,22 +385,18 @@ inferTypeOf = define "inferTypeOf" $
   "finalized" <<~ finalizeInferredTerm @@ var "fcx2" @@ var "cx" @@ Typing.inferenceResultTerm (var "result") $
   "letResult" <<~ ExtractCore.let_ @@ var "cx" @@ var "finalized" $
   "bindings" <~ Core.letBindings (var "letResult") $
-  "wrongCount" <~ (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [
+  Logic.ifElse (Equality.equal (int32 1) (Lists.length $ var "bindings"))
+    ("binding" <<~ headOrFail @@ string "inferTypeOf: single binding expected" @@ var "bindings" $
+     "term1" <~ Core.bindingTerm (var "binding") $
+     "mts" <~ Core.bindingType (var "binding") $
+     Maybes.maybe
+       (Ctx.failInContext (Error.errorOther $ Error.otherError (string "Expected a type scheme")) (var "fcx2"))
+       ("ts" ~> right $ pair (pair (var "term1") (var "ts")) (var "fcx2"))
+       (var "mts"))
+    (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [
       (string "Expected a single binding with a type scheme, but got: "),
       Literals.showInt32 $ Lists.length $ var "bindings",
-      (string " bindings")])) (var "fcx2")) $
-  Logic.ifElse (Equality.equal (int32 1) (Lists.length $ var "bindings"))
-    (Maybes.maybe
-      (var "wrongCount")
-      ("binding" ~>
-        "term1" <~ Core.bindingTerm (var "binding") $
-        "mts" <~ Core.bindingType (var "binding") $
-        Maybes.maybe
-          (Ctx.failInContext (Error.errorOther $ Error.otherError (string "Expected a type scheme")) (var "fcx2"))
-          ("ts" ~> right $ pair (pair (var "term1") (var "ts")) (var "fcx2"))
-          (var "mts"))
-      (Lists.maybeHead (var "bindings")))
-    (var "wrongCount")
+      (string " bindings")])) (var "fcx2"))
 
 
 inferTypeOfLiteral :: TTermDefinition (Context -> Literal -> InferenceResult)
@@ -831,37 +854,21 @@ inferTypeOfPair = define "inferTypeOfPair" $
   "itypes" <~ Pairs.first (Pairs.second $ var "results") $
   "isubst" <~ Pairs.first (Pairs.second $ Pairs.second $ var "results") $
   "pairElemConstraints" <~ Pairs.second (Pairs.second $ Pairs.second $ var "results") $
-  -- inferMany with two inputs returns exactly two elements in iterms/itypes;
-  -- this error path is unreachable when inferMany behaves.
-  "arityErr" <~ (Ctx.failInContext
-    (Error.errorOther $ Error.otherError (string "inferTypeOfPair: expected 2 inferred terms/types"))
-    (var "fcx2")) $
-  Maybes.maybe (var "arityErr")
-    ("termsUc" ~>
-      "ifst" <~ Pairs.first (var "termsUc") $
-      Maybes.maybe (var "arityErr")
-        ("termsUc2" ~>
-          "isnd" <~ Pairs.first (var "termsUc2") $
-          Maybes.maybe (var "arityErr")
-            ("typesUc" ~>
-              "tyFst" <~ Pairs.first (var "typesUc") $
-              Maybes.maybe (var "arityErr")
-                ("typesUc2" ~>
-                  "tySnd" <~ Pairs.first (var "typesUc2") $
-                  "pairTerm" <~ (Core.termPair $ pair (var "ifst") (var "isnd")) $
-                  "termWithTypes" <~ (Core.termTypeApplication $ Core.typeApplicationTerm
-                    (Core.termTypeApplication $ Core.typeApplicationTerm (var "pairTerm") (var "tyFst"))
-                    (var "tySnd")) $
-                  right (yieldWithConstraints
-                    @@ var "fcx2"
-                    @@ var "termWithTypes"
-                    @@ (Core.typePair $ Core.pairType (var "tyFst") (var "tySnd"))
-                    @@ var "isubst"
-                    @@ var "pairElemConstraints"))
-                (Lists.uncons (Pairs.second $ var "typesUc")))
-            (Lists.uncons (var "itypes")))
-        (Lists.uncons (Pairs.second $ var "termsUc")))
-    (Lists.uncons (var "iterms"))
+  -- inferMany with two inputs returns exactly two elements in iterms/itypes.
+  "ifst"  <<~ atOrFail @@ int32 0 @@ string "inferTypeOfPair ifst"  @@ var "iterms" $
+  "isnd"  <<~ atOrFail @@ int32 1 @@ string "inferTypeOfPair isnd"  @@ var "iterms" $
+  "tyFst" <<~ atOrFail @@ int32 0 @@ string "inferTypeOfPair tyFst" @@ var "itypes" $
+  "tySnd" <<~ atOrFail @@ int32 1 @@ string "inferTypeOfPair tySnd" @@ var "itypes" $
+  "pairTerm" <~ (Core.termPair $ pair (var "ifst") (var "isnd")) $
+  "termWithTypes" <~ (Core.termTypeApplication $ Core.typeApplicationTerm
+    (Core.termTypeApplication $ Core.typeApplicationTerm (var "pairTerm") (var "tyFst"))
+    (var "tySnd")) $
+  right (yieldWithConstraints
+    @@ var "fcx2"
+    @@ var "termWithTypes"
+    @@ (Core.typePair $ Core.pairType (var "tyFst") (var "tySnd"))
+    @@ var "isubst"
+    @@ var "pairElemConstraints")
 
 inferTypeOfPrimitive :: TTermDefinition (Context -> Graph -> Name -> Prelude.Either Error InferenceResult)
 inferTypeOfPrimitive = define "inferTypeOfPrimitive" $
