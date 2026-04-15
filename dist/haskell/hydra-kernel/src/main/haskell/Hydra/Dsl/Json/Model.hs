@@ -35,7 +35,7 @@ valueNull =
         Core.fieldName = (Core.Name "null"),
         Core.fieldTerm = Core.TermUnit}}))
 
-valueNumber :: Phantoms.TTerm Double -> Phantoms.TTerm Model.Value
+valueNumber :: Phantoms.TTerm Sci.Scientific -> Phantoms.TTerm Model.Value
 valueNumber x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.model.Value"),

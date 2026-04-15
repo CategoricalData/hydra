@@ -18,7 +18,7 @@ data Value =
   -- | JSON's null value
   ValueNull  |
   -- | A numeric value
-  ValueNumber Double |
+  ValueNumber Sci.Scientific |
   -- | A JSON object as a set of key/value pairs
   ValueObject (M.Map String Value) |
   -- | A string value
