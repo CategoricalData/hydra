@@ -191,6 +191,7 @@ encodeLiteralType = define "encodeLiteralType" $
   doc "Map a Hydra LiteralType to its Coq stdlib counterpart" $
   lambda "lt" $ cases _LiteralType (var "lt") Nothing [
     _LiteralType_boolean>>: constant (coqTermQualid @@ string "bool"),
+    _LiteralType_decimal>>: constant (coqTermQualid @@ string "Q"),
     _LiteralType_float>>: constant (coqTermQualid @@ string "Q"),
     _LiteralType_integer>>: "it" ~> cases _IntegerType (var "it") Nothing [
       _IntegerType_bigint>>: constant (coqTermQualid @@ string "Z"),
@@ -310,6 +311,8 @@ encodeLiteral = define "encodeLiteral" $
   lambda "lit" $ cases _Literal (var "lit") Nothing [
     _Literal_boolean>>: "b" ~>
       Logic.ifElse (var "b") (coqTermQualid @@ string "true") (coqTermQualid @@ string "false"),
+    _Literal_decimal>>: "d" ~> coqTermQualid @@ Strings.cat (list [
+      string "(", Literals.showDecimal (var "d"), string ")"]),
     _Literal_float>>: "fv" ~> cases _FloatValue (var "fv") Nothing [
       _FloatValue_bigfloat>>: "v" ~> coqTermQualid @@ Strings.cat (list [
         string "(", Literals.showBigfloat (var "v"), string ")"]),

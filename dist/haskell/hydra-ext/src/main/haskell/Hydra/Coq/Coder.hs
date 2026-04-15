@@ -20,6 +20,7 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Build the Coq dependent-function term `forall (_ : dom), cod` used as the arrow type
 coqArrow :: Syntax.Term -> Syntax.Term -> Syntax.Term
@@ -90,6 +91,10 @@ encodeLiteral :: Core.Literal -> Syntax.Term
 encodeLiteral lit =
     case lit of
       Core.LiteralBoolean v0 -> Logic.ifElse v0 (coqTermQualid "true") (coqTermQualid "false")
+      Core.LiteralDecimal v0 -> coqTermQualid (Strings.cat [
+        "(",
+        (Literals.showDecimal v0),
+        ")"])
       Core.LiteralFloat v0 -> case v0 of
         Core.FloatValueBigfloat v1 -> coqTermQualid (Strings.cat [
           "(",
@@ -151,6 +156,7 @@ encodeLiteralType :: Core.LiteralType -> Syntax.Term
 encodeLiteralType lt =
     case lt of
       Core.LiteralTypeBoolean -> coqTermQualid "bool"
+      Core.LiteralTypeDecimal -> coqTermQualid "Q"
       Core.LiteralTypeFloat _ -> coqTermQualid "Q"
       Core.LiteralTypeInteger v0 -> case v0 of
         Core.IntegerTypeBigint -> coqTermQualid "Z"
