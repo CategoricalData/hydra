@@ -53,7 +53,8 @@ def toJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)
         lazy val results: Either[scala.Predef.String, Seq[hydra.json.model.Value]] = hydra.lib.eithers.mapList[hydra.core.Term,
            hydra.json.model.Value, scala.Predef.String]((t: hydra.core.Term) =>
           hydra.json.encode.toJson(types)(tname)(v_Type_list_elemType)(t))(v_Term_list_terms)
-        hydra.lib.eithers.map[Seq[hydra.json.model.Value], hydra.json.model.Value, scala.Predef.String]((vs: Seq[hydra.json.model.Value]) => hydra.json.model.Value.array(vs))(results)
+        hydra.lib.eithers.map[Seq[hydra.json.model.Value], hydra.json.model.Value,
+           scala.Predef.String]((vs: Seq[hydra.json.model.Value]) => hydra.json.model.Value.array(vs))(results)
       }
       case _ => Left("expected list term")
     case hydra.core.Type.set(v_Type_set_elemType) => strippedTerm match
@@ -63,7 +64,8 @@ def toJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)
           lazy val results: Either[scala.Predef.String, Seq[hydra.json.model.Value]] = hydra.lib.eithers.mapList[hydra.core.Term,
              hydra.json.model.Value, scala.Predef.String]((t: hydra.core.Term) =>
             hydra.json.encode.toJson(types)(tname)(v_Type_set_elemType)(t))(terms)
-          hydra.lib.eithers.map[Seq[hydra.json.model.Value], hydra.json.model.Value, scala.Predef.String]((vs: Seq[hydra.json.model.Value]) => hydra.json.model.Value.array(vs))(results)
+          hydra.lib.eithers.map[Seq[hydra.json.model.Value], hydra.json.model.Value,
+             scala.Predef.String]((vs: Seq[hydra.json.model.Value]) => hydra.json.model.Value.array(vs))(results)
         }
       }
       case _ => Left("expected set term")
@@ -99,7 +101,8 @@ def toJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)
             lazy val fname: scala.Predef.String = (f.name)
             lazy val fterm: hydra.core.Term = (f.term)
             lazy val ftype: hydra.core.Type = (ft.`type`)
-            hydra.lib.logic.ifElse[Either[scala.Predef.String, Option[Tuple2[scala.Predef.String, hydra.json.model.Value]]]](isSimpleMaybe(ftype))(hydra.strip.deannotateTerm(fterm) match
+            hydra.lib.logic.ifElse[Either[scala.Predef.String, Option[Tuple2[scala.Predef.String,
+               hydra.json.model.Value]]]](isSimpleMaybe(ftype))(hydra.strip.deannotateTerm(fterm) match
               case hydra.core.Term.maybe(v_Term_maybe_opt) => hydra.lib.maybes.maybe[Either[scala.Predef.String,
                  Option[Tuple2[scala.Predef.String, hydra.json.model.Value]]], hydra.core.Term](Right(None))((v: hydra.core.Term) =>
                 {
@@ -108,14 +111,16 @@ def toJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)
                   case _ => ftype
                 {
                   lazy val encoded: Either[scala.Predef.String, hydra.json.model.Value] = hydra.json.encode.toJson(types)(tname)(innerType)(v)
-                  hydra.lib.eithers.map[hydra.json.model.Value, Option[Tuple2[scala.Predef.String, hydra.json.model.Value]],
-                     scala.Predef.String]((ev: hydra.json.model.Value) => Some(Tuple2(fname, ev)))(encoded)
+                  hydra.lib.eithers.map[hydra.json.model.Value, Option[Tuple2[scala.Predef.String,
+                     hydra.json.model.Value]], scala.Predef.String]((ev: hydra.json.model.Value) => Some(Tuple2(fname,
+                     ev)))(encoded)
                 }
               })(v_Term_maybe_opt)
               case _ => Left("expected maybe term for optional field"))({
               lazy val encoded: Either[scala.Predef.String, hydra.json.model.Value] = hydra.json.encode.toJson(types)(tname)(ftype)(fterm)
-              hydra.lib.eithers.map[hydra.json.model.Value, Option[Tuple2[scala.Predef.String, hydra.json.model.Value]],
-                 scala.Predef.String]((ev: hydra.json.model.Value) => Some(Tuple2(fname, ev)))(encoded)
+              hydra.lib.eithers.map[hydra.json.model.Value, Option[Tuple2[scala.Predef.String,
+                 hydra.json.model.Value]], scala.Predef.String]((ev: hydra.json.model.Value) => Some(Tuple2(fname,
+                 ev)))(encoded)
             })
           }
           {
@@ -125,14 +130,17 @@ def toJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)
               {
                 lazy val encodedPairs: Either[scala.Predef.String, Seq[Option[Tuple2[scala.Predef.String,
                    hydra.json.model.Value]]]] = hydra.lib.eithers.mapList[Tuple2[hydra.core.FieldType,
-                   hydra.core.Field], Option[Tuple2[scala.Predef.String, hydra.json.model.Value]], scala.Predef.String]((ftf: Tuple2[hydra.core.FieldType,
-                   hydra.core.Field]) =>
-                  encodeFieldWithType(hydra.lib.pairs.first[hydra.core.FieldType, hydra.core.Field](ftf))(hydra.lib.pairs.second[hydra.core.FieldType,
-                     hydra.core.Field](ftf)))(hydra.lib.lists.zip[hydra.core.FieldType, hydra.core.Field](fieldTypes)(fields))
+                   hydra.core.Field], Option[Tuple2[scala.Predef.String, hydra.json.model.Value]],
+                   scala.Predef.String]((ftf: Tuple2[hydra.core.FieldType, hydra.core.Field]) =>
+                  encodeFieldWithType(hydra.lib.pairs.first[hydra.core.FieldType,
+                     hydra.core.Field](ftf))(hydra.lib.pairs.second[hydra.core.FieldType,
+                     hydra.core.Field](ftf)))(hydra.lib.lists.zip[hydra.core.FieldType,
+                     hydra.core.Field](fieldTypes)(fields))
                 hydra.lib.eithers.map[Seq[Option[Tuple2[scala.Predef.String, hydra.json.model.Value]]],
                    hydra.json.model.Value, scala.Predef.String]((pairs: Seq[Option[Tuple2[scala.Predef.String,
                    hydra.json.model.Value]]]) =>
-                  hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String, hydra.json.model.Value](hydra.lib.maybes.cat[Tuple2[scala.Predef.String,
+                  hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String,
+                     hydra.json.model.Value](hydra.lib.maybes.cat[Tuple2[scala.Predef.String,
                      hydra.json.model.Value]](pairs))))(encodedPairs)
               }
             }
@@ -157,8 +165,10 @@ def toJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)
                    hydra.json.model.Value]]((err: scala.Predef.String) => Left(err))((ftype: hydra.core.Type) =>
                   {
                   lazy val encodedUnion: Either[scala.Predef.String, hydra.json.model.Value] = hydra.json.encode.toJson(types)(tname)(ftype)(fterm)
-                  hydra.lib.eithers.map[hydra.json.model.Value, hydra.json.model.Value, scala.Predef.String]((v: hydra.json.model.Value) =>
-                    hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String, hydra.json.model.Value](Seq(Tuple2(fname, v)))))(encodedUnion)
+                  hydra.lib.eithers.map[hydra.json.model.Value, hydra.json.model.Value,
+                     scala.Predef.String]((v: hydra.json.model.Value) =>
+                    hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String,
+                       hydra.json.model.Value](Seq(Tuple2(fname, v)))))(encodedUnion)
                 })(ftypeResult)
               }
             }
@@ -166,7 +176,8 @@ def toJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)
         }
       }
       case _ => Left("expected union term")
-    case hydra.core.Type.unit => Right(hydra.json.model.Value.`object`(hydra.lib.maps.empty[scala.Predef.String, hydra.json.model.Value]))
+    case hydra.core.Type.unit => Right(hydra.json.model.Value.`object`(hydra.lib.maps.empty[scala.Predef.String,
+       hydra.json.model.Value]))
     case hydra.core.Type.wrap(v_Type_wrap_wn) => strippedTerm match
       case hydra.core.Term.wrap(v_Term_wrap_wt) => hydra.json.encode.toJson(types)(tname)(v_Type_wrap_wn)(v_Term_wrap_wt.body)
       case _ => Left("expected wrapped term")
@@ -176,23 +187,27 @@ def toJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)
         lazy val valType: hydra.core.Type = (v_Type_map_mt.values)
         strippedTerm match
           case hydra.core.Term.map(v_Term_map_m) => {
-            def encodeEntry(kv: Tuple2[hydra.core.Term, hydra.core.Term]): Either[scala.Predef.String, hydra.json.model.Value] =
+            def encodeEntry(kv: Tuple2[hydra.core.Term, hydra.core.Term]): Either[scala.Predef.String,
+               hydra.json.model.Value] =
               {
               lazy val k: hydra.core.Term = hydra.lib.pairs.first[hydra.core.Term, hydra.core.Term](kv)
               lazy val v: hydra.core.Term = hydra.lib.pairs.second[hydra.core.Term, hydra.core.Term](kv)
               lazy val encodedK: Either[scala.Predef.String, hydra.json.model.Value] = hydra.json.encode.toJson(types)(tname)(keyType)(k)
               lazy val encodedV: Either[scala.Predef.String, hydra.json.model.Value] = hydra.json.encode.toJson(types)(tname)(valType)(v)
-              hydra.lib.eithers.either[scala.Predef.String, hydra.json.model.Value, Either[scala.Predef.String,
-                 hydra.json.model.Value]]((err: scala.Predef.String) => Left(err))((ek: hydra.json.model.Value) =>
-                hydra.lib.eithers.map[hydra.json.model.Value, hydra.json.model.Value, scala.Predef.String]((ev: hydra.json.model.Value) =>
-                hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String, hydra.json.model.Value](Seq(Tuple2("@key",
-                   ek), Tuple2("@value", ev)))))(encodedV))(encodedK)
+              hydra.lib.eithers.either[scala.Predef.String, hydra.json.model.Value,
+                 Either[scala.Predef.String, hydra.json.model.Value]]((err: scala.Predef.String) => Left(err))((ek: hydra.json.model.Value) =>
+                hydra.lib.eithers.map[hydra.json.model.Value, hydra.json.model.Value,
+                   scala.Predef.String]((ev: hydra.json.model.Value) =>
+                hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String,
+                   hydra.json.model.Value](Seq(Tuple2("@key", ek), Tuple2("@value",
+                   ev)))))(encodedV))(encodedK)
             }
             {
               lazy val entries: Either[scala.Predef.String, Seq[hydra.json.model.Value]] = hydra.lib.eithers.mapList[Tuple2[hydra.core.Term,
                  hydra.core.Term], hydra.json.model.Value, scala.Predef.String](encodeEntry)(hydra.lib.maps.toList[hydra.core.Term,
                  hydra.core.Term](v_Term_map_m))
-              hydra.lib.eithers.map[Seq[hydra.json.model.Value], hydra.json.model.Value, scala.Predef.String]((es: Seq[hydra.json.model.Value]) => hydra.json.model.Value.array(es))(entries)
+              hydra.lib.eithers.map[Seq[hydra.json.model.Value], hydra.json.model.Value,
+                 scala.Predef.String]((es: Seq[hydra.json.model.Value]) => hydra.json.model.Value.array(es))(entries)
             }
           }
           case _ => Left("expected map term")
@@ -211,11 +226,13 @@ def toJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)
                 lazy val encodedFirst: Either[scala.Predef.String, hydra.json.model.Value] = hydra.json.encode.toJson(types)(tname)(firstType)(first)
                 {
                   lazy val encodedSecond: Either[scala.Predef.String, hydra.json.model.Value] = hydra.json.encode.toJson(types)(tname)(secondType)(second)
-                  hydra.lib.eithers.either[scala.Predef.String, hydra.json.model.Value, Either[scala.Predef.String,
-                     hydra.json.model.Value]]((err: scala.Predef.String) => Left(err))((ef: hydra.json.model.Value) =>
-                    hydra.lib.eithers.map[hydra.json.model.Value, hydra.json.model.Value, scala.Predef.String]((es: hydra.json.model.Value) =>
-                    hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String, hydra.json.model.Value](Seq(Tuple2("@first",
-                       ef), Tuple2("@second", es)))))(encodedSecond))(encodedFirst)
+                  hydra.lib.eithers.either[scala.Predef.String, hydra.json.model.Value,
+                     Either[scala.Predef.String, hydra.json.model.Value]]((err: scala.Predef.String) => Left(err))((ef: hydra.json.model.Value) =>
+                    hydra.lib.eithers.map[hydra.json.model.Value, hydra.json.model.Value,
+                       scala.Predef.String]((es: hydra.json.model.Value) =>
+                    hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String,
+                       hydra.json.model.Value](Seq(Tuple2("@first", ef), Tuple2("@second",
+                       es)))))(encodedSecond))(encodedFirst)
                 }
               }
             }
@@ -228,24 +245,30 @@ def toJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)
       {
         lazy val rightType: hydra.core.Type = (v_Type_either_et.right)
         strippedTerm match
-          case hydra.core.Term.either(v_Term_either_e) => hydra.lib.eithers.either[hydra.core.Term, hydra.core.Term,
-             Either[scala.Predef.String, hydra.json.model.Value]]((l: hydra.core.Term) =>
+          case hydra.core.Term.either(v_Term_either_e) => hydra.lib.eithers.either[hydra.core.Term,
+             hydra.core.Term, Either[scala.Predef.String, hydra.json.model.Value]]((l: hydra.core.Term) =>
             {
             lazy val encodedL: Either[scala.Predef.String, hydra.json.model.Value] = hydra.json.encode.toJson(types)(tname)(leftType)(l)
-            hydra.lib.eithers.map[hydra.json.model.Value, hydra.json.model.Value, scala.Predef.String]((v: hydra.json.model.Value) =>
-              hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String, hydra.json.model.Value](Seq(Tuple2("@left", v)))))(encodedL)
+            hydra.lib.eithers.map[hydra.json.model.Value, hydra.json.model.Value,
+               scala.Predef.String]((v: hydra.json.model.Value) =>
+              hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String,
+                 hydra.json.model.Value](Seq(Tuple2("@left", v)))))(encodedL)
           })((r: hydra.core.Term) =>
             {
             lazy val encodedR: Either[scala.Predef.String, hydra.json.model.Value] = hydra.json.encode.toJson(types)(tname)(rightType)(r)
-            hydra.lib.eithers.map[hydra.json.model.Value, hydra.json.model.Value, scala.Predef.String]((v: hydra.json.model.Value) =>
-              hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String, hydra.json.model.Value](Seq(Tuple2("@right", v)))))(encodedR)
+            hydra.lib.eithers.map[hydra.json.model.Value, hydra.json.model.Value,
+               scala.Predef.String]((v: hydra.json.model.Value) =>
+              hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String,
+                 hydra.json.model.Value](Seq(Tuple2("@right", v)))))(encodedR)
           })(v_Term_either_e)
           case _ => Left("expected either term")
       }
     }
     case hydra.core.Type.variable(v_Type_variable_name) => {
-      lazy val lookedUp: Option[hydra.core.Type] = hydra.lib.maps.lookup[hydra.core.Name, hydra.core.Type](v_Type_variable_name)(types)
-      hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.json.model.Value], hydra.core.Type](hydra.json.encode.toJsonUntyped(term))((resolvedType: hydra.core.Type) =>
+      lazy val lookedUp: Option[hydra.core.Type] = hydra.lib.maps.lookup[hydra.core.Name,
+         hydra.core.Type](v_Type_variable_name)(types)
+      hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.json.model.Value],
+         hydra.core.Type](hydra.json.encode.toJsonUntyped(term))((resolvedType: hydra.core.Type) =>
         hydra.json.encode.toJson(types)(v_Type_variable_name)(resolvedType)(term))(lookedUp)
     }
     case _ => Left(hydra.lib.strings.cat(Seq("unsupported type for JSON encoding: ", hydra.show.core.`type`(typ))))
@@ -266,7 +289,8 @@ def toJsonUntyped(term: hydra.core.Term): Either[scala.Predef.String, hydra.json
       {
         lazy val results: Either[scala.Predef.String, Seq[hydra.json.model.Value]] = hydra.lib.eithers.mapList[hydra.core.Term,
            hydra.json.model.Value, scala.Predef.String]((t: hydra.core.Term) => hydra.json.encode.toJsonUntyped(t))(terms)
-        hydra.lib.eithers.map[Seq[hydra.json.model.Value], hydra.json.model.Value, scala.Predef.String]((vs: Seq[hydra.json.model.Value]) => hydra.json.model.Value.array(vs))(results)
+        hydra.lib.eithers.map[Seq[hydra.json.model.Value], hydra.json.model.Value,
+           scala.Predef.String]((vs: Seq[hydra.json.model.Value]) => hydra.json.model.Value.array(vs))(results)
       }
     }
     case hydra.core.Term.maybe(v_Term_maybe_opt) => hydra.lib.maybes.maybe[Either[scala.Predef.String,
@@ -276,22 +300,27 @@ def toJsonUntyped(term: hydra.core.Term): Either[scala.Predef.String, hydra.json
       hydra.lib.eithers.map[hydra.json.model.Value, hydra.json.model.Value, scala.Predef.String]((encoded: hydra.json.model.Value) => hydra.json.model.Value.array(Seq(encoded)))(encodedMaybe)
     })(v_Term_maybe_opt)
     case hydra.core.Term.record(v_Term_record_r) => {
-      def encodeField(f: hydra.core.Field): Either[scala.Predef.String, Tuple2[scala.Predef.String, hydra.json.model.Value]] =
+      def encodeField(f: hydra.core.Field): Either[scala.Predef.String, Tuple2[scala.Predef.String,
+         hydra.json.model.Value]] =
         {
         lazy val fname: scala.Predef.String = (f.name)
         lazy val fterm: hydra.core.Term = (f.term)
         lazy val encodedField: Either[scala.Predef.String, hydra.json.model.Value] = hydra.json.encode.toJsonUntyped(fterm)
-        hydra.lib.eithers.map[hydra.json.model.Value, Tuple2[scala.Predef.String, hydra.json.model.Value],
-           scala.Predef.String]((v: hydra.json.model.Value) => Tuple2(fname, v))(encodedField)
+        hydra.lib.eithers.map[hydra.json.model.Value, Tuple2[scala.Predef.String,
+           hydra.json.model.Value], scala.Predef.String]((v: hydra.json.model.Value) => Tuple2(fname,
+           v))(encodedField)
       }
       {
         lazy val fields: Seq[hydra.core.Field] = (v_Term_record_r.fields)
         {
-          lazy val encodedFields: Either[scala.Predef.String, Seq[Tuple2[scala.Predef.String, hydra.json.model.Value]]] = hydra.lib.eithers.mapList[hydra.core.Field,
+          lazy val encodedFields: Either[scala.Predef.String, Seq[Tuple2[scala.Predef.String,
+             hydra.json.model.Value]]] = hydra.lib.eithers.mapList[hydra.core.Field,
              Tuple2[scala.Predef.String, hydra.json.model.Value], scala.Predef.String](encodeField)(fields)
-          hydra.lib.eithers.map[Seq[Tuple2[scala.Predef.String, hydra.json.model.Value]], hydra.json.model.Value,
-             scala.Predef.String]((fs: Seq[Tuple2[scala.Predef.String, hydra.json.model.Value]]) =>
-            hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String, hydra.json.model.Value](fs)))(encodedFields)
+          hydra.lib.eithers.map[Seq[Tuple2[scala.Predef.String, hydra.json.model.Value]],
+             hydra.json.model.Value, scala.Predef.String]((fs: Seq[Tuple2[scala.Predef.String,
+             hydra.json.model.Value]]) =>
+            hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String,
+               hydra.json.model.Value](fs)))(encodedFields)
         }
       }
     }
@@ -303,16 +332,20 @@ def toJsonUntyped(term: hydra.core.Term): Either[scala.Predef.String, hydra.json
           lazy val fterm: hydra.core.Term = (field.term)
           {
             lazy val encodedUnion: Either[scala.Predef.String, hydra.json.model.Value] = hydra.json.encode.toJsonUntyped(fterm)
-            hydra.lib.eithers.map[hydra.json.model.Value, hydra.json.model.Value, scala.Predef.String]((v: hydra.json.model.Value) =>
-              hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String, hydra.json.model.Value](Seq(Tuple2(fname, v)))))(encodedUnion)
+            hydra.lib.eithers.map[hydra.json.model.Value, hydra.json.model.Value,
+               scala.Predef.String]((v: hydra.json.model.Value) =>
+              hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String,
+                 hydra.json.model.Value](Seq(Tuple2(fname, v)))))(encodedUnion)
           }
         }
       }
     }
-    case hydra.core.Term.unit => Right(hydra.json.model.Value.`object`(hydra.lib.maps.empty[scala.Predef.String, hydra.json.model.Value]))
+    case hydra.core.Term.unit => Right(hydra.json.model.Value.`object`(hydra.lib.maps.empty[scala.Predef.String,
+       hydra.json.model.Value]))
     case hydra.core.Term.wrap(v_Term_wrap_wt) => hydra.json.encode.toJsonUntyped(v_Term_wrap_wt.body)
     case hydra.core.Term.map(v_Term_map_m) => {
-      def encodeEntry(kv: Tuple2[hydra.core.Term, hydra.core.Term]): Either[scala.Predef.String, hydra.json.model.Value] =
+      def encodeEntry(kv: Tuple2[hydra.core.Term, hydra.core.Term]): Either[scala.Predef.String,
+         hydra.json.model.Value] =
         {
         lazy val k: hydra.core.Term = hydra.lib.pairs.first[hydra.core.Term, hydra.core.Term](kv)
         lazy val v: hydra.core.Term = hydra.lib.pairs.second[hydra.core.Term, hydra.core.Term](kv)
@@ -321,14 +354,15 @@ def toJsonUntyped(term: hydra.core.Term): Either[scala.Predef.String, hydra.json
         hydra.lib.eithers.either[scala.Predef.String, hydra.json.model.Value, Either[scala.Predef.String,
            hydra.json.model.Value]]((err: scala.Predef.String) => Left(err))((ek: hydra.json.model.Value) =>
           hydra.lib.eithers.map[hydra.json.model.Value, hydra.json.model.Value, scala.Predef.String]((ev: hydra.json.model.Value) =>
-          hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String, hydra.json.model.Value](Seq(Tuple2("@key",
-             ek), Tuple2("@value", ev)))))(encodedV))(encodedK)
+          hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String,
+             hydra.json.model.Value](Seq(Tuple2("@key", ek), Tuple2("@value", ev)))))(encodedV))(encodedK)
       }
       {
         lazy val entries: Either[scala.Predef.String, Seq[hydra.json.model.Value]] = hydra.lib.eithers.mapList[Tuple2[hydra.core.Term,
            hydra.core.Term], hydra.json.model.Value, scala.Predef.String](encodeEntry)(hydra.lib.maps.toList[hydra.core.Term,
            hydra.core.Term](v_Term_map_m))
-        hydra.lib.eithers.map[Seq[hydra.json.model.Value], hydra.json.model.Value, scala.Predef.String]((es: Seq[hydra.json.model.Value]) => hydra.json.model.Value.array(es))(entries)
+        hydra.lib.eithers.map[Seq[hydra.json.model.Value], hydra.json.model.Value,
+           scala.Predef.String]((es: Seq[hydra.json.model.Value]) => hydra.json.model.Value.array(es))(entries)
       }
     }
     case hydra.core.Term.pair(v_Term_pair_p) => {
@@ -339,26 +373,31 @@ def toJsonUntyped(term: hydra.core.Term): Either[scala.Predef.String, hydra.json
           lazy val encodedFirst: Either[scala.Predef.String, hydra.json.model.Value] = hydra.json.encode.toJsonUntyped(first)
           {
             lazy val encodedSecond: Either[scala.Predef.String, hydra.json.model.Value] = hydra.json.encode.toJsonUntyped(second)
-            hydra.lib.eithers.either[scala.Predef.String, hydra.json.model.Value, Either[scala.Predef.String,
-               hydra.json.model.Value]]((err: scala.Predef.String) => Left(err))((ef: hydra.json.model.Value) =>
-              hydra.lib.eithers.map[hydra.json.model.Value, hydra.json.model.Value, scala.Predef.String]((es: hydra.json.model.Value) =>
-              hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String, hydra.json.model.Value](Seq(Tuple2("@first",
-                 ef), Tuple2("@second", es)))))(encodedSecond))(encodedFirst)
+            hydra.lib.eithers.either[scala.Predef.String, hydra.json.model.Value,
+               Either[scala.Predef.String, hydra.json.model.Value]]((err: scala.Predef.String) => Left(err))((ef: hydra.json.model.Value) =>
+              hydra.lib.eithers.map[hydra.json.model.Value, hydra.json.model.Value,
+                 scala.Predef.String]((es: hydra.json.model.Value) =>
+              hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String,
+                 hydra.json.model.Value](Seq(Tuple2("@first", ef), Tuple2("@second",
+                 es)))))(encodedSecond))(encodedFirst)
           }
         }
       }
     }
-    case hydra.core.Term.either(v_Term_either_e) => hydra.lib.eithers.either[hydra.core.Term, hydra.core.Term,
-       Either[scala.Predef.String, hydra.json.model.Value]]((l: hydra.core.Term) =>
+    case hydra.core.Term.either(v_Term_either_e) => hydra.lib.eithers.either[hydra.core.Term,
+       hydra.core.Term, Either[scala.Predef.String, hydra.json.model.Value]]((l: hydra.core.Term) =>
       {
       lazy val encodedL: Either[scala.Predef.String, hydra.json.model.Value] = hydra.json.encode.toJsonUntyped(l)
       hydra.lib.eithers.map[hydra.json.model.Value, hydra.json.model.Value, scala.Predef.String]((v: hydra.json.model.Value) =>
-        hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String, hydra.json.model.Value](Seq(Tuple2("@left", v)))))(encodedL)
+        hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String,
+           hydra.json.model.Value](Seq(Tuple2("@left", v)))))(encodedL)
     })((r: hydra.core.Term) =>
       {
       lazy val encodedR: Either[scala.Predef.String, hydra.json.model.Value] = hydra.json.encode.toJsonUntyped(r)
       hydra.lib.eithers.map[hydra.json.model.Value, hydra.json.model.Value, scala.Predef.String]((v: hydra.json.model.Value) =>
-        hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String, hydra.json.model.Value](Seq(Tuple2("@right", v)))))(encodedR)
+        hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String,
+           hydra.json.model.Value](Seq(Tuple2("@right", v)))))(encodedR)
     })(v_Term_either_e)
-    case _ => Left(hydra.lib.strings.cat(Seq("unsupported term variant for JSON encoding: ", hydra.show.core.term(term))))
+    case _ => Left(hydra.lib.strings.cat(Seq("unsupported term variant for JSON encoding: ",
+       hydra.show.core.term(term))))
 }

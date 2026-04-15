@@ -392,9 +392,6 @@ Fix it at the generator level.
 These patches are currently in place and have open or implied issues tracking
 them as generator bugs:
 
-- `heads/haskell/bin/sync-scala.sh`: escapes the Scala `macro` reserved keyword,
-  and rewrites bare inference type variables to `Any`. The Scala coder should
-  emit these directly.
 - `heads/haskell/bin/sync-java.sh`: patches `hydra/lisp/Coder.java` to rewrite
   a `PartialVisitor` type parameter that the Java coder infers incorrectly.
 - `heads/haskell/bin/sync-python.sh`: patches `test_graph.py` to replace

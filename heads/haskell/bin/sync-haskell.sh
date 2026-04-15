@@ -1,25 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Script to regenerate all Haskell artifacts from Hydra sources and run tests.
+# Script to regenerate all Haskell artifacts for hydra-kernel and hydra-haskell
+# from Hydra sources, via the two-stage DSL → JSON → Haskell pipeline.
 #
-# This is the Haskell counterpart to the hydra-ext/bin/sync-*.sh scripts.
-# It ensures hydra-haskell is in a fully consistent state by regenerating all
-# generated Haskell code in the correct order, with rebuilds between phases
-# (since each phase writes .hs files that subsequent phases depend on).
+# Stage 1 — DSL → JSON:
+#   Runs the kernel DSL through the Haskell head and exports the complete
+#   kernel universe (types, terms, eval lib, DSL modules, tests, and the
+#   hydra.dsls aggregator) to dist/json/hydra-kernel/src/{main,test}/json/.
 #
-# Steps:
-#   1. Generate kernel modules
-#   2. Generate kernel test modules
-#   3. Generate eval lib modules
-#   4. Generate encoder/decoder source modules
-#   5. Regenerate kernel modules (to pick up new encoder/decoder sources)
-#   6. Export and verify JSON kernel
-#   7. Run tests (unless --quick)
+# Stage 2 — JSON → Haskell:
+#   Runs bootstrap-from-json with --package-split, so that each loaded module
+#   is routed to dist/haskell/<package>/ based on its namespace prefix.
+#   Decoder/encoder source modules (Hydra.Sources.{Decode,Encode}.*) are
+#   synthesized from the loaded kernel type modules via --synthesize-sources.
+#
+# This replaces the older multi-pass approach (update-haskell-kernel →
+# update-kernel-tests → update-haskell-eval-lib → update-haskell-sources →
+# update-haskell-kernel again) with a single JSON-reading generator call.
 #
 # Prerequisites:
 #   - Stack is installed and configured
-#   - Run from the hydra-haskell directory (or the script will cd there)
 #
 # Usage:
 #   ./bin/sync-haskell.sh          # Full sync (all steps including tests)
@@ -43,20 +44,20 @@ for arg in "$@"; do
         --help|-h)
             echo "Usage: $0 [OPTIONS]"
             echo ""
-            echo "Regenerate all Haskell artifacts from Hydra sources."
+            echo "Regenerate hydra-kernel and hydra-haskell Haskell dist via DSL → JSON → Haskell."
             echo ""
             echo "Options:"
             echo "  --quick    Skip running tests after generation"
             echo "  --help     Show this help message"
             echo ""
             echo "Steps performed:"
-            echo "  1. Generate kernel modules"
-            echo "  2. Generate kernel test modules"
-            echo "  3. Generate eval lib modules"
-            echo "  4. Generate encoder/decoder source modules"
-            echo "  5. Regenerate kernel modules (picks up new encoder/decoder sources)"
-            echo "  6. Export and verify JSON kernel"
-            echo "  7. Run tests (unless --quick)"
+            echo "  1. Build required executables"
+            echo "  2. Export kernel + test modules to JSON (DSL → JSON)"
+            echo "  3. Verify JSON kernel + write manifest"
+            echo "  4. Generate Haskell from JSON (JSON → Haskell)"
+            echo "  5. Post-process generated files (TestGraph.hs patch)"
+            echo "  6. Run tests (unless --quick)"
+            echo "  7. Regenerate the lexicon"
             exit 0
             ;;
         *)
@@ -69,82 +70,64 @@ cd "$HYDRA_HASKELL_DIR"
 
 TOTAL_STEPS=7
 
-banner2 "Synchronizing Hydra-Haskell (from DSL)"
+banner2 "Synchronizing Hydra-Haskell (via DSL → JSON → Haskell)"
 echo ""
 
-step 1 $TOTAL_STEPS "Generating kernel modules"
+step 1 $TOTAL_STEPS "Building required executables"
 echo ""
-stack build hydra:exe:update-haskell-kernel
-stack exec update-haskell-kernel -- $RTS_FLAGS
+stack build \
+    hydra:exe:update-json-main \
+    hydra:exe:update-json-test \
+    hydra:exe:update-json-manifest \
+    hydra:exe:verify-json-kernel \
+    hydra:exe:bootstrap-from-json
 
-if [ $? -ne 0 ]; then
-    echo "ERROR: Kernel generation failed"
-    exit 1
-fi
-
+step 2 $TOTAL_STEPS "Exporting kernel + test modules to JSON"
 echo ""
-echo "  Rebuilding..."
-stack build
+stack exec update-json-main -- $RTS_FLAGS
+stack exec update-json-test -- $RTS_FLAGS
 
-step 2 $TOTAL_STEPS "Generating kernel test modules"
+step 3 $TOTAL_STEPS "Verifying JSON kernel and writing manifest"
 echo ""
-stack build hydra:exe:update-kernel-tests
-stack exec update-kernel-tests -- $RTS_FLAGS
+stack exec verify-json-kernel -- $RTS_FLAGS
+stack exec update-json-manifest
 
-# Patch TestGraph.hs to use TestEnv (real graph with primitives) instead of emptyGraph
+step 4 $TOTAL_STEPS "Generating Haskell from JSON"
+echo ""
+stack exec bootstrap-from-json -- \
+    --target haskell \
+    --output "../../dist/haskell" \
+    --package-split \
+    --include-dsls \
+    --include-tests \
+    --synthesize-sources \
+    $RTS_FLAGS
+
+step 5 $TOTAL_STEPS "Post-processing generated files"
+echo ""
+
+# Patch TestGraph.hs to use TestEnv (real graph with primitives) instead of emptyGraph.
+# Without this, evaluation tests produce "<<eval error>>" because no primitives are registered.
+#
+# Note: Hydra.Test.TestEnv is a hand-written bridge module that lives under
+# dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestEnv.hs and is
+# checked into git. It is NOT generated; bootstrap-from-json doesn't target
+# it (it's not in manifest.json's testModules), so it survives regeneration.
 TESTGRAPH="../../dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestGraph.hs"
 if [ -f "$TESTGRAPH" ]; then
-    echo "  Post-processing: patching TestGraph.hs..."
+    echo "  Patching TestGraph.hs..."
     sed_inplace 's/import qualified Hydra.Lexical as Lexical$/import qualified Hydra.Lexical as Lexical\nimport qualified Hydra.Test.TestEnv as TestEnv/' "$TESTGRAPH"
     sed_inplace 's/testGraph = Lexical.emptyGraph/testGraph = TestEnv.testGraph testTypes/' "$TESTGRAPH"
     sed_inplace 's/testContext = Lexical.emptyContext/testContext = TestEnv.testContext/' "$TESTGRAPH"
 fi
 
+# Rebuild so subsequent steps (test, lexicon) pick up the new Haskell dist.
 echo ""
 echo "  Rebuilding..."
 stack build
-
-step 3 $TOTAL_STEPS "Generating eval lib modules"
-echo ""
-stack build hydra:exe:update-haskell-eval-lib
-stack exec update-haskell-eval-lib -- $RTS_FLAGS
-
-echo ""
-echo "  Rebuilding..."
-stack build
-
-step 4 $TOTAL_STEPS "Generating encoder/decoder source modules"
-echo ""
-stack build hydra:exe:update-haskell-sources
-stack exec update-haskell-sources -- $RTS_FLAGS
-
-echo ""
-echo "  Rebuilding..."
-stack build
-
-step 5 $TOTAL_STEPS "Regenerating kernel modules (post encoder/decoder)"
-echo ""
-stack exec update-haskell-kernel -- $RTS_FLAGS
-
-if [ $? -ne 0 ]; then
-    echo "ERROR: Kernel regeneration failed"
-    exit 1
-fi
-
-echo ""
-echo "  Rebuilding..."
-stack build
-
-step 6 $TOTAL_STEPS "Exporting and verifying JSON"
-echo ""
-stack build hydra:exe:update-json-main hydra:exe:update-json-test hydra:exe:verify-json-kernel hydra:exe:update-json-manifest
-stack exec update-json-main -- $RTS_FLAGS
-stack exec update-json-test -- $RTS_FLAGS
-stack exec verify-json-kernel -- $RTS_FLAGS
-stack exec update-json-manifest
 
 if [ "$QUICK_MODE" = false ]; then
-    step 7 $TOTAL_STEPS "Running tests"
+    step 6 $TOTAL_STEPS "Running tests"
     echo ""
 
     TEST_LOG="$HYDRA_HASKELL_DIR/test-output.log"
@@ -158,12 +141,11 @@ if [ "$QUICK_MODE" = false ]; then
         warn "Some tests failed (exit code $TEST_RESULT). See $TEST_LOG"
     fi
 else
-    step 7 $TOTAL_STEPS "Skipped (--quick mode)"
+    step 6 $TOTAL_STEPS "Skipped (--quick mode)"
 fi
 
-# Regenerate the lexicon
+step 7 $TOTAL_STEPS "Regenerating lexicon"
 echo ""
-echo "  Regenerating lexicon..."
 stack ghci hydra:lib --ghci-options='-e ":m Hydra.Haskell.Generation" -e "writeLexiconToStandardPath"' 2>&1 | grep -E "^Lexicon|^Error" || true
 
 echo ""

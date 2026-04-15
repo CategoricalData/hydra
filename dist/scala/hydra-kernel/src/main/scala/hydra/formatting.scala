@@ -36,7 +36,8 @@ def convertCase(from: hydra.util.CaseConvention)(to: hydra.util.CaseConvention)(
 def convertCaseCamelOrUnderscoreToLowerSnake(s: scala.Predef.String): scala.Predef.String =
   {
   lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn("_")(s)
-  lazy val snakeParts: Seq[scala.Predef.String] = hydra.lib.lists.map[scala.Predef.String, scala.Predef.String]((p: scala.Predef.String) => hydra.formatting.convertCaseCamelToLowerSnake(p))(parts)
+  lazy val snakeParts: Seq[scala.Predef.String] = hydra.lib.lists.map[scala.Predef.String,
+     scala.Predef.String]((p: scala.Predef.String) => hydra.formatting.convertCaseCamelToLowerSnake(p))(parts)
   hydra.lib.strings.intercalate("_")(snakeParts)
 }
 
@@ -84,8 +85,8 @@ def nonAlnumToUnderscores(input: scala.Predef.String): scala.Predef.String =
        false))(hydra.lib.logic.ifElse[Tuple2[Seq[Int], Boolean]](b)(Tuple2(s, true))(Tuple2(hydra.lib.lists.cons[Int](95)(s),
        true)))
   }
-  lazy val result: Tuple2[Seq[Int], Boolean] = hydra.lib.lists.foldl[Tuple2[Seq[Int], Boolean], Int](replace)(Tuple2(Seq(),
-     false))(hydra.lib.strings.toList(input))
+  lazy val result: Tuple2[Seq[Int], Boolean] = hydra.lib.lists.foldl[Tuple2[Seq[Int],
+     Boolean], Int](replace)(Tuple2(Seq(), false))(hydra.lib.strings.toList(input))
   hydra.lib.strings.fromList(hydra.lib.lists.reverse[Int](hydra.lib.pairs.first[Seq[Int], Boolean](result)))
 }
 
@@ -105,7 +106,8 @@ def sanitizeWithUnderscores(reserved: scala.collection.immutable.Set[scala.Prede
   hydra.formatting.escapeWithUnderscore(reserved)(hydra.formatting.nonAlnumToUnderscores(s))
 
 def showList[T0](f: (T0 => scala.Predef.String))(els: Seq[T0]): scala.Predef.String =
-  hydra.lib.strings.cat(Seq("[", hydra.lib.strings.intercalate(", ")(hydra.lib.lists.map[T0, scala.Predef.String](f)(els)), "]"))
+  hydra.lib.strings.cat(Seq("[", hydra.lib.strings.intercalate(", ")(hydra.lib.lists.map[T0,
+     scala.Predef.String](f)(els)), "]"))
 
 def stripLeadingAndTrailingWhitespace(s: scala.Predef.String): scala.Predef.String =
   hydra.lib.strings.fromList(hydra.lib.lists.dropWhile[Int](hydra.lib.chars.isSpace)(hydra.lib.lists.reverse[Int](hydra.lib.lists.dropWhile[Int](hydra.lib.chars.isSpace)(hydra.lib.lists.reverse[Int](hydra.lib.strings.toList(s))))))
@@ -113,13 +115,15 @@ def stripLeadingAndTrailingWhitespace(s: scala.Predef.String): scala.Predef.Stri
 def withCharacterAliases(original: scala.Predef.String): scala.Predef.String =
   {
   lazy val aliases: Map[Int, scala.Predef.String] = hydra.lib.maps.fromList[Int, scala.Predef.String](Seq(Tuple2(32,
-     "sp"), Tuple2(33, "excl"), Tuple2(34, "quot"), Tuple2(35, "num"), Tuple2(36, "dollar"), Tuple2(37,
-     "percnt"), Tuple2(38, "amp"), Tuple2(39, "apos"), Tuple2(40, "lpar"), Tuple2(41, "rpar"), Tuple2(42,
-     "ast"), Tuple2(43, "plus"), Tuple2(44, "comma"), Tuple2(45, "minus"), Tuple2(46, "period"), Tuple2(47,
-     "sol"), Tuple2(58, "colon"), Tuple2(59, "semi"), Tuple2(60, "lt"), Tuple2(61, "equals"), Tuple2(62,
-     "gt"), Tuple2(63, "quest"), Tuple2(64, "commat"), Tuple2(91, "lsqb"), Tuple2(92, "bsol"), Tuple2(93,
-     "rsqb"), Tuple2(94, "circ"), Tuple2(95, "lowbar"), Tuple2(96, "grave"), Tuple2(123, "lcub"), Tuple2(124,
-     "verbar"), Tuple2(125, "rcub"), Tuple2(126, "tilde")))
+     "sp"), Tuple2(33, "excl"), Tuple2(34, "quot"), Tuple2(35, "num"), Tuple2(36,
+     "dollar"), Tuple2(37, "percnt"), Tuple2(38, "amp"), Tuple2(39, "apos"), Tuple2(40,
+     "lpar"), Tuple2(41, "rpar"), Tuple2(42, "ast"), Tuple2(43, "plus"), Tuple2(44,
+     "comma"), Tuple2(45, "minus"), Tuple2(46, "period"), Tuple2(47, "sol"), Tuple2(58,
+     "colon"), Tuple2(59, "semi"), Tuple2(60, "lt"), Tuple2(61, "equals"), Tuple2(62,
+     "gt"), Tuple2(63, "quest"), Tuple2(64, "commat"), Tuple2(91, "lsqb"), Tuple2(92,
+     "bsol"), Tuple2(93, "rsqb"), Tuple2(94, "circ"), Tuple2(95, "lowbar"), Tuple2(96,
+     "grave"), Tuple2(123, "lcub"), Tuple2(124, "verbar"), Tuple2(125, "rcub"), Tuple2(126,
+     "tilde")))
   def alias(c: Int): Seq[Int] =
     hydra.lib.maybes.fromMaybe[Seq[Int]](hydra.lib.lists.pure[Int](c))(hydra.lib.maybes.map[scala.Predef.String,
        Seq[Int]](hydra.lib.strings.toList)(hydra.lib.maps.lookup[Int, scala.Predef.String](c)(aliases)))

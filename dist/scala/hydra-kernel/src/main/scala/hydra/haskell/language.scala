@@ -17,7 +17,8 @@ lazy val haskellLanguage: hydra.coders.Language = {
   lazy val functionVariants: scala.collection.immutable.Set[hydra.variants.FunctionVariant] = hydra.lib.sets.fromList[hydra.variants.FunctionVariant](Seq(hydra.variants.FunctionVariant.elimination,
      hydra.variants.FunctionVariant.lambda))
   lazy val integerTypes: scala.collection.immutable.Set[hydra.core.IntegerType] = hydra.lib.sets.fromList[hydra.core.IntegerType](Seq(hydra.core.IntegerType.bigint,
-     hydra.core.IntegerType.int8, hydra.core.IntegerType.int16, hydra.core.IntegerType.int32, hydra.core.IntegerType.int64))
+     hydra.core.IntegerType.int8, hydra.core.IntegerType.int16, hydra.core.IntegerType.int32,
+     hydra.core.IntegerType.int64))
   lazy val termVariants: scala.collection.immutable.Set[hydra.variants.TermVariant] = hydra.lib.sets.fromList[hydra.variants.TermVariant](Seq(hydra.variants.TermVariant.annotated,
      hydra.variants.TermVariant.application, hydra.variants.TermVariant.cases, hydra.variants.TermVariant.either,
      hydra.variants.TermVariant.lambda, hydra.variants.TermVariant.let, hydra.variants.TermVariant.list,
@@ -34,15 +35,18 @@ lazy val haskellLanguage: hydra.coders.Language = {
      hydra.variants.TypeVariant.unit, hydra.variants.TypeVariant.variable, hydra.variants.TypeVariant.void,
      hydra.variants.TypeVariant.wrap))
   def typePredicate[T0](_x: T0): Boolean = true
-  hydra.coders.Language("hydra.haskell", hydra.coders.LanguageConstraints(eliminationVariants, literalVariants,
-     floatTypes, functionVariants, integerTypes, termVariants, typeVariants, typePredicate))
+  hydra.coders.Language("hydra.haskell", hydra.coders.LanguageConstraints(eliminationVariants,
+     literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants,
+     typePredicate))
 }
 
 lazy val reservedWords: scala.collection.immutable.Set[scala.Predef.String] = {
-  lazy val keywordSymbols: Seq[scala.Predef.String] = Seq("case", "class", "data", "default", "deriving",
-     "do", "else", "forall", "foreign", "if", "import", "in", "infix", "infixl", "infixr", "instance",
-     "let", "module", "newtype", "of", "then", "type", "where")
-  lazy val reservedSymbols: Seq[scala.Predef.String] = Seq("Bool", "Double", "False", "Float", "Int",
-     "Integer", "Just", "Maybe", "Nothing", "Ord", "Show", "String", "True")
+  lazy val keywordSymbols: Seq[scala.Predef.String] = Seq("case", "class", "data",
+     "default", "deriving", "do", "else", "forall", "foreign", "if", "import", "in",
+     "infix", "infixl", "infixr", "instance", "let", "module", "newtype", "of", "then",
+     "type", "where")
+  lazy val reservedSymbols: Seq[scala.Predef.String] = Seq("Bool", "Double", "False",
+     "Float", "Int", "Integer", "Just", "Maybe", "Nothing", "Ord", "Show", "String",
+     "True")
   hydra.lib.sets.fromList[scala.Predef.String](hydra.lib.lists.concat2[scala.Predef.String](keywordSymbols)(reservedSymbols))
 }

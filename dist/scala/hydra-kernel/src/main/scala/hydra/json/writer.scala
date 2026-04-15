@@ -4,7 +4,8 @@ import hydra.ast.*
 
 import hydra.json.model.*
 
-lazy val colonOp: hydra.ast.Op = hydra.ast.Op(":", hydra.ast.Padding(hydra.ast.Ws.none, hydra.ast.Ws.space), 0, hydra.ast.Associativity.none)
+lazy val colonOp: hydra.ast.Op = hydra.ast.Op(":", hydra.ast.Padding(hydra.ast.Ws.none,
+   hydra.ast.Ws.space), 0, hydra.ast.Associativity.none)
 
 def jsonString(s: scala.Predef.String): scala.Predef.String =
   {
@@ -16,7 +17,8 @@ def jsonString(s: scala.Predef.String): scala.Predef.String =
   }
   def escape(c: Int): scala.Predef.String =
     hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(34))("\\\"")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(92))("\\\\")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(8))("\\b")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(12))("\\f")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(10))("\\n")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(13))("\\r")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(9))("\\t")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.lt[Int](c)(32))(hexEscape(c))(hydra.lib.strings.fromList(hydra.lib.lists.pure[Int](c))))))))))
-  lazy val escaped: scala.Predef.String = hydra.lib.strings.cat(hydra.lib.lists.map[Int, scala.Predef.String](escape)(hydra.lib.strings.toList(s)))
+  lazy val escaped: scala.Predef.String = hydra.lib.strings.cat(hydra.lib.lists.map[Int,
+     scala.Predef.String](escape)(hydra.lib.strings.toList(s)))
   hydra.lib.strings.cat2(hydra.lib.strings.cat2("\"")(escaped))("\"")
 }
 

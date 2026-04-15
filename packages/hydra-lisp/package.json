@@ -1,0 +1,6 @@
+{
+  "name": "hydra-lisp",
+  "description": "Lisp coder for Hydra: shared coder for Clojure, Scheme, Common Lisp, and Emacs Lisp dialects",
+  "sourceLanguage": "haskell",
+  "dependencies": ["hydra-kernel"]
+}

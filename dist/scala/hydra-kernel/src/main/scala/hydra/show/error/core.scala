@@ -7,9 +7,11 @@ import hydra.error.core.*
 def constantConditionError(e: hydra.error.core.ConstantConditionError): scala.Predef.String =
   hydra.lib.strings.cat(Seq("constant condition: ifElse with literal ", hydra.lib.literals.showBoolean(e.value)))
 
-def duplicateBindingError(e: hydra.error.core.DuplicateBindingError): scala.Predef.String = hydra.lib.strings.cat(Seq("duplicate binding: ", (e.name)))
+def duplicateBindingError(e: hydra.error.core.DuplicateBindingError): scala.Predef.String = hydra.lib.strings.cat(Seq("duplicate binding: ",
+   (e.name)))
 
-def duplicateFieldError(e: hydra.error.core.DuplicateFieldError): scala.Predef.String = hydra.lib.strings.cat(Seq("duplicate field: ", (e.name)))
+def duplicateFieldError(e: hydra.error.core.DuplicateFieldError): scala.Predef.String = hydra.lib.strings.cat(Seq("duplicate field: ",
+   (e.name)))
 
 def duplicateRecordTypeFieldNamesError(e: hydra.error.core.DuplicateRecordTypeFieldNamesError): scala.Predef.String = hydra.lib.strings.cat(Seq("duplicate field in record type: ",
    (e.name)))
@@ -102,7 +104,8 @@ def nonComparableSetElementTypeError(e: hydra.error.core.NonComparableSetElement
 def redundantWrapUnwrapError(e: hydra.error.core.RedundantWrapUnwrapError): scala.Predef.String = hydra.lib.strings.cat(Seq("redundant wrap/unwrap for type: ",
    (e.typeName)))
 
-def selfApplicationError(e: hydra.error.core.SelfApplicationError): scala.Predef.String = hydra.lib.strings.cat(Seq("self-application of variable: ", (e.name)))
+def selfApplicationError(e: hydra.error.core.SelfApplicationError): scala.Predef.String = hydra.lib.strings.cat(Seq("self-application of variable: ",
+   (e.name)))
 
 def singleVariantUnionError(e: hydra.error.core.SingleVariantUnionError): scala.Predef.String = hydra.lib.strings.cat(Seq("union type with single variant: ",
    (e.fieldName)))
@@ -142,17 +145,20 @@ def unexpectedTermVariantError(e: hydra.error.core.UnexpectedTermVariantError): 
   {
   lazy val expected: hydra.variants.TermVariant = (e.expectedVariant)
   lazy val actual: hydra.core.Term = (e.actualTerm)
-  hydra.lib.strings.cat(Seq("expected ", hydra.show.variants.termVariant(expected), " term but found ", hydra.show.core.term(actual)))
+  hydra.lib.strings.cat(Seq("expected ", hydra.show.variants.termVariant(expected),
+     " term but found ", hydra.show.core.term(actual)))
 }
 
 def unexpectedTypeVariantError(e: hydra.error.core.UnexpectedTypeVariantError): scala.Predef.String =
   {
   lazy val expected: hydra.variants.TypeVariant = (e.expectedVariant)
   lazy val actual: hydra.core.Type = (e.actualType)
-  hydra.lib.strings.cat(Seq("expected ", hydra.show.variants.typeVariant(expected), " type but found ", hydra.show.core.`type`(actual)))
+  hydra.lib.strings.cat(Seq("expected ", hydra.show.variants.typeVariant(expected),
+     " type but found ", hydra.show.core.`type`(actual)))
 }
 
-def unknownPrimitiveNameError(e: hydra.error.core.UnknownPrimitiveNameError): scala.Predef.String = hydra.lib.strings.cat(Seq("unknown primitive: ", (e.name)))
+def unknownPrimitiveNameError(e: hydra.error.core.UnknownPrimitiveNameError): scala.Predef.String = hydra.lib.strings.cat(Seq("unknown primitive: ",
+   (e.name)))
 
 def unnecessaryIdentityApplicationError[T0](e: T0): scala.Predef.String = "unnecessary application of identity lambda"
 

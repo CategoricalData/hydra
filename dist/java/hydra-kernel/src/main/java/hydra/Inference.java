@@ -42,18 +42,27 @@ public interface Inference {
               bterm), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())),
             (java.util.function.Function<hydra.core.TypeScheme, hydra.core.Binding>) (ts -> {
               hydra.util.Lazy<java.util.Set<hydra.core.Name>> bvars = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply((ts).variables));
-              java.util.Set<hydra.core.Name> unboundInTerm = hydra.Variables.freeTypeVariablesInTerm(bterm);
-              java.util.Set<hydra.core.Name> unboundInType = hydra.Variables.freeVariablesInType((ts).type);
-              hydra.util.Lazy<java.util.List<hydra.core.Name>> unbound = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(hydra.lib.sets.Difference.apply(
+              hydra.util.Lazy<java.util.Set<hydra.core.Name>> excluded = new hydra.util.Lazy<>(() -> hydra.lib.sets.Union.apply(
+                svars.get(),
+                bvars.get()));
+              hydra.util.Lazy<java.util.Set<hydra.core.Name>> inType = new hydra.util.Lazy<>(() -> hydra.lib.sets.Difference.apply(
+                hydra.Variables.freeVariablesInType((ts).type),
+                excluded.get()));
+              hydra.util.Lazy<java.util.Set<hydra.core.Name>> phantoms = new hydra.util.Lazy<>(() -> hydra.lib.sets.Difference.apply(
+                hydra.Variables.freeTypeVariablesInTerm(bterm),
                 hydra.lib.sets.Union.apply(
-                  unboundInType,
-                  unboundInTerm),
-                hydra.lib.sets.Union.apply(
-                  svars.get(),
-                  bvars.get()))));
+                  excluded.get(),
+                  inType.get())));
+              hydra.util.Lazy<hydra.typing.TypeSubst> phantomSubst = new hydra.util.Lazy<>(() -> new hydra.typing.TypeSubst(hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
+                (java.util.function.Function<hydra.core.Name, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>) (v -> (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>(v, new hydra.core.Type.Unit())))),
+                hydra.lib.sets.ToList.apply(phantoms.get())))));
+              hydra.core.Term bterm1 = hydra.Substitution.substTypesInTerm(
+                phantomSubst.get(),
+                bterm);
+              hydra.util.Lazy<java.util.List<hydra.core.Name>> unbound = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(inType.get()));
               hydra.util.Lazy<hydra.core.Term> bterm2 = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
                 (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, hydra.core.Term>>) (t -> (java.util.function.Function<hydra.core.Name, hydra.core.Term>) (v -> new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda(v, t)))),
-                bterm,
+                bterm1,
                 unbound.get()));
               hydra.util.Lazy<hydra.core.TypeScheme> ts2 = new hydra.util.Lazy<>(() -> new hydra.core.TypeScheme(hydra.lib.lists.Concat2.apply(
                 (ts).variables,

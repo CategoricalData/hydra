@@ -6,7 +6,8 @@ import hydra.parsing.*
 
 def parseError(x: hydra.parsing.ParseError): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.parsing.ParseError", Seq(hydra.core.Field("message",
-     hydra.core.Term.literal(hydra.core.Literal.string(x.message))), hydra.core.Field("remainder", hydra.core.Term.literal(hydra.core.Literal.string(x.remainder))))))
+     hydra.core.Term.literal(hydra.core.Literal.string(x.message))), hydra.core.Field("remainder",
+     hydra.core.Term.literal(hydra.core.Literal.string(x.remainder))))))
 
 def parseResult[T0](a: (T0 => hydra.core.Term))(v1: hydra.parsing.ParseResult[T0]): hydra.core.Term =
   v1 match
