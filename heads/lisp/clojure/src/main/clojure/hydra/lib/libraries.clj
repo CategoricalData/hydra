@@ -199,6 +199,7 @@
                                         (fn [n xs] ((lists/hydra_lib_lists_take n) xs))
                                         [] (p/tc-int32) (p/tc-list a) (p/tc-list a))
      (qname ns_ "transpose")  (p/prim1 (qname ns_ "transpose")  lists/hydra_lib_lists_transpose  [] (p/tc-list (p/tc-list a)) (p/tc-list (p/tc-list a)))
+     (qname ns_ "uncons")     (p/prim1 (qname ns_ "uncons")     lists/hydra_lib_lists_uncons     [] (p/tc-list a) (p/tc-optional (p/tc-pair a (p/tc-list a))))
      (qname ns_ "zip")        (p/prim2 (qname ns_ "zip")
                                         (fn [xs ys] ((lists/hydra_lib_lists_zip xs) ys))
                                         [] (p/tc-list a) (p/tc-list b) (p/tc-list (p/tc-pair a b)))

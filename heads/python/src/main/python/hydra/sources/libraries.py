@@ -399,6 +399,11 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         qname(namespace, "transpose"), lists.transpose, [_a],
         prims.list_(prims.list_(a)), prims.list_(prims.list_(a))
     )
+    # prim1: uncons :: [a] -> Maybe (a, [a])
+    primitives[qname(namespace, "uncons")] = prims.prim1(
+        qname(namespace, "uncons"), lists.uncons, [_a],
+        prims.list_(a), prims.optional(prims.pair(a, prims.list_(a)))
+    )
     # prim2: zip :: [a] -> [b] -> [(a, b)]
     primitives[qname(namespace, "zip")] = prims.prim2(
         qname(namespace, "zip"), lists.zip, [_a, _b],

@@ -271,6 +271,11 @@ def transpose(values: Sequence[Sequence[A]]) -> frozenlist[frozenlist[A]]:
     return tuple(tuple(row[i] for row in values if i < len(row)) for i in range(max(len(row) for row in values)))
 
 
+def uncons(values: Sequence[A]) -> Maybe[tuple[A, frozenlist[A]]]:
+    """Split a list into its head and tail, returning Nothing if the list is empty."""
+    return Just((values[0], tuple(values[1:]))) if len(values) > 0 else Nothing()
+
+
 def zip(values1: Sequence[A], values2: Sequence[B]) -> frozenlist[tuple[A, B]]:
     """Zip two lists into pairs."""
     import builtins

@@ -137,6 +137,7 @@ public class Libraries {
                 new hydra.lib.lists.Tail(),
                 new hydra.lib.lists.Take(),
                 new hydra.lib.lists.Transpose(),
+                new hydra.lib.lists.Uncons(),
                 new hydra.lib.lists.Zip(),
                 new hydra.lib.lists.ZipWith());
     }

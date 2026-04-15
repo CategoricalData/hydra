@@ -225,6 +225,13 @@
                 (reverse acc)
                 (recur (inc i) (cons col acc))))))))))
 
+;; uncons :: [a] -> Maybe (a, [a])
+(def hydra_lib_lists_uncons
+  (fn [xs]
+    (if (empty? xs)
+      (list :nothing)
+      (list :just (list (first xs) (rest xs))))))
+
 ;; apply :: [a -> b] -> [a] -> [b]
 (def hydra_lib_lists_apply
   (fn [fs] (fn [xs]

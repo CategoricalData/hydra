@@ -93,6 +93,7 @@ module_ = Module ns definitions
       toDefinition sort_,
       toDefinition sortOn_,
       toDefinition span_,
+      toDefinition uncons_,
       toDefinition zipWith_]
 
 -- | Interpreter-friendly applicative apply for List terms.
@@ -427,6 +428,21 @@ span_ = define "span" $
     (Core.termApplication $ Core.application
       (Core.termVariable $ encodedName _pairs_second)
       (var "finalState"))
+
+-- | Interpreter-friendly uncons for List terms.
+-- uncons xs = if null xs then Nothing else Just (head xs, tail xs)
+uncons_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
+uncons_ = define "uncons" $
+  doc "Interpreter-friendly uncons for List terms." $
+  "cx" ~> "g" ~>
+  "listTerm" ~>
+  "elements" <<~ (ExtractCore.list @@ var "g" @@ var "listTerm") $
+  right $ Logic.ifElse
+    (Lists.null (var "elements"))
+    (Core.termMaybe nothing)
+    (Core.termMaybe $ just $ Core.termPair $ pair
+      (Lists.head (var "elements"))
+      (Core.termList $ Lists.tail (var "elements")))
 
 -- | Interpreter-friendly zipWith for List terms.
 -- Applies funTerm to corresponding pairs of elements.

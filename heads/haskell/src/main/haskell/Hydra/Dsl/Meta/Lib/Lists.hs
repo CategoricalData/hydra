@@ -172,6 +172,10 @@ take = primitive2 _lists_take
 transpose :: TTerm [[a]] -> TTerm [[a]]
 transpose = primitive1 _lists_transpose
 
+-- | Decompose a list into its head and tail, returning Nothing if the list is empty.
+uncons :: TTerm [a] -> TTerm (Maybe (a, [a]))
+uncons = primitive1 _lists_uncons
+
 -- | Zip two lists into pairs.
 zip :: TTerm [a] -> TTerm [b] -> TTerm [(a, b)]
 zip = primitive2 _lists_zip

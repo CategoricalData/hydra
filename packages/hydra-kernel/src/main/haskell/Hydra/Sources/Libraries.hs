@@ -123,6 +123,7 @@ _lists_span        = LibNames.listsSpan
 _lists_tail        = LibNames.listsTail
 _lists_take        = LibNames.listsTake
 _lists_transpose   = LibNames.listsTranspose
+_lists_uncons      = LibNames.listsUncons
 _lists_zip         = LibNames.listsZip
 _lists_zipWith     = LibNames.listsZipWith
 
@@ -488,6 +489,7 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim1     _lists_tail        Lists.tail          [_x]         (list x_) (list x_),
     prim2     _lists_take        Lists.take          [_x]         int32 (list x_) (list x_),
     prim1     _lists_transpose   Lists.transpose     [_x]         (list (list x_)) (list (list x_)),
+    prim1     _lists_uncons      Lists.uncons        [_x]         (list x_) (optional (pair x_ (list x_))),
     prim2     _lists_zip         Lists.zip           [_x, _y]     (list x_) (list y_) (list (pair x_ y_)),
     prim3     _lists_zipWith     Lists.zipWith       [_x, _y, _z] (fun x_ $ fun y_ z_) (list x_) (list y_) (list z_)]
 

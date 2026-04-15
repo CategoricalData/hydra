@@ -647,6 +647,12 @@ object Libraries:
           val innerLists = exList(xss).map(exList)
           mkList(hydra.lib.lists.transpose(innerLists).map(mkList))
         }),
+      s"$ns.uncons" -> mkPrimImpl(s"$ns.uncons", tScheme(Seq("a"),
+        tFun(tList(a), tOpt(tPair(a, tList(a))))),
+        impl1(xs => {
+          val items = exList(xs)
+          mkMaybe(lists.uncons(items).map((h, t) => mkPairTerm(h, mkList(t))))
+        })),
       s"$ns.zip" -> mkPrimImpl(s"$ns.zip", tScheme(Seq("a", "b"),
         tFun(tList(a), tFun(tList(b), tList(tPair(a, b))))),
         impl2((xs, ys) => mkList(exList(xs).zip(exList(ys)).map((a, b) => mkPairTerm(a, b))))),
