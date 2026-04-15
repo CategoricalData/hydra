@@ -304,6 +304,10 @@ mathNegateFloat64 :: TTerm TestGroup
 mathNegateFloat64 = subgroup "negateFloat64" [
   test "positive" 5.0 (-5.0),
   test "negative" (-5.0) 5.0,
+  -- "zero" case (negate 0.0 = -0.0) is intentionally omitted:
+  -- the Haskell coder normalizes the literal -0.0 to 0.0 when regenerating
+  -- the test file, so the expected side drifts away from the actual side.
+  -- Tracking: follow-up to #340 on IEEE negative zero preservation.
   test "fractional" 1.5 (-1.5)]
   where
     test name x result = primCase name _math_negateFloat64 [float64 x] (float64 result)
