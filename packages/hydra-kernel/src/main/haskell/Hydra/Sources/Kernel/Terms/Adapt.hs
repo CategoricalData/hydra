@@ -319,6 +319,11 @@ adaptLiteral = define "adaptLiteral" $
       Nothing [
       _LiteralType_integer>>: "it" ~> Core.literalInteger $
         Literals.bigintToIntegerValue @@ var "it" @@ Logic.ifElse (var "b") (bigint 1) (bigint 0)],
+    _Literal_decimal>>: "d" ~> cases _LiteralType (var "lt")
+      Nothing [
+      _LiteralType_float>>: constant $ Core.literalFloat $
+        inject _FloatValue _FloatValue_float64 (Literals.decimalToFloat64 (var "d")),
+      _LiteralType_string>>: constant $ Core.literalString $ Literals.showDecimal (var "d")],
     _Literal_float>>: "f" ~> cases _LiteralType (var "lt")
       Nothing [
       _LiteralType_float>>: "ft" ~> Core.literalFloat $
@@ -337,6 +342,7 @@ adaptLiteralType = define "adaptLiteralType" $
     _LiteralType_binary>>: constant $ just Core.literalTypeString,
     _LiteralType_boolean>>: constant $ Maybes.map (unaryFunction Core.literalTypeInteger) $
       adaptIntegerType @@ var "constraints" @@ Core.integerTypeInt8,
+    _LiteralType_decimal>>: constant $ just $ Core.literalTypeFloat Core.floatTypeFloat64,
     _LiteralType_float>>: "ft" ~> Maybes.map (unaryFunction Core.literalTypeFloat) $
       adaptFloatType @@ var "constraints" @@ var "ft",
     _LiteralType_integer>>: "it" ~> Maybes.map (unaryFunction Core.literalTypeInteger) $
@@ -857,6 +863,12 @@ prepareLiteralType = define "prepareLiteralType" $
           ("v" ~> cases _Literal (var "v") (Just (var "v")) [
             _Literal_binary>>: ("b" ~> inject _Literal _Literal_string (Literals.binaryToString (var "b")))])
           (Sets.fromList $ list [string "replace binary strings with character strings"])),
+      _LiteralType_decimal>>: (constant $
+        triple
+          (Core.literalTypeFloat Core.floatTypeFloat64)
+          ("v" ~> cases _Literal (var "v") (Just (var "v")) [
+            _Literal_decimal>>: ("d" ~> inject _Literal _Literal_float (inject _FloatValue _FloatValue_float64 (Literals.decimalToFloat64 (var "d"))))])
+          (Sets.fromList $ list [string "replace arbitrary-precision decimal numbers with 64-bit floating-point numbers (doubles)"])),
       _LiteralType_float>>: ("ft" ~> lets [
         "result">: prepareFloatType @@ var "ft",
         "rtyp">: Pairs.first (var "result"),
