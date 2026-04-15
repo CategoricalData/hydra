@@ -4275,7 +4275,7 @@
                 "@key": "description",
                 "@value": {
                   "literal": {
-                    "string": "Parse a non-finite float sentinel string to a float64. Returns Nothing for unrecognized strings."}}}],
+                    "string": "Parse an IEEE sentinel string (NaN, Infinity, -Infinity, -0.0) to a float64. Returns Nothing for unrecognized strings."}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -4298,14 +4298,29 @@
                                   "application": {
                                     "argument": {
                                       "application": {
-                                        "argument": {"literal": {"string": "-Infinity"}},
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"literal": {"string": "-0.0"}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "s"},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.equality.equal"},
+                                                    "type": {"literal": {"string": {}}}}}}}}},
                                         "function": {
                                           "application": {
-                                            "argument": {"variable": "s"},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.equality.equal"},
-                                                "type": {"literal": {"string": {}}}}}}}}},
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"literal": {"string": "-Infinity"}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "s"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.equality.equal"},
+                                                        "type": {"literal": {"string": {}}}}}}}}},
+                                            "function": {"variable": "hydra.lib.logic.or"}}}}},
                                     "function": {
                                       "application": {
                                         "argument": {

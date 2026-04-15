@@ -350,6 +350,40 @@
                                     {
                                       "record": {
                                         "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "hundredth"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "inject": {
+                                                                  "field": {"name": "number", "term": {"literal": {"decimal": 1.0e-2}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {"name": "expected", "term": {"literal": {"string": "1.0e-2"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
                                           {"name": "name", "term": {"literal": {"string": "small decimal"}}},
                                           {
                                             "name": "case",
