@@ -22,19 +22,20 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
--- | Encode a float value to JSON. Bigfloat rejects non-finite; Float64 encodes sentinels as strings; Float32 always strings.
+-- | Encode a float value to JSON. Bigfloat rejects anything the decimal space can't hold;
+-- Float64 uses string sentinels for NaN/Inf/-0.0; Float32 always strings.
 encodeFloat :: Core.FloatValue -> Either String Model.Value
 encodeFloat fv =
     case fv of
       Core.FloatValueBigfloat v0 ->
         let s = Literals.showBigfloat v0
-        in (Logic.ifElse (isNonFiniteFloatString s) (Left (Strings.cat [
-          "JSON cannot represent non-finite bigfloat: ",
+        in (Logic.ifElse (requiresJsonStringSentinel s) (Left (Strings.cat [
+          "JSON cannot represent bigfloat value: ",
           s])) (Right (Model.ValueNumber (Literals.float64ToDecimal (Literals.bigfloatToFloat64 v0)))))
       Core.FloatValueFloat32 v0 -> Right (Model.ValueString (Literals.showFloat32 v0))
       Core.FloatValueFloat64 v0 ->
         let s = Literals.showFloat64 v0
-        in (Logic.ifElse (isNonFiniteFloatString s) (Right (Model.ValueString s)) (Right (Model.ValueNumber (Literals.float64ToDecimal v0))))
+        in (Logic.ifElse (requiresJsonStringSentinel s) (Right (Model.ValueString s)) (Right (Model.ValueNumber (Literals.float64ToDecimal v0))))
 
 -- | Encode an integer value to JSON. Small ints use native numbers; large ints use strings.
 encodeInteger :: Core.IntegerValue -> Either t0 Model.Value
@@ -61,10 +62,11 @@ encodeLiteral lit =
       Core.LiteralInteger v0 -> encodeInteger v0
       Core.LiteralString v0 -> Right (Model.ValueString v0)
 
--- | Check whether a string is one of the non-finite float sentinels: NaN, Infinity, -Infinity.
-isNonFiniteFloatString :: String -> Bool
-isNonFiniteFloatString s =
-    Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Equality.equal s "-Infinity"))
+-- | True for IEEE sentinel strings that JSON must escape as a string to preserve.
+-- These are: NaN, Infinity, -Infinity, and -0.0 (decimal has no negative zero).
+requiresJsonStringSentinel :: String -> Bool
+requiresJsonStringSentinel s =
+    Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))
 
 -- | Encode a Hydra term to a JSON value given a type and type name. Returns Left for unsupported constructs.
 toJson :: M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Core.Term -> Either String Model.Value
