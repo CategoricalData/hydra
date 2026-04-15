@@ -156,7 +156,7 @@ decodeField cx m =
 decodeFixed :: t0 -> M.Map String Model.Value -> Either Errors.Error Schema.NamedType
 decodeFixed cx m =
     Eithers.bind (requireNumberE cx avro_size m) (\n ->
-      let size = Literals.bigintToInt32 (Literals.bigfloatToBigint n)
+      let size = Literals.bigintToInt32 (Literals.decimalToBigint n)
       in (Right (Schema.NamedTypeFixed (Schema.Fixed {
         Schema.fixedSize = size}))))
 
@@ -396,7 +396,7 @@ requireE cx fname m =
       " not found"])) (\v -> Right v) (Maps.lookup fname m)
 
 -- | Look up a required number attribute in a JSON object map
-requireNumberE :: t0 -> String -> M.Map String Model.Value -> Either Errors.Error Double
+requireNumberE :: t0 -> String -> M.Map String Model.Value -> Either Errors.Error Sci.Scientific
 requireNumberE cx fname m = Eithers.bind (requireE cx fname m) (\v -> expectNumberE cx v)
 
 -- | Look up a required string attribute in a JSON object map
