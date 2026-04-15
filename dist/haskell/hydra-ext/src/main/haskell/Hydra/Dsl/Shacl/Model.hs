@@ -9,6 +9,7 @@ import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Rdf.Syntax as Syntax
 import qualified Hydra.Shacl.Model as Model
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 
 closed :: Phantoms.TTerm Bool -> Phantoms.TTerm (Maybe (S.Set Syntax.Property)) -> Phantoms.TTerm Model.Closed

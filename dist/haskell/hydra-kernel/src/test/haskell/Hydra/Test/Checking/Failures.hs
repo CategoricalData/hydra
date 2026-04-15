@@ -6,6 +6,7 @@ module Hydra.Test.Checking.Failures where
 
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Type checking failure test cases
 allTests :: Testing.TestGroup

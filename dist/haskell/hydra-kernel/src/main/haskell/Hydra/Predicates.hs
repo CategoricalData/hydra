@@ -27,6 +27,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 -- | Check if a binding needs to be treated as a function

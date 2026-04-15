@@ -819,6 +819,15 @@
                             "@value": {"literal": {"string": "A boolean literal"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
+                    "name": "decimal",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "An arbitrary-precision decimal literal"}}}],
+                        "body": {"literal": {"decimal": {}}}}}},
+                  {
                     "name": "float",
                     "type": {
                       "annotated": {
@@ -877,6 +886,16 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The type of a boolean (true/false) value"}}}],
+                        "body": {"unit": {}}}}},
+                  {
+                    "name": "decimal",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "The type of an arbitrary-precision decimal value"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "float",

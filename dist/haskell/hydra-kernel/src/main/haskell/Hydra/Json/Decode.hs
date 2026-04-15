@@ -18,6 +18,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 -- | Decode a JSON value to a float term. Numbers for Bigfloat/Float64; strings for Float32 and NaN/Inf sentinels.
@@ -99,6 +100,9 @@ decodeLiteral lt value =
       Core.LiteralTypeBoolean -> case value of
         Model.ValueBoolean v1 -> Right (Core.TermLiteral (Core.LiteralBoolean v1))
         _ -> Left "expected boolean"
+      Core.LiteralTypeDecimal -> case value of
+        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralDecimal (Literals.float64ToDecimal (Literals.bigfloatToFloat64 v1))))
+        _ -> Left "expected number for decimal"
       Core.LiteralTypeFloat v0 -> decodeFloat v0 value
       Core.LiteralTypeInteger v0 -> decodeInteger v0 value
       Core.LiteralTypeString ->

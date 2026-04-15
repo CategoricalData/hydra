@@ -169,6 +169,9 @@ def adaptLiteral(lt: hydra.core.LiteralType)(l: hydra.core.Literal): hydra.core.
     case hydra.core.LiteralType.string => hydra.core.Literal.string(hydra.lib.literals.binaryToString(v_Literal_binary_b))
   case hydra.core.Literal.boolean(v_Literal_boolean_b) => lt match
     case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => hydra.core.Literal.integer(hydra.literals.bigintToIntegerValue(v_LiteralType_integer_it)(hydra.lib.logic.ifElse[BigInt](v_Literal_boolean_b)(BigInt("1"))(BigInt("0"))))
+  case hydra.core.Literal.decimal(v_Literal_decimal_d) => lt match
+    case hydra.core.LiteralType.float(v_LiteralType_float__) => hydra.core.Literal.float(hydra.core.FloatValue.float64(hydra.lib.literals.decimalToFloat64(v_Literal_decimal_d)))
+    case hydra.core.LiteralType.string => hydra.core.Literal.string(hydra.lib.literals.showDecimal(v_Literal_decimal_d))
   case hydra.core.Literal.float(v_Literal_float_f) => lt match
     case hydra.core.LiteralType.float(v_LiteralType_float_ft) => hydra.core.Literal.float(hydra.literals.bigfloatToFloatValue(v_LiteralType_float_ft)(hydra.literals.floatValueToBigfloat(v_Literal_float_f)))
   case hydra.core.Literal.integer(v_Literal_integer_i) => lt match
@@ -181,6 +184,7 @@ def adaptLiteralType(constraints: hydra.coders.LanguageConstraints)(lt: hydra.co
     case hydra.core.LiteralType.binary => Some(hydra.core.LiteralType.string)
     case hydra.core.LiteralType.boolean => hydra.lib.maybes.map[hydra.core.IntegerType,
        hydra.core.LiteralType]((x: hydra.core.IntegerType) => hydra.core.LiteralType.integer(x))(hydra.adapt.adaptIntegerType(constraints)(hydra.core.IntegerType.int8))
+    case hydra.core.LiteralType.decimal => Some(hydra.core.LiteralType.float(hydra.core.FloatType.float64))
     case hydra.core.LiteralType.float(v_LiteralType_float_ft) => hydra.lib.maybes.map[hydra.core.FloatType,
        hydra.core.LiteralType]((x: hydra.core.FloatType) => hydra.core.LiteralType.float(x))(hydra.adapt.adaptFloatType(constraints)(v_LiteralType_float_ft))
     case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => hydra.lib.maybes.map[hydra.core.IntegerType,
@@ -499,6 +503,11 @@ def prepareLiteralType(at: hydra.core.LiteralType): Tuple2[hydra.core.LiteralTyp
     v match
     case hydra.core.Literal.binary(v_Literal_binary_b) => hydra.core.Literal.string(hydra.lib.literals.binaryToString(v_Literal_binary_b))
     case _ => v, hydra.lib.sets.fromList[scala.Predef.String](Seq("replace binary strings with character strings"))))
+  case hydra.core.LiteralType.decimal => Tuple2(hydra.core.LiteralType.float(hydra.core.FloatType.float64),
+     Tuple2((v: hydra.core.Literal) =>
+    v match
+    case hydra.core.Literal.decimal(v_Literal_decimal_d) => hydra.core.Literal.float(hydra.core.FloatValue.float64(hydra.lib.literals.decimalToFloat64(v_Literal_decimal_d)))
+    case _ => v, hydra.lib.sets.fromList[scala.Predef.String](Seq("replace arbitrary-precision decimal numbers with 64-bit floating-point numbers (doubles)"))))
   case hydra.core.LiteralType.float(v_LiteralType_float_ft) => {
     lazy val result: Tuple2[hydra.core.FloatType, Tuple2[(hydra.core.FloatValue => hydra.core.FloatValue),
        scala.collection.immutable.Set[scala.Predef.String]]] = hydra.adapt.prepareFloatType(v_LiteralType_float_ft)

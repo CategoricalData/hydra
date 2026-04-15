@@ -16,6 +16,7 @@ literalVariant :: LiteralVariant -> TTerm LiteralVariant
 literalVariant v = injectUnit _LiteralVariant $ case v of
   LiteralVariantBinary -> _LiteralVariant_binary
   LiteralVariantBoolean -> _LiteralVariant_boolean
+  LiteralVariantDecimal -> _LiteralVariant_decimal
   LiteralVariantFloat -> _LiteralVariant_float
   LiteralVariantInteger -> _LiteralVariant_integer
   LiteralVariantString -> _LiteralVariant_string

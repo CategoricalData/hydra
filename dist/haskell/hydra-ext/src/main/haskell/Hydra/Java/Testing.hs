@@ -15,6 +15,7 @@ import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Build the complete Java test module content
 buildJavaTestModule :: Packaging.Module -> Testing.TestGroup -> String -> String

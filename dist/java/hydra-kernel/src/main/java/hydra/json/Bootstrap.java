@@ -423,6 +423,9 @@ public interface Bootstrap {
           new hydra.core.FieldType(new hydra.core.Name("boolean"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Literal(new hydra.core.LiteralType.Boolean_()), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A boolean literal")))))))),
+          new hydra.core.FieldType(new hydra.core.Name("decimal"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Literal(new hydra.core.LiteralType.Decimal()), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("An arbitrary-precision decimal literal")))))))),
           new hydra.core.FieldType(new hydra.core.Name("float"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.FloatValue")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A floating-point literal")))))))),
@@ -443,6 +446,9 @@ public interface Bootstrap {
           new hydra.core.FieldType(new hydra.core.Name("boolean"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Unit(), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("The type of a boolean (true/false) value")))))))),
+          new hydra.core.FieldType(new hydra.core.Name("decimal"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Unit(), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The type of an arbitrary-precision decimal value")))))))),
           new hydra.core.FieldType(new hydra.core.Name("float"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.FloatType")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("The type of a floating-point value")))))))),

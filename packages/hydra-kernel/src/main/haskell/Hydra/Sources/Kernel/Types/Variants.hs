@@ -50,6 +50,7 @@ literalVariant = define "LiteralVariant" $
   T.enum [
     "binary",
     "boolean",
+    "decimal",
     "float",
     "integer",
     "string"]

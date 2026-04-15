@@ -9,6 +9,7 @@ import qualified Hydra.Json.Model as Model
 import qualified Hydra.Pegasus.Pdl as Pdl
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 annotations :: Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Bool -> Phantoms.TTerm Pdl.Annotations
 annotations doc deprecated =

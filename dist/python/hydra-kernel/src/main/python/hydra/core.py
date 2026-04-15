@@ -306,6 +306,9 @@ class LiteralBinary(Node[bytes]):
 class LiteralBoolean(Node[bool]):
     r"""A boolean literal"""
 
+class LiteralDecimal(Node[Decimal]):
+    r"""An arbitrary-precision decimal literal"""
+
 class LiteralFloat(Node["FloatValue"]):
     r"""A floating-point literal"""
 
@@ -321,11 +324,12 @@ class _LiteralMeta(type):
 
 # A term constant; an instance of a literal type.
 class Literal(metaclass=_LiteralMeta):
-    r"""LiteralBinary | LiteralBoolean | LiteralFloat | LiteralInteger | LiteralString"""
+    r"""LiteralBinary | LiteralBoolean | LiteralDecimal | LiteralFloat | LiteralInteger | LiteralString"""
 
     TYPE_ = Name("hydra.core.Literal")
     BINARY = Name("binary")
     BOOLEAN = Name("boolean")
+    DECIMAL = Name("decimal")
     FLOAT = Name("float")
     INTEGER = Name("integer")
     STRING = Name("string")
@@ -348,6 +352,15 @@ class LiteralTypeBoolean:
     def __hash__(self):
         return hash("LiteralTypeBoolean")
 
+class LiteralTypeDecimal:
+    r"""The type of an arbitrary-precision decimal value"""
+
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, LiteralTypeDecimal)
+    def __hash__(self):
+        return hash("LiteralTypeDecimal")
+
 class LiteralTypeFloat(Node["FloatType"]):
     r"""The type of a floating-point value"""
 
@@ -369,11 +382,12 @@ class _LiteralTypeMeta(type):
 
 # Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants.
 class LiteralType(metaclass=_LiteralTypeMeta):
-    r"""LiteralTypeBinary | LiteralTypeBoolean | LiteralTypeFloat | LiteralTypeInteger | LiteralTypeString"""
+    r"""LiteralTypeBinary | LiteralTypeBoolean | LiteralTypeDecimal | LiteralTypeFloat | LiteralTypeInteger | LiteralTypeString"""
 
     TYPE_ = Name("hydra.core.LiteralType")
     BINARY = Name("binary")
     BOOLEAN = Name("boolean")
+    DECIMAL = Name("decimal")
     FLOAT = Name("float")
     INTEGER = Name("integer")
     STRING = Name("string")

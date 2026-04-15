@@ -17,6 +17,7 @@ import qualified Hydra.Show.Error.Core as ErrorCore
 import qualified Hydra.Show.Typing as Typing
 import qualified Hydra.Show.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Show a checking error as a string
 checkingError :: Checking.CheckingError -> String

@@ -27,6 +27,7 @@ import qualified Hydra.Strip as Strip
 import qualified Hydra.Util as Util
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 encodeEnumVariant :: t0 -> t1 -> Core.FieldType -> Either Errors.Error Syntax.EnumVariant

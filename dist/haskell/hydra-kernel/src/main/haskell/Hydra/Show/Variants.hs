@@ -6,6 +6,7 @@ module Hydra.Show.Variants where
 
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Show a term variant as a string
 termVariant :: Variants.TermVariant -> String

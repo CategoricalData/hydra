@@ -31,6 +31,13 @@
   (lambda (x)
     (float x 1.0d0)))
 
+;; bigint_to_decimal :: BigInteger -> Decimal
+;; Convert a bigint to a decimal. Common Lisp has no native decimal type;
+;; values represented as double-float (adapter fallback policy).
+(defvar hydra_lib_literals_bigint_to_decimal
+  (lambda (x)
+    (float x 1.0d0)))
+
 ;; bigint_to_int :: BigInteger -> Int  (identity)
 ;; Convert a bigint (Integer) to an int.
 (defvar hydra_lib_literals_bigint_to_int
@@ -87,6 +94,22 @@
   (lambda (bs)
     (map 'list (lambda (b) (logand b #xFF)) bs)))
 
+;; decimal_to_bigint :: Decimal -> BigInteger
+;; Common Lisp has no native decimal; values are double-float.
+(defvar hydra_lib_literals_decimal_to_bigint
+  (lambda (x)
+    (round x)))
+
+;; decimal_to_float32 :: Decimal -> Float
+(defvar hydra_lib_literals_decimal_to_float32
+  (lambda (x)
+    (float (float x 1.0f0) 1.0d0)))
+
+;; decimal_to_float64 :: Decimal -> Double
+(defvar hydra_lib_literals_decimal_to_float64
+  (lambda (x)
+    (float x 1.0d0)))
+
 ;; binary_to_string :: ByteString -> String (base64 encoding)
 ;; Convert binary to string by base64 encoding.
 (defvar hydra_lib_literals_binary_to_string
@@ -124,9 +147,19 @@
   (lambda (x)
     (float x 1.0d0)))
 
+;; float32_to_decimal :: Float -> Decimal
+(defvar hydra_lib_literals_float32_to_decimal
+  (lambda (x)
+    (float x 1.0d0)))
+
 ;; float64_to_bigfloat :: Double -> Double
 ;; Convert a float64 (Double) to a bigfloat (Double).
 (defvar hydra_lib_literals_float64_to_bigfloat
+  (lambda (x)
+    (float x 1.0d0)))
+
+;; float64_to_decimal :: Double -> Decimal
+(defvar hydra_lib_literals_float64_to_decimal
   (lambda (x)
     (float x 1.0d0)))
 
@@ -160,6 +193,16 @@
 ;; read_bigfloat :: String -> Maybe Double
 ;; Parse a string to a bigfloat (Double).
 (defvar hydra_lib_literals_read_bigfloat
+  (lambda (s)
+    (let* ((*read-default-float-format* 'double-float)
+           (n (ignore-errors (read-from-string s))))
+      (if (and n (numberp n))
+          (list :just (float n 1.0d0))
+          (list :nothing)))))
+
+;; read_decimal :: String -> Maybe Decimal
+;; No native decimal; parse as double-float.
+(defvar hydra_lib_literals_read_decimal
   (lambda (s)
     (let* ((*read-default-float-format* 'double-float)
            (n (ignore-errors (read-from-string s))))
@@ -402,6 +445,12 @@
 ;; show_bigfloat :: Double -> String
 ;; Convert a bigfloat (Double) to string.
 (defvar hydra_lib_literals_show_bigfloat
+  (lambda (x)
+    (haskell-show-float (float x 1.0d0))))
+
+;; show_decimal :: Decimal -> String
+;; No native decimal; formatted as double-float.
+(defvar hydra_lib_literals_show_decimal
   (lambda (x)
     (haskell-show-float (float x 1.0d0))))
 

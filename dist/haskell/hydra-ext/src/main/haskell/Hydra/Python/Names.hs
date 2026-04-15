@@ -21,6 +21,7 @@ import qualified Hydra.Python.Serde as Serde
 import qualified Hydra.Python.Syntax as Syntax
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Generate a constant name for a field definition
 encodeConstantForFieldName :: t0 -> t1 -> Core.Name -> Syntax.Name

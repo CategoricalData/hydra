@@ -54,6 +54,16 @@ public interface Literals {
     }
 
     /**
+     * Create a decimal literal from a BigDecimal value.
+     *
+     * @param value the BigDecimal value
+     * @return a decimal literal
+     */
+    static Literal decimal(final BigDecimal value) {
+        return new Literal.Decimal(value);
+    }
+
+    /**
      * Create a float literal from a FloatValue.
      *
      * @param value the float value
@@ -208,6 +218,11 @@ public interface Literals {
             @Override
             public String visit(Literal.Boolean_ instance) {
                 return "boolean:" + instance.value;
+            }
+
+            @Override
+            public String visit(Literal.Decimal instance) {
+                return "decimal:" + instance.value;
             }
 
             @Override

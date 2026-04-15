@@ -6,6 +6,7 @@ from hydra.core import (
     IntegerValue,
     LiteralBinary,
     LiteralBoolean,
+    LiteralDecimal,
     LiteralFloat,
     LiteralInteger,
     LiteralString,
@@ -40,6 +41,14 @@ def boolean(value: bool) -> Literal:
     Example: boolean(True)
     """
     return LiteralBoolean(value)
+
+
+def decimal(value: Decimal) -> Literal:
+    """Create a decimal literal (arbitrary-precision exact decimal).
+
+    Example: decimal(Decimal('1.23'))
+    """
+    return LiteralDecimal(value)
 
 
 def string(value: str) -> Literal:

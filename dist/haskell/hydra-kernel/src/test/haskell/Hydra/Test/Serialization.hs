@@ -9,6 +9,7 @@ import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Test cases for AST serialization
 allTests :: Testing.TestGroup

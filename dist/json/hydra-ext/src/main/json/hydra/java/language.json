@@ -66,6 +66,10 @@
                                 "typeName": "hydra.variants.LiteralVariant"}},
                             {
                               "inject": {
+                                "field": {"name": "decimal", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.LiteralVariant"}},
+                            {
+                              "inject": {
                                 "field": {"name": "float", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.LiteralVariant"}},
                             {

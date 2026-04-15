@@ -26,6 +26,7 @@ import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 -- | Apply a parsed pattern to a term, producing string terms

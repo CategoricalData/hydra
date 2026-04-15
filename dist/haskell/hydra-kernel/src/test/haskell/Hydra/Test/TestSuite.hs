@@ -38,6 +38,7 @@ import qualified Hydra.Test.Validate.All as ValidateAll
 import qualified Hydra.Test.Variables as Variables
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | The group of all common tests
 allTests :: Testing.TestGroup

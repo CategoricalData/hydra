@@ -7,6 +7,7 @@ module Hydra.Sources.Encode.Core where
 import qualified Hydra.Core as Core
 import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 module_ :: Packaging.Module
 module_ =
@@ -2218,6 +2219,49 @@ module_ =
                                               Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
               Core.Field {
+                Core.fieldName = (Core.Name "decimal"),
+                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "y"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermInject (Core.Injection {
+                    Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                    Core.injectionField = Core.Field {
+                      Core.fieldName = (Core.Name "inject"),
+                      Core.fieldTerm = (Core.TermRecord (Core.Record {
+                        Core.recordTypeName = (Core.Name "hydra.core.Injection"),
+                        Core.recordFields = [
+                          Core.Field {
+                            Core.fieldName = (Core.Name "typeName"),
+                            Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                              Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.core.Literal"))}))},
+                          Core.Field {
+                            Core.fieldName = (Core.Name "field"),
+                            Core.fieldTerm = (Core.TermRecord (Core.Record {
+                              Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                              Core.recordFields = [
+                                Core.Field {
+                                  Core.fieldName = (Core.Name "name"),
+                                  Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                    Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "decimal"))}))},
+                                Core.Field {
+                                  Core.fieldName = (Core.Name "term"),
+                                  Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermLambda (Core.Lambda {
+                                      Core.lambdaParameter = (Core.Name "x"),
+                                      Core.lambdaDomain = Nothing,
+                                      Core.lambdaBody = (Core.TermInject (Core.Injection {
+                                        Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                                        Core.injectionField = Core.Field {
+                                          Core.fieldName = (Core.Name "literal"),
+                                          Core.fieldTerm = (Core.TermInject (Core.Injection {
+                                            Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
+                                            Core.injectionField = Core.Field {
+                                              Core.fieldName = (Core.Name "decimal"),
+                                              Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))})),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
+              Core.Field {
                 Core.fieldName = (Core.Name "float"),
                 Core.fieldTerm = (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
@@ -2402,6 +2446,45 @@ module_ =
                                   Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                     Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                     Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "boolean"))}))},
+                                Core.Field {
+                                  Core.fieldName = (Core.Name "term"),
+                                  Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermLambda (Core.Lambda {
+                                      Core.lambdaParameter = (Core.Name "_"),
+                                      Core.lambdaDomain = Nothing,
+                                      Core.lambdaBody = (Core.TermInject (Core.Injection {
+                                        Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                                        Core.injectionField = Core.Field {
+                                          Core.fieldName = (Core.Name "unit"),
+                                          Core.fieldTerm = Core.TermUnit}}))})),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
+              Core.Field {
+                Core.fieldName = (Core.Name "decimal"),
+                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "y"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermInject (Core.Injection {
+                    Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                    Core.injectionField = Core.Field {
+                      Core.fieldName = (Core.Name "inject"),
+                      Core.fieldTerm = (Core.TermRecord (Core.Record {
+                        Core.recordTypeName = (Core.Name "hydra.core.Injection"),
+                        Core.recordFields = [
+                          Core.Field {
+                            Core.fieldName = (Core.Name "typeName"),
+                            Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                              Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.core.LiteralType"))}))},
+                          Core.Field {
+                            Core.fieldName = (Core.Name "field"),
+                            Core.fieldTerm = (Core.TermRecord (Core.Record {
+                              Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                              Core.recordFields = [
+                                Core.Field {
+                                  Core.fieldName = (Core.Name "name"),
+                                  Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                    Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "decimal"))}))},
                                 Core.Field {
                                   Core.fieldName = (Core.Name "term"),
                                   Core.fieldTerm = (Core.TermApplication (Core.Application {

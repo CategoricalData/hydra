@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Delta.Parquet as Parquet
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 arrayType :: Phantoms.TTerm Parquet.DataType -> Phantoms.TTerm Bool -> Phantoms.TTerm Parquet.ArrayType
 arrayType elementType containsNull =

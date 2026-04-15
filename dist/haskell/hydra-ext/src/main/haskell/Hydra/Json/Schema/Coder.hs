@@ -12,6 +12,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Construct JSON Schema documents from type definitions
 constructModule :: t0 -> t1 -> t2 -> t3 -> t4 -> t5

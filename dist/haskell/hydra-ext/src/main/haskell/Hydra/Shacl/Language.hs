@@ -9,6 +9,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Language constraints for W3C SHACL
 shaclLanguage :: Coders.Language

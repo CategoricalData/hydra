@@ -872,6 +872,31 @@
                                                                         "second": {"maybe": {"literal": {"string": {}}}}}}}},
                                                                 "type": {"list": {"literal": {"string": {}}}}}}]},
                                                         {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "pair": {
+                                                                                    "@first": {"literal": {"string": "Data.Scientific"}},
+                                                                                    "@second": {"maybe": {"literal": {"string": "Sci"}}}}},
+                                                                                "type": {"literal": {"string": {}}}}},
+                                                                            "type": {"maybe": {"literal": {"string": {}}}}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}}},
+                                                                    "type": {
+                                                                      "pair": {
+                                                                        "first": {"literal": {"string": {}}},
+                                                                        "second": {"maybe": {"literal": {"string": {}}}}}}}},
+                                                                "type": {"list": {"literal": {"string": {}}}}}}]},
+                                                        {
                                                           "application": {
                                                             "argument": {
                                                               "typeApplication": {
@@ -1090,8 +1115,17 @@
                                                                   "application": {
                                                                     "argument": {
                                                                       "application": {
-                                                                        "argument": {"variable": "mod"},
-                                                                        "function": {"variable": "hydra.analysis.moduleContainsBinaryLiterals"}}},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "mod"},
+                                                                            "function": {"variable": "hydra.analysis.moduleContainsDecimalLiterals"}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "mod"},
+                                                                                "function": {"variable": "hydra.analysis.moduleContainsBinaryLiterals"}}},
+                                                                            "function": {"variable": "hydra.lib.logic.or"}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {"variable": "hydra.lib.logic.ifElse"},
@@ -2332,6 +2366,41 @@
                                             "type": {"variable": "hydra.haskell.syntax.Expression"}}},
                                         "domain": {"literal": {"boolean": {}}},
                                         "parameter": "b"}}},
+                                  {
+                                    "name": "decimal",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "either": {
+                                                    "@right": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "inject": {
+                                                                "field": {
+                                                                  "name": "string",
+                                                                  "term": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "d"},
+                                                                      "function": {"variable": "hydra.lib.literals.showDecimal"}}}},
+                                                                "typeName": "hydra.haskell.syntax.Literal"}},
+                                                            "function": {"variable": "hydra.haskell.utils.hslit"}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"literal": {"string": "Literals.stringToDecimal"}},
+                                                                "function": {"variable": "hydra.haskell.utils.hsvar"}}},
+                                                            "function": {"variable": "hydra.haskell.utils.hsapp"}}}}}}},
+                                                "type": {"variable": "hydra.errors.Error"}}},
+                                            "type": {"variable": "hydra.haskell.syntax.Expression"}}},
+                                        "domain": {"literal": {"decimal": {}}},
+                                        "parameter": "d"}}},
                                   {
                                     "name": "float",
                                     "term": {
@@ -5428,6 +5497,29 @@
                                                                                           "term": {
                                                                                             "application": {
                                                                                               "argument": {"literal": {"string": "Bool"}},
+                                                                                              "function": {"variable": "hydra.haskell.utils.rawName"}}}},
+                                                                                        "typeName": "hydra.haskell.syntax.Type"}}}},
+                                                                                "type": {"variable": "hydra.errors.Error"}}},
+                                                                            "type": {"variable": "hydra.haskell.syntax.Type"}}},
+                                                                        "domain": {"unit": {}},
+                                                                        "parameter": "_"}}},
+                                                                  {
+                                                                    "name": "decimal",
+                                                                    "term": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "either": {
+                                                                                    "@right": {
+                                                                                      "inject": {
+                                                                                        "field": {
+                                                                                          "name": "variable",
+                                                                                          "term": {
+                                                                                            "application": {
+                                                                                              "argument": {"literal": {"string": "Sci.Scientific"}},
                                                                                               "function": {"variable": "hydra.haskell.utils.rawName"}}}},
                                                                                         "typeName": "hydra.haskell.syntax.Type"}}}},
                                                                                 "type": {"variable": "hydra.errors.Error"}}},

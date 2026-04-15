@@ -8,6 +8,7 @@ import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Libraries
 
 import qualified Data.ByteString as B
+import qualified Data.Scientific as Sci
 import Data.Int
 
 
@@ -26,6 +27,10 @@ bigfloatToFloat64 = primitive1 _literals_bigfloatToFloat64
 -- | Convert a bigint (Integer) to a bigfloat (Double).
 bigintToBigfloat :: TTerm Integer -> TTerm Double
 bigintToBigfloat = primitive1 _literals_bigintToBigfloat
+
+-- | Convert a bigint (Integer) to a decimal (Scientific).
+bigintToDecimal :: TTerm Integer -> TTerm Sci.Scientific
+bigintToDecimal = primitive1 _literals_bigintToDecimal
 
 -- | Convert a bigint (Integer) to an int8.
 bigintToInt8 :: TTerm Integer -> TTerm Int8
@@ -67,13 +72,33 @@ binaryToBytes = primitive1 _literals_binaryToBytes
 binaryToString :: TTerm B.ByteString -> TTerm String
 binaryToString = primitive1 _literals_binaryToString
 
+-- | Convert a decimal (Scientific) to a bigint (Integer) by truncating toward zero.
+decimalToBigint :: TTerm Sci.Scientific -> TTerm Integer
+decimalToBigint = primitive1 _literals_decimalToBigint
+
+-- | Convert a decimal (Scientific) to a float32 (Float). May lose precision.
+decimalToFloat32 :: TTerm Sci.Scientific -> TTerm Float
+decimalToFloat32 = primitive1 _literals_decimalToFloat32
+
+-- | Convert a decimal (Scientific) to a float64 (Double). May lose precision.
+decimalToFloat64 :: TTerm Sci.Scientific -> TTerm Double
+decimalToFloat64 = primitive1 _literals_decimalToFloat64
+
 -- | Convert a float32 (Float) to a bigfloat (Double).
 float32ToBigfloat :: TTerm Float -> TTerm Double
 float32ToBigfloat = primitive1 _literals_float32ToBigfloat
 
+-- | Convert a float32 (Float) to a decimal (Scientific).
+float32ToDecimal :: TTerm Float -> TTerm Sci.Scientific
+float32ToDecimal = primitive1 _literals_float32ToDecimal
+
 -- | Convert a float64 (Double) to a bigfloat (Double).
 float64ToBigfloat :: TTerm Double -> TTerm Double
 float64ToBigfloat = primitive1 _literals_float64ToBigfloat
+
+-- | Convert a float64 (Double) to a decimal (Scientific).
+float64ToDecimal :: TTerm Double -> TTerm Sci.Scientific
+float64ToDecimal = primitive1 _literals_float64ToDecimal
 
 -- | Convert an int8 to a bigint (Integer).
 int8ToBigint :: TTerm Int8 -> TTerm Integer
@@ -102,6 +127,10 @@ readBigint = primitive1 _literals_readBigint
 -- | Parse a string to a boolean.
 readBoolean :: TTerm String -> TTerm (Maybe Bool)
 readBoolean = primitive1 _literals_readBoolean
+
+-- | Parse a string to a decimal (Scientific).
+readDecimal :: TTerm String -> TTerm (Maybe Sci.Scientific)
+readDecimal = primitive1 _literals_readDecimal
 
 -- | Parse a string to a float32 (Float).
 readFloat32 :: TTerm String -> TTerm (Maybe Float)
@@ -158,6 +187,10 @@ showBigint = primitive1 _literals_showBigint
 -- | Convert a boolean to string.
 showBoolean :: TTerm Bool -> TTerm String
 showBoolean = primitive1 _literals_showBoolean
+
+-- | Convert a decimal (Scientific) to string.
+showDecimal :: TTerm Sci.Scientific -> TTerm String
+showDecimal = primitive1 _literals_showDecimal
 
 -- | Convert a float32 (Float) to string.
 showFloat32 :: TTerm Float -> TTerm String

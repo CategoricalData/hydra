@@ -14,6 +14,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 caseConvention :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.CaseConvention
 caseConvention cx raw =

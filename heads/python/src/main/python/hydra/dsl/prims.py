@@ -95,6 +95,14 @@ def binary() -> TermCoder[bytes]:
     )
 
 
+def decimal() -> TermCoder[Decimal]:
+    return TermCoder(
+        type=types.decimal(),
+        encode=lambda cx, g, t: extract.decimal(g, t),
+        decode=lambda cx, v: Right(terms.decimal(v))
+    )
+
+
 def boolean() -> TermCoder[bool]:
     return TermCoder(
         type=types.boolean(),

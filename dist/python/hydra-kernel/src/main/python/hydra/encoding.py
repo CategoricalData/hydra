@@ -92,6 +92,9 @@ def encode_literal_type(v1: hydra.core.LiteralType) -> hydra.core.Term:
         case hydra.core.LiteralTypeBoolean():
             return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("boolean"), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))))))))
 
+        case hydra.core.LiteralTypeDecimal():
+            return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("decimal"), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))))))))
+
         case hydra.core.LiteralTypeString():
             return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("string"), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))))))))
 

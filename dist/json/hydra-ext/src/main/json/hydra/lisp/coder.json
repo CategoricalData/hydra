@@ -2366,6 +2366,39 @@
                             "domain": {"literal": {"boolean": {}}},
                             "parameter": "b"}}},
                       {
+                        "name": "decimal",
+                        "term": {
+                          "lambda": {
+                            "body": {
+                              "inject": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "inject": {
+                                      "field": {
+                                        "name": "float",
+                                        "term": {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "value",
+                                                "term": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "d"},
+                                                        "function": {"variable": "hydra.lib.literals.decimalToFloat64"}}},
+                                                    "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}}},
+                                              {
+                                                "name": "precision",
+                                                "term": {
+                                                  "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
+                                            "typeName": "hydra.lisp.syntax.FloatLiteral"}}},
+                                      "typeName": "hydra.lisp.syntax.Literal"}}},
+                                "typeName": "hydra.lisp.syntax.Expression"}},
+                            "domain": {"literal": {"decimal": {}}},
+                            "parameter": "d"}}},
+                      {
                         "name": "string",
                         "term": {
                           "lambda": {
@@ -5593,6 +5626,21 @@
                                                                                       "term": {
                                                                                         "wrap": {
                                                                                           "body": {"literal": {"string": "Boolean"}},
+                                                                                          "typeName": "hydra.lisp.syntax.Symbol"}}},
+                                                                                    "typeName": "hydra.lisp.syntax.TypeSpecifier"}},
+                                                                                "domain": {"unit": {}},
+                                                                                "parameter": "_"}}},
+                                                                          {
+                                                                            "name": "decimal",
+                                                                            "term": {
+                                                                              "lambda": {
+                                                                                "body": {
+                                                                                  "inject": {
+                                                                                    "field": {
+                                                                                      "name": "named",
+                                                                                      "term": {
+                                                                                        "wrap": {
+                                                                                          "body": {"literal": {"string": "Decimal"}},
                                                                                           "typeName": "hydra.lisp.syntax.Symbol"}}},
                                                                                     "typeName": "hydra.lisp.syntax.TypeSpecifier"}},
                                                                                 "domain": {"unit": {}},

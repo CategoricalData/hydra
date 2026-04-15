@@ -15,6 +15,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Parsers as Parsers
 import qualified Hydra.Parsing as Parsing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Parse a single digit (0-9)
 digit :: Parsing.Parser Int

@@ -104,6 +104,9 @@ def encode_type(namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.Modu
             case hydra.core.LiteralTypeBoolean():
                 return Right(cast(hydra.haskell.syntax.Type, hydra.haskell.syntax.TypeVariable(hydra.haskell.utils.raw_name("Bool"))))
 
+            case hydra.core.LiteralTypeDecimal():
+                return Right(cast(hydra.haskell.syntax.Type, hydra.haskell.syntax.TypeVariable(hydra.haskell.utils.raw_name("Sci.Scientific"))))
+
             case hydra.core.LiteralTypeFloat(value=ft):
                 return _hoist_encode_body_1(ft)
 
@@ -335,6 +338,9 @@ def encode_literal(l: hydra.core.Literal, cx: T0):
 
         case hydra.core.LiteralBoolean(value=b):
             return Right(hydra.haskell.utils.hsvar(hydra.lib.logic.if_else(b, (lambda : "True"), (lambda : "False"))))
+
+        case hydra.core.LiteralDecimal(value=d):
+            return Right(hydra.haskell.utils.hsapp(hydra.haskell.utils.hsvar("Literals.stringToDecimal"), hydra.haskell.utils.hslit(cast(hydra.haskell.syntax.Literal, hydra.haskell.syntax.LiteralString(hydra.lib.literals.show_decimal(d))))))
 
         case hydra.core.LiteralFloat(value=fv):
             return _hoist_hydra_haskell_coder_encode_literal_1(fv)
@@ -901,7 +907,7 @@ def construct_module(namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax
             def spec() -> Maybe[hydra.haskell.syntax.SpecImport]:
                 return hydra.lib.logic.if_else(hydra.lib.lists.null(hidden()), (lambda : Nothing()), (lambda : Just(cast(hydra.haskell.syntax.SpecImport, hydra.haskell.syntax.SpecImportHiding(hydra.lib.lists.map((lambda n: hydra.haskell.syntax.ImportExportSpec(Nothing(), hydra.haskell.utils.simple_name(n), Nothing())), hidden()))))))
             return hydra.haskell.syntax.Import(hydra.lib.maybes.is_just(malias()), hydra.haskell.syntax.ModuleName(name()), hydra.lib.maybes.map((lambda x: hydra.haskell.syntax.ModuleName(x)), malias()), spec())
-        return hydra.lib.lists.map((lambda x1: to_import(x1)), hydra.lib.lists.concat((((("Prelude", Nothing()), ("Enum", "Ordering", "decodeFloat", "encodeFloat", "fail", "map", "pure", "sum")),), cond_import(meta().uses_byte_string, (("Data.ByteString", Just("B")), ())), cond_import(meta().uses_int, (("Data.Int", Just("I")), ())), cond_import(meta().uses_map, (("Data.Map", Just("M")), ())), cond_import(meta().uses_set, (("Data.Set", Just("S")), ())), hydra.lib.logic.if_else(hydra.analysis.module_contains_binary_literals(mod), (lambda : ((("Hydra.Lib.Literals", Just("Literals")), ()),)), (lambda : ())))))
+        return hydra.lib.lists.map((lambda x1: to_import(x1)), hydra.lib.lists.concat((((("Prelude", Nothing()), ("Enum", "Ordering", "decodeFloat", "encodeFloat", "fail", "map", "pure", "sum")),), ((("Data.Scientific", Just("Sci")), ()),), cond_import(meta().uses_byte_string, (("Data.ByteString", Just("B")), ())), cond_import(meta().uses_int, (("Data.Int", Just("I")), ())), cond_import(meta().uses_map, (("Data.Map", Just("M")), ())), cond_import(meta().uses_set, (("Data.Set", Just("S")), ())), hydra.lib.logic.if_else(hydra.lib.logic.or_(hydra.analysis.module_contains_binary_literals(mod), hydra.analysis.module_contains_decimal_literals(mod)), (lambda : ((("Hydra.Lib.Literals", Just("Literals")), ()),)), (lambda : ())))))
     return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda x1: create_declarations(x1)), defs), (lambda decl_lists: (decls := hydra.lib.lists.concat(decl_lists), mc := mod.description, Right(hydra.haskell.syntax.Module(Just(hydra.haskell.syntax.ModuleHead(mc, import_name(h(mod.namespace)), ())), imports(), decls)))[2]))
 
 # The key used to track Haskell variable depth in annotations.

@@ -210,7 +210,7 @@ def encode_literal_type(lt: hydra.core.LiteralType):
             return xsd("string")
 
         case _:
-            raise AssertionError("Unreachable: all variants handled")
+            raise TypeError("Unsupported LiteralType")
 
 def node(constraints: frozenlist[hydra.shacl.model.CommonConstraint]) -> hydra.shacl.model.Shape:
     r"""Construct a SHACL node shape from a list of common constraints."""

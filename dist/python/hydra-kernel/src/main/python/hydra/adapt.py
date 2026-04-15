@@ -210,6 +210,9 @@ def adapt_literal_type(constraints: hydra.coders.LanguageConstraints, lt: hydra.
             case hydra.core.LiteralTypeBoolean():
                 return hydra.lib.maybes.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeInteger(x))), adapt_integer_type(constraints, hydra.core.IntegerType.INT8))
 
+            case hydra.core.LiteralTypeDecimal():
+                return Just(cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(hydra.core.FloatType.FLOAT64)))
+
             case hydra.core.LiteralTypeFloat(value=ft):
                 return hydra.lib.maybes.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(x))), adapt_float_type(constraints, ft))
 
@@ -267,14 +270,24 @@ def adapt_literal(lt: hydra.core.LiteralType, l: hydra.core.Literal):
 
             case _:
                 raise TypeError("Unsupported LiteralType")
-    def _hoist_hydra_adapt_adapt_literal_3(f, v1):
+    def _hoist_hydra_adapt_adapt_literal_3(d, v1):
+        match v1:
+            case hydra.core.LiteralTypeFloat():
+                return cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueFloat64(hydra.lib.literals.decimal_to_float64(d)))))
+
+            case hydra.core.LiteralTypeString():
+                return cast(hydra.core.Literal, hydra.core.LiteralString(hydra.lib.literals.show_decimal(d)))
+
+            case _:
+                raise TypeError("Unsupported LiteralType")
+    def _hoist_hydra_adapt_adapt_literal_4(f, v1):
         match v1:
             case hydra.core.LiteralTypeFloat(value=ft):
                 return cast(hydra.core.Literal, hydra.core.LiteralFloat(hydra.literals.bigfloat_to_float_value(ft, hydra.literals.float_value_to_bigfloat(f))))
 
             case _:
                 raise TypeError("Unsupported LiteralType")
-    def _hoist_hydra_adapt_adapt_literal_4(i, v1):
+    def _hoist_hydra_adapt_adapt_literal_5(i, v1):
         match v1:
             case hydra.core.LiteralTypeInteger(value=it):
                 return cast(hydra.core.Literal, hydra.core.LiteralInteger(hydra.literals.bigint_to_integer_value(it, hydra.literals.integer_value_to_bigint(i))))
@@ -288,11 +301,14 @@ def adapt_literal(lt: hydra.core.LiteralType, l: hydra.core.Literal):
         case hydra.core.LiteralBoolean(value=b2):
             return _hoist_hydra_adapt_adapt_literal_2(b2, lt)
 
+        case hydra.core.LiteralDecimal(value=d):
+            return _hoist_hydra_adapt_adapt_literal_3(d, lt)
+
         case hydra.core.LiteralFloat(value=f):
-            return _hoist_hydra_adapt_adapt_literal_3(f, lt)
+            return _hoist_hydra_adapt_adapt_literal_4(f, lt)
 
         case hydra.core.LiteralInteger(value=i):
-            return _hoist_hydra_adapt_adapt_literal_4(i, lt)
+            return _hoist_hydra_adapt_adapt_literal_5(i, lt)
 
         case _:
             raise TypeError("Unsupported Literal")
@@ -648,9 +664,19 @@ def prepare_literal_type(at: hydra.core.LiteralType):
 
             case _:
                 return v
+    def _hoist_hydra_adapt_prepare_literal_type_2(v, v1):
+        match v1:
+            case hydra.core.LiteralDecimal(value=d):
+                return cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueFloat64(hydra.lib.literals.decimal_to_float64(d)))))
+
+            case _:
+                return v
     match at:
         case hydra.core.LiteralTypeBinary():
             return (cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()), ((lambda v: _hoist_hydra_adapt_prepare_literal_type_1(v, v)), hydra.lib.sets.from_list(("replace binary strings with character strings",))))
+
+        case hydra.core.LiteralTypeDecimal():
+            return (cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(hydra.core.FloatType.FLOAT64)), ((lambda v: _hoist_hydra_adapt_prepare_literal_type_2(v, v)), hydra.lib.sets.from_list(("replace arbitrary-precision decimal numbers with 64-bit floating-point numbers (doubles)",))))
 
         case hydra.core.LiteralTypeFloat(value=ft):
             @lru_cache(1)
