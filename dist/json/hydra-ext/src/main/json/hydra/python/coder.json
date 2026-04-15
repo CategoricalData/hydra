@@ -11264,6 +11264,41 @@
                                     "domain": {"literal": {"boolean": {}}},
                                     "parameter": "b"}}},
                               {
+                                "name": "decimal",
+                                "term": {
+                                  "lambda": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "either": {
+                                                "@right": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "list": [
+                                                        {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "d"},
+                                                                "function": {"variable": "hydra.lib.literals.showDecimal"}}},
+                                                            "function": {"variable": "hydra.python.utils.singleQuotedString"}}}]},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "Decimal"}},
+                                                                "typeName": "hydra.python.syntax.Name"}},
+                                                            "function": {"variable": "hydra.python.utils.pyNameToPyPrimary"}}},
+                                                        "function": {"variable": "hydra.python.utils.functionCall"}}}}}}},
+                                            "type": {"variable": "t0"}}},
+                                        "type": {"variable": "hydra.python.syntax.Expression"}}},
+                                    "domain": {"literal": {"decimal": {}}},
+                                    "parameter": "d"}}},
+                              {
                                 "name": "float",
                                 "term": {
                                   "lambda": {
@@ -11363,6 +11398,13 @@
                                         "term": {
                                           "lambda": {
                                             "body": {"literal": {"string": "bool"}},
+                                            "domain": {"unit": {}},
+                                            "parameter": "_"}}},
+                                      {
+                                        "name": "decimal",
+                                        "term": {
+                                          "lambda": {
+                                            "body": {"literal": {"string": "Decimal"}},
                                             "domain": {"unit": {}},
                                             "parameter": "_"}}},
                                       {

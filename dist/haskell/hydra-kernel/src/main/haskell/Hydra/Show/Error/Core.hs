@@ -11,6 +11,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Show.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Show a constant condition error as a string
 constantConditionError :: ErrorCore.ConstantConditionError -> String

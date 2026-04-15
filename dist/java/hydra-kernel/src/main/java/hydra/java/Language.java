@@ -28,6 +28,7 @@ public interface Language {
     hydra.util.Lazy<java.util.Set<hydra.variants.LiteralVariant>> literalVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.variants.LiteralVariant.Binary(),
       new hydra.variants.LiteralVariant.Boolean_(),
+      new hydra.variants.LiteralVariant.Decimal(),
       new hydra.variants.LiteralVariant.Float_(),
       new hydra.variants.LiteralVariant.Integer_(),
       new hydra.variants.LiteralVariant.String_())));

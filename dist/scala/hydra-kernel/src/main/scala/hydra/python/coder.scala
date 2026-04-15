@@ -874,6 +874,7 @@ def encodeLiteral[T0](lit: hydra.core.Literal): Either[T0, hydra.python.syntax.E
       hydra.python.utils.pyAtomToPyExpression(hydra.python.syntax.Atom.number(hydra.python.syntax.Number.integer(hydra.lib.literals.int32ToBigint(byteVal)))))(byteValues)))))))
   }
   case hydra.core.Literal.boolean(v_Literal_boolean_b) => Right(hydra.python.utils.pyAtomToPyExpression(hydra.lib.logic.ifElse[hydra.python.syntax.Atom](v_Literal_boolean_b)(hydra.python.syntax.Atom.`true`)(hydra.python.syntax.Atom.`false`)))
+  case hydra.core.Literal.decimal(v_Literal_decimal_d) => Right(hydra.python.utils.functionCall(hydra.python.utils.pyNameToPyPrimary("Decimal"))(Seq(hydra.python.utils.singleQuotedString(hydra.lib.literals.showDecimal(v_Literal_decimal_d)))))
   case hydra.core.Literal.float(v_Literal_float_f) => hydra.python.coder.encodeFloatValue(v_Literal_float_f)
   case hydra.core.Literal.integer(v_Literal_integer_i) => hydra.python.coder.encodeIntegerValue(v_Literal_integer_i)
   case hydra.core.Literal.string(v_Literal_string_s) => Right(hydra.python.utils.stringToPyExpression(hydra.python.syntax.QuoteStyle.double)(v_Literal_string_s))
@@ -883,6 +884,7 @@ def encodeLiteralType[T0](lt: hydra.core.LiteralType): Either[T0, hydra.python.s
   lazy val findName: scala.Predef.String = lt match
     case hydra.core.LiteralType.binary => "bytes"
     case hydra.core.LiteralType.boolean => "bool"
+    case hydra.core.LiteralType.decimal => "Decimal"
     case hydra.core.LiteralType.float(v_LiteralType_float_ft) => v_LiteralType_float_ft match
       case hydra.core.FloatType.bigfloat => "Decimal"
       case hydra.core.FloatType.float32 => "float"

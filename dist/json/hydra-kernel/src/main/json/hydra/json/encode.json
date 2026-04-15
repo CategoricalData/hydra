@@ -3394,6 +3394,32 @@
                                     "domain": {"literal": {"boolean": {}}},
                                     "parameter": "b"}}},
                               {
+                                "name": "decimal",
+                                "term": {
+                                  "lambda": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "either": {
+                                                "@right": {
+                                                  "inject": {
+                                                    "field": {
+                                                      "name": "number",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "d"},
+                                                              "function": {"variable": "hydra.lib.literals.decimalToFloat64"}}},
+                                                          "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}}},
+                                                    "typeName": "hydra.json.model.Value"}}}},
+                                            "type": {"variable": "t0"}}},
+                                        "type": {"variable": "hydra.json.model.Value"}}},
+                                    "domain": {"literal": {"decimal": {}}},
+                                    "parameter": "d"}}},
+                              {
                                 "name": "float",
                                 "term": {
                                   "lambda": {

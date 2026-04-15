@@ -36,6 +36,7 @@ import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
 
@@ -151,6 +152,9 @@ adaptLiteral lt l =
         Core.LiteralTypeString -> Core.LiteralString (LibLiterals.binaryToString v0)
       Core.LiteralBoolean v0 -> case lt of
         Core.LiteralTypeInteger v1 -> Core.LiteralInteger (Literals.bigintToIntegerValue v1 (Logic.ifElse v0 1 0))
+      Core.LiteralDecimal v0 -> case lt of
+        Core.LiteralTypeFloat _ -> Core.LiteralFloat (Core.FloatValueFloat64 (LibLiterals.decimalToFloat64 v0))
+        Core.LiteralTypeString -> Core.LiteralString (LibLiterals.showDecimal v0)
       Core.LiteralFloat v0 -> case lt of
         Core.LiteralTypeFloat v1 -> Core.LiteralFloat (Literals.bigfloatToFloatValue v1 (Literals.floatValueToBigfloat v0))
       Core.LiteralInteger v0 -> case lt of
@@ -164,6 +168,7 @@ adaptLiteralType constraints lt =
               \lt2 -> case lt2 of
                 Core.LiteralTypeBinary -> Just Core.LiteralTypeString
                 Core.LiteralTypeBoolean -> Maybes.map (\x -> Core.LiteralTypeInteger x) (adaptIntegerType constraints Core.IntegerTypeInt8)
+                Core.LiteralTypeDecimal -> Just (Core.LiteralTypeFloat Core.FloatTypeFloat64)
                 Core.LiteralTypeFloat v0 -> Maybes.map (\x -> Core.LiteralTypeFloat x) (adaptFloatType constraints v0)
                 Core.LiteralTypeInteger v0 -> Maybes.map (\x -> Core.LiteralTypeInteger x) (adaptIntegerType constraints v0)
                 _ -> Nothing
@@ -436,6 +441,10 @@ prepareLiteralType at =
         Core.LiteralBinary v1 -> Core.LiteralString (LibLiterals.binaryToString v1)
         _ -> v), (Sets.fromList [
         "replace binary strings with character strings"])))
+      Core.LiteralTypeDecimal -> (Core.LiteralTypeFloat Core.FloatTypeFloat64, ((\v -> case v of
+        Core.LiteralDecimal v1 -> Core.LiteralFloat (Core.FloatValueFloat64 (LibLiterals.decimalToFloat64 v1))
+        _ -> v), (Sets.fromList [
+        "replace arbitrary-precision decimal numbers with 64-bit floating-point numbers (doubles)"])))
       Core.LiteralTypeFloat v0 ->
         let result = prepareFloatType v0
             rtyp = Pairs.first result

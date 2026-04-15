@@ -25,6 +25,7 @@ import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Predicates as Predicates
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Collect forall type variable names from a type
 collectForallVariables :: Core.Type -> [Core.Name]
@@ -219,6 +220,55 @@ decodeLiteralType lt =
                                     Core.lambdaParameter = (Core.Name "b"),
                                     Core.lambdaDomain = Nothing,
                                     Core.lambdaBody = (Core.TermEither (Right (Core.TermVariable (Core.Name "b"))))}))}]})),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))}))}]})),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))}))})),
+            Core.applicationArgument = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})
+      Core.LiteralTypeDecimal -> Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "cx"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "raw"),
+          Core.lambdaDomain = Nothing,
+          Core.lambdaBody = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.either")),
+                Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "err"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))}))})),
+              Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "stripped"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermCases (Core.CaseStatement {
+                    Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
+                    Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
+                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
+                    Core.caseStatementCases = [
+                      Core.Field {
+                        Core.fieldName = (Core.Name "literal"),
+                        Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                          Core.lambdaParameter = (Core.Name "v"),
+                          Core.lambdaDomain = Nothing,
+                          Core.lambdaBody = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermCases (Core.CaseStatement {
+                              Core.caseStatementTypeName = (Core.Name "hydra.core.Literal"),
+                              Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
+                                Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
+                                Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected decimal literal"))}))))),
+                              Core.caseStatementCases = [
+                                Core.Field {
+                                  Core.fieldName = (Core.Name "decimal"),
+                                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                    Core.lambdaParameter = (Core.Name "d"),
+                                    Core.lambdaDomain = Nothing,
+                                    Core.lambdaBody = (Core.TermEither (Right (Core.TermVariable (Core.Name "d"))))}))}]})),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))}))}]})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))}))})),
             Core.applicationArgument = (Core.TermApplication (Core.Application {

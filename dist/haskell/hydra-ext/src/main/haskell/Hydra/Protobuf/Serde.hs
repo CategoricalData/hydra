@@ -14,6 +14,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Protobuf.Proto3 as Proto3
 import qualified Hydra.Serialization as Serialization
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | The name of the deprecated option
 deprecatedOptionName :: String

@@ -8,6 +8,7 @@ import qualified Hydra.Coq.Syntax as Syntax
 import qualified Hydra.Core as Core
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 annotatedApplication :: Phantoms.TTerm Syntax.QualidAnnotated -> Phantoms.TTerm [Syntax.Term1] -> Phantoms.TTerm Syntax.AnnotatedApplication
 annotatedApplication annot terms =

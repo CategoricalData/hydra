@@ -12,6 +12,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Show.Core as Core
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Test cases for hydra.lib.maybes primitives
 allTests :: Testing.TestGroup

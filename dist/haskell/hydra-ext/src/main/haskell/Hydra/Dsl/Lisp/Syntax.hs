@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Lisp.Syntax as Syntax
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 andExpression :: Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.AndExpression
 andExpression expressions =

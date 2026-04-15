@@ -7,6 +7,7 @@ module Hydra.Tabular where
 import qualified Hydra.Core as Core
 import qualified Hydra.Relational as Relational
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | A column type, consisting of a name and a value type
 data ColumnType =

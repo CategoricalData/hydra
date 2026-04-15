@@ -11,6 +11,7 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 -- | Test cases for subterm hoisting and case statement hoisting

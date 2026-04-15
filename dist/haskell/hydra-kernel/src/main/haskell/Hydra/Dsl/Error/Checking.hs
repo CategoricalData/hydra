@@ -11,6 +11,7 @@ import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 
 checkingErrorIncorrectUnification :: Phantoms.TTerm Checking.IncorrectUnificationError -> Phantoms.TTerm Checking.CheckingError

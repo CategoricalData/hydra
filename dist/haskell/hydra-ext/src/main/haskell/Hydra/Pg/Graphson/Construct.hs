@@ -16,6 +16,7 @@ import qualified Hydra.Pg.Graphson.Coder as Coder
 import qualified Hydra.Pg.Graphson.Syntax as Syntax
 import qualified Hydra.Pg.Model as PgModel
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 -- | Convert a property graph adjacent edge to a GraphSON adjacent edge

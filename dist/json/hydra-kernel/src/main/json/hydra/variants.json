@@ -47,6 +47,7 @@
                 "union": [
                   {"name": "binary", "type": {"unit": {}}},
                   {"name": "boolean", "type": {"unit": {}}},
+                  {"name": "decimal", "type": {"unit": {}}},
                   {"name": "float", "type": {"unit": {}}},
                   {"name": "integer", "type": {"unit": {}}},
                   {"name": "string", "type": {"unit": {}}}]}}},

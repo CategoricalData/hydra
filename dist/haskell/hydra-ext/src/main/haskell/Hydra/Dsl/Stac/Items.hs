@@ -10,6 +10,7 @@ import qualified Hydra.Iana.Linkrelations as Linkrelations
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Stac.Items as Items
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 asset :: Phantoms.TTerm Items.Uri -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe Items.MediaType) -> Phantoms.TTerm [Items.Role] -> Phantoms.TTerm Items.Asset

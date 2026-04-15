@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Cypher.Features as Features
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 aggregateFunctionFeatures :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.AggregateFunctionFeatures
 aggregateFunctionFeatures avg collect count max min percentileCont percentileDisc stdev stdevp sum =

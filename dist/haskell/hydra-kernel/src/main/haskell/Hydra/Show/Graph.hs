@@ -9,6 +9,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as ShowCore
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Show a list of bindings as a string
 graph :: [Core.Binding] -> String

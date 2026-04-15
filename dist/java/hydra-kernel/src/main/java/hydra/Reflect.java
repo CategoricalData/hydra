@@ -237,6 +237,11 @@ public interface Reflect {
       }
 
       @Override
+      public hydra.core.LiteralType visit(hydra.core.Literal.Decimal ignored) {
+        return new hydra.core.LiteralType.Decimal();
+      }
+
+      @Override
       public hydra.core.LiteralType visit(hydra.core.Literal.Float_ arg_) {
         return new hydra.core.LiteralType.Float_(hydra.Reflect.floatValueType((arg_).value));
       }
@@ -266,6 +271,11 @@ public interface Reflect {
       }
 
       @Override
+      public hydra.variants.LiteralVariant visit(hydra.core.LiteralType.Decimal ignored) {
+        return new hydra.variants.LiteralVariant.Decimal();
+      }
+
+      @Override
       public hydra.variants.LiteralVariant visit(hydra.core.LiteralType.Float_ ignored) {
         return new hydra.variants.LiteralVariant.Float_();
       }
@@ -286,7 +296,8 @@ public interface Reflect {
     return hydra.lib.lists.Concat.apply(java.util.Arrays.asList(
       java.util.Arrays.asList(
         new hydra.core.LiteralType.Binary(),
-        new hydra.core.LiteralType.Boolean_()),
+        new hydra.core.LiteralType.Boolean_(),
+        new hydra.core.LiteralType.Decimal()),
       hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.core.FloatType, hydra.core.LiteralType>) (x -> new hydra.core.LiteralType.Float_(x)),
         hydra.Reflect.floatTypes()),
@@ -304,6 +315,7 @@ public interface Reflect {
     return java.util.Arrays.asList(
       new hydra.variants.LiteralVariant.Binary(),
       new hydra.variants.LiteralVariant.Boolean_(),
+      new hydra.variants.LiteralVariant.Decimal(),
       new hydra.variants.LiteralVariant.Float_(),
       new hydra.variants.LiteralVariant.Integer_(),
       new hydra.variants.LiteralVariant.String_());

@@ -566,6 +566,16 @@
                         "domain": {"literal": {"boolean": {}}},
                         "parameter": "_"}}},
                   {
+                    "name": "decimal",
+                    "term": {
+                      "lambda": {
+                        "body": {
+                          "inject": {
+                            "field": {"name": "decimal", "term": {"unit": {}}},
+                            "typeName": "hydra.core.LiteralType"}},
+                        "domain": {"literal": {"decimal": {}}},
+                        "parameter": "_"}}},
+                  {
                     "name": "float",
                     "term": {
                       "lambda": {
@@ -657,6 +667,16 @@
                         "domain": {"unit": {}},
                         "parameter": "_"}}},
                   {
+                    "name": "decimal",
+                    "term": {
+                      "lambda": {
+                        "body": {
+                          "inject": {
+                            "field": {"name": "decimal", "term": {"unit": {}}},
+                            "typeName": "hydra.variants.LiteralVariant"}},
+                        "domain": {"unit": {}},
+                        "parameter": "_"}}},
+                  {
                     "name": "float",
                     "term": {
                       "lambda": {
@@ -715,6 +735,10 @@
                         {
                           "inject": {
                             "field": {"name": "boolean", "term": {"unit": {}}},
+                            "typeName": "hydra.core.LiteralType"}},
+                        {
+                          "inject": {
+                            "field": {"name": "decimal", "term": {"unit": {}}},
                             "typeName": "hydra.core.LiteralType"}}]},
                     {
                       "application": {
@@ -815,6 +839,10 @@
                 {
                   "inject": {
                     "field": {"name": "boolean", "term": {"unit": {}}},
+                    "typeName": "hydra.variants.LiteralVariant"}},
+                {
+                  "inject": {
+                    "field": {"name": "decimal", "term": {"unit": {}}},
                     "typeName": "hydra.variants.LiteralVariant"}},
                 {
                   "inject": {

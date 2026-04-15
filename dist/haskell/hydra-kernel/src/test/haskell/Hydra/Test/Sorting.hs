@@ -11,6 +11,7 @@ import qualified Hydra.Show.Core as Core
 import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Test cases for topological sorting
 allTests :: Testing.TestGroup

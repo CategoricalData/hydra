@@ -2870,6 +2870,58 @@
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
                               {
+                                "name": "decimal",
+                                "term": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {"variable": "value"},
+                                        "function": {
+                                          "cases": {
+                                            "cases": [
+                                              {
+                                                "name": "number",
+                                                "term": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "either": {
+                                                                "@right": {
+                                                                  "inject": {
+                                                                    "field": {
+                                                                      "name": "literal",
+                                                                      "term": {
+                                                                        "inject": {
+                                                                          "field": {
+                                                                            "name": "decimal",
+                                                                            "term": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "n"},
+                                                                                    "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}},
+                                                                                "function": {"variable": "hydra.lib.literals.float64ToDecimal"}}}},
+                                                                          "typeName": "hydra.core.Literal"}}},
+                                                                    "typeName": "hydra.core.Term"}}}},
+                                                            "type": {"literal": {"string": {}}}}},
+                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                    "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                                    "parameter": "n"}}}],
+                                            "default": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "either": {"@left": {"literal": {"string": "expected number for decimal"}}}},
+                                                    "type": {"literal": {"string": {}}}}},
+                                                "type": {"variable": "hydra.core.Term"}}},
+                                            "typeName": "hydra.json.model.Value"}}}},
+                                    "domain": {"unit": {}},
+                                    "parameter": "_"}}},
+                              {
                                 "name": "float",
                                 "term": {
                                   "lambda": {

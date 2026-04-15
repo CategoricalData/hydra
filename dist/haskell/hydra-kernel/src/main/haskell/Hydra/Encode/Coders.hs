@@ -7,6 +7,7 @@ module Hydra.Encode.Coders where
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 coderDirection :: Coders.CoderDirection -> Core.Term
 coderDirection x =

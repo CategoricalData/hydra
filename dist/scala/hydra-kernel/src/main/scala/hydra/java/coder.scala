@@ -1449,6 +1449,7 @@ def encodeLiteral(lit: hydra.core.Literal): hydra.java.syntax.Expression =
       hydra.java.utils.javaLiteralToJavaExpression(hydra.java.syntax.Literal.integer(hydra.lib.literals.int32ToBigint(w))))(byteValues))))
   }
   case hydra.core.Literal.boolean(v_Literal_boolean_b) => hydra.java.coder.encodeLiteral_litExp(hydra.java.utils.javaBoolean(v_Literal_boolean_b))
+  case hydra.core.Literal.decimal(v_Literal_decimal_v) => hydra.java.utils.javaConstructorCall(hydra.java.utils.javaConstructorName("java.math.BigDecimal")(None))(Seq(hydra.java.coder.encodeLiteral(hydra.core.Literal.string(hydra.lib.literals.showDecimal(v_Literal_decimal_v)))))(None)
   case hydra.core.Literal.float(v_Literal_float_f) => hydra.java.coder.encodeLiteral_encodeFloat(v_Literal_float_f)
   case hydra.core.Literal.integer(v_Literal_integer_i) => hydra.java.coder.encodeLiteral_encodeInteger(v_Literal_integer_i)
   case hydra.core.Literal.string(v_Literal_string_s) => hydra.java.coder.encodeLiteral_litExp(hydra.java.utils.javaString(v_Literal_string_s))
@@ -1459,6 +1460,7 @@ def encodeLiteralType[T0, T1, T2](lt: hydra.core.LiteralType)(cx: T0)(g: T1): Ei
      hydra.java.syntax.ArrayType_Variant.primitive(hydra.java.syntax.PrimitiveTypeWithAnnotations(hydra.java.syntax.PrimitiveType.numeric(hydra.java.syntax.NumericType.integral(hydra.java.syntax.IntegralType.byte)),
      Seq()))))))
   case hydra.core.LiteralType.boolean => hydra.java.coder.encodeLiteralType_simple("Boolean")(cx)(g)
+  case hydra.core.LiteralType.decimal => Right(hydra.java.utils.javaRefType(Seq())(Some(hydra.java.names.javaPackageName(Seq("java", "math"))))("BigDecimal"))
   case hydra.core.LiteralType.float(v_LiteralType_float_ft) => v_LiteralType_float_ft match
     case hydra.core.FloatType.bigfloat => Right(hydra.java.utils.javaRefType(Seq())(Some(hydra.java.names.javaPackageName(Seq("java", "math"))))("BigDecimal"))
     case hydra.core.FloatType.float32 => hydra.java.coder.encodeLiteralType_simple("Float")(cx)(g)
@@ -2853,6 +2855,7 @@ def interfaceTypes(isSer: Boolean)(aliases: hydra.java.environment.Aliases)(tpar
 def isBigNumericType(typ: hydra.core.Type): Boolean =
   hydra.strip.deannotateType(typ) match
   case hydra.core.Type.literal(v_Type_literal_lt) => v_Type_literal_lt match
+    case hydra.core.LiteralType.decimal => true
     case hydra.core.LiteralType.float(v_LiteralType_float_ft) => v_LiteralType_float_ft match
       case hydra.core.FloatType.bigfloat => true
       case _ => false

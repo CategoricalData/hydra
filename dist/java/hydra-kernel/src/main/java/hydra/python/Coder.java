@@ -1659,6 +1659,13 @@ public interface Coder {
       }
 
       @Override
+      public hydra.util.Either<T0, hydra.python.syntax.Expression> visit(hydra.core.Literal.Decimal d) {
+        return hydra.util.Either.<T0, hydra.python.syntax.Expression>right(hydra.python.Utils.functionCall(
+          hydra.python.Utils.pyNameToPyPrimary(new hydra.python.syntax.Name("Decimal")),
+          java.util.Arrays.asList(hydra.python.Utils.singleQuotedString(hydra.lib.literals.ShowDecimal.apply((d).value)))));
+      }
+
+      @Override
       public hydra.util.Either<T0, hydra.python.syntax.Expression> visit(hydra.core.Literal.Float_ f) {
         return hydra.python.Coder.<T0>encodeFloatValue((f).value);
       }
@@ -1687,6 +1694,11 @@ public interface Coder {
       @Override
       public String visit(hydra.core.LiteralType.Boolean_ ignored) {
         return "bool";
+      }
+
+      @Override
+      public String visit(hydra.core.LiteralType.Decimal ignored) {
+        return "Decimal";
       }
 
       @Override

@@ -6,7 +6,7 @@
 
 (def hydra_variants_function_variant-variants (list :elimination :lambda))
 
-(def hydra_variants_literal_variant-variants (list :binary :boolean :float :integer :string))
+(def hydra_variants_literal_variant-variants (list :binary :boolean :decimal :float :integer :string))
 
 (def hydra_variants_term_variant-variants (list :annotated :application :cases :either :inject :lambda :let :list :literal :map :maybe :pair :project :record :set :type_application :type_lambda :unit :unwrap :variable :wrap))
 

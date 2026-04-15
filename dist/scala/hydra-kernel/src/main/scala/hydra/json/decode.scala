@@ -99,6 +99,9 @@ def decodeLiteral(lt: hydra.core.LiteralType)(value: hydra.json.model.Value): Ei
   case hydra.core.LiteralType.boolean => value match
     case hydra.json.model.Value.boolean(v_Value_boolean_b) => Right(hydra.core.Term.literal(hydra.core.Literal.boolean(v_Value_boolean_b)))
     case _ => Left("expected boolean")
+  case hydra.core.LiteralType.decimal => value match
+    case hydra.json.model.Value.number(v_Value_number_n) => Right(hydra.core.Term.literal(hydra.core.Literal.decimal(hydra.lib.literals.float64ToDecimal(hydra.lib.literals.bigfloatToFloat64(v_Value_number_n)))))
+    case _ => Left("expected number for decimal")
   case hydra.core.LiteralType.float(v_LiteralType_float_ft) => hydra.json.decode.decodeFloat(v_LiteralType_float_ft)(value)
   case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => hydra.json.decode.decodeInteger(v_LiteralType_integer_it)(value)
   case hydra.core.LiteralType.string => {

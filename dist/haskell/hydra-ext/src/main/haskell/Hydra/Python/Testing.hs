@@ -14,6 +14,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Build the complete Python test module content
 buildPythonTestModule :: t0 -> Testing.TestGroup -> String -> String

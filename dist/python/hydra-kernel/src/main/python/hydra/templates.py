@@ -89,6 +89,9 @@ def instantiate_template(cx: T0, minimal: bool, schema: FrozenDict[hydra.core.Na
             case hydra.core.LiteralTypeBoolean():
                 return cast(hydra.core.Literal, hydra.core.LiteralBoolean(False))
 
+            case hydra.core.LiteralTypeDecimal():
+                return cast(hydra.core.Literal, hydra.core.LiteralDecimal(Decimal('0.0')))
+
             case hydra.core.LiteralTypeInteger(value=it):
                 return cast(hydra.core.Literal, hydra.core.LiteralInteger(for_integer(it)))
 

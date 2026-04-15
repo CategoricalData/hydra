@@ -14,6 +14,7 @@ import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Test.TestTypes as TestTypes
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
 

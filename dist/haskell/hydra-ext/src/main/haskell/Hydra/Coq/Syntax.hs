@@ -8,6 +8,7 @@ module Hydra.Coq.Syntax where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 data AnnotatedApplication =
   AnnotatedApplication {

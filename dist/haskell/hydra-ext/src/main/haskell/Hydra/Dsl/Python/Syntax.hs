@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Python.Syntax as Syntax
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 annotatedRhsStar :: Phantoms.TTerm [Syntax.StarExpression] -> Phantoms.TTerm Syntax.AnnotatedRhs
 annotatedRhsStar x =

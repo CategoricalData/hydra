@@ -11,6 +11,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Tabular as Tabular
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 columnType :: Tabular.ColumnType -> Core.Term
 columnType x =
