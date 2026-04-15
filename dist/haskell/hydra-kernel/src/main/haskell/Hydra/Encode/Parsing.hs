@@ -7,6 +7,7 @@ module Hydra.Encode.Parsing where
 import qualified Hydra.Core as Core
 import qualified Hydra.Parsing as Parsing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 parseError :: Parsing.ParseError -> Core.Term
 parseError x =

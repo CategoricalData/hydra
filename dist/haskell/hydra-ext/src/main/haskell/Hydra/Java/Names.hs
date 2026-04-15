@@ -7,6 +7,7 @@ module Hydra.Java.Names where
 import qualified Hydra.Java.Syntax as Syntax
 import qualified Hydra.Lib.Lists as Lists
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 acceptMethodName :: String
 acceptMethodName = "accept"

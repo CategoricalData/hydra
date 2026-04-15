@@ -4,60 +4,100 @@
 Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdlib.QArith.QArith hydra.lib.base.
 
 (* Module dependencies *)
-Require Import hydra.context hydra.core hydra.typing hydra.substitution hydra.errors hydra.lib.eithers hydra.annotations hydra.lib.strings hydra.show.core hydra.show.typing hydra.lib.maps hydra.lib.lists hydra.lib.pairs hydra.lib.maybes hydra.lib.sets hydra.graph hydra.unification hydra.checking hydra.reflect hydra.names hydra.variables hydra.lib.logic hydra.lib.equality hydra.resolution hydra.extract.core hydra.sorting hydra.lib.math hydra.lib.literals hydra.rewriting hydra.lexical.
+Require Import hydra.paths hydra.ast hydra.classes hydra.coders hydra.context hydra.core hydra.error.checking hydra.error.core hydra.error.packaging hydra.errors hydra.graph hydra.json.model hydra.packaging hydra.parsing hydra.phantoms hydra.query hydra.relational hydra.tabular hydra.testing hydra.topology hydra.typing hydra.util hydra.variants hydra.annotations hydra.checking hydra.extract.core hydra.lexical hydra.reflect hydra.rewriting hydra.names hydra.resolution hydra.show.core hydra.show.errors hydra.show.typing hydra.sorting hydra.substitution hydra.variables hydra.unification.
 
-Axiom yieldWithConstraints : Context_ -> Term -> Type_ -> TypeSubst -> (list) ((prod) (Name) (TypeVariableMetadata)) -> InferenceResult.
-Axiom yieldDebug : forall (t0 : Type), Context_ -> t0 -> string -> Term -> Type_ -> TypeSubst -> (sum) (Error) (InferenceResult).
-Axiom yieldCheckedWithConstraints : Context_ -> Term -> Type_ -> TypeSubst -> (list) ((prod) (Name) (TypeVariableMetadata)) -> InferenceResult.
-Axiom yieldChecked : Context_ -> Term -> Type_ -> TypeSubst -> InferenceResult.
-Axiom yield : Context_ -> Term -> Type_ -> TypeSubst -> InferenceResult.
-Axiom showInferenceResult : InferenceResult -> string.
-Axiom mergeClassConstraints : forall (t0 : Type), (list) ((prod) (t0) (TypeVariableMetadata)) -> (list) ((prod) (t0) (TypeVariableMetadata)) -> (list) ((prod) (t0) (TypeVariableMetadata)).
-Axiom mapConstraints : forall (t0 : Type) (t1 : Type), t0 -> hydra.graph.Graph -> (TypeSubst -> t1) -> (list) (TypeConstraint) -> (sum) (Error) (t1).
-Axiom inferTypeOfUnit : Context_ -> InferenceResult.
-Axiom inferTypeOfLiteral : Context_ -> Literal -> InferenceResult.
-Axiom freshVariableType : Context_ -> (prod) (Type_) (Context_).
-Axiom freeVariablesInContext : hydra.graph.Graph -> (list) (Name).
-Axiom isUnbound : hydra.graph.Graph -> Name -> bool.
-Axiom generalize : hydra.graph.Graph -> Type_ -> TypeScheme.
-Axiom extendContext : (list) ((prod) (Name) (TypeScheme)) -> hydra.graph.Graph -> hydra.graph.Graph.
-Axiom buildTypeApplicationTerm : (list) (Name) -> Term -> Term.
-Axiom inferTypeOfPrimitive : Context_ -> hydra.graph.Graph -> Name -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfProjection : Context_ -> hydra.graph.Graph -> Projection -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfUnwrap : Context_ -> hydra.graph.Graph -> Name -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfVariable : Context_ -> hydra.graph.Graph -> Name -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfWrappedTerm_inferTypeOfTerm_bundle : unit.
+Axiom bindConstraints : forall (_ : t0) , forall (_ : hydra.graph.Graph) , forall (_ : (list) (TypeConstraint)) , (sum) (Error) (TypeSubst).
 
-Axiom inferTypeOfWrappedTerm : Context_ -> hydra.graph.Graph -> WrappedTerm -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfTerm : Context_ -> hydra.graph.Graph -> Term -> string -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfAnnotatedTerm : Context_ -> hydra.graph.Graph -> AnnotatedTerm -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfApplication : Context_ -> hydra.graph.Graph -> Application -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfEither : Context_ -> hydra.graph.Graph -> (sum) (Term) (Term) -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfFunction : Context_ -> hydra.graph.Graph -> Function -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfElimination : Context_ -> hydra.graph.Graph -> Elimination -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfCaseStatement : Context_ -> hydra.graph.Graph -> CaseStatement -> (sum) (Error) (InferenceResult).
-Axiom inferMany : Context_ -> hydra.graph.Graph -> (list) ((prod) (Term) (string)) -> (sum) (Error) ((prod) ((prod) ((list) (Term)) ((prod) ((list) (Type_)) ((prod) (TypeSubst) ((list) ((prod) (Name) (TypeVariableMetadata)))))) (Context_)).
-Axiom inferTypeOfLambda : Context_ -> hydra.graph.Graph -> Lambda -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfInjection : Context_ -> hydra.graph.Graph -> Injection -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfLet : Context_ -> hydra.graph.Graph -> Let -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfLetNormalized : Context_ -> hydra.graph.Graph -> Let -> (sum) (Error) (InferenceResult).
-Axiom inferTypesOfTemporaryBindings : Context_ -> hydra.graph.Graph -> (list) (Binding) -> (sum) (Error) ((prod) ((prod) ((list) (Term)) ((prod) ((list) (Type_)) ((prod) (TypeSubst) ((list) ((prod) (Name) (TypeVariableMetadata)))))) (Context_)).
-Axiom inferTypeOfList : Context_ -> hydra.graph.Graph -> (list) (Term) -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfCollection : Context_ -> hydra.graph.Graph -> (Type_ -> Type_) -> ((list) (Term) -> Term) -> string -> (list) (Name) -> (list) (Term) -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfMap : Context_ -> hydra.graph.Graph -> (list) ((prod) (Term) (Term)) -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfOptional : Context_ -> hydra.graph.Graph -> (option) (Term) -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfPair : Context_ -> hydra.graph.Graph -> (prod) (Term) (Term) -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfRecord : Context_ -> hydra.graph.Graph -> Record_ -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfSet : Context_ -> hydra.graph.Graph -> (list) (Term) -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfTypeApplication : Context_ -> hydra.graph.Graph -> TypeApplicationTerm -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfTypeLambda : Context_ -> hydra.graph.Graph -> TypeLambda -> (sum) (Error) (InferenceResult).
-Axiom forInferredTerm : forall (t0 : Type), Context_ -> hydra.graph.Graph -> Term -> string -> (InferenceResult -> t0) -> (sum) (Error) ((prod) (t0) (Context_)).
-Axiom inferInGraphContext : Context_ -> hydra.graph.Graph -> Term -> (sum) (Error) (InferenceResult).
-Axiom bindUnboundTypeVariables_bundle : unit.
+Axiom bindUnboundTypeVariables : forall (_ : hydra.graph.Graph) , forall (_ : Term) , Term.
 
-Axiom bindUnboundTypeVariables : hydra.graph.Graph -> Term -> Term.
-Axiom finalizeInferredTerm : forall (t0 : Type), t0 -> hydra.graph.Graph -> Term -> (sum) (Error) (Term).
-Axiom inferGraphTypes : Context_ -> (list) (Binding) -> hydra.graph.Graph -> (sum) (Error) ((prod) ((prod) (hydra.graph.Graph) ((list) (Binding))) (Context_)).
-Axiom inferTypeOf : Context_ -> hydra.graph.Graph -> Term -> (sum) (Error) ((prod) ((prod) (Term) (TypeScheme)) (Context_)).
-Axiom bindConstraints : forall (t0 : Type), t0 -> hydra.graph.Graph -> (list) (TypeConstraint) -> (sum) (Error) (TypeSubst).
+Axiom buildTypeApplicationTerm : forall (_ : (list) (Name)) , forall (_ : Term) , Term.
 
+Axiom extendContext : forall (_ : (list) ((prod) (Name) (TypeScheme))) , forall (_ : hydra.graph.Graph) , hydra.graph.Graph.
+
+Axiom finalizeInferredTerm : forall (_ : t0) , forall (_ : hydra.graph.Graph) , forall (_ : Term) , (sum) (Error) (Term).
+
+Axiom forInferredTerm : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : Term) , forall (_ : string) , forall (_ : forall (_ : InferenceResult) , t0) , (sum) (Error) ((prod) (t0) (Context_)).
+
+Axiom freeVariablesInContext : forall (_ : hydra.graph.Graph) , (list) (Name).
+
+Axiom freshVariableType : forall (_ : Context_) , (prod) (Type_) (Context_).
+
+Axiom generalize : forall (_ : hydra.graph.Graph) , forall (_ : Type_) , TypeScheme.
+
+Axiom inferGraphTypes : forall (_ : Context_) , forall (_ : (list) (Binding)) , forall (_ : hydra.graph.Graph) , (sum) (Error) ((prod) ((prod) (hydra.graph.Graph) ((list) (Binding))) (Context_)).
+
+Axiom inferInGraphContext : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : Term) , (sum) (Error) (InferenceResult).
+
+Axiom inferMany : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : (list) ((prod) (Term) (string))) , (sum) (Error) ((prod) ((prod) ((list) (Term)) ((prod) ((list) (Type_)) ((prod) (TypeSubst) ((list) ((prod) (Name) (TypeVariableMetadata)))))) (Context_)).
+
+Axiom inferTypeOf : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : Term) , (sum) (Error) ((prod) ((prod) (Term) (TypeScheme)) (Context_)).
+
+Axiom inferTypeOfAnnotatedTerm : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : AnnotatedTerm) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfApplication : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : Application) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfCaseStatement : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : CaseStatement) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfCollection : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : forall (_ : Type_) , Type_) , forall (_ : forall (_ : (list) (Term)) , Term) , forall (_ : string) , forall (_ : (list) (Name)) , forall (_ : (list) (Term)) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfEither : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : (sum) (Term) (Term)) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfInjection : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : Injection) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfLambda : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : Lambda) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfLet : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : Let) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfLetNormalized : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : Let) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfList : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : (list) (Term)) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfLiteral : forall (_ : Context_) , forall (_ : Literal) , InferenceResult.
+
+Axiom inferTypeOfMap : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : (list) ((prod) (Term) (Term))) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfOptional : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : (option) (Term)) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfPair : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : (prod) (Term) (Term)) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfPrimitive : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : Name) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfProjection : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : Projection) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfRecord : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : Record_) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfSet : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : (list) (Term)) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfTerm : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : Term) , forall (_ : string) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfTypeApplication : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : TypeApplicationTerm) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfTypeLambda : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : TypeLambda) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfUnit : forall (_ : Context_) , InferenceResult.
+
+Axiom inferTypeOfUnwrap : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : Name) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfVariable : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : Name) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypeOfWrappedTerm : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : WrappedTerm) , (sum) (Error) (InferenceResult).
+
+Axiom inferTypesOfTemporaryBindings : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : (list) (Binding)) , (sum) (Error) ((prod) ((prod) ((list) (Term)) ((prod) ((list) (Type_)) ((prod) (TypeSubst) ((list) ((prod) (Name) (TypeVariableMetadata)))))) (Context_)).
+
+Axiom isUnbound : forall (_ : hydra.graph.Graph) , forall (_ : Name) , bool.
+
+Axiom mapConstraints : forall (_ : t0) , forall (_ : hydra.graph.Graph) , forall (_ : forall (_ : TypeSubst) , t1) , forall (_ : (list) (TypeConstraint)) , (sum) (Error) (t1).
+
+Axiom mergeClassConstraints : forall (_ : (list) ((prod) (t0) (TypeVariableMetadata))) , forall (_ : (list) ((prod) (t0) (TypeVariableMetadata))) , (list) ((prod) (t0) (TypeVariableMetadata)).
+
+Axiom showInferenceResult : forall (_ : InferenceResult) , string.
+
+Axiom yield : forall (_ : Context_) , forall (_ : Term) , forall (_ : Type_) , forall (_ : TypeSubst) , InferenceResult.
+
+Axiom yieldChecked : forall (_ : Context_) , forall (_ : Term) , forall (_ : Type_) , forall (_ : TypeSubst) , InferenceResult.
+
+Axiom yieldCheckedWithConstraints : forall (_ : Context_) , forall (_ : Term) , forall (_ : Type_) , forall (_ : TypeSubst) , forall (_ : (list) ((prod) (Name) (TypeVariableMetadata))) , InferenceResult.
+
+Axiom yieldDebug : forall (_ : Context_) , forall (_ : t0) , forall (_ : string) , forall (_ : Term) , forall (_ : Type_) , forall (_ : TypeSubst) , (sum) (Error) (InferenceResult).
+
+Axiom yieldWithConstraints : forall (_ : Context_) , forall (_ : Term) , forall (_ : Type_) , forall (_ : TypeSubst) , forall (_ : (list) ((prod) (Name) (TypeVariableMetadata))) , InferenceResult.

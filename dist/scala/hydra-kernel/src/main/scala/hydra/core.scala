@@ -65,6 +65,7 @@ case class Let(bindings: Seq[hydra.core.Binding], body: hydra.core.Term)
 enum Literal :
    case binary(value: scala.Predef.String) extends Literal
    case boolean(value: Boolean) extends Literal
+   case decimal(value: BigDecimal) extends Literal
    case float(value: hydra.core.FloatValue) extends Literal
    case integer(value: hydra.core.IntegerValue) extends Literal
    case string(value: scala.Predef.String) extends Literal
@@ -72,6 +73,7 @@ enum Literal :
 enum LiteralType :
    case binary extends LiteralType
    case boolean extends LiteralType
+   case decimal extends LiteralType
    case float(value: hydra.core.FloatType) extends LiteralType
    case integer(value: hydra.core.IntegerType) extends LiteralType
    case string extends LiteralType

@@ -14,6 +14,8 @@ public abstract class LiteralVariant implements Serializable, Comparable<Literal
 
   public static final hydra.core.Name BOOLEAN = new hydra.core.Name("boolean");
 
+  public static final hydra.core.Name DECIMAL = new hydra.core.Name("decimal");
+
   public static final hydra.core.Name FLOAT = new hydra.core.Name("float");
 
   public static final hydra.core.Name INTEGER = new hydra.core.Name("integer");
@@ -30,6 +32,8 @@ public abstract class LiteralVariant implements Serializable, Comparable<Literal
     R visit(Binary instance) ;
 
     R visit(Boolean_ instance) ;
+
+    R visit(Decimal instance) ;
 
     R visit(Float_ instance) ;
 
@@ -48,6 +52,10 @@ public abstract class LiteralVariant implements Serializable, Comparable<Literal
     }
 
     default R visit(Boolean_ instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Decimal instance) {
       return otherwise(instance);
     }
 
@@ -110,6 +118,41 @@ public abstract class LiteralVariant implements Serializable, Comparable<Literal
         return false;
       }
       Boolean_ o = (Boolean_) other;
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LiteralVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class Decimal extends hydra.variants.LiteralVariant implements Serializable {
+    public Decimal () {
+
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Decimal)) {
+        return false;
+      }
+      Decimal o = (Decimal) other;
       return true;
     }
 

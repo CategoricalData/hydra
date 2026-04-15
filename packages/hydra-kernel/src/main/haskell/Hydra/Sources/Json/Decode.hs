@@ -354,6 +354,11 @@ decodeLiteral = define "decodeLiteral" $
         (Just $ left $ string "expected boolean") [
         _Value_boolean>>: "b" ~> right $ Core.termLiteral $ Core.literalBoolean $ var "b"],
 
+    _LiteralType_decimal>>: constant $
+      cases _Value (var "value")
+        (Just $ left $ string "expected number for decimal") [
+        _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalDecimal $ Literals.float64ToDecimal $ Literals.bigfloatToFloat64 $ var "n"],
+
     _LiteralType_float>>: "ft" ~> decodeFloat @@ var "ft" @@ var "value",
 
     _LiteralType_integer>>: "it" ~> decodeInteger @@ var "it" @@ var "value",

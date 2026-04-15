@@ -52,6 +52,11 @@ public interface Variants {
       }
 
       @Override
+      public hydra.core.Term visit(hydra.variants.LiteralVariant.Decimal y) {
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.variants.LiteralVariant"), new hydra.core.Field(new hydra.core.Name("decimal"), new hydra.core.Term.Unit())));
+      }
+
+      @Override
       public hydra.core.Term visit(hydra.variants.LiteralVariant.Float_ y) {
         return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.variants.LiteralVariant"), new hydra.core.Field(new hydra.core.Name("float"), new hydra.core.Term.Unit())));
       }

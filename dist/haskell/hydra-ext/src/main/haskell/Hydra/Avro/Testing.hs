@@ -8,6 +8,7 @@ import qualified Hydra.Avro.Schema as Schema
 import qualified Hydra.Core as Core
 import qualified Hydra.Json.Model as Model
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | A test case which maps an Avro schema to a Hydra type and compares the result
 data TypeLevelForwardTestCase =

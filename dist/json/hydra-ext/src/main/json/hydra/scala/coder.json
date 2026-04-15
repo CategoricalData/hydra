@@ -3600,6 +3600,29 @@
                                                 "domain": {"literal": {"boolean": {}}},
                                                 "parameter": "b"}}},
                                           {
+                                            "name": "decimal",
+                                            "term": {
+                                              "lambda": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "either": {
+                                                            "@right": {
+                                                              "inject": {
+                                                                "field": {
+                                                                  "name": "string",
+                                                                  "term": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "d"},
+                                                                      "function": {"variable": "hydra.lib.literals.showDecimal"}}}},
+                                                                "typeName": "hydra.scala.syntax.Lit"}}}},
+                                                        "type": {"variable": "hydra.errors.Error"}}},
+                                                    "type": {"variable": "hydra.scala.syntax.Lit"}}},
+                                                "domain": {"literal": {"decimal": {}}},
+                                                "parameter": "d"}}},
+                                          {
                                             "name": "float",
                                             "term": {
                                               "lambda": {
@@ -6018,6 +6041,30 @@
                                                                 "function": {
                                                                   "cases": {
                                                                     "cases": [
+                                                                      {
+                                                                        "name": "decimal",
+                                                                        "term": {
+                                                                          "lambda": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "either": {
+                                                                                        "@right": {
+                                                                                          "application": {
+                                                                                            "argument": {"list": [{"variable": "litData"}]},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"literal": {"string": "BigDecimal"}},
+                                                                                                    "function": {"variable": "hydra.scala.utils.sname"}}},
+                                                                                                "function": {"variable": "hydra.scala.utils.sapply"}}}}}}},
+                                                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                                                "type": {"variable": "hydra.scala.syntax.Data"}}},
+                                                                            "domain": {"literal": {"decimal": {}}},
+                                                                            "parameter": "_"}}},
                                                                       {
                                                                         "name": "integer",
                                                                         "term": {
@@ -8626,6 +8673,34 @@
                                                                                         "term": {
                                                                                           "record": {
                                                                                             "fields": [{"name": "value", "term": {"literal": {"string": "Boolean"}}}],
+                                                                                            "typeName": "hydra.scala.syntax.Type_Name"}}},
+                                                                                      "typeName": "hydra.scala.syntax.Type_Ref"}}},
+                                                                                "typeName": "hydra.scala.syntax.Type"}}}},
+                                                                        "type": {"variable": "hydra.errors.Error"}}},
+                                                                    "type": {"variable": "hydra.scala.syntax.Type"}}},
+                                                                "domain": {"unit": {}},
+                                                                "parameter": "_"}}},
+                                                          {
+                                                            "name": "decimal",
+                                                            "term": {
+                                                              "lambda": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "either": {
+                                                                            "@right": {
+                                                                              "inject": {
+                                                                                "field": {
+                                                                                  "name": "ref",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "field": {
+                                                                                        "name": "name",
+                                                                                        "term": {
+                                                                                          "record": {
+                                                                                            "fields": [{"name": "value", "term": {"literal": {"string": "BigDecimal"}}}],
                                                                                             "typeName": "hydra.scala.syntax.Type_Name"}}},
                                                                                       "typeName": "hydra.scala.syntax.Type_Ref"}}},
                                                                                 "typeName": "hydra.scala.syntax.Type"}}}},

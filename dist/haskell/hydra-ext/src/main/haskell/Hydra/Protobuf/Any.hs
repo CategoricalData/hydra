@@ -6,6 +6,7 @@ module Hydra.Protobuf.Any where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.ByteString as B
 
 -- | `Any` contains an arbitrary serialized protocol buffer message along with a URL that describes the type of the serialized message.

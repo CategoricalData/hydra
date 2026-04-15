@@ -12,6 +12,7 @@ import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
 

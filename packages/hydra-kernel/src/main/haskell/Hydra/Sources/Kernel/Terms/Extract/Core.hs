@@ -34,7 +34,7 @@ import qualified Hydra.Dsl.Meta.Types        as MetaTypes
 import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms hiding (
-  bigfloat, bigint, binary, boolean, cases, field, float32, float64, floatValue, injection, int8, int16, int32, int64,
+  bigfloat, bigint, binary, boolean, cases, decimal, field, float32, float64, floatValue, injection, int8, int16, int32, int64,
   integerValue, lambda, list, literal, map, pair, set, record, string, unit, wrap, uint8, uint16, uint32, uint64)
 import qualified Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Prims             as Prims
@@ -52,6 +52,7 @@ import           Prelude hiding ((++), map)
 import qualified Data.Int                    as I
 import qualified Data.List                   as L
 import qualified Data.Map                    as M
+import qualified Data.Scientific             as Sci
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
@@ -95,6 +96,8 @@ module_ = Module ns definitions
      toDefinition booleanLiteral,
      toDefinition caseField,
      toDefinition cases,
+     toDefinition decimal,
+     toDefinition decimalLiteral,
      toDefinition decodeEither,
      toDefinition decodeList,
      toDefinition decodeMap,
@@ -224,6 +227,20 @@ booleanLiteral = define "booleanLiteral" $
   "v" ~> Phantoms.cases _Literal (var "v")
     (Just (unexpected(Phantoms.string "boolean") (ShowCore.literal @@ var "v"))) [
     _Literal_boolean>>: "b" ~> right (var "b")]
+
+decimal :: TTermDefinition (Graph -> Term -> Prelude.Either Error Sci.Scientific)
+decimal = define "decimal" $
+  doc "Extract an arbitrary-precision decimal value from a term" $
+  "graph" ~> "t" ~>
+  "l" <<~ literal @@ var "graph" @@ var "t" $
+  decimalLiteral @@ var "l"
+
+decimalLiteral :: TTermDefinition (Literal -> Prelude.Either Error Sci.Scientific)
+decimalLiteral = define "decimalLiteral" $
+  doc "Extract a decimal literal from a Literal value" $
+  "v" ~> Phantoms.cases _Literal (var "v")
+    (Just (unexpected(Phantoms.string "decimal") (ShowCore.literal @@ var "v"))) [
+    _Literal_decimal>>: "d" ~> right (var "d")]
 
 -- TODO: nonstandard; move me
 caseField :: TTermDefinition (Name -> String -> Graph -> Term -> Prelude.Either Error Field)

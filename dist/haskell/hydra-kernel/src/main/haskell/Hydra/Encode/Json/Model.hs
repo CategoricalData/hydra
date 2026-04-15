@@ -9,6 +9,7 @@ import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 value :: Model.Value -> Core.Term
 value x =

@@ -6,6 +6,7 @@ module Hydra.Phantoms where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | An association of a named term (element) with a phantom type
 data TBinding a =

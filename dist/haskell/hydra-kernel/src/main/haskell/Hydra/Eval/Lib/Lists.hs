@@ -15,6 +15,7 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Reduction as Reduction
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Interpreter-friendly applicative apply for List terms.
 apply :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term

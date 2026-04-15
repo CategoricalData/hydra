@@ -660,6 +660,56 @@ public interface Analysis {
       defTerms.get());
   }
 
+  static Boolean moduleContainsDecimalLiterals(hydra.packaging.Module mod) {
+    java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Term, Boolean>> checkTerm = (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Term, Boolean>>) (found -> (java.util.function.Function<hydra.core.Term, Boolean>) (term -> hydra.lib.logic.Or.apply(
+      found,
+      (term).accept(new hydra.core.Term.PartialVisitor<>() {
+        @Override
+        public Boolean otherwise(hydra.core.Term instance) {
+          return false;
+        }
+
+        @Override
+        public Boolean visit(hydra.core.Term.Literal lit) {
+          return (lit).value.accept(new hydra.core.Literal.PartialVisitor<>() {
+            @Override
+            public Boolean otherwise(hydra.core.Literal instance) {
+              return false;
+            }
+
+            @Override
+            public Boolean visit(hydra.core.Literal.Decimal ignored) {
+              return true;
+            }
+          });
+        }
+      }))));
+    hydra.util.Lazy<java.util.List<hydra.core.Term>> defTerms = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.packaging.Definition, hydra.util.Maybe<hydra.core.Term>>) (d -> (d).accept(new hydra.packaging.Definition.PartialVisitor<>() {
+        @Override
+        public hydra.util.Maybe<hydra.core.Term> otherwise(hydra.packaging.Definition instance) {
+          return (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing());
+        }
+
+        @Override
+        public hydra.util.Maybe<hydra.core.Term> visit(hydra.packaging.Definition.Term td) {
+          return hydra.util.Maybe.just((td).value.term);
+        }
+      })),
+      (mod).definitions)));
+    java.util.function.Function<hydra.core.Term, Boolean> termContainsDecimal = (java.util.function.Function<hydra.core.Term, Boolean>) (term -> hydra.Rewriting.foldOverTerm(
+      new hydra.coders.TraversalOrder.Pre(),
+      checkTerm,
+      false,
+      term));
+    return hydra.lib.lists.Foldl.apply(
+      (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Term, Boolean>>) (acc -> (java.util.function.Function<hydra.core.Term, Boolean>) (t -> hydra.lib.logic.Or.apply(
+        acc,
+        (termContainsDecimal).apply(t)))),
+      false,
+      defTerms.get());
+  }
+
   static <T0> hydra.util.Either<hydra.errors.Error_, java.util.Set<hydra.packaging.Namespace>> moduleDependencyNamespaces(T0 cx, hydra.graph.Graph graph, Boolean binds, Boolean withPrims, Boolean withNoms, Boolean withSchema, hydra.packaging.Module mod) {
     hydra.util.Lazy<java.util.List<hydra.core.Binding>> allBindings = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.packaging.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.packaging.Definition.PartialVisitor<>() {

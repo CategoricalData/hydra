@@ -16,6 +16,7 @@ import qualified Hydra.Rdf.Syntax as Syntax
 import qualified Hydra.Rdf.Utils as Utils
 import qualified Hydra.Shacl.Model as ShaclModel
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Convert edge types into property shape constraints for a given vertex label
 edgeTypesToPropertyShapes :: t0 -> (PgModel.EdgeLabel -> Syntax.Iri) -> PgModel.VertexLabel -> [PgModel.EdgeType t1] -> [ShaclModel.CommonConstraint]

@@ -41,7 +41,8 @@ module_ = Module ns definitions
   where
     definitions = [
       toDefinition coqLanguage,
-      toDefinition coqReservedWords]
+      toDefinition coqReservedWords,
+      toDefinition coqStrippedReservedWords]
 
 -- | Language constraints for Coq.
 -- Coq's type system (CIC) is a strict superset of System F, so it supports all Hydra features.
@@ -121,34 +122,58 @@ coqLanguage = define "coqLanguage" $ lets [
         (var "typeVariants")
         (var "typePredicate"))
 
--- | Reserved words in Coq
+-- | Reserved words that must be renamed when used as Coq variable or binding names.
+-- This set is kept narrower than the full Coq lexicon: it includes only the tokens
+-- that actually clash with Coq variable-name usage (Gallina and vernacular keywords)
+-- plus a few stdlib names that appear as Hydra-generated lambda parameter names.
 coqReservedWords :: TTermDefinition (S.Set String)
 coqReservedWords = define "coqReservedWords" $
   Sets.fromList $ list $ fmap string reservedWords
   where
     reservedWords = [
-      -- Gallina keywords
-      "as", "at", "cofix", "else", "end", "exists", "exists2", "fix",
-      "for", "forall", "fun", "if", "IF", "in", "let", "match",
+      -- Gallina and vernacular keywords
+      "as", "at", "cofix", "do", "else", "end", "exists", "exists2",
+      "fix", "for", "forall", "fun", "if", "IF", "in", "let", "match",
+      "mod", "open", "Prop", "return", "Set", "then", "Type", "using",
+      "where", "with",
+      "Axiom", "Class", "Coercion", "Context", "Definition", "Fixpoint",
+      "Hypothesis", "Inductive", "Instance", "Lemma", "Module", "Notation",
+      "Proof", "Qed", "Record", "Require", "Import", "Section", "End",
+      "Theorem", "Example", "Variable", "Variables",
+      -- Coq stdlib names that appear as Hydra-generated lambda parameter names
+      "cons", "pair", "nil",
+      -- Names that collide with Hydra kernel function names after namespace
+      -- stripping (e.g., hydra.show.core.term, hydra.show.core.type).
+      "term", "literal", "graph", "element"]
+
+-- | Reserved words that must be renamed when they appear as a stripped-local
+-- form of a cross-module Hydra reference. This set is used only by
+-- `resolveQualifiedName` when it converts a `hydra.<ns>.<x>` reference to its
+-- short form. It is strictly narrower than `coqReservedWords` — in particular
+-- it does *not* include `term`, `literal`, `element`, whose cross-module
+-- disambiguation is handled by the ambiguous-names mechanism, not by
+-- underscore-escaping. It is narrower at the lambda-parameter side too, but
+-- that set is tracked separately via `coqReservedWords`.
+coqStrippedReservedWords :: TTermDefinition (S.Set String)
+coqStrippedReservedWords = define "coqStrippedReservedWords" $
+  Sets.fromList $ list $ fmap string reservedWords
+  where
+    reservedWords = [
+      -- Gallina and vernacular keywords
+      "as", "at", "cofix", "do", "else", "end", "exists", "exists2",
+      "fix", "for", "forall", "fun", "if", "IF", "in", "let", "match",
       "mod", "Prop", "return", "Set", "then", "Type", "using",
       "where", "with",
-      -- Vernacular keywords
-      "Abort", "About", "Add", "Admit", "Admitted", "All",
-      "Arguments", "Axiom", "Check", "Class", "Close",
-      "CoFixpoint", "CoInductive", "Coercion", "Compute",
-      "Conjecture", "Context", "Corollary", "Declare",
-      "Defined", "Definition", "Derive", "End", "Eval",
-      "Example", "Existing", "Export", "Fact", "Fixpoint",
-      "From", "Function", "Generalizable", "Global", "Goal",
-      "Hint", "Hypothesis", "Import", "Inductive", "Infix",
-      "Instance", "Lemma", "Let", "Local", "Ltac", "Module",
-      "Notation", "Obligation", "Opaque", "Open", "Parameter",
-      "Polymorphic", "Proof", "Program", "Proposition", "Qed",
-      "Record", "Require", "Remark", "Scope", "Search",
-      "Section", "Set", "Show", "Strategy", "Structure",
-      "Tactic", "Theorem", "Transparent", "Unset", "Variable",
-      "Variables",
-      -- Standard library names we'll reference
-      "bool", "nat", "Z", "list", "option", "prod", "sum",
-      "unit", "Empty_set", "String", "true", "false",
-      "None", "Some", "nil", "cons", "pair", "inl", "inr", "tt"]
+      "Axiom", "Class", "Coercion", "Context", "Definition", "Fixpoint",
+      "Hypothesis", "Inductive", "Instance", "Lemma", "Module", "Notation",
+      "Proof", "Qed", "Record", "Require", "Import", "Section", "End",
+      "Theorem", "Example", "Variable", "Variables",
+      -- Coq stdlib type names
+      "bool", "nat", "list", "option", "prod", "sum", "unit",
+      "string", "String", "Empty_set",
+      -- Coq stdlib value constructors
+      "true", "false", "None", "Some", "nil", "cons", "pair",
+      "inl", "inr", "tt",
+      -- Hydra module name whose stripped form collides with generated
+      -- definition names.
+      "graph"]

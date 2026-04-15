@@ -285,6 +285,21 @@ public interface Adapt {
       }
 
       @Override
+      public hydra.core.Literal visit(hydra.core.Literal.Decimal d) {
+        return (lt).accept(new hydra.core.LiteralType.PartialVisitor<>() {
+          @Override
+          public hydra.core.Literal visit(hydra.core.LiteralType.Float_ ignored) {
+            return new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(hydra.lib.literals.DecimalToFloat64.apply((d).value)));
+          }
+
+          @Override
+          public hydra.core.Literal visit(hydra.core.LiteralType.String_ ignored) {
+            return new hydra.core.Literal.String_(hydra.lib.literals.ShowDecimal.apply((d).value));
+          }
+        });
+      }
+
+      @Override
       public hydra.core.Literal visit(hydra.core.Literal.Float_ f) {
         return (lt).accept(new hydra.core.LiteralType.PartialVisitor<>() {
           @Override
@@ -329,6 +344,11 @@ public interface Adapt {
           hydra.Adapt.adaptIntegerType(
             constraints,
             new hydra.core.IntegerType.Int8()));
+      }
+
+      @Override
+      public hydra.util.Maybe<hydra.core.LiteralType> visit(hydra.core.LiteralType.Decimal ignored) {
+        return hydra.util.Maybe.just(new hydra.core.LiteralType.Float_(new hydra.core.FloatType.Float64()));
       }
 
       @Override
@@ -908,6 +928,21 @@ public interface Adapt {
             return new hydra.core.Literal.String_(hydra.lib.literals.BinaryToString.apply((b).value));
           }
         })), hydra.lib.sets.FromList.apply(java.util.Arrays.asList("replace binary strings with character strings"))))))));
+      }
+
+      @Override
+      public hydra.util.Pair<hydra.core.LiteralType, hydra.util.Pair<java.util.function.Function<hydra.core.Literal, hydra.core.Literal>, java.util.Set<String>>> visit(hydra.core.LiteralType.Decimal ignored) {
+        return (hydra.util.Pair<hydra.core.LiteralType, hydra.util.Pair<java.util.function.Function<hydra.core.Literal, hydra.core.Literal>, java.util.Set<String>>>) ((hydra.util.Pair<hydra.core.LiteralType, hydra.util.Pair<java.util.function.Function<hydra.core.Literal, hydra.core.Literal>, java.util.Set<String>>>) (new hydra.util.Pair<hydra.core.LiteralType, hydra.util.Pair<java.util.function.Function<hydra.core.Literal, hydra.core.Literal>, java.util.Set<String>>>(new hydra.core.LiteralType.Float_(new hydra.core.FloatType.Float64()), (hydra.util.Pair<java.util.function.Function<hydra.core.Literal, hydra.core.Literal>, java.util.Set<String>>) ((hydra.util.Pair<java.util.function.Function<hydra.core.Literal, hydra.core.Literal>, java.util.Set<String>>) (new hydra.util.Pair<java.util.function.Function<hydra.core.Literal, hydra.core.Literal>, java.util.Set<String>>((java.util.function.Function<hydra.core.Literal, hydra.core.Literal>) (v -> (v).accept(new hydra.core.Literal.PartialVisitor<>() {
+          @Override
+          public hydra.core.Literal otherwise(hydra.core.Literal instance) {
+            return v;
+          }
+
+          @Override
+          public hydra.core.Literal visit(hydra.core.Literal.Decimal d) {
+            return new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(hydra.lib.literals.DecimalToFloat64.apply((d).value)));
+          }
+        })), hydra.lib.sets.FromList.apply(java.util.Arrays.asList("replace arbitrary-precision decimal numbers with 64-bit floating-point numbers (doubles)"))))))));
       }
 
       @Override

@@ -9,6 +9,7 @@ import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Paths as Paths
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | An error that occurred during decoding of a term
 newtype DecodingError =

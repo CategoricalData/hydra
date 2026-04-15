@@ -24,6 +24,7 @@ import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Predicates as Predicates
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Transform a type binding into an encoder binding
 encodeBinding :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.DecodingError Core.Binding
@@ -175,6 +176,18 @@ encodeLiteralType x =
               Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
               Core.injectionField = Core.Field {
                 Core.fieldName = (Core.Name "boolean"),
+                Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))})
+      Core.LiteralTypeDecimal -> Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "x"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermInject (Core.Injection {
+          Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+          Core.injectionField = Core.Field {
+            Core.fieldName = (Core.Name "literal"),
+            Core.fieldTerm = (Core.TermInject (Core.Injection {
+              Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
+              Core.injectionField = Core.Field {
+                Core.fieldName = (Core.Name "decimal"),
                 Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))})
       Core.LiteralTypeString -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "x"),

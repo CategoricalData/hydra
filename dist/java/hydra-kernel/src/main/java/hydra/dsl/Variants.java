@@ -34,6 +34,10 @@ public interface Variants {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.variants.LiteralVariant"), new hydra.core.Field(new hydra.core.Name("boolean"), new hydra.core.Term.Unit()))));
   }
 
+  static hydra.phantoms.TTerm<hydra.variants.LiteralVariant> literalVariantDecimal() {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.variants.LiteralVariant"), new hydra.core.Field(new hydra.core.Name("decimal"), new hydra.core.Term.Unit()))));
+  }
+
   static hydra.phantoms.TTerm<hydra.variants.LiteralVariant> literalVariantFloat() {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.variants.LiteralVariant"), new hydra.core.Field(new hydra.core.Name("float"), new hydra.core.Term.Unit()))));
   }

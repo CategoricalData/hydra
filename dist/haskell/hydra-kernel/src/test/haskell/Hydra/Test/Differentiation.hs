@@ -13,6 +13,7 @@ import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Test cases for automatic differentiation
 allTests :: Testing.TestGroup

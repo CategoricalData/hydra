@@ -7,6 +7,7 @@ module Hydra.Encode.Variants where
 import qualified Hydra.Core as Core
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 eliminationVariant :: Variants.EliminationVariant -> Core.Term
 eliminationVariant x =
@@ -53,6 +54,11 @@ literalVariant x =
         Core.injectionTypeName = (Core.Name "hydra.variants.LiteralVariant"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "boolean"),
+          Core.fieldTerm = Core.TermUnit}})
+      Variants.LiteralVariantDecimal -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.variants.LiteralVariant"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "decimal"),
           Core.fieldTerm = Core.TermUnit}})
       Variants.LiteralVariantFloat -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.variants.LiteralVariant"),

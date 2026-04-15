@@ -14,6 +14,8 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
 
   public static final hydra.core.Name BOOLEAN = new hydra.core.Name("boolean");
 
+  public static final hydra.core.Name DECIMAL = new hydra.core.Name("decimal");
+
   public static final hydra.core.Name FLOAT = new hydra.core.Name("float");
 
   public static final hydra.core.Name INTEGER = new hydra.core.Name("integer");
@@ -30,6 +32,8 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
     R visit(Binary instance) ;
 
     R visit(Boolean_ instance) ;
+
+    R visit(Decimal instance) ;
 
     R visit(Float_ instance) ;
 
@@ -48,6 +52,10 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
     }
 
     default R visit(Boolean_ instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Decimal instance) {
       return otherwise(instance);
     }
 
@@ -143,6 +151,49 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
         return tagCmp;
       }
       Boolean_ o = (Boolean_) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  /**
+   * An arbitrary-precision decimal literal
+   */
+  public static final class Decimal extends hydra.core.Literal implements Serializable {
+    public final java.math.BigDecimal value;
+
+    public Decimal (java.math.BigDecimal value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Decimal)) {
+        return false;
+      }
+      Decimal o = (Decimal) other;
+      return this.value.compareTo(o.value) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Literal other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Decimal o = (Decimal) other;
       return hydra.util.Comparing.compare(
         value,
         o.value);

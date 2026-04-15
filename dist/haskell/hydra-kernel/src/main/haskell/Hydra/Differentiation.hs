@@ -11,6 +11,7 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Differentiate a binary primitive application given both arguments and their derivatives
 differentiateBinary :: Core.Name -> Core.Term -> Core.Term -> Core.Term -> Core.Term -> Core.Term

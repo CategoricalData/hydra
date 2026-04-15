@@ -428,6 +428,11 @@ public interface Coder {
       }
 
       @Override
+      public hydra.lisp.syntax.Expression visit(hydra.core.Literal.Decimal d) {
+        return new hydra.lisp.syntax.Expression.Literal(new hydra.lisp.syntax.Literal.Float_(new hydra.lisp.syntax.FloatLiteral(hydra.lib.literals.Float64ToBigfloat.apply(hydra.lib.literals.DecimalToFloat64.apply((d).value)), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()))));
+      }
+
+      @Override
       public hydra.lisp.syntax.Expression visit(hydra.core.Literal.String_ s) {
         return new hydra.lisp.syntax.Expression.Literal(new hydra.lisp.syntax.Literal.String_((s).value));
       }
@@ -898,6 +903,11 @@ public interface Coder {
           @Override
           public hydra.lisp.syntax.TypeSpecifier visit(hydra.core.LiteralType.Boolean_ ignored) {
             return new hydra.lisp.syntax.TypeSpecifier.Named(new hydra.lisp.syntax.Symbol("Boolean"));
+          }
+
+          @Override
+          public hydra.lisp.syntax.TypeSpecifier visit(hydra.core.LiteralType.Decimal ignored) {
+            return new hydra.lisp.syntax.TypeSpecifier.Named(new hydra.lisp.syntax.Symbol("Decimal"));
           }
 
           @Override

@@ -97,6 +97,7 @@ scalaLanguage = define "scalaLanguage" $
     Variants.eliminationVariantWrap],
   "literalVariants">: Sets.fromList $ list [
     Variants.literalVariantBoolean,
+    Variants.literalVariantDecimal,
     Variants.literalVariantFloat,
     Variants.literalVariantInteger,
     Variants.literalVariantString],

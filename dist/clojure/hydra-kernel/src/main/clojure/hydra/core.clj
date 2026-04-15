@@ -58,9 +58,9 @@
 (defrecord hydra_core_let [bindings body])
 (defn make-hydra_core_let [bindings body] (->hydra_core_let bindings body))
 
-(def hydra_core_literal-variants (list :binary :boolean :float :integer :string))
+(def hydra_core_literal-variants (list :binary :boolean :decimal :float :integer :string))
 
-(def hydra_core_literal_type-variants (list :binary :boolean :float :integer :string))
+(def hydra_core_literal_type-variants (list :binary :boolean :decimal :float :integer :string))
 
 (defrecord hydra_core_map_type [keys values])
 (defn make-hydra_core_map_type [keys values] (->hydra_core_map_type keys values))

@@ -24,6 +24,7 @@ import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 -- | Convert a definition to a typed term

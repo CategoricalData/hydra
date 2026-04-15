@@ -122,6 +122,7 @@ module_ = Module ns definitions
       toDefinition literalsBigfloatToFloat32,
       toDefinition literalsBigfloatToFloat64,
       toDefinition literalsBigintToBigfloat,
+      toDefinition literalsBigintToDecimal,
       toDefinition literalsBigintToInt8,
       toDefinition literalsBigintToInt16,
       toDefinition literalsBigintToInt32,
@@ -132,8 +133,13 @@ module_ = Module ns definitions
       toDefinition literalsBigintToUint64,
       toDefinition literalsBinaryToBytes,
       toDefinition literalsBinaryToString,
+      toDefinition literalsDecimalToBigint,
+      toDefinition literalsDecimalToFloat32,
+      toDefinition literalsDecimalToFloat64,
       toDefinition literalsFloat32ToBigfloat,
+      toDefinition literalsFloat32ToDecimal,
       toDefinition literalsFloat64ToBigfloat,
+      toDefinition literalsFloat64ToDecimal,
       toDefinition literalsInt8ToBigint,
       toDefinition literalsInt16ToBigint,
       toDefinition literalsInt32ToBigint,
@@ -141,6 +147,7 @@ module_ = Module ns definitions
       toDefinition literalsReadBigfloat,
       toDefinition literalsReadBigint,
       toDefinition literalsReadBoolean,
+      toDefinition literalsReadDecimal,
       toDefinition literalsReadFloat32,
       toDefinition literalsReadFloat64,
       toDefinition literalsReadInt8,
@@ -155,6 +162,7 @@ module_ = Module ns definitions
       toDefinition literalsShowBigfloat,
       toDefinition literalsShowBigint,
       toDefinition literalsShowBoolean,
+      toDefinition literalsShowDecimal,
       toDefinition literalsShowFloat32,
       toDefinition literalsShowFloat64,
       toDefinition literalsShowInt8,
@@ -466,6 +474,7 @@ literalsBigfloatToBigint  = defineName "literalsBigfloatToBigint" "hydra.lib.lit
 literalsBigfloatToFloat32 = defineName "literalsBigfloatToFloat32" "hydra.lib.literals" "bigfloatToFloat32"
 literalsBigfloatToFloat64 = defineName "literalsBigfloatToFloat64" "hydra.lib.literals" "bigfloatToFloat64"
 literalsBigintToBigfloat  = defineName "literalsBigintToBigfloat" "hydra.lib.literals" "bigintToBigfloat"
+literalsBigintToDecimal   = defineName "literalsBigintToDecimal" "hydra.lib.literals" "bigintToDecimal"
 literalsBigintToInt8      = defineName "literalsBigintToInt8" "hydra.lib.literals" "bigintToInt8"
 literalsBigintToInt16     = defineName "literalsBigintToInt16" "hydra.lib.literals" "bigintToInt16"
 literalsBigintToInt32     = defineName "literalsBigintToInt32" "hydra.lib.literals" "bigintToInt32"
@@ -476,8 +485,13 @@ literalsBigintToUint32    = defineName "literalsBigintToUint32" "hydra.lib.liter
 literalsBigintToUint64    = defineName "literalsBigintToUint64" "hydra.lib.literals" "bigintToUint64"
 literalsBinaryToBytes     = defineName "literalsBinaryToBytes" "hydra.lib.literals" "binaryToBytes"
 literalsBinaryToString    = defineName "literalsBinaryToString" "hydra.lib.literals" "binaryToString"
+literalsDecimalToBigint   = defineName "literalsDecimalToBigint" "hydra.lib.literals" "decimalToBigint"
+literalsDecimalToFloat32  = defineName "literalsDecimalToFloat32" "hydra.lib.literals" "decimalToFloat32"
+literalsDecimalToFloat64  = defineName "literalsDecimalToFloat64" "hydra.lib.literals" "decimalToFloat64"
 literalsFloat32ToBigfloat = defineName "literalsFloat32ToBigfloat" "hydra.lib.literals" "float32ToBigfloat"
+literalsFloat32ToDecimal  = defineName "literalsFloat32ToDecimal" "hydra.lib.literals" "float32ToDecimal"
 literalsFloat64ToBigfloat = defineName "literalsFloat64ToBigfloat" "hydra.lib.literals" "float64ToBigfloat"
+literalsFloat64ToDecimal  = defineName "literalsFloat64ToDecimal" "hydra.lib.literals" "float64ToDecimal"
 literalsInt8ToBigint      = defineName "literalsInt8ToBigint" "hydra.lib.literals" "int8ToBigint"
 literalsInt16ToBigint     = defineName "literalsInt16ToBigint" "hydra.lib.literals" "int16ToBigint"
 literalsInt32ToBigint     = defineName "literalsInt32ToBigint" "hydra.lib.literals" "int32ToBigint"
@@ -485,6 +499,7 @@ literalsInt64ToBigint     = defineName "literalsInt64ToBigint" "hydra.lib.litera
 literalsReadBigfloat      = defineName "literalsReadBigfloat" "hydra.lib.literals" "readBigfloat"
 literalsReadBigint        = defineName "literalsReadBigint" "hydra.lib.literals" "readBigint"
 literalsReadBoolean       = defineName "literalsReadBoolean" "hydra.lib.literals" "readBoolean"
+literalsReadDecimal       = defineName "literalsReadDecimal" "hydra.lib.literals" "readDecimal"
 literalsReadFloat32       = defineName "literalsReadFloat32" "hydra.lib.literals" "readFloat32"
 literalsReadFloat64       = defineName "literalsReadFloat64" "hydra.lib.literals" "readFloat64"
 literalsReadInt8          = defineName "literalsReadInt8" "hydra.lib.literals" "readInt8"
@@ -499,6 +514,7 @@ literalsReadUint64        = defineName "literalsReadUint64" "hydra.lib.literals"
 literalsShowBigfloat      = defineName "literalsShowBigfloat" "hydra.lib.literals" "showBigfloat"
 literalsShowBigint        = defineName "literalsShowBigint" "hydra.lib.literals" "showBigint"
 literalsShowBoolean       = defineName "literalsShowBoolean" "hydra.lib.literals" "showBoolean"
+literalsShowDecimal       = defineName "literalsShowDecimal" "hydra.lib.literals" "showDecimal"
 literalsShowFloat32       = defineName "literalsShowFloat32" "hydra.lib.literals" "showFloat32"
 literalsShowFloat64       = defineName "literalsShowFloat64" "hydra.lib.literals" "showFloat64"
 literalsShowInt8          = defineName "literalsShowInt8" "hydra.lib.literals" "showInt8"

@@ -143,6 +143,28 @@ public interface Core {
       })));
   }
 
+  static hydra.util.Either<hydra.errors.Error_, java.math.BigDecimal> decimal(hydra.graph.Graph graph, hydra.core.Term t) {
+    return hydra.lib.eithers.Bind.apply(
+      hydra.extract.Core.literal(
+        graph,
+        t),
+      (java.util.function.Function<hydra.core.Literal, hydra.util.Either<hydra.errors.Error_, java.math.BigDecimal>>) (l -> hydra.extract.Core.decimalLiteral(l)));
+  }
+
+  static hydra.util.Either<hydra.errors.Error_, java.math.BigDecimal> decimalLiteral(hydra.core.Literal v) {
+    return (v).accept(new hydra.core.Literal.PartialVisitor<>() {
+      @Override
+      public hydra.util.Either<hydra.errors.Error_, java.math.BigDecimal> otherwise(hydra.core.Literal instance) {
+        return hydra.util.Either.<hydra.errors.Error_, java.math.BigDecimal>left(new hydra.errors.Error_.Extraction(new hydra.errors.ExtractionError.UnexpectedShape(new hydra.errors.UnexpectedShapeError("decimal", hydra.show.Core.literal(v)))));
+      }
+
+      @Override
+      public hydra.util.Either<hydra.errors.Error_, java.math.BigDecimal> visit(hydra.core.Literal.Decimal d) {
+        return hydra.util.Either.<hydra.errors.Error_, java.math.BigDecimal>right((d).value);
+      }
+    });
+  }
+
   static <T0, T1> hydra.util.Either<hydra.errors.DecodingError, hydra.util.Either<T0, T1>> decodeEither(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, T0>>> leftDecoder, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, T1>>> rightDecoder, hydra.graph.Graph g, hydra.core.Term term) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.Core.stripWithDecodingError(

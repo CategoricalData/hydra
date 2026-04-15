@@ -1,6 +1,7 @@
 """A DSL for constructing Hydra terms in Python."""
 
 from collections.abc import Mapping, Sequence
+from decimal import Decimal
 from functools import reduce
 
 import hydra.constants
@@ -122,6 +123,14 @@ def boolean(value: bool) -> Term:
     Example: boolean(True)
     """
     return literal(lt.boolean(value))
+
+
+def decimal(value: Decimal) -> Term:
+    """Create a decimal literal (arbitrary-precision exact decimal).
+
+    Example: decimal(Decimal('1.23'))
+    """
+    return literal(lt.decimal(value))
 
 
 def char(value: str) -> Term:

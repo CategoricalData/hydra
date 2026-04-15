@@ -13,6 +13,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 functionStructure :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Typing.FunctionStructure t0)
 functionStructure env cx raw =

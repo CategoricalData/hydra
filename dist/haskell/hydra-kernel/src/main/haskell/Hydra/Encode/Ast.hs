@@ -9,6 +9,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maybes as Maybes
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 associativity :: Ast.Associativity -> Core.Term
 associativity x =

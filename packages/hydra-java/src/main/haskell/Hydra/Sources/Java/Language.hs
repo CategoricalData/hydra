@@ -104,6 +104,7 @@ javaLanguage = define "javaLanguage" $
   "literalVariants">: Sets.fromList $ list [
     Variants.literalVariantBinary, -- byte[]
     Variants.literalVariantBoolean, -- boolean
+    Variants.literalVariantDecimal, -- java.math.BigDecimal
     Variants.literalVariantFloat, -- (see float types)
     Variants.literalVariantInteger, -- (see integer types)
     Variants.literalVariantString], -- string

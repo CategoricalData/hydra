@@ -2,40 +2,34 @@
 
 (* Standard library imports *)
 Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdlib.QArith.QArith hydra.lib.base.
-Definition Row (v : Type) : Type :=
-  (list) (v).
-
-Definition RelationName : Type :=
-  string.
-
-Definition Relation (v : Type) : Type :=
-  (list) ((Row) (v)).
-
-Definition ColumnName : Type :=
-  string.
+Definition ColumnName : Type := string.
 
 Record ColumnSchema (t : Type) : Type := Build_ColumnSchema {
-  columnSchema_name : ColumnName ;
-  columnSchema_domain : t
+columnSchema_name : ColumnName ;
+columnSchema_domain : t ;
 }.
+
+Definition RelationName : Type := string.
 
 Record ForeignKey : Type := Build_ForeignKey {
-  foreignKey_foreignRelation : RelationName ;
-  foreignKey_keys : (list) ((prod) (ColumnName) (ColumnName))
+foreignKey_foreignRelation : RelationName ;
+foreignKey_keys : (list) ((prod) (ColumnName) (ColumnName)) ;
 }.
 
-Definition PrimaryKey : Type :=
-  (list) (ColumnName).
+Definition PrimaryKey : Type := (list) (ColumnName).
+
+Definition Row (v : Type) : Type := (list) (v).
+
+Definition Relation (v : Type) : Type := (list) ((Row) (v)).
 
 Record RelationSchema (t : Type) : Type := Build_RelationSchema {
-  relationSchema_name : RelationName ;
-  relationSchema_columns : (list) ((ColumnSchema) (t)) ;
-  relationSchema_primaryKeys : (list) (PrimaryKey) ;
-  relationSchema_foreignKeys : (list) (ForeignKey)
+relationSchema_name : RelationName ;
+relationSchema_columns : (list) ((ColumnSchema) (t)) ;
+relationSchema_primaryKeys : (list) (PrimaryKey) ;
+relationSchema_foreignKeys : (list) (ForeignKey) ;
 }.
 
-Definition Relationship (v : Type) : Type :=
-  (list) ((list) ((prod) (ColumnName) (v))).
+Definition Relationship (v : Type) : Type := (list) ((list) ((prod) (ColumnName) (v))).
 
 Arguments Build_ColumnSchema {t}.
 Arguments columnSchema_name {t}.

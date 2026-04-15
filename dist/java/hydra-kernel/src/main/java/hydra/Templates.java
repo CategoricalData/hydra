@@ -97,6 +97,11 @@ public interface Templates {
       }
 
       @Override
+      public hydra.core.Literal visit(hydra.core.LiteralType.Decimal ignored) {
+        return new hydra.core.Literal.Decimal(new java.math.BigDecimal("0.0"));
+      }
+
+      @Override
       public hydra.core.Literal visit(hydra.core.LiteralType.Integer_ it) {
         return new hydra.core.Literal.Integer_((forInteger).apply((it).value));
       }
