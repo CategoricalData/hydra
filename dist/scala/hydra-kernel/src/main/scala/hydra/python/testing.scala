@@ -16,7 +16,8 @@ def formatPythonTestName(name: scala.Predef.String): scala.Predef.String =
   hydra.lib.strings.cat2("test_")(hydra.lib.strings.fromList(hydra.lib.lists.map[Int, Int]((c: Int) =>
   hydra.lib.logic.ifElse[Int](hydra.lib.chars.isAlphaNum(c))(hydra.lib.chars.toLower(c))(95))(hydra.lib.strings.toList(name))))
 
-def generatePythonTestCase[T0](groupPath: Seq[scala.Predef.String])(tcm: hydra.testing.TestCaseWithMetadata): Either[T0, Seq[scala.Predef.String]] =
+def generatePythonTestCase[T0](groupPath: Seq[scala.Predef.String])(tcm: hydra.testing.TestCaseWithMetadata): Either[T0,
+   Seq[scala.Predef.String]] =
   {
   lazy val `name_`: scala.Predef.String = (tcm.name)
   lazy val tcase: hydra.testing.TestCase = (tcm.`case`)
@@ -26,14 +27,16 @@ def generatePythonTestCase[T0](groupPath: Seq[scala.Predef.String])(tcm: hydra.t
       lazy val `expected_`: scala.Predef.String = (v_TestCase_universal_ucase.expected)
       lazy val fullName: scala.Predef.String = hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.lists.`null`[scala.Predef.String](groupPath))(`name_`)(hydra.lib.strings.intercalate("__")(hydra.lib.lists.concat2[scala.Predef.String](groupPath)(Seq(`name_`))))
       lazy val formattedName: scala.Predef.String = hydra.python.testing.formatPythonTestName(fullName)
-      Right(Seq(hydra.lib.strings.cat(Seq("def ", formattedName, "():")), hydra.lib.strings.cat(Seq("    assert (", `actual_`, ") == (", `expected_`, ")"))))
+      Right(Seq(hydra.lib.strings.cat(Seq("def ", formattedName, "():")), hydra.lib.strings.cat(Seq("    assert (",
+         `actual_`, ") == (", `expected_`, ")"))))
     }
 }
 
 def generatePythonTestFile[T0, T1](testModule: hydra.packaging.Module)(testGroup: hydra.testing.TestGroup)(_g: T0): Either[T1,
    Tuple2[scala.Predef.String, scala.Predef.String]] = hydra.python.testing.generateTestFileWithPythonCodec(testModule)(testGroup)
 
-def generatePythonTestGroupHierarchy[T0](groupPath: Seq[scala.Predef.String])(testGroup: hydra.testing.TestGroup): Either[T0, scala.Predef.String] =
+def generatePythonTestGroupHierarchy[T0](groupPath: Seq[scala.Predef.String])(testGroup: hydra.testing.TestGroup): Either[T0,
+   scala.Predef.String] =
   {
   lazy val `cases_`: Seq[hydra.testing.TestCaseWithMetadata] = (testGroup.cases)
   lazy val subgroups: Seq[hydra.testing.TestGroup] = (testGroup.subgroups)
@@ -57,13 +60,16 @@ def generatePythonTestGroupHierarchy[T0](groupPath: Seq[scala.Predef.String])(te
 
 def generateTestFileWithPythonCodec[T0](testModule: hydra.packaging.Module)(testGroup: hydra.testing.TestGroup): Either[T0,
    Tuple2[scala.Predef.String, scala.Predef.String]] =
-  hydra.lib.eithers.map[scala.Predef.String, Tuple2[scala.Predef.String, scala.Predef.String], T0]((testBody: scala.Predef.String) =>
+  hydra.lib.eithers.map[scala.Predef.String, Tuple2[scala.Predef.String, scala.Predef.String],
+     T0]((testBody: scala.Predef.String) =>
   {
   lazy val testModuleContent: scala.Predef.String = hydra.python.testing.buildPythonTestModule(testModule)(testGroup)(testBody)
   lazy val `ns_`: hydra.packaging.Namespace = (testModule.namespace)
   lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(`ns_`)
   lazy val dirParts: Seq[scala.Predef.String] = hydra.lib.lists.init[scala.Predef.String](parts)
-  lazy val fileName: scala.Predef.String = hydra.lib.strings.cat(Seq("test_", hydra.lib.lists.last[scala.Predef.String](parts), ".py"))
-  lazy val filePath: scala.Predef.String = hydra.lib.strings.cat(Seq(hydra.lib.strings.intercalate("/")(dirParts), "/", fileName))
+  lazy val fileName: scala.Predef.String = hydra.lib.strings.cat(Seq("test_", hydra.lib.lists.last[scala.Predef.String](parts),
+     ".py"))
+  lazy val filePath: scala.Predef.String = hydra.lib.strings.cat(Seq(hydra.lib.strings.intercalate("/")(dirParts),
+     "/", fileName))
   Tuple2(filePath, testModuleContent)
 })(hydra.python.testing.generatePythonTestGroupHierarchy(Seq())(testGroup))

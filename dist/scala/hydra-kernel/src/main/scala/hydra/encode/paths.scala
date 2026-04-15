@@ -5,18 +5,20 @@ import hydra.core.*
 import hydra.paths.*
 
 def subtermEdge(x: hydra.paths.SubtermEdge): hydra.core.Term =
-  hydra.core.Term.record(hydra.core.Record("hydra.paths.SubtermEdge", Seq(hydra.core.Field("source", hydra.encode.paths.subtermNode(x.source)),
-     hydra.core.Field("path", hydra.encode.paths.subtermPath(x.path)), hydra.core.Field("target", hydra.encode.paths.subtermNode(x.target)))))
+  hydra.core.Term.record(hydra.core.Record("hydra.paths.SubtermEdge", Seq(hydra.core.Field("source",
+     hydra.encode.paths.subtermNode(x.source)), hydra.core.Field("path", hydra.encode.paths.subtermPath(x.path)),
+     hydra.core.Field("target", hydra.encode.paths.subtermNode(x.target)))))
 
 def subtermGraph(x: hydra.paths.SubtermGraph): hydra.core.Term =
-  hydra.core.Term.record(hydra.core.Record("hydra.paths.SubtermGraph", Seq(hydra.core.Field("nodes", hydra.core.Term.list(hydra.lib.lists.map[hydra.paths.SubtermNode,
-     hydra.core.Term](hydra.encode.paths.subtermNode)(x.nodes))), hydra.core.Field("edges", hydra.core.Term.list(hydra.lib.lists.map[hydra.paths.SubtermEdge,
+  hydra.core.Term.record(hydra.core.Record("hydra.paths.SubtermGraph", Seq(hydra.core.Field("nodes",
+     hydra.core.Term.list(hydra.lib.lists.map[hydra.paths.SubtermNode, hydra.core.Term](hydra.encode.paths.subtermNode)(x.nodes))),
+     hydra.core.Field("edges", hydra.core.Term.list(hydra.lib.lists.map[hydra.paths.SubtermEdge,
      hydra.core.Term](hydra.encode.paths.subtermEdge)(x.edges))))))
 
 def subtermNode(x: hydra.paths.SubtermNode): hydra.core.Term =
-  hydra.core.Term.record(hydra.core.Record("hydra.paths.SubtermNode", Seq(hydra.core.Field("name", hydra.encode.core.name(x.name)),
-     hydra.core.Field("label", hydra.core.Term.literal(hydra.core.Literal.string(x.label))), hydra.core.Field("id",
-     hydra.core.Term.literal(hydra.core.Literal.string(x.id))))))
+  hydra.core.Term.record(hydra.core.Record("hydra.paths.SubtermNode", Seq(hydra.core.Field("name",
+     hydra.encode.core.name(x.name)), hydra.core.Field("label", hydra.core.Term.literal(hydra.core.Literal.string(x.label))),
+     hydra.core.Field("id", hydra.core.Term.literal(hydra.core.Literal.string(x.id))))))
 
 def subtermPath(x: hydra.paths.SubtermPath): hydra.core.Term =
   hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.paths.SubtermPath", hydra.core.Term.list(hydra.lib.lists.map[hydra.paths.SubtermStep,
@@ -66,18 +68,20 @@ def subtermStep(v1: hydra.paths.SubtermStep): hydra.core.Term =
      hydra.core.Field("wrappedTerm", hydra.core.Term.unit)))
 
 def subtypeEdge(x: hydra.paths.SubtypeEdge): hydra.core.Term =
-  hydra.core.Term.record(hydra.core.Record("hydra.paths.SubtypeEdge", Seq(hydra.core.Field("source", hydra.encode.paths.subtypeNode(x.source)),
-     hydra.core.Field("path", hydra.encode.paths.subtypePath(x.path)), hydra.core.Field("target", hydra.encode.paths.subtypeNode(x.target)))))
+  hydra.core.Term.record(hydra.core.Record("hydra.paths.SubtypeEdge", Seq(hydra.core.Field("source",
+     hydra.encode.paths.subtypeNode(x.source)), hydra.core.Field("path", hydra.encode.paths.subtypePath(x.path)),
+     hydra.core.Field("target", hydra.encode.paths.subtypeNode(x.target)))))
 
 def subtypeGraph(x: hydra.paths.SubtypeGraph): hydra.core.Term =
-  hydra.core.Term.record(hydra.core.Record("hydra.paths.SubtypeGraph", Seq(hydra.core.Field("nodes", hydra.core.Term.list(hydra.lib.lists.map[hydra.paths.SubtypeNode,
-     hydra.core.Term](hydra.encode.paths.subtypeNode)(x.nodes))), hydra.core.Field("edges", hydra.core.Term.list(hydra.lib.lists.map[hydra.paths.SubtypeEdge,
+  hydra.core.Term.record(hydra.core.Record("hydra.paths.SubtypeGraph", Seq(hydra.core.Field("nodes",
+     hydra.core.Term.list(hydra.lib.lists.map[hydra.paths.SubtypeNode, hydra.core.Term](hydra.encode.paths.subtypeNode)(x.nodes))),
+     hydra.core.Field("edges", hydra.core.Term.list(hydra.lib.lists.map[hydra.paths.SubtypeEdge,
      hydra.core.Term](hydra.encode.paths.subtypeEdge)(x.edges))))))
 
 def subtypeNode(x: hydra.paths.SubtypeNode): hydra.core.Term =
-  hydra.core.Term.record(hydra.core.Record("hydra.paths.SubtypeNode", Seq(hydra.core.Field("name", hydra.encode.core.name(x.name)),
-     hydra.core.Field("label", hydra.core.Term.literal(hydra.core.Literal.string(x.label))), hydra.core.Field("id",
-     hydra.core.Term.literal(hydra.core.Literal.string(x.id))))))
+  hydra.core.Term.record(hydra.core.Record("hydra.paths.SubtypeNode", Seq(hydra.core.Field("name",
+     hydra.encode.core.name(x.name)), hydra.core.Field("label", hydra.core.Term.literal(hydra.core.Literal.string(x.label))),
+     hydra.core.Field("id", hydra.core.Term.literal(hydra.core.Literal.string(x.id))))))
 
 def subtypePath(x: hydra.paths.SubtypePath): hydra.core.Term =
   hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.paths.SubtypePath", hydra.core.Term.list(hydra.lib.lists.map[hydra.paths.SubtypeStep,

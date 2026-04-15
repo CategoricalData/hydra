@@ -75,8 +75,8 @@ enum ArrayType_Variant :
 
 type Dims = Seq[Seq[hydra.java.syntax.Annotation]]
 
-case class TypeParameter(modifiers: Seq[hydra.java.syntax.TypeParameterModifier], identifier: hydra.java.syntax.TypeIdentifier,
-   bound: Option[hydra.java.syntax.TypeBound])
+case class TypeParameter(modifiers: Seq[hydra.java.syntax.TypeParameterModifier],
+   identifier: hydra.java.syntax.TypeIdentifier, bound: Option[hydra.java.syntax.TypeBound])
 
 type TypeParameterModifier = hydra.java.syntax.Annotation
 
@@ -84,7 +84,8 @@ enum TypeBound :
    case variable(value: hydra.java.syntax.TypeVariable) extends TypeBound
    case classOrInterface(value: hydra.java.syntax.TypeBound_ClassOrInterface) extends TypeBound
 
-case class TypeBound_ClassOrInterface(`type`: hydra.java.syntax.ClassOrInterfaceType, additional: Seq[hydra.java.syntax.AdditionalBound])
+case class TypeBound_ClassOrInterface(`type`: hydra.java.syntax.ClassOrInterfaceType,
+   additional: Seq[hydra.java.syntax.AdditionalBound])
 
 type AdditionalBound = hydra.java.syntax.InterfaceType
 
@@ -116,10 +117,11 @@ enum CompilationUnit :
    case ordinary(value: hydra.java.syntax.OrdinaryCompilationUnit) extends CompilationUnit
    case modular(value: hydra.java.syntax.ModularCompilationUnit) extends CompilationUnit
 
-case class OrdinaryCompilationUnit(`package`: Option[hydra.java.syntax.PackageDeclaration], imports: Seq[hydra.java.syntax.ImportDeclaration],
-   types: Seq[hydra.java.syntax.TypeDeclarationWithComments])
+case class OrdinaryCompilationUnit(`package`: Option[hydra.java.syntax.PackageDeclaration],
+   imports: Seq[hydra.java.syntax.ImportDeclaration], types: Seq[hydra.java.syntax.TypeDeclarationWithComments])
 
-case class ModularCompilationUnit(imports: Seq[hydra.java.syntax.ImportDeclaration], module: hydra.java.syntax.ModuleDeclaration)
+case class ModularCompilationUnit(imports: Seq[hydra.java.syntax.ImportDeclaration],
+   module: hydra.java.syntax.ModuleDeclaration)
 
 case class PackageDeclaration(modifiers: Seq[hydra.java.syntax.PackageModifier], identifiers: Seq[hydra.java.syntax.Identifier])
 
@@ -146,8 +148,8 @@ enum TypeDeclaration :
 
 case class TypeDeclarationWithComments(value: hydra.java.syntax.TypeDeclaration, comments: Option[scala.Predef.String])
 
-case class ModuleDeclaration(annotations: Seq[hydra.java.syntax.Annotation], open: Boolean, identifiers: Seq[hydra.java.syntax.Identifier],
-   directives: Seq[Seq[hydra.java.syntax.ModuleDirective]])
+case class ModuleDeclaration(annotations: Seq[hydra.java.syntax.Annotation], open: Boolean,
+   identifiers: Seq[hydra.java.syntax.Identifier], directives: Seq[Seq[hydra.java.syntax.ModuleDirective]])
 
 enum ModuleDirective :
    case requires(value: hydra.java.syntax.ModuleDirective_Requires) extends ModuleDirective
@@ -156,9 +158,11 @@ enum ModuleDirective :
    case uses(value: hydra.java.syntax.TypeName) extends ModuleDirective
    case provides(value: hydra.java.syntax.ModuleDirective_Provides) extends ModuleDirective
 
-case class ModuleDirective_Requires(modifiers: Seq[hydra.java.syntax.RequiresModifier], module: hydra.java.syntax.ModuleName)
+case class ModuleDirective_Requires(modifiers: Seq[hydra.java.syntax.RequiresModifier],
+   module: hydra.java.syntax.ModuleName)
 
-case class ModuleDirective_ExportsOrOpens(`package`: hydra.java.syntax.PackageName, modules: Seq[hydra.java.syntax.ModuleName])
+case class ModuleDirective_ExportsOrOpens(`package`: hydra.java.syntax.PackageName,
+   modules: Seq[hydra.java.syntax.ModuleName])
 
 case class ModuleDirective_Provides(to: hydra.java.syntax.TypeName, `with`: Seq[hydra.java.syntax.TypeName])
 
@@ -170,8 +174,9 @@ enum ClassDeclaration :
    case normal(value: hydra.java.syntax.NormalClassDeclaration) extends ClassDeclaration
    case `enum`(value: hydra.java.syntax.EnumDeclaration) extends ClassDeclaration
 
-case class NormalClassDeclaration(modifiers: Seq[hydra.java.syntax.ClassModifier], identifier: hydra.java.syntax.TypeIdentifier,
-   parameters: Seq[hydra.java.syntax.TypeParameter], `extends`: Option[hydra.java.syntax.ClassType], implements: Seq[hydra.java.syntax.InterfaceType],
+case class NormalClassDeclaration(modifiers: Seq[hydra.java.syntax.ClassModifier],
+   identifier: hydra.java.syntax.TypeIdentifier, parameters: Seq[hydra.java.syntax.TypeParameter],
+   `extends`: Option[hydra.java.syntax.ClassType], implements: Seq[hydra.java.syntax.InterfaceType],
    body: hydra.java.syntax.ClassBody)
 
 enum ClassModifier :
@@ -192,7 +197,8 @@ enum ClassBodyDeclaration :
    case staticInitializer(value: hydra.java.syntax.StaticInitializer) extends ClassBodyDeclaration
    case constructorDeclaration(value: hydra.java.syntax.ConstructorDeclaration) extends ClassBodyDeclaration
 
-case class ClassBodyDeclarationWithComments(value: hydra.java.syntax.ClassBodyDeclaration, comments: Option[scala.Predef.String])
+case class ClassBodyDeclarationWithComments(value: hydra.java.syntax.ClassBodyDeclaration,
+   comments: Option[scala.Predef.String])
 
 enum ClassMemberDeclaration :
    case field(value: hydra.java.syntax.FieldDeclaration) extends ClassMemberDeclaration
@@ -258,8 +264,8 @@ enum FormalParameter :
    case simple(value: hydra.java.syntax.FormalParameter_Simple) extends FormalParameter
    case variableArity(value: hydra.java.syntax.VariableArityParameter) extends FormalParameter
 
-case class FormalParameter_Simple(modifiers: Seq[hydra.java.syntax.VariableModifier], `type`: hydra.java.syntax.UnannType,
-   id: hydra.java.syntax.VariableDeclaratorId)
+case class FormalParameter_Simple(modifiers: Seq[hydra.java.syntax.VariableModifier],
+   `type`: hydra.java.syntax.UnannType, id: hydra.java.syntax.VariableDeclaratorId)
 
 case class VariableArityParameter(modifiers: hydra.java.syntax.VariableModifier, `type`: hydra.java.syntax.UnannType,
    annotations: Seq[hydra.java.syntax.Annotation], identifier: hydra.java.syntax.Identifier)
@@ -282,8 +288,9 @@ type InstanceInitializer = hydra.java.syntax.Block
 
 type StaticInitializer = hydra.java.syntax.Block
 
-case class ConstructorDeclaration(modifiers: Seq[hydra.java.syntax.ConstructorModifier], constructor: hydra.java.syntax.ConstructorDeclarator,
-   throws: Option[hydra.java.syntax.Throws], body: hydra.java.syntax.ConstructorBody)
+case class ConstructorDeclaration(modifiers: Seq[hydra.java.syntax.ConstructorModifier],
+   constructor: hydra.java.syntax.ConstructorDeclarator, throws: Option[hydra.java.syntax.Throws],
+   body: hydra.java.syntax.ConstructorBody)
 
 enum ConstructorModifier :
    case annotation(value: hydra.java.syntax.Annotation) extends ConstructorModifier
@@ -291,15 +298,17 @@ enum ConstructorModifier :
    case `protected` extends ConstructorModifier
    case `private` extends ConstructorModifier
 
-case class ConstructorDeclarator(parameters: Seq[hydra.java.syntax.TypeParameter], name: hydra.java.syntax.SimpleTypeName,
-   receiverParameter: Option[hydra.java.syntax.ReceiverParameter], formalParameters: Seq[hydra.java.syntax.FormalParameter])
+case class ConstructorDeclarator(parameters: Seq[hydra.java.syntax.TypeParameter],
+   name: hydra.java.syntax.SimpleTypeName, receiverParameter: Option[hydra.java.syntax.ReceiverParameter],
+   formalParameters: Seq[hydra.java.syntax.FormalParameter])
 
 type SimpleTypeName = hydra.java.syntax.TypeIdentifier
 
-case class ConstructorBody(invocation: Option[hydra.java.syntax.ExplicitConstructorInvocation], statements: Seq[hydra.java.syntax.BlockStatement])
+case class ConstructorBody(invocation: Option[hydra.java.syntax.ExplicitConstructorInvocation],
+   statements: Seq[hydra.java.syntax.BlockStatement])
 
-case class ExplicitConstructorInvocation(typeArguments: Seq[hydra.java.syntax.TypeArgument], arguments: Seq[hydra.java.syntax.Expression],
-   variant: hydra.java.syntax.ExplicitConstructorInvocation_Variant)
+case class ExplicitConstructorInvocation(typeArguments: Seq[hydra.java.syntax.TypeArgument],
+   arguments: Seq[hydra.java.syntax.Expression], variant: hydra.java.syntax.ExplicitConstructorInvocation_Variant)
 
 enum ExplicitConstructorInvocation_Variant :
    case `this` extends ExplicitConstructorInvocation_Variant
@@ -322,9 +331,9 @@ enum InterfaceDeclaration :
    case normalInterface(value: hydra.java.syntax.NormalInterfaceDeclaration) extends InterfaceDeclaration
    case annotationType(value: hydra.java.syntax.AnnotationTypeDeclaration) extends InterfaceDeclaration
 
-case class NormalInterfaceDeclaration(modifiers: Seq[hydra.java.syntax.InterfaceModifier], identifier: hydra.java.syntax.TypeIdentifier,
-   parameters: Seq[hydra.java.syntax.TypeParameter], `extends`: Seq[hydra.java.syntax.InterfaceType],
-   body: hydra.java.syntax.InterfaceBody)
+case class NormalInterfaceDeclaration(modifiers: Seq[hydra.java.syntax.InterfaceModifier],
+   identifier: hydra.java.syntax.TypeIdentifier, parameters: Seq[hydra.java.syntax.TypeParameter],
+   `extends`: Seq[hydra.java.syntax.InterfaceType], body: hydra.java.syntax.InterfaceBody)
 
 enum InterfaceModifier :
    case annotation(value: hydra.java.syntax.Annotation) extends InterfaceModifier
@@ -343,8 +352,8 @@ enum InterfaceMemberDeclaration :
    case `class`(value: hydra.java.syntax.ClassDeclaration) extends InterfaceMemberDeclaration
    case interface(value: hydra.java.syntax.InterfaceDeclaration) extends InterfaceMemberDeclaration
 
-case class ConstantDeclaration(modifiers: Seq[hydra.java.syntax.ConstantModifier], `type`: hydra.java.syntax.UnannType,
-   variables: Seq[hydra.java.syntax.VariableDeclarator])
+case class ConstantDeclaration(modifiers: Seq[hydra.java.syntax.ConstantModifier],
+   `type`: hydra.java.syntax.UnannType, variables: Seq[hydra.java.syntax.VariableDeclarator])
 
 enum ConstantModifier :
    case annotation(value: hydra.java.syntax.Annotation) extends ConstantModifier
@@ -352,8 +361,8 @@ enum ConstantModifier :
    case static extends ConstantModifier
    case `final` extends ConstantModifier
 
-case class InterfaceMethodDeclaration(modifiers: Seq[hydra.java.syntax.InterfaceMethodModifier], header: hydra.java.syntax.MethodHeader,
-   body: hydra.java.syntax.MethodBody)
+case class InterfaceMethodDeclaration(modifiers: Seq[hydra.java.syntax.InterfaceMethodModifier],
+   header: hydra.java.syntax.MethodHeader, body: hydra.java.syntax.MethodBody)
 
 enum InterfaceMethodModifier :
    case annotation(value: hydra.java.syntax.Annotation) extends InterfaceMethodModifier
@@ -364,8 +373,8 @@ enum InterfaceMethodModifier :
    case static extends InterfaceMethodModifier
    case strictfp extends InterfaceMethodModifier
 
-case class AnnotationTypeDeclaration(modifiers: Seq[hydra.java.syntax.InterfaceModifier], identifier: hydra.java.syntax.TypeIdentifier,
-   body: hydra.java.syntax.AnnotationTypeBody)
+case class AnnotationTypeDeclaration(modifiers: Seq[hydra.java.syntax.InterfaceModifier],
+   identifier: hydra.java.syntax.TypeIdentifier, body: hydra.java.syntax.AnnotationTypeBody)
 
 type AnnotationTypeBody = Seq[Seq[hydra.java.syntax.AnnotationTypeMemberDeclaration]]
 
@@ -376,8 +385,8 @@ enum AnnotationTypeMemberDeclaration :
    case interface(value: hydra.java.syntax.InterfaceDeclaration) extends AnnotationTypeMemberDeclaration
 
 case class AnnotationTypeElementDeclaration(modifiers: Seq[hydra.java.syntax.AnnotationTypeElementModifier],
-   `type`: hydra.java.syntax.UnannType, identifier: hydra.java.syntax.Identifier, dims: Option[hydra.java.syntax.Dims],
-   default: Option[hydra.java.syntax.DefaultValue])
+   `type`: hydra.java.syntax.UnannType, identifier: hydra.java.syntax.Identifier,
+   dims: Option[hydra.java.syntax.Dims], default: Option[hydra.java.syntax.DefaultValue])
 
 enum AnnotationTypeElementModifier :
    case public(value: hydra.java.syntax.Annotation) extends AnnotationTypeElementModifier
@@ -416,8 +425,8 @@ enum BlockStatement :
 
 type LocalVariableDeclarationStatement = hydra.java.syntax.LocalVariableDeclaration
 
-case class LocalVariableDeclaration(modifiers: Seq[hydra.java.syntax.VariableModifier], `type`: hydra.java.syntax.LocalVariableType,
-   declarators: Seq[hydra.java.syntax.VariableDeclarator])
+case class LocalVariableDeclaration(modifiers: Seq[hydra.java.syntax.VariableModifier],
+   `type`: hydra.java.syntax.LocalVariableType, declarators: Seq[hydra.java.syntax.VariableDeclarator])
 
 enum LocalVariableType :
    case `type`(value: hydra.java.syntax.UnannType) extends LocalVariableType
@@ -469,10 +478,11 @@ enum StatementExpression :
 
 case class IfThenStatement(expression: hydra.java.syntax.Expression, statement: hydra.java.syntax.Statement)
 
-case class IfThenElseStatement(cond: Option[hydra.java.syntax.Expression], `then`: hydra.java.syntax.StatementNoShortIf, `else`: hydra.java.syntax.Statement)
+case class IfThenElseStatement(cond: Option[hydra.java.syntax.Expression], `then`: hydra.java.syntax.StatementNoShortIf,
+   `else`: hydra.java.syntax.Statement)
 
-case class IfThenElseStatementNoShortIf(cond: Option[hydra.java.syntax.Expression], `then`: hydra.java.syntax.StatementNoShortIf,
-   `else`: hydra.java.syntax.StatementNoShortIf)
+case class IfThenElseStatementNoShortIf(cond: Option[hydra.java.syntax.Expression],
+   `then`: hydra.java.syntax.StatementNoShortIf, `else`: hydra.java.syntax.StatementNoShortIf)
 
 enum AssertStatement :
    case single(value: hydra.java.syntax.Expression) extends AssertStatement
@@ -484,7 +494,8 @@ case class SwitchStatement(cond: hydra.java.syntax.Expression, block: hydra.java
 
 type SwitchBlock = Seq[hydra.java.syntax.SwitchBlock_Pair]
 
-case class SwitchBlock_Pair(statements: Seq[hydra.java.syntax.SwitchBlockStatementGroup], labels: Seq[hydra.java.syntax.SwitchLabel])
+case class SwitchBlock_Pair(statements: Seq[hydra.java.syntax.SwitchBlockStatementGroup],
+   labels: Seq[hydra.java.syntax.SwitchLabel])
 
 case class SwitchBlockStatementGroup(labels: Seq[hydra.java.syntax.SwitchLabel], statements: Seq[hydra.java.syntax.BlockStatement])
 
@@ -511,7 +522,8 @@ enum ForStatementNoShortIf :
 
 case class BasicForStatement(cond: hydra.java.syntax.ForCond, body: hydra.java.syntax.Statement)
 
-case class ForCond(init: Option[hydra.java.syntax.ForInit], cond: Option[hydra.java.syntax.Expression], update: Option[hydra.java.syntax.ForUpdate])
+case class ForCond(init: Option[hydra.java.syntax.ForInit], cond: Option[hydra.java.syntax.Expression],
+   update: Option[hydra.java.syntax.ForUpdate])
 
 case class BasicForStatementNoShortIf(cond: hydra.java.syntax.ForCond, body: hydra.java.syntax.StatementNoShortIf)
 
@@ -526,7 +538,8 @@ case class EnhancedForStatement(cond: hydra.java.syntax.EnhancedForCond, body: h
 case class EnhancedForCond(modifiers: Seq[hydra.java.syntax.VariableModifier], `type`: hydra.java.syntax.LocalVariableType,
    id: hydra.java.syntax.VariableDeclaratorId, expression: hydra.java.syntax.Expression)
 
-case class EnhancedForStatementNoShortIf(cond: hydra.java.syntax.EnhancedForCond, body: hydra.java.syntax.StatementNoShortIf)
+case class EnhancedForStatementNoShortIf(cond: hydra.java.syntax.EnhancedForCond,
+   body: hydra.java.syntax.StatementNoShortIf)
 
 type BreakStatement = Option[hydra.java.syntax.Identifier]
 
@@ -545,21 +558,22 @@ enum TryStatement :
 
 case class TryStatement_Simple(block: hydra.java.syntax.Block, catches: hydra.java.syntax.Catches)
 
-case class TryStatement_WithFinally(block: hydra.java.syntax.Block, catches: Option[hydra.java.syntax.Catches], `finally`: hydra.java.syntax.Finally)
+case class TryStatement_WithFinally(block: hydra.java.syntax.Block, catches: Option[hydra.java.syntax.Catches],
+   `finally`: hydra.java.syntax.Finally)
 
 type Catches = Seq[hydra.java.syntax.CatchClause]
 
 case class CatchClause(parameter: Option[hydra.java.syntax.CatchFormalParameter], block: hydra.java.syntax.Block)
 
-case class CatchFormalParameter(modifiers: Seq[hydra.java.syntax.VariableModifier], `type`: hydra.java.syntax.CatchType,
-   id: hydra.java.syntax.VariableDeclaratorId)
+case class CatchFormalParameter(modifiers: Seq[hydra.java.syntax.VariableModifier],
+   `type`: hydra.java.syntax.CatchType, id: hydra.java.syntax.VariableDeclaratorId)
 
 case class CatchType(`type`: hydra.java.syntax.UnannClassType, types: Seq[hydra.java.syntax.ClassType])
 
 type Finally = hydra.java.syntax.Block
 
-case class TryWithResourcesStatement(resourceSpecification: hydra.java.syntax.ResourceSpecification, block: hydra.java.syntax.Block,
-   catches: Option[hydra.java.syntax.Catches], `finally`: Option[hydra.java.syntax.Finally])
+case class TryWithResourcesStatement(resourceSpecification: hydra.java.syntax.ResourceSpecification,
+   block: hydra.java.syntax.Block, catches: Option[hydra.java.syntax.Catches], `finally`: Option[hydra.java.syntax.Finally])
 
 type ResourceSpecification = Seq[hydra.java.syntax.Resource]
 
@@ -647,8 +661,8 @@ enum MethodInvocation_Header :
    case simple(value: hydra.java.syntax.MethodName) extends MethodInvocation_Header
    case complex(value: hydra.java.syntax.MethodInvocation_Complex) extends MethodInvocation_Header
 
-case class MethodInvocation_Complex(variant: hydra.java.syntax.MethodInvocation_Variant, typeArguments: Seq[hydra.java.syntax.TypeArgument],
-   identifier: hydra.java.syntax.Identifier)
+case class MethodInvocation_Complex(variant: hydra.java.syntax.MethodInvocation_Variant,
+   typeArguments: Seq[hydra.java.syntax.TypeArgument], identifier: hydra.java.syntax.Identifier)
 
 enum MethodInvocation_Variant :
    case `type`(value: hydra.java.syntax.TypeName) extends MethodInvocation_Variant
@@ -671,10 +685,11 @@ case class MethodReference_Expression(name: hydra.java.syntax.ExpressionName, ty
 case class MethodReference_Primary(primary: hydra.java.syntax.Primary, typeArguments: Seq[hydra.java.syntax.TypeArgument],
    identifier: hydra.java.syntax.Identifier)
 
-case class MethodReference_ReferenceType(referenceType: hydra.java.syntax.ReferenceType, typeArguments: Seq[hydra.java.syntax.TypeArgument],
-   identifier: hydra.java.syntax.Identifier)
+case class MethodReference_ReferenceType(referenceType: hydra.java.syntax.ReferenceType,
+   typeArguments: Seq[hydra.java.syntax.TypeArgument], identifier: hydra.java.syntax.Identifier)
 
-case class MethodReference_Super(typeArguments: Seq[hydra.java.syntax.TypeArgument], identifier: hydra.java.syntax.Identifier, `super`: Boolean)
+case class MethodReference_Super(typeArguments: Seq[hydra.java.syntax.TypeArgument],
+   identifier: hydra.java.syntax.Identifier, `super`: Boolean)
 
 case class MethodReference_New(classType: hydra.java.syntax.ClassType, typeArguments: Seq[hydra.java.syntax.TypeArgument])
 
@@ -686,11 +701,11 @@ enum ArrayCreationExpression :
    case primitiveArray(value: hydra.java.syntax.ArrayCreationExpression_PrimitiveArray) extends ArrayCreationExpression
    case classOrInterfaceArray(value: hydra.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray) extends ArrayCreationExpression
 
-case class ArrayCreationExpression_Primitive(`type`: hydra.java.syntax.PrimitiveTypeWithAnnotations, dimExprs: Seq[hydra.java.syntax.DimExpr],
-   dims: Option[hydra.java.syntax.Dims])
+case class ArrayCreationExpression_Primitive(`type`: hydra.java.syntax.PrimitiveTypeWithAnnotations,
+   dimExprs: Seq[hydra.java.syntax.DimExpr], dims: Option[hydra.java.syntax.Dims])
 
-case class ArrayCreationExpression_ClassOrInterface(`type`: hydra.java.syntax.ClassOrInterfaceType, dimExprs: Seq[hydra.java.syntax.DimExpr],
-   dims: Option[hydra.java.syntax.Dims])
+case class ArrayCreationExpression_ClassOrInterface(`type`: hydra.java.syntax.ClassOrInterfaceType,
+   dimExprs: Seq[hydra.java.syntax.DimExpr], dims: Option[hydra.java.syntax.Dims])
 
 case class ArrayCreationExpression_PrimitiveArray(`type`: hydra.java.syntax.PrimitiveTypeWithAnnotations,
    dims: Seq[hydra.java.syntax.Dims], array: hydra.java.syntax.ArrayInitializer)
@@ -714,8 +729,8 @@ enum LambdaParameter :
    case normal(value: hydra.java.syntax.LambdaParameter_Normal) extends LambdaParameter
    case variableArity(value: hydra.java.syntax.VariableArityParameter) extends LambdaParameter
 
-case class LambdaParameter_Normal(modifiers: Seq[hydra.java.syntax.VariableModifier], `type`: hydra.java.syntax.LambdaParameterType,
-   id: hydra.java.syntax.VariableDeclaratorId)
+case class LambdaParameter_Normal(modifiers: Seq[hydra.java.syntax.VariableModifier],
+   `type`: hydra.java.syntax.LambdaParameterType, id: hydra.java.syntax.VariableDeclaratorId)
 
 enum LambdaParameterType :
    case `type`(value: hydra.java.syntax.UnannType) extends LambdaParameterType
@@ -729,7 +744,8 @@ enum AssignmentExpression :
    case conditional(value: hydra.java.syntax.ConditionalExpression) extends AssignmentExpression
    case assignment(value: hydra.java.syntax.Assignment) extends AssignmentExpression
 
-case class Assignment(lhs: hydra.java.syntax.LeftHandSide, op: hydra.java.syntax.AssignmentOperator, expression: hydra.java.syntax.Expression)
+case class Assignment(lhs: hydra.java.syntax.LeftHandSide, op: hydra.java.syntax.AssignmentOperator,
+   expression: hydra.java.syntax.Expression)
 
 enum LeftHandSide :
    case expressionName(value: hydra.java.syntax.ExpressionName) extends LeftHandSide
@@ -755,11 +771,11 @@ enum ConditionalExpression :
    case ternaryCond(value: hydra.java.syntax.ConditionalExpression_TernaryCond) extends ConditionalExpression
    case ternaryLambda(value: hydra.java.syntax.ConditionalExpression_TernaryLambda) extends ConditionalExpression
 
-case class ConditionalExpression_TernaryCond(cond: hydra.java.syntax.ConditionalOrExpression, ifTrue: hydra.java.syntax.Expression,
-   ifFalse: hydra.java.syntax.ConditionalExpression)
+case class ConditionalExpression_TernaryCond(cond: hydra.java.syntax.ConditionalOrExpression,
+   ifTrue: hydra.java.syntax.Expression, ifFalse: hydra.java.syntax.ConditionalExpression)
 
-case class ConditionalExpression_TernaryLambda(cond: hydra.java.syntax.ConditionalOrExpression, ifTrue: hydra.java.syntax.Expression,
-   ifFalse: hydra.java.syntax.LambdaExpression)
+case class ConditionalExpression_TernaryLambda(cond: hydra.java.syntax.ConditionalOrExpression,
+   ifTrue: hydra.java.syntax.Expression, ifFalse: hydra.java.syntax.LambdaExpression)
 
 type ConditionalOrExpression = Seq[hydra.java.syntax.ConditionalAndExpression]
 
@@ -786,15 +802,20 @@ enum RelationalExpression :
    case greaterThanEqual(value: hydra.java.syntax.RelationalExpression_GreaterThanEqual) extends RelationalExpression
    case instanceof(value: hydra.java.syntax.RelationalExpression_InstanceOf) extends RelationalExpression
 
-case class RelationalExpression_LessThan(lhs: hydra.java.syntax.RelationalExpression, rhs: hydra.java.syntax.ShiftExpression)
+case class RelationalExpression_LessThan(lhs: hydra.java.syntax.RelationalExpression,
+   rhs: hydra.java.syntax.ShiftExpression)
 
-case class RelationalExpression_GreaterThan(lhs: hydra.java.syntax.RelationalExpression, rhs: hydra.java.syntax.ShiftExpression)
+case class RelationalExpression_GreaterThan(lhs: hydra.java.syntax.RelationalExpression,
+   rhs: hydra.java.syntax.ShiftExpression)
 
-case class RelationalExpression_LessThanEqual(lhs: hydra.java.syntax.RelationalExpression, rhs: hydra.java.syntax.ShiftExpression)
+case class RelationalExpression_LessThanEqual(lhs: hydra.java.syntax.RelationalExpression,
+   rhs: hydra.java.syntax.ShiftExpression)
 
-case class RelationalExpression_GreaterThanEqual(lhs: hydra.java.syntax.RelationalExpression, rhs: hydra.java.syntax.ShiftExpression)
+case class RelationalExpression_GreaterThanEqual(lhs: hydra.java.syntax.RelationalExpression,
+   rhs: hydra.java.syntax.ShiftExpression)
 
-case class RelationalExpression_InstanceOf(lhs: hydra.java.syntax.RelationalExpression, rhs: hydra.java.syntax.ReferenceType)
+case class RelationalExpression_InstanceOf(lhs: hydra.java.syntax.RelationalExpression,
+   rhs: hydra.java.syntax.ReferenceType)
 
 enum ShiftExpression :
    case unary(value: hydra.java.syntax.AdditiveExpression) extends ShiftExpression
@@ -817,7 +838,8 @@ enum MultiplicativeExpression :
    case divide(value: hydra.java.syntax.MultiplicativeExpression_Binary) extends MultiplicativeExpression
    case mod(value: hydra.java.syntax.MultiplicativeExpression_Binary) extends MultiplicativeExpression
 
-case class MultiplicativeExpression_Binary(lhs: hydra.java.syntax.MultiplicativeExpression, rhs: hydra.java.syntax.UnaryExpression)
+case class MultiplicativeExpression_Binary(lhs: hydra.java.syntax.MultiplicativeExpression,
+   rhs: hydra.java.syntax.UnaryExpression)
 
 enum UnaryExpression :
    case preIncrement(value: hydra.java.syntax.PreIncrementExpression) extends UnaryExpression
@@ -851,11 +873,14 @@ enum CastExpression :
    case notPlusMinus(value: hydra.java.syntax.CastExpression_NotPlusMinus) extends CastExpression
    case lambda(value: hydra.java.syntax.CastExpression_Lambda) extends CastExpression
 
-case class CastExpression_Primitive(`type`: hydra.java.syntax.PrimitiveTypeWithAnnotations, expression: hydra.java.syntax.UnaryExpression)
+case class CastExpression_Primitive(`type`: hydra.java.syntax.PrimitiveTypeWithAnnotations,
+   expression: hydra.java.syntax.UnaryExpression)
 
-case class CastExpression_NotPlusMinus(refAndBounds: hydra.java.syntax.CastExpression_RefAndBounds, expression: hydra.java.syntax.UnaryExpression)
+case class CastExpression_NotPlusMinus(refAndBounds: hydra.java.syntax.CastExpression_RefAndBounds,
+   expression: hydra.java.syntax.UnaryExpression)
 
-case class CastExpression_Lambda(refAndBounds: hydra.java.syntax.CastExpression_RefAndBounds, expression: hydra.java.syntax.LambdaExpression)
+case class CastExpression_Lambda(refAndBounds: hydra.java.syntax.CastExpression_RefAndBounds,
+   expression: hydra.java.syntax.LambdaExpression)
 
 case class CastExpression_RefAndBounds(`type`: hydra.java.syntax.ReferenceType, bounds: Seq[hydra.java.syntax.AdditionalBound])
 

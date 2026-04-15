@@ -49,8 +49,8 @@ def notAForallTypeError(e: hydra.error.checking.NotAForallTypeError): scala.Pred
   lazy val typ: hydra.core.Type = (e.`type`)
   lazy val args: Seq[hydra.core.Type] = (e.typeArguments)
   hydra.lib.strings.cat(Seq("not a forall type: ", hydra.show.core.`type`(typ), ". Trying to apply ",
-     hydra.lib.literals.showInt32(hydra.lib.lists.length[hydra.core.Type](args)), " type argument(s): ",
-     hydra.formatting.showList(hydra.show.core.`type`)(args)))
+     hydra.lib.literals.showInt32(hydra.lib.lists.length[hydra.core.Type](args)),
+     " type argument(s): ", hydra.formatting.showList(hydra.show.core.`type`)(args)))
 }
 
 def notAFunctionTypeError(e: hydra.error.checking.NotAFunctionTypeError): scala.Predef.String =
@@ -68,14 +68,16 @@ def typeArityMismatchError(e: hydra.error.checking.TypeArityMismatchError): scal
   lazy val actual: Int = (e.actualArity)
   lazy val args: Seq[hydra.core.Type] = (e.typeArguments)
   hydra.lib.strings.cat(Seq("type ", hydra.show.core.`type`(typ), " applied to the wrong number of type arguments (expected ",
-     hydra.lib.literals.showInt32(expected), ", got ", hydra.lib.literals.showInt32(actual), "): ", hydra.formatting.showList(hydra.show.core.`type`)(args)))
+     hydra.lib.literals.showInt32(expected), ", got ", hydra.lib.literals.showInt32(actual),
+     "): ", hydra.formatting.showList(hydra.show.core.`type`)(args)))
 }
 
 def typeMismatchError(e: hydra.error.checking.TypeMismatchError): scala.Predef.String =
   {
   lazy val expected: hydra.core.Type = (e.expectedType)
   lazy val actual: hydra.core.Type = (e.actualType)
-  hydra.lib.strings.cat(Seq("type mismatch: expected ", hydra.show.core.`type`(expected), " but found ", hydra.show.core.`type`(actual)))
+  hydra.lib.strings.cat(Seq("type mismatch: expected ", hydra.show.core.`type`(expected),
+     " but found ", hydra.show.core.`type`(actual)))
 }
 
 def unboundTypeVariablesError(e: hydra.error.checking.UnboundTypeVariablesError): scala.Predef.String =
@@ -83,7 +85,8 @@ def unboundTypeVariablesError(e: hydra.error.checking.UnboundTypeVariablesError)
   lazy val vars: scala.collection.immutable.Set[hydra.core.Name] = (e.variables)
   lazy val typ: hydra.core.Type = (e.`type`)
   hydra.lib.strings.cat(Seq("unbound type variables: {", hydra.lib.strings.intercalate(", ")(hydra.lib.lists.map[hydra.core.Name,
-     scala.Predef.String]((x) => x)(hydra.lib.sets.toList[hydra.core.Name](vars))), "} in type ", hydra.show.core.`type`(typ)))
+     scala.Predef.String]((x) => x)(hydra.lib.sets.toList[hydra.core.Name](vars))),
+     "} in type ", hydra.show.core.`type`(typ)))
 }
 
 def unequalTypesError(e: hydra.error.checking.UnequalTypesError): scala.Predef.String =
@@ -98,7 +101,8 @@ def unificationError(e: hydra.errors.UnificationError): scala.Predef.String =
   lazy val lt: hydra.core.Type = (e.leftType)
   lazy val rt: hydra.core.Type = (e.rightType)
   lazy val msg: scala.Predef.String = (e.message)
-  hydra.lib.strings.cat(Seq("unification error: cannot unify ", hydra.show.core.`type`(lt), " with ", hydra.show.core.`type`(rt), ": ", msg))
+  hydra.lib.strings.cat(Seq("unification error: cannot unify ", hydra.show.core.`type`(lt),
+     " with ", hydra.show.core.`type`(rt), ": ", msg))
 }
 
 def unsupportedTermVariantError(e: hydra.error.checking.UnsupportedTermVariantError): scala.Predef.String =

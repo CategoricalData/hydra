@@ -2440,6 +2440,67 @@ testGroupForPolymorphism =
                     Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
                   Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}]},
+        Testing.TestGroup {
+          Testing.testGroupName = "Phantom type variables",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = [
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#1",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> ShowCore.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.isLeft")),
+                  Core.applicationArgument = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))})))),
+                Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
+                  Core.typeSchemeVariables = [],
+                  Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeBoolean),
+                  Core.typeSchemeConstraints = Nothing}))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#2",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> ShowCore.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.isLeft")),
+                  Core.applicationArgument = (Core.TermEither (Right (Core.TermLiteral (Core.LiteralString "x"))))})))),
+                Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
+                  Core.typeSchemeVariables = [],
+                  Core.typeSchemeType = (Core.TypeLiteral Core.LiteralTypeBoolean),
+                  Core.typeSchemeConstraints = Nothing}))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#3",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> ShowCore.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermList [
+                  Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.isLeft")),
+                    Core.applicationArgument = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))}),
+                  (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.isLeft")),
+                    Core.applicationArgument = (Core.TermEither (Left (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137)))))}))]))),
+                Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
+                  Core.typeSchemeVariables = [],
+                  Core.typeSchemeType = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeBoolean)),
+                  Core.typeSchemeConstraints = Nothing}))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#4",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> ShowCore.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermVariable (Core.Name "hydra.lib.eithers.isLeft")))),
+                Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
+                  Core.typeSchemeVariables = [
+                    Core.Name "t0",
+                    (Core.Name "t1")],
+                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                    Core.functionTypeDomain = (Core.TypeEither (Core.EitherType {
+                      Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "t0")),
+                      Core.eitherTypeRight = (Core.TypeVariable (Core.Name "t1"))})),
+                    Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeBoolean)})),
+                  Core.typeSchemeConstraints = Nothing}))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
 

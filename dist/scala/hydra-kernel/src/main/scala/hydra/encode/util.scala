@@ -19,7 +19,8 @@ def comparison(v1: hydra.util.Comparison): hydra.core.Term =
   v1 match
   case hydra.util.Comparison.lessThan => hydra.core.Term.inject(hydra.core.Injection("hydra.util.Comparison",
      hydra.core.Field("lessThan", hydra.core.Term.unit)))
-  case hydra.util.Comparison.equalTo => hydra.core.Term.inject(hydra.core.Injection("hydra.util.Comparison", hydra.core.Field("equalTo", hydra.core.Term.unit)))
+  case hydra.util.Comparison.equalTo => hydra.core.Term.inject(hydra.core.Injection("hydra.util.Comparison",
+     hydra.core.Field("equalTo", hydra.core.Term.unit)))
   case hydra.util.Comparison.greaterThan => hydra.core.Term.inject(hydra.core.Injection("hydra.util.Comparison",
      hydra.core.Field("greaterThan", hydra.core.Term.unit)))
 

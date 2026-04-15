@@ -12,7 +12,8 @@ def encodeAnnotatedStatement(`as_`: hydra.python.syntax.AnnotatedStatement): hyd
   {
   lazy val `doc_`: scala.Predef.String = (`as_`.comment)
   lazy val stmt: hydra.python.syntax.Statement = (`as_`.statement)
-  hydra.serialization.newlineSep(Seq(hydra.serialization.cst(hydra.python.serde.toPythonComments(`doc_`)), hydra.python.serde.encodeStatement(stmt)))
+  hydra.serialization.newlineSep(Seq(hydra.serialization.cst(hydra.python.serde.toPythonComments(`doc_`)),
+     hydra.python.serde.encodeStatement(stmt)))
 }
 
 def encodeAnnotation(ann: hydra.python.syntax.Annotation): hydra.ast.Expr =
@@ -39,7 +40,8 @@ def encodeAssignmentExpression(ae: hydra.python.syntax.AssignmentExpression): hy
   {
   lazy val name: hydra.python.syntax.Name = (ae.name)
   lazy val expr: hydra.python.syntax.Expression = (ae.expression)
-  hydra.serialization.spaceSep(Seq(hydra.python.serde.encodeName(name), hydra.serialization.cst(":="), hydra.python.serde.encodeExpression(expr)))
+  hydra.serialization.spaceSep(Seq(hydra.python.serde.encodeName(name), hydra.serialization.cst(":="),
+     hydra.python.serde.encodeExpression(expr)))
 }
 
 def encodeAtom(atom: hydra.python.syntax.Atom): hydra.ast.Expr =
@@ -106,7 +108,8 @@ def encodeBlock(b: hydra.python.syntax.Block): hydra.ast.Expr =
   b match
   case hydra.python.syntax.Block.indented(v_Block_indented_groups) => hydra.serialization.tabIndentDoubleSpace(hydra.lib.lists.map[Seq[hydra.python.syntax.Statement],
      hydra.ast.Expr]((stmts: Seq[hydra.python.syntax.Statement]) =>
-    hydra.serialization.newlineSep(hydra.lib.lists.map[hydra.python.syntax.Statement, hydra.ast.Expr](hydra.python.serde.encodeStatement)(stmts)))(v_Block_indented_groups))
+    hydra.serialization.newlineSep(hydra.lib.lists.map[hydra.python.syntax.Statement,
+       hydra.ast.Expr](hydra.python.serde.encodeStatement)(stmts)))(v_Block_indented_groups))
   case hydra.python.syntax.Block.simple(v_Block_simple_ss) => hydra.serialization.semicolonSep(hydra.lib.lists.map[hydra.python.syntax.SimpleStatement,
      hydra.ast.Expr](hydra.python.serde.encodeSimpleStatement)(v_Block_simple_ss))
 
@@ -119,7 +122,8 @@ def encodeCaseBlock(cb: hydra.python.syntax.CaseBlock): hydra.ast.Expr =
   lazy val body: hydra.python.syntax.Block = (cb.body)
   hydra.serialization.newlineSep(Seq(hydra.serialization.noSep(Seq(hydra.serialization.spaceSep(hydra.lib.maybes.cat[hydra.ast.Expr](Seq(Some(hydra.serialization.cst("case")),
      Some(hydra.python.serde.encodePatterns(patterns)), hydra.lib.maybes.map[hydra.python.syntax.Guard,
-     hydra.ast.Expr](hydra.python.serde.encodeGuard)(guard)))), hydra.serialization.cst(":"))), hydra.python.serde.encodeBlock(body)))
+     hydra.ast.Expr](hydra.python.serde.encodeGuard)(guard)))), hydra.serialization.cst(":"))),
+     hydra.python.serde.encodeBlock(body)))
 }
 
 def encodeClassDefinition(cd: hydra.python.syntax.ClassDefinition): hydra.ast.Expr =
@@ -128,11 +132,14 @@ def encodeClassDefinition(cd: hydra.python.syntax.ClassDefinition): hydra.ast.Ex
   lazy val name: hydra.python.syntax.Name = (cd.name)
   lazy val args: Option[hydra.python.syntax.Args] = (cd.arguments)
   lazy val body: hydra.python.syntax.Block = (cd.body)
-  lazy val argPart: Option[hydra.ast.Expr] = hydra.lib.maybes.map[hydra.python.syntax.Args, hydra.ast.Expr]((a: hydra.python.syntax.Args) =>
-    hydra.serialization.noSep(Seq(hydra.serialization.cst("("), hydra.python.serde.encodeArgs(a), hydra.serialization.cst(")"))))(args)
+  lazy val argPart: Option[hydra.ast.Expr] = hydra.lib.maybes.map[hydra.python.syntax.Args,
+     hydra.ast.Expr]((a: hydra.python.syntax.Args) =>
+    hydra.serialization.noSep(Seq(hydra.serialization.cst("("), hydra.python.serde.encodeArgs(a),
+       hydra.serialization.cst(")"))))(args)
   hydra.serialization.newlineSep(hydra.lib.maybes.cat[hydra.ast.Expr](Seq(hydra.lib.maybes.map[hydra.python.syntax.Decorators,
      hydra.ast.Expr](hydra.python.serde.encodeDecorators)(decs), Some(hydra.serialization.noSep(hydra.lib.maybes.cat[hydra.ast.Expr](Seq(Some(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("class"),
-     hydra.python.serde.encodeName(name)))), argPart, Some(hydra.serialization.cst(":")))))), Some(hydra.python.serde.encodeBlock(body)))))
+     hydra.python.serde.encodeName(name)))), argPart, Some(hydra.serialization.cst(":")))))),
+     Some(hydra.python.serde.encodeBlock(body)))))
 }
 
 def encodeClassPattern(cp: hydra.python.syntax.ClassPattern): hydra.ast.Expr =
@@ -176,7 +183,8 @@ def encodeConditional(c: hydra.python.syntax.Conditional): hydra.ast.Expr =
   lazy val cond: hydra.python.syntax.Disjunction = (c.`if`)
   lazy val elseExpr: hydra.python.syntax.Expression = (c.`else`)
   hydra.serialization.spaceSep(Seq(hydra.python.serde.encodeDisjunction(body), hydra.serialization.cst("if"),
-     hydra.python.serde.encodeDisjunction(cond), hydra.serialization.cst("else"), hydra.python.serde.encodeExpression(elseExpr)))
+     hydra.python.serde.encodeDisjunction(cond), hydra.serialization.cst("else"),
+     hydra.python.serde.encodeExpression(elseExpr)))
 }
 
 def encodeConjunction(c: hydra.python.syntax.Conjunction): hydra.ast.Expr =
@@ -184,7 +192,8 @@ def encodeConjunction(c: hydra.python.syntax.Conjunction): hydra.ast.Expr =
      hydra.ast.Expr](hydra.python.serde.encodeInversion)(c))
 
 def encodeDecorators(decs: hydra.python.syntax.Decorators): hydra.ast.Expr =
-  hydra.serialization.newlineSep(hydra.lib.lists.map[hydra.python.syntax.NamedExpression, hydra.ast.Expr]((ne: hydra.python.syntax.NamedExpression) =>
+  hydra.serialization.newlineSep(hydra.lib.lists.map[hydra.python.syntax.NamedExpression,
+     hydra.ast.Expr]((ne: hydra.python.syntax.NamedExpression) =>
   hydra.serialization.noSep(Seq(hydra.serialization.cst("@"), hydra.python.serde.encodeNamedExpression(ne))))(decs))
 
 def encodeDict(d: hydra.python.syntax.Dict): hydra.ast.Expr =
@@ -241,8 +250,10 @@ def encodeFunctionDefRaw(fdr: hydra.python.syntax.FunctionDefRaw): hydra.ast.Exp
   lazy val asyncKw: Option[hydra.ast.Expr] = hydra.lib.logic.ifElse[Option[hydra.ast.Expr]](`async_`)(Some(hydra.serialization.cst("async")))(None)
   lazy val tparamPart: Option[hydra.ast.Expr] = hydra.lib.logic.ifElse[Option[hydra.ast.Expr]](hydra.lib.lists.`null`[hydra.python.syntax.TypeParameter](tparams))(None)(Some(hydra.serialization.bracketList(hydra.serialization.inlineStyle)(hydra.lib.lists.map[hydra.python.syntax.TypeParameter,
      hydra.ast.Expr](hydra.python.serde.encodeTypeParameter)(tparams))))
-  lazy val paramPart: Option[hydra.ast.Expr] = hydra.lib.maybes.map[hydra.python.syntax.Parameters, hydra.ast.Expr](hydra.python.serde.encodeParameters)(params)
-  lazy val retPart: Option[hydra.ast.Expr] = hydra.lib.maybes.map[hydra.python.syntax.Expression, hydra.ast.Expr]((t: hydra.python.syntax.Expression) =>
+  lazy val paramPart: Option[hydra.ast.Expr] = hydra.lib.maybes.map[hydra.python.syntax.Parameters,
+     hydra.ast.Expr](hydra.python.serde.encodeParameters)(params)
+  lazy val retPart: Option[hydra.ast.Expr] = hydra.lib.maybes.map[hydra.python.syntax.Expression,
+     hydra.ast.Expr]((t: hydra.python.syntax.Expression) =>
     hydra.serialization.spaceSep(Seq(hydra.serialization.cst("->"), hydra.python.serde.encodeExpression(t))))(retType)
   hydra.serialization.newlineSep(Seq(hydra.serialization.noSep(Seq(hydra.serialization.spaceSep(hydra.lib.maybes.cat[hydra.ast.Expr](Seq(asyncKw,
      Some(hydra.serialization.cst("def")), Some(hydra.serialization.noSep(hydra.lib.maybes.cat[hydra.ast.Expr](Seq(Some(hydra.python.serde.encodeName(name)),
@@ -283,7 +294,8 @@ def encodeImportFromAsName(ifan: hydra.python.syntax.ImportFromAsName): hydra.as
   lazy val name: hydra.python.syntax.Name = (ifan.name)
   lazy val alias: Option[hydra.python.syntax.Name] = (ifan.as)
   hydra.lib.maybes.maybe[hydra.ast.Expr, hydra.python.syntax.Name](hydra.python.serde.encodeName(name))((a: hydra.python.syntax.Name) =>
-    hydra.serialization.spaceSep(Seq(hydra.python.serde.encodeName(name), hydra.serialization.cst("as"), hydra.python.serde.encodeName(a))))(alias)
+    hydra.serialization.spaceSep(Seq(hydra.python.serde.encodeName(name), hydra.serialization.cst("as"),
+       hydra.python.serde.encodeName(a))))(alias)
 }
 
 def encodeImportFromTargets(t: hydra.python.syntax.ImportFromTargets): hydra.ast.Expr =
@@ -292,7 +304,8 @@ def encodeImportFromTargets(t: hydra.python.syntax.ImportFromTargets): hydra.ast
      hydra.ast.Expr](hydra.python.serde.encodeImportFromAsName)(v_ImportFromTargets_simple_names))
   case hydra.python.syntax.ImportFromTargets.parens(v_ImportFromTargets_parens_names) => hydra.serialization.noSep(Seq(hydra.serialization.cst("("),
      hydra.serialization.commaSep(hydra.serialization.inlineStyle)(hydra.lib.lists.map[hydra.python.syntax.ImportFromAsName,
-     hydra.ast.Expr](hydra.python.serde.encodeImportFromAsName)(v_ImportFromTargets_parens_names)), hydra.serialization.cst(")")))
+     hydra.ast.Expr](hydra.python.serde.encodeImportFromAsName)(v_ImportFromTargets_parens_names)),
+     hydra.serialization.cst(")")))
   case hydra.python.syntax.ImportFromTargets.star => hydra.serialization.cst("*")
 
 def encodeImportName(`in_`: hydra.python.syntax.ImportName): hydra.ast.Expr =
@@ -314,7 +327,8 @@ def encodeKeywordPattern(kp: hydra.python.syntax.KeywordPattern): hydra.ast.Expr
   {
   lazy val name: hydra.python.syntax.Name = (kp.name)
   lazy val pat: hydra.python.syntax.Pattern = (kp.pattern)
-  hydra.serialization.noSep(Seq(hydra.python.serde.encodeName(name), hydra.serialization.cst("="), hydra.python.serde.encodePattern(pat)))
+  hydra.serialization.noSep(Seq(hydra.python.serde.encodeName(name), hydra.serialization.cst("="),
+     hydra.python.serde.encodePattern(pat)))
 }
 
 def encodeKeywordPatterns(kp: hydra.python.syntax.KeywordPatterns): hydra.ast.Expr =
@@ -333,7 +347,8 @@ def encodeKwarg(k: hydra.python.syntax.Kwarg): hydra.ast.Expr =
   {
   lazy val name: hydra.python.syntax.Name = (k.name)
   lazy val expr: hydra.python.syntax.Expression = (k.value)
-  hydra.serialization.noSep(Seq(hydra.python.serde.encodeName(name), hydra.serialization.cst("="), hydra.python.serde.encodeExpression(expr)))
+  hydra.serialization.noSep(Seq(hydra.python.serde.encodeName(name), hydra.serialization.cst("="),
+     hydra.python.serde.encodeExpression(expr)))
 }
 
 def encodeKwargOrDoubleStarred(kds: hydra.python.syntax.KwargOrDoubleStarred): hydra.ast.Expr =
@@ -351,7 +366,8 @@ def encodeLambda(l: hydra.python.syntax.Lambda): hydra.ast.Expr =
   {
   lazy val params: hydra.python.syntax.LambdaParameters = (l.params)
   lazy val body: hydra.python.syntax.Expression = (l.body)
-  hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("lambda"), hydra.serialization.noSep(Seq(hydra.python.serde.encodeLambdaParameters(params),
+  hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("lambda"),
+     hydra.serialization.noSep(Seq(hydra.python.serde.encodeLambdaParameters(params),
      hydra.serialization.cst(":"))), hydra.python.serde.encodeExpression(body))))
 }
 
@@ -380,15 +396,18 @@ def encodeMatchStatement(ms: hydra.python.syntax.MatchStatement): hydra.ast.Expr
   lazy val subj: hydra.python.syntax.SubjectExpression = (ms.subject)
   lazy val cases: Seq[hydra.python.syntax.CaseBlock] = (ms.cases)
   hydra.serialization.newlineSep(Seq(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("match"),
-     hydra.serialization.noSep(Seq(hydra.python.serde.encodeSubjectExpression(subj), hydra.serialization.cst(":"))))),
-     hydra.serialization.tabIndentDoubleSpace(hydra.lib.lists.map[hydra.python.syntax.CaseBlock, hydra.ast.Expr](hydra.python.serde.encodeCaseBlock)(cases))))
+     hydra.serialization.noSep(Seq(hydra.python.serde.encodeSubjectExpression(subj),
+     hydra.serialization.cst(":"))))), hydra.serialization.tabIndentDoubleSpace(hydra.lib.lists.map[hydra.python.syntax.CaseBlock,
+     hydra.ast.Expr](hydra.python.serde.encodeCaseBlock)(cases))))
 }
 
 def encodeModule(mod: hydra.python.syntax.Module): hydra.ast.Expr =
   {
   lazy val warning: hydra.ast.Expr = hydra.serialization.cst(hydra.python.serde.toPythonComments(hydra.constants.warningAutoGeneratedFile))
-  lazy val groups: Seq[hydra.ast.Expr] = hydra.lib.lists.map[Seq[hydra.python.syntax.Statement], hydra.ast.Expr]((group: Seq[hydra.python.syntax.Statement]) =>
-    hydra.serialization.newlineSep(hydra.lib.lists.map[hydra.python.syntax.Statement, hydra.ast.Expr](hydra.python.serde.encodeStatement)(group)))(mod)
+  lazy val groups: Seq[hydra.ast.Expr] = hydra.lib.lists.map[Seq[hydra.python.syntax.Statement],
+     hydra.ast.Expr]((group: Seq[hydra.python.syntax.Statement]) =>
+    hydra.serialization.newlineSep(hydra.lib.lists.map[hydra.python.syntax.Statement,
+       hydra.ast.Expr](hydra.python.serde.encodeStatement)(group)))(mod)
   hydra.serialization.doubleNewlineSep(hydra.lib.lists.cons[hydra.ast.Expr](warning)(groups))
 }
 
@@ -623,7 +642,8 @@ def encodeTPrimaryAndName(pn: hydra.python.syntax.TPrimaryAndName): hydra.ast.Ex
   {
   lazy val prim: hydra.python.syntax.TPrimary = (pn.primary)
   lazy val `name_`: hydra.python.syntax.Name = (pn.name)
-  hydra.serialization.noSep(Seq(hydra.python.serde.encodeTPrimary(prim), hydra.serialization.cst("."), hydra.python.serde.encodeName(`name_`)))
+  hydra.serialization.noSep(Seq(hydra.python.serde.encodeTPrimary(prim), hydra.serialization.cst("."),
+     hydra.python.serde.encodeName(`name_`)))
 }
 
 def encodeTargetWithStarAtom(t: hydra.python.syntax.TargetWithStarAtom): hydra.ast.Expr =
@@ -650,7 +670,8 @@ def encodeTypeAlias(ta: hydra.python.syntax.TypeAlias): hydra.ast.Expr =
   lazy val alias: hydra.ast.Expr = hydra.serialization.noSep(hydra.lib.maybes.cat[hydra.ast.Expr](Seq(Some(hydra.python.serde.encodeName(name)),
      hydra.lib.logic.ifElse[Option[hydra.ast.Expr]](hydra.lib.lists.`null`[hydra.python.syntax.TypeParameter](tparams))(None)(Some(hydra.serialization.bracketList(hydra.serialization.inlineStyle)(hydra.lib.lists.map[hydra.python.syntax.TypeParameter,
      hydra.ast.Expr](hydra.python.serde.encodeTypeParameter)(tparams)))))))
-  hydra.serialization.spaceSep(Seq(hydra.serialization.cst("type"), alias, hydra.serialization.cst("="), hydra.python.serde.encodeExpression(expr)))
+  hydra.serialization.spaceSep(Seq(hydra.serialization.cst("type"), alias, hydra.serialization.cst("="),
+     hydra.python.serde.encodeExpression(expr)))
 }
 
 def encodeTypeParameter(tp: hydra.python.syntax.TypeParameter): hydra.ast.Expr =
@@ -665,8 +686,8 @@ def encodeTypedAssignment(ta: hydra.python.syntax.TypedAssignment): hydra.ast.Ex
   lazy val typ: hydra.python.syntax.Expression = (ta.`type`)
   lazy val rhs: Option[hydra.python.syntax.AnnotatedRhs] = (ta.rhs)
   hydra.serialization.spaceSep(hydra.lib.maybes.cat[hydra.ast.Expr](Seq(Some(hydra.serialization.noSep(Seq(hydra.python.serde.encodeSingleTarget(lhs),
-     hydra.serialization.cst(":")))), Some(hydra.python.serde.encodeExpression(typ)), hydra.lib.maybes.map[hydra.python.syntax.AnnotatedRhs,
-     hydra.ast.Expr](hydra.python.serde.encodeAnnotatedRhs)(rhs))))
+     hydra.serialization.cst(":")))), Some(hydra.python.serde.encodeExpression(typ)),
+     hydra.lib.maybes.map[hydra.python.syntax.AnnotatedRhs, hydra.ast.Expr](hydra.python.serde.encodeAnnotatedRhs)(rhs))))
 }
 
 def encodeUntypedAssignment(ua: hydra.python.syntax.UntypedAssignment): hydra.ast.Expr =
@@ -685,8 +706,9 @@ def encodeWhileStatement(ws: hydra.python.syntax.WhileStatement): hydra.ast.Expr
   lazy val body: hydra.python.syntax.Block = (ws.body)
   lazy val `else_`: Option[hydra.python.syntax.Block] = (ws.`else`)
   hydra.serialization.newlineSep(hydra.lib.maybes.cat[hydra.ast.Expr](Seq(Some(hydra.serialization.newlineSep(Seq(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("while"),
-     hydra.serialization.noSep(Seq(hydra.python.serde.encodeNamedExpression(cond), hydra.serialization.cst(":"))))),
-     hydra.python.serde.encodeBlock(body)))), hydra.lib.maybes.map[hydra.python.syntax.Block, hydra.ast.Expr]((eb: hydra.python.syntax.Block) =>
+     hydra.serialization.noSep(Seq(hydra.python.serde.encodeNamedExpression(cond),
+     hydra.serialization.cst(":"))))), hydra.python.serde.encodeBlock(body)))), hydra.lib.maybes.map[hydra.python.syntax.Block,
+     hydra.ast.Expr]((eb: hydra.python.syntax.Block) =>
     hydra.serialization.newlineSep(Seq(hydra.serialization.cst("else:"), hydra.python.serde.encodeBlock(eb))))(`else_`))))
 }
 

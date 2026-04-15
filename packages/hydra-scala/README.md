@@ -52,7 +52,6 @@ In 0.15, Hydra's Scala code is split across three locations
 - **This package** (`packages/hydra-scala/`) — Scala coder DSL sources and the sbt build
   - `src/main/haskell/Hydra/Sources/Scala/` — Scala coder DSL sources (written in Haskell)
   - `build.sbt` — sbt build configuration (points at the head and the generated kernel)
-  - `bin/break-long-lines.py` — post-processor for generated code
 
 - **Scala head** ([`heads/scala/src/main/scala/`](https://github.com/CategoricalData/hydra/tree/main/heads/scala/src/main/scala))
   — hand-written Scala runtime

@@ -6,7 +6,7 @@ package hydra.test.lib;
  * Test cases for hydra.lib.maps primitives
  */
 public interface Maps {
-  static <T6, T5, T4, T3, T2, T1, T0> hydra.testing.TestGroup allTests() {
+  static hydra.testing.TestGroup allTests() {
     return new hydra.testing.TestGroup("hydra.lib.maps primitives", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(
       new hydra.testing.TestGroup("alter", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
         new hydra.testing.TestCaseWithMetadata("insert new key", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.show.Core.map(
@@ -144,7 +144,7 @@ public interface Maps {
             "c")))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
         new hydra.testing.TestCaseWithMetadata("empty map", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.show.Core.list(
           (java.util.function.Function<String, String>) (s -> hydra.lib.literals.ShowString.apply(s)),
-          hydra.lib.maps.Elems.apply((java.util.Map<T0, String>) ((java.util.Map<T0, String>) (java.util.Collections.<T0, String>emptyMap())))), hydra.show.Core.list(
+          hydra.lib.maps.Elems.apply((java.util.Map<java.lang.Void, String>) ((java.util.Map<java.lang.Void, String>) (java.util.Collections.<java.lang.Void, String>emptyMap())))), hydra.show.Core.list(
           (java.util.function.Function<String, String>) (s -> hydra.lib.literals.ShowString.apply(s)),
           (java.util.List<String>) (java.util.Collections.<String>emptyList())))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())))),
       new hydra.testing.TestGroup("empty", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(new hydra.testing.TestCaseWithMetadata("empty map", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.show.Core.map(
@@ -418,7 +418,7 @@ public interface Maps {
             3)))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
         new hydra.testing.TestCaseWithMetadata("empty map", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.show.Core.list(
           (java.util.function.Function<Integer, String>) (n -> hydra.lib.literals.ShowInt32.apply(n)),
-          hydra.lib.maps.Keys.apply((java.util.Map<Integer, T1>) ((java.util.Map<Integer, T1>) (java.util.Collections.<Integer, T1>emptyMap())))), hydra.show.Core.list(
+          hydra.lib.maps.Keys.apply((java.util.Map<Integer, java.lang.Void>) ((java.util.Map<Integer, java.lang.Void>) (java.util.Collections.<Integer, java.lang.Void>emptyMap())))), hydra.show.Core.list(
           (java.util.function.Function<Integer, String>) (n -> hydra.lib.literals.ShowInt32.apply(n)),
           (java.util.List<Integer>) (java.util.Collections.<Integer>emptyList())))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())))),
       new hydra.testing.TestGroup("lookup", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
@@ -542,9 +542,9 @@ public interface Maps {
               "b"))))), hydra.lib.literals.ShowBoolean.apply(false))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
         new hydra.testing.TestCaseWithMetadata("empty map", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.literals.ShowBoolean.apply(hydra.lib.maps.Member.apply(
           1,
-          (java.util.Map<Integer, T2>) ((java.util.Map<Integer, T2>) (java.util.Collections.<Integer, T2>emptyMap())))), hydra.lib.literals.ShowBoolean.apply(false))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())))),
+          (java.util.Map<Integer, java.lang.Void>) ((java.util.Map<Integer, java.lang.Void>) (java.util.Collections.<Integer, java.lang.Void>emptyMap())))), hydra.lib.literals.ShowBoolean.apply(false))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())))),
       new hydra.testing.TestGroup("null", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
-        new hydra.testing.TestCaseWithMetadata("empty map", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.literals.ShowBoolean.apply(hydra.lib.maps.Null.apply((java.util.Map<T3, T4>) ((java.util.Map<T3, T4>) (java.util.Collections.<T3, T4>emptyMap())))), hydra.lib.literals.ShowBoolean.apply(true))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
+        new hydra.testing.TestCaseWithMetadata("empty map", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.literals.ShowBoolean.apply(hydra.lib.maps.Null.apply((java.util.Map<java.lang.Void, java.lang.Void>) ((java.util.Map<java.lang.Void, java.lang.Void>) (java.util.Collections.<java.lang.Void, java.lang.Void>emptyMap())))), hydra.lib.literals.ShowBoolean.apply(true))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
         new hydra.testing.TestCaseWithMetadata("non-empty map", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.literals.ShowBoolean.apply(hydra.lib.maps.Null.apply(new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
           1,
           "a"))))), hydra.lib.literals.ShowBoolean.apply(false))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())))),
@@ -628,7 +628,7 @@ public interface Maps {
         new hydra.testing.TestCaseWithMetadata("single entry", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.literals.ShowInt32.apply(hydra.lib.maps.Size.apply(new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
           42,
           "test"))))), hydra.lib.literals.ShowInt32.apply(1))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
-        new hydra.testing.TestCaseWithMetadata("empty map", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.literals.ShowInt32.apply(hydra.lib.maps.Size.apply((java.util.Map<T5, T6>) ((java.util.Map<T5, T6>) (java.util.Collections.<T5, T6>emptyMap())))), hydra.lib.literals.ShowInt32.apply(0))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())))),
+        new hydra.testing.TestCaseWithMetadata("empty map", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.literals.ShowInt32.apply(hydra.lib.maps.Size.apply((java.util.Map<java.lang.Void, java.lang.Void>) ((java.util.Map<java.lang.Void, java.lang.Void>) (java.util.Collections.<java.lang.Void, java.lang.Void>emptyMap())))), hydra.lib.literals.ShowInt32.apply(0))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())))),
       new hydra.testing.TestGroup("toList", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
         new hydra.testing.TestCaseWithMetadata("convert to pairs", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.show.Core.list(
           (java.util.function.Function<hydra.util.Pair<Integer, String>, String>) (p -> hydra.show.Core.pair(

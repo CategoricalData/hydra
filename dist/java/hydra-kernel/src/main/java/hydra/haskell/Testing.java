@@ -55,10 +55,10 @@ public interface Testing {
       testCases_));
   }
 
-  static <T0> String buildTestModule(hydra.packaging.Module testModule, hydra.testing.TestGroup testGroup, String testBody, hydra.packaging.Namespaces<hydra.haskell.syntax.ModuleName> namespaces) {
+  static String buildTestModule(hydra.packaging.Module testModule, hydra.testing.TestGroup testGroup, String testBody, hydra.packaging.Namespaces<hydra.haskell.syntax.ModuleName> namespaces) {
     hydra.util.Lazy<java.util.List<String>> domainImports = new hydra.util.Lazy<>(() -> hydra.haskell.Testing.findHaskellImports(
       namespaces,
-      (java.util.Set<T0>) (hydra.lib.sets.Empty.<T0>apply())));
+      (java.util.Set<java.lang.Void>) (hydra.lib.sets.Empty.<java.lang.Void>apply())));
     java.util.List<String> standardImports = java.util.Arrays.asList(
       "import Hydra.Kernel",
       "import qualified Test.Hspec as H",

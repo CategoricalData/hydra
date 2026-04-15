@@ -12,7 +12,8 @@ def expectNumber(value: hydra.json.model.Value): Either[scala.Predef.String, Big
   case hydra.json.model.Value.number(v_Value_number_d) => Right(v_Value_number_d)
   case _ => Left(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("JSON number"))(hydra.lib.strings.cat2(" but found ")(hydra.extract.json.showValue(value))))
 
-def expectObject(value: hydra.json.model.Value): Either[scala.Predef.String, Map[scala.Predef.String, hydra.json.model.Value]] =
+def expectObject(value: hydra.json.model.Value): Either[scala.Predef.String, Map[scala.Predef.String,
+   hydra.json.model.Value]] =
   value match
   case hydra.json.model.Value.`object`(v_Value_object_m) => Right(v_Value_object_m)
   case _ => Left(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("JSON object"))(hydra.lib.strings.cat2(" but found ")(hydra.extract.json.showValue(value))))
@@ -24,12 +25,17 @@ def expectString(value: hydra.json.model.Value): Either[scala.Predef.String, sca
 
 def opt[T0, T1](fname: T0)(m: Map[T0, T1]): Option[T1] = hydra.lib.maps.lookup[T0, T1](fname)(m)
 
-def optArray[T0](fname: T0)(m: Map[T0, hydra.json.model.Value]): Either[scala.Predef.String, Option[Seq[hydra.json.model.Value]]] =
-  hydra.lib.maybes.maybe[Either[scala.Predef.String, Option[Seq[hydra.json.model.Value]]], hydra.json.model.Value](Right(None))((a: hydra.json.model.Value) =>
-  hydra.lib.eithers.map[Seq[hydra.json.model.Value], Option[Seq[hydra.json.model.Value]], scala.Predef.String]((x: Seq[hydra.json.model.Value]) => Some(x))(hydra.extract.json.expectArray(a)))(hydra.extract.json.opt(fname)(m))
+def optArray[T0](fname: T0)(m: Map[T0, hydra.json.model.Value]): Either[scala.Predef.String,
+   Option[Seq[hydra.json.model.Value]]] =
+  hydra.lib.maybes.maybe[Either[scala.Predef.String, Option[Seq[hydra.json.model.Value]]],
+     hydra.json.model.Value](Right(None))((a: hydra.json.model.Value) =>
+  hydra.lib.eithers.map[Seq[hydra.json.model.Value], Option[Seq[hydra.json.model.Value]],
+     scala.Predef.String]((x: Seq[hydra.json.model.Value]) => Some(x))(hydra.extract.json.expectArray(a)))(hydra.extract.json.opt(fname)(m))
 
-def optString[T0](fname: T0)(m: Map[T0, hydra.json.model.Value]): Either[scala.Predef.String, Option[scala.Predef.String]] =
-  hydra.lib.maybes.maybe[Either[scala.Predef.String, Option[scala.Predef.String]], hydra.json.model.Value](Right(None))((s: hydra.json.model.Value) =>
+def optString[T0](fname: T0)(m: Map[T0, hydra.json.model.Value]): Either[scala.Predef.String,
+   Option[scala.Predef.String]] =
+  hydra.lib.maybes.maybe[Either[scala.Predef.String, Option[scala.Predef.String]],
+     hydra.json.model.Value](Right(None))((s: hydra.json.model.Value) =>
   hydra.lib.eithers.map[scala.Predef.String, Option[scala.Predef.String], scala.Predef.String]((x: scala.Predef.String) => Some(x))(hydra.extract.json.expectString(s)))(hydra.extract.json.opt(fname)(m))
 
 def require[T0, T1](fname: T0)(m: Map[T0, T1]): Either[scala.Predef.String, T1] =
@@ -37,7 +43,8 @@ def require[T0, T1](fname: T0)(m: Map[T0, T1]): Either[scala.Predef.String, T1] 
      hydra.extract.json.showValue(fname), " not found"))))((value: T1) => Right(value))(hydra.lib.maps.lookup[T0,
      T1](fname)(m))
 
-def requireArray[T0](fname: T0)(m: Map[T0, hydra.json.model.Value]): Either[scala.Predef.String, Seq[hydra.json.model.Value]] =
+def requireArray[T0](fname: T0)(m: Map[T0, hydra.json.model.Value]): Either[scala.Predef.String,
+   Seq[hydra.json.model.Value]] =
   hydra.lib.eithers.bind[scala.Predef.String, hydra.json.model.Value, Seq[hydra.json.model.Value]](hydra.extract.json.require(fname)(m))(hydra.extract.json.expectArray)
 
 def requireNumber[T0](fname: T0)(m: Map[T0, hydra.json.model.Value]): Either[scala.Predef.String, BigDecimal] =
