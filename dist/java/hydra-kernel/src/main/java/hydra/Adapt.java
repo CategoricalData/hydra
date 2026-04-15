@@ -479,18 +479,16 @@ public interface Adapt {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Term>>>> forUnsupported = new java.util.concurrent.atomic.AtomicReference<>();
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Term>>>> tryTerm = new java.util.concurrent.atomic.AtomicReference<>();
     forUnsupported.set((java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Term>>>) (term -> {
-      java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Term>>>> forNonNull = new java.util.concurrent.atomic.AtomicReference<>();
       java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Term>>>> tryAlts = new java.util.concurrent.atomic.AtomicReference<>();
-      forNonNull.set((java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Term>>>) (alts -> hydra.lib.eithers.Bind.apply(
-        tryTerm.get().apply(hydra.lib.lists.Head.apply(alts)),
-        (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Term>>>) (mterm -> hydra.lib.maybes.Maybe.applyLazy(
-          () -> tryAlts.get().apply(hydra.lib.lists.Tail.apply(alts)),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Term>>>) (t -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Term>>right(hydra.util.Maybe.just(t))),
-          mterm)))));
-      tryAlts.set((java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Term>>>) (alts -> hydra.lib.logic.IfElse.lazy(
-        hydra.lib.lists.Null.apply(alts),
+      tryAlts.set((java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Term>>>) (alts -> hydra.lib.maybes.Maybe.applyLazy(
         () -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Term>>right((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())),
-        () -> forNonNull.get().apply(alts))));
+        (java.util.function.Function<hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Term>>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Term>>>) (uc -> hydra.lib.eithers.Bind.apply(
+          tryTerm.get().apply(hydra.lib.pairs.First.apply(uc)),
+          (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Term>>>) (mterm -> hydra.lib.maybes.Maybe.applyLazy(
+            () -> tryAlts.get().apply(hydra.lib.pairs.Second.apply(uc)),
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Term>>>) (t -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Term>>right(hydra.util.Maybe.just(t))),
+            mterm)))),
+        hydra.lib.lists.Uncons.apply(alts))));
       return hydra.lib.eithers.Bind.apply(
         hydra.Adapt.<T0>termAlternatives(
           cx,
@@ -568,13 +566,12 @@ public interface Adapt {
     forUnsupported.set((java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (typ -> {
       java.util.List<hydra.core.Type> alts0 = hydra.Adapt.typeAlternatives(typ);
       java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.core.Type>, hydra.util.Maybe<hydra.core.Type>>> tryAlts = new java.util.concurrent.atomic.AtomicReference<>();
-      tryAlts.set((java.util.function.Function<java.util.List<hydra.core.Type>, hydra.util.Maybe<hydra.core.Type>>) (alts -> hydra.lib.logic.IfElse.lazy(
-        hydra.lib.lists.Null.apply(alts),
-        () -> (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()),
-        () -> hydra.lib.maybes.Maybe.applyLazy(
-          () -> tryAlts.get().apply(hydra.lib.lists.Tail.apply(alts)),
+      tryAlts.set((java.util.function.Function<java.util.List<hydra.core.Type>, hydra.util.Maybe<hydra.core.Type>>) (alts -> hydra.lib.maybes.Bind.apply(
+        hydra.lib.lists.Uncons.apply(alts),
+        (java.util.function.Function<hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>, hydra.util.Maybe<hydra.core.Type>>) (uc -> hydra.lib.maybes.Maybe.applyLazy(
+          () -> tryAlts.get().apply(hydra.lib.pairs.Second.apply(uc)),
           (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (t -> hydra.util.Maybe.just(t)),
-          tryType.get().apply(hydra.lib.lists.Head.apply(alts))))));
+          tryType.get().apply(hydra.lib.pairs.First.apply(uc)))))));
       return tryAlts.get().apply(alts0);
     }));
     tryType.set((java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (typ -> {
@@ -1165,10 +1162,12 @@ public interface Adapt {
           return hydra.util.Either.<hydra.errors.Error_, hydra.util.Pair<java.util.Map<hydra.core.Name, hydra.core.Type>, java.util.List<java.util.List<hydra.packaging.TypeDefinition>>>>right((hydra.util.Pair<java.util.Map<hydra.core.Name, hydra.core.Type>, java.util.List<java.util.List<hydra.packaging.TypeDefinition>>>) ((hydra.util.Pair<java.util.Map<hydra.core.Name, hydra.core.Type>, java.util.List<java.util.List<hydra.packaging.TypeDefinition>>>) (new hydra.util.Pair<java.util.Map<hydra.core.Name, hydra.core.Type>, java.util.List<java.util.List<hydra.packaging.TypeDefinition>>>(tmap1, hydra.lib.lists.Map.apply(
             (java.util.function.Function<java.util.List<hydra.core.Name>, java.util.List<hydra.packaging.TypeDefinition>>) (names -> hydra.lib.lists.Map.apply(
               toDef,
-              hydra.lib.lists.Map.apply(
-                (java.util.function.Function<hydra.core.Name, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>) (n -> (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>(n, hydra.lib.maybes.FromJust.apply(hydra.lib.maps.Lookup.apply(
-                  n,
-                  tmap1)))))),
+              hydra.lib.maybes.MapMaybe.apply(
+                (java.util.function.Function<hydra.core.Name, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.Type>>>) (n -> hydra.lib.maybes.Map.apply(
+                  (java.util.function.Function<hydra.core.Type, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>) (t -> (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>(n, t)))),
+                  hydra.lib.maps.Lookup.apply(
+                    n,
+                    tmap1))),
                 names))),
             nameLists)))));
         }))));

@@ -354,20 +354,17 @@ public interface Encode {
           public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Inject inj) {
             hydra.core.Field field = (inj).value.field;
             String fname = (field).name.value;
-            java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.core.FieldType>, hydra.util.Either<String, hydra.core.Type>>> findFieldType = new java.util.concurrent.atomic.AtomicReference<>();
-            findFieldType.set((java.util.function.Function<java.util.List<hydra.core.FieldType>, hydra.util.Either<String, hydra.core.Type>>) (fts -> hydra.lib.logic.IfElse.lazy(
-              hydra.lib.lists.Null.apply(fts),
+            hydra.core.Term fterm = (field).term;
+            hydra.util.Lazy<hydra.util.Either<String, hydra.core.Type>> ftypeResult = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
               () -> hydra.util.Either.<String, hydra.core.Type>left(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
                 "unknown variant: ",
                 fname))),
-              () -> hydra.lib.logic.IfElse.lazy(
-                hydra.lib.equality.Equal.apply(
-                  hydra.lib.lists.Head.apply(fts).name.value,
-                  fname),
-                () -> hydra.util.Either.<String, hydra.core.Type>right(hydra.lib.lists.Head.apply(fts).type),
-                () -> findFieldType.get().apply(hydra.lib.lists.Tail.apply(fts))))));
-            hydra.core.Term fterm = (field).term;
-            hydra.util.Either<String, hydra.core.Type> ftypeResult = findFieldType.get().apply((rt).value);
+              (java.util.function.Function<hydra.core.FieldType, hydra.util.Either<String, hydra.core.Type>>) (ft -> hydra.util.Either.<String, hydra.core.Type>right((ft).type)),
+              hydra.lib.lists.Find.apply(
+                (java.util.function.Function<hydra.core.FieldType, Boolean>) (ft -> hydra.lib.equality.Equal.apply(
+                  (ft).name.value,
+                  fname)),
+                (rt).value)));
             return hydra.lib.eithers.Either.apply(
               (java.util.function.Function<String, hydra.util.Either<String, hydra.json.model.Value>>) (err -> hydra.util.Either.<String, hydra.json.model.Value>left(err)),
               (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.json.model.Value>>) (ftype -> {
@@ -380,7 +377,7 @@ public interface Encode {
                   (java.util.function.Function<hydra.json.model.Value, hydra.json.model.Value>) (v -> new hydra.json.model.Value.Object_(hydra.lib.maps.FromList.apply(java.util.Arrays.asList((hydra.util.Pair<String, hydra.json.model.Value>) ((hydra.util.Pair<String, hydra.json.model.Value>) (new hydra.util.Pair<String, hydra.json.model.Value>(fname, v))))))),
                   encodedUnion);
               }),
-              ftypeResult);
+              ftypeResult.get());
           }
         });
       }

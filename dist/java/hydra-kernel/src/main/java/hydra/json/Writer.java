@@ -11,17 +11,28 @@ public interface Writer {
   }
 
   static String jsonString(String s) {
+    java.util.function.Function<Integer, String> hexChar = (java.util.function.Function<Integer, String>) (i -> hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> "?",
+      hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<Integer, String>) (ch -> hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(ch))),
+        hydra.lib.strings.MaybeCharAt.apply(
+          i,
+          "0123456789abcdef"))));
     java.util.function.Function<Integer, String> hexEscape = (java.util.function.Function<Integer, String>) (c -> {
-      hydra.util.Lazy<String> hi = new hydra.util.Lazy<>(() -> hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(hydra.lib.strings.CharAt.apply(
-        hydra.lib.math.Div.apply(
-          c,
-          16),
-        "0123456789abcdef"))));
-      hydra.util.Lazy<String> lo = new hydra.util.Lazy<>(() -> hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(hydra.lib.strings.CharAt.apply(
-        hydra.lib.math.Mod.apply(
-          c,
-          16),
-        "0123456789abcdef"))));
+      hydra.util.Lazy<String> hi = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+        () -> "?",
+        hydra.lib.maybes.Map.apply(
+          hexChar,
+          hydra.lib.math.MaybeDiv.apply(
+            c,
+            16))));
+      hydra.util.Lazy<String> lo = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+        () -> "?",
+        hydra.lib.maybes.Map.apply(
+          hexChar,
+          hydra.lib.math.MaybeMod.apply(
+            c,
+            16))));
       return hydra.lib.strings.Cat2.apply(
         hydra.lib.strings.Cat2.apply(
           "\\u00",

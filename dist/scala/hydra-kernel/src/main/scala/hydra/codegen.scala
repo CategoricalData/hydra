@@ -30,15 +30,17 @@ def escapeControlCharsInJson(input: Seq[Int]): Seq[Int] =
   def hexDigit(n: Int): Int =
     hydra.lib.logic.ifElse[Int](hydra.lib.equality.lt[Int](n)(10))(hydra.lib.math.add(48)(n))(hydra.lib.math.add(97)(hydra.lib.math.sub(n)(10)))
   def escapeToUnicode(b: Int): Seq[Int] =
-    Seq(92, 117, 48, 48, hexDigit(hydra.lib.math.div(b)(16)), hexDigit(hydra.lib.math.mod(b)(16)))
+    Seq(92, 117, 48, 48, hexDigit(hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.math.maybeDiv(b)(16))),
+       hexDigit(hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.math.maybeMod(b)(16))))
   def go(inStr: Boolean)(esc: Boolean)(bytes: Seq[Int]): Seq[Int] =
-    hydra.lib.logic.ifElse[Seq[Int]](hydra.lib.lists.`null`[Int](bytes))(Seq())({
-    lazy val b: Int = hydra.lib.lists.head[Int](bytes)
+    hydra.lib.maybes.maybe[Seq[Int], Tuple2[Int, Seq[Int]]](Seq())((uc: Tuple2[Int, Seq[Int]]) =>
     {
-      lazy val bs: Seq[Int] = hydra.lib.lists.tail[Int](bytes)
+    lazy val b: Int = hydra.lib.pairs.first[Int, Seq[Int]](uc)
+    {
+      lazy val bs: Seq[Int] = hydra.lib.pairs.second[Int, Seq[Int]](uc)
       hydra.lib.logic.ifElse[Seq[Int]](esc)(hydra.lib.lists.cons[Int](b)(go(inStr)(false)(bs)))(hydra.lib.logic.ifElse[Seq[Int]](hydra.lib.logic.and(hydra.lib.equality.equal[Int](b)(92))(inStr))(hydra.lib.lists.cons[Int](b)(go(inStr)(true)(bs)))(hydra.lib.logic.ifElse[Seq[Int]](hydra.lib.equality.equal[Int](b)(34))(hydra.lib.lists.cons[Int](b)(go(hydra.lib.logic.not(inStr))(false)(bs)))(hydra.lib.logic.ifElse[Seq[Int]](hydra.lib.logic.and(inStr)(hydra.lib.equality.lt[Int](b)(32)))(hydra.lib.lists.concat2[Int](escapeToUnicode(b))(go(inStr)(false)(bs)))(hydra.lib.lists.cons[Int](b)(go(inStr)(false)(bs))))))
     }
-  })
+  })(hydra.lib.lists.uncons[Int](bytes))
   go(false)(false)(input)
 }
 

@@ -246,6 +246,11 @@ def span[T0](cx: T0)(g: hydra.graph.Graph)(predTerm: hydra.core.Term)(listTerm: 
   }
 })
 
+def uncons[T0](cx: T0)(g: hydra.graph.Graph)(listTerm: hydra.core.Term): Either[hydra.errors.Error, hydra.core.Term] =
+  hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.Term], hydra.core.Term](hydra.extract.core.list(g)(listTerm))((elements: Seq[hydra.core.Term]) =>
+  Right(hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.lists.`null`[hydra.core.Term](elements))(hydra.core.Term.maybe(None))(hydra.core.Term.maybe(Some(hydra.core.Term.pair(Tuple2(hydra.lib.lists.head[hydra.core.Term](elements),
+     hydra.core.Term.list(hydra.lib.lists.tail[hydra.core.Term](elements)))))))))
+
 def zipWith[T0](cx: T0)(g: hydra.graph.Graph)(funTerm: hydra.core.Term)(listTerm1: hydra.core.Term)(listTerm2: hydra.core.Term): Either[hydra.errors.Error,
    hydra.core.Term] =
   hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.Term], hydra.core.Term](hydra.extract.core.list(g)(listTerm1))((elements1: Seq[hydra.core.Term]) =>

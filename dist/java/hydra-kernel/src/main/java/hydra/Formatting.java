@@ -18,11 +18,15 @@ public interface Formatting {
         hydra.lib.chars.IsUpper.apply(c),
         () -> java.util.Arrays.asList((java.util.List<Integer>) (java.util.Collections.<Integer>emptyList())),
         () -> (java.util.List<java.util.List<Integer>>) (java.util.Collections.<java.util.List<Integer>>emptyList())),
-      hydra.lib.lists.Cons.apply(
-        hydra.lib.lists.Cons.apply(
-          c,
-          hydra.lib.lists.Head.apply(acc)),
-        hydra.lib.lists.Tail.apply(acc)))));
+      hydra.lib.maybes.FromMaybe.applyLazy(
+        () -> acc,
+        hydra.lib.maybes.Map.apply(
+          (java.util.function.Function<hydra.util.Pair<java.util.List<Integer>, java.util.List<java.util.List<Integer>>>, java.util.List<java.util.List<Integer>>>) (uc -> hydra.lib.lists.Cons.apply(
+            hydra.lib.lists.Cons.apply(
+              c,
+              hydra.lib.pairs.First.apply(uc)),
+            hydra.lib.pairs.Second.apply(uc))),
+          hydra.lib.lists.Uncons.apply(acc))))));
     hydra.util.Lazy<java.util.List<String>> byCaps = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       hydra.lib.strings.FromList::apply,
       hydra.lib.lists.Foldl.apply(
@@ -163,12 +167,16 @@ public interface Formatting {
       () -> s,
       () -> ((java.util.function.Supplier<String>) (() -> {
         java.util.List<Integer> list = hydra.lib.strings.ToList.apply(s);
-        return ((java.util.function.Supplier<String>) (() -> {
-          hydra.util.Lazy<String> firstLetter = new hydra.util.Lazy<>(() -> (mapping).apply(hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(hydra.lib.lists.Head.apply(list)))));
-          return hydra.lib.strings.Cat2.apply(
-            firstLetter.get(),
-            hydra.lib.strings.FromList.apply(hydra.lib.lists.Tail.apply(list)));
-        })).get();
+        return hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> s,
+          hydra.lib.maybes.Map.apply(
+            (java.util.function.Function<hydra.util.Pair<Integer, java.util.List<Integer>>, String>) (uc -> {
+              hydra.util.Lazy<String> firstLetter = new hydra.util.Lazy<>(() -> (mapping).apply(hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(hydra.lib.pairs.First.apply(uc)))));
+              return hydra.lib.strings.Cat2.apply(
+                firstLetter.get(),
+                hydra.lib.strings.FromList.apply(hydra.lib.pairs.Second.apply(uc)));
+            }),
+            hydra.lib.lists.Uncons.apply(list)));
       })).get());
   }
 
@@ -228,17 +236,20 @@ public interface Formatting {
           hydra.lib.strings.Length.apply(stripped),
           1);
         return ((java.util.function.Supplier<String>) (() -> {
-          Integer lastChar = hydra.lib.strings.CharAt.apply(
-            lastIdx,
-            stripped);
-          return hydra.lib.logic.IfElse.lazy(
-            hydra.lib.equality.Equal.apply(
-              lastChar,
-              46),
-            () -> stripped,
-            () -> hydra.lib.strings.Cat2.apply(
-              stripped,
-              "."));
+          String appended = hydra.lib.strings.Cat2.apply(
+            stripped,
+            ".");
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> appended,
+            (java.util.function.Function<Integer, String>) (lastChar -> hydra.lib.logic.IfElse.lazy(
+              hydra.lib.equality.Equal.apply(
+                lastChar,
+                46),
+              () -> stripped,
+              () -> appended)),
+            hydra.lib.strings.MaybeCharAt.apply(
+              lastIdx,
+              stripped));
         })).get();
       })).get());
   }
@@ -348,13 +359,21 @@ public interface Formatting {
             prev)).apply(hydra.lib.lists.Drop.apply(
             maxlen,
             rem)),
-          () -> helper.get().apply(hydra.lib.lists.Cons.apply(
-            hydra.lib.lists.Init.apply(prefix.get()),
-            prev)).apply(hydra.lib.lists.Concat2.apply(
-            suffix.get(),
-            hydra.lib.lists.Drop.apply(
+          () -> hydra.lib.maybes.FromMaybe.applyLazy(
+            () -> helper.get().apply(hydra.lib.lists.Cons.apply(
+              trunc.get(),
+              prev)).apply(hydra.lib.lists.Drop.apply(
               maxlen,
-              rem)))));
+              rem)),
+            hydra.lib.maybes.Map.apply(
+              (java.util.function.Function<java.util.List<Integer>, java.util.List<java.util.List<Integer>>>) (pfxInit -> helper.get().apply(hydra.lib.lists.Cons.apply(
+                pfxInit,
+                prev)).apply(hydra.lib.lists.Concat2.apply(
+                suffix.get(),
+                hydra.lib.lists.Drop.apply(
+                  maxlen,
+                  rem)))),
+              hydra.lib.lists.MaybeInit.apply(prefix.get())))));
     })));
     return hydra.lib.strings.FromList.apply(hydra.lib.lists.Intercalate.apply(
       java.util.Arrays.asList(10),

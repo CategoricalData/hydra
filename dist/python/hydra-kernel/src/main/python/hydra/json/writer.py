@@ -16,6 +16,7 @@ import hydra.lib.literals
 import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.math
+import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.strings
 import hydra.serialization
@@ -26,13 +27,15 @@ colon_op = hydra.ast.Op(hydra.ast.Symbol(":"), hydra.ast.Padding(cast(hydra.ast.
 def json_string(s: str) -> str:
     r"""Escape and quote a string for JSON output."""
 
+    def hex_char(i: int) -> str:
+        return hydra.lib.maybes.from_maybe((lambda : "?"), hydra.lib.maybes.map((lambda ch: hydra.lib.strings.from_list(hydra.lib.lists.pure(ch))), hydra.lib.strings.maybe_char_at(i, "0123456789abcdef")))
     def hex_escape(c: int) -> str:
         @lru_cache(1)
         def hi() -> str:
-            return hydra.lib.strings.from_list(hydra.lib.lists.pure(hydra.lib.strings.char_at(hydra.lib.math.div(c, 16), "0123456789abcdef")))
+            return hydra.lib.maybes.from_maybe((lambda : "?"), hydra.lib.maybes.map(hex_char, hydra.lib.math.maybe_div(c, 16)))
         @lru_cache(1)
         def lo() -> str:
-            return hydra.lib.strings.from_list(hydra.lib.lists.pure(hydra.lib.strings.char_at(hydra.lib.math.mod(c, 16), "0123456789abcdef")))
+            return hydra.lib.maybes.from_maybe((lambda : "?"), hydra.lib.maybes.map(hex_char, hydra.lib.math.maybe_mod(c, 16)))
         return hydra.lib.strings.cat2(hydra.lib.strings.cat2("\\u00", hi()), lo())
     def escape(c: int) -> str:
         return hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 34), (lambda : "\\\""), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 92), (lambda : "\\\\"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 8), (lambda : "\\b"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 12), (lambda : "\\f"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 10), (lambda : "\\n"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 13), (lambda : "\\r"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 9), (lambda : "\\t"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.lt(c, 32), (lambda : hex_escape(c)), (lambda : hydra.lib.strings.from_list(hydra.lib.lists.pure(c))))))))))))))))))

@@ -13,8 +13,20 @@ def encodeBinding[T0](cx: T0)(graph: hydra.graph.Graph)(b: hydra.core.Binding): 
      Some(hydra.encoding.encoderTypeSchemeNamed(b.name)(typ)))))
 
 def encodeBindingName(n: hydra.core.Name): hydra.core.Name =
-  hydra.lib.logic.ifElse[hydra.core.Name](hydra.lib.logic.not(hydra.lib.lists.`null`[scala.Predef.String](hydra.lib.lists.tail[scala.Predef.String](hydra.lib.strings.splitOn(".")(n)))))(hydra.lib.strings.intercalate(".")(hydra.lib.lists.concat2[scala.Predef.String](Seq("hydra",
-     "encode"))(hydra.lib.lists.concat2[scala.Predef.String](hydra.lib.lists.tail[scala.Predef.String](hydra.lib.lists.init[scala.Predef.String](hydra.lib.strings.splitOn(".")(n))))(Seq(hydra.formatting.decapitalize(hydra.names.localNameOf(n)))))))(hydra.formatting.decapitalize(hydra.names.localNameOf(n)))
+  {
+  lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(n)
+  lazy val localPart: scala.Predef.String = hydra.formatting.decapitalize(hydra.names.localNameOf(n))
+  lazy val localResult: hydra.core.Name = localPart
+  hydra.lib.maybes.maybe[hydra.core.Name, Seq[scala.Predef.String]](localResult)((nsParts: Seq[scala.Predef.String]) =>
+    hydra.lib.maybes.maybe[hydra.core.Name, Tuple2[scala.Predef.String, Seq[scala.Predef.String]]](localResult)((nsUc: Tuple2[scala.Predef.String,
+       Seq[scala.Predef.String]]) =>
+    {
+    lazy val tail: Seq[scala.Predef.String] = hydra.lib.pairs.second[scala.Predef.String,
+       Seq[scala.Predef.String]](nsUc)
+    hydra.lib.strings.intercalate(".")(hydra.lib.lists.concat2[scala.Predef.String](Seq("hydra",
+       "encode"))(hydra.lib.lists.concat2[scala.Predef.String](tail)(Seq(localPart))))
+  })(hydra.lib.lists.uncons[scala.Predef.String](nsParts)))(hydra.lib.lists.maybeInit[scala.Predef.String](parts))
+}
 
 def encodeEitherType(et: hydra.core.EitherType): hydra.core.Term =
   hydra.core.Term.lambda(hydra.core.Lambda("e", None, hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
@@ -123,7 +135,14 @@ def encodeName(n: hydra.core.Name): hydra.core.Term =
   hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.core.Name", hydra.core.Term.literal(hydra.core.Literal.string(n))))
 
 def encodeNamespace(ns: hydra.packaging.Namespace): hydra.packaging.Namespace =
-  hydra.lib.strings.cat(Seq("hydra.encode.", hydra.lib.strings.intercalate(".")(hydra.lib.lists.tail[scala.Predef.String](hydra.lib.strings.splitOn(".")(ns)))))
+  {
+  lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(ns)
+  lazy val fallback: hydra.packaging.Namespace = ns
+  hydra.lib.maybes.maybe[hydra.packaging.Namespace, Tuple2[scala.Predef.String, Seq[scala.Predef.String]]](fallback)((uc: Tuple2[scala.Predef.String,
+     Seq[scala.Predef.String]]) =>
+    hydra.lib.strings.cat(Seq("hydra.encode.", hydra.lib.strings.intercalate(".")(hydra.lib.pairs.second[scala.Predef.String,
+       Seq[scala.Predef.String]](uc)))))(hydra.lib.lists.uncons[scala.Predef.String](parts))
+}
 
 def encodeOptionalType(elemType: hydra.core.Type): hydra.core.Term =
   hydra.core.Term.lambda(hydra.core.Lambda("opt", None, hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",

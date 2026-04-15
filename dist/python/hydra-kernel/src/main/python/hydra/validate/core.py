@@ -87,7 +87,7 @@ def check_undefined_type_variables_in_type(path: T0, cx: hydra.graph.Graph, typ:
     @lru_cache(1)
     def undefined() -> frozenset[hydra.core.Name]:
         return hydra.lib.sets.difference(free_vars(), cx.type_variables)
-    return hydra.lib.logic.if_else(hydra.lib.sets.null(undefined()), (lambda : Nothing()), (lambda : (first_undefined := hydra.lib.lists.head(hydra.lib.sets.to_list(undefined())), mk_error(first_undefined))[1]))
+    return hydra.lib.maybes.maybe((lambda : Nothing()), (lambda first_undefined: mk_error(first_undefined)), hydra.lib.lists.maybe_head(hydra.lib.sets.to_list(undefined())))
 
 def check_undefined_type_variables_in_type_scheme(path: T0, cx: hydra.graph.Graph, ts: hydra.core.TypeScheme, mk_error: Callable[[hydra.core.Name], Maybe[T1]]) -> Maybe[T1]:
     r"""Check a type scheme for type variables not bound by the scheme or the current scope."""
@@ -98,7 +98,7 @@ def check_undefined_type_variables_in_type_scheme(path: T0, cx: hydra.graph.Grap
     @lru_cache(1)
     def undefined() -> frozenset[hydra.core.Name]:
         return hydra.lib.sets.difference(free_vars(), cx.type_variables)
-    return hydra.lib.logic.if_else(hydra.lib.sets.null(undefined()), (lambda : Nothing()), (lambda : (first_undefined := hydra.lib.lists.head(hydra.lib.sets.to_list(undefined())), mk_error(first_undefined))[1]))
+    return hydra.lib.maybes.maybe((lambda : Nothing()), (lambda first_undefined: mk_error(first_undefined)), hydra.lib.lists.maybe_head(hydra.lib.sets.to_list(undefined())))
 
 def first_error(checks: frozenlist[Maybe[T0]]) -> Maybe[T0]:
     r"""Return the first error from a list of optional errors, or nothing if all are valid."""
@@ -319,7 +319,7 @@ def validate_type_node(bound_vars: frozenset[hydra.core.Name], typ: hydra.core.T
             return first_type_error((_hoist_hydra_validate_core_validate_type_node_1(elem_type, elem_type), check_void(elem_type)))
 
         case hydra.core.TypeUnion(value=fields2):
-            return first_type_error((hydra.lib.logic.if_else(hydra.lib.lists.null(fields2), (lambda : Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorEmptyUnionType(hydra.error.core.EmptyUnionTypeError(hydra.paths.SubtermPath(())))))), (lambda : Nothing())), hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(fields2), 1), (lambda : (single_field := hydra.lib.lists.head(fields2), Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorSingleVariantUnion(hydra.error.core.SingleVariantUnionError(hydra.paths.SubtermPath(()), single_field.name)))))[1]), (lambda : Nothing())), check_duplicate_field_types(fields2, (lambda dup_name: Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorDuplicateUnionTypeFieldNames(hydra.error.core.DuplicateUnionTypeFieldNamesError(hydra.paths.SubtermPath(()), dup_name)))))), first_type_error(hydra.lib.lists.map((lambda f: check_void(f.type)), fields2))))
+            return first_type_error((hydra.lib.logic.if_else(hydra.lib.lists.null(fields2), (lambda : Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorEmptyUnionType(hydra.error.core.EmptyUnionTypeError(hydra.paths.SubtermPath(())))))), (lambda : Nothing())), hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(fields2), 1), (lambda : hydra.lib.maybes.maybe((lambda : Nothing()), (lambda single_field: Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorSingleVariantUnion(hydra.error.core.SingleVariantUnionError(hydra.paths.SubtermPath(()), single_field.name))))), hydra.lib.lists.maybe_head(fields2))), (lambda : Nothing())), check_duplicate_field_types(fields2, (lambda dup_name: Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorDuplicateUnionTypeFieldNames(hydra.error.core.DuplicateUnionTypeFieldNamesError(hydra.paths.SubtermPath(()), dup_name)))))), first_type_error(hydra.lib.lists.map((lambda f: check_void(f.type)), fields2))))
 
         case hydra.core.TypeVariable(value=var_name):
             return hydra.lib.logic.if_else(hydra.lib.sets.member(var_name, bound_vars), (lambda : Nothing()), (lambda : Just(cast(hydra.error.core.InvalidTypeError, hydra.error.core.InvalidTypeErrorUndefinedTypeVariable(hydra.error.core.UndefinedTypeVariableError(hydra.paths.SubtermPath(()), var_name))))))

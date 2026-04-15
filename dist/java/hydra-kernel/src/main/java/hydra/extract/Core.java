@@ -106,15 +106,15 @@ public interface Core {
         graph,
         term),
       (java.util.function.Function<hydra.core.CaseStatement, hydra.util.Either<hydra.errors.Error_, hydra.core.Field>>) (cs -> {
-        hydra.util.Lazy<java.util.List<hydra.core.Field>> matching = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+        hydra.util.Lazy<hydra.util.Maybe<hydra.core.Field>> matching = new hydra.util.Lazy<>(() -> hydra.lib.lists.Find.apply(
           (java.util.function.Function<hydra.core.Field, Boolean>) (f -> hydra.lib.equality.Equal.apply(
             (f).name.value,
             (fieldName).value)),
           (cs).cases));
-        return hydra.lib.logic.IfElse.lazy(
-          hydra.lib.lists.Null.apply(matching.get()),
+        return hydra.lib.maybes.Maybe.applyLazy(
           () -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Field>left(new hydra.errors.Error_.Extraction(new hydra.errors.ExtractionError.UnexpectedShape(new hydra.errors.UnexpectedShapeError("matching case", "no matching case")))),
-          () -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Field>right(hydra.lib.lists.Head.apply(matching.get())));
+          (java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.errors.Error_, hydra.core.Field>>) (mf -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Field>right(mf)),
+          matching.get());
       }));
   }
 
@@ -362,21 +362,28 @@ public interface Core {
       fields));
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(matchingFields.get()),
-      () -> hydra.util.Either.<hydra.errors.Error_, T0>left(new hydra.errors.Error_.Extraction(new hydra.errors.ExtractionError.UnexpectedShape(new hydra.errors.UnexpectedShapeError(hydra.lib.strings.Cat2.apply(
-        "field ",
-        (fname).value), "no matching field")))),
+      () -> hydra.extract.Core.<T0>field_noMatchErr(fname),
       () -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.equality.Equal.apply(
           hydra.lib.lists.Length.apply(matchingFields.get()),
           1),
-        () -> hydra.lib.eithers.Bind.apply(
-          hydra.Lexical.stripAndDereferenceTerm(
-            graph,
-            hydra.lib.lists.Head.apply(matchingFields.get()).term),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, T0>>) (stripped -> (mapping).apply(stripped))),
+        () -> hydra.lib.maybes.Maybe.applyLazy(
+          () -> hydra.extract.Core.<T0>field_noMatchErr(fname),
+          (java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.errors.Error_, T0>>) (mf -> hydra.lib.eithers.Bind.apply(
+            hydra.Lexical.stripAndDereferenceTerm(
+              graph,
+              (mf).term),
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, T0>>) (stripped -> (mapping).apply(stripped)))),
+          hydra.lib.lists.MaybeHead.apply(matchingFields.get())),
         () -> hydra.util.Either.<hydra.errors.Error_, T0>left(new hydra.errors.Error_.Extraction(new hydra.errors.ExtractionError.UnexpectedShape(new hydra.errors.UnexpectedShapeError("single field", hydra.lib.strings.Cat2.apply(
           "multiple fields named ",
           (fname).value)))))));
+  }
+
+  static <T1> hydra.util.Either<hydra.errors.Error_, T1> field_noMatchErr(hydra.core.Name fname) {
+    return hydra.util.Either.<hydra.errors.Error_, T1>left(new hydra.errors.Error_.Extraction(new hydra.errors.ExtractionError.UnexpectedShape(new hydra.errors.UnexpectedShapeError(hydra.lib.strings.Cat2.apply(
+      "field ",
+      (fname).value), "no matching field"))));
   }
 
   static hydra.util.Either<hydra.errors.Error_, Float> float32(hydra.graph.Graph graph, hydra.core.Term t) {
@@ -665,14 +672,21 @@ public interface Core {
           (letExpr).bindings));
         return hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(matchingBindings.get()),
-          () -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Term>left(new hydra.errors.Error_.Extraction(new hydra.errors.ExtractionError.NoSuchBinding(new hydra.errors.NoSuchBindingError(name)))),
+          () -> hydra.extract.Core.letBinding_noBindingErr(name),
           () -> hydra.lib.logic.IfElse.lazy(
             hydra.lib.equality.Equal.apply(
               hydra.lib.lists.Length.apply(matchingBindings.get()),
               1),
-            () -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Term>right(hydra.lib.lists.Head.apply(matchingBindings.get()).term),
+            () -> hydra.lib.maybes.Maybe.applyLazy(
+              () -> hydra.extract.Core.letBinding_noBindingErr(name),
+              (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.errors.Error_, hydra.core.Term>>) (b -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Term>right((b).term)),
+              hydra.lib.lists.MaybeHead.apply(matchingBindings.get())),
             () -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Term>left(new hydra.errors.Error_.Extraction(new hydra.errors.ExtractionError.MultipleBindings(new hydra.errors.MultipleBindingsError(name))))));
       }));
+  }
+
+  static <T0> hydra.util.Either<hydra.errors.Error_, T0> letBinding_noBindingErr(hydra.core.Name name) {
+    return hydra.util.Either.<hydra.errors.Error_, T0>left(new hydra.errors.Error_.Extraction(new hydra.errors.ExtractionError.NoSuchBinding(new hydra.errors.NoSuchBindingError(name))));
   }
 
   static hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.core.Term>> list(hydra.graph.Graph graph, hydra.core.Term term) {
@@ -698,10 +712,10 @@ public interface Core {
       hydra.extract.Core.list(
         graph,
         term),
-      (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, hydra.core.Term>>) (l -> hydra.lib.logic.IfElse.lazy(
-        hydra.lib.lists.Null.apply(l),
+      (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, hydra.core.Term>>) (l -> hydra.lib.maybes.Maybe.applyLazy(
         () -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Term>left(new hydra.errors.Error_.Extraction(new hydra.errors.ExtractionError.UnexpectedShape(new hydra.errors.UnexpectedShapeError("non-empty list", "empty list")))),
-        () -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Term>right(hydra.lib.lists.Head.apply(l)))));
+        (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.core.Term>>) (h -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Term>right(h)),
+        hydra.lib.lists.MaybeHead.apply(l))));
   }
 
   static <T0> hydra.util.Either<hydra.errors.Error_, java.util.List<T0>> listOf(java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, T0>> f, hydra.graph.Graph graph, hydra.core.Term term) {
