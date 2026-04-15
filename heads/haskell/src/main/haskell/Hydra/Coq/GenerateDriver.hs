@@ -11,7 +11,10 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Errors as Errors
 import qualified Data.Map as Map
 import qualified Data.Set as Set
-import System.FilePath ((</>))
+import Control.Monad (forM_)
+import Data.List (sort)
+import System.Directory (copyFile, createDirectoryIfMissing, listDirectory)
+import System.FilePath ((</>), takeDirectory)
 
 -- | Standard coder interface: takes an adapted Module and Definitions,
 -- returns a map from file paths to file contents.
@@ -34,3 +37,20 @@ writeCoqProject baseDir = do
         ]
   writeFile (baseDir </> "_CoqProject") content
   putStrLn "  _CoqProject"
+
+-- | Copy the hand-written hydra.lib.* axiom-stub modules into the output tree.
+-- These files declare Coq axioms for Hydra primitive functions whose bodies
+-- are implemented natively in each host language. They have no DSL sources
+-- (unlike hydra.lib.names, which is DSL-generated), so they are maintained
+-- by hand under heads/haskell/src/main/coq/hydra/lib/ and copied into dist/
+-- at generation time. The source path is resolved relative to the current
+-- working directory, which is heads/haskell/ when generate-coq runs.
+copyCoqLibFiles :: FilePath -> IO ()
+copyCoqLibFiles baseDir = do
+  let srcDir = "src/main/coq" </> "hydra" </> "lib"
+      dstDir = baseDir </> "hydra" </> "lib"
+  createDirectoryIfMissing True dstDir
+  files <- sort <$> listDirectory srcDir
+  forM_ files $ \f -> do
+    copyFile (srcDir </> f) (dstDir </> f)
+    putStrLn ("  hydra/lib/" ++ f)
