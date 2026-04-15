@@ -22,6 +22,7 @@ import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
+import qualified Data.Scientific              as Sci
 
 -- Additional imports specific to this module
 import Hydra.Testing
@@ -55,6 +56,7 @@ allTests = define "allTests" $
     Phantoms.doc "Round-trip test cases for JSON encoding and decoding" $
     supergroup "JSON round-trip" [
       literalRoundtripGroup,
+      decimalRoundtripGroup,
       collectionRoundtripGroup,
       optionalRoundtripGroup,
       recordRoundtripGroup]
@@ -113,6 +115,38 @@ literalRoundtripGroup = subgroup "literal types" [
     roundtripTest "string simple" T.string (string "hello"),
     roundtripTest "string empty" T.string (string ""),
     roundtripTest "string with spaces" T.string (string "hello world")]
+
+----------------------------------------
+-- Decimal precision
+----------------------------------------
+
+-- | Decimal round-trips must preserve arbitrary precision. Covers values that bigfloat (Double)
+-- could not express exactly — large integers, small/large exponents — plus everyday decimals.
+decimalRoundtripGroup :: TTerm TestGroup
+decimalRoundtripGroup = subgroup "decimal precision" [
+    roundtripTest "decimal zero" T.decimal (decimal 0),
+    roundtripTest "decimal whole" T.decimal (decimal 42),
+    roundtripTest "decimal negative whole" T.decimal (decimal (-17)),
+    roundtripTest "decimal fraction" T.decimal (decimal 3.14),
+    roundtripTest "decimal negative fraction" T.decimal (decimal (-2.5)),
+    -- Large integer beyond Double exact range
+    roundtripTest "decimal large integer"
+      T.decimal
+      (decimal (Sci.scientific 100000000000000000001 0)),
+    roundtripTest "decimal large negative integer"
+      T.decimal
+      (decimal (Sci.scientific (-100000000000000000001) 0)),
+    -- Tiny and huge exponents
+    roundtripTest "decimal tiny exponent"
+      T.decimal
+      (decimal (Sci.scientific 1 (-20))),
+    roundtripTest "decimal huge exponent"
+      T.decimal
+      (decimal (Sci.scientific 1 20)),
+    -- 22 significant digits of pi
+    roundtripTest "decimal many significant digits"
+      T.decimal
+      (decimal (Sci.scientific 314159265358979323846 (-20)))]
 
 ----------------------------------------
 -- Collection types

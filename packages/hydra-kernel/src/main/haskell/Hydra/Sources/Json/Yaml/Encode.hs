@@ -120,7 +120,7 @@ jsonToYaml = define "jsonToYaml" $
       Yaml.nodeScalar Yaml.scalarNull,
 
     _Value_number>>: "n" ~>
-      Yaml.nodeScalar $ Yaml.scalarFloat $ var "n",
+      Yaml.nodeScalar $ Yaml.scalarDecimal $ var "n",
 
     _Value_object>>: "obj" ~>
       Yaml.nodeMapping $ Maps.fromList $
