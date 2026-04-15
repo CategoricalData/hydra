@@ -33,7 +33,7 @@ value x =
         Core.injectionTypeName = (Core.Name "hydra.json.model.Value"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "number"),
-          Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat v0)))}})
+          Core.fieldTerm = (Core.TermLiteral (Core.LiteralDecimal v0))}})
       Model.ValueObject v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.json.model.Value"),
         Core.injectionField = Core.Field {

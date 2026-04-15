@@ -126,7 +126,7 @@ doubleValueToJson :: TTermDefinition (G.DoubleValue -> JM.Value)
 doubleValueToJson = define "doubleValueToJson" $
   doc "Convert a GraphSON DoubleValue to a JSON Value" $
   match G._DoubleValue Nothing [
-    G._DoubleValue_finite>>: "d" ~> Json.valueNumber (Literals.float64ToBigfloat $ var "d"),
+    G._DoubleValue_finite>>: "d" ~> Json.valueNumber (Literals.float64ToDecimal $ var "d"),
     G._DoubleValue_infinity>>: constant $ Json.valueString (string "Infinity"),
     G._DoubleValue_negativeInfinity>>: constant $ Json.valueString (string "-Infinity"),
     G._DoubleValue_notANumber>>: constant $ Json.valueString (string "NaN")]
@@ -136,7 +136,7 @@ floatValueToJson :: TTermDefinition (G.FloatValue -> JM.Value)
 floatValueToJson = define "floatValueToJson" $
   doc "Convert a GraphSON FloatValue to a JSON Value" $
   match G._FloatValue Nothing [
-    G._FloatValue_finite>>: "f" ~> Json.valueNumber (Literals.float32ToBigfloat $ var "f"),
+    G._FloatValue_finite>>: "f" ~> Json.valueNumber (Literals.float32ToDecimal $ var "f"),
     G._FloatValue_infinity>>: constant $ Json.valueString (string "Infinity"),
     G._FloatValue_negativeInfinity>>: constant $ Json.valueString (string "-Infinity"),
     G._FloatValue_notANumber>>: constant $ Json.valueString (string "NaN")]
@@ -180,13 +180,13 @@ valueToJson = define "valueToJson" $
     G._Value_bigDecimal>>: "bd" ~>
       typedValueToJson @@ string "g:BigDecimal" @@ (Json.valueString $ unwrap G._BigDecimalValue @@ var "bd"),
     G._Value_bigInteger>>: "i" ~>
-      typedValueToJson @@ string "g:BigInteger" @@ (Json.valueNumber $ Literals.bigintToBigfloat $ var "i"),
+      typedValueToJson @@ string "g:BigInteger" @@ (Json.valueNumber $ Literals.bigintToDecimal $ var "i"),
     -- Note: binary is represented as base64-encoded string in GraphSON
     G._Value_binary>>: "b" ~>
       typedValueToJson @@ string "g:Binary" @@ (Json.valueString $ var "b"),
     G._Value_boolean>>: "b" ~> Json.valueBoolean (var "b"),
     G._Value_byte>>: "b" ~>
-      typedValueToJson @@ string "g:Byte" @@ (Json.valueNumber $ Literals.bigintToBigfloat $ Literals.uint8ToBigint $ var "b"),
+      typedValueToJson @@ string "g:Byte" @@ (Json.valueNumber $ Literals.bigintToDecimal $ Literals.uint8ToBigint $ var "b"),
     G._Value_char>>: "c" ~>
       typedValueToJson @@ string "g:Char" @@ (Json.valueString $ Strings.fromList $ Lists.pure $ Literals.bigintToInt32 $ Literals.uint32ToBigint $ var "c"),
     G._Value_composite>>: "ctv" ~>
@@ -202,11 +202,11 @@ valueToJson = define "valueToJson" $
     G._Value_float>>: "fv" ~>
       typedValueToJson @@ string "g:Float" @@ (floatValueToJson @@ var "fv"),
     G._Value_integer>>: "i" ~>
-      typedValueToJson @@ string "g:Int32" @@ (Json.valueNumber $ Literals.bigintToBigfloat $ Literals.int32ToBigint $ var "i"),
+      typedValueToJson @@ string "g:Int32" @@ (Json.valueNumber $ Literals.bigintToDecimal $ Literals.int32ToBigint $ var "i"),
     G._Value_list>>: "vals" ~>
       typedValueToJson @@ string "g:List" @@ (Json.valueArray $ Lists.map valueToJson $ var "vals"),
     G._Value_long>>: "l" ~>
-      typedValueToJson @@ string "g:Long" @@ (Json.valueNumber $ Literals.bigintToBigfloat $ Literals.int64ToBigint $ var "l"),
+      typedValueToJson @@ string "g:Long" @@ (Json.valueNumber $ Literals.bigintToDecimal $ Literals.int64ToBigint $ var "l"),
     G._Value_map>>: "m" ~>
       typedValueToJson @@ string "g:Map" @@ (mapToJson @@ var "m"),
     G._Value_null>>: constant Json.valueNull,
@@ -215,7 +215,7 @@ valueToJson = define "valueToJson" $
     G._Value_set>>: "vals" ~>
       typedValueToJson @@ string "g:Set" @@ (Json.valueArray $ Lists.map valueToJson $ var "vals"),
     G._Value_short>>: "i" ~>
-      typedValueToJson @@ string "g:Int16" @@ (Json.valueNumber $ Literals.bigintToBigfloat $ Literals.int16ToBigint $ var "i"),
+      typedValueToJson @@ string "g:Int16" @@ (Json.valueNumber $ Literals.bigintToDecimal $ Literals.int16ToBigint $ var "i"),
     G._Value_string>>: "s" ~> Json.valueString (var "s"),
     G._Value_uuid>>: "u" ~>
       typedValueToJson @@ string "g:UUID" @@ (Json.valueString $ unwrap G._Uuid @@ var "u")]
