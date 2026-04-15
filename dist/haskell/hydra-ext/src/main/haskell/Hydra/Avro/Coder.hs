@@ -54,9 +54,9 @@ avroHydraAdapter cx schema env0 =
                   Coders.coderEncode = encode,
                   Coders.coderDecode = decode}}, env)
           doubleToInt =
-                  \d -> Literals.bigintToInt32 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 d))))
+                  \d -> Literals.bigintToInt32 (Literals.decimalToBigint d)
           doubleToLong =
-                  \d -> Literals.bigintToInt64 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 d))))
+                  \d -> Literals.bigintToInt64 (Literals.decimalToBigint d)
       in case schema of
         Schema.SchemaArray v0 -> Eithers.bind (avroHydraAdapter cx (Schema.arrayItems v0) env0) (\adEnv ->
           let ad = Pairs.first adEnv
@@ -222,7 +222,7 @@ avroHydraAdapter cx schema env0 =
             Graph.graphSchemaTypes = Maps.empty,
             Graph.graphTypeVariables = Sets.empty}) t))
           Schema.PrimitiveInt -> simpleAdapter env0 (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (\_cx -> \jv -> case jv of
-            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (doubleToInt v2))))) (\cx1 -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint i))) (ExtractCore.int32 (Graph.Graph {
+            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (doubleToInt v2))))) (\cx1 -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint i))) (ExtractCore.int32 (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -232,7 +232,7 @@ avroHydraAdapter cx schema env0 =
             Graph.graphSchemaTypes = Maps.empty,
             Graph.graphTypeVariables = Sets.empty}) t))
           Schema.PrimitiveLong -> simpleAdapter env0 (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)) (\_cx -> \jv -> case jv of
-            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (doubleToLong v2))))) (\cx1 -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int64ToBigint i))) (ExtractCore.int64 (Graph.Graph {
+            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (doubleToLong v2))))) (\cx1 -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToDecimal (Literals.int64ToBigint i))) (ExtractCore.int64 (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -242,7 +242,7 @@ avroHydraAdapter cx schema env0 =
             Graph.graphSchemaTypes = Maps.empty,
             Graph.graphTypeVariables = Sets.empty}) t))
           Schema.PrimitiveFloat -> simpleAdapter env0 (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)) (\_cx -> \jv -> case jv of
-            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (Literals.bigfloatToFloat32 v2))))) (\cx1 -> \t -> Eithers.map (\f -> Model.ValueNumber (Literals.float32ToBigfloat f)) (ExtractCore.float32 (Graph.Graph {
+            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (Literals.decimalToFloat32 v2))))) (\cx1 -> \t -> Eithers.map (\f -> Model.ValueNumber (Literals.float32ToDecimal f)) (ExtractCore.float32 (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -252,7 +252,7 @@ avroHydraAdapter cx schema env0 =
             Graph.graphSchemaTypes = Maps.empty,
             Graph.graphTypeVariables = Sets.empty}) t))
           Schema.PrimitiveDouble -> simpleAdapter env0 (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)) (\_cx -> \jv -> case jv of
-            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.bigfloatToFloat64 v2))))) (\cx1 -> \t -> Eithers.map (\d -> Model.ValueNumber (Literals.float64ToBigfloat d)) (ExtractCore.float64 (Graph.Graph {
+            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.decimalToFloat64 v2))))) (\cx1 -> \t -> Eithers.map (\d -> Model.ValueNumber (Literals.float64ToDecimal d)) (ExtractCore.float64 (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -348,7 +348,7 @@ encodeAnnotationValue v =
       Model.ValueArray v0 -> Core.TermList (Lists.map encodeAnnotationValue v0)
       Model.ValueBoolean v0 -> Core.TermLiteral (Core.LiteralBoolean v0)
       Model.ValueNull -> Core.TermUnit
-      Model.ValueNumber v0 -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat v0))
+      Model.ValueNumber v0 -> Core.TermLiteral (Core.LiteralDecimal v0)
       Model.ValueObject v0 -> Core.TermMap (Maps.fromList (Lists.map (\entry ->
         let k = Pairs.first entry
             v_ = Pairs.second entry
@@ -411,7 +411,7 @@ jsonToStringE cx v =
     case v of
       Model.ValueBoolean v0 -> Right (Logic.ifElse v0 "true" "false")
       Model.ValueString v0 -> Right v0
-      Model.ValueNumber v0 -> Right (Literals.showBigfloat v0)
+      Model.ValueNumber v0 -> Right (Literals.showDecimal v0)
       _ -> unexpectedE cx "string, number, or boolean" "other"
 
 -- | Extract named type annotations and convert them to core Name/Term pairs

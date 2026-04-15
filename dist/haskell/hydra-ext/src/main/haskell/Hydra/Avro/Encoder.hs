@@ -233,7 +233,7 @@ floatAdapter cx typ ft =
                   Coders.coderEncode = encode,
                   Coders.coderDecode = decode}})
       in case ft of
-        Core.FloatTypeFloat32 -> simple (Schema.SchemaPrimitive Schema.PrimitiveFloat) False (\_cx -> \t -> Eithers.map (\f -> Model.ValueNumber (Literals.float32ToBigfloat f)) (ExtractCore.float32 (Graph.Graph {
+        Core.FloatTypeFloat32 -> simple (Schema.SchemaPrimitive Schema.PrimitiveFloat) False (\_cx -> \t -> Eithers.map (\f -> Model.ValueNumber (Literals.float32ToDecimal f)) (ExtractCore.float32 (Graph.Graph {
           Graph.graphBoundTerms = Maps.empty,
           Graph.graphBoundTypes = Maps.empty,
           Graph.graphClassConstraints = Maps.empty,
@@ -242,8 +242,8 @@ floatAdapter cx typ ft =
           Graph.graphPrimitives = Maps.empty,
           Graph.graphSchemaTypes = Maps.empty,
           Graph.graphTypeVariables = Sets.empty}) t)) (\_cx -> \j -> case j of
-          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (Literals.bigfloatToFloat32 v1)))))
-        Core.FloatTypeFloat64 -> simple (Schema.SchemaPrimitive Schema.PrimitiveDouble) False (\_cx -> \t -> Eithers.map (\d -> Model.ValueNumber (Literals.float64ToBigfloat d)) (ExtractCore.float64 (Graph.Graph {
+          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (Literals.decimalToFloat32 v1)))))
+        Core.FloatTypeFloat64 -> simple (Schema.SchemaPrimitive Schema.PrimitiveDouble) False (\_cx -> \t -> Eithers.map (\d -> Model.ValueNumber (Literals.float64ToDecimal d)) (ExtractCore.float64 (Graph.Graph {
           Graph.graphBoundTerms = Maps.empty,
           Graph.graphBoundTypes = Maps.empty,
           Graph.graphClassConstraints = Maps.empty,
@@ -252,19 +252,19 @@ floatAdapter cx typ ft =
           Graph.graphPrimitives = Maps.empty,
           Graph.graphSchemaTypes = Maps.empty,
           Graph.graphTypeVariables = Sets.empty}) t)) (\_cx -> \j -> case j of
-          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.bigfloatToFloat64 v1)))))
+          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.decimalToFloat64 v1)))))
         _ -> simple (Schema.SchemaPrimitive Schema.PrimitiveDouble) True (\_cx -> \t -> case t of
           Core.TermLiteral v0 -> case v0 of
             Core.LiteralFloat v1 -> Right (Model.ValueNumber (floatValueToDouble v1))) (\_cx -> \j -> case j of
-          Model.ValueNumber v0 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.bigfloatToFloat64 v0)))))
+          Model.ValueNumber v0 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.decimalToFloat64 v0)))))
 
--- | Convert any float value to a double (bigfloat)
-floatValueToDouble :: Core.FloatValue -> Double
+-- | Convert any float value to a JSON decimal number
+floatValueToDouble :: Core.FloatValue -> Sci.Scientific
 floatValueToDouble fv =
     case fv of
-      Core.FloatValueBigfloat v0 -> v0
-      Core.FloatValueFloat32 v0 -> Literals.float32ToBigfloat v0
-      Core.FloatValueFloat64 v0 -> Literals.float64ToBigfloat v0
+      Core.FloatValueBigfloat v0 -> Literals.float64ToDecimal (Literals.bigfloatToFloat64 v0)
+      Core.FloatValueFloat32 v0 -> Literals.float32ToDecimal v0
+      Core.FloatValueFloat64 v0 -> Literals.float64ToDecimal v0
 
 -- | Fold over field types, building adapters and threading the environment
 foldFieldAdapters :: t0 -> [Core.FieldType] -> Environment.EncodeEnvironment -> Either Errors.Error ([(Core.Name, (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value))], Environment.EncodeEnvironment)
@@ -310,7 +310,7 @@ integerAdapter cx typ it =
                   Coders.coderEncode = encode,
                   Coders.coderDecode = decode}})
       in case it of
-        Core.IntegerTypeInt32 -> simple (Schema.SchemaPrimitive Schema.PrimitiveInt) False (\_cx -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint i))) (ExtractCore.int32 (Graph.Graph {
+        Core.IntegerTypeInt32 -> simple (Schema.SchemaPrimitive Schema.PrimitiveInt) False (\_cx -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint i))) (ExtractCore.int32 (Graph.Graph {
           Graph.graphBoundTerms = Maps.empty,
           Graph.graphBoundTypes = Maps.empty,
           Graph.graphClassConstraints = Maps.empty,
@@ -319,8 +319,8 @@ integerAdapter cx typ it =
           Graph.graphPrimitives = Maps.empty,
           Graph.graphSchemaTypes = Maps.empty,
           Graph.graphTypeVariables = Sets.empty}) t)) (\_cx -> \j -> case j of
-          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Literals.bigintToInt32 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 v1)))))))))
-        Core.IntegerTypeInt64 -> simple (Schema.SchemaPrimitive Schema.PrimitiveLong) False (\_cx -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int64ToBigint i))) (ExtractCore.int64 (Graph.Graph {
+          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Literals.bigintToInt32 (Literals.decimalToBigint v1))))))
+        Core.IntegerTypeInt64 -> simple (Schema.SchemaPrimitive Schema.PrimitiveLong) False (\_cx -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToDecimal (Literals.int64ToBigint i))) (ExtractCore.int64 (Graph.Graph {
           Graph.graphBoundTerms = Maps.empty,
           Graph.graphBoundTypes = Maps.empty,
           Graph.graphClassConstraints = Maps.empty,
@@ -329,25 +329,25 @@ integerAdapter cx typ it =
           Graph.graphPrimitives = Maps.empty,
           Graph.graphSchemaTypes = Maps.empty,
           Graph.graphTypeVariables = Sets.empty}) t)) (\_cx -> \j -> case j of
-          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (Literals.bigintToInt64 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 v1)))))))))
+          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (Literals.bigintToInt64 (Literals.decimalToBigint v1))))))
         _ -> simple (Schema.SchemaPrimitive Schema.PrimitiveLong) True (\_cx -> \t -> case t of
           Core.TermLiteral v0 -> case v0 of
             Core.LiteralInteger v1 -> Right (Model.ValueNumber (integerValueToDouble v1))) (\_cx -> \j -> case j of
-          Model.ValueNumber v0 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (Literals.bigintToInt64 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 v0)))))))))
+          Model.ValueNumber v0 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (Literals.bigintToInt64 (Literals.decimalToBigint v0))))))
 
--- | Convert any integer value to a double (bigfloat)
-integerValueToDouble :: Core.IntegerValue -> Double
+-- | Convert any integer value to a JSON decimal number
+integerValueToDouble :: Core.IntegerValue -> Sci.Scientific
 integerValueToDouble iv =
     case iv of
-      Core.IntegerValueBigint v0 -> Literals.bigintToBigfloat v0
-      Core.IntegerValueInt8 v0 -> Literals.bigintToBigfloat (Literals.int8ToBigint v0)
-      Core.IntegerValueInt16 v0 -> Literals.bigintToBigfloat (Literals.int16ToBigint v0)
-      Core.IntegerValueInt32 v0 -> Literals.bigintToBigfloat (Literals.int32ToBigint v0)
-      Core.IntegerValueInt64 v0 -> Literals.bigintToBigfloat (Literals.int64ToBigint v0)
-      Core.IntegerValueUint8 v0 -> Literals.bigintToBigfloat (Literals.uint8ToBigint v0)
-      Core.IntegerValueUint16 v0 -> Literals.bigintToBigfloat (Literals.uint16ToBigint v0)
-      Core.IntegerValueUint32 v0 -> Literals.bigintToBigfloat (Literals.uint32ToBigint v0)
-      Core.IntegerValueUint64 v0 -> Literals.bigintToBigfloat (Literals.uint64ToBigint v0)
+      Core.IntegerValueBigint v0 -> Literals.bigintToDecimal v0
+      Core.IntegerValueInt8 v0 -> Literals.bigintToDecimal (Literals.int8ToBigint v0)
+      Core.IntegerValueInt16 v0 -> Literals.bigintToDecimal (Literals.int16ToBigint v0)
+      Core.IntegerValueInt32 v0 -> Literals.bigintToDecimal (Literals.int32ToBigint v0)
+      Core.IntegerValueInt64 v0 -> Literals.bigintToDecimal (Literals.int64ToBigint v0)
+      Core.IntegerValueUint8 v0 -> Literals.bigintToDecimal (Literals.uint8ToBigint v0)
+      Core.IntegerValueUint16 v0 -> Literals.bigintToDecimal (Literals.uint16ToBigint v0)
+      Core.IntegerValueUint32 v0 -> Literals.bigintToDecimal (Literals.uint32ToBigint v0)
+      Core.IntegerValueUint64 v0 -> Literals.bigintToDecimal (Literals.uint64ToBigint v0)
 
 -- | Create an adapter for literal types
 literalAdapter :: t0 -> t1 -> Core.LiteralType -> Either t2 (Coders.Adapter t1 Schema.Schema Core.Term Model.Value)
