@@ -258,7 +258,7 @@ encodeFixed :: Schema.Fixed -> [(String, Model.Value)]
 encodeFixed f =
     [
       ("type", (Model.ValueString "fixed")),
-      ("size", (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint (Schema.fixedSize f)))))]
+      ("size", (Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint (Schema.fixedSize f)))))]
 
 -- | Encode an Avro map schema to a JSON object
 encodeMap :: Schema.Map -> Model.Value
@@ -344,7 +344,7 @@ expectArrayE cx value =
       Model.ValueArray v0 -> Right v0
 
 -- | Extract a JSON number or return an error
-expectNumberE :: t0 -> Model.Value -> Either t1 Double
+expectNumberE :: t0 -> Model.Value -> Either t1 Sci.Scientific
 expectNumberE cx value =
     case value of
       Model.ValueNumber v0 -> Right v0
