@@ -38,7 +38,7 @@ Axiom isUnionEliminationApplication : forall (_ : Term) , bool.
 
 Axiom normalizePathForHoisting : forall (_ : (list) (SubtermStep)) , (list) (SubtermStep).
 
-Axiom shouldHoistAll : forall (_ : t0) , forall (_ : t1) , bool.
+Axiom shouldHoistAll : forall (t0 : Type) , forall (t1 : Type) , forall (_ : t0) , forall (_ : t1) , bool.
 
 Axiom shouldHoistCaseStatement : forall (_ : (prod) ((list) (SubtermStep)) (Term)) , bool.
 

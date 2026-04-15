@@ -6,7 +6,7 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 (* Module dependencies *)
 Require Import hydra.paths hydra.ast hydra.classes hydra.coders hydra.context hydra.core hydra.error.checking hydra.error.core hydra.error.packaging hydra.errors hydra.graph hydra.json.model hydra.packaging hydra.parsing hydra.phantoms hydra.query hydra.relational hydra.tabular hydra.testing hydra.topology hydra.typing hydra.util hydra.variants hydra.annotations hydra.checking hydra.extract.core hydra.lexical hydra.reflect hydra.rewriting hydra.names hydra.resolution hydra.show.core hydra.show.errors hydra.show.typing hydra.sorting hydra.substitution hydra.variables hydra.unification.
 
-Axiom bindConstraints : forall (_ : t0) , forall (_ : hydra.graph.Graph) , forall (_ : (list) (TypeConstraint)) , (sum) (Error) (TypeSubst).
+Axiom bindConstraints : forall (t0 : Type) , forall (_ : t0) , forall (_ : hydra.graph.Graph) , forall (_ : (list) (TypeConstraint)) , (sum) (Error) (TypeSubst).
 
 Axiom bindUnboundTypeVariables : forall (_ : hydra.graph.Graph) , forall (_ : Term) , Term.
 
@@ -14,9 +14,9 @@ Axiom buildTypeApplicationTerm : forall (_ : (list) (Name)) , forall (_ : Term) 
 
 Axiom extendContext : forall (_ : (list) ((prod) (Name) (TypeScheme))) , forall (_ : hydra.graph.Graph) , hydra.graph.Graph.
 
-Axiom finalizeInferredTerm : forall (_ : t0) , forall (_ : hydra.graph.Graph) , forall (_ : Term) , (sum) (Error) (Term).
+Axiom finalizeInferredTerm : forall (t0 : Type) , forall (_ : t0) , forall (_ : hydra.graph.Graph) , forall (_ : Term) , (sum) (Error) (Term).
 
-Axiom forInferredTerm : forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : Term) , forall (_ : string) , forall (_ : forall (_ : InferenceResult) , t0) , (sum) (Error) ((prod) (t0) (Context_)).
+Axiom forInferredTerm : forall (t0 : Type) , forall (_ : Context_) , forall (_ : hydra.graph.Graph) , forall (_ : Term) , forall (_ : string) , forall (_ : forall (_ : InferenceResult) , t0) , (sum) (Error) ((prod) (t0) (Context_)).
 
 Axiom freeVariablesInContext : forall (_ : hydra.graph.Graph) , (list) (Name).
 
@@ -86,9 +86,9 @@ Axiom inferTypesOfTemporaryBindings : forall (_ : Context_) , forall (_ : hydra.
 
 Axiom isUnbound : forall (_ : hydra.graph.Graph) , forall (_ : Name) , bool.
 
-Axiom mapConstraints : forall (_ : t0) , forall (_ : hydra.graph.Graph) , forall (_ : forall (_ : TypeSubst) , t1) , forall (_ : (list) (TypeConstraint)) , (sum) (Error) (t1).
+Axiom mapConstraints : forall (t0 : Type) , forall (t1 : Type) , forall (_ : t0) , forall (_ : hydra.graph.Graph) , forall (_ : forall (_ : TypeSubst) , t1) , forall (_ : (list) (TypeConstraint)) , (sum) (Error) (t1).
 
-Axiom mergeClassConstraints : forall (_ : (list) ((prod) (t0) (TypeVariableMetadata))) , forall (_ : (list) ((prod) (t0) (TypeVariableMetadata))) , (list) ((prod) (t0) (TypeVariableMetadata)).
+Axiom mergeClassConstraints : forall (t0 : Type) , forall (_ : (list) ((prod) (t0) (TypeVariableMetadata))) , forall (_ : (list) ((prod) (t0) (TypeVariableMetadata))) , (list) ((prod) (t0) (TypeVariableMetadata)).
 
 Axiom showInferenceResult : forall (_ : InferenceResult) , string.
 
@@ -98,6 +98,6 @@ Axiom yieldChecked : forall (_ : Context_) , forall (_ : Term) , forall (_ : Typ
 
 Axiom yieldCheckedWithConstraints : forall (_ : Context_) , forall (_ : Term) , forall (_ : Type_) , forall (_ : TypeSubst) , forall (_ : (list) ((prod) (Name) (TypeVariableMetadata))) , InferenceResult.
 
-Axiom yieldDebug : forall (_ : Context_) , forall (_ : t0) , forall (_ : string) , forall (_ : Term) , forall (_ : Type_) , forall (_ : TypeSubst) , (sum) (Error) (InferenceResult).
+Axiom yieldDebug : forall (t0 : Type) , forall (_ : Context_) , forall (_ : t0) , forall (_ : string) , forall (_ : Term) , forall (_ : Type_) , forall (_ : TypeSubst) , (sum) (Error) (InferenceResult).
 
 Axiom yieldWithConstraints : forall (_ : Context_) , forall (_ : Term) , forall (_ : Type_) , forall (_ : TypeSubst) , forall (_ : (list) ((prod) (Name) (TypeVariableMetadata))) , InferenceResult.
