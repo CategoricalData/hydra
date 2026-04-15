@@ -5,59 +5,56 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 
 (* Module dependencies *)
 Require Import hydra.core hydra.graph.
-Record TypeDefinition : Type := Build_TypeDefinition {
-  typeDefinition_name : Name ;
-  typeDefinition_type : TypeScheme
-}.
-
 Record TermDefinition : Type := Build_TermDefinition {
-  termDefinition_name : Name ;
-  termDefinition_term : Term ;
-  termDefinition_type : (option) (TypeScheme)
+termDefinition_name : Name ;
+termDefinition_term : Term ;
+termDefinition_type : (option) (TypeScheme) ;
 }.
 
-Definition PackageName : Type :=
-  string.
+Record TypeDefinition : Type := Build_TypeDefinition {
+typeDefinition_name : Name ;
+typeDefinition_type : TypeScheme ;
+}.
 
-Definition Namespace : Type :=
-  string.
+Inductive Definition_ : Type :=
+| Definition__Term : forall (_ : TermDefinition) , Definition_
+| Definition__Type : forall (_ : TypeDefinition) , Definition_.
+
+Definition FileExtension : Type := string.
+
+Definition Namespace : Type := string.
+
+Record Library : Type := Build_Library {
+library_namespace : Namespace ;
+library_prefix : string ;
+library_primitives : (list) (Primitive) ;
+}.
+
+Record Module_ : Type := Build_Module_ {
+module__namespace : Namespace ;
+module__definitions : (list) (Definition_) ;
+module__termDependencies : (list) (Namespace) ;
+module__typeDependencies : (list) (Namespace) ;
+module__description : (option) (string) ;
+}.
 
 Record Namespaces (n : Type) : Type := Build_Namespaces {
-  namespaces_focus : (prod) (Namespace) (n) ;
-  namespaces_mapping : (list) ((prod) (Namespace) (n))
+namespaces_focus : (prod) (Namespace) (n) ;
+namespaces_mapping : (list) ((prod) (Namespace) (n)) ;
+}.
+
+Definition PackageName : Type := string.
+
+Record Package : Type := Build_Package {
+package_name : PackageName ;
+package_modules : (list) (Module_) ;
+package_dependencies : (list) (PackageName) ;
+package_description : (option) (string) ;
 }.
 
 Record QualifiedName : Type := Build_QualifiedName {
-  qualifiedName_namespace : (option) (Namespace) ;
-  qualifiedName_local : string
-}.
-
-Record Library : Type := Build_Library {
-  library_namespace : Namespace ;
-  library_prefix : string ;
-  library_primitives : (list) (Primitive)
-}.
-
-Definition FileExtension : Type :=
-  string.
-
-Inductive Definition_ : Type :=
-| Definition__Term : TermDefinition -> Definition_
-| Definition__Type : TypeDefinition -> Definition_.
-
-Record Module_ : Type := Build_Module_ {
-  module__namespace : Namespace ;
-  module__definitions : (list) (Definition_) ;
-  module__termDependencies : (list) (Namespace) ;
-  module__typeDependencies : (list) (Namespace) ;
-  module__description : (option) (string)
-}.
-
-Record Package : Type := Build_Package {
-  package_name : PackageName ;
-  package_modules : (list) (Module_) ;
-  package_dependencies : (list) (PackageName) ;
-  package_description : (option) (string)
+qualifiedName_namespace : (option) (Namespace) ;
+qualifiedName_local : string ;
 }.
 
 Arguments Build_Namespaces {n}.

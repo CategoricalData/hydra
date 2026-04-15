@@ -2,58 +2,61 @@
 
 (* Standard library imports *)
 Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdlib.QArith.QArith hydra.lib.base.
-Inductive TypeVariant : Type :=
-| TypeVariant_Annotated : unit -> TypeVariant
-| TypeVariant_Application : unit -> TypeVariant
-| TypeVariant_Either : unit -> TypeVariant
-| TypeVariant_Forall : unit -> TypeVariant
-| TypeVariant_Function : unit -> TypeVariant
-| TypeVariant_List : unit -> TypeVariant
-| TypeVariant_Literal : unit -> TypeVariant
-| TypeVariant_Map : unit -> TypeVariant
-| TypeVariant_Maybe : unit -> TypeVariant
-| TypeVariant_Pair : unit -> TypeVariant
-| TypeVariant_Record : unit -> TypeVariant
-| TypeVariant_Set : unit -> TypeVariant
-| TypeVariant_Union : unit -> TypeVariant
-| TypeVariant_Unit : unit -> TypeVariant
-| TypeVariant_Variable : unit -> TypeVariant
-| TypeVariant_Void : unit -> TypeVariant
-| TypeVariant_Wrap : unit -> TypeVariant.
-
-Inductive TermVariant : Type :=
-| TermVariant_Annotated : unit -> TermVariant
-| TermVariant_Application : unit -> TermVariant
-| TermVariant_Either : unit -> TermVariant
-| TermVariant_Function : unit -> TermVariant
-| TermVariant_Let : unit -> TermVariant
-| TermVariant_List : unit -> TermVariant
-| TermVariant_Literal : unit -> TermVariant
-| TermVariant_Map : unit -> TermVariant
-| TermVariant_Maybe : unit -> TermVariant
-| TermVariant_Pair : unit -> TermVariant
-| TermVariant_Record : unit -> TermVariant
-| TermVariant_Set : unit -> TermVariant
-| TermVariant_TypeApplication : unit -> TermVariant
-| TermVariant_TypeLambda : unit -> TermVariant
-| TermVariant_Union : unit -> TermVariant
-| TermVariant_Unit : unit -> TermVariant
-| TermVariant_Variable : unit -> TermVariant
-| TermVariant_Wrap : unit -> TermVariant.
-
-Inductive LiteralVariant : Type :=
-| LiteralVariant_Binary : unit -> LiteralVariant
-| LiteralVariant_Boolean : unit -> LiteralVariant
-| LiteralVariant_Float : unit -> LiteralVariant
-| LiteralVariant_Integer : unit -> LiteralVariant
-| LiteralVariant_String : unit -> LiteralVariant.
+Inductive EliminationVariant : Type :=
+| EliminationVariant_Record : forall (_ : unit) , EliminationVariant
+| EliminationVariant_Union : forall (_ : unit) , EliminationVariant
+| EliminationVariant_Wrap : forall (_ : unit) , EliminationVariant.
 
 Inductive FunctionVariant : Type :=
-| FunctionVariant_Elimination : unit -> FunctionVariant
-| FunctionVariant_Lambda : unit -> FunctionVariant.
+| FunctionVariant_Elimination : forall (_ : unit) , FunctionVariant
+| FunctionVariant_Lambda : forall (_ : unit) , FunctionVariant.
 
-Inductive EliminationVariant : Type :=
-| EliminationVariant_Record : unit -> EliminationVariant
-| EliminationVariant_Union : unit -> EliminationVariant
-| EliminationVariant_Wrap : unit -> EliminationVariant.
+Inductive LiteralVariant : Type :=
+| LiteralVariant_Binary : forall (_ : unit) , LiteralVariant
+| LiteralVariant_Boolean : forall (_ : unit) , LiteralVariant
+| LiteralVariant_Float : forall (_ : unit) , LiteralVariant
+| LiteralVariant_Integer : forall (_ : unit) , LiteralVariant
+| LiteralVariant_String : forall (_ : unit) , LiteralVariant.
+
+Inductive TermVariant : Type :=
+| TermVariant_Annotated : forall (_ : unit) , TermVariant
+| TermVariant_Application : forall (_ : unit) , TermVariant
+| TermVariant_Cases : forall (_ : unit) , TermVariant
+| TermVariant_Either : forall (_ : unit) , TermVariant
+| TermVariant_Inject : forall (_ : unit) , TermVariant
+| TermVariant_Lambda : forall (_ : unit) , TermVariant
+| TermVariant_Let : forall (_ : unit) , TermVariant
+| TermVariant_List : forall (_ : unit) , TermVariant
+| TermVariant_Literal : forall (_ : unit) , TermVariant
+| TermVariant_Map : forall (_ : unit) , TermVariant
+| TermVariant_Maybe : forall (_ : unit) , TermVariant
+| TermVariant_Pair : forall (_ : unit) , TermVariant
+| TermVariant_Project : forall (_ : unit) , TermVariant
+| TermVariant_Record : forall (_ : unit) , TermVariant
+| TermVariant_Set : forall (_ : unit) , TermVariant
+| TermVariant_TypeApplication : forall (_ : unit) , TermVariant
+| TermVariant_TypeLambda : forall (_ : unit) , TermVariant
+| TermVariant_Unit : forall (_ : unit) , TermVariant
+| TermVariant_Unwrap : forall (_ : unit) , TermVariant
+| TermVariant_Variable : forall (_ : unit) , TermVariant
+| TermVariant_Wrap : forall (_ : unit) , TermVariant.
+
+Inductive TypeVariant : Type :=
+| TypeVariant_Annotated : forall (_ : unit) , TypeVariant
+| TypeVariant_Application : forall (_ : unit) , TypeVariant
+| TypeVariant_Either : forall (_ : unit) , TypeVariant
+| TypeVariant_Forall : forall (_ : unit) , TypeVariant
+| TypeVariant_Function : forall (_ : unit) , TypeVariant
+| TypeVariant_List : forall (_ : unit) , TypeVariant
+| TypeVariant_Literal : forall (_ : unit) , TypeVariant
+| TypeVariant_Map : forall (_ : unit) , TypeVariant
+| TypeVariant_Maybe : forall (_ : unit) , TypeVariant
+| TypeVariant_Pair : forall (_ : unit) , TypeVariant
+| TypeVariant_Record : forall (_ : unit) , TypeVariant
+| TypeVariant_Set : forall (_ : unit) , TypeVariant
+| TypeVariant_Union : forall (_ : unit) , TypeVariant
+| TypeVariant_Unit : forall (_ : unit) , TypeVariant
+| TypeVariant_Variable : forall (_ : unit) , TypeVariant
+| TypeVariant_Void : forall (_ : unit) , TypeVariant
+| TypeVariant_Wrap : forall (_ : unit) , TypeVariant.
 

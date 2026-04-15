@@ -4,29 +4,44 @@
 Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdlib.QArith.QArith hydra.lib.base.
 
 (* Module dependencies *)
-Require Import hydra.paths hydra.lib.pairs hydra.lib.logic hydra.core hydra.strip hydra.lib.lists hydra.graph hydra.lib.maps hydra.scoping hydra.lib.strings hydra.lib.literals hydra.variables hydra.lib.sets hydra.lexical hydra.lib.math hydra.rewriting hydra.lib.maybes hydra.environment hydra.lib.equality hydra.typing hydra.resolution hydra.sorting hydra.substitution.
+Require Import hydra.paths hydra.ast hydra.classes hydra.coders hydra.context hydra.core hydra.error.checking hydra.error.core hydra.error.packaging hydra.errors hydra.graph hydra.json.model hydra.packaging hydra.parsing hydra.phantoms hydra.query hydra.relational hydra.tabular hydra.testing hydra.topology hydra.typing hydra.util hydra.variants hydra.lexical hydra.rewriting hydra.environment hydra.resolution hydra.scoping hydra.sorting hydra.strip hydra.substitution hydra.variables.
 
-Axiom updateHoistState : SubtermStep -> (prod) (bool) (bool) -> (prod) (bool) (bool).
-Axiom shouldHoistAll : forall (t0 : Type) (t1 : Type), t0 -> t1 -> bool.
-Axiom isLambdaBody : SubtermStep -> bool.
-Axiom isEliminationUnion : Function -> bool.
-Axiom isUnionElimination : Term -> bool.
-Axiom isUnionEliminationApplication : Term -> bool.
-Axiom shouldHoistCaseStatement : (prod) ((list) (SubtermStep)) (Term) -> bool.
-Axiom isApplicationFunction : SubtermStep -> bool.
-Axiom normalizePathForHoisting : (list) (SubtermStep) -> (list) (SubtermStep).
-Axiom hoistSubterms : ((prod) ((list) (SubtermStep)) (Term) -> bool) -> hydra.graph.Graph -> Term -> Term.
-Axiom hoistCaseStatements : hydra.graph.Graph -> Term -> Term.
-Axiom hoistCaseStatementsInGraph : (list) (Binding) -> (list) (Binding).
-Axiom countVarOccurrences_bundle : unit.
+Axiom augmentBindingsWithNewFreeVars : forall (_ : hydra.graph.Graph) , forall (_ : (list) (Name)) , forall (_ : (list) (Binding)) , (prod) ((list) (Binding)) (TermSubst).
 
-Axiom countVarOccurrences : Name -> Term -> Z.
-Axiom bindingUsesContextTypeVars : hydra.graph.Graph -> Binding -> bool.
-Axiom bindingIsPolymorphic : Binding -> bool.
-Axiom shouldHoistPolymorphic : hydra.graph.Graph -> Binding -> bool.
-Axiom augmentBindingsWithNewFreeVars : hydra.graph.Graph -> (list) (Name) -> (list) (Binding) -> (prod) ((list) (Binding)) (TermSubst).
-Axiom hoistLetBindingsWithPredicate : (Binding -> bool) -> (hydra.graph.Graph -> Binding -> bool) -> hydra.graph.Graph -> Let -> Let.
-Axiom hoistAllLetBindings : Let -> Let.
-Axiom hoistLetBindingsWithContext : (Binding -> bool) -> hydra.graph.Graph -> Let -> Let.
-Axiom hoistPolymorphicLetBindings : (Binding -> bool) -> Let -> Let.
+Axiom bindingIsPolymorphic : forall (_ : Binding) , bool.
 
+Axiom bindingUsesContextTypeVars : forall (_ : hydra.graph.Graph) , forall (_ : Binding) , bool.
+
+Axiom countVarOccurrences : forall (_ : Name) , forall (_ : Term) , Z.
+
+Axiom hoistAllLetBindings : forall (_ : Let) , Let.
+
+Axiom hoistCaseStatements : forall (_ : hydra.graph.Graph) , forall (_ : Term) , Term.
+
+Axiom hoistCaseStatementsInGraph : forall (_ : (list) (Binding)) , (list) (Binding).
+
+Axiom hoistLetBindingsWithContext : forall (_ : forall (_ : Binding) , bool) , forall (_ : hydra.graph.Graph) , forall (_ : Let) , Let.
+
+Axiom hoistLetBindingsWithPredicate : forall (_ : forall (_ : Binding) , bool) , forall (_ : forall (_ : hydra.graph.Graph) , forall (_ : Binding) , bool) , forall (_ : hydra.graph.Graph) , forall (_ : Let) , Let.
+
+Axiom hoistPolymorphicLetBindings : forall (_ : forall (_ : Binding) , bool) , forall (_ : Let) , Let.
+
+Axiom hoistSubterms : forall (_ : forall (_ : (prod) ((list) (SubtermStep)) (Term)) , bool) , forall (_ : hydra.graph.Graph) , forall (_ : Term) , Term.
+
+Axiom isApplicationFunction : forall (_ : SubtermStep) , bool.
+
+Axiom isLambdaBody : forall (_ : SubtermStep) , bool.
+
+Axiom isUnionElimination : forall (_ : Term) , bool.
+
+Axiom isUnionEliminationApplication : forall (_ : Term) , bool.
+
+Axiom normalizePathForHoisting : forall (_ : (list) (SubtermStep)) , (list) (SubtermStep).
+
+Axiom shouldHoistAll : forall (_ : t0) , forall (_ : t1) , bool.
+
+Axiom shouldHoistCaseStatement : forall (_ : (prod) ((list) (SubtermStep)) (Term)) , bool.
+
+Axiom shouldHoistPolymorphic : forall (_ : hydra.graph.Graph) , forall (_ : Binding) , bool.
+
+Axiom updateHoistState : forall (_ : SubtermStep) , forall (_ : (prod) (bool) (bool)) , (prod) (bool) (bool).

@@ -6,8 +6,30 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 (* Module dependencies *)
 Require Import hydra.variants.
 
-Definition typeVariant : TypeVariant -> string :=
-  fun x_ => match x_ with
+Definition termVariant : forall (_ : TermVariant) , string := fun x_ => match x_ with
+| TermVariant_Annotated _ => "annotated"%string
+| TermVariant_Application _ => "application"%string
+| TermVariant_Cases _ => "cases"%string
+| TermVariant_Either _ => "either"%string
+| TermVariant_Lambda _ => "lambda"%string
+| TermVariant_Let _ => "let"%string
+| TermVariant_List _ => "list"%string
+| TermVariant_Literal _ => "literal"%string
+| TermVariant_Map _ => "map"%string
+| TermVariant_Maybe _ => "maybe"%string
+| TermVariant_Pair _ => "pair"%string
+| TermVariant_Project _ => "project"%string
+| TermVariant_Record _ => "record"%string
+| TermVariant_Set _ => "set"%string
+| TermVariant_TypeLambda _ => "typeLambda"%string
+| TermVariant_TypeApplication _ => "typeApplication"%string
+| TermVariant_Inject _ => "inject"%string
+| TermVariant_Unit _ => "unit"%string
+| TermVariant_Unwrap _ => "unwrap"%string
+| TermVariant_Variable _ => "variable"%string
+| TermVariant_Wrap _ => "wrap"%string
+end.
+Definition typeVariant : forall (_ : TypeVariant) , string := fun x_ => match x_ with
 | TypeVariant_Annotated _ => "annotated"%string
 | TypeVariant_Application _ => "application"%string
 | TypeVariant_Either _ => "either"%string
@@ -25,26 +47,5 @@ Definition typeVariant : TypeVariant -> string :=
 | TypeVariant_Variable _ => "variable"%string
 | TypeVariant_Void _ => "void"%string
 | TypeVariant_Wrap _ => "wrap"%string
-end.
-Definition termVariant : TermVariant -> string :=
-  fun x_ => match x_ with
-| TermVariant_Annotated _ => "annotated"%string
-| TermVariant_Application _ => "application"%string
-| TermVariant_Either _ => "either"%string
-| TermVariant_Function _ => "function"%string
-| TermVariant_Let _ => "let"%string
-| TermVariant_List _ => "list"%string
-| TermVariant_Literal _ => "literal"%string
-| TermVariant_Map _ => "map"%string
-| TermVariant_Maybe _ => "maybe"%string
-| TermVariant_Pair _ => "pair"%string
-| TermVariant_Record _ => "record"%string
-| TermVariant_Set _ => "set"%string
-| TermVariant_TypeLambda _ => "typeLambda"%string
-| TermVariant_TypeApplication _ => "typeApplication"%string
-| TermVariant_Union _ => "union"%string
-| TermVariant_Unit _ => "unit"%string
-| TermVariant_Variable _ => "variable"%string
-| TermVariant_Wrap _ => "wrap"%string
 end.
 
