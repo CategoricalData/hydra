@@ -36,9 +36,9 @@ set -euo pipefail
 #   hydra, java, python, scala, clojure, common-lisp, emacs-lisp, scheme
 #
 # Targets that exist as DSL sources but are NOT part of --targets all:
-#   coq, javascript, rust
+#   coq, typescript, rust
 # These languages have generation-only support (DSL sources in packages/hydra-coq,
-# packages/hydra-javascript, etc.) but no full runtime implementation, no test
+# packages/hydra-typescript, etc.) but no full runtime implementation, no test
 # suite, and no dedicated sync-<lang>.sh script. They will silently drift unless
 # regenerated manually via the appropriate Stack exec.
 

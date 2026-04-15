@@ -45,7 +45,7 @@ library:
     - ../../packages/hydra-haskell/src/main/haskell
     - ../../dist/haskell/hydra-haskell/src/main/haskell
     - ../../packages/hydra-java/src/main/haskell
-    - ../../packages/hydra-javascript/src/main/haskell
+    - ../../packages/hydra-typescript/src/main/haskell
     - ../../packages/hydra-kernel/src/main/haskell
     - ../../packages/hydra-lisp/src/main/haskell
     - ../../packages/hydra-ext/src/main/haskell

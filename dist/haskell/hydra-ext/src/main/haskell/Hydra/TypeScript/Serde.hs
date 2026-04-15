@@ -2,12 +2,12 @@
 
 -- | Serialization functions for converting JavaScript AST to abstract expressions
 
-module Hydra.JavaScript.Serde where
+module Hydra.TypeScript.Serde where
 
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Constants as Constants
-import qualified Hydra.JavaScript.Operators as Operators
-import qualified Hydra.JavaScript.Syntax as Syntax
+import qualified Hydra.TypeScript.Operators as Operators
+import qualified Hydra.TypeScript.Syntax as Syntax
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals

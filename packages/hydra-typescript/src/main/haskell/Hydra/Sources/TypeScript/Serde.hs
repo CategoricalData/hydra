@@ -1,9 +1,9 @@
--- | Serialization functions for JavaScript AST to abstract syntax expressions.
+-- | Serialization functions for TypeScript AST to abstract syntax expressions.
 --
--- This module provides functions to convert JavaScript AST types to Hydra's
+-- This module provides functions to convert TypeScript AST types to Hydra's
 -- abstract Expr type, which can then be rendered to concrete syntax.
 
-module Hydra.Sources.JavaScript.Serde where
+module Hydra.Sources.TypeScript.Serde where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
@@ -84,22 +84,22 @@ import qualified Data.Maybe                                as Y
 
 -- Additional imports
 import Hydra.Ast
-import qualified Hydra.JavaScript.Syntax as JS
-import qualified Hydra.Sources.JavaScript.Syntax as JavaScriptSyntax
-import qualified Hydra.Sources.JavaScript.Operators as JavaScriptOperators
+import qualified Hydra.TypeScript.Syntax as JS
+import qualified Hydra.Sources.TypeScript.Syntax as TypeScriptSyntax
+import qualified Hydra.Sources.TypeScript.Operators as TypeScriptOperators
 
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 ns :: Namespace
-ns = Namespace "hydra.javaScript.serde"
+ns = Namespace "hydra.typeScript.serde"
 
 module_ :: Module
 module_ = Module ns definitions
-    [Constants.ns, Serialization.ns, JavaScriptOperators.ns]
-    (JavaScriptSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Serialization functions for converting JavaScript AST to abstract expressions"
+    [Constants.ns, Serialization.ns, TypeScriptOperators.ns]
+    (TypeScriptSyntax.ns:KernelTypes.kernelTypesNamespaces) $
+    Just "Serialization functions for converting TypeScript AST to abstract expressions"
   where
     definitions = [
       -- Core conversions
@@ -177,7 +177,7 @@ module_ = Module ns definitions
 
       -- Comments
       toDefinition documentationCommentToExpr,
-      toDefinition toJavaScriptComments,
+      toDefinition toTypeScriptComments,
       toDefinition documentationTagToLine,
       toDefinition typeExpressionToString,
       toDefinition toLineComment,
@@ -224,7 +224,7 @@ stringLiteralToExpr = define "stringLiteralToExpr" $
 
 escapeString :: TTermDefinition (String -> Bool -> String)
 escapeString = define "escapeString" $
-  doc "Escape special characters in a string for JavaScript" $
+  doc "Escape special characters in a string for TypeScript" $
   lambda "s" $ lambda "singleQuote" $
     -- Simple implementation: escape backslashes, quotes, and newlines
     -- A full implementation would handle more escape sequences
@@ -261,7 +261,7 @@ numericLiteralToExpr = define "numericLiteralToExpr" $
 
 expressionToExpr :: TTermDefinition (JS.Expression -> Expr)
 expressionToExpr = define "expressionToExpr" $
-  doc "Convert a JavaScript expression to an AST expression" $
+  doc "Convert a TypeScript expression to an AST expression" $
   lambda "expr" $
     cases JS._Expression (var "expr") Nothing [
       JS._Expression_identifier>>: lambda "id" $ identifierToExpr @@ var "id",
@@ -336,7 +336,7 @@ propertyToExpr = define "propertyToExpr" $
       (expressionToExpr @@ var "key")] $
     Logic.ifElse (var "shorthand")
       (var "keyExpr")
-      (Serialization.ifx @@ JavaScriptOperators.colonOp @@ var "keyExpr" @@ (expressionToExpr @@ var "value"))
+      (Serialization.ifx @@ TypeScriptOperators.colonOp @@ var "keyExpr" @@ (expressionToExpr @@ var "value"))
 
 functionExpressionToExpr :: TTermDefinition (JS.FunctionExpression -> Expr)
 functionExpressionToExpr = define "functionExpressionToExpr" $
@@ -380,7 +380,7 @@ arrowFunctionExpressionToExpr = define "arrowFunctionExpressionToExpr" $
       JS._ArrowFunctionBody_block>>: lambda "b" $ blockStatementToExpr @@ var "b"]] $
     Serialization.spaceSep @@ (Lists.concat $ list [
       var "asyncKw",
-      list [Serialization.ifx @@ JavaScriptOperators.arrowOp @@ var "paramsExpr" @@ var "bodyExpr"]])
+      list [Serialization.ifx @@ TypeScriptOperators.arrowOp @@ var "paramsExpr" @@ var "bodyExpr"]])
 
 callExpressionToExpr :: TTermDefinition (JS.CallExpression -> Expr)
 callExpressionToExpr = define "callExpressionToExpr" $
@@ -415,7 +415,7 @@ memberExpressionToExpr = define "memberExpressionToExpr" $
         Serialization.brackets @@ Serialization.squareBrackets @@ Serialization.inlineStyle @@ var "propExpr"])
       -- obj.prop or obj?.prop
       (Serialization.ifx @@
-        (Logic.ifElse (var "optional") JavaScriptOperators.optionalChainOp JavaScriptOperators.memberOp) @@
+        (Logic.ifElse (var "optional") TypeScriptOperators.optionalChainOp TypeScriptOperators.memberOp) @@
         var "objExpr" @@ var "propExpr")
 
 conditionalExpressionToExpr :: TTermDefinition (JS.ConditionalExpression -> Expr)
@@ -519,7 +519,7 @@ assignmentPatternToExpr = define "assignmentPatternToExpr" $
   lambda "assign" $ lets [
     "left">: project JS._AssignmentPattern JS._AssignmentPattern_left @@ var "assign",
     "right">: project JS._AssignmentPattern JS._AssignmentPattern_right @@ var "assign"] $
-    Serialization.ifx @@ JavaScriptOperators.defineOp @@
+    Serialization.ifx @@ TypeScriptOperators.defineOp @@
       (patternToExpr @@ var "left") @@
       (expressionToExpr @@ var "right")
 
@@ -581,7 +581,7 @@ variableDeclaratorToExpr = define "variableDeclaratorToExpr" $
     "init">: project JS._VariableDeclarator JS._VariableDeclarator_init @@ var "decl"] $
     Maybes.maybe
       (patternToExpr @@ var "id")
-      (lambda "e" $ Serialization.ifx @@ JavaScriptOperators.defineOp @@
+      (lambda "e" $ Serialization.ifx @@ TypeScriptOperators.defineOp @@
         (patternToExpr @@ var "id") @@
         (expressionToExpr @@ var "e"))
       (var "init")
@@ -890,7 +890,7 @@ methodDefinitionToExpr = define "methodDefinitionToExpr" $
 
 programToExpr :: TTermDefinition (JS.Program -> Expr)
 programToExpr = define "programToExpr" $
-  doc "Convert a JavaScript program to an AST expression" $
+  doc "Convert a TypeScript program to an AST expression" $
   lambda "prog" $ lets [
     "body">: project JS._Program JS._Program_body @@ var "prog",
     "warning">: list [Serialization.cst @@ (toLineComment @@ Constants.warningAutoGeneratedFile)],
@@ -1032,31 +1032,31 @@ binaryOperatorToExpr = define "binaryOperatorToExpr" $
   doc "Convert a binary operator to an Op" $
   lambda "op" $
     cases JS._BinaryOperator (var "op") Nothing [
-      JS._BinaryOperator_add>>: constant JavaScriptOperators.addOp,
-      JS._BinaryOperator_subtract>>: constant JavaScriptOperators.subtractOp,
-      JS._BinaryOperator_multiply>>: constant JavaScriptOperators.multiplyOp,
-      JS._BinaryOperator_divide>>: constant JavaScriptOperators.divideOp,
-      JS._BinaryOperator_modulo>>: constant JavaScriptOperators.moduloOp,
-      JS._BinaryOperator_exponentiate>>: constant JavaScriptOperators.exponentiateOp,
-      JS._BinaryOperator_equal>>: constant JavaScriptOperators.equalOp,
-      JS._BinaryOperator_notEqual>>: constant JavaScriptOperators.notEqualOp,
-      JS._BinaryOperator_strictEqual>>: constant JavaScriptOperators.strictEqualOp,
-      JS._BinaryOperator_strictNotEqual>>: constant JavaScriptOperators.strictNotEqualOp,
-      JS._BinaryOperator_lessThan>>: constant JavaScriptOperators.lessThanOp,
-      JS._BinaryOperator_lessThanOrEqual>>: constant JavaScriptOperators.lessThanOrEqualOp,
-      JS._BinaryOperator_greaterThan>>: constant JavaScriptOperators.greaterThanOp,
-      JS._BinaryOperator_greaterThanOrEqual>>: constant JavaScriptOperators.greaterThanOrEqualOp,
-      JS._BinaryOperator_and>>: constant JavaScriptOperators.logicalAndOp,
-      JS._BinaryOperator_or>>: constant JavaScriptOperators.logicalOrOp,
-      JS._BinaryOperator_nullishCoalescing>>: constant JavaScriptOperators.nullishCoalescingOp,
-      JS._BinaryOperator_bitwiseAnd>>: constant JavaScriptOperators.bitwiseAndOp,
-      JS._BinaryOperator_bitwiseOr>>: constant JavaScriptOperators.bitwiseOrOp,
-      JS._BinaryOperator_bitwiseXor>>: constant JavaScriptOperators.bitwiseXorOp,
-      JS._BinaryOperator_leftShift>>: constant JavaScriptOperators.leftShiftOp,
-      JS._BinaryOperator_rightShift>>: constant JavaScriptOperators.rightShiftOp,
-      JS._BinaryOperator_unsignedRightShift>>: constant JavaScriptOperators.unsignedRightShiftOp,
-      JS._BinaryOperator_in>>: constant JavaScriptOperators.inOp,
-      JS._BinaryOperator_instanceof>>: constant JavaScriptOperators.instanceOfOp]
+      JS._BinaryOperator_add>>: constant TypeScriptOperators.addOp,
+      JS._BinaryOperator_subtract>>: constant TypeScriptOperators.subtractOp,
+      JS._BinaryOperator_multiply>>: constant TypeScriptOperators.multiplyOp,
+      JS._BinaryOperator_divide>>: constant TypeScriptOperators.divideOp,
+      JS._BinaryOperator_modulo>>: constant TypeScriptOperators.moduloOp,
+      JS._BinaryOperator_exponentiate>>: constant TypeScriptOperators.exponentiateOp,
+      JS._BinaryOperator_equal>>: constant TypeScriptOperators.equalOp,
+      JS._BinaryOperator_notEqual>>: constant TypeScriptOperators.notEqualOp,
+      JS._BinaryOperator_strictEqual>>: constant TypeScriptOperators.strictEqualOp,
+      JS._BinaryOperator_strictNotEqual>>: constant TypeScriptOperators.strictNotEqualOp,
+      JS._BinaryOperator_lessThan>>: constant TypeScriptOperators.lessThanOp,
+      JS._BinaryOperator_lessThanOrEqual>>: constant TypeScriptOperators.lessThanOrEqualOp,
+      JS._BinaryOperator_greaterThan>>: constant TypeScriptOperators.greaterThanOp,
+      JS._BinaryOperator_greaterThanOrEqual>>: constant TypeScriptOperators.greaterThanOrEqualOp,
+      JS._BinaryOperator_and>>: constant TypeScriptOperators.logicalAndOp,
+      JS._BinaryOperator_or>>: constant TypeScriptOperators.logicalOrOp,
+      JS._BinaryOperator_nullishCoalescing>>: constant TypeScriptOperators.nullishCoalescingOp,
+      JS._BinaryOperator_bitwiseAnd>>: constant TypeScriptOperators.bitwiseAndOp,
+      JS._BinaryOperator_bitwiseOr>>: constant TypeScriptOperators.bitwiseOrOp,
+      JS._BinaryOperator_bitwiseXor>>: constant TypeScriptOperators.bitwiseXorOp,
+      JS._BinaryOperator_leftShift>>: constant TypeScriptOperators.leftShiftOp,
+      JS._BinaryOperator_rightShift>>: constant TypeScriptOperators.rightShiftOp,
+      JS._BinaryOperator_unsignedRightShift>>: constant TypeScriptOperators.unsignedRightShiftOp,
+      JS._BinaryOperator_in>>: constant TypeScriptOperators.inOp,
+      JS._BinaryOperator_instanceof>>: constant TypeScriptOperators.instanceOfOp]
 
 unaryOperatorToString :: TTermDefinition (JS.UnaryOperator -> String)
 unaryOperatorToString = define "unaryOperatorToString" $
@@ -1106,10 +1106,10 @@ documentationCommentToExpr = define "documentationCommentToExpr" $
   lambda "doc" $ lets [
     "description">: project JS._DocumentationComment JS._DocumentationComment_description @@ var "doc",
     "tags">: project JS._DocumentationComment JS._DocumentationComment_tags @@ var "doc"] $
-    Serialization.cst @@ (toJavaScriptComments @@ var "description" @@ var "tags")
+    Serialization.cst @@ (toTypeScriptComments @@ var "description" @@ var "tags")
 
-toJavaScriptComments :: TTermDefinition (String -> [JS.DocumentationTag] -> String)
-toJavaScriptComments = define "toJavaScriptComments" $
+toTypeScriptComments :: TTermDefinition (String -> [JS.DocumentationTag] -> String)
+toTypeScriptComments = define "toTypeScriptComments" $
   doc "Format a description and tags as a JSDoc comment" $
   lambda "desc" $ lambda "tags" $ lets [
     "descLines">: Logic.ifElse (Equality.equal (var "desc") (string ""))
@@ -1164,7 +1164,7 @@ typeExpressionToString = define "typeExpressionToString" $
 
 toLineComment :: TTermDefinition (String -> String)
 toLineComment = define "toLineComment" $
-  doc "Convert a string to a JavaScript line comment" $
+  doc "Convert a string to a TypeScript line comment" $
   lambda "s" $ Strings.intercalate (string "\n") $ Lists.map (lambda "line" $ Strings.cat2 (string "// ") (var "line")) (Strings.lines $ var "s")
 
 

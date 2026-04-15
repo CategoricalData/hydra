@@ -2,7 +2,7 @@
 
 -- | A JavaScript/ECMAScript syntax model for code generation
 
-module Hydra.JavaScript.Syntax where
+module Hydra.TypeScript.Syntax where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)

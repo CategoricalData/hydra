@@ -1,10 +1,10 @@
--- | A JavaScript/ECMAScript syntax model for code generation.
+-- | A TypeScript syntax model for code generation.
 --
--- This model is based on the ECMAScript 2024 specification and is designed
+-- This model is based on the TypeScript 5.x specification and is designed
 -- to support Hydra's code generation needs. It focuses on the subset of
--- JavaScript syntax needed for generating functional, type-annotated code.
+-- TypeScript syntax needed for generating functional, typed code.
 
-module Hydra.Sources.JavaScript.Syntax where
+module Hydra.Sources.TypeScript.Syntax where
 
 -- Standard imports for type-level sources outside of the kernel
 import           Hydra.Kernel
@@ -20,7 +20,7 @@ import qualified Data.Maybe                      as Y
 
 
 ns :: Namespace
-ns = Namespace "hydra.javaScript.syntax"
+ns = Namespace "hydra.typeScript.syntax"
 
 define :: String -> Type -> Binding
 define = datatype ns
@@ -30,7 +30,7 @@ js = typeref ns
 
 module_ :: Module
 module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
-    Just "A JavaScript/ECMAScript syntax model for code generation"
+    Just "A TypeScript syntax model for code generation"
   where
     definitions = [
       -- Identifiers and names
@@ -150,7 +150,7 @@ module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
 
 identifier :: Binding
 identifier = define "Identifier" $
-  doc "A JavaScript identifier (variable, function, class name, etc.)" $
+  doc "A TypeScript identifier (variable, function, class name, etc.)" $
   T.wrap T.string
 
 qualifiedName :: Binding
@@ -352,7 +352,7 @@ typeParameter = define "TypeParameter" $
 
 expression :: Binding
 expression = define "Expression" $
-  doc "A JavaScript expression" $
+  doc "A TypeScript expression" $
   T.union [
     "identifier">:
       doc "A simple identifier" $
@@ -643,7 +643,7 @@ restElement = define "RestElement" $
 
 statement :: Binding
 statement = define "Statement" $
-  doc "A JavaScript statement" $
+  doc "A TypeScript statement" $
   T.union [
     "expression">:
       doc "An expression statement" $
@@ -943,7 +943,7 @@ methodKind = define "MethodKind" $
 
 program :: Binding
 program = define "Program" $
-  doc "A JavaScript program (module)" $
+  doc "A TypeScript program (module)" $
   T.record [
     "body">:
       doc "The module items" $
@@ -1121,7 +1121,7 @@ assignmentOperator = define "AssignmentOperator" $
 
 comment :: Binding
 comment = define "Comment" $
-  doc "A JavaScript comment" $
+  doc "A TypeScript comment" $
   T.union [
     "line">:
       doc "A single-line comment (// ...)"

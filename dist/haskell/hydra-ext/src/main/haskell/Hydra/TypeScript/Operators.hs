@@ -2,7 +2,7 @@
 
 -- | AST operators for JavaScript with precedence and associativity
 
-module Hydra.JavaScript.Operators where
+module Hydra.TypeScript.Operators where
 
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Serialization as Serialization

@@ -1,6 +1,6 @@
--- | Language constraints and reserved words for JavaScript/ECMAScript
+-- | Language constraints and reserved words for TypeScript
 
-module Hydra.Sources.JavaScript.Language where
+module Hydra.Sources.TypeScript.Language where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
@@ -84,15 +84,15 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
-module_ = Module (Namespace "hydra.javaScript.language")
-  [toDefinition javaScriptLanguage, toDefinition javaScriptReservedWords]
+module_ = Module (Namespace "hydra.typeScript.language")
+  [toDefinition typeScriptLanguage, toDefinition typeScriptReservedWords]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
-  Just "Language constraints and reserved words for JavaScript (ECMAScript 2024)"
+  Just "Language constraints and reserved words for TypeScript 5.x"
 
-javaScriptLanguage :: TTermDefinition Language
-javaScriptLanguage = define "javaScriptLanguage" $
-    doc "Language constraints for JavaScript (ECMAScript 2024)" $ lets [
+typeScriptLanguage :: TTermDefinition Language
+typeScriptLanguage = define "typeScriptLanguage" $
+    doc "Language constraints for TypeScript 5.x" $ lets [
     "eliminationVariants">: Sets.fromList $ list [
       Variants.eliminationVariantRecord,
       Variants.eliminationVariantUnion,
@@ -160,7 +160,7 @@ javaScriptLanguage = define "javaScriptLanguage" $
       Variants.typeVariantWrap],
     "typePredicate">: constant true] $ -- All types supported via runtime representation
     Coders.language
-      (Coders.languageName_ $ string "hydra.javaScript")
+      (Coders.languageName_ $ string "hydra.typeScript")
       (Coders.languageConstraints_
         (var "eliminationVariants")
         (var "literalVariants")
@@ -171,20 +171,26 @@ javaScriptLanguage = define "javaScriptLanguage" $
         (var "typeVariants")
         (var "typePredicate"))
 
-javaScriptReservedWords :: TTermDefinition (S.Set String)
-javaScriptReservedWords = define "javaScriptReservedWords" $
-  doc "A set of reserved words in JavaScript" $
+typeScriptReservedWords :: TTermDefinition (S.Set String)
+typeScriptReservedWords = define "typeScriptReservedWords" $
+  doc "A set of reserved words in TypeScript" $
   lets [
     "keywords">:
-      doc "JavaScript keywords per ECMAScript 2024 specification" $
+      doc "TypeScript keywords (superset of ECMAScript 2024)" $
       list $ string <$> [
-        -- Keywords
         "await", "break", "case", "catch", "class", "const", "continue",
         "debugger", "default", "delete", "do", "else", "enum", "export",
         "extends", "false", "finally", "for", "function", "if", "import",
         "in", "instanceof", "let", "new", "null", "return", "super",
         "switch", "this", "throw", "true", "try", "typeof", "undefined",
         "var", "void", "while", "with", "yield"],
+    "typeScriptOnly">:
+      doc "TypeScript-specific keywords not reserved in JavaScript" $
+      list $ string <$> [
+        "abstract", "as", "asserts", "async", "constructor", "declare",
+        "get", "infer", "is", "keyof", "namespace", "never", "out",
+        "override", "readonly", "satisfies", "set", "type", "unique",
+        "unknown"],
     "futureReserved">:
       doc "Future reserved words (strict mode)" $
       list $ string <$> [
@@ -196,32 +202,29 @@ javaScriptReservedWords = define "javaScriptReservedWords" $
     "builtIns">:
       doc "Common built-in identifiers we should avoid" $
       list $ string <$> [
-        -- Global objects
         "Array", "ArrayBuffer", "BigInt", "Boolean", "DataView", "Date",
         "Error", "Float32Array", "Float64Array", "Function", "Int8Array",
         "Int16Array", "Int32Array", "JSON", "Map", "Math", "Number",
-        "Object", "Promise", "Proxy", "Reflect", "RegExp", "Set", "String",
-        "Symbol", "Uint8Array", "Uint8ClampedArray", "Uint16Array",
-        "Uint32Array", "WeakMap", "WeakSet",
-        -- Global functions
+        "Object", "Promise", "Proxy", "Readonly", "ReadonlyArray",
+        "ReadonlyMap", "ReadonlySet", "Record", "Reflect", "RegExp",
+        "Set", "String", "Symbol", "Uint8Array", "Uint8ClampedArray",
+        "Uint16Array", "Uint32Array", "WeakMap", "WeakSet",
         "decodeURI", "decodeURIComponent", "encodeURI", "encodeURIComponent",
         "eval", "isFinite", "isNaN", "parseFloat", "parseInt",
-        -- Common identifiers in Node.js and browsers
         "console", "document", "global", "globalThis", "module", "process",
         "require", "window"],
-    "hydraJavaScriptKeywords">:
-      doc "Reserved words specific to Hydra-JavaScript" $
+    "hydraTypeScriptKeywords">:
+      doc "Reserved words specific to Hydra-TypeScript" $
       list $ string <$> [
-        -- Core utilities
         "Name", "FrozenMap",
-        -- Tag constants
         "TERM_ANNOTATED", "TERM_APPLICATION", "TERM_EITHER", "TERM_FUNCTION",
         "TERM_LET", "TERM_LIST", "TERM_LITERAL", "TERM_MAP", "TERM_MAYBE",
         "TERM_PAIR", "TERM_RECORD", "TERM_SET", "TERM_TYPE_APPLICATION",
         "TERM_TYPE_LAMBDA", "TERM_UNION", "TERM_UNIT", "TERM_VARIABLE", "TERM_WRAP"]] $
     Sets.fromList $ Lists.concat $ list [
       var "keywords",
+      var "typeScriptOnly",
       var "futureReserved",
       var "strictModeReserved",
       var "builtIns",
-      var "hydraJavaScriptKeywords"]
+      var "hydraTypeScriptKeywords"]

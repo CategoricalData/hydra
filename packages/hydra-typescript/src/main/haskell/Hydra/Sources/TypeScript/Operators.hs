@@ -1,9 +1,9 @@
--- | AST operators for JavaScript, defining precedence and associativity.
+-- | AST operators for TypeScript, defining precedence and associativity.
 --
 -- Operator precedence is based on:
 -- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_precedence
 
-module Hydra.Sources.JavaScript.Operators where
+module Hydra.Sources.TypeScript.Operators where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
@@ -90,13 +90,13 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 ns :: Namespace
-ns = Namespace "hydra.javaScript.operators"
+ns = Namespace "hydra.typeScript.operators"
 
 module_ :: Module
 module_ = Module ns definitions
     [Serialization.ns]
     KernelTypes.kernelTypesNamespaces $
-    Just "AST operators for JavaScript with precedence and associativity"
+    Just "AST operators for TypeScript with precedence and associativity"
   where
     definitions = [
       -- Function application
