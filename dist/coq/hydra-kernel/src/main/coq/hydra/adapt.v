@@ -61,6 +61,7 @@ Definition adaptIntegerType : forall (_ : LanguageConstraints) , forall (_ : Int
 Definition adaptLiteralType : forall (_ : LanguageConstraints) , forall (_ : LiteralType) , (option) (LiteralType) := fun (constraints : LanguageConstraints) => fun (lt : LiteralType) => let forUnsupported := fun (lt2 : LiteralType) => (fun x_ => match x_ with
 | LiteralType_Binary _ => (Some) ((LiteralType_String) (tt))
 | LiteralType_Boolean _ => ((maybes.map) (fun (x : IntegerType) => (LiteralType_Integer) (x))) (((adaptIntegerType) (constraints)) ((IntegerType_Int8) (tt)))
+| LiteralType_Decimal _ => (Some) ((LiteralType_Float) ((FloatType_Float64) (tt)))
 | LiteralType_Float v_ => (fun (ft : FloatType) => ((maybes.map) (fun (x : FloatType) => (LiteralType_Float) (x))) (((adaptFloatType) (constraints)) (ft))) (v_)
 | LiteralType_Integer v_ => (fun (it : IntegerType) => ((maybes.map) (fun (x : IntegerType) => (LiteralType_Integer) (x))) (((adaptIntegerType) (constraints)) (it))) (v_)
 | _ => None
@@ -80,6 +81,11 @@ Definition adaptLiteral : forall (_ : LiteralType) , forall (_ : Literal) , Lite
 end) (lt)) (v_)
 | Literal_Boolean v_ => (fun (b : bool) => (fun x_ => match x_ with
 | LiteralType_Integer v_ => (fun (it : IntegerType) => (Literal_Integer) (((bigintToIntegerValue) (it)) ((((logic.ifElse) (b)) ((1)%Z)) ((0)%Z)))) (v_)
+| _ => hydra_unreachable
+end) (lt)) (v_)
+| Literal_Decimal v_ => (fun (d : Q) => (fun x_ => match x_ with
+| LiteralType_Float v_ => (fun (_ : FloatType) => (Literal_Float) ((FloatValue_Float64) ((literals.decimalToFloat64) (d)))) (v_)
+| LiteralType_String _ => (Literal_String) ((literals.showDecimal) (d))
 | _ => hydra_unreachable
 end) (lt)) (v_)
 | Literal_Float v_ => (fun (f : FloatValue) => (fun x_ => match x_ with
@@ -183,6 +189,10 @@ Definition prepareLiteralType : forall (_ : LiteralType) , (prod) (LiteralType) 
 | Literal_Binary v_ => (fun (b : string) => (Literal_String) ((literals.binaryToString) (b))) (v_)
 | _ => v
 end) (v)) ((sets.fromList) ((cons) ("replace binary strings with character strings"%string) (nil))))
+| LiteralType_Decimal _ => (pair) ((LiteralType_Float) ((FloatType_Float64) (tt))) ((pair) (fun (v : Literal) => (fun x_ => match x_ with
+| Literal_Decimal v_ => (fun (d : Q) => (Literal_Float) ((FloatValue_Float64) ((literals.decimalToFloat64) (d)))) (v_)
+| _ => v
+end) (v)) ((sets.fromList) ((cons) ("replace arbitrary-precision decimal numbers with 64-bit floating-point numbers (doubles)"%string) (nil))))
 | LiteralType_Float v_ => (fun (ft : FloatType) => let result := (prepareFloatType) (ft) in let msgs := (pairs.second) ((pairs.second) (result)) in let rep := (pairs.first) ((pairs.second) (result)) in let rtyp := (pairs.first) (result) in (pair) ((LiteralType_Float) (rtyp)) ((pair) (fun (v : Literal) => (fun x_ => match x_ with
 | Literal_Float v_ => (fun (fv : FloatValue) => (Literal_Float) ((rep) (fv))) (v_)
 | _ => v

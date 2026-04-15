@@ -23,6 +23,7 @@ Inductive IntegerType : Type :=
 Inductive LiteralType : Type :=
 | LiteralType_Binary : forall (_ : unit) , LiteralType
 | LiteralType_Boolean : forall (_ : unit) , LiteralType
+| LiteralType_Decimal : forall (_ : unit) , LiteralType
 | LiteralType_Float : forall (_ : FloatType) , LiteralType
 | LiteralType_Integer : forall (_ : IntegerType) , LiteralType
 | LiteralType_String : forall (_ : unit) , LiteralType.
@@ -50,6 +51,7 @@ Inductive IntegerValue : Type :=
 Inductive Literal : Type :=
 | Literal_Binary : forall (_ : string) , Literal
 | Literal_Boolean : forall (_ : bool) , Literal
+| Literal_Decimal : forall (_ : Q) , Literal
 | Literal_Float : forall (_ : FloatValue) , Literal
 | Literal_Integer : forall (_ : IntegerValue) , Literal
 | Literal_String : forall (_ : string) , Literal.

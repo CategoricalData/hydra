@@ -18,6 +18,7 @@ end.
 Definition literalVariant : forall (_ : LiteralVariant) , Term := fun x_ => match x_ with
 | LiteralVariant_Binary v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("hydra.variants.LiteralVariant"%string) ((Build_Field) ("binary"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | LiteralVariant_Boolean v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("hydra.variants.LiteralVariant"%string) ((Build_Field) ("boolean"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
+| LiteralVariant_Decimal v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("hydra.variants.LiteralVariant"%string) ((Build_Field) ("decimal"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | LiteralVariant_Float v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("hydra.variants.LiteralVariant"%string) ((Build_Field) ("float"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | LiteralVariant_Integer v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("hydra.variants.LiteralVariant"%string) ((Build_Field) ("integer"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | LiteralVariant_String v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("hydra.variants.LiteralVariant"%string) ((Build_Field) ("string"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)

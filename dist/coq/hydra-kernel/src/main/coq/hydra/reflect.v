@@ -56,6 +56,7 @@ end.
 Definition literalType : forall (_ : Literal) , LiteralType := fun x_ => match x_ with
 | Literal_Binary v_ => (fun (_ : string) => (LiteralType_Binary) (tt)) (v_)
 | Literal_Boolean v_ => (fun (_ : bool) => (LiteralType_Boolean) (tt)) (v_)
+| Literal_Decimal v_ => (fun (_ : Q) => (LiteralType_Decimal) (tt)) (v_)
 | Literal_Float v_ => (fun (arg_ : FloatValue) => (fun (injected_ : FloatType) => (LiteralType_Float) (injected_)) ((floatValueType) (arg_))) (v_)
 | Literal_Integer v_ => (fun (arg_ : IntegerValue) => (fun (injected_ : IntegerType) => (LiteralType_Integer) (injected_)) ((integerValueType) (arg_))) (v_)
 | Literal_String v_ => (fun (_ : string) => (LiteralType_String) (tt)) (v_)
@@ -63,13 +64,14 @@ end.
 Definition literalTypeVariant : forall (_ : LiteralType) , LiteralVariant := fun x_ => match x_ with
 | LiteralType_Binary _ => (LiteralVariant_Binary) (tt)
 | LiteralType_Boolean _ => (LiteralVariant_Boolean) (tt)
+| LiteralType_Decimal _ => (LiteralVariant_Decimal) (tt)
 | LiteralType_Float v_ => (fun (_ : FloatType) => (LiteralVariant_Float) (tt)) (v_)
 | LiteralType_Integer v_ => (fun (_ : IntegerType) => (LiteralVariant_Integer) (tt)) (v_)
 | LiteralType_String _ => (LiteralVariant_String) (tt)
 end.
-Definition literalTypes : (list) (LiteralType) := (lists.concat) ((cons) ((cons) ((LiteralType_Binary) (tt)) ((cons) ((LiteralType_Boolean) (tt)) (nil))) ((cons) (((lists.map) (fun (x : FloatType) => (LiteralType_Float) (x))) (floatTypes)) ((cons) (((lists.map) (fun (x : IntegerType) => (LiteralType_Integer) (x))) (integerTypes)) ((cons) ((cons) ((LiteralType_String) (tt)) (nil)) (nil))))).
+Definition literalTypes : (list) (LiteralType) := (lists.concat) ((cons) ((cons) ((LiteralType_Binary) (tt)) ((cons) ((LiteralType_Boolean) (tt)) ((cons) ((LiteralType_Decimal) (tt)) (nil)))) ((cons) (((lists.map) (fun (x : FloatType) => (LiteralType_Float) (x))) (floatTypes)) ((cons) (((lists.map) (fun (x : IntegerType) => (LiteralType_Integer) (x))) (integerTypes)) ((cons) ((cons) ((LiteralType_String) (tt)) (nil)) (nil))))).
 Definition literalVariant : forall (_ : Literal) , LiteralVariant := fun (arg_ : Literal) => (literalTypeVariant) ((literalType) (arg_)).
-Definition literalVariants : (list) (LiteralVariant) := (cons) ((LiteralVariant_Binary) (tt)) ((cons) ((LiteralVariant_Boolean) (tt)) ((cons) ((LiteralVariant_Float) (tt)) ((cons) ((LiteralVariant_Integer) (tt)) ((cons) ((LiteralVariant_String) (tt)) (nil))))).
+Definition literalVariants : (list) (LiteralVariant) := (cons) ((LiteralVariant_Binary) (tt)) ((cons) ((LiteralVariant_Boolean) (tt)) ((cons) ((LiteralVariant_Decimal) (tt)) ((cons) ((LiteralVariant_Float) (tt)) ((cons) ((LiteralVariant_Integer) (tt)) ((cons) ((LiteralVariant_String) (tt)) (nil)))))).
 Definition termVariant : forall (_ : Term) , TermVariant := fun x_ => match x_ with
 | Term_Annotated v_ => (fun (_ : AnnotatedTerm) => (TermVariant_Annotated) (tt)) (v_)
 | Term_Application v_ => (fun (_ : Application) => (TermVariant_Application) (tt)) (v_)

@@ -28,6 +28,7 @@ end) (ft) in let forInteger := fun (it : IntegerType) => (fun x_ => match x_ wit
 end) (it) in let forLiteral := fun (lt : LiteralType) => (fun x_ => match x_ with
 | LiteralType_Binary _ => (Literal_String) (""%string)
 | LiteralType_Boolean _ => (Literal_Boolean) (false)
+| LiteralType_Decimal _ => (Literal_Decimal) ((0.0))
 | LiteralType_Integer v_ => (fun (it : IntegerType) => (Literal_Integer) ((forInteger) (it))) (v_)
 | LiteralType_Float v_ => (fun (ft : FloatType) => (Literal_Float) ((forFloat) (ft))) (v_)
 | LiteralType_String _ => (Literal_String) (""%string)

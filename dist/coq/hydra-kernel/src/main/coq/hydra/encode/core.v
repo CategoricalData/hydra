@@ -26,6 +26,7 @@ end.
 Definition literalType : forall (_ : LiteralType) , Term := fun x_ => match x_ with
 | LiteralType_Binary v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("hydra.core.LiteralType"%string) ((Build_Field) ("binary"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | LiteralType_Boolean v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("hydra.core.LiteralType"%string) ((Build_Field) ("boolean"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
+| LiteralType_Decimal v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("hydra.core.LiteralType"%string) ((Build_Field) ("decimal"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 | LiteralType_Float v_ => (fun (y : FloatType) => (Term_Inject) ((Build_Injection) ("hydra.core.LiteralType"%string) ((Build_Field) ("float"%string) ((floatType) (y))))) (v_)
 | LiteralType_Integer v_ => (fun (y : IntegerType) => (Term_Inject) ((Build_Injection) ("hydra.core.LiteralType"%string) ((Build_Field) ("integer"%string) ((integerType) (y))))) (v_)
 | LiteralType_String v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("hydra.core.LiteralType"%string) ((Build_Field) ("string"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
@@ -50,6 +51,7 @@ end.
 Definition literal : forall (_ : Literal) , Term := fun x_ => match x_ with
 | Literal_Binary v_ => (fun (y : string) => (Term_Inject) ((Build_Injection) ("hydra.core.Literal"%string) ((Build_Field) ("binary"%string) ((fun (x : string) => (Term_Literal) ((Literal_Binary) (x))) (y))))) (v_)
 | Literal_Boolean v_ => (fun (y : bool) => (Term_Inject) ((Build_Injection) ("hydra.core.Literal"%string) ((Build_Field) ("boolean"%string) ((fun (x : bool) => (Term_Literal) ((Literal_Boolean) (x))) (y))))) (v_)
+| Literal_Decimal v_ => (fun (y : Q) => (Term_Inject) ((Build_Injection) ("hydra.core.Literal"%string) ((Build_Field) ("decimal"%string) ((fun (x : Q) => (Term_Literal) ((Literal_Decimal) (x))) (y))))) (v_)
 | Literal_Float v_ => (fun (y : FloatValue) => (Term_Inject) ((Build_Injection) ("hydra.core.Literal"%string) ((Build_Field) ("float"%string) ((floatValue) (y))))) (v_)
 | Literal_Integer v_ => (fun (y : IntegerValue) => (Term_Inject) ((Build_Injection) ("hydra.core.Literal"%string) ((Build_Field) ("integer"%string) ((integerValue) (y))))) (v_)
 | Literal_String v_ => (fun (y : string) => (Term_Inject) ((Build_Injection) ("hydra.core.Literal"%string) ((Build_Field) ("string"%string) ((fun (x : string) => (Term_Literal) ((Literal_String) (x))) (y))))) (v_)

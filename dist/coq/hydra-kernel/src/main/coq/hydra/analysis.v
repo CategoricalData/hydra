@@ -110,6 +110,16 @@ end) (term_)) in let defTerms := (maybes.cat) (((lists.map) (fun (d : Definition
 | Definition__Term v_ => (fun (td : TermDefinition) => (Some) ((fun r_ => (termDefinition_term) (r_)) (td))) (v_)
 | _ => None
 end) (d))) ((fun r_ => (module__definitions) (r_)) (mod_))) in let termContainsBinary := fun (term_ : Term) => ((((foldOverTerm) ((TraversalOrder_Pre) (tt))) (checkTerm)) (false)) (term_) in (((lists.foldl) (fun (acc : bool) => fun (t : Term) => ((logic.or) (acc)) ((termContainsBinary) (t)))) (false)) (defTerms).
+Definition moduleContainsDecimalLiterals : forall (_ : Module_) , bool := fun (mod_ : Module_) => let checkTerm := fun (found : bool) => fun (term_ : Term) => ((logic.or) (found)) ((fun x_ => match x_ with
+| Term_Literal v_ => (fun (lit : Literal) => (fun x_ => match x_ with
+| Literal_Decimal v_ => (fun (_ : Q) => true) (v_)
+| _ => false
+end) (lit)) (v_)
+| _ => false
+end) (term_)) in let defTerms := (maybes.cat) (((lists.map) (fun (d : Definition_) => (fun x_ => match x_ with
+| Definition__Term v_ => (fun (td : TermDefinition) => (Some) ((fun r_ => (termDefinition_term) (r_)) (td))) (v_)
+| _ => None
+end) (d))) ((fun r_ => (module__definitions) (r_)) (mod_))) in let termContainsDecimal := fun (term_ : Term) => ((((foldOverTerm) ((TraversalOrder_Pre) (tt))) (checkTerm)) (false)) (term_) in (((lists.foldl) (fun (acc : bool) => fun (t : Term) => ((logic.or) (acc)) ((termContainsDecimal) (t)))) (false)) (defTerms).
 Definition moduleDependencyNamespaces (t0 : Type) : forall (_ : t0) , forall (_ : hydra.graph.Graph) , forall (_ : bool) , forall (_ : bool) , forall (_ : bool) , forall (_ : bool) , forall (_ : Module_) , (sum) (Error) ((list) (Namespace)) := fun (cx : t0) => fun (graph_ : hydra.graph.Graph) => fun (binds : bool) => fun (withPrims : bool) => fun (withNoms : bool) => fun (withSchema : bool) => fun (mod_ : Module_) => let allBindings := (maybes.cat) (((lists.map) (fun (d : Definition_) => (fun x_ => match x_ with
 | Definition__Type v_ => (fun (td : TypeDefinition) => (Some) (((fun (name : Name) => fun (typ : Type_) => let schemaTerm := (Term_Variable) ("hydra.core.Type"%string) in let dataTerm := (normalizeTermAnnotations) ((Term_Annotated) ((Build_AnnotatedTerm) ((hydra.encode.core.type) (typ)) ((maps.fromList) ((cons) ((pair) (key_type) (schemaTerm)) (nil))))) in (Build_Binding) (name) (dataTerm) ((Some) ((Build_TypeScheme) (nil) ((Type__Variable) ("hydra.core.Type"%string)) (None)))) ((fun r_ => (typeDefinition_name) (r_)) (td))) ((fun r_ => (typeScheme_type) (r_)) ((fun r_ => (typeDefinition_type) (r_)) (td))))) (v_)
 | Definition__Term v_ => (fun (td : TermDefinition) => (Some) ((Build_Binding) ((fun r_ => (termDefinition_name) (r_)) (td)) ((fun r_ => (termDefinition_term) (r_)) (td)) ((fun r_ => (termDefinition_type) (r_)) (td)))) (v_)
