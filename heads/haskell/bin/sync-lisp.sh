@@ -1,14 +1,21 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Script to regenerate Lisp code for all four dialects from Hydra sources.
+# Script to regenerate Lisp code for all four dialects from JSON modules.
 #
-# This generates Clojure, Common Lisp, Emacs Lisp, and Scheme code
-# from the Hydra kernel and test modules using the Lisp coder.
+# This reads the kernel JSON sources (produced by sync-haskell.sh) and invokes
+# `bootstrap-from-json --target <dialect>` for each selected dialect, which
+# loads main + coder + test modules from JSON and emits Lisp source files via
+# the same Hydra.Lisp.Coder used by the DSL-direct path.
+#
+# Scheme-specific shell post-processing (runtime lib copy, stub modules,
+# testGraph patching) runs afterwards.
+#
+# This replaces the older one-shot `generate-lisp` executable.
 #
 # Prerequisites:
-#   - Hydra-Ext must be consistent (run sync-ext.sh first)
-#   - Run from the hydra-ext directory (or the script will cd there)
+#   - Hydra-Haskell must be built and the JSON kernel up to date
+#     (run sync-haskell.sh first)
 #
 # Usage:
 #   ./bin/sync-lisp.sh                                  # Generate all four dialects
@@ -31,7 +38,7 @@ while [ $# -gt 0 ]; do
         --help|-h)
             echo "Usage: $0 [OPTIONS]"
             echo ""
-            echo "Regenerate Lisp code from Hydra sources."
+            echo "Regenerate Lisp code from JSON kernel modules."
             echo ""
             echo "Options:"
             echo "  --dialects D,...  Generate only specified dialects (default: all four)"
@@ -40,9 +47,10 @@ while [ $# -gt 0 ]; do
             echo "  --help            Show this help message"
             echo ""
             echo "Steps performed:"
-            echo "  1. Build generate-lisp executable"
-            echo "  2. Generate Lisp code for selected dialects"
-            echo "  3. Run tests for each dialect (unless --quick)"
+            echo "  1. Build bootstrap-from-json executable"
+            echo "  2. Generate Lisp code for each selected dialect (via JSON -> Lisp)"
+            echo "  3. Post-process generated files (Scheme runtime lib, stubs, testGraph)"
+            echo "  4. Run tests for each dialect (unless --quick)"
             exit 0
             ;;
     esac
@@ -50,12 +58,12 @@ while [ $# -gt 0 ]; do
 done
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-HYDRA_EXT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
-HYDRA_ROOT_DIR="$( cd "$HYDRA_EXT_DIR/../.." && pwd )"
+HYDRA_HASKELL_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
+HYDRA_ROOT_DIR="$( cd "$HYDRA_HASKELL_DIR/../.." && pwd )"
 
 source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 
-cd "$HYDRA_EXT_DIR"
+cd "$HYDRA_HASKELL_DIR"
 
 # Parse dialect list
 IFS=',' read -ra DIALECT_LIST <<< "$DIALECTS"
@@ -80,69 +88,103 @@ for d in "${DIALECT_LIST[@]}"; do
     esac
 done
 
+# Is scheme in the selected dialects?
+scheme_selected=false
+for d in "${DIALECT_LIST[@]}"; do
+    if [ "$d" = "scheme" ]; then
+        scheme_selected=true
+    fi
+done
+
 banner2 "Synchronizing Lisp (${DIALECT_LIST[*]})"
 echo ""
 
-TOTAL_STEPS=3
+TOTAL_STEPS=4
 
-step 1 $TOTAL_STEPS "Building generate-lisp executable"
+step 1 $TOTAL_STEPS "Building bootstrap-from-json"
 echo ""
-stack build hydra:exe:generate-lisp
+stack build hydra:exe:bootstrap-from-json
 
-step 2 $TOTAL_STEPS "Generating Lisp code"
+step 2 $TOTAL_STEPS "Generating Lisp from JSON"
 echo ""
-# generate-lisp generates all four dialects; we run it once
-# and let the user's --dialects flag control which tests to run
-stack exec generate-lisp -- $RTS_FLAGS
+for dialect in "${DIALECT_LIST[@]}"; do
+    echo "  --- $dialect ---"
+    stack exec bootstrap-from-json -- \
+        --target "$dialect" \
+        --include-coders \
+        --include-tests \
+        $RTS_FLAGS
+    echo ""
+done
 
-# Restore Scheme dist native libs to their committed (portable alist) versions.
-# The generate-lisp tool overwrites these with the src/main vhash versions, but
-# dist must use portable alists since standalone targets lack (ice-9 vlist).
-SCHEME_GEN_LIB="$HYDRA_ROOT_DIR/dist/scheme/hydra-kernel/src/main/scheme/hydra/lib"
-if [ -d "$SCHEME_GEN_LIB" ]; then
-    echo "  Restoring portable dist lib files for Scheme..."
-    git -C "$HYDRA_ROOT_DIR" checkout -- \
-        dist/scheme/hydra-kernel/src/main/scheme/hydra/lib/maps.scm \
-        dist/scheme/hydra-kernel/src/main/scheme/hydra/lib/sets.scm \
-        2>/dev/null || true
+step 3 $TOTAL_STEPS "Post-processing generated files"
+echo ""
+
+# --- Scheme-specific post-processing ---
+if [ "$scheme_selected" = true ]; then
+    # Copy hand-written Scheme runtime library files (chars, eithers, lists, ...)
+    # from heads/lisp/scheme into dist/scheme. These are not generated from any
+    # kernel module; they implement the Scheme runtime for the generated code.
+    #
+    # Skip maps.scm and sets.scm: dist must use portable alist versions because
+    # standalone Scheme compilers lack (ice-9 vlist), while src/main/guile uses
+    # the vhash-backed versions under heads/lisp/scheme. Both versions are
+    # checked into git; leave dist's alone.
+    SCHEME_LIB_SRC="$HYDRA_ROOT_DIR/heads/lisp/scheme/src/main/scheme/hydra/lib"
+    SCHEME_LIB_DST="$HYDRA_ROOT_DIR/dist/scheme/hydra-kernel/src/main/scheme/hydra/lib"
+    echo "  Copying Scheme runtime libraries..."
+    mkdir -p "$SCHEME_LIB_DST"
+    for lib_file in "$SCHEME_LIB_SRC"/*.scm; do
+        [ -e "$lib_file" ] || continue
+        base=$(basename "$lib_file")
+        case "$base" in
+            maps.scm|sets.scm) continue ;;
+        esac
+        cp "$lib_file" "$SCHEME_LIB_DST/$base"
+    done
+
+    # Write Scheme stub modules for decode/encode graph/compute.
+    # These are empty R7RS library definitions used as placeholders.
+    SCHEME_MAIN="$HYDRA_ROOT_DIR/dist/scheme/hydra-kernel/src/main/scheme"
+    for stub in decode/graph decode/compute encode/graph encode/compute; do
+        path="$SCHEME_MAIN/hydra/$stub.scm"
+        mod_name=$(echo "hydra $stub" | tr '/' ' ')
+        mkdir -p "$(dirname "$path")"
+        cat > "$path" <<EOF
+(define-library ($mod_name)
+(import (scheme base))
+(export)
+(begin))
+EOF
+    done
 fi
 
-dialect_dir() {
-    case "$1" in
-        clojure)     echo "$HYDRA_ROOT_DIR/packages/hydra-lisp/hydra-clojure" ;;
-        common-lisp) echo "$HYDRA_ROOT_DIR/packages/hydra-lisp/hydra-common-lisp" ;;
-        emacs-lisp)  echo "$HYDRA_ROOT_DIR/packages/hydra-lisp/hydra-emacs-lisp" ;;
-        scheme)      echo "$HYDRA_ROOT_DIR/packages/hydra-lisp/hydra-scheme" ;;
-    esac
-}
-
-dialect_head_dir() {
-    echo "$HYDRA_ROOT_DIR/heads/lisp/$1"
-}
+# --- testGraph patches for all four dialects (unchanged from previous version) ---
 
 # Patch Scheme test_graph.scm to build a full graph with primitives and schema types.
 # The graph must be defined AFTER test_terms and test_types (forward reference issue).
-# Copy annotation bindings alongside the generated test graph (for include)
-cp "$HYDRA_ROOT_DIR/heads/lisp/scheme/src/test/scheme/hydra/annotation_bindings.scm" \
-   "$HYDRA_ROOT_DIR/dist/scheme/hydra-kernel/src/test/scheme/hydra/test/annotation_bindings.scm" 2>/dev/null
+if [ "$scheme_selected" = true ]; then
+    # Copy annotation bindings alongside the generated test graph (for include)
+    cp "$HYDRA_ROOT_DIR/heads/lisp/scheme/src/test/scheme/hydra/annotation_bindings.scm" \
+       "$HYDRA_ROOT_DIR/dist/scheme/hydra-kernel/src/test/scheme/hydra/test/annotation_bindings.scm" 2>/dev/null || true
 
-echo "Patching Scheme test_graph.scm..."
-SCHEME_TESTGRAPH="$HYDRA_ROOT_DIR/dist/scheme/hydra-kernel/src/test/scheme/hydra/test/test_graph.scm"
-if [ -f "$SCHEME_TESTGRAPH" ]; then
-    # Add required imports for building graph with primitives
-    sed -i '' 's|(import (scheme base) (hydra core) (hydra lexical) (hydra lib maps) (hydra packaging) (hydra test test_terms) (hydra test test_types))|(import (scheme base) (hydra core) (hydra context) (hydra graph) (hydra lexical) (hydra lib libraries) (hydra lib maps) (hydra packaging) (hydra rewriting) (hydra scoping) (hydra json bootstrap) (hydra test test_terms) (hydra test test_types))|' "$SCHEME_TESTGRAPH"
-    # Delete the empty context and graph defs
-    sed -i '' '/^(define hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$SCHEME_TESTGRAPH"
-    sed -i '' '/^(define hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$SCHEME_TESTGRAPH"
-    # Remove the final )) that closes begin and define-library, then append defs + closing
-    sed -i '' '$ s/))$//' "$SCHEME_TESTGRAPH"
-    cat >> "$SCHEME_TESTGRAPH" << 'SCMEOF'
+    echo "  Patching Scheme test_graph.scm..."
+    SCHEME_TESTGRAPH="$HYDRA_ROOT_DIR/dist/scheme/hydra-kernel/src/test/scheme/hydra/test/test_graph.scm"
+    if [ -f "$SCHEME_TESTGRAPH" ]; then
+        # Add required imports for building graph with primitives
+        sed -i '' 's|(import (scheme base) (hydra core) (hydra lexical) (hydra lib maps) (hydra packaging) (hydra test test_terms) (hydra test test_types))|(import (scheme base) (hydra core) (hydra context) (hydra graph) (hydra lexical) (hydra lib libraries) (hydra lib maps) (hydra packaging) (hydra rewriting) (hydra scoping) (hydra json bootstrap) (hydra test test_terms) (hydra test test_types))|' "$SCHEME_TESTGRAPH"
+        # Delete the empty context and graph defs
+        sed -i '' '/^(define hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$SCHEME_TESTGRAPH"
+        sed -i '' '/^(define hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$SCHEME_TESTGRAPH"
+        # Remove the final )) that closes begin and define-library, then append defs + closing
+        sed -i '' '$ s/))$//' "$SCHEME_TESTGRAPH"
+        cat >> "$SCHEME_TESTGRAPH" << 'SCMEOF'
 ;; Include annotation term-level bindings (shared with test runner).
 SCMEOF
-    # Include the annotation_bindings.scm that was just copied alongside this file
-    # (see the `cp` above that places it next to test_graph.scm in the same directory).
-    echo '(include "annotation_bindings.scm")' >> "$SCHEME_TESTGRAPH"
-    cat >> "$SCHEME_TESTGRAPH" << 'SCMEOF'
+        # Include the annotation_bindings.scm that was just copied alongside this file
+        # (see the `cp` above that places it next to test_graph.scm in the same directory).
+        echo '(include "annotation_bindings.scm")' >> "$SCHEME_TESTGRAPH"
+        cat >> "$SCHEME_TESTGRAPH" << 'SCMEOF'
 
 (define hydra_test_test_graph_test_context (make-hydra_context_context (list) (list) hydra_lib_maps_empty))
 (define hydra_test_test_graph_test_graph
@@ -165,20 +207,23 @@ SCMEOF
       schema-types (list))))
 ))
 SCMEOF
+    fi
 fi
 
 # Patch Clojure testGraph.clj to build a full graph with primitives and schema types.
 # The graph must be defined AFTER test_terms and test_types (forward reference issue).
-echo "Patching Clojure testGraph.clj..."
-CLJ_TESTGRAPH="$HYDRA_ROOT_DIR/dist/clojure/hydra-kernel/src/test/clojure/hydra/test/testGraph.clj"
-if [ -f "$CLJ_TESTGRAPH" ]; then
-    # Add required imports
-    sed -i '' 's|\[hydra.lexical :refer :all\]|[hydra.lexical :refer :all] [hydra.lib.libraries :refer :all] [hydra.rewriting :refer :all] [hydra.scoping :refer :all] [hydra.json.bootstrap :refer :all] [hydra.graph :refer :all] [hydra.context :refer :all] [hydra.annotation-bindings :refer [annotation-bindings]]|' "$CLJ_TESTGRAPH"
-    # Delete the empty context and empty graph defs (they'll be re-added at the end)
-    sed -i '' '/^(def hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$CLJ_TESTGRAPH"
-    sed -i '' '/^(def hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$CLJ_TESTGRAPH"
-    # Append full graph and context defs at end of file (after test_types is defined)
-    cat >> "$CLJ_TESTGRAPH" << 'CLJEOF'
+for d in "${DIALECT_LIST[@]}"; do [ "$d" = "clojure" ] && clojure_selected=true; done
+if [ "${clojure_selected:-false}" = true ]; then
+    echo "  Patching Clojure testGraph.clj..."
+    CLJ_TESTGRAPH="$HYDRA_ROOT_DIR/dist/clojure/hydra-kernel/src/test/clojure/hydra/test/testGraph.clj"
+    if [ -f "$CLJ_TESTGRAPH" ]; then
+        # Add required imports
+        sed -i '' 's|\[hydra.lexical :refer :all\]|[hydra.lexical :refer :all] [hydra.lib.libraries :refer :all] [hydra.rewriting :refer :all] [hydra.scoping :refer :all] [hydra.json.bootstrap :refer :all] [hydra.graph :refer :all] [hydra.context :refer :all] [hydra.annotation-bindings :refer [annotation-bindings]]|' "$CLJ_TESTGRAPH"
+        # Delete the empty context and empty graph defs (they'll be re-added at the end)
+        sed -i '' '/^(def hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$CLJ_TESTGRAPH"
+        sed -i '' '/^(def hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$CLJ_TESTGRAPH"
+        # Append full graph and context defs at end of file (after test_types is defined)
+        cat >> "$CLJ_TESTGRAPH" << 'CLJEOF'
 
 (def hydra_test_test_graph_test_context {:functions () :annotations () :variable_types {}})
 
@@ -203,15 +248,18 @@ if [ -f "$CLJ_TESTGRAPH" ]; then
      :schema_types schema-types
      :type_variables #{}}))
 CLJEOF
+    fi
 fi
 
 # Patch Common Lisp test_graph.lisp — same approach as Clojure (append at end)
-echo "Patching Common Lisp test_graph.lisp..."
-CL_TESTGRAPH="$HYDRA_ROOT_DIR/dist/common-lisp/hydra-kernel/src/test/common-lisp/hydra/test/test_graph.lisp"
-if [ -f "$CL_TESTGRAPH" ]; then
-    sed -i '' '/^(cl:defvar hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$CL_TESTGRAPH"
-    sed -i '' '/^(cl:defvar hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$CL_TESTGRAPH"
-    cat >> "$CL_TESTGRAPH" << 'CLEOF'
+for d in "${DIALECT_LIST[@]}"; do [ "$d" = "common-lisp" ] && common_lisp_selected=true; done
+if [ "${common_lisp_selected:-false}" = true ]; then
+    echo "  Patching Common Lisp test_graph.lisp..."
+    CL_TESTGRAPH="$HYDRA_ROOT_DIR/dist/common-lisp/hydra-kernel/src/test/common-lisp/hydra/test/test_graph.lisp"
+    if [ -f "$CL_TESTGRAPH" ]; then
+        sed -i '' '/^(cl:defvar hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$CL_TESTGRAPH"
+        sed -i '' '/^(cl:defvar hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$CL_TESTGRAPH"
+        cat >> "$CL_TESTGRAPH" << 'CLEOF'
 
 (cl:defvar hydra_test_test_graph_test_context (make-hydra_context_context (cl:list) (cl:list) hydra_lib_maps_empty))
 
@@ -234,15 +282,18 @@ if [ -f "$CL_TESTGRAPH" ]; then
       schema-types
       hydra_lib_sets_empty)))
 CLEOF
+    fi
 fi
 
 # Patch Emacs Lisp test_graph.el — same approach (append at end)
-echo "Patching Emacs Lisp test_graph.el..."
-EL_TESTGRAPH="$HYDRA_ROOT_DIR/dist/emacs-lisp/hydra-kernel/src/test/emacs-lisp/hydra/test/test_graph.el"
-if [ -f "$EL_TESTGRAPH" ]; then
-    sed -i '' '/^(setq hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$EL_TESTGRAPH"
-    sed -i '' '/^(setq hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$EL_TESTGRAPH"
-    cat >> "$EL_TESTGRAPH" << 'ELEOF'
+for d in "${DIALECT_LIST[@]}"; do [ "$d" = "emacs-lisp" ] && emacs_lisp_selected=true; done
+if [ "${emacs_lisp_selected:-false}" = true ]; then
+    echo "  Patching Emacs Lisp test_graph.el..."
+    EL_TESTGRAPH="$HYDRA_ROOT_DIR/dist/emacs-lisp/hydra-kernel/src/test/emacs-lisp/hydra/test/test_graph.el"
+    if [ -f "$EL_TESTGRAPH" ]; then
+        sed -i '' '/^(setq hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$EL_TESTGRAPH"
+        sed -i '' '/^(setq hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$EL_TESTGRAPH"
+        cat >> "$EL_TESTGRAPH" << 'ELEOF'
 
 (setq hydra_test_test_graph_test_context (list (cons :functions nil) (cons :annotations nil) (cons :variable_types nil)))
 
@@ -257,10 +308,15 @@ if [ -f "$EL_TESTGRAPH" ]; then
          (bound-terms (hydra_lib_maps_from_list (append (hydra-annotation-bindings) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))))
     (list (cons :bound_terms bound-terms) (cons :bound_types nil) (cons :class_constraints nil) (cons :lambda_variables nil) (cons :metadata nil) (cons :primitives prim-map) (cons :schema_types schema-types) (cons :type_variables nil))))
 ELEOF
+    fi
 fi
 
+dialect_head_dir() {
+    echo "$HYDRA_ROOT_DIR/heads/lisp/$1"
+}
+
 if [ "$QUICK_MODE" = false ]; then
-    step 3 $TOTAL_STEPS "Running tests"
+    step 4 $TOTAL_STEPS "Running tests"
     echo ""
 
     for dialect in "${DIALECT_LIST[@]}"; do
@@ -269,14 +325,14 @@ if [ "$QUICK_MODE" = false ]; then
         if [ -f "$HEAD_DIR/run-tests.sh" ]; then
             cd "$HEAD_DIR"
             bash run-tests.sh
-            cd "$HYDRA_EXT_DIR"
+            cd "$HYDRA_HASKELL_DIR"
         else
             echo "    Skipped (no run-tests.sh found in $HEAD_DIR)"
         fi
         echo ""
     done
 else
-    step 3 $TOTAL_STEPS "Skipped (--quick mode)"
+    step 4 $TOTAL_STEPS "Skipped (--quick mode)"
 fi
 
 # Report new files
