@@ -1688,9 +1688,15 @@
                                                                     "type": {"variable": "hydra.core.Name"}}},
                                                                 "type": {"variable": "hydra.core.Term"}}}}}}},
                                                     "function": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.maybes.fromJust"},
-                                                        "type": {"variable": "hydra.core.Term"}}}}},
+                                                      "application": {
+                                                        "argument": {
+                                                          "inject": {
+                                                            "field": {"name": "unit", "term": {"unit": {}}},
+                                                            "typeName": "hydra.core.Term"}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                            "type": {"variable": "hydra.core.Term"}}}}}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {

@@ -128,7 +128,7 @@ satisfy pred =
                     Parsing.parseSuccessValue = c,
                     Parsing.parseSuccessRemainder = rest})) (Parsing.ParseResultFailure (Parsing.ParseError {
                     Parsing.parseErrorMessage = "character did not satisfy predicate",
-                    Parsing.parseErrorRemainder = input})))) (Lists.safeHead codes))
+                    Parsing.parseErrorRemainder = input})))) (Lists.maybeHead codes))
       in (Parsing.Parser parse)
 
 -- | Parse zero or more occurrences separated by a separator

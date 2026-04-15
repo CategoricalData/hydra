@@ -152,6 +152,8 @@ lazy val listsTake: hydra.core.Name = "hydra.lib.lists.take"
 
 lazy val listsTranspose: hydra.core.Name = "hydra.lib.lists.transpose"
 
+lazy val listsUncons: hydra.core.Name = "hydra.lib.lists.uncons"
+
 lazy val listsZip: hydra.core.Name = "hydra.lib.lists.zip"
 
 lazy val listsZipWith: hydra.core.Name = "hydra.lib.lists.zipWith"

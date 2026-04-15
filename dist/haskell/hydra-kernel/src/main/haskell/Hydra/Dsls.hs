@@ -51,28 +51,34 @@ dslBindingName :: Core.Name -> Core.Name
 dslBindingName n =
 
       let parts = Strings.splitOn "." (Core.unName n)
-      in (Logic.ifElse (Logic.not (Lists.null (Lists.tail parts))) (Logic.ifElse (Equality.equal (Lists.head parts) "hydra") (Core.Name (Strings.intercalate "." (Lists.concat2 [
-        "hydra",
-        "dsl"] (Lists.concat2 (Lists.tail (Lists.init parts)) [
-        Formatting.decapitalize (Names.localNameOf n)])))) (Core.Name (Strings.intercalate "." (Lists.concat2 [
-        "hydra",
-        "dsl"] (Lists.concat2 (Lists.init parts) [
-        Formatting.decapitalize (Names.localNameOf n)]))))) (Core.Name (Formatting.decapitalize (Names.localNameOf n))))
+          localPart = Formatting.decapitalize (Names.localNameOf n)
+          localResult = Core.Name localPart
+      in (Maybes.maybe localResult (\nsParts -> Maybes.maybe localResult (\nsHeadTail ->
+        let dslNsParts =
+                Logic.ifElse (Equality.equal (Pairs.first nsHeadTail) "hydra") (Lists.concat2 [
+                  "hydra",
+                  "dsl"] (Pairs.second nsHeadTail)) (Lists.concat2 [
+                  "hydra",
+                  "dsl"] nsParts)
+        in (Core.Name (Strings.intercalate "." (Lists.concat2 dslNsParts [
+          localPart])))) (Lists.uncons nsParts)) (Lists.maybeInit parts))
 
 -- | Generate a qualified DSL element name from a type name and local element name
 dslDefinitionName :: Core.Name -> String -> Core.Name
 dslDefinitionName typeName localName =
 
       let parts = Strings.splitOn "." (Core.unName typeName)
-          nsParts = Lists.init parts
-          dslNsParts =
-                  Logic.ifElse (Equality.equal (Lists.head nsParts) "hydra") (Lists.concat2 [
-                    "hydra",
-                    "dsl"] (Lists.tail nsParts)) (Lists.concat2 [
-                    "hydra",
-                    "dsl"] nsParts)
-      in (Core.Name (Strings.intercalate "." (Lists.concat2 dslNsParts [
-        localName])))
+      in (Maybes.maybe (Core.Name localName) (\nsParts ->
+        let dslNsParts =
+                Maybes.maybe [
+                  "hydra",
+                  "dsl"] (\nsHeadTail -> Logic.ifElse (Equality.equal (Pairs.first nsHeadTail) "hydra") (Lists.concat2 [
+                  "hydra",
+                  "dsl"] (Pairs.second nsHeadTail)) (Lists.concat2 [
+                  "hydra",
+                  "dsl"] nsParts)) (Lists.uncons nsParts)
+        in (Core.Name (Strings.intercalate "." (Lists.concat2 dslNsParts [
+          localName])))) (Lists.maybeInit parts))
 
 -- | Transform a type module into a DSL module
 dslModule :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error (Maybe Packaging.Module)
@@ -111,11 +117,13 @@ dslNamespace :: Packaging.Namespace -> Packaging.Namespace
 dslNamespace ns =
 
       let parts = Strings.splitOn "." (Packaging.unNamespace ns)
-      in (Logic.ifElse (Equality.equal (Lists.head parts) "hydra") (Packaging.Namespace (Strings.cat [
+          prefixFull =
+                  Packaging.Namespace (Strings.cat [
+                    "hydra.dsl.",
+                    (Packaging.unNamespace ns)])
+      in (Maybes.maybe prefixFull (\ht -> Logic.ifElse (Equality.equal (Pairs.first ht) "hydra") (Packaging.Namespace (Strings.cat [
         "hydra.dsl.",
-        (Strings.intercalate "." (Lists.tail parts))])) (Packaging.Namespace (Strings.cat [
-        "hydra.dsl.",
-        (Packaging.unNamespace ns)])))
+        (Strings.intercalate "." (Pairs.second ht))])) prefixFull) (Lists.uncons parts))
 
 -- | Build a TypeScheme with TTerm-wrapped parameter and result types
 dslTypeScheme :: Core.Type -> [Core.Type] -> Core.Type -> Core.TypeScheme

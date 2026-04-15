@@ -80,8 +80,10 @@ findFieldType :: t0 -> Core.Name -> [Core.FieldType] -> Either Errors.Error Core
 findFieldType cx fname fields =
 
       let matchingFields = Lists.filter (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) (Core.unName fname)) fields
-      in (Logic.ifElse (Lists.null matchingFields) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
-        Errors.noMatchingFieldErrorFieldName = fname})))) (Logic.ifElse (Equality.equal (Lists.length matchingFields) 1) (Right (Core.fieldTypeType (Lists.head matchingFields))) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorMultipleFields (Errors.MultipleFieldsError {
+          noMatch =
+                  Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
+                    Errors.noMatchingFieldErrorFieldName = fname})))
+      in (Logic.ifElse (Lists.null matchingFields) noMatch (Logic.ifElse (Equality.equal (Lists.length matchingFields) 1) (Maybes.maybe noMatch (\ft -> Right (Core.fieldTypeType ft)) (Lists.maybeHead matchingFields)) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorMultipleFields (Errors.MultipleFieldsError {
         Errors.multipleFieldsErrorFieldName = fname}))))))
 
 -- | Fully strip a type of forall quantifiers, normalizing bound variable names for alpha-equivalence comparison
@@ -179,9 +181,10 @@ requireUnionField cx graph tname fname =
 
       let withRowType =
               \rt ->
-                let matches = Lists.filter (\ft -> Equality.equal (Core.fieldTypeName ft) fname) rt
-                in (Logic.ifElse (Lists.null matches) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
-                  Errors.noMatchingFieldErrorFieldName = fname})))) (Right (Core.fieldTypeType (Lists.head matches))))
+                let noMatchErr =
+                        Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
+                          Errors.noMatchingFieldErrorFieldName = fname})))
+                in (Maybes.maybe noMatchErr (\ft -> Right (Core.fieldTypeType ft)) (Lists.find (\ft -> Equality.equal (Core.fieldTypeName ft) fname) rt))
       in (Eithers.bind (requireUnionType cx graph tname) withRowType)
 
 -- | Require a name to resolve to a union type

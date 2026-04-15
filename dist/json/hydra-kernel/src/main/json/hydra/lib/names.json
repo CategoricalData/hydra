@@ -674,6 +674,14 @@
         "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
+        "name": "hydra.lib.names.listsUncons",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.lists.uncons"}},
+            "typeName": "hydra.core.Name"}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+    {
+      "term": {
         "name": "hydra.lib.names.listsZip",
         "term": {
           "wrap": {

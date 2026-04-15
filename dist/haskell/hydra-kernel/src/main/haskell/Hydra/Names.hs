@@ -9,7 +9,6 @@ import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Formatting as Formatting
-import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -107,11 +106,16 @@ qualifyName :: Core.Name -> Packaging.QualifiedName
 qualifyName name =
 
       let parts = Lists.reverse (Strings.splitOn "." (Core.unName name))
-      in (Logic.ifElse (Equality.equal 1 (Lists.length parts)) (Packaging.QualifiedName {
+      in (Maybes.maybe (Packaging.QualifiedName {
         Packaging.qualifiedNameNamespace = Nothing,
-        Packaging.qualifiedNameLocal = (Core.unName name)}) (Packaging.QualifiedName {
-        Packaging.qualifiedNameNamespace = (Just (Packaging.Namespace (Strings.intercalate "." (Lists.reverse (Lists.tail parts))))),
-        Packaging.qualifiedNameLocal = (Lists.head parts)}))
+        Packaging.qualifiedNameLocal = (Core.unName name)}) (\uc ->
+        let localName = Pairs.first uc
+            restReversed = Pairs.second uc
+        in (Logic.ifElse (Lists.null restReversed) (Packaging.QualifiedName {
+          Packaging.qualifiedNameNamespace = Nothing,
+          Packaging.qualifiedNameLocal = (Core.unName name)}) (Packaging.QualifiedName {
+          Packaging.qualifiedNameNamespace = (Just (Packaging.Namespace (Strings.intercalate "." (Lists.reverse restReversed)))),
+          Packaging.qualifiedNameLocal = localName}))) (Lists.uncons parts))
 
 -- | Generate a unique label by appending a suffix if the label is already in use
 uniqueLabel :: S.Set String -> String -> String

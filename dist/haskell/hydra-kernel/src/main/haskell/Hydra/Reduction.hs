@@ -316,12 +316,15 @@ etaExpandTypedTerm cx tx0 term0 =
                                 _ -> dflt
                     extraVariables = \n -> Lists.map (\i -> Core.Name (Strings.cat2 "v" (Literals.showInt32 i))) (Math.range 1 n)
                     pad =
-                            \vars -> \body -> Logic.ifElse (Lists.null vars) body (Core.TermLambda (Core.Lambda {
-                              Core.lambdaParameter = (Lists.head vars),
-                              Core.lambdaDomain = Nothing,
-                              Core.lambdaBody = (pad (Lists.tail vars) (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = body,
-                                Core.applicationArgument = (Core.TermVariable (Lists.head vars))})))}))
+                            \vars -> \body -> Maybes.maybe body (\uc ->
+                              let v0 = Pairs.first uc
+                                  vrest = Pairs.second uc
+                              in (Core.TermLambda (Core.Lambda {
+                                Core.lambdaParameter = v0,
+                                Core.lambdaDomain = Nothing,
+                                Core.lambdaBody = (pad vrest (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = body,
+                                  Core.applicationArgument = (Core.TermVariable v0)})))}))) (Lists.uncons vars)
                     padn = \n -> \body -> pad (extraVariables n) body
                     unwind =
                             \term2 -> Lists.foldl (\e -> \t -> Core.TermTypeApplication (Core.TypeApplicationTerm {
@@ -442,47 +445,48 @@ reduceTerm cx graph eager term =
                     in (Logic.and eager2 isNonLambdaTerm)
           reduceArg = \eager2 -> \arg -> Logic.ifElse eager2 (Right arg) (reduce False arg)
           applyToArguments =
-                  \fun -> \args -> Logic.ifElse (Lists.null args) fun (applyToArguments (Core.TermApplication (Core.Application {
+                  \fun -> \args -> Maybes.maybe fun (\uc -> applyToArguments (Core.TermApplication (Core.Application {
                     Core.applicationFunction = fun,
-                    Core.applicationArgument = (Lists.head args)})) (Lists.tail args))
+                    Core.applicationArgument = (Pairs.first uc)})) (Pairs.second uc)) (Lists.uncons args)
           mapErrorToString = \e -> Errors.ErrorOther (Errors.OtherError (ShowErrors.error e))
           applyProjection =
                   \proj -> \reducedArg -> Eithers.bind (ExtractCore.record (Core.projectionTypeName proj) graph (Strip.deannotateTerm reducedArg)) (\fields ->
-                    let matchingFields = Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.projectionField proj)) fields
-                    in (Logic.ifElse (Lists.null matchingFields) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
-                      Errors.noMatchingFieldErrorFieldName = (Core.projectionField proj)})))) (Right (Core.fieldTerm (Lists.head matchingFields)))))
+                    let matching = Lists.find (\f -> Equality.equal (Core.fieldName f) (Core.projectionField proj)) fields
+                    in (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
+                      Errors.noMatchingFieldErrorFieldName = (Core.projectionField proj)})))) (\mf -> Right (Core.fieldTerm mf)) matching))
           applyCases =
                   \cs -> \reducedArg -> Eithers.bind (ExtractCore.injection (Core.caseStatementTypeName cs) graph reducedArg) (\field ->
-                    let matchingFields = Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.fieldName field)) (Core.caseStatementCases cs)
-                    in (Logic.ifElse (Lists.null matchingFields) (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
-                      Errors.noMatchingFieldErrorFieldName = (Core.fieldName field)})))) (\x -> Right x) (Core.caseStatementDefault cs)) (Right (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.fieldTerm (Lists.head matchingFields)),
-                      Core.applicationArgument = (Core.fieldTerm field)})))))
+                    let matching = Lists.find (\f -> Equality.equal (Core.fieldName f) (Core.fieldName field)) (Core.caseStatementCases cs)
+                    in (Maybes.maybe (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
+                      Errors.noMatchingFieldErrorFieldName = (Core.fieldName field)})))) (\x -> Right x) (Core.caseStatementDefault cs)) (\mf -> Right (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.fieldTerm mf),
+                      Core.applicationArgument = (Core.fieldTerm field)}))) matching))
           applyIfNullary =
                   \eager2 -> \original -> \args ->
                     let stripped = Strip.deannotateTerm original
                         forProjection =
-                                \proj -> \args2 ->
-                                  let arg = Lists.head args2
-                                      remainingArgs = Lists.tail args2
-                                  in (Eithers.bind (reduceArg eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (applyProjection proj reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))
+                                \proj -> \args2 -> Maybes.maybe (Right original) (\uc ->
+                                  let arg = Pairs.first uc
+                                      remainingArgs = Pairs.second uc
+                                  in (Eithers.bind (reduceArg eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (applyProjection proj reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))) (Lists.uncons args2)
                         forCases =
-                                \cs -> \args2 ->
-                                  let arg = Lists.head args2
-                                      remainingArgs = Lists.tail args2
-                                  in (Eithers.bind (reduceArg eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (applyCases cs reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))
+                                \cs -> \args2 -> Maybes.maybe (Right original) (\uc ->
+                                  let arg = Pairs.first uc
+                                      remainingArgs = Pairs.second uc
+                                  in (Eithers.bind (reduceArg eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (applyCases cs reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))) (Lists.uncons args2)
                         forUnwrap =
-                                \name -> \args2 ->
-                                  let arg = Lists.head args2
-                                      remainingArgs = Lists.tail args2
-                                  in (Eithers.bind (reduceArg eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (ExtractCore.wrap name graph reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))
+                                \name -> \args2 -> Maybes.maybe (Right original) (\uc ->
+                                  let arg = Pairs.first uc
+                                      remainingArgs = Pairs.second uc
+                                  in (Eithers.bind (reduceArg eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (ExtractCore.wrap name graph reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))) (Lists.uncons args2)
                         forLambda =
                                 \l -> \args2 ->
                                   let param = Core.lambdaParameter l
                                       body = Core.lambdaBody l
-                                      arg = Lists.head args2
-                                      remainingArgs = Lists.tail args2
-                                  in (Eithers.bind (reduce eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (reduce eager2 (Variables.replaceFreeTermVariable param reducedArg body)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))
+                                  in (Maybes.maybe (Right original) (\uc ->
+                                    let arg = Pairs.first uc
+                                        remainingArgs = Pairs.second uc
+                                    in (Eithers.bind (reduce eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (reduce eager2 (Variables.replaceFreeTermVariable param reducedArg body)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))) (Lists.uncons args2))
                         forPrimitive =
                                 \prim -> \arity -> \args2 ->
                                   let argList = Lists.take arity args2
