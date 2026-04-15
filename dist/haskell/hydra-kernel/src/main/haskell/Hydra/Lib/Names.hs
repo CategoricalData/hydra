@@ -230,6 +230,9 @@ listsTake = Core.Name "hydra.lib.lists.take"
 listsTranspose :: Core.Name
 listsTranspose = Core.Name "hydra.lib.lists.transpose"
 
+listsUncons :: Core.Name
+listsUncons = Core.Name "hydra.lib.lists.uncons"
+
 listsZip :: Core.Name
 listsZip = Core.Name "hydra.lib.lists.zip"
 

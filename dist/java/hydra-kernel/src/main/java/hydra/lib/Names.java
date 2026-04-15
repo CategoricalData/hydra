@@ -302,6 +302,10 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.lists.transpose");
   }
 
+  static hydra.core.Name listsUncons() {
+    return new hydra.core.Name("hydra.lib.lists.uncons");
+  }
+
   static hydra.core.Name listsZip() {
     return new hydra.core.Name("hydra.lib.lists.zip");
   }

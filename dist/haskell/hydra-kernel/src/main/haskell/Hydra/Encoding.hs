@@ -18,6 +18,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Names as Names
@@ -36,10 +37,16 @@ encodeBinding cx graph b =
 -- | Generate a binding name for an encoder function from a type name
 encodeBindingName :: Core.Name -> Core.Name
 encodeBindingName n =
-    Logic.ifElse (Logic.not (Lists.null (Lists.tail (Strings.splitOn "." (Core.unName n))))) (Core.Name (Strings.intercalate "." (Lists.concat2 [
-      "hydra",
-      "encode"] (Lists.concat2 (Lists.tail (Lists.init (Strings.splitOn "." (Core.unName n)))) [
-      Formatting.decapitalize (Names.localNameOf n)])))) (Core.Name (Formatting.decapitalize (Names.localNameOf n)))
+
+      let parts = Strings.splitOn "." (Core.unName n)
+          localPart = Formatting.decapitalize (Names.localNameOf n)
+          localResult = Core.Name localPart
+      in (Maybes.maybe localResult (\nsParts -> Maybes.maybe localResult (\nsUc ->
+        let tail = Pairs.second nsUc
+        in (Core.Name (Strings.intercalate "." (Lists.concat2 [
+          "hydra",
+          "encode"] (Lists.concat2 tail [
+          localPart]))))) (Lists.uncons nsParts)) (Lists.maybeInit parts))
 
 -- | Generate an encoder for an Either type
 encodeEitherType :: Core.EitherType -> Core.Term
@@ -276,9 +283,12 @@ encodeName n =
 -- | Generate an encoder module namespace from a source module namespace
 encodeNamespace :: Packaging.Namespace -> Packaging.Namespace
 encodeNamespace ns =
-    Packaging.Namespace (Strings.cat [
-      "hydra.encode.",
-      (Strings.intercalate "." (Lists.tail (Strings.splitOn "." (Packaging.unNamespace ns))))])
+
+      let parts = Strings.splitOn "." (Packaging.unNamespace ns)
+          fallback = Packaging.Namespace (Packaging.unNamespace ns)
+      in (Maybes.maybe fallback (\uc -> Packaging.Namespace (Strings.cat [
+        "hydra.encode.",
+        (Strings.intercalate "." (Pairs.second uc))])) (Lists.uncons parts))
 
 -- | Generate an encoder for a Maybe type
 encodeOptionalType :: Core.Type -> Core.Term

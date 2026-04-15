@@ -380,7 +380,7 @@ hoistSubterms shouldHoist cx0 term0 =
                         bodyPathPrefix = Lists.concat2 path [
                               Paths.SubtermStepLetBody]
                         firstBindingName =
-                                Maybes.maybe "body" (\b -> Strings.intercalate "_" (Strings.splitOn "." (Core.unName (Core.bindingName b)))) (Lists.safeHead bindings)
+                                Maybes.maybe "body" (\b -> Strings.intercalate "_" (Strings.splitOn "." (Core.unName (Core.bindingName b)))) (Lists.maybeHead bindings)
                         bodyPrefix = Strings.cat2 firstBindingName "_body"
                         bodyResult = processImmediateSubterm cx 1 bodyPrefix bodyPathPrefix body
                         newBody = Pairs.second bodyResult
@@ -430,11 +430,13 @@ normalizePathForHoisting :: [Paths.SubtermStep] -> [Paths.SubtermStep]
 normalizePathForHoisting path =
 
       let go =
-              \remaining -> Logic.ifElse (Logic.or (Lists.null remaining) (Lists.null (Lists.tail remaining))) remaining (
-                let first = Lists.head remaining
-                    second = Lists.head (Lists.tail remaining)
-                    rest = Lists.tail (Lists.tail remaining)
-                in (Logic.ifElse (Logic.and (isApplicationFunction first) (isLambdaBody second)) (Lists.cons Paths.SubtermStepLetBody (go rest)) (Lists.cons first (go (Lists.tail remaining)))))
+              \remaining -> Maybes.maybe remaining (\uc1 ->
+                let first = Pairs.first uc1
+                    afterFirst = Pairs.second uc1
+                in (Maybes.maybe remaining (\uc2 ->
+                  let second = Pairs.first uc2
+                      rest = Pairs.second uc2
+                  in (Logic.ifElse (Logic.and (isApplicationFunction first) (isLambdaBody second)) (Lists.cons Paths.SubtermStepLetBody (go rest)) (Lists.cons first (go afterFirst)))) (Lists.uncons afterFirst))) (Lists.uncons remaining)
       in (go path)
 
 -- | Predicate that always returns True, for hoisting all bindings unconditionally.

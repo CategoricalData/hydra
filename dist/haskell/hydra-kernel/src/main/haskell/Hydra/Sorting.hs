@@ -27,8 +27,8 @@ adjacencyListToMap pairs =
           existing = Maybes.maybe [] Equality.identity (Maps.lookup k mp)
       in (Maps.insert k (Lists.concat2 existing vs) mp)) Maps.empty pairs
 
--- | Given a list of adjacency lists represented as (key, [key]) pairs, construct a graph along with a function mapping each vertex (an Int) back to its original key.
-adjacencyListsToGraph :: Ord t0 => ([(t0, [t0])] -> (M.Map Int [Int], (Int -> t0)))
+-- | Given a list of adjacency lists represented as (key, [key]) pairs, construct a graph along with a function mapping each vertex (an Int) back to its original key (Nothing for unknown vertices).
+adjacencyListsToGraph :: Ord t0 => ([(t0, [t0])] -> (M.Map Int [Int], (Int -> Maybe t0)))
 adjacencyListsToGraph edges0 =
 
       let sortedEdges = Lists.sortOn Pairs.first edges0
@@ -51,7 +51,7 @@ adjacencyListsToGraph edges0 =
                         kNeighbors = Pairs.second vkNeighbors
                         neighbors = Pairs.second kNeighbors
                     in (v, (Maybes.mapMaybe (\k -> Maps.lookup k keyToVertex) neighbors))) indexedEdges)
-          vertexToKey = \v -> Maybes.fromJust (Maps.lookup v vertexMap)
+          vertexToKey = \v -> Maps.lookup v vertexMap
       in (graph, vertexToKey)
 
 createOrderingIsomorphism :: Ord t0 => ([t0] -> [t0] -> Topology.OrderingIsomorphism t1)
@@ -95,9 +95,9 @@ popStackUntil :: Int -> Topology.TarjanState -> ([Int], Topology.TarjanState)
 popStackUntil v st0 =
 
       let go =
-              \acc -> \st ->
-                let x = Lists.head (Topology.tarjanStateStack st)
-                    xs = Lists.tail (Topology.tarjanStateStack st)
+              \acc -> \st -> Maybes.maybe (Lists.reverse acc, st) (\uc ->
+                let x = Pairs.first uc
+                    xs = Pairs.second uc
                     newSt =
                             Topology.TarjanState {
                               Topology.tarjanStateCounter = (Topology.tarjanStateCounter st),
@@ -115,7 +115,7 @@ popStackUntil v st0 =
                               Topology.tarjanStateOnStack = (Sets.delete x (Topology.tarjanStateOnStack st)),
                               Topology.tarjanStateSccs = (Topology.tarjanStateSccs newSt)}
                     acc_ = Lists.cons x acc
-                in (Logic.ifElse (Equality.equal x v) (Lists.reverse acc_, newSt2) (go acc_ newSt2))
+                in (Logic.ifElse (Equality.equal x v) (Lists.reverse acc_, newSt2) (go acc_ newSt2))) (Lists.uncons (Topology.tarjanStateStack st))
       in (go [] st0)
 
 -- | Given a graph as an adjacency list of edges and a list of explicit tags per node, compute the full set of tags for each node by propagating tags through edges. If there is an edge from n1 to n2 and n2 has tag t, then n1 also has tag t. Note: pairs in the output are not ordered.
@@ -198,7 +198,7 @@ topologicalSort :: Ord t0 => ([(t0, [t0])] -> Either [[t0]] [t0])
 topologicalSort pairs =
 
       let sccs = topologicalSortComponents pairs
-          isCycle = \scc -> Logic.not (Lists.null (Lists.tail scc))
+          isCycle = \scc -> Equality.gt (Lists.length scc) 1
           withCycles = Lists.filter isCycle sccs
       in (Logic.ifElse (Lists.null withCycles) (Right (Lists.concat sccs)) (Left withCycles))
 
@@ -208,7 +208,7 @@ topologicalSortComponents pairs =
 
       let graphResult = adjacencyListsToGraph pairs
           g = Pairs.first graphResult
-      in (Lists.map (\comp -> Lists.map (Pairs.second graphResult) comp) (stronglyConnectedComponents g))
+      in (Lists.map (\comp -> Maybes.mapMaybe (Pairs.second graphResult) comp) (stronglyConnectedComponents g))
 
 -- | Sort a directed acyclic graph (DAG) of nodes using two helper functions: one for node keys, and one for the adjacency list of connected node keys. The result is a list of strongly-connected components (cycles), in which singleton lists represent acyclic nodes.
 topologicalSortNodes :: Ord t1 => ((t0 -> t1) -> (t0 -> [t1]) -> [t0] -> [[t0]])

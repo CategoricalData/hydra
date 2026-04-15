@@ -4869,6 +4869,140 @@
           "variables": ["t0"]}}},
     {
       "term": {
+        "name": "hydra.eval.lib.lists.uncons",
+        "term": {
+          "typeLambda": {
+            "body": {
+              "annotated": {
+                "annotation": [
+                  {
+                    "@key": "description",
+                    "@value": {"literal": {"string": "Interpreter-friendly uncons for List terms."}}}],
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "lambda": {
+                        "body": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {
+                                  "lambda": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "either": {
+                                                "@right": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "inject": {
+                                                        "field": {
+                                                          "name": "maybe",
+                                                          "term": {
+                                                            "maybe": {
+                                                              "inject": {
+                                                                "field": {
+                                                                  "name": "pair",
+                                                                  "term": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "pair": {
+                                                                              "@first": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "elements"},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"variable": "hydra.lib.lists.head"},
+                                                                                      "type": {"variable": "hydra.core.Term"}}}}},
+                                                                              "@second": {
+                                                                                "inject": {
+                                                                                  "field": {
+                                                                                    "name": "list",
+                                                                                    "term": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "elements"},
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"variable": "hydra.lib.lists.tail"},
+                                                                                            "type": {"variable": "hydra.core.Term"}}}}}},
+                                                                                  "typeName": "hydra.core.Term"}}}},
+                                                                          "type": {"variable": "hydra.core.Term"}}},
+                                                                      "type": {"variable": "hydra.core.Term"}}}},
+                                                                "typeName": "hydra.core.Term"}}}},
+                                                        "typeName": "hydra.core.Term"}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "inject": {
+                                                            "field": {
+                                                              "name": "maybe",
+                                                              "term": {
+                                                                "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}}},
+                                                            "typeName": "hydra.core.Term"}},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "elements"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.lists.null"},
+                                                                    "type": {"variable": "hydra.core.Term"}}}}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                "type": {"variable": "hydra.core.Term"}}}}}}}}}}},
+                                            "type": {"variable": "hydra.errors.Error"}}},
+                                        "type": {"variable": "hydra.core.Term"}}},
+                                    "domain": {"list": {"variable": "hydra.core.Term"}},
+                                    "parameter": "elements"}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "listTerm"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "g"},
+                                            "function": {"variable": "hydra.extract.core.list"}}}}},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.eithers.bind"},
+                                                "type": {"variable": "hydra.errors.Error"}}},
+                                            "type": {"list": {"variable": "hydra.core.Term"}}}},
+                                        "type": {"variable": "hydra.core.Term"}}}}}}},
+                            "domain": {"variable": "hydra.core.Term"},
+                            "parameter": "listTerm"}},
+                        "domain": {"variable": "hydra.graph.Graph"},
+                        "parameter": "g"}},
+                    "domain": {"variable": "t0"},
+                    "parameter": "cx"}}}},
+            "parameter": "t0"}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "either": {
+                          "left": {"variable": "hydra.errors.Error"},
+                          "right": {"variable": "hydra.core.Term"}}},
+                      "domain": {"variable": "hydra.core.Term"}}},
+                  "domain": {"variable": "hydra.graph.Graph"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0"]}}},
+    {
+      "term": {
         "name": "hydra.eval.lib.lists.zipWith",
         "term": {
           "typeLambda": {

@@ -237,6 +237,17 @@ public interface Lists {
       }));
   }
 
+  static <T0> hydra.util.Either<hydra.errors.Error_, hydra.core.Term> uncons(T0 cx, hydra.graph.Graph g, hydra.core.Term listTerm) {
+    return hydra.lib.eithers.Bind.apply(
+      hydra.extract.Core.list(
+        g,
+        listTerm),
+      (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, hydra.core.Term>>) (elements -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Term>right(hydra.lib.logic.IfElse.lazy(
+        hydra.lib.lists.Null.apply(elements),
+        () -> new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())),
+        () -> new hydra.core.Term.Maybe(hydra.util.Maybe.just(new hydra.core.Term.Pair((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(hydra.lib.lists.Head.apply(elements), new hydra.core.Term.List(hydra.lib.lists.Tail.apply(elements))))))))))));
+  }
+
   static <T0> hydra.util.Either<hydra.errors.Error_, hydra.core.Term> zipWith(T0 cx, hydra.graph.Graph g, hydra.core.Term funTerm, hydra.core.Term listTerm1, hydra.core.Term listTerm2) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.Core.list(

@@ -5628,21 +5628,39 @@
                                       "application": {
                                         "argument": {
                                           "application": {
-                                            "argument": {"literal": {"integer": {"int32": 16}}},
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"literal": {"integer": {"int32": 16}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "b"},
+                                                    "function": {"variable": "hydra.lib.math.maybeDiv"}}}}},
                                             "function": {
                                               "application": {
-                                                "argument": {"variable": "b"},
-                                                "function": {"variable": "hydra.lib.math.div"}}}}},
+                                                "argument": {"literal": {"integer": {"int32": 0}}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                         "function": {"variable": "hexDigit"}}},
                                     {
                                       "application": {
                                         "argument": {
                                           "application": {
-                                            "argument": {"literal": {"integer": {"int32": 16}}},
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"literal": {"integer": {"int32": 16}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "b"},
+                                                    "function": {"variable": "hydra.lib.math.maybeMod"}}}}},
                                             "function": {
                                               "application": {
-                                                "argument": {"variable": "b"},
-                                                "function": {"variable": "hydra.lib.math.mod"}}}}},
+                                                "argument": {"literal": {"integer": {"int32": 0}}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                         "function": {"variable": "hexDigit"}}}]},
                                 "domain": {"literal": {"integer": {"int32": {}}}},
                                 "parameter": "b"}},
@@ -5666,40 +5684,201 @@
                                             "body": {
                                               "application": {
                                                 "argument": {
-                                                  "let": {
-                                                    "bindings": [
-                                                      {
-                                                        "name": "b",
-                                                        "term": {
-                                                          "application": {
-                                                            "argument": {"variable": "bytes"},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.lists.head"},
-                                                                "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                        "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
-                                                    "body": {
-                                                      "let": {
-                                                        "bindings": [
-                                                          {
-                                                            "name": "bs",
-                                                            "term": {
-                                                              "application": {
-                                                                "argument": {"variable": "bytes"},
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {"variable": "hydra.lib.lists.tail"},
-                                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                            "type": {
-                                                              "type": {"list": {"literal": {"integer": {"int32": {}}}}},
-                                                              "variables": []}}],
+                                                  "application": {
+                                                    "argument": {"variable": "bytes"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.lists.uncons"},
+                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "lambda": {
                                                         "body": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {
+                                                          "let": {
+                                                            "bindings": [
+                                                              {
+                                                                "name": "b",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "uc"},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {"variable": "hydra.lib.pairs.first"},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                        "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}},
+                                                                "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                                                            "body": {
+                                                              "let": {
+                                                                "bindings": [
+                                                                  {
+                                                                    "name": "bs",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "uc"},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"variable": "hydra.lib.pairs.second"},
+                                                                                "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                            "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}},
+                                                                    "type": {
+                                                                      "type": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                                                      "variables": []}}],
+                                                                "body": {
                                                                   "application": {
                                                                     "argument": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "bs"},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {"literal": {"boolean": false}},
+                                                                                            "function": {
+                                                                                              "application": {"argument": {"variable": "inStr"}, "function": {"variable": "go"}}}}}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "b"},
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"variable": "hydra.lib.lists.cons"},
+                                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "bs"},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {"literal": {"boolean": false}},
+                                                                                                "function": {
+                                                                                                  "application": {"argument": {"variable": "inStr"}, "function": {"variable": "go"}}}}}}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "b"},
+                                                                                                "function": {"variable": "escapeToUnicode"}}},
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"variable": "hydra.lib.lists.concat2"},
+                                                                                                "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {"literal": {"integer": {"int32": 32}}},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "b"},
+                                                                                                    "function": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"variable": "hydra.lib.equality.lt"},
+                                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "inStr"},
+                                                                                                "function": {"variable": "hydra.lib.logic.and"}}}}},
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                            "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}}}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "bs"},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {"literal": {"boolean": false}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "inStr"},
+                                                                                                    "function": {"variable": "hydra.lib.logic.not"}}},
+                                                                                                "function": {"variable": "go"}}}}}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "b"},
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"variable": "hydra.lib.lists.cons"},
+                                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {"literal": {"integer": {"int32": 34}}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "b"},
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"variable": "hydra.lib.equality.equal"},
+                                                                                                "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                        "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}}}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "bs"},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {"literal": {"boolean": true}},
+                                                                                        "function": {
+                                                                                          "application": {"argument": {"variable": "inStr"}, "function": {"variable": "go"}}}}}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "b"},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"variable": "hydra.lib.lists.cons"},
+                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "inStr"},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"literal": {"integer": {"int32": 92}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "b"},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"variable": "hydra.lib.equality.equal"},
+                                                                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                        "function": {"variable": "hydra.lib.logic.and"}}}}},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                    "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}}}}},
+                                                                    "function": {
                                                                       "application": {
                                                                         "argument": {
                                                                           "application": {
@@ -5720,174 +5899,32 @@
                                                                                     "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                                         "function": {
                                                                           "application": {
-                                                                            "argument": {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "bs"},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {"literal": {"boolean": false}},
-                                                                                        "function": {
-                                                                                          "application": {"argument": {"variable": "inStr"}, "function": {"variable": "go"}}}}}}},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "b"},
-                                                                                        "function": {"variable": "escapeToUnicode"}}},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"variable": "hydra.lib.lists.concat2"},
-                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "argument": {"literal": {"integer": {"int32": 32}}},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "b"},
-                                                                                            "function": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {"variable": "hydra.lib.equality.lt"},
-                                                                                                "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "inStr"},
-                                                                                        "function": {"variable": "hydra.lib.logic.and"}}}}},
-                                                                                "function": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                                    "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}}}}},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "bs"},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {"literal": {"boolean": false}},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "inStr"},
-                                                                                            "function": {"variable": "hydra.lib.logic.not"}}},
-                                                                                        "function": {"variable": "go"}}}}}}},
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "b"},
-                                                                                "function": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {"variable": "hydra.lib.lists.cons"},
-                                                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {
-                                                                              "application": {
-                                                                                "argument": {"literal": {"integer": {"int32": 34}}},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "b"},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"variable": "hydra.lib.equality.equal"},
-                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                            "argument": {"variable": "esc"},
                                                                             "function": {
                                                                               "typeApplication": {
                                                                                 "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}}}}},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "bs"},
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "argument": {"literal": {"boolean": true}},
-                                                                                "function": {
-                                                                                  "application": {"argument": {"variable": "inStr"}, "function": {"variable": "go"}}}}}}},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "b"},
-                                                                            "function": {
-                                                                              "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.lists.cons"},
-                                                                                "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "inStr"},
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "argument": {"literal": {"integer": {"int32": 92}}},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "b"},
-                                                                                        "function": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"variable": "hydra.lib.equality.equal"},
-                                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                                                "function": {"variable": "hydra.lib.logic.and"}}}}},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                            "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}}}}},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "bs"},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {"literal": {"boolean": false}},
-                                                                            "function": {
-                                                                              "application": {"argument": {"variable": "inStr"}, "function": {"variable": "go"}}}}}}},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "b"},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {"variable": "hydra.lib.lists.cons"},
-                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "esc"},
-                                                                    "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                        "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}}}}},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "typeApplication": {
-                                                        "body": {"list": []},
-                                                        "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}}}}},
+                                                        "domain": {
+                                                          "pair": {
+                                                            "first": {"literal": {"integer": {"int32": {}}}},
+                                                            "second": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                        "parameter": "uc"}},
                                                     "function": {
                                                       "application": {
                                                         "argument": {
-                                                          "application": {
-                                                            "argument": {"variable": "bytes"},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.lists.null"},
-                                                                "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                          "typeApplication": {
+                                                            "body": {"list": []},
+                                                            "type": {"literal": {"integer": {"int32": {}}}}}},
                                                         "function": {
                                                           "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                            "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}}}}},
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.lib.maybes.maybe"},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            "type": {
+                                                              "pair": {
+                                                                "first": {"literal": {"integer": {"int32": {}}}},
+                                                                "second": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}}},
                                             "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
                                             "parameter": "bytes"}},
                                         "domain": {"literal": {"boolean": {}}},

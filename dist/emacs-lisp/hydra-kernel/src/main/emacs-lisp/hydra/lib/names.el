@@ -152,6 +152,8 @@
 
 (defvar hydra_lib_names_lists_transpose "hydra.lib.lists.transpose")
 
+(defvar hydra_lib_names_lists_uncons "hydra.lib.lists.uncons")
+
 (defvar hydra_lib_names_lists_zip "hydra.lib.lists.zip")
 
 (defvar hydra_lib_names_lists_zip_with "hydra.lib.lists.zipWith")

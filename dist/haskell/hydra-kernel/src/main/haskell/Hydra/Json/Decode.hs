@@ -159,7 +159,8 @@ fromJson types tname typ value =
                         Core.TypeMaybe _ -> True
                         _ -> False
           in (Logic.ifElse isNestedMaybe (
-            let decodeJust = \arr -> Eithers.map (\v -> Core.TermMaybe (Just v)) (fromJson types tname v0 (Lists.head arr))
+            let decodeJust =
+                    \arr -> Maybes.maybe (Left "expected single-element array for Just") (\firstVal -> Eithers.map (\v -> Core.TermMaybe (Just v)) (fromJson types tname v0 firstVal)) (Lists.maybeHead arr)
                 decodeMaybeArray =
                         \arr ->
                           let len = Lists.length arr
@@ -198,13 +199,12 @@ fromJson types tname typ value =
                       Core.injectionField = Core.Field {
                         Core.fieldName = (Core.Name key),
                         Core.fieldTerm = v}})) decoded)
-              tryField =
-                      \key -> \val -> \ft -> Logic.ifElse (Equality.equal (Core.unName (Core.fieldTypeName ft)) key) (Just (decodeVariant key val (Core.fieldTypeType ft))) Nothing
               findAndDecode =
-                      \key -> \val -> \fts -> Logic.ifElse (Lists.null fts) (Left (Strings.cat [
+                      \key -> \val -> \fts -> Maybes.maybe (Left (Strings.cat [
                         "unknown variant: ",
-                        key])) (Maybes.maybe (findAndDecode key val (Lists.tail fts)) (\r -> r) (tryField key val (Lists.head fts)))
-              decodeSingleKey = \obj -> findAndDecode (Lists.head (Maps.keys obj)) (Maps.lookup (Lists.head (Maps.keys obj)) obj) v0
+                        key])) (\ft -> decodeVariant key val (Core.fieldTypeType ft)) (Lists.find (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) key) fts)
+              decodeSingleKey =
+                      \obj -> Maybes.maybe (Left "expected single-key object for union") (\k -> findAndDecode k (Maps.lookup k obj) v0) (Lists.maybeHead (Maps.keys obj))
               processUnion =
                       \obj -> Logic.ifElse (Equality.equal (Lists.length (Maps.keys obj)) 1) (decodeSingleKey obj) (Left "expected single-key object for union")
               objResult = expectObject value

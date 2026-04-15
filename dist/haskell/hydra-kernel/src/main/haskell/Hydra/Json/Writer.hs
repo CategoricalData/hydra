@@ -12,6 +12,7 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Serialization as Serialization
@@ -32,11 +33,13 @@ colonOp =
 jsonString :: String -> String
 jsonString s =
 
-      let hexEscape =
-              \c ->
-                let hi = Strings.fromList (Lists.pure (Strings.charAt (Math.div c 16) "0123456789abcdef"))
-                    lo = Strings.fromList (Lists.pure (Strings.charAt (Math.mod c 16) "0123456789abcdef"))
-                in (Strings.cat2 (Strings.cat2 "\\u00" hi) lo)
+      let hexChar =
+              \i -> Maybes.fromMaybe "?" (Maybes.map (\ch -> Strings.fromList (Lists.pure ch)) (Strings.maybeCharAt i "0123456789abcdef"))
+          hexEscape =
+                  \c ->
+                    let hi = Maybes.fromMaybe "?" (Maybes.map hexChar (Math.maybeDiv c 16))
+                        lo = Maybes.fromMaybe "?" (Maybes.map hexChar (Math.maybeMod c 16))
+                    in (Strings.cat2 (Strings.cat2 "\\u00" hi) lo)
           escape =
                   \c -> Logic.ifElse (Equality.equal c 34) "\\\"" (Logic.ifElse (Equality.equal c 92) "\\\\" (Logic.ifElse (Equality.equal c 8) "\\b" (Logic.ifElse (Equality.equal c 12) "\\f" (Logic.ifElse (Equality.equal c 10) "\\n" (Logic.ifElse (Equality.equal c 13) "\\r" (Logic.ifElse (Equality.equal c 9) "\\t" (Logic.ifElse (Equality.lt c 32) (hexEscape c) (Strings.fromList (Lists.pure c)))))))))
           escaped = Strings.cat (Lists.map escape (Strings.toList s))

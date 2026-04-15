@@ -19,6 +19,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Names as Names
@@ -90,10 +91,16 @@ decodeBinding cx graph b =
 -- | Generate a binding name for a decoder function from a type name
 decodeBindingName :: Core.Name -> Core.Name
 decodeBindingName n =
-    Logic.ifElse (Logic.not (Lists.null (Lists.tail (Strings.splitOn "." (Core.unName n))))) (Core.Name (Strings.intercalate "." (Lists.concat2 [
-      "hydra",
-      "decode"] (Lists.concat2 (Lists.tail (Lists.init (Strings.splitOn "." (Core.unName n)))) [
-      Formatting.decapitalize (Names.localNameOf n)])))) (Core.Name (Formatting.decapitalize (Names.localNameOf n)))
+
+      let parts = Strings.splitOn "." (Core.unName n)
+          localPart = Formatting.decapitalize (Names.localNameOf n)
+          localResult = Core.Name localPart
+      in (Maybes.maybe localResult (\nsParts -> Maybes.maybe localResult (\nsUc ->
+        let tail = Pairs.second nsUc
+        in (Core.Name (Strings.intercalate "." (Lists.concat2 [
+          "hydra",
+          "decode"] (Lists.concat2 tail [
+          localPart]))))) (Lists.uncons nsParts)) (Lists.maybeInit parts))
 
 -- | Generate a decoder for an Either type
 decodeEitherType :: Core.EitherType -> Core.Term
@@ -1097,9 +1104,12 @@ decodeModule cx graph mod =
 -- | Generate a decoder module namespace from a source module namespace
 decodeNamespace :: Packaging.Namespace -> Packaging.Namespace
 decodeNamespace ns =
-    Packaging.Namespace (Strings.cat [
-      "hydra.decode.",
-      (Strings.intercalate "." (Lists.tail (Strings.splitOn "." (Packaging.unNamespace ns))))])
+
+      let parts = Strings.splitOn "." (Packaging.unNamespace ns)
+          fallback = Packaging.Namespace (Packaging.unNamespace ns)
+      in (Maybes.maybe fallback (\uc -> Packaging.Namespace (Strings.cat [
+        "hydra.decode.",
+        (Strings.intercalate "." (Pairs.second uc))])) (Lists.uncons parts))
 
 -- | Generate a decoder for a pair type
 decodePairType :: Core.PairType -> Core.Term

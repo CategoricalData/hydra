@@ -86,10 +86,10 @@ caseField name n graph term =
       let fieldName = Core.Name n
       in (Eithers.bind (cases name graph term) (\cs ->
         let matching =
-                Lists.filter (\f -> Equality.equal (Core.unName (Core.fieldName f)) (Core.unName fieldName)) (Core.caseStatementCases cs)
-        in (Logic.ifElse (Lists.null matching) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+                Lists.find (\f -> Equality.equal (Core.unName (Core.fieldName f)) (Core.unName fieldName)) (Core.caseStatementCases cs)
+        in (Maybes.maybe (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "matching case",
-          Errors.unexpectedShapeErrorActual = "no matching case"})))) (Right (Lists.head matching)))))
+          Errors.unexpectedShapeErrorActual = "no matching case"})))) (\mf -> Right mf) matching)))
 
 -- | Extract case statement from a term
 cases :: Core.Name -> Graph.Graph -> Core.Term -> Either Errors.Error Core.CaseStatement
@@ -183,9 +183,11 @@ field :: Core.Name -> (Core.Term -> Either Errors.Error t0) -> Graph.Graph -> [C
 field fname mapping graph fields =
 
       let matchingFields = Lists.filter (\f -> Equality.equal (Core.unName (Core.fieldName f)) (Core.unName fname)) fields
-      in (Logic.ifElse (Lists.null matchingFields) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-        Errors.unexpectedShapeErrorExpected = (Strings.cat2 "field " (Core.unName fname)),
-        Errors.unexpectedShapeErrorActual = "no matching field"})))) (Logic.ifElse (Equality.equal (Lists.length matchingFields) 1) (Eithers.bind (Lexical.stripAndDereferenceTerm graph (Core.fieldTerm (Lists.head matchingFields))) (\stripped -> mapping stripped)) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+          noMatchErr =
+                  Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+                    Errors.unexpectedShapeErrorExpected = (Strings.cat2 "field " (Core.unName fname)),
+                    Errors.unexpectedShapeErrorActual = "no matching field"})))
+      in (Logic.ifElse (Lists.null matchingFields) noMatchErr (Logic.ifElse (Equality.equal (Lists.length matchingFields) 1) (Maybes.maybe noMatchErr (\mf -> Eithers.bind (Lexical.stripAndDereferenceTerm graph (Core.fieldTerm mf)) (\stripped -> mapping stripped)) (Lists.maybeHead matchingFields)) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "single field",
         Errors.unexpectedShapeErrorActual = (Strings.cat2 "multiple fields named " (Core.unName fname))}))))))
 
@@ -345,8 +347,10 @@ letBinding n graph term =
       in (Eithers.bind (let_ graph term) (\letExpr ->
         let matchingBindings =
                 Lists.filter (\b -> Equality.equal (Core.unName (Core.bindingName b)) (Core.unName name)) (Core.letBindings letExpr)
-        in (Logic.ifElse (Lists.null matchingBindings) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorNoSuchBinding (Errors.NoSuchBindingError {
-          Errors.noSuchBindingErrorName = name})))) (Logic.ifElse (Equality.equal (Lists.length matchingBindings) 1) (Right (Core.bindingTerm (Lists.head matchingBindings))) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorMultipleBindings (Errors.MultipleBindingsError {
+            noBindingErr =
+                    Left (Errors.ErrorExtraction (Errors.ExtractionErrorNoSuchBinding (Errors.NoSuchBindingError {
+                      Errors.noSuchBindingErrorName = name})))
+        in (Logic.ifElse (Lists.null matchingBindings) noBindingErr (Logic.ifElse (Equality.equal (Lists.length matchingBindings) 1) (Maybes.maybe noBindingErr (\b -> Right (Core.bindingTerm b)) (Lists.maybeHead matchingBindings)) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorMultipleBindings (Errors.MultipleBindingsError {
           Errors.multipleBindingsErrorName = name}))))))))
 
 -- | Extract a list of terms from a term
@@ -361,9 +365,9 @@ list graph term =
 -- | Extract the first element of a list term
 listHead :: Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 listHead graph term =
-    Eithers.bind (list graph term) (\l -> Logic.ifElse (Lists.null l) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+    Eithers.bind (list graph term) (\l -> Maybes.maybe (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
       Errors.unexpectedShapeErrorExpected = "non-empty list",
-      Errors.unexpectedShapeErrorActual = "empty list"})))) (Right (Lists.head l)))
+      Errors.unexpectedShapeErrorActual = "empty list"})))) (\h -> Right h) (Lists.maybeHead l))
 
 -- | Extract a list of values from a term, mapping a function over each element
 listOf :: (Core.Term -> Either Errors.Error t0) -> Graph.Graph -> Core.Term -> Either Errors.Error [t0]

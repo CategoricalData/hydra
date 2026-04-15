@@ -432,6 +432,11 @@ span cx g predTerm listTerm =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
         Core.applicationArgument = finalState}))))))
 
+-- | Interpreter-friendly uncons for List terms.
+uncons :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
+uncons cx g listTerm =
+    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Logic.ifElse (Lists.null elements) (Core.TermMaybe Nothing) (Core.TermMaybe (Just (Core.TermPair (Lists.head elements, (Core.TermList (Lists.tail elements))))))))
+
 -- | Interpreter-friendly zipWith for List terms.
 zipWith :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 zipWith cx g funTerm listTerm1 listTerm2 =

@@ -13,6 +13,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as ShowCore
@@ -140,7 +141,7 @@ unifyTypeConstraints cx schemaTypes constraints =
                       Errors.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Attempted to unify schema names " (Core.unName v0)) " and ") (Core.unName v1)) " (") comment) ")")})) (bind v1 sleft)) (bind v0 sright))
                     _ -> tryBinding v0 sright
                   _ -> dflt
-      in (Logic.ifElse (Lists.null constraints) (Right Substitution.idTypeSubst) (withConstraint (Lists.head constraints) (Lists.tail constraints)))
+      in (Maybes.maybe (Right Substitution.idTypeSubst) (\uc -> withConstraint (Pairs.first uc) (Pairs.second uc)) (Lists.uncons constraints))
 
 unifyTypeLists :: t0 -> M.Map Core.Name t1 -> [Core.Type] -> [Core.Type] -> String -> Either Errors.UnificationError Typing.TypeSubst
 unifyTypeLists cx schemaTypes l r comment =

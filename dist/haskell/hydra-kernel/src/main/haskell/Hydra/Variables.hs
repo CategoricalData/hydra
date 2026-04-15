@@ -139,9 +139,9 @@ normalizeTypeVariablesInTerm term =
                                     let bindings0 = Core.letBindings v0
                                         body0 = Core.letBody v0
                                         step =
-                                                \acc -> \bs -> Logic.ifElse (Lists.null bs) (Lists.reverse acc) (
-                                                  let b = Lists.head bs
-                                                      tl = Lists.tail bs
+                                                \acc -> \bs -> Maybes.maybe (Lists.reverse acc) (\uc ->
+                                                  let b = Pairs.first uc
+                                                      tl = Pairs.second uc
                                                       noType =
 
                                                                 let newVal = rewriteWithSubst ((subst, boundVars), next) (Core.bindingTerm b)
@@ -181,7 +181,7 @@ normalizeTypeVariablesInTerm term =
                                                                                 Core.typeSchemeType = (substType newSubst typ),
                                                                                 Core.typeSchemeConstraints = newConstraints}))}
                                                                 in (step (Lists.cons b1 acc) tl)
-                                                  in (Maybes.maybe noType (\ts -> withType ts) (Core.bindingType b)))
+                                                  in (Maybes.maybe noType (\ts -> withType ts) (Core.bindingType b))) (Lists.uncons bs)
                                         bindings1 = step [] bindings0
                                     in (Core.TermLet (Core.Let {
                                       Core.letBindings = bindings1,

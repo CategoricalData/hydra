@@ -156,6 +156,8 @@ lists_take = hydra.core.Name("hydra.lib.lists.take")
 
 lists_transpose = hydra.core.Name("hydra.lib.lists.transpose")
 
+lists_uncons = hydra.core.Name("hydra.lib.lists.uncons")
+
 lists_zip = hydra.core.Name("hydra.lib.lists.zip")
 
 lists_zip_with = hydra.core.Name("hydra.lib.lists.zipWith")
