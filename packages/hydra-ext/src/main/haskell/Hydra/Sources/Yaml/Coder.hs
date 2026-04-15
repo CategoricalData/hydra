@@ -14,6 +14,7 @@ import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
@@ -56,6 +57,7 @@ module_ = Module ns definitions
     definitions = [
       toDefinition yamlCoder,
       toDefinition literalYamlCoder,
+      toDefinition isNonFiniteFloatString,
       toDefinition recordCoder,
       toDefinition encodeRecord,
       toDefinition decodeRecord,
@@ -79,9 +81,16 @@ literalYamlCoder = define "literalYamlCoder" $
     cases YM._Scalar (var "s")
       (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected boolean, found scalar"])) (var "cx")) [
       YM._Scalar_bool>>: "b" ~> right (Core.literalBoolean $ var "b")]) $
+  "decodeDecimal" <~ ("cx" ~> "s" ~>
+    cases YM._Scalar (var "s")
+      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected decimal, found scalar"])) (var "cx")) [
+      YM._Scalar_decimal>>: "d" ~> right (Core.literalDecimal $ var "d"),
+      YM._Scalar_float>>: "f" ~> right (Core.literalDecimal $ Literals.float64ToDecimal $ Literals.bigfloatToFloat64 $ var "f"),
+      YM._Scalar_int>>: "i" ~> right (Core.literalDecimal $ Literals.bigintToDecimal $ var "i")]) $
   "decodeFloat" <~ ("cx" ~> "s" ~>
     cases YM._Scalar (var "s")
       (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected float, found scalar"])) (var "cx")) [
+      YM._Scalar_decimal>>: "d" ~> right (Core.literalFloat $ Core.floatValueBigfloat $ Literals.float64ToBigfloat $ Literals.decimalToFloat64 $ var "d"),
       YM._Scalar_float>>: "f" ~> right (Core.literalFloat $ Core.floatValueBigfloat $ var "f")]) $
   "decodeInteger" <~ ("cx" ~> "s" ~>
     cases YM._Scalar (var "s")
@@ -97,11 +106,19 @@ literalYamlCoder = define "literalYamlCoder" $
         "b" <<~ ExtractCore.booleanLiteral @@ var "lit" $
         right (Yaml.scalarBool $ var "b"))
       (var "decodeBool"),
+    _LiteralType_decimal>>: constant $ Coders.coder
+      ("cx" ~> "lit" ~>
+        "d" <<~ ExtractCore.decimalLiteral @@ var "lit" $
+        right (Yaml.scalarDecimal $ var "d"))
+      (var "decodeDecimal"),
     _LiteralType_float>>: constant $ Coders.coder
       ("cx" ~> "lit" ~>
         "f" <<~ ExtractCore.floatLiteral @@ var "lit" $
         "bf" <<~ ExtractCore.bigfloatValue @@ var "f" $
-        right (Yaml.scalarFloat $ var "bf"))
+        "shown" <~ (Literals.showBigfloat $ var "bf") $
+        Logic.ifElse (isNonFiniteFloatString @@ var "shown")
+          (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "YAML cannot represent non-finite float: ", var "shown"])) (var "cx"))
+          (right (Yaml.scalarFloat $ var "bf")))
       (var "decodeFloat"),
     _LiteralType_integer>>: constant $ Coders.coder
       ("cx" ~> "lit" ~>
@@ -115,6 +132,14 @@ literalYamlCoder = define "literalYamlCoder" $
         right (Yaml.scalarStr $ var "s"))
       (var "decodeString")]) $
   right $ var "encoded"
+
+-- | Check whether a float's string form is one of the non-finite sentinels: NaN, Infinity, -Infinity.
+isNonFiniteFloatString :: TTermDefinition (String -> Bool)
+isNonFiniteFloatString = define "isNonFiniteFloatString" $
+  doc "Check whether a string is one of the non-finite float sentinels: NaN, Infinity, -Infinity." $
+  "s" ~> Logic.or (Equality.equal (var "s") (string "NaN")) $
+         Logic.or (Equality.equal (var "s") (string "Infinity"))
+                  (Equality.equal (var "s") (string "-Infinity"))
 
 recordCoder :: TTermDefinition (Name -> [FieldType] -> Context -> Graph -> Either Error (Coder Term YM.Node))
 recordCoder = define "recordCoder" $

@@ -51,6 +51,7 @@ import qualified Hydra.Sources.Test.Inference.NominalTypes as InferenceNominalTy
 import qualified Hydra.Sources.Test.Json.Parser as JsonParser
 import qualified Hydra.Sources.Test.Json.Roundtrip as JsonRoundtrip
 import qualified Hydra.Sources.Test.Json.Writer as JsonWriter
+import qualified Hydra.Sources.Test.Json.Yaml as JsonYaml
 import qualified Hydra.Sources.Test.Hoisting.All as HoistingAll
 import qualified Hydra.Sources.Test.Hoisting.Cases as HoistingCases
 import qualified Hydra.Sources.Test.Hoisting.Let as HoistingLet
@@ -116,6 +117,7 @@ otherPairs = [
   -- (JsonParser.ns, JsonParser.allTests),
   (JsonRoundtrip.ns, JsonRoundtrip.allTests),
   (JsonWriter.ns, JsonWriter.allTests),
+  (JsonYaml.ns, JsonYaml.allTests),
   -- TODO #336: (Ordering.ns, Ordering.allTests) temporarily removed - needs investigation
   (Reduction.ns, Reduction.allTests),
   (Rewriting.ns, Rewriting.allTests),
@@ -141,7 +143,7 @@ testSuiteModules =
    HoistingAll.module_, HoistingCases.module_, HoistingLet.module_,
    -- Other tests
    Annotations.module_, Dependencies.module_, Differentiation.module_, EtaExpansion.module_, Formatting.module_,
-   JsonRoundtrip.module_, JsonWriter.module_,
+   JsonRoundtrip.module_, JsonWriter.module_, JsonYaml.module_,
    Reduction.module_, Rewriting.module_, Serialization.module_, Sorting.module_,
    Strip.module_, Variables.module_,
    -- TODO #336: Ordering.module_ temporarily removed - needs investigation

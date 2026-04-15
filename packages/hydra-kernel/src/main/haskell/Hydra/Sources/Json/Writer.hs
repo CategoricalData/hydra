@@ -179,14 +179,10 @@ valueToExpr = jsonSerdeDefinition "valueToExpr" $
       Serialization.cst @@ string "null",
     J._Value_number>>: "n" ~>
       -- For whole numbers, omit the decimal point (e.g., 15 instead of 15.0).
-      -- Exception: -0.0 must keep its sign, so detect it via the bigfloat string
-      -- before taking the integer shortcut.
-      "rounded" <~ Literals.bigfloatToBigint (var "n") $
-      "shown" <~ (Literals.showBigfloat $ var "n") $
+      "rounded" <~ Literals.decimalToBigint (var "n") $
+      "shown" <~ (Literals.showDecimal $ var "n") $
       Serialization.cst @@ (Logic.ifElse
-        (Logic.and
-          (Equality.equal (var "n") (Literals.bigintToBigfloat $ var "rounded"))
-          (Logic.not (Equality.equal (var "shown") (string "-0.0"))))
+        (Equality.equal (var "n") (Literals.bigintToDecimal $ var "rounded"))
         (Literals.showBigint $ var "rounded")
         (var "shown")),
     J._Value_object>>: "obj" ~>

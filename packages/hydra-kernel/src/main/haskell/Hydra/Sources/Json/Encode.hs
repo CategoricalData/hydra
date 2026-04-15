@@ -101,7 +101,7 @@ module_ = Module ns definitions
       toDefinition encodeLiteral,
       toDefinition encodeFloat,
       toDefinition encodeInteger,
-      toDefinition isSpecialFloatString]
+      toDefinition isNonFiniteFloatString]
 
 -- | Encode a Term to a JSON Value, given a type and type lookup table.
 -- Returns Left with an error message for unsupported term constructs.
@@ -425,40 +425,41 @@ encodeLiteral = define "encodeLiteral" $
   "lit" ~> cases _Literal (var "lit") Nothing [
     _Literal_binary>>: "b" ~> right $ Json.valueString $ Literals.binaryToString $ var "b",
     _Literal_boolean>>: "b" ~> right $ Json.valueBoolean $ var "b",
-    _Literal_decimal>>: "d" ~> right $ Json.valueNumber $ Literals.float64ToBigfloat $ Literals.decimalToFloat64 $ var "d",
+    _Literal_decimal>>: "d" ~> right $ Json.valueNumber $ var "d",
     _Literal_float>>: "f" ~> encodeFloat @@ var "f",
     _Literal_integer>>: "i" ~> encodeInteger @@ var "i",
     _Literal_string>>: "s" ~> right $ Json.valueString $ var "s"]
 
--- | Encode a float value to JSON
--- Float64 and Bigfloat use native JSON numbers; Float32 uses string to preserve exact precision
--- Special values (NaN, Infinity, -Infinity) are encoded as JSON strings for all float types
+-- | Encode a float value to JSON.
+-- Bigfloat uses native JSON numbers (lossless for finite values via Scientific). Bigfloat cannot
+-- represent non-finite values after this migration because several target types (Java BigDecimal,
+-- Python Decimal) have no NaN or infinity in their value space, so non-finite bigfloat inputs
+-- produce an error. Float32 and Float64 serialize non-finite values as JSON string sentinels
+-- because their host representations (IEEE 754) carry NaN/Inf natively and round-trip losslessly.
+-- Float32 always uses string to preserve exact source precision.
 encodeFloat :: TTermDefinition (FloatValue -> Either String Value)
 encodeFloat = define "encodeFloat" $
-  doc "Encode a float value to JSON. Float64/Bigfloat use native numbers; Float32 uses string. NaN/Inf always encoded as strings." $
+  doc "Encode a float value to JSON. Bigfloat rejects non-finite; Float64 encodes sentinels as strings; Float32 always strings." $
   "fv" ~> cases _FloatValue (var "fv") Nothing [
     _FloatValue_bigfloat>>: "bf" ~>
       "s" <~ (Literals.showBigfloat $ var "bf") $
-      Logic.ifElse (isSpecialFloatString @@ var "s")
-        (right $ Json.valueString $ var "s")
-        (right $ Json.valueNumber $ var "bf"),
+      Logic.ifElse (isNonFiniteFloatString @@ var "s")
+        (left $ Strings.cat $ list [string "JSON cannot represent non-finite bigfloat: ", var "s"])
+        (right $ Json.valueNumber $ Literals.float64ToDecimal $ Literals.bigfloatToFloat64 $ var "bf"),
     _FloatValue_float32>>: "f" ~> right $ Json.valueString $ Literals.showFloat32 $ var "f",
     _FloatValue_float64>>: "f" ~>
       "s" <~ (Literals.showFloat64 $ var "f") $
-      Logic.ifElse (isSpecialFloatString @@ var "s")
+      Logic.ifElse (isNonFiniteFloatString @@ var "s")
         (right $ Json.valueString $ var "s")
-        (right $ Json.valueNumber $ Literals.float64ToBigfloat $ var "f")]
+        (right $ Json.valueNumber $ Literals.float64ToDecimal $ var "f")]
 
--- | Check whether a string is one of the special float sentinels: "NaN", "Infinity", "-Infinity", "-0.0"
--- Negative zero is treated as a special value because JSON arbitrary-precision decimal
--- representations (Scientific, BigDecimal, Decimal) cannot distinguish it from +0.0.
-isSpecialFloatString :: TTermDefinition (String -> Bool)
-isSpecialFloatString = define "isSpecialFloatString" $
-  doc "Check whether a string is one of the special float sentinels: NaN, Infinity, -Infinity, -0.0." $
+-- | Check whether a float's string form is one of the non-finite sentinels: NaN, Infinity, -Infinity.
+isNonFiniteFloatString :: TTermDefinition (String -> Bool)
+isNonFiniteFloatString = define "isNonFiniteFloatString" $
+  doc "Check whether a string is one of the non-finite float sentinels: NaN, Infinity, -Infinity." $
   "s" ~> Logic.or (Equality.equal (var "s") (string "NaN")) $
-         Logic.or (Equality.equal (var "s") (string "Infinity")) $
-         Logic.or (Equality.equal (var "s") (string "-Infinity"))
-                  (Equality.equal (var "s") (string "-0.0"))
+         Logic.or (Equality.equal (var "s") (string "Infinity"))
+                  (Equality.equal (var "s") (string "-Infinity"))
 
 -- | Encode an integer value to JSON
 -- Small integers (int8, int16, int32, uint8, uint16) use native JSON numbers
@@ -472,9 +473,9 @@ encodeInteger = define "encodeInteger" $
     _IntegerValue_int64>>: "i" ~> right $ Json.valueString $ Literals.showInt64 $ var "i",
     _IntegerValue_uint32>>: "i" ~> right $ Json.valueString $ Literals.showUint32 $ var "i",
     _IntegerValue_uint64>>: "i" ~> right $ Json.valueString $ Literals.showUint64 $ var "i",
-    -- Small integers: use native JSON numbers (convert to bigfloat for JSON)
-    _IntegerValue_int8>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ Literals.int8ToBigint $ var "i",
-    _IntegerValue_int16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ Literals.int16ToBigint $ var "i",
-    _IntegerValue_int32>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ Literals.int32ToBigint $ var "i",
-    _IntegerValue_uint8>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ Literals.uint8ToBigint $ var "i",
-    _IntegerValue_uint16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ Literals.uint16ToBigint $ var "i"]
+    -- Small integers: use native JSON numbers (convert to decimal for JSON)
+    _IntegerValue_int8>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.int8ToBigint $ var "i",
+    _IntegerValue_int16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.int16ToBigint $ var "i",
+    _IntegerValue_int32>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.int32ToBigint $ var "i",
+    _IntegerValue_uint8>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.uint8ToBigint $ var "i",
+    _IntegerValue_uint16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.uint16ToBigint $ var "i"]
