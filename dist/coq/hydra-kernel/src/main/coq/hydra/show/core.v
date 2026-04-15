@@ -52,6 +52,7 @@ end) (it).
 Definition literalType : forall (_ : LiteralType) , string := fun (lt : LiteralType) => (fun x_ => match x_ with
 | LiteralType_Binary _ => "binary"%string
 | LiteralType_Boolean _ => "boolean"%string
+| LiteralType_Decimal _ => "decimal"%string
 | LiteralType_Float v_ => (fun (ft : FloatType) => (floatType) (ft)) (v_)
 | LiteralType_Integer v_ => (fun (it : IntegerType) => (integerType) (it)) (v_)
 | LiteralType_String _ => "string"%string
@@ -109,6 +110,7 @@ end) (iv).
 Definition literal : forall (_ : Literal) , string := fun (l : Literal) => (fun x_ => match x_ with
 | Literal_Binary v_ => (fun (_ : string) => "[binary]"%string) (v_)
 | Literal_Boolean v_ => (fun (b : bool) => (((logic.ifElse) (b)) ("true"%string)) ("false"%string)) (v_)
+| Literal_Decimal v_ => (fun (d : Q) => (literals.showDecimal) (d)) (v_)
 | Literal_Float v_ => (fun (fv : FloatValue) => (float) (fv)) (v_)
 | Literal_Integer v_ => (fun (iv : IntegerValue) => (integer) (iv)) (v_)
 | Literal_String v_ => (fun (s : string) => (literals.showString) (s)) (v_)

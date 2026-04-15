@@ -28,6 +28,7 @@ Arguments encodeInteger {t0}.
 Definition encodeLiteral (t0 : Type) : forall (_ : Literal) , (sum) (t0) (Value) := fun (lit : Literal) => (fun x_ => match x_ with
 | Literal_Binary v_ => (fun (b : string) => (inr) ((Value_String) ((literals.binaryToString) (b)))) (v_)
 | Literal_Boolean v_ => (fun (b : bool) => (inr) ((Value_Boolean) (b))) (v_)
+| Literal_Decimal v_ => (fun (d : Q) => (inr) ((Value_Number) ((literals.float64ToBigfloat) ((literals.decimalToFloat64) (d))))) (v_)
 | Literal_Float v_ => (fun (f : FloatValue) => (encodeFloat) (f)) (v_)
 | Literal_Integer v_ => (fun (i : IntegerValue) => (encodeInteger) (i)) (v_)
 | Literal_String v_ => (fun (s : string) => (inr) ((Value_String) (s))) (v_)

@@ -14,6 +14,7 @@ Inductive FunctionVariant : Type :=
 Inductive LiteralVariant : Type :=
 | LiteralVariant_Binary : forall (_ : unit) , LiteralVariant
 | LiteralVariant_Boolean : forall (_ : unit) , LiteralVariant
+| LiteralVariant_Decimal : forall (_ : unit) , LiteralVariant
 | LiteralVariant_Float : forall (_ : unit) , LiteralVariant
 | LiteralVariant_Integer : forall (_ : unit) , LiteralVariant
 | LiteralVariant_String : forall (_ : unit) , LiteralVariant.
