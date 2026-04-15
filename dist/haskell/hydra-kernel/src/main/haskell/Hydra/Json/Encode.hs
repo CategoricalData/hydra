@@ -22,8 +22,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
--- | Encode a float value to JSON. Bigfloat rejects anything the decimal space can't hold;
--- Float64 uses string sentinels for NaN/Inf/-0.0; Float32 always strings.
+-- | Encode a float value to JSON. Bigfloat rejects anything the decimal space can't hold; Float64 uses string sentinels for NaN/Inf/-0.0; Float32 always strings.
 encodeFloat :: Core.FloatValue -> Either String Model.Value
 encodeFloat fv =
     case fv of
@@ -63,7 +62,6 @@ encodeLiteral lit =
       Core.LiteralString v0 -> Right (Model.ValueString v0)
 
 -- | True for IEEE sentinel strings that JSON must escape as a string to preserve.
--- These are: NaN, Infinity, -Infinity, and -0.0 (decimal has no negative zero).
 requiresJsonStringSentinel :: String -> Bool
 requiresJsonStringSentinel s =
     Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))

@@ -397,11 +397,11 @@
                                                                                                                                               "typeApplication": {
                                                                                                                                                 "body": {
                                                                                                                                                   "typeApplication": {
-                                                                                                                                                    "body": {"either": {"@right": {"variable": "f"}}},
+                                                                                                                                                    "body": {"either": {"@right": {"variable": "d"}}},
                                                                                                                                                     "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                                                 "type": {"literal": {"decimal": {}}}}},
                                                                                                                                             "domain": {"literal": {"decimal": {}}},
-                                                                                                                                            "parameter": "f"}}}],
+                                                                                                                                            "parameter": "d"}}}],
                                                                                                                                     "default": {
                                                                                                                                       "typeApplication": {
                                                                                                                                         "body": {

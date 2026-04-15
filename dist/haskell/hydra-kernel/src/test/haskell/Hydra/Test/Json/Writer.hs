@@ -88,6 +88,13 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "hundredth",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "1.0e-2"))),
+                Testing.universalTestCaseExpected = "1.0e-2"})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "small decimal",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "1.0e-3"))),
