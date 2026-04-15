@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.TypeScript.Model as Model
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 functionType :: Phantoms.TTerm [Model.Parameter] -> Phantoms.TTerm Model.Type -> Phantoms.TTerm Model.FunctionType
 functionType parameters range =

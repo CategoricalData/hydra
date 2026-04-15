@@ -6,6 +6,5 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 (* Module dependencies *)
 Require Import hydra.core.
 
-Definition typesByName : (list) ((prod) (Name) (Type_)) :=
-  nil.
+Definition typesByName : (list) ((prod) (Name) (Type_)) := nil.
 

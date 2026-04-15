@@ -135,6 +135,21 @@ def case_field(name: hydra.core.Name, n: str, graph: hydra.graph.Graph, term: hy
     field_name = hydra.core.Name(n)
     return hydra.lib.eithers.bind(cases(name, graph, term), (lambda cs: (matching := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name.value, field_name.value)), cs.cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError("matching case", "no matching case"))))))), (lambda : Right(hydra.lib.lists.head(matching)))))[1]))
 
+def decimal_literal(v: hydra.core.Literal) -> Either[hydra.errors.Error, Decimal]:
+    r"""Extract a decimal literal from a Literal value."""
+
+    match v:
+        case hydra.core.LiteralDecimal(value=d):
+            return Right(d)
+
+        case _:
+            return Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError("decimal", hydra.show.core.literal(v)))))))
+
+def decimal(graph: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.errors.Error, Decimal]:
+    r"""Extract an arbitrary-precision decimal value from a term."""
+
+    return hydra.lib.eithers.bind(literal(graph, t), (lambda l: decimal_literal(l)))
+
 def strip_with_decoding_error(g: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.core.Term]:
     r"""Strip annotations and dereference variables, returning Either DecodingError Term."""
 

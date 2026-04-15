@@ -124,6 +124,7 @@ def literal(l: hydra.core.Literal): scala.Predef.String =
   l match
   case hydra.core.Literal.binary(v_Literal_binary__) => "[binary]"
   case hydra.core.Literal.boolean(v_Literal_boolean_b) => hydra.lib.logic.ifElse[scala.Predef.String](v_Literal_boolean_b)("true")("false")
+  case hydra.core.Literal.decimal(v_Literal_decimal_d) => hydra.lib.literals.showDecimal(v_Literal_decimal_d)
   case hydra.core.Literal.float(v_Literal_float_fv) => hydra.show.core.float(v_Literal_float_fv)
   case hydra.core.Literal.integer(v_Literal_integer_iv) => hydra.show.core.integer(v_Literal_integer_iv)
   case hydra.core.Literal.string(v_Literal_string_s) => hydra.lib.literals.showString(v_Literal_string_s)
@@ -132,6 +133,7 @@ def literalType(lt: hydra.core.LiteralType): scala.Predef.String =
   lt match
   case hydra.core.LiteralType.binary => "binary"
   case hydra.core.LiteralType.boolean => "boolean"
+  case hydra.core.LiteralType.decimal => "decimal"
   case hydra.core.LiteralType.float(v_LiteralType_float_ft) => hydra.show.core.floatType(v_LiteralType_float_ft)
   case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => hydra.show.core.integerType(v_LiteralType_integer_it)
   case hydra.core.LiteralType.string => "string"

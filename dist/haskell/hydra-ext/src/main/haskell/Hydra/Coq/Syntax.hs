@@ -8,6 +8,7 @@ module Hydra.Coq.Syntax where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 data AnnotatedApplication =
   AnnotatedApplication {
@@ -1003,6 +1004,19 @@ _UniverseName_set = Core.Name "set"
 
 _UniverseName_prop = Core.Name "prop"
 
+-- | An Axiom declaration: `Axiom <name> : <type>.`
+data AxiomDeclaration =
+  AxiomDeclaration {
+    axiomDeclarationName :: Ident,
+    axiomDeclarationType :: Type}
+  deriving (Eq, Ord, Read, Show)
+
+_AxiomDeclaration = Core.Name "hydra.coq.syntax.AxiomDeclaration"
+
+_AxiomDeclaration_name = Core.Name "name"
+
+_AxiomDeclaration_type = Core.Name "type"
+
 -- | A Coq comment (* ... *)
 newtype Comment =
   Comment {
@@ -1273,6 +1287,7 @@ _Sentence_content = Core.Name "content"
 
 -- | The content of a top-level sentence
 data SentenceContent =
+  SentenceContentAxiom AxiomDeclaration |
   SentenceContentDefinition Definition |
   SentenceContentFixpoint FixpointDefinition |
   SentenceContentInductive InductiveDefinition |
@@ -1285,6 +1300,8 @@ data SentenceContent =
   deriving (Eq, Ord, Read, Show)
 
 _SentenceContent = Core.Name "hydra.coq.syntax.SentenceContent"
+
+_SentenceContent_axiom = Core.Name "axiom"
 
 _SentenceContent_definition = Core.Name "definition"
 

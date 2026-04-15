@@ -38,6 +38,7 @@ import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
 
@@ -267,6 +268,7 @@ encodeLiteral cx g av =
     case av of
       Core.LiteralBinary v0 -> Right (Syntax.LitBytes (Literals.binaryToBytes v0))
       Core.LiteralBoolean v0 -> Right (Syntax.LitBoolean v0)
+      Core.LiteralDecimal v0 -> Right (Syntax.LitString (Literals.showDecimal v0))
       Core.LiteralFloat v0 -> case v0 of
         Core.FloatValueBigfloat v1 -> Right (Syntax.LitDouble (Literals.bigfloatToFloat64 v1))
         Core.FloatValueFloat32 v1 -> Right (Syntax.LitFloat v1)
@@ -401,6 +403,8 @@ encodeTerm cx g term0 =
         Core.TermLiteral v0 -> Eithers.bind (encodeLiteral cx g v0) (\slit ->
           let litData = Syntax.DataLit slit
           in case v0 of
+            Core.LiteralDecimal _ -> Right (Utils.sapply (Utils.sname "BigDecimal") [
+              litData])
             Core.LiteralInteger v1 -> case v1 of
               Core.IntegerValueBigint v2 -> Right (Utils.sapply (Utils.sname "BigInt") [
                 Syntax.DataLit (Syntax.LitString (Literals.showBigint v2))])
@@ -527,6 +531,8 @@ encodeType cx g t =
             Syntax.type_NameValue = "Byte"}))])
         Core.LiteralTypeBoolean -> Right (Syntax.TypeRef (Syntax.Type_RefName (Syntax.Type_Name {
           Syntax.type_NameValue = "Boolean"})))
+        Core.LiteralTypeDecimal -> Right (Syntax.TypeRef (Syntax.Type_RefName (Syntax.Type_Name {
+          Syntax.type_NameValue = "BigDecimal"})))
         Core.LiteralTypeFloat v1 -> case v1 of
           Core.FloatTypeBigfloat -> Right (Syntax.TypeRef (Syntax.Type_RefName (Syntax.Type_Name {
             Syntax.type_NameValue = "BigDecimal"})))

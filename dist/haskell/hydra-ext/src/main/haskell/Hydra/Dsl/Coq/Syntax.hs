@@ -8,6 +8,7 @@ import qualified Hydra.Coq.Syntax as Syntax
 import qualified Hydra.Core as Core
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 annotatedApplication :: Phantoms.TTerm Syntax.QualidAnnotated -> Phantoms.TTerm [Syntax.Term1] -> Phantoms.TTerm Syntax.AnnotatedApplication
 annotatedApplication annot terms =
@@ -108,6 +109,66 @@ argTerm x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "term"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+axiomDeclaration :: Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.AxiomDeclaration
+axiomDeclaration name type_ =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.coq.syntax.AxiomDeclaration"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm name)},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm type_)}]}))
+
+axiomDeclarationName :: Phantoms.TTerm Syntax.AxiomDeclaration -> Phantoms.TTerm Syntax.Ident
+axiomDeclarationName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.coq.syntax.AxiomDeclaration"),
+        Core.projectionField = (Core.Name "name")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+axiomDeclarationType :: Phantoms.TTerm Syntax.AxiomDeclaration -> Phantoms.TTerm Syntax.Type
+axiomDeclarationType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.coq.syntax.AxiomDeclaration"),
+        Core.projectionField = (Core.Name "type")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+axiomDeclarationWithName :: Phantoms.TTerm Syntax.AxiomDeclaration -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.AxiomDeclaration
+axiomDeclarationWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.coq.syntax.AxiomDeclaration"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coq.syntax.AxiomDeclaration"),
+              Core.projectionField = (Core.Name "type")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+axiomDeclarationWithType :: Phantoms.TTerm Syntax.AxiomDeclaration -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.AxiomDeclaration
+axiomDeclarationWithType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.coq.syntax.AxiomDeclaration"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.coq.syntax.AxiomDeclaration"),
+              Core.projectionField = (Core.Name "name")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
 binderGeneralizing :: Phantoms.TTerm Syntax.GeneralizingBinder -> Phantoms.TTerm Syntax.Binder
 binderGeneralizing x =
@@ -5244,6 +5305,14 @@ sentenceContent x =
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Sentence"),
         Core.projectionField = (Core.Name "content")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+sentenceContentAxiom :: Phantoms.TTerm Syntax.AxiomDeclaration -> Phantoms.TTerm Syntax.SentenceContent
+sentenceContentAxiom x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.coq.syntax.SentenceContent"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "axiom"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 sentenceContentDefinition :: Phantoms.TTerm Syntax.Definition -> Phantoms.TTerm Syntax.SentenceContent
 sentenceContentDefinition x =

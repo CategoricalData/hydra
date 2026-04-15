@@ -10,6 +10,7 @@ import qualified Hydra.Encode.Paths as Paths
 import qualified Hydra.Encode.Variants as Variants
 import qualified Hydra.Error.Core as ErrorCore
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 constantConditionError :: ErrorCore.ConstantConditionError -> Core.Term
 constantConditionError x =

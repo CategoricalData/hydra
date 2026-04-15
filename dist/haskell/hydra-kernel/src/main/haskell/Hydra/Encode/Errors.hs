@@ -11,6 +11,7 @@ import qualified Hydra.Encode.Error.Core as ErrorCore
 import qualified Hydra.Encode.Paths as Paths
 import qualified Hydra.Errors as Errors
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 decodingError :: Errors.DecodingError -> Core.Term
 decodingError x =

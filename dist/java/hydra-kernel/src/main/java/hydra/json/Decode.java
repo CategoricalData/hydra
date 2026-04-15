@@ -205,6 +205,21 @@ public interface Decode {
       }
 
       @Override
+      public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.LiteralType.Decimal ignored) {
+        return (value).accept(new hydra.json.model.Value.PartialVisitor<>() {
+          @Override
+          public hydra.util.Either<String, hydra.core.Term> otherwise(hydra.json.model.Value instance) {
+            return hydra.util.Either.<String, hydra.core.Term>left("expected number for decimal");
+          }
+
+          @Override
+          public hydra.util.Either<String, hydra.core.Term> visit(hydra.json.model.Value.Number_ n) {
+            return hydra.util.Either.<String, hydra.core.Term>right(new hydra.core.Term.Literal(new hydra.core.Literal.Decimal(hydra.lib.literals.Float64ToDecimal.apply(hydra.lib.literals.BigfloatToFloat64.apply((n).value)))));
+          }
+        });
+      }
+
+      @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.LiteralType.Float_ ft) {
         return hydra.json.Decode.decodeFloat(
           (ft).value,

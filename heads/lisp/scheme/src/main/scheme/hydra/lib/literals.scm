@@ -7,6 +7,7 @@
           hydra_lib_literals_bigfloat_to_float32
           hydra_lib_literals_bigfloat_to_float64
           hydra_lib_literals_bigint_to_bigfloat
+          hydra_lib_literals_bigint_to_decimal
           hydra_lib_literals_bigint_to_int
           hydra_lib_literals_bigint_to_int8
           hydra_lib_literals_bigint_to_int16
@@ -18,9 +19,14 @@
           hydra_lib_literals_bigint_to_uint32
           hydra_lib_literals_bigint_to_uint64
           hydra_lib_literals_binary_to_string
+          hydra_lib_literals_decimal_to_bigint
+          hydra_lib_literals_decimal_to_float32
+          hydra_lib_literals_decimal_to_float64
           hydra_lib_literals_float
           hydra_lib_literals_float32_to_bigfloat
+          hydra_lib_literals_float32_to_decimal
           hydra_lib_literals_float64_to_bigfloat
+          hydra_lib_literals_float64_to_decimal
           hydra_lib_literals_int
           hydra_lib_literals_int8_to_bigint
           hydra_lib_literals_int16_to_bigint
@@ -28,6 +34,7 @@
           hydra_lib_literals_int64_to_bigint
           hydra_lib_literals_read_bigfloat
           hydra_lib_literals_read_bigint
+          hydra_lib_literals_read_decimal
           hydra_lib_literals_read_float
           hydra_lib_literals_read_float32
           hydra_lib_literals_read_int
@@ -37,6 +44,7 @@
           hydra_lib_literals_read_uint64
           hydra_lib_literals_show_bigfloat
           hydra_lib_literals_show_bigint
+          hydra_lib_literals_show_decimal
           hydra_lib_literals_show_float
           hydra_lib_literals_show_float32
           hydra_lib_literals_show_float64
@@ -99,6 +107,12 @@
 
     ;; bigint_to_bigfloat :: BigInteger -> Double
     (define hydra_lib_literals_bigint_to_bigfloat
+      (lambda (x)
+        (inexact x)))
+
+    ;; bigint_to_decimal :: BigInteger -> Decimal
+    ;; Scheme has no native decimal; adapter fallback uses inexact double.
+    (define hydra_lib_literals_bigint_to_decimal
       (lambda (x)
         (inexact x)))
 
@@ -183,6 +197,21 @@
                                  #\=)))
                     (loop (+ i 3) (cons c3 (cons c2 (cons c1 (cons c0 acc))))))))))))
 
+    ;; decimal_to_bigint :: Decimal -> BigInteger
+    ;; Scheme has no native decimal; input is inexact double.
+    (define hydra_lib_literals_decimal_to_bigint
+      (lambda (x)
+        (exact (round x))))
+
+    ;; decimal_to_float32 :: Decimal -> Float
+    (define hydra_lib_literals_decimal_to_float32
+      (lambda (x) (float32-approx x)))
+
+    ;; decimal_to_float64 :: Decimal -> Double
+    (define hydra_lib_literals_decimal_to_float64
+      (lambda (x)
+        (inexact x)))
+
     ;; float :: FloatPrecision -> Double -> Double
     (define hydra_lib_literals_float
       (lambda (precision)
@@ -194,8 +223,18 @@
       (lambda (x)
         (inexact x)))
 
+    ;; float32_to_decimal :: Float -> Decimal
+    (define hydra_lib_literals_float32_to_decimal
+      (lambda (x)
+        (inexact x)))
+
     ;; float64_to_bigfloat :: Double -> Double
     (define hydra_lib_literals_float64_to_bigfloat
+      (lambda (x)
+        (inexact x)))
+
+    ;; float64_to_decimal :: Double -> Decimal
+    (define hydra_lib_literals_float64_to_decimal
       (lambda (x)
         (inexact x)))
 
@@ -227,6 +266,14 @@
 
     ;; read_bigfloat :: String -> Maybe Double
     (define hydra_lib_literals_read_bigfloat
+      (lambda (s)
+        (let ((n (string->number s)))
+          (if n
+              (list 'just (inexact n))
+              (list 'nothing)))))
+
+    ;; read_decimal :: String -> Maybe Decimal
+    (define hydra_lib_literals_read_decimal
       (lambda (s)
         (let ((n (string->number s)))
           (if n
@@ -387,6 +434,11 @@
 
     ;; show_bigfloat :: Double -> String
     (define hydra_lib_literals_show_bigfloat
+      (lambda (x)
+        (haskell-show-float x)))
+
+    ;; show_decimal :: Decimal -> String
+    (define hydra_lib_literals_show_decimal
       (lambda (x)
         (haskell-show-float x)))
 

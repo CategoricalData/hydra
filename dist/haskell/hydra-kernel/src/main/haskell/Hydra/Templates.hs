@@ -15,7 +15,9 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
+import qualified Hydra.Lib.Literals as Literals
 
 -- | Decode a list of type-encoding bindings into a map of named types
 graphToSchema :: t0 -> Graph.Graph -> [Core.Binding] -> Either Errors.DecodingError (M.Map Core.Name Core.Type)
@@ -56,6 +58,7 @@ instantiateTemplate cx minimal schema tname t =
                   \lt -> case lt of
                     Core.LiteralTypeBinary -> Core.LiteralString ""
                     Core.LiteralTypeBoolean -> Core.LiteralBoolean False
+                    Core.LiteralTypeDecimal -> Core.LiteralDecimal (Literals.stringToDecimal "0.0")
                     Core.LiteralTypeInteger v0 -> Core.LiteralInteger (forInteger v0)
                     Core.LiteralTypeFloat v0 -> Core.LiteralFloat (forFloat v0)
                     Core.LiteralTypeString -> Core.LiteralString ""

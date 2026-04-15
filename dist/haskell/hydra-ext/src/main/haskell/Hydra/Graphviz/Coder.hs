@@ -21,6 +21,7 @@ import qualified Hydra.Paths as Paths
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Paths as ShowPaths
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 -- | Create a DOT label attribute

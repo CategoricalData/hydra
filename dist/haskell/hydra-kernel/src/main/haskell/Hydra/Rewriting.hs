@@ -17,6 +17,7 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Scoping as Scoping
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Apply a term-level function inside any leading type lambdas
 applyInsideTypeLambdasAndAnnotations :: (Core.Term -> Core.Term) -> Core.Term -> Core.Term

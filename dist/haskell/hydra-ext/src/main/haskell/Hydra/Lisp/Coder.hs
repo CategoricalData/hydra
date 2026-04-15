@@ -28,6 +28,7 @@ import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 dialectCadr :: Syntax.Dialect -> String
 dialectCadr d =
@@ -179,6 +180,9 @@ encodeLiteral :: Core.Literal -> Syntax.Expression
 encodeLiteral lit =
     case lit of
       Core.LiteralBoolean v0 -> Syntax.ExpressionLiteral (Syntax.LiteralBoolean v0)
+      Core.LiteralDecimal v0 -> Syntax.ExpressionLiteral (Syntax.LiteralFloat (Syntax.FloatLiteral {
+        Syntax.floatLiteralValue = (Literals.float64ToBigfloat (Literals.decimalToFloat64 v0)),
+        Syntax.floatLiteralPrecision = Nothing}))
       Core.LiteralString v0 -> Syntax.ExpressionLiteral (Syntax.LiteralString v0)
       Core.LiteralFloat v0 -> case v0 of
         Core.FloatValueFloat32 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralFloat (Syntax.FloatLiteral {
@@ -331,6 +335,7 @@ encodeType cx g t =
         Core.TypeLiteral v0 -> Right (case v0 of
           Core.LiteralTypeBinary -> Syntax.TypeSpecifierNamed (Syntax.Symbol "ByteArray")
           Core.LiteralTypeBoolean -> Syntax.TypeSpecifierNamed (Syntax.Symbol "Boolean")
+          Core.LiteralTypeDecimal -> Syntax.TypeSpecifierNamed (Syntax.Symbol "Decimal")
           Core.LiteralTypeFloat _ -> Syntax.TypeSpecifierNamed (Syntax.Symbol "Float")
           Core.LiteralTypeInteger _ -> Syntax.TypeSpecifierNamed (Syntax.Symbol "Integer")
           Core.LiteralTypeString -> Syntax.TypeSpecifierNamed (Syntax.Symbol "String"))

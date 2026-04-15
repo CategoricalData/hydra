@@ -118,6 +118,11 @@ public interface Variants {
               hydra.extract.Core.decodeUnit(
                 cx,
                 input)))))),
+            (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.LiteralVariant>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.LiteralVariant>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.LiteralVariant>>>(new hydra.core.Name("decimal"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.LiteralVariant>>) (input -> hydra.lib.eithers.Map.apply(
+              (java.util.function.Function<java.lang.Void, hydra.variants.LiteralVariant>) (t -> new hydra.variants.LiteralVariant.Decimal()),
+              hydra.extract.Core.decodeUnit(
+                cx,
+                input)))))),
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.LiteralVariant>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.LiteralVariant>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.LiteralVariant>>>(new hydra.core.Name("float"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.LiteralVariant>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<java.lang.Void, hydra.variants.LiteralVariant>) (t -> new hydra.variants.LiteralVariant.Float_()),
               hydra.extract.Core.decodeUnit(

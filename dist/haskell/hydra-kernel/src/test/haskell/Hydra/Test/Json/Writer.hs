@@ -8,6 +8,7 @@ import qualified Hydra.Json.Model as Model
 import qualified Hydra.Json.Writer as Writer
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 -- | Test cases for JSON serialization (writer)

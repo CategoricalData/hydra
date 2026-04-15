@@ -12,6 +12,7 @@ import qualified Hydra.Test.Checking.Fundamentals as Fundamentals
 import qualified Hydra.Test.Checking.NominalTypes as NominalTypes
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | The group of all type checking tests
 allTests :: Testing.TestGroup

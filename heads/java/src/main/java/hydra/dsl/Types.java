@@ -151,6 +151,14 @@ public interface Types {
     }
 
     /**
+     * Arbitrary-precision decimal type.
+     * @return the decimal type
+     */
+    static Type decimal() {
+        return literal(LiteralTypes.decimal());
+    }
+
+    /**
      * String type.
      * @return the string type
      */

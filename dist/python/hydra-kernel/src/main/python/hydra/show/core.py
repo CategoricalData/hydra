@@ -82,6 +82,9 @@ def literal_type(lt: hydra.core.LiteralType) -> str:
         case hydra.core.LiteralTypeBoolean():
             return "boolean"
 
+        case hydra.core.LiteralTypeDecimal():
+            return "decimal"
+
         case hydra.core.LiteralTypeFloat(value=ft):
             return float_type(ft)
 
@@ -261,6 +264,9 @@ def literal(l: hydra.core.Literal) -> str:
 
         case hydra.core.LiteralBoolean(value=b):
             return hydra.lib.logic.if_else(b, (lambda : "true"), (lambda : "false"))
+
+        case hydra.core.LiteralDecimal(value=d):
+            return hydra.lib.literals.show_decimal(d)
 
         case hydra.core.LiteralFloat(value=fv):
             return float(fv)

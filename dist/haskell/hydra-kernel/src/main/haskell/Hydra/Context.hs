@@ -6,6 +6,7 @@ module Hydra.Context where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 -- | An execution context for tracing and diagnostics, threaded through function calls

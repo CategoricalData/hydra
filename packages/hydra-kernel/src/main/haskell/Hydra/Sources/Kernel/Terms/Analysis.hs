@@ -17,6 +17,7 @@ import Hydra.Kernel hiding (
   isSelfTailRecursive,
   isTailRecursiveInTailPosition,
   moduleContainsBinaryLiterals,
+  moduleContainsDecimalLiterals,
   moduleDependencyNamespaces,
   namespacesForDefinitions)
 import Hydra.Sources.Libraries
@@ -110,6 +111,7 @@ module_ = Module ns definitions
       toDefinition isSelfTailRecursive,
       toDefinition isTailRecursiveInTailPosition,
       toDefinition moduleContainsBinaryLiterals,
+      toDefinition moduleContainsDecimalLiterals,
       toDefinition moduleDependencyNamespaces,
       toDefinition namespacesForDefinitions]
 
@@ -469,6 +471,26 @@ moduleContainsBinaryLiterals = define "moduleContainsBinaryLiterals" $
     (Packaging.moduleDefinitions (var "mod"))) $
   Lists.foldl
     ("acc" ~> "t" ~> Logic.or (var "acc") (var "termContainsBinary" @@ var "t"))
+    false
+    (var "defTerms")
+
+moduleContainsDecimalLiterals :: TTermDefinition (Module -> Bool)
+moduleContainsDecimalLiterals = define "moduleContainsDecimalLiterals" $
+  doc "Check whether a module contains any decimal literal values" $
+  "mod" ~>
+  "checkTerm" <~ ("found" ~> "term" ~> Logic.or (var "found") $
+    cases _Term (var "term") (Just false) [
+      _Term_literal>>: "lit" ~>
+        cases _Literal (var "lit") (Just false) [
+          _Literal_decimal>>: constant true]]) $
+  "termContainsDecimal" <~ ("term" ~>
+    Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "checkTerm" @@ false @@ var "term") $
+  "defTerms" <~ Maybes.cat (Lists.map
+    ("d" ~> cases _Definition (var "d") (Just nothing) [
+      _Definition_term>>: "td" ~> just (Packaging.termDefinitionTerm $ var "td")])
+    (Packaging.moduleDefinitions (var "mod"))) $
+  Lists.foldl
+    ("acc" ~> "t" ~> Logic.or (var "acc") (var "termContainsDecimal" @@ var "t"))
     false
     (var "defTerms")
 

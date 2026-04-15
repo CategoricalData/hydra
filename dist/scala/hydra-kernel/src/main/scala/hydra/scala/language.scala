@@ -10,7 +10,8 @@ lazy val scalaLanguage: hydra.coders.Language = {
   lazy val eliminationVariants: scala.collection.immutable.Set[hydra.variants.EliminationVariant] = hydra.lib.sets.fromList[hydra.variants.EliminationVariant](Seq(hydra.variants.EliminationVariant.record,
      hydra.variants.EliminationVariant.union, hydra.variants.EliminationVariant.wrap))
   lazy val literalVariants: scala.collection.immutable.Set[hydra.variants.LiteralVariant] = hydra.lib.sets.fromList[hydra.variants.LiteralVariant](Seq(hydra.variants.LiteralVariant.boolean,
-     hydra.variants.LiteralVariant.float, hydra.variants.LiteralVariant.integer, hydra.variants.LiteralVariant.string))
+     hydra.variants.LiteralVariant.decimal, hydra.variants.LiteralVariant.float, hydra.variants.LiteralVariant.integer,
+     hydra.variants.LiteralVariant.string))
   lazy val floatTypes: scala.collection.immutable.Set[hydra.core.FloatType] = hydra.lib.sets.fromList[hydra.core.FloatType](Seq(hydra.core.FloatType.bigfloat,
      hydra.core.FloatType.float32, hydra.core.FloatType.float64))
   lazy val functionVariants: scala.collection.immutable.Set[hydra.variants.FunctionVariant] = hydra.lib.sets.fromList[hydra.variants.FunctionVariant](Seq(hydra.variants.FunctionVariant.elimination,

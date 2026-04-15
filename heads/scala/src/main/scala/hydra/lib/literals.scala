@@ -8,6 +8,7 @@ object literals:
   def bigfloatToFloat64(x: BigDecimal): Double = x.toDouble
   def bigfloatToFloatValue(x: BigDecimal): Any = x // Placeholder
   def bigintToBigfloat(x: BigInt): BigDecimal = BigDecimal(x)
+  def bigintToDecimal(x: BigInt): BigDecimal = BigDecimal(x)
   def bigintToInt(x: BigInt)(it: Any): Any = it // Placeholder
   def bigintToInt8(x: BigInt): Byte = x.toByte
   def bigintToInt16(x: BigInt): Short = x.toShort
@@ -23,9 +24,14 @@ object literals:
     try java.util.Base64.getDecoder.decode(b).toSeq.map(_.toInt & 0xff)
     catch case _: IllegalArgumentException => b.getBytes("ISO-8859-1").toSeq.map(_.toInt & 0xff)
   def binaryToString(b: String): String = b
+  def decimalToBigint(x: BigDecimal): BigInt = x.setScale(0, BigDecimal.RoundingMode.HALF_EVEN).toBigInt
+  def decimalToFloat32(x: BigDecimal): Float = x.toFloat
+  def decimalToFloat64(x: BigDecimal): Double = x.toDouble
   def float(ft: Any)(x: BigDecimal): Any = x // Placeholder
   def float32ToBigfloat(x: Float): BigDecimal = BigDecimal(x.toDouble)
+  def float32ToDecimal(x: Float): BigDecimal = BigDecimal(x.toString)
   def float64ToBigfloat(x: Double): BigDecimal = BigDecimal(x)
+  def float64ToDecimal(x: Double): BigDecimal = BigDecimal(x.toString)
   def floatValueToBigfloat(x: Any): BigDecimal = x match
     case d: BigDecimal => d
     case d: Double => BigDecimal(d)
@@ -45,6 +51,7 @@ object literals:
   def readBigfloat(s: String): Option[BigDecimal] = try Some(BigDecimal(s)) catch { case _: Exception => None }
   def readBigint(s: String): Option[BigInt] = try Some(BigInt(s)) catch { case _: Exception => None }
   def readBoolean(s: String): Option[Boolean] = s.toBooleanOption
+  def readDecimal(s: String): Option[BigDecimal] = try Some(BigDecimal(s)) catch { case _: Exception => None }
   def readFloat(s: String)(ft: Any): Option[Any] = try Some(BigDecimal(s)) catch { case _: Exception => None }
   def readFloat32(s: String): Option[Float] = s.toFloatOption
   def readFloat64(s: String): Option[Double] = s.toDoubleOption
@@ -125,6 +132,23 @@ object literals:
   def showBigfloat(x: BigDecimal): String = showHaskellDouble(x.toDouble)
   def showBigint(x: BigInt): String = x.toString
   def showBoolean(x: Boolean): String = if x then "true" else "false"
+  def showDecimal(x: BigDecimal): String = {
+    // Match Haskell's Data.Scientific show: "42.0", "3.14", "1.0e20", "1.0e-10".
+    val stripped = x.underlying.stripTrailingZeros
+    if (stripped.signum == 0) return "0.0"
+    val precision = stripped.precision
+    val scale = stripped.scale
+    val e = precision - scale - 1
+    val sign = if (stripped.signum < 0) "-" else ""
+    val plain = stripped.unscaledValue.abs.toString
+    if (e >= 7 || e < -3) {
+      val mantissa = if (plain.length == 1) plain + ".0" else plain.charAt(0).toString + "." + plain.substring(1)
+      s"$sign${mantissa}e$e"
+    } else {
+      val s = stripped.toPlainString
+      if (s.contains(".")) s else s + ".0"
+    }
+  }
   def showFloat(x: Any)(ft: Any): String = x.toString
   def showFloat32(x: Float): String = showHaskellFloat32(x)
   def showFloat64(x: Double): String = showHaskellDouble(x)

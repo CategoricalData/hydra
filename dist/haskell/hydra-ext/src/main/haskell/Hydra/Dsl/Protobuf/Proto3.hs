@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Protobuf.Proto3 as Proto3
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 definitionEnum :: Phantoms.TTerm Proto3.EnumDefinition -> Phantoms.TTerm Proto3.Definition
 definitionEnum x =

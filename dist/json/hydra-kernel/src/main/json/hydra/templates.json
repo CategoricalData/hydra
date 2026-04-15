@@ -496,6 +496,16 @@
                                                                                 "domain": {"unit": {}},
                                                                                 "parameter": "_"}}},
                                                                           {
+                                                                            "name": "decimal",
+                                                                            "term": {
+                                                                              "lambda": {
+                                                                                "body": {
+                                                                                  "inject": {
+                                                                                    "field": {"name": "decimal", "term": {"literal": {"decimal": 0}}},
+                                                                                    "typeName": "hydra.core.Literal"}},
+                                                                                "domain": {"unit": {}},
+                                                                                "parameter": "_"}}},
+                                                                          {
                                                                             "name": "integer",
                                                                             "term": {
                                                                               "lambda": {

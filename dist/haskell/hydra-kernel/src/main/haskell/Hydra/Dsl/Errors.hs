@@ -11,6 +11,7 @@ import qualified Hydra.Errors as Errors
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 decodingError :: Phantoms.TTerm String -> Phantoms.TTerm Errors.DecodingError
 decodingError x =

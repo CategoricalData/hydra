@@ -6,6 +6,7 @@ module Hydra.Protobuf.Environment where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | A reference to a structural type (Either or Pair) with its component types
 data StructuralTypeRef =

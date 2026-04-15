@@ -26,6 +26,7 @@ import qualified Hydra.Pg.TermsToElements as TermsToElements
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 -- | Check a condition, returning an error if false

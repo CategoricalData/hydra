@@ -6,6 +6,7 @@ module Hydra.Pg.Model where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 -- | An edge which is adjacent to a given vertex. Only the other endpoint of the edge is provided.

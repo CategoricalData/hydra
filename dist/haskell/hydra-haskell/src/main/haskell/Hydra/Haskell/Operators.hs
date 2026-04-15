@@ -8,6 +8,7 @@ import qualified Hydra.Ast as Ast
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Serialization as Serialization
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Logical AND operator (&&)
 andOp :: Ast.Op

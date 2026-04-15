@@ -16,6 +16,7 @@ import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Rewriting as Rewriting
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 -- | Convert a subterm step to a string representation

@@ -6,6 +6,7 @@ module Hydra.Haskell.Environment where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Metadata used to determine which standard imports are needed in a generated Haskell module
 data HaskellModuleMetadata =

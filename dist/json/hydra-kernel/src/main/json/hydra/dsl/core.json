@@ -10581,6 +10581,76 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.dsl.core.literalDecimal",
+        "term": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {
+                                "wrap": {
+                                  "body": {"literal": {"string": "hydra.core.Literal"}},
+                                  "typeName": "hydra.core.Name"}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "decimal"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {"variable": "x"},
+                                          "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "typeName": "hydra.core.Field"}}}],
+                          "typeName": "hydra.core.Injection"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "An arbitrary-precision decimal literal"}}}],
+                    "body": {"literal": {"decimal": {}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "x"}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.core.Literal"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "An arbitrary-precision decimal literal"}}}],
+                      "body": {"literal": {"decimal": {}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.dsl.core.literalFloat",
         "term": {
           "lambda": {
@@ -10862,6 +10932,51 @@
                                   "term": {
                                     "wrap": {
                                       "body": {"literal": {"string": "boolean"}},
+                                      "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "term",
+                                  "term": {
+                                    "inject": {
+                                      "field": {"name": "unit", "term": {"unit": {}}},
+                                      "typeName": "hydra.core.Term"}}}],
+                              "typeName": "hydra.core.Field"}}}],
+                      "typeName": "hydra.core.Injection"}}},
+                "typeName": "hydra.core.Term"}},
+            "typeName": "hydra.phantoms.TTerm"}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.core.LiteralType"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.core.literalTypeDecimal",
+        "term": {
+          "wrap": {
+            "body": {
+              "inject": {
+                "field": {
+                  "name": "inject",
+                  "term": {
+                    "record": {
+                      "fields": [
+                        {
+                          "name": "typeName",
+                          "term": {
+                            "wrap": {
+                              "body": {"literal": {"string": "hydra.core.LiteralType"}},
+                              "typeName": "hydra.core.Name"}}},
+                        {
+                          "name": "field",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "name",
+                                  "term": {
+                                    "wrap": {
+                                      "body": {"literal": {"string": "decimal"}},
                                       "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "term",
