@@ -584,7 +584,38 @@ testGroupForPolymorphism = define "testGroupForPolymorphism" $
         T.string,
       expectMono 2 []
         (lambda "x" $ primitive _math_sub @@ (primitive _math_add @@ var "x" @@ var "x") @@ int32 1)
-        (T.function T.int32 T.int32)]]
+        (T.function T.int32 T.int32)],
+
+    -- Phantom type variables: positions in a polymorphic primitive's type
+    -- signature where the argument's shape leaves one slot unconstrained.
+    -- e.g. isLeft : forall a b. Either a b -> Bool applied to (Left 42)
+    -- pins a = Int32 but leaves b free. Inference must not carry b out as
+    -- a forall parameter of the enclosing binding: the binding's type
+    -- (Bool, List Bool, ...) is monomorphic and the phantom b is not part
+    -- of its external signature.
+    subgroup "Phantom type variables" [
+      -- isLeft applied to a Left pins only the left type arg; the right
+      -- type arg is phantom. Result type: Bool (monomorphic).
+      expectMono 1 []
+        (primitive _eithers_isLeft @@ left (int32 42))
+        T.boolean,
+      -- isLeft applied to a Right pins only the right type arg; the left
+      -- type arg is phantom. Result type: Bool (monomorphic).
+      expectMono 2 []
+        (primitive _eithers_isLeft @@ right (string "x"))
+        T.boolean,
+      -- A list of expressions with independent phantom vars: still
+      -- monomorphic List Bool, not forall t0 t1. List Bool.
+      expectMono 3 []
+        (list [
+          primitive _eithers_isLeft @@ left (int32 42),
+          primitive _eithers_isLeft @@ left (int32 137)])
+        (T.list T.boolean),
+      -- Control: the bare primitive (no application) must stay polymorphic.
+      -- This is the genuine forall case and must not be disturbed by the fix.
+      expectPoly 4 []
+        (primitive _eithers_isLeft)
+        ["t0", "t1"] (T.function (T.either_ (T.var "t0") (T.var "t1")) T.boolean)]]
 
 testGroupForPrimitives :: TTermDefinition TestGroup
 testGroupForPrimitives = define "testGroupForPrimitives" $

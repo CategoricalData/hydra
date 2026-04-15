@@ -6,7 +6,8 @@ type ColumnName = scala.Predef.String
 
 case class ColumnSchema[T](name: hydra.relational.ColumnName, domain: T)
 
-case class ForeignKey(foreignRelation: hydra.relational.RelationName, keys: Map[hydra.relational.ColumnName, hydra.relational.ColumnName])
+case class ForeignKey(foreignRelation: hydra.relational.RelationName, keys: Map[hydra.relational.ColumnName,
+   hydra.relational.ColumnName])
 
 type PrimaryKey = Seq[hydra.relational.ColumnName]
 

@@ -1,0 +1,6 @@
+{
+  "name": "hydra-python",
+  "description": "Python coder for Hydra: generates idiomatic Python code from Hydra type and term modules",
+  "sourceLanguage": "haskell",
+  "dependencies": ["hydra-kernel"]
+}

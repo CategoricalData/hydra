@@ -2,7 +2,8 @@ package hydra.haskell.syntax
 
 import hydra.core.*
 
-case class Alternative(pattern: hydra.haskell.syntax.Pattern, rhs: hydra.haskell.syntax.CaseRhs, binds: Option[hydra.haskell.syntax.LocalBindings])
+case class Alternative(pattern: hydra.haskell.syntax.Pattern, rhs: hydra.haskell.syntax.CaseRhs,
+   binds: Option[hydra.haskell.syntax.LocalBindings])
 
 enum Assertion :
    case `class`(value: hydra.haskell.syntax.ClassAssertion) extends Assertion
@@ -43,7 +44,8 @@ enum DeclarationHead :
    case parens(value: hydra.haskell.syntax.DeclarationHead) extends DeclarationHead
    case simple(value: hydra.haskell.syntax.Name) extends DeclarationHead
 
-case class ApplicationDeclarationHead(function: hydra.haskell.syntax.DeclarationHead, operand: hydra.haskell.syntax.Variable)
+case class ApplicationDeclarationHead(function: hydra.haskell.syntax.DeclarationHead,
+   operand: hydra.haskell.syntax.Variable)
 
 type Deriving = Seq[hydra.haskell.syntax.Name]
 
@@ -77,9 +79,11 @@ case class CaseExpression(`case`: hydra.haskell.syntax.Expression, alternatives:
 
 case class ConstructRecordExpression(name: hydra.haskell.syntax.Name, fields: Seq[hydra.haskell.syntax.FieldUpdate])
 
-case class IfExpression(condition: hydra.haskell.syntax.Expression, `then`: hydra.haskell.syntax.Expression, `else`: hydra.haskell.syntax.Expression)
+case class IfExpression(condition: hydra.haskell.syntax.Expression, `then`: hydra.haskell.syntax.Expression,
+   `else`: hydra.haskell.syntax.Expression)
 
-case class InfixApplicationExpression(lhs: hydra.haskell.syntax.Expression, operator: hydra.haskell.syntax.Operator, rhs: hydra.haskell.syntax.Expression)
+case class InfixApplicationExpression(lhs: hydra.haskell.syntax.Expression, operator: hydra.haskell.syntax.Operator,
+   rhs: hydra.haskell.syntax.Expression)
 
 case class LambdaExpression(bindings: Seq[hydra.haskell.syntax.Pattern], inner: hydra.haskell.syntax.Expression)
 
@@ -110,8 +114,8 @@ enum ImportModifier :
    case pattern extends ImportModifier
    case `type` extends ImportModifier
 
-case class ImportExportSpec(modifier: Option[hydra.haskell.syntax.ImportModifier], name: hydra.haskell.syntax.Name,
-   subspec: Option[hydra.haskell.syntax.SubspecImportExportSpec])
+case class ImportExportSpec(modifier: Option[hydra.haskell.syntax.ImportModifier],
+   name: hydra.haskell.syntax.Name, subspec: Option[hydra.haskell.syntax.SubspecImportExportSpec])
 
 enum SubspecImportExportSpec :
    case all extends SubspecImportExportSpec
@@ -134,7 +138,8 @@ type LocalBindings = Seq[hydra.haskell.syntax.LocalBinding]
 case class Module(head: Option[hydra.haskell.syntax.ModuleHead], imports: Seq[hydra.haskell.syntax.Import],
    declarations: Seq[hydra.haskell.syntax.DeclarationWithComments])
 
-case class ModuleHead(comments: Option[scala.Predef.String], name: hydra.haskell.syntax.ModuleName, exports: Seq[hydra.haskell.syntax.Export])
+case class ModuleHead(comments: Option[scala.Predef.String], name: hydra.haskell.syntax.ModuleName,
+   exports: Seq[hydra.haskell.syntax.Export])
 
 type ModuleName = scala.Predef.String
 
@@ -193,7 +198,8 @@ case class ContextType(ctx: hydra.haskell.syntax.Assertion, `type`: hydra.haskel
 
 case class FunctionType(domain: hydra.haskell.syntax.Type, codomain: hydra.haskell.syntax.Type)
 
-case class InfixType(lhs: hydra.haskell.syntax.Type, operator: hydra.haskell.syntax.Operator, rhs: hydra.haskell.syntax.Operator)
+case class InfixType(lhs: hydra.haskell.syntax.Type, operator: hydra.haskell.syntax.Operator,
+   rhs: hydra.haskell.syntax.Operator)
 
 case class TypeDeclaration(name: hydra.haskell.syntax.DeclarationHead, `type`: hydra.haskell.syntax.Type)
 

@@ -6,7 +6,8 @@ import hydra.errors.*
 
 import hydra.parsing.*
 
-def parseError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.parsing.ParseError] =
+def parseError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+   hydra.parsing.ParseError] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.parsing.ParseError]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
@@ -34,7 +35,8 @@ def parseError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
-def parseResult[T0](a: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError, T0]))(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+def parseResult[T0](a: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError,
+   T0]))(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
    hydra.parsing.ParseResult[T0]] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.parsing.ParseResult[T0]]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
@@ -43,20 +45,25 @@ def parseResult[T0](a: (hydra.graph.Graph => hydra.core.Term => Either[hydra.err
     lazy val field: hydra.core.Field = (v_Term_inject_inj.field)
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
-    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.parsing.ParseResult[T0]])] = hydra.lib.maps.fromList[hydra.core.Name,
+    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError,
+       hydra.parsing.ParseResult[T0]])] = hydra.lib.maps.fromList[hydra.core.Name,
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.parsing.ParseResult[T0]]](Seq(Tuple2("success",
        (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.parsing.ParseSuccess[T0], hydra.parsing.ParseResult[T0], hydra.errors.DecodingError]((t: hydra.parsing.ParseSuccess[T0]) => hydra.parsing.ParseResult.success(t))(hydra.decode.parsing.parseSuccess(a)(cx)(input))),
+      hydra.lib.eithers.map[hydra.parsing.ParseSuccess[T0], hydra.parsing.ParseResult[T0],
+         hydra.errors.DecodingError]((t: hydra.parsing.ParseSuccess[T0]) => hydra.parsing.ParseResult.success(t))(hydra.decode.parsing.parseSuccess(a)(cx)(input))),
          Tuple2("failure", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.parsing.ParseError, hydra.parsing.ParseResult[T0], hydra.errors.DecodingError]((t: hydra.parsing.ParseError) => hydra.parsing.ParseResult.failure(t))(hydra.decode.parsing.parseError(cx)(input)))))
-    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.parsing.ParseResult[T0]], (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.parsing.ParseResult[T0]]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
-       hydra.parsing.ParseResult[T0]])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.parsing.ParseResult[T0]]](fname)(variantMap))
+      hydra.lib.eithers.map[hydra.parsing.ParseError, hydra.parsing.ParseResult[T0],
+         hydra.errors.DecodingError]((t: hydra.parsing.ParseError) => hydra.parsing.ParseResult.failure(t))(hydra.decode.parsing.parseError(cx)(input)))))
+    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.parsing.ParseResult[T0]],
+       (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.parsing.ParseResult[T0]]](Left(hydra.lib.strings.cat(Seq("no such field ",
+       fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
+       hydra.parsing.ParseResult[T0]])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name,
+       (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.parsing.ParseResult[T0]]](fname)(variantMap))
   }
   case _ => Left("expected union"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
-def parseSuccess[T0](a: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError, T0]))(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+def parseSuccess[T0](a: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError,
+   T0]))(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
    hydra.parsing.ParseSuccess[T0]] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.parsing.ParseSuccess[T0]]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>

@@ -6,7 +6,8 @@ lazy val andOp: hydra.ast.Op = hydra.serialization.op("&&")(3)(hydra.ast.Associa
 
 lazy val apOp: hydra.ast.Op = hydra.serialization.op("<*>")(4)(hydra.ast.Associativity.left)
 
-lazy val appOp: hydra.ast.Op = hydra.ast.Op("", hydra.ast.Padding(hydra.ast.Ws.none, hydra.ast.Ws.space), 0, hydra.ast.Associativity.left)
+lazy val appOp: hydra.ast.Op = hydra.ast.Op("", hydra.ast.Padding(hydra.ast.Ws.none,
+   hydra.ast.Ws.space), 0, hydra.ast.Associativity.left)
 
 lazy val applyOp: hydra.ast.Op = hydra.serialization.op("$")(0)(hydra.ast.Associativity.right)
 

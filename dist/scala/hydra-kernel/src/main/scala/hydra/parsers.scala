@@ -45,7 +45,8 @@ def choice[T0](ps: Seq[hydra.parsing.Parser[T0]]): hydra.parsing.Parser[T0] =
 
 lazy val eof: hydra.parsing.Parser[Unit] = (input: scala.Predef.String) =>
   hydra.lib.logic.ifElse[hydra.parsing.ParseResult[Unit]](hydra.lib.equality.equal[scala.Predef.String](input)(""))(hydra.parsing.ParseResult.success(hydra.parsing.ParseSuccess((),
-     "")))(hydra.parsing.ParseResult.failure(hydra.parsing.ParseError("expected end of input", input)))
+     "")))(hydra.parsing.ParseResult.failure(hydra.parsing.ParseError("expected end of input",
+     input)))
 
 def fail[T0](msg: scala.Predef.String): hydra.parsing.Parser[T0] =
   (input: scala.Predef.String) =>

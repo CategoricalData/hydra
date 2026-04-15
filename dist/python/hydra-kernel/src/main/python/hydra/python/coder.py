@@ -892,7 +892,7 @@ def encode_term_inline(cx: hydra.context.Context, env: hydra.python.environment.
 
                 case _:
                     return t
-    def with_cast(pyexp: hydra.python.syntax.Expression) -> Either[T1, hydra.python.syntax.Expression]:
+    def with_cast(pyexp: hydra.python.syntax.Expression) -> Either[T0, hydra.python.syntax.Expression]:
         return hydra.lib.logic.if_else(hydra.lib.logic.or_(no_cast, env.skip_casts), (lambda : Right(pyexp)), (lambda : (tc := env.graph, (mtyp := hydra.lib.eithers.map((lambda _r: hydra.lib.pairs.first(_r)), hydra.checking.type_of(cx, tc, (), term)), hydra.lib.eithers.either((lambda _: Right(pyexp)), (lambda typ: hydra.lib.eithers.either((lambda _: Right(pyexp)), (lambda pytyp: Right(hydra.python.utils.cast_to(pytyp, pyexp))), encode_type(env, typ))), mtyp))[1])[1]))
     match hydra.strip.deannotate_and_detype_term(term):
         case hydra.core.TermApplication(value=app):

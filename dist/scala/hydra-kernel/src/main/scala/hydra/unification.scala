@@ -19,7 +19,8 @@ def joinTypes[T0](cx: T0)(left: hydra.core.Type)(right: hydra.core.Type)(comment
     Left(hydra.errors.UnificationError(sleft, sright, hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("cannot unify ")(hydra.show.core.`type`(sleft)))(" with "))(hydra.show.core.`type`(sright))))
   def assertEqual[T1]: Either[hydra.errors.UnificationError, Seq[T1]] =
     hydra.lib.logic.ifElse[Either[hydra.errors.UnificationError, Seq[T1]]](hydra.lib.equality.equal[hydra.core.Type](sleft)(sright))(Right(Seq()))(cannotUnify)
-  def joinList(lefts: Seq[hydra.core.Type])(rights: Seq[hydra.core.Type]): Either[hydra.errors.UnificationError, Seq[hydra.typing.TypeConstraint]] =
+  def joinList(lefts: Seq[hydra.core.Type])(rights: Seq[hydra.core.Type]): Either[hydra.errors.UnificationError,
+     Seq[hydra.typing.TypeConstraint]] =
     hydra.lib.logic.ifElse[Either[hydra.errors.UnificationError, Seq[hydra.typing.TypeConstraint]]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Type](lefts))(hydra.lib.lists.length[hydra.core.Type](rights)))(Right(hydra.lib.lists.zipWith[hydra.core.Type,
        hydra.core.Type, hydra.typing.TypeConstraint](joinOne)(lefts)(rights)))(cannotUnify)
   def joinRowTypes(left2: Seq[hydra.core.FieldType])(right2: Seq[hydra.core.FieldType]): Either[hydra.errors.UnificationError,
@@ -27,7 +28,8 @@ def joinTypes[T0](cx: T0)(left: hydra.core.Type)(right: hydra.core.Type)(comment
     hydra.lib.logic.ifElse[Either[hydra.errors.UnificationError, Seq[hydra.typing.TypeConstraint]]](hydra.lib.logic.and(hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Name](hydra.lib.lists.map[hydra.core.FieldType,
        hydra.core.Name]((x: hydra.core.FieldType) => (x.name))(left2)))(hydra.lib.lists.length[hydra.core.Name](hydra.lib.lists.map[hydra.core.FieldType,
        hydra.core.Name]((x: hydra.core.FieldType) => (x.name))(right2))))(hydra.lib.lists.foldl[Boolean,
-       Boolean](hydra.lib.logic.and)(true)(hydra.lib.lists.zipWith[hydra.core.Name, hydra.core.Name, Boolean]((left3: hydra.core.Name) =>
+       Boolean](hydra.lib.logic.and)(true)(hydra.lib.lists.zipWith[hydra.core.Name,
+       hydra.core.Name, Boolean]((left3: hydra.core.Name) =>
     (right3: hydra.core.Name) => hydra.lib.equality.equal[scala.Predef.String](left3)(right3))(hydra.lib.lists.map[hydra.core.FieldType,
        hydra.core.Name]((x: hydra.core.FieldType) => (x.name))(left2))(hydra.lib.lists.map[hydra.core.FieldType,
        hydra.core.Name]((x: hydra.core.FieldType) => (x.name))(right2)))))(joinList(hydra.lib.lists.map[hydra.core.FieldType,
@@ -51,7 +53,8 @@ def joinTypes[T0](cx: T0)(left: hydra.core.Type)(right: hydra.core.Type)(comment
       case _ => cannotUnify
     case hydra.core.Type.literal(v_Type_literal__) => assertEqual
     case hydra.core.Type.map(v_Type_map_l) => sright match
-      case hydra.core.Type.map(v_Type_map_r) => Right(Seq(joinOne(v_Type_map_l.keys)(v_Type_map_r.keys), joinOne(v_Type_map_l.values)(v_Type_map_r.values)))
+      case hydra.core.Type.map(v_Type_map_r) => Right(Seq(joinOne(v_Type_map_l.keys)(v_Type_map_r.keys),
+         joinOne(v_Type_map_l.values)(v_Type_map_r.values)))
       case _ => cannotUnify
     case hydra.core.Type.maybe(v_Type_maybe_l) => sright match
       case hydra.core.Type.maybe(v_Type_maybe_r) => Right(Seq(joinOne(v_Type_maybe_l)(v_Type_maybe_r)))
@@ -84,7 +87,8 @@ def joinTypes[T0](cx: T0)(left: hydra.core.Type)(right: hydra.core.Type)(comment
 def unifyTypeConstraints[T0, T1](cx: T0)(schemaTypes: Map[hydra.core.Name, T1])(constraints: Seq[hydra.typing.TypeConstraint]): Either[hydra.errors.UnificationError,
    hydra.typing.TypeSubst] =
   {
-  def withConstraint(c: hydra.typing.TypeConstraint)(rest: Seq[hydra.typing.TypeConstraint]): Either[hydra.errors.UnificationError, hydra.typing.TypeSubst] =
+  def withConstraint(c: hydra.typing.TypeConstraint)(rest: Seq[hydra.typing.TypeConstraint]): Either[hydra.errors.UnificationError,
+     hydra.typing.TypeSubst] =
     {
     lazy val sleft: hydra.core.Type = hydra.strip.deannotateType(c.left)
     lazy val sright: hydra.core.Type = hydra.strip.deannotateType(c.right)
@@ -95,13 +99,16 @@ def unifyTypeConstraints[T0, T1](cx: T0)(schemaTypes: Map[hydra.core.Name, T1])(
       def withResult(s: hydra.typing.TypeSubst): hydra.typing.TypeSubst = hydra.substitution.composeTypeSubst(subst)(s)
       hydra.lib.eithers.map[hydra.typing.TypeSubst, hydra.typing.TypeSubst, hydra.errors.UnificationError](withResult)(hydra.unification.unifyTypeConstraints(cx)(schemaTypes)(hydra.substitution.substituteInConstraints(subst)(rest)))
     }
-    def tryBinding(v: hydra.core.Name)(t: hydra.core.Type): Either[hydra.errors.UnificationError, hydra.typing.TypeSubst] =
+    def tryBinding(v: hydra.core.Name)(t: hydra.core.Type): Either[hydra.errors.UnificationError,
+       hydra.typing.TypeSubst] =
       hydra.lib.logic.ifElse[Either[hydra.errors.UnificationError, hydra.typing.TypeSubst]](hydra.unification.variableOccursInType(v)(t))(Left(hydra.errors.UnificationError(sleft,
          sright, hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("Variable ")(v))(" appears free in type "))(hydra.show.core.`type`(t)))(" ("))(comment))(")"))))(bind(v)(t))
     lazy val noVars: Either[hydra.errors.UnificationError, hydra.typing.TypeSubst] = {
-      def withConstraints(constraints2: Seq[hydra.typing.TypeConstraint]): Either[hydra.errors.UnificationError, hydra.typing.TypeSubst] =
+      def withConstraints(constraints2: Seq[hydra.typing.TypeConstraint]): Either[hydra.errors.UnificationError,
+         hydra.typing.TypeSubst] =
         hydra.unification.unifyTypeConstraints(cx)(schemaTypes)(hydra.lib.lists.concat2[hydra.typing.TypeConstraint](constraints2)(rest))
-      hydra.lib.eithers.bind[hydra.errors.UnificationError, Seq[hydra.typing.TypeConstraint], hydra.typing.TypeSubst](hydra.unification.joinTypes(cx)(sleft)(sright)(comment))(withConstraints)
+      hydra.lib.eithers.bind[hydra.errors.UnificationError, Seq[hydra.typing.TypeConstraint],
+         hydra.typing.TypeSubst](hydra.unification.joinTypes(cx)(sleft)(sright)(comment))(withConstraints)
     }
     lazy val dflt: Either[hydra.errors.UnificationError, hydra.typing.TypeSubst] = sright match
       case hydra.core.Type.variable(v_Type_variable_name) => tryBinding(v_Type_variable_name)(sleft)
@@ -113,8 +120,8 @@ def unifyTypeConstraints[T0, T1](cx: T0)(schemaTypes: Map[hydra.core.Name, T1])(
            hydra.typing.TypeSubst]](hydra.lib.maybes.isJust[T1](hydra.lib.maps.lookup[hydra.core.Name,
            T1](v_Type_variable_name)(schemaTypes)))(hydra.lib.logic.ifElse[Either[hydra.errors.UnificationError,
            hydra.typing.TypeSubst]](hydra.lib.maybes.isJust[T1](hydra.lib.maps.lookup[hydra.core.Name,
-           T1](v_Type_variable_name2)(schemaTypes)))(Left(hydra.errors.UnificationError(sleft, sright,
-           hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("Attempted to unify schema names ")(v_Type_variable_name))(" and "))(v_Type_variable_name2))(" ("))(comment))(")"))))(bind(v_Type_variable_name2)(sleft)))(bind(v_Type_variable_name)(sright)))
+           T1](v_Type_variable_name2)(schemaTypes)))(Left(hydra.errors.UnificationError(sleft,
+           sright, hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("Attempted to unify schema names ")(v_Type_variable_name))(" and "))(v_Type_variable_name2))(" ("))(comment))(")"))))(bind(v_Type_variable_name2)(sleft)))(bind(v_Type_variable_name)(sright)))
         case _ => tryBinding(v_Type_variable_name)(sright)
       case _ => dflt
   }
@@ -124,9 +131,10 @@ def unifyTypeConstraints[T0, T1](cx: T0)(schemaTypes: Map[hydra.core.Name, T1])(
 def unifyTypeLists[T0, T1](cx: T0)(schemaTypes: Map[hydra.core.Name, T1])(l: Seq[hydra.core.Type])(r: Seq[hydra.core.Type])(comment: scala.Predef.String): Either[hydra.errors.UnificationError,
    hydra.typing.TypeSubst] =
   {
-  def toConstraint(l2: hydra.core.Type)(r2: hydra.core.Type): hydra.typing.TypeConstraint = hydra.typing.TypeConstraint(l2, r2, comment)
-  hydra.unification.unifyTypeConstraints(cx)(schemaTypes)(hydra.lib.lists.zipWith[hydra.core.Type, hydra.core.Type,
-     hydra.typing.TypeConstraint](toConstraint)(l)(r))
+  def toConstraint(l2: hydra.core.Type)(r2: hydra.core.Type): hydra.typing.TypeConstraint = hydra.typing.TypeConstraint(l2,
+     r2, comment)
+  hydra.unification.unifyTypeConstraints(cx)(schemaTypes)(hydra.lib.lists.zipWith[hydra.core.Type,
+     hydra.core.Type, hydra.typing.TypeConstraint](toConstraint)(l)(r))
 }
 
 def unifyTypes[T0, T1](cx: T0)(schemaTypes: Map[hydra.core.Name, T1])(l: hydra.core.Type)(r: hydra.core.Type)(comment: scala.Predef.String): Either[hydra.errors.UnificationError,

@@ -11,7 +11,8 @@ def graph(v1: hydra.graph.Graph)(v2: hydra.core.Term): Either[hydra.errors.Decod
   (v22: hydra.core.Term) =>
   hydra.extract.core.decodeList(hydra.decode.topology.vertex)(v12)(v22))(v1)(v2)
 
-def tarjanState(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.topology.TarjanState] =
+def tarjanState(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+   hydra.topology.TarjanState] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.topology.TarjanState]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
@@ -40,7 +41,8 @@ def tarjanState(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
           case hydra.core.IntegerValue.int32(v_IntegerValue_int32_i) => Right(v_IntegerValue_int32_i)
           case _ => Left("expected int32 value")
         case _ => Left("expected int32 literal")
-      case _ => Left("expected literal"))(hydra.extract.core.stripWithDecodingError(cx2)(raw2)))(v1)(v2))(fieldMap)(cx))((field_indices: Map[Int, Int]) =>
+      case _ => Left("expected literal"))(hydra.extract.core.stripWithDecodingError(cx2)(raw2)))(v1)(v2))(fieldMap)(cx))((field_indices: Map[Int,
+         Int]) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, Map[Int, Int], hydra.topology.TarjanState](hydra.extract.core.requireField("lowLinks")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.core.decodeMap(hydra.decode.topology.vertex)((cx2: hydra.graph.Graph) =>
@@ -53,11 +55,13 @@ def tarjanState(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
           case hydra.core.IntegerValue.int32(v_IntegerValue_int32_i) => Right(v_IntegerValue_int32_i)
           case _ => Left("expected int32 value")
         case _ => Left("expected int32 literal")
-      case _ => Left("expected literal"))(hydra.extract.core.stripWithDecodingError(cx2)(raw2)))(v1)(v2))(fieldMap)(cx))((field_lowLinks: Map[Int, Int]) =>
+      case _ => Left("expected literal"))(hydra.extract.core.stripWithDecodingError(cx2)(raw2)))(v1)(v2))(fieldMap)(cx))((field_lowLinks: Map[Int,
+         Int]) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[Int], hydra.topology.TarjanState](hydra.extract.core.requireField("stack")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.core.decodeList(hydra.decode.topology.vertex)(v1)(v2))(fieldMap)(cx))((field_stack: Seq[Int]) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.collection.immutable.Set[Int], hydra.topology.TarjanState](hydra.extract.core.requireField("onStack")((v1: hydra.graph.Graph) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.collection.immutable.Set[Int],
+         hydra.topology.TarjanState](hydra.extract.core.requireField("onStack")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.core.decodeSet(hydra.decode.topology.vertex)(v1)(v2))(fieldMap)(cx))((field_onStack: scala.collection.immutable.Set[Int]) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[Seq[Int]], hydra.topology.TarjanState](hydra.extract.core.requireField("sccs")((v1: hydra.graph.Graph) =>
@@ -65,7 +69,8 @@ def tarjanState(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
       hydra.extract.core.decodeList((v12: hydra.graph.Graph) =>
       (v22: hydra.core.Term) =>
       hydra.extract.core.decodeList(hydra.decode.topology.vertex)(v12)(v22))(v1)(v2))(fieldMap)(cx))((field_sccs: Seq[Seq[Int]]) =>
-      Right(hydra.topology.TarjanState(field_counter, field_indices, field_lowLinks, field_stack, field_onStack, field_sccs))))))))
+      Right(hydra.topology.TarjanState(field_counter, field_indices, field_lowLinks,
+         field_stack, field_onStack, field_sccs))))))))
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
