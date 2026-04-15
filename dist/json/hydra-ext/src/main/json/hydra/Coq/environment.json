@@ -1,0 +1,67 @@
+{
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.coq.environment.CoqEnvironment",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "Cross-module state threaded through the Coq encoder"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "currentNamespace",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The Hydra namespace of the module currently being encoded (e.g. \"hydra.core\"). Used by the name resolver to decide whether a cross-namespace reference needs to stay qualified."}}}],
+                        "body": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "constructorCounts",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "Number of constructors in each union type, keyed by local type name (e.g. \"Term\" -> 14). Used to decide whether a match is exhaustive."}}}],
+                        "body": {
+                          "map": {
+                            "keys": {"literal": {"string": {}}},
+                            "values": {"literal": {"integer": {"int32": {}}}}}}}}},
+                  {
+                    "name": "ambiguousNames",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "Local names (without namespace prefix) that are defined in more than one module. References to these must be kept fully qualified."}}}],
+                        "body": {"set": {"literal": {"string": {}}}}}}},
+                  {
+                    "name": "sanitizedAccessors",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "Accessor names for record fields that were sanitized to unit due to Coq's strict positivity requirement. Applications of these accessors are replaced with hydra_unreachable at emission time."}}}],
+                        "body": {"set": {"literal": {"string": {}}}}}}}]}}},
+          "variables": []}}}],
+  "description": "Environment types for Coq code generation",
+  "namespace": "hydra.coq.environment",
+  "termDependencies": [],
+  "typeDependencies": ["hydra.core"]}

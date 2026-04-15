@@ -121,8 +121,12 @@
     "hydra.shex.syntax",
     "hydra.xml.schema"],
   "hydraExtModules": [
+    "hydra.coq.coder",
+    "hydra.coq.environment",
+    "hydra.coq.generate",
     "hydra.coq.language",
     "hydra.coq.serde",
+    "hydra.coq.utils",
     "hydra.atlas",
     "hydra.avro.coder",
     "hydra.avro.encoder",
