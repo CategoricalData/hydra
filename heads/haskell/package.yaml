@@ -103,24 +103,6 @@ executables:
     dependencies:
       - hydra
 
-  update-scala:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-scala
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra
-
-  update-scala-tests:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-scala-tests
-      - ../../dist/haskell/hydra-kernel/src/test/haskell
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra
-      - hspec                      >= 2.11.0 && < 2.12
-
   update-ext-sources:
     main: Main.hs
     source-dirs:

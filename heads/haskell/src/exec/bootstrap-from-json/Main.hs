@@ -32,7 +32,7 @@ module Main where
 import Hydra.Kernel
 import Hydra.Generation
 import Hydra.Sources.All (kernelModules)
-import Hydra.ExtGeneration (moduleToLispDialect)
+import Hydra.ExtGeneration (moduleToLispDialect, wrapLongLinesInScalaTree)
 import Hydra.Haskell.Coder (moduleToHaskell)
 import Hydra.Haskell.Language (haskellLanguage)
 import Hydra.Java.Coder (moduleToJava)
@@ -529,6 +529,15 @@ main = do
     else return 0
 
   let genTestSuccess = True
+
+  -- Scala post-processing: wrap long lines in every generated .scala file.
+  -- The Scala compiler hits stack/memory limits on extremely long single-line
+  -- expressions; wrapping is the same pass that writeScala applies in the
+  -- DSL-direct path, lifted here so the JSON pipeline produces identical output.
+  when (target == "scala") $ do
+    putStrLn "Post-processing: wrapping long Scala lines..."
+    wrapLongLinesInScalaTree outBase
+    putStrLn ""
 
   putStrLn "=========================================="
   putStrLn $ "Done: " ++ show mainFileCount ++ " main"
