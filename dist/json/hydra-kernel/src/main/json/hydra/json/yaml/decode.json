@@ -350,6 +350,24 @@
                                                 "domain": {"literal": {"boolean": {}}},
                                                 "parameter": "b"}}},
                                           {
+                                            "name": "decimal",
+                                            "term": {
+                                              "lambda": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "either": {
+                                                            "@right": {
+                                                              "inject": {
+                                                                "field": {"name": "number", "term": {"variable": "d"}},
+                                                                "typeName": "hydra.json.model.Value"}}}},
+                                                        "type": {"literal": {"string": {}}}}},
+                                                    "type": {"variable": "hydra.json.model.Value"}}},
+                                                "domain": {"literal": {"decimal": {}}},
+                                                "parameter": "d"}}},
+                                          {
                                             "name": "float",
                                             "term": {
                                               "lambda": {
@@ -361,7 +379,15 @@
                                                           "either": {
                                                             "@right": {
                                                               "inject": {
-                                                                "field": {"name": "number", "term": {"variable": "f"}},
+                                                                "field": {
+                                                                  "name": "number",
+                                                                  "term": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "f"},
+                                                                          "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}},
+                                                                      "function": {"variable": "hydra.lib.literals.float64ToDecimal"}}}},
                                                                 "typeName": "hydra.json.model.Value"}}}},
                                                         "type": {"literal": {"string": {}}}}},
                                                     "type": {"variable": "hydra.json.model.Value"}}},
@@ -384,7 +410,7 @@
                                                                   "term": {
                                                                     "application": {
                                                                       "argument": {"variable": "i"},
-                                                                      "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
+                                                                      "function": {"variable": "hydra.lib.literals.bigintToDecimal"}}}},
                                                                 "typeName": "hydra.json.model.Value"}}}},
                                                         "type": {"literal": {"string": {}}}}},
                                                     "type": {"variable": "hydra.json.model.Value"}}},

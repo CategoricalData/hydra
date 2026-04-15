@@ -28,18 +28,16 @@ encodeFloat fv =
     case fv of
       Core.FloatValueBigfloat v0 ->
         let s = Literals.showBigfloat v0
-        in (Logic.ifElse (isNonFiniteFloatString s)
-              (Left (Strings.cat ["JSON cannot represent non-finite bigfloat: ", s]))
-              (Right (Model.ValueNumber (Literals.float64ToDecimal (Literals.bigfloatToFloat64 v0)))))
+        in (Logic.ifElse (isNonFiniteFloatString s) (Left (Strings.cat [
+          "JSON cannot represent non-finite bigfloat: ",
+          s])) (Right (Model.ValueNumber (Literals.float64ToDecimal (Literals.bigfloatToFloat64 v0)))))
       Core.FloatValueFloat32 v0 -> Right (Model.ValueString (Literals.showFloat32 v0))
       Core.FloatValueFloat64 v0 ->
         let s = Literals.showFloat64 v0
-        in (Logic.ifElse (isNonFiniteFloatString s)
-              (Right (Model.ValueString s))
-              (Right (Model.ValueNumber (Literals.float64ToDecimal v0))))
+        in (Logic.ifElse (isNonFiniteFloatString s) (Right (Model.ValueString s)) (Right (Model.ValueNumber (Literals.float64ToDecimal v0))))
 
 -- | Encode an integer value to JSON. Small ints use native numbers; large ints use strings.
-encodeInteger :: Core.IntegerValue -> Either String Model.Value
+encodeInteger :: Core.IntegerValue -> Either t0 Model.Value
 encodeInteger iv =
     case iv of
       Core.IntegerValueBigint v0 -> Right (Model.ValueString (Literals.showBigint v0))

@@ -162,7 +162,7 @@
                                                             "application": {
                                                               "argument": {
                                                                 "inject": {
-                                                                  "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 0}}}},
+                                                                  "field": {"name": "number", "term": {"literal": {"decimal": 0}}},
                                                                   "typeName": "hydra.json.model.Value"}},
                                                               "function": {"variable": "hydra.json.writer.printJson"}}}},
                                                         {"name": "expected", "term": {"literal": {"string": "0"}}}],
@@ -196,7 +196,7 @@
                                                             "application": {
                                                               "argument": {
                                                                 "inject": {
-                                                                  "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 42}}}},
+                                                                  "field": {"name": "number", "term": {"literal": {"decimal": 42}}},
                                                                   "typeName": "hydra.json.model.Value"}},
                                                               "function": {"variable": "hydra.json.writer.printJson"}}}},
                                                         {"name": "expected", "term": {"literal": {"string": "42"}}}],
@@ -230,7 +230,7 @@
                                                             "application": {
                                                               "argument": {
                                                                 "inject": {
-                                                                  "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": -17}}}},
+                                                                  "field": {"name": "number", "term": {"literal": {"decimal": -17}}},
                                                                   "typeName": "hydra.json.model.Value"}},
                                                               "function": {"variable": "hydra.json.writer.printJson"}}}},
                                                         {"name": "expected", "term": {"literal": {"string": "-17"}}}],
@@ -264,9 +264,7 @@
                                                             "application": {
                                                               "argument": {
                                                                 "inject": {
-                                                                  "field": {
-                                                                    "name": "number",
-                                                                    "term": {"literal": {"float": {"bigfloat": 1000000}}}},
+                                                                  "field": {"name": "number", "term": {"literal": {"decimal": 1000000}}},
                                                                   "typeName": "hydra.json.model.Value"}},
                                                               "function": {"variable": "hydra.json.writer.printJson"}}}},
                                                         {"name": "expected", "term": {"literal": {"string": "1000000"}}}],
@@ -300,7 +298,7 @@
                                                             "application": {
                                                               "argument": {
                                                                 "inject": {
-                                                                  "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 3.14}}}},
+                                                                  "field": {"name": "number", "term": {"literal": {"decimal": 3.14}}},
                                                                   "typeName": "hydra.json.model.Value"}},
                                                               "function": {"variable": "hydra.json.writer.printJson"}}}},
                                                         {"name": "expected", "term": {"literal": {"string": "3.14"}}}],
@@ -334,7 +332,7 @@
                                                             "application": {
                                                               "argument": {
                                                                 "inject": {
-                                                                  "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": -2.5}}}},
+                                                                  "field": {"name": "number", "term": {"literal": {"decimal": -2.5}}},
                                                                   "typeName": "hydra.json.model.Value"}},
                                                               "function": {"variable": "hydra.json.writer.printJson"}}}},
                                                         {"name": "expected", "term": {"literal": {"string": "-2.5"}}}],
@@ -368,12 +366,179 @@
                                                             "application": {
                                                               "argument": {
                                                                 "inject": {
-                                                                  "field": {
-                                                                    "name": "number",
-                                                                    "term": {"literal": {"float": {"bigfloat": 1.0e-3}}}},
+                                                                  "field": {"name": "number", "term": {"literal": {"decimal": 1.0e-3}}},
                                                                   "typeName": "hydra.json.model.Value"}},
                                                               "function": {"variable": "hydra.json.writer.printJson"}}}},
                                                         {"name": "expected", "term": {"literal": {"string": "1.0e-3"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
+                            "typeName": "hydra.testing.TestGroup"}},
+                        {
+                          "record": {
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "decimal precision"}}},
+                              {
+                                "name": "description",
+                                "term": {
+                                  "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                              {
+                                "name": "subgroups",
+                                "term": {
+                                  "typeApplication": {
+                                    "body": {"list": []},
+                                    "type": {"variable": "hydra.testing.TestGroup"}}}},
+                              {
+                                "name": "cases",
+                                "term": {
+                                  "list": [
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "large integer exact"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "inject": {
+                                                                  "field": {
+                                                                    "name": "number",
+                                                                    "term": {"literal": {"decimal": 100000000000000000001}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"literal": {"string": "100000000000000000001"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "large negative integer exact"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "inject": {
+                                                                  "field": {
+                                                                    "name": "number",
+                                                                    "term": {"literal": {"decimal": -100000000000000000001}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"literal": {"string": "-100000000000000000001"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "tiny exponent"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "inject": {
+                                                                  "field": {"name": "number", "term": {"literal": {"decimal": 1.0e-20}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {"name": "expected", "term": {"literal": {"string": "1.0e-20"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "huge exponent"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "inject": {
+                                                                  "field": {
+                                                                    "name": "number",
+                                                                    "term": {"literal": {"decimal": 100000000000000000000}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {"name": "expected", "term": {"literal": {"string": "1.0e20"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
@@ -817,7 +982,7 @@
                                                                       "list": [
                                                                         {
                                                                           "inject": {
-                                                                            "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 1}}}},
+                                                                            "field": {"name": "number", "term": {"literal": {"decimal": 1}}},
                                                                             "typeName": "hydra.json.model.Value"}}]}},
                                                                   "typeName": "hydra.json.model.Value"}},
                                                               "function": {"variable": "hydra.json.writer.printJson"}}}},
@@ -858,15 +1023,15 @@
                                                                       "list": [
                                                                         {
                                                                           "inject": {
-                                                                            "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 1}}}},
+                                                                            "field": {"name": "number", "term": {"literal": {"decimal": 1}}},
                                                                             "typeName": "hydra.json.model.Value"}},
                                                                         {
                                                                           "inject": {
-                                                                            "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 2}}}},
+                                                                            "field": {"name": "number", "term": {"literal": {"decimal": 2}}},
                                                                             "typeName": "hydra.json.model.Value"}},
                                                                         {
                                                                           "inject": {
-                                                                            "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 3}}}},
+                                                                            "field": {"name": "number", "term": {"literal": {"decimal": 3}}},
                                                                             "typeName": "hydra.json.model.Value"}}]}},
                                                                   "typeName": "hydra.json.model.Value"}},
                                                               "function": {"variable": "hydra.json.writer.printJson"}}}},
@@ -954,7 +1119,7 @@
                                                                       "list": [
                                                                         {
                                                                           "inject": {
-                                                                            "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 1}}}},
+                                                                            "field": {"name": "number", "term": {"literal": {"decimal": 1}}},
                                                                             "typeName": "hydra.json.model.Value"}},
                                                                         {
                                                                           "inject": {
@@ -1115,13 +1280,13 @@
                                                                           "@key": {"literal": {"string": "a"}},
                                                                           "@value": {
                                                                             "inject": {
-                                                                              "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 1}}}},
+                                                                              "field": {"name": "number", "term": {"literal": {"decimal": 1}}},
                                                                               "typeName": "hydra.json.model.Value"}}},
                                                                         {
                                                                           "@key": {"literal": {"string": "b"}},
                                                                           "@value": {
                                                                             "inject": {
-                                                                              "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 2}}}},
+                                                                              "field": {"name": "number", "term": {"literal": {"decimal": 2}}},
                                                                               "typeName": "hydra.json.model.Value"}}}]}},
                                                                   "typeName": "hydra.json.model.Value"}},
                                                               "function": {"variable": "hydra.json.writer.printJson"}}}},
@@ -1172,7 +1337,7 @@
                                                                           "@key": {"literal": {"string": "count"}},
                                                                           "@value": {
                                                                             "inject": {
-                                                                              "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 42}}}},
+                                                                              "field": {"name": "number", "term": {"literal": {"decimal": 42}}},
                                                                               "typeName": "hydra.json.model.Value"}}},
                                                                         {
                                                                           "@key": {"literal": {"string": "name"}},
@@ -1247,11 +1412,11 @@
                                                                                 "list": [
                                                                                   {
                                                                                     "inject": {
-                                                                                      "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 1}}}},
+                                                                                      "field": {"name": "number", "term": {"literal": {"decimal": 1}}},
                                                                                       "typeName": "hydra.json.model.Value"}},
                                                                                   {
                                                                                     "inject": {
-                                                                                      "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 2}}}},
+                                                                                      "field": {"name": "number", "term": {"literal": {"decimal": 2}}},
                                                                                       "typeName": "hydra.json.model.Value"}}]}},
                                                                             "typeName": "hydra.json.model.Value"}},
                                                                         {
@@ -1262,11 +1427,11 @@
                                                                                 "list": [
                                                                                   {
                                                                                     "inject": {
-                                                                                      "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 3}}}},
+                                                                                      "field": {"name": "number", "term": {"literal": {"decimal": 3}}},
                                                                                       "typeName": "hydra.json.model.Value"}},
                                                                                   {
                                                                                     "inject": {
-                                                                                      "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 4}}}},
+                                                                                      "field": {"name": "number", "term": {"literal": {"decimal": 4}}},
                                                                                       "typeName": "hydra.json.model.Value"}}]}},
                                                                             "typeName": "hydra.json.model.Value"}}]}},
                                                                   "typeName": "hydra.json.model.Value"}},
@@ -1318,11 +1483,11 @@
                                                                                   "list": [
                                                                                     {
                                                                                       "inject": {
-                                                                                        "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 1}}}},
+                                                                                        "field": {"name": "number", "term": {"literal": {"decimal": 1}}},
                                                                                         "typeName": "hydra.json.model.Value"}},
                                                                                     {
                                                                                       "inject": {
-                                                                                        "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 2}}}},
+                                                                                        "field": {"name": "number", "term": {"literal": {"decimal": 2}}},
                                                                                         "typeName": "hydra.json.model.Value"}}]}},
                                                                               "typeName": "hydra.json.model.Value"}}}]}},
                                                                   "typeName": "hydra.json.model.Value"}},
@@ -1374,7 +1539,7 @@
                                                                                     "@key": {"literal": {"string": "id"}},
                                                                                     "@value": {
                                                                                       "inject": {
-                                                                                        "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 1}}}},
+                                                                                        "field": {"name": "number", "term": {"literal": {"decimal": 1}}},
                                                                                         "typeName": "hydra.json.model.Value"}}}]}},
                                                                             "typeName": "hydra.json.model.Value"}},
                                                                         {
@@ -1387,7 +1552,7 @@
                                                                                     "@key": {"literal": {"string": "id"}},
                                                                                     "@value": {
                                                                                       "inject": {
-                                                                                        "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 2}}}},
+                                                                                        "field": {"name": "number", "term": {"literal": {"decimal": 2}}},
                                                                                         "typeName": "hydra.json.model.Value"}}}]}},
                                                                             "typeName": "hydra.json.model.Value"}}]}},
                                                                   "typeName": "hydra.json.model.Value"}},

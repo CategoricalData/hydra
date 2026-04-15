@@ -14,6 +14,7 @@ import qualified Hydra.Test.Hoisting.All as HoistingAll
 import qualified Hydra.Test.Inference.All as InferenceAll
 import qualified Hydra.Test.Json.Roundtrip as Roundtrip
 import qualified Hydra.Test.Json.Writer as Writer
+import qualified Hydra.Test.Json.Yaml as Yaml
 import qualified Hydra.Test.Lib.Chars as Chars
 import qualified Hydra.Test.Lib.Eithers as Eithers
 import qualified Hydra.Test.Lib.Equality as Equality
@@ -70,6 +71,7 @@ allTests =
         InferenceAll.allTests,
         Roundtrip.allTests,
         Writer.allTests,
+        Yaml.allTests,
         Reduction.allTests,
         Rewriting.allTests,
         Serialization.allTests,

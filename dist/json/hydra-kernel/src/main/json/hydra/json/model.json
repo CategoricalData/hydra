@@ -47,7 +47,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "A numeric value"}}}],
-                        "body": {"literal": {"float": {"bigfloat": {}}}}}}},
+                        "body": {"literal": {"decimal": {}}}}}},
                   {
                     "name": "object",
                     "type": {

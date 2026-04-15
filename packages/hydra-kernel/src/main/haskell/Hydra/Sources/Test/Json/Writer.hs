@@ -96,14 +96,15 @@ decimalPrecisionGroup = subgroup "decimal precision" [
     writerCase "large negative integer exact"
       (Json.valueNumber $ Phantoms.decimal (Sci.scientific (-100000000000000000001) 0))
       "-100000000000000000001",
-    -- Tiny exponent value — Scientific's Show emits scientific notation here.
+    -- Tiny exponent value — Scientific's Show emits scientific notation (not a whole number).
     writerCase "tiny exponent"
       (Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 (-20)))
       "1.0e-20",
-    -- Huge exponent value — Scientific's Show emits scientific notation here.
+    -- Large exponent value: the writer's whole-number shortcut detects this as an integer
+    -- and prints it in plain form rather than scientific notation.
     writerCase "huge exponent"
       (Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 20))
-      "1.0e20"]
+      "100000000000000000000"]
 
 stringsGroup :: TTerm TestGroup
 stringsGroup = subgroup "strings" [
