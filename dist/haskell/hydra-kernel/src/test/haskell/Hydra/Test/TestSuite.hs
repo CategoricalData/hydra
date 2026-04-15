@@ -10,6 +10,7 @@ import qualified Hydra.Test.Dependencies as Dependencies
 import qualified Hydra.Test.Differentiation as Differentiation
 import qualified Hydra.Test.EtaExpansion as EtaExpansion
 import qualified Hydra.Test.Formatting as Formatting
+import qualified Hydra.Test.Generation as Generation
 import qualified Hydra.Test.Hoisting.All as HoistingAll
 import qualified Hydra.Test.Inference.All as InferenceAll
 import qualified Hydra.Test.Json.Roundtrip as Roundtrip
@@ -65,6 +66,7 @@ allTests =
         Differentiation.allTests,
         EtaExpansion.allTests,
         Formatting.allTests,
+        Generation.allTests,
         HoistingAll.allTests,
         InferenceAll.allTests,
         Roundtrip.allTests,
