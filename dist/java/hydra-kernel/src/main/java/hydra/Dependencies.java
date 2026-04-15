@@ -243,9 +243,11 @@ public interface Dependencies {
           n,
           rootName),
         () -> (l).body,
-        () -> hydra.lib.maybes.FromJust.apply(hydra.lib.maps.Lookup.apply(
-          n,
-          bindingMap.get()))))));
+        () -> hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> new hydra.core.Term.Unit(),
+          hydra.lib.maps.Lookup.apply(
+            n,
+            bindingMap.get()))))));
     hydra.util.Lazy<java.util.Set<hydra.core.Name>> reachable = new hydra.util.Lazy<>(() -> hydra.Sorting.findReachableNodes(
       adj,
       rootName));

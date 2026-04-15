@@ -24,6 +24,8 @@
 
 (require 'hydra.lib.maybes)
 
+(require 'hydra.lib.pairs)
+
 (require 'hydra.lib.sets)
 
 (require 'hydra.lib.strings)
@@ -34,7 +36,7 @@
 
 (require 'hydra.predicates)
 
-(defvar hydra_encoding_encode_binding_name (lambda (n) (if (hydra_lib_logic_not (hydra_lib_lists_null (hydra_lib_lists_tail (funcall (hydra_lib_strings_split_on ".") (funcall (lambda (v) v) n))))) (funcall (hydra_lib_strings_intercalate ".") (funcall (hydra_lib_lists_concat2 (list "hydra" "encode")) (funcall (hydra_lib_lists_concat2 (hydra_lib_lists_tail (hydra_lib_lists_init (funcall (hydra_lib_strings_split_on ".") (funcall (lambda (v) v) n))))) (list (hydra_formatting_decapitalize (hydra_names_local_name_of n)))))) (hydra_formatting_decapitalize (hydra_names_local_name_of n)))))
+(defvar hydra_encoding_encode_binding_name (lambda (n) (let ((parts (funcall (hydra_lib_strings_split_on ".") (funcall (lambda (v) v) n)))) (let ((local_part (hydra_formatting_decapitalize (hydra_names_local_name_of n)))) (let ((local_result local_part)) (funcall (funcall (hydra_lib_maybes_maybe (lambda () local_result)) (lambda (ns_parts) (funcall (funcall (hydra_lib_maybes_maybe (lambda () local_result)) (lambda (ns_uc) (let ((tail (hydra_lib_pairs_second ns_uc))) (funcall (hydra_lib_strings_intercalate ".") (funcall (hydra_lib_lists_concat2 (list "hydra" "encode")) (funcall (hydra_lib_lists_concat2 tail) (list local_part))))))) (hydra_lib_lists_uncons ns_parts)))) (hydra_lib_lists_maybe_init parts)))))))
 
 (defvar hydra_encoding_encode_float_value (lambda (float_type) (lambda (val_term) (list :inject (make-hydra_core_injection "hydra.core.FloatValue" (make-hydra_core_field (funcall (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :bigfloat) (funcall (lambda (_) "bigfloat") match_value)) ((equal (car match_target) :float32) (funcall (lambda (_) "float32") match_value)) ((equal (car match_target) :float64) (funcall (lambda (_) "float64") match_value)))) (cadr match_target))) float_type) val_term))))))
 
@@ -96,7 +98,7 @@
 
 (defvar hydra_encoding_encode_binding (lambda (cx) (lambda (graph) (lambda (b) (funcall (hydra_lib_eithers_bind (funcall (hydra_decode_core_type graph) (funcall (lambda (v) (hydra_core_binding-term v)) b))) (lambda (typ) (list :right (make-hydra_core_binding (hydra_encoding_encode_binding_name (funcall (lambda (v) (hydra_core_binding-name v)) b)) (funcall (hydra_encoding_encode_type_named (funcall (lambda (v) (hydra_core_binding-name v)) b)) typ) (list :just (funcall (hydra_encoding_encoder_type_scheme_named (funcall (lambda (v) (hydra_core_binding-name v)) b)) typ))))))))))
 
-(defvar hydra_encoding_encode_namespace (lambda (ns_) (hydra_lib_strings_cat (list "hydra.encode." (funcall (hydra_lib_strings_intercalate ".") (hydra_lib_lists_tail (funcall (hydra_lib_strings_split_on ".") (funcall (lambda (v) v) ns_))))))))
+(defvar hydra_encoding_encode_namespace (lambda (ns_) (let ((parts (funcall (hydra_lib_strings_split_on ".") (funcall (lambda (v) v) ns_)))) (let ((fallback (funcall (lambda (v) v) ns_))) (funcall (funcall (hydra_lib_maybes_maybe (lambda () fallback)) (lambda (uc) (hydra_lib_strings_cat (list "hydra.encode." (funcall (hydra_lib_strings_intercalate ".") (hydra_lib_pairs_second uc)))))) (hydra_lib_lists_uncons parts))))))
 
 (defvar hydra_encoding_is_encodable_binding (lambda (cx) (lambda (graph) (lambda (b) (funcall (hydra_lib_eithers_bind (funcall (funcall (hydra_predicates_is_serializable_by_name cx) graph) (funcall (lambda (v) (hydra_core_binding-name v)) b))) (lambda (serializable) (list :right (if serializable (list :just b) (list :nothing)))))))))
 

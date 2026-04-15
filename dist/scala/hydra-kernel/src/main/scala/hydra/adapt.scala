@@ -247,12 +247,14 @@ def adaptTerm[T0](constraints: hydra.coders.LanguageConstraints)(litmap: Map[hyd
       case _ => Right(Some(term))
     def forUnsupported(term: hydra.core.Term): Either[hydra.errors.Error, Option[hydra.core.Term]] =
       {
-      def forNonNull(alts: Seq[hydra.core.Term]): Either[hydra.errors.Error, Option[hydra.core.Term]] =
-        hydra.lib.eithers.bind[hydra.errors.Error, Option[hydra.core.Term], Option[hydra.core.Term]](tryTerm(hydra.lib.lists.head[hydra.core.Term](alts)))((mterm: Option[hydra.core.Term]) =>
-        hydra.lib.maybes.maybe[Either[hydra.errors.Error, Option[hydra.core.Term]],
-           hydra.core.Term](tryAlts(hydra.lib.lists.tail[hydra.core.Term](alts)))((t: hydra.core.Term) => Right(Some(t)))(mterm))
       def tryAlts(alts: Seq[hydra.core.Term]): Either[hydra.errors.Error, Option[hydra.core.Term]] =
-        hydra.lib.logic.ifElse[Either[hydra.errors.Error, Option[hydra.core.Term]]](hydra.lib.lists.`null`[hydra.core.Term](alts))(Right(None))(forNonNull(alts))
+        hydra.lib.maybes.maybe[Either[hydra.errors.Error, Option[hydra.core.Term]],
+           Tuple2[hydra.core.Term, Seq[hydra.core.Term]]](Right(None))((uc: Tuple2[hydra.core.Term,
+           Seq[hydra.core.Term]]) =>
+        hydra.lib.eithers.bind[hydra.errors.Error, Option[hydra.core.Term], Option[hydra.core.Term]](tryTerm(hydra.lib.pairs.first[hydra.core.Term,
+           Seq[hydra.core.Term]](uc)))((mterm: Option[hydra.core.Term]) =>
+        hydra.lib.maybes.maybe[Either[hydra.errors.Error, Option[hydra.core.Term]],
+           hydra.core.Term](tryAlts(hydra.lib.pairs.second[hydra.core.Term, Seq[hydra.core.Term]](uc)))((t: hydra.core.Term) => Right(Some(t)))(mterm)))(hydra.lib.lists.uncons[hydra.core.Term](alts))
       hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.Term], Option[hydra.core.Term]](hydra.adapt.termAlternatives(cx)(graph)(term))((alts0: Seq[hydra.core.Term]) => tryAlts(alts0))
     }
     def tryTerm(term: hydra.core.Term): Either[hydra.errors.Error, Option[hydra.core.Term]] =
@@ -293,8 +295,11 @@ def adaptType(constraints: hydra.coders.LanguageConstraints)(litmap: Map[hydra.c
   def forUnsupported(typ: hydra.core.Type): Option[hydra.core.Type] =
     {
     def tryAlts(alts: Seq[hydra.core.Type]): Option[hydra.core.Type] =
-      hydra.lib.logic.ifElse[Option[hydra.core.Type]](hydra.lib.lists.`null`[hydra.core.Type](alts))(None)(hydra.lib.maybes.maybe[Option[hydra.core.Type],
-         hydra.core.Type](tryAlts(hydra.lib.lists.tail[hydra.core.Type](alts)))((t: hydra.core.Type) => Some(t))(tryType(hydra.lib.lists.head[hydra.core.Type](alts))))
+      hydra.lib.maybes.bind[Tuple2[hydra.core.Type, Seq[hydra.core.Type]], hydra.core.Type](hydra.lib.lists.uncons[hydra.core.Type](alts))((uc: Tuple2[hydra.core.Type,
+         Seq[hydra.core.Type]]) =>
+      hydra.lib.maybes.maybe[Option[hydra.core.Type], hydra.core.Type](tryAlts(hydra.lib.pairs.second[hydra.core.Type,
+         Seq[hydra.core.Type]](uc)))((t: hydra.core.Type) => Some(t))(tryType(hydra.lib.pairs.first[hydra.core.Type,
+         Seq[hydra.core.Type]](uc))))
     lazy val alts0: Seq[hydra.core.Type] = hydra.adapt.typeAlternatives(typ)
     tryAlts(alts0)
   }
@@ -651,10 +656,10 @@ def schemaGraphToDefinitions[T0](constraints: hydra.coders.LanguageConstraints)(
          hydra.core.TypeScheme(Seq(), hydra.lib.pairs.second[hydra.core.Name, hydra.core.Type](pair),
          None))
     Right(Tuple2(tmap1, hydra.lib.lists.map[Seq[hydra.core.Name], Seq[hydra.packaging.TypeDefinition]]((names: Seq[hydra.core.Name]) =>
-      hydra.lib.lists.map[Tuple2[hydra.core.Name, hydra.core.Type], hydra.packaging.TypeDefinition](toDef)(hydra.lib.lists.map[hydra.core.Name,
+      hydra.lib.lists.map[Tuple2[hydra.core.Name, hydra.core.Type], hydra.packaging.TypeDefinition](toDef)(hydra.lib.maybes.mapMaybe[hydra.core.Name,
          Tuple2[hydra.core.Name, hydra.core.Type]]((n: hydra.core.Name) =>
-      Tuple2(n, hydra.lib.maybes.fromJust[hydra.core.Type](hydra.lib.maps.lookup[hydra.core.Name,
-         hydra.core.Type](n)(tmap1))))(names)))(nameLists)))
+      hydra.lib.maybes.map[hydra.core.Type, Tuple2[hydra.core.Name, hydra.core.Type]]((t: hydra.core.Type) => Tuple2(n,
+         t))(hydra.lib.maps.lookup[hydra.core.Name, hydra.core.Type](n)(tmap1)))(names)))(nameLists)))
   }))
 }
 

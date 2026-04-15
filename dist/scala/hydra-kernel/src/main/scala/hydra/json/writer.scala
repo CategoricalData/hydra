@@ -9,10 +9,15 @@ lazy val colonOp: hydra.ast.Op = hydra.ast.Op(":", hydra.ast.Padding(hydra.ast.W
 
 def jsonString(s: scala.Predef.String): scala.Predef.String =
   {
+  def hexChar(i: Int): scala.Predef.String =
+    hydra.lib.maybes.fromMaybe[scala.Predef.String]("?")(hydra.lib.maybes.map[Int,
+       scala.Predef.String]((ch: Int) => hydra.lib.strings.fromList(hydra.lib.lists.pure[Int](ch)))(hydra.lib.strings.maybeCharAt(i)("0123456789abcdef")))
   def hexEscape(c: Int): scala.Predef.String =
     {
-    lazy val hi: scala.Predef.String = hydra.lib.strings.fromList(hydra.lib.lists.pure[Int](hydra.lib.strings.charAt(hydra.lib.math.div(c)(16))("0123456789abcdef")))
-    lazy val lo: scala.Predef.String = hydra.lib.strings.fromList(hydra.lib.lists.pure[Int](hydra.lib.strings.charAt(hydra.lib.math.mod(c)(16))("0123456789abcdef")))
+    lazy val hi: scala.Predef.String = hydra.lib.maybes.fromMaybe[scala.Predef.String]("?")(hydra.lib.maybes.map[Int,
+       scala.Predef.String](hexChar)(hydra.lib.math.maybeDiv(c)(16)))
+    lazy val lo: scala.Predef.String = hydra.lib.maybes.fromMaybe[scala.Predef.String]("?")(hydra.lib.maybes.map[Int,
+       scala.Predef.String](hexChar)(hydra.lib.math.maybeMod(c)(16)))
     hydra.lib.strings.cat2(hydra.lib.strings.cat2("\\u00")(hi))(lo)
   }
   def escape(c: Int): scala.Predef.String =
