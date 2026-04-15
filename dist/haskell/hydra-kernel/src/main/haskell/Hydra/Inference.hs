@@ -38,6 +38,11 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Return the element at the given index, or Left(Other) with the given description if out of range
+atOrFail :: Int -> String -> [t0] -> Either Errors.Error t0
+atOrFail i desc xs =
+    Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "atOrFail: " desc)))) (\x -> Right x) (Lists.maybeAt i xs)
+
 -- | Unify type constraints and check the substitution
 bindConstraints :: t0 -> Graph.Graph -> [Typing.TypeConstraint] -> Either Errors.Error Typing.TypeSubst
 bindConstraints flowCx cx constraints =
@@ -150,6 +155,11 @@ generalize cx typ =
         Core.typeSchemeType = typ,
         Core.typeSchemeConstraints = constraintsMaybe}
 
+-- | Return the first element of a list, or Left(Other) with the given description if the list is empty
+headOrFail :: String -> [t0] -> Either Errors.Error t0
+headOrFail desc xs =
+    Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "headOrFail: " desc)))) (\x -> Right x) (Lists.maybeHead xs)
+
 -- | Infer types for all elements in a graph, using the provided ordered bindings. Returns both the inferred graph and the ordered inferred bindings.
 inferGraphTypes :: Context.Context -> [Core.Binding] -> Graph.Graph -> Either Errors.Error ((Graph.Graph, [Core.Binding]), Context.Context)
 inferGraphTypes fcx0 bindings0 g0 =
@@ -234,15 +244,13 @@ inferTypeOf fcx cx term =
         let fcx2 = Typing.inferenceResultContext result
         in (Eithers.bind (finalizeInferredTerm fcx2 cx (Typing.inferenceResultTerm result)) (\finalized -> Eithers.bind (ExtractCore.let_ cx finalized) (\letResult ->
           let bindings = Core.letBindings letResult
-              wrongCount =
-                      Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
-                        "Expected a single binding with a type scheme, but got: ",
-                        (Literals.showInt32 (Lists.length bindings)),
-                        " bindings"])))
-          in (Logic.ifElse (Equality.equal 1 (Lists.length bindings)) (Maybes.maybe wrongCount (\binding ->
+          in (Logic.ifElse (Equality.equal 1 (Lists.length bindings)) (Eithers.bind (headOrFail "inferTypeOf: single binding expected" bindings) (\binding ->
             let term1 = Core.bindingTerm binding
                 mts = Core.bindingType binding
-            in (Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError "Expected a type scheme"))) (\ts -> Right ((term1, ts), fcx2)) mts)) (Lists.maybeHead bindings)) wrongCount))))))
+            in (Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError "Expected a type scheme"))) (\ts -> Right ((term1, ts), fcx2)) mts))) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
+            "Expected a single binding with a type scheme, but got: ",
+            (Literals.showInt32 (Lists.length bindings)),
+            " bindings"]))))))))))
 
 -- | Infer the type of an annotated term (Either version)
 inferTypeOfAnnotatedTerm :: Context.Context -> Graph.Graph -> Core.AnnotatedTerm -> Either Errors.Error Typing.InferenceResult
@@ -771,25 +779,17 @@ inferTypeOfPair fcx cx p =
           itypes = Pairs.first (Pairs.second results)
           isubst = Pairs.first (Pairs.second (Pairs.second results))
           pairElemConstraints = Pairs.second (Pairs.second (Pairs.second results))
-          arityErr = Left (Errors.ErrorOther (Errors.OtherError "inferTypeOfPair: expected 2 inferred terms/types"))
-      in (Maybes.maybe arityErr (\termsUc ->
-        let ifst = Pairs.first termsUc
-        in (Maybes.maybe arityErr (\termsUc2 ->
-          let isnd = Pairs.first termsUc2
-          in (Maybes.maybe arityErr (\typesUc ->
-            let tyFst = Pairs.first typesUc
-            in (Maybes.maybe arityErr (\typesUc2 ->
-              let tySnd = Pairs.first typesUc2
-                  pairTerm = Core.TermPair (ifst, isnd)
-                  termWithTypes =
-                          Core.TermTypeApplication (Core.TypeApplicationTerm {
-                            Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-                              Core.typeApplicationTermBody = pairTerm,
-                              Core.typeApplicationTermType = tyFst})),
-                            Core.typeApplicationTermType = tySnd})
-              in (Right (yieldWithConstraints fcx2 termWithTypes (Core.TypePair (Core.PairType {
-                Core.pairTypeFirst = tyFst,
-                Core.pairTypeSecond = tySnd})) isubst pairElemConstraints))) (Lists.uncons (Pairs.second typesUc)))) (Lists.uncons itypes))) (Lists.uncons (Pairs.second termsUc)))) (Lists.uncons iterms)))
+      in (Eithers.bind (atOrFail 0 "inferTypeOfPair ifst" iterms) (\ifst -> Eithers.bind (atOrFail 1 "inferTypeOfPair isnd" iterms) (\isnd -> Eithers.bind (atOrFail 0 "inferTypeOfPair tyFst" itypes) (\tyFst -> Eithers.bind (atOrFail 1 "inferTypeOfPair tySnd" itypes) (\tySnd ->
+        let pairTerm = Core.TermPair (ifst, isnd)
+            termWithTypes =
+                    Core.TermTypeApplication (Core.TypeApplicationTerm {
+                      Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                        Core.typeApplicationTermBody = pairTerm,
+                        Core.typeApplicationTermType = tyFst})),
+                      Core.typeApplicationTermType = tySnd})
+        in (Right (yieldWithConstraints fcx2 termWithTypes (Core.TypePair (Core.PairType {
+          Core.pairTypeFirst = tyFst,
+          Core.pairTypeSecond = tySnd})) isubst pairElemConstraints))))))))
 
 -- | Infer the type of a primitive function (Either version)
 inferTypeOfPrimitive :: Context.Context -> Graph.Graph -> Core.Name -> Either Errors.Error Typing.InferenceResult
