@@ -25,7 +25,8 @@ def encodeName(isQualified: Boolean)(conv: hydra.util.CaseConvention)(env: hydra
   {
   lazy val namespaces: hydra.packaging.Namespaces[hydra.python.syntax.DottedName] = (env.namespaces)
   lazy val focusPair: Tuple2[hydra.packaging.Namespace, hydra.python.syntax.DottedName] = (namespaces.focus)
-  lazy val focusNs: hydra.packaging.Namespace = hydra.lib.pairs.first[hydra.packaging.Namespace, hydra.python.syntax.DottedName](focusPair)
+  lazy val focusNs: hydra.packaging.Namespace = hydra.lib.pairs.first[hydra.packaging.Namespace,
+     hydra.python.syntax.DottedName](focusPair)
   lazy val boundVars: Map[hydra.core.Name, hydra.python.syntax.Name] = hydra.lib.pairs.second[Seq[hydra.core.Name],
      Map[hydra.core.Name, hydra.python.syntax.Name]](env.boundTypeVariables)
   lazy val qualName: hydra.packaging.QualifiedName = hydra.names.qualifyName(name)
@@ -46,7 +47,8 @@ def encodeNameQualified(env: hydra.python.environment.PythonEnvironment)(name: h
   {
   lazy val namespaces: hydra.packaging.Namespaces[hydra.python.syntax.DottedName] = (env.namespaces)
   lazy val focusPair: Tuple2[hydra.packaging.Namespace, hydra.python.syntax.DottedName] = (namespaces.focus)
-  lazy val focusNs: hydra.packaging.Namespace = hydra.lib.pairs.first[hydra.packaging.Namespace, hydra.python.syntax.DottedName](focusPair)
+  lazy val focusNs: hydra.packaging.Namespace = hydra.lib.pairs.first[hydra.packaging.Namespace,
+     hydra.python.syntax.DottedName](focusPair)
   lazy val boundVars: Map[hydra.core.Name, hydra.python.syntax.Name] = hydra.lib.pairs.second[Seq[hydra.core.Name],
      Map[hydra.core.Name, hydra.python.syntax.Name]](env.boundTypeVariables)
   lazy val qualName: hydra.packaging.QualifiedName = hydra.names.qualifyName(name)
@@ -80,10 +82,12 @@ def variableReference(conv: hydra.util.CaseConvention)(quoted: Boolean)(env: hyd
   lazy val unquoted: hydra.python.syntax.Expression = hydra.python.syntax.Expression.simple(Seq(Seq(hydra.python.syntax.Inversion.simple(hydra.python.syntax.Comparison(hydra.python.syntax.BitwiseOr(None,
      hydra.python.syntax.BitwiseXor(None, hydra.python.syntax.BitwiseAnd(None, hydra.python.syntax.ShiftExpression(None,
      hydra.python.syntax.Sum(None, hydra.python.syntax.Term(None, hydra.python.syntax.Factor.simple(hydra.python.syntax.Power(hydra.python.syntax.AwaitPrimary(false,
-     hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.name(pyName))), None)))))))), Seq())))))
+     hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.name(pyName))), None)))))))),
+     Seq())))))
   lazy val namespaces: hydra.packaging.Namespaces[hydra.python.syntax.DottedName] = (env.namespaces)
   lazy val focusPair: Tuple2[hydra.packaging.Namespace, hydra.python.syntax.DottedName] = (namespaces.focus)
-  lazy val focusNs: hydra.packaging.Namespace = hydra.lib.pairs.first[hydra.packaging.Namespace, hydra.python.syntax.DottedName](focusPair)
+  lazy val focusNs: hydra.packaging.Namespace = hydra.lib.pairs.first[hydra.packaging.Namespace,
+     hydra.python.syntax.DottedName](focusPair)
   lazy val mns: Option[hydra.packaging.Namespace] = hydra.names.namespaceOf(name)
   lazy val sameNamespace: Boolean = hydra.lib.maybes.maybe[Boolean, hydra.packaging.Namespace](false)((ns: hydra.packaging.Namespace) =>
     hydra.lib.equality.equal[hydra.packaging.Namespace](ns)(focusNs))(mns)

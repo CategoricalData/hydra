@@ -14,21 +14,26 @@ enum TopLevelForm :
    case `macro`(value: hydra.lisp.syntax.MacroDefinition) extends TopLevelForm
    case expression(value: hydra.lisp.syntax.Expression) extends TopLevelForm
 
-case class TopLevelFormWithComments(doc: Option[hydra.lisp.syntax.Docstring], comment: Option[hydra.lisp.syntax.Comment], form: hydra.lisp.syntax.TopLevelForm)
+case class TopLevelFormWithComments(doc: Option[hydra.lisp.syntax.Docstring], comment: Option[hydra.lisp.syntax.Comment],
+   form: hydra.lisp.syntax.TopLevelForm)
 
-case class FunctionDefinition(name: hydra.lisp.syntax.Symbol, params: Seq[hydra.lisp.syntax.Symbol], restParam: Option[hydra.lisp.syntax.Symbol],
-   doc: Option[hydra.lisp.syntax.Docstring], typeHints: Seq[hydra.lisp.syntax.TypeHint], body: Seq[hydra.lisp.syntax.Expression])
+case class FunctionDefinition(name: hydra.lisp.syntax.Symbol, params: Seq[hydra.lisp.syntax.Symbol],
+   restParam: Option[hydra.lisp.syntax.Symbol], doc: Option[hydra.lisp.syntax.Docstring],
+   typeHints: Seq[hydra.lisp.syntax.TypeHint], body: Seq[hydra.lisp.syntax.Expression])
 
-case class VariableDefinition(name: hydra.lisp.syntax.Symbol, value: hydra.lisp.syntax.Expression, doc: Option[hydra.lisp.syntax.Docstring])
+case class VariableDefinition(name: hydra.lisp.syntax.Symbol, value: hydra.lisp.syntax.Expression,
+   doc: Option[hydra.lisp.syntax.Docstring])
 
-case class ConstantDefinition(name: hydra.lisp.syntax.Symbol, value: hydra.lisp.syntax.Expression, doc: Option[hydra.lisp.syntax.Docstring])
+case class ConstantDefinition(name: hydra.lisp.syntax.Symbol, value: hydra.lisp.syntax.Expression,
+   doc: Option[hydra.lisp.syntax.Docstring])
 
-case class RecordTypeDefinition(name: hydra.lisp.syntax.Symbol, fields: Seq[hydra.lisp.syntax.FieldDefinition], doc: Option[hydra.lisp.syntax.Docstring])
+case class RecordTypeDefinition(name: hydra.lisp.syntax.Symbol, fields: Seq[hydra.lisp.syntax.FieldDefinition],
+   doc: Option[hydra.lisp.syntax.Docstring])
 
 case class FieldDefinition(name: hydra.lisp.syntax.Symbol, defaultValue: Option[hydra.lisp.syntax.Expression])
 
-case class MacroDefinition(name: hydra.lisp.syntax.Symbol, params: Seq[hydra.lisp.syntax.Symbol], restParam: Option[hydra.lisp.syntax.Symbol],
-   body: Seq[hydra.lisp.syntax.Expression])
+case class MacroDefinition(name: hydra.lisp.syntax.Symbol, params: Seq[hydra.lisp.syntax.Symbol],
+   restParam: Option[hydra.lisp.syntax.Symbol], body: Seq[hydra.lisp.syntax.Expression])
 
 enum Expression :
    case application(value: hydra.lisp.syntax.Application) extends Expression
@@ -60,22 +65,25 @@ enum Expression :
 
 case class Application(function: hydra.lisp.syntax.Expression, arguments: Seq[hydra.lisp.syntax.Expression])
 
-case class Lambda(name: Option[hydra.lisp.syntax.Symbol], params: Seq[hydra.lisp.syntax.Symbol], restParam: Option[hydra.lisp.syntax.Symbol],
-   body: Seq[hydra.lisp.syntax.Expression])
+case class Lambda(name: Option[hydra.lisp.syntax.Symbol], params: Seq[hydra.lisp.syntax.Symbol],
+   restParam: Option[hydra.lisp.syntax.Symbol], body: Seq[hydra.lisp.syntax.Expression])
 
 case class VariableReference(name: hydra.lisp.syntax.Symbol, functionNamespace: Boolean)
 
-case class FieldAccess(recordType: hydra.lisp.syntax.Symbol, field: hydra.lisp.syntax.Symbol, target: hydra.lisp.syntax.Expression)
+case class FieldAccess(recordType: hydra.lisp.syntax.Symbol, field: hydra.lisp.syntax.Symbol,
+   target: hydra.lisp.syntax.Expression)
 
 case class TypeAnnotation(expression: hydra.lisp.syntax.Expression, `type`: hydra.lisp.syntax.TypeSpecifier)
 
-case class IfExpression(condition: hydra.lisp.syntax.Expression, `then`: hydra.lisp.syntax.Expression, `else`: Option[hydra.lisp.syntax.Expression])
+case class IfExpression(condition: hydra.lisp.syntax.Expression, `then`: hydra.lisp.syntax.Expression,
+   `else`: Option[hydra.lisp.syntax.Expression])
 
 case class CondExpression(clauses: Seq[hydra.lisp.syntax.CondClause], default: Option[hydra.lisp.syntax.Expression])
 
 case class CondClause(condition: hydra.lisp.syntax.Expression, body: hydra.lisp.syntax.Expression)
 
-case class CaseExpression(scrutinee: hydra.lisp.syntax.Expression, clauses: Seq[hydra.lisp.syntax.CaseClause], default: Option[hydra.lisp.syntax.Expression])
+case class CaseExpression(scrutinee: hydra.lisp.syntax.Expression, clauses: Seq[hydra.lisp.syntax.CaseClause],
+   default: Option[hydra.lisp.syntax.Expression])
 
 case class CaseClause(keys: Seq[hydra.lisp.syntax.Expression], body: hydra.lisp.syntax.Expression)
 
@@ -97,7 +105,8 @@ case class UnquoteExpression(body: hydra.lisp.syntax.Expression)
 
 case class SplicingUnquoteExpression(body: hydra.lisp.syntax.Expression)
 
-case class LetExpression(kind: hydra.lisp.syntax.LetKind, bindings: Seq[hydra.lisp.syntax.LetBinding], body: Seq[hydra.lisp.syntax.Expression])
+case class LetExpression(kind: hydra.lisp.syntax.LetKind, bindings: Seq[hydra.lisp.syntax.LetBinding],
+   body: Seq[hydra.lisp.syntax.Expression])
 
 enum LetKind :
    case parallel extends LetKind

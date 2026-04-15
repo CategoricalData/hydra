@@ -176,11 +176,13 @@ bindConstraints = define "bindConstraints" $
 
 bindUnboundTypeVariables :: TTermDefinition (Graph -> Term -> Term)
 bindUnboundTypeVariables = define "bindUnboundTypeVariables" $
-  doc ("Place unbound type variables appearing anywhere under a typed let binding in the type scheme of that binding."
-    <> " These variables may appear in the binding type scheme itself or in that of a subterm,"
-    <> " in domain types attached to functions, and in type abstraction and type application terms."
-    <> " This process attempts to capture type variables which have escaped unification, e.g. due to unused code."
-    <> " However, unbound type variables not appearing beneath any typed let binding remain unbound.") $
+  doc ("Handle unbound type variables under a typed let binding."
+    <> " Variables appearing free in the binding's declared type (but not in schema types or the scheme's own"
+    <> " quantified variables) are added to the scheme and the term is wrapped in matching TypeLambdas."
+    <> " Variables appearing only in the term body (at type-application or lambda-domain positions)"
+    <> " are phantom — they have no external effect on the binding's type — and are substituted with"
+    <> " hydra.core.Unit in the body rather than generalized. This keeps downstream stages from seeing"
+    <> " vacuous foralls that target languages with non-polymorphic value bindings (e.g. Scala val) cannot express.") $
   "cx" ~> "term0" ~>
   "svars" <~ Sets.fromList (Maps.keys $ Graph.graphSchemaTypes $ var "cx") $
   "rewrite" <~ ("recurse" ~> "term" ~> cases _Term (var "term")
@@ -193,11 +195,22 @@ bindUnboundTypeVariables = define "bindUnboundTypeVariables" $
           (Core.binding (var "bname") (bindUnboundTypeVariables @@ var "cx" @@ var "bterm") nothing)
           ("ts" ~>
             "bvars" <~ Sets.fromList (Core.typeSchemeVariables $ var "ts") $
-            "unboundInType" <~ Variables.freeVariablesInType @@ (Core.typeSchemeType $ var "ts") $
-            "unboundInTerm" <~ Variables.freeTypeVariablesInTerm @@ var "bterm" $
-            "unbound" <~ Sets.toList (Sets.difference
-              (Sets.union (var "unboundInType") (var "unboundInTerm"))
-              (Sets.union (var "svars") (var "bvars"))) $
+            "excluded" <~ Sets.union (var "svars") (var "bvars") $
+            "inType" <~ Sets.difference
+              (Variables.freeVariablesInType @@ (Core.typeSchemeType $ var "ts"))
+              (var "excluded") $
+            "phantoms" <~ Sets.difference
+              (Variables.freeTypeVariablesInTerm @@ var "bterm")
+              (Sets.union (var "excluded") (var "inType")) $
+            -- Phantom variables appear only in the term body (e.g. at type-application
+            -- positions left behind by inference for unconstrained slots) and have no
+            -- external effect on the binding's type. Substitute them with Unit in the
+            -- body so downstream stages see a closed monomorphic term.
+            "phantomSubst" <~ Typing.typeSubst (Maps.fromList
+              (Lists.map ("v" ~> pair (var "v") Core.typeUnit) (Sets.toList (var "phantoms")))) $
+            "bterm1" <~ Substitution.substTypesInTerm @@ var "phantomSubst" @@ var "bterm" $
+            -- Generalize only over variables that appear in the declared type.
+            "unbound" <~ Sets.toList (var "inType") $
             "ts2" <~ Core.typeScheme
               (Lists.concat2
                 (Core.typeSchemeVariables $ var "ts")
@@ -207,7 +220,7 @@ bindUnboundTypeVariables = define "bindUnboundTypeVariables" $
             "bterm2" <~ Lists.foldl
               ("t" ~> "v" ~> Core.termTypeLambda
                 (Core.typeLambda (var "v") (var "t")))
-              (var "bterm")
+              (var "bterm1")
               (var "unbound") $
             Core.binding (var "bname") (var "bterm2") (just $ var "ts2"))) $
       Core.termLet $ Core.let_

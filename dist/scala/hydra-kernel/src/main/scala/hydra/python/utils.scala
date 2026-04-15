@@ -100,8 +100,8 @@ def functionCall(func: hydra.python.syntax.Primary)(args: Seq[hydra.python.synta
   hydra.python.utils.pyPrimaryToPyExpression(hydra.python.utils.primaryWithRhs(func)(hydra.python.syntax.PrimaryRhs.call(hydra.python.utils.pyExpressionsToPyArgs(args))))
 
 lazy val getItemParams: hydra.python.syntax.Parameters = hydra.python.syntax.Parameters.paramNoDefault(hydra.python.syntax.ParamNoDefaultParameters(Seq(hydra.python.syntax.ParamNoDefault(hydra.python.syntax.Param("cls",
-   None), None), hydra.python.syntax.ParamNoDefault(hydra.python.syntax.Param("item", None), None)), Seq(),
-   None))
+   None), None), hydra.python.syntax.ParamNoDefault(hydra.python.syntax.Param("item",
+   None), None)), Seq(), None))
 
 def indentedBlock(mcomment: Option[scala.Predef.String])(stmts: Seq[Seq[hydra.python.syntax.Statement]]): hydra.python.syntax.Block =
   {
@@ -140,7 +140,8 @@ def primaryWithRhs(prim: hydra.python.syntax.Primary)(rhs: hydra.python.syntax.P
   hydra.python.syntax.Primary.compound(hydra.python.syntax.PrimaryWithRhs(prim, rhs))
 
 def primaryWithSlices(prim: hydra.python.syntax.Primary)(first: hydra.python.syntax.Slice)(rest: Seq[hydra.python.syntax.SliceOrStarredExpression]): hydra.python.syntax.Primary =
-  hydra.python.utils.primaryWithRhs(prim)(hydra.python.syntax.PrimaryRhs.slices(hydra.python.syntax.Slices(first, rest)))
+  hydra.python.utils.primaryWithRhs(prim)(hydra.python.syntax.PrimaryRhs.slices(hydra.python.syntax.Slices(first,
+     rest)))
 
 def projectFromExpression(exp: hydra.python.syntax.Expression)(name: hydra.python.syntax.Name): hydra.python.syntax.Expression =
   {
@@ -258,8 +259,8 @@ lazy val selfOnlyParams: hydra.python.syntax.Parameters = hydra.python.syntax.Pa
    None), None)), Seq(), None))
 
 lazy val selfOtherParams: hydra.python.syntax.Parameters = hydra.python.syntax.Parameters.paramNoDefault(hydra.python.syntax.ParamNoDefaultParameters(Seq(hydra.python.syntax.ParamNoDefault(hydra.python.syntax.Param("self",
-   None), None), hydra.python.syntax.ParamNoDefault(hydra.python.syntax.Param("other", None), None)),
-   Seq(), None))
+   None), None), hydra.python.syntax.ParamNoDefault(hydra.python.syntax.Param("other",
+   None), None)), Seq(), None))
 
 def singleQuotedString(s: scala.Predef.String): hydra.python.syntax.Expression =
   hydra.python.utils.stringToPyExpression(hydra.python.syntax.QuoteStyle.single)(s)
@@ -283,8 +284,8 @@ def typeAliasStatement310[T0](name: hydra.python.syntax.Name)(_tparams: T0)(mcom
      hydra.python.syntax.Expression.simple(Seq(Seq(hydra.python.syntax.Inversion.simple(hydra.python.syntax.Comparison(hydra.python.syntax.BitwiseOr(None,
      hydra.python.syntax.BitwiseXor(None, hydra.python.syntax.BitwiseAnd(None, hydra.python.syntax.ShiftExpression(None,
      hydra.python.syntax.Sum(None, hydra.python.syntax.Term(None, hydra.python.syntax.Factor.simple(hydra.python.syntax.Power(hydra.python.syntax.AwaitPrimary(false,
-     hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.name("TypeAlias"))), None)))))))), Seq()))))),
-     Some(hydra.python.utils.pyExpressionToPyAnnotatedRhs(quotedExpr))))))
+     hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.name("TypeAlias"))),
+     None)))))))), Seq()))))), Some(hydra.python.utils.pyExpressionToPyAnnotatedRhs(quotedExpr))))))
 }
 
 def unionTypeClassStatements310(name: hydra.python.syntax.Name)(mcomment: Option[scala.Predef.String])(tyexpr: hydra.python.syntax.Expression)(extraStmts: Seq[hydra.python.syntax.Statement]): Seq[hydra.python.syntax.Statement] =
@@ -295,7 +296,8 @@ def unionTypeClassStatements310(name: hydra.python.syntax.Name)(mcomment: Option
   lazy val returnObject: hydra.python.syntax.Statement = hydra.python.utils.pySimpleStatementToPyStatement(hydra.python.syntax.SimpleStatement.`return`(Seq(hydra.python.syntax.StarExpression.simple(hydra.python.syntax.Expression.simple(Seq(Seq(hydra.python.syntax.Inversion.simple(hydra.python.syntax.Comparison(hydra.python.syntax.BitwiseOr(None,
      hydra.python.syntax.BitwiseXor(None, hydra.python.syntax.BitwiseAnd(None, hydra.python.syntax.ShiftExpression(None,
      hydra.python.syntax.Sum(None, hydra.python.syntax.Term(None, hydra.python.syntax.Factor.simple(hydra.python.syntax.Power(hydra.python.syntax.AwaitPrimary(false,
-     hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.name("object"))), None)))))))), Seq())))))))))
+     hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.name("object"))),
+     None)))))))), Seq())))))))))
   lazy val getItemMethod: hydra.python.syntax.Statement = hydra.python.syntax.Statement.compound(hydra.python.syntax.CompoundStatement.function(hydra.python.syntax.FunctionDefinition(None,
      hydra.python.syntax.FunctionDefRaw(false, "__getitem__", Seq(), Some(hydra.python.utils.getItemParams),
      None, None, hydra.python.utils.indentedBlock(None)(Seq(Seq(returnObject)))))))
@@ -303,17 +305,19 @@ def unionTypeClassStatements310(name: hydra.python.syntax.Name)(mcomment: Option
      metaName, Seq(), Some(hydra.python.utils.pyExpressionsToPyArgs(Seq(hydra.python.syntax.Expression.simple(Seq(Seq(hydra.python.syntax.Inversion.simple(hydra.python.syntax.Comparison(hydra.python.syntax.BitwiseOr(None,
      hydra.python.syntax.BitwiseXor(None, hydra.python.syntax.BitwiseAnd(None, hydra.python.syntax.ShiftExpression(None,
      hydra.python.syntax.Sum(None, hydra.python.syntax.Term(None, hydra.python.syntax.Factor.simple(hydra.python.syntax.Power(hydra.python.syntax.AwaitPrimary(false,
-     hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.name("type"))), None)))))))), Seq())))))))),
-     hydra.python.utils.indentedBlock(None)(Seq(Seq(getItemMethod)))))
+     hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.name("type"))), None)))))))),
+     Seq())))))))), hydra.python.utils.indentedBlock(None)(Seq(Seq(getItemMethod)))))
   lazy val docStmt: hydra.python.syntax.Statement = hydra.python.utils.pyExpressionToPyStatement(hydra.python.utils.tripleQuotedString(docString))
   lazy val bodyGroups: Seq[Seq[hydra.python.syntax.Statement]] = hydra.lib.logic.ifElse[Seq[Seq[hydra.python.syntax.Statement]]](hydra.lib.lists.`null`[hydra.python.syntax.Statement](extraStmts))({
     lazy val passStmt: hydra.python.syntax.Statement = hydra.python.utils.pySimpleStatementToPyStatement(hydra.python.syntax.SimpleStatement.pass)
     Seq(Seq(docStmt), Seq(passStmt))
   })(Seq(Seq(docStmt), extraStmts))
-  lazy val metaclassArg: hydra.python.syntax.Kwarg = hydra.python.syntax.Kwarg("metaclass", hydra.python.syntax.Expression.simple(Seq(Seq(hydra.python.syntax.Inversion.simple(hydra.python.syntax.Comparison(hydra.python.syntax.BitwiseOr(None,
+  lazy val metaclassArg: hydra.python.syntax.Kwarg = hydra.python.syntax.Kwarg("metaclass",
+     hydra.python.syntax.Expression.simple(Seq(Seq(hydra.python.syntax.Inversion.simple(hydra.python.syntax.Comparison(hydra.python.syntax.BitwiseOr(None,
      hydra.python.syntax.BitwiseXor(None, hydra.python.syntax.BitwiseAnd(None, hydra.python.syntax.ShiftExpression(None,
      hydra.python.syntax.Sum(None, hydra.python.syntax.Term(None, hydra.python.syntax.Factor.simple(hydra.python.syntax.Power(hydra.python.syntax.AwaitPrimary(false,
-     hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.name(metaName))), None)))))))), Seq()))))))
+     hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.name(metaName))),
+     None)))))))), Seq()))))))
   lazy val unionClass: hydra.python.syntax.Statement = hydra.python.utils.annotatedStatement(mcomment)(hydra.python.utils.pyClassDefinitionToPyStatement(hydra.python.syntax.ClassDefinition(None,
      name, Seq(), Some(hydra.python.syntax.Args(Seq(), Seq(hydra.python.syntax.KwargOrStarred.kwarg(metaclassArg)),
      Seq())), hydra.python.utils.indentedBlock(None)(bodyGroups))))
@@ -327,11 +331,12 @@ def unitVariantMethods(className: hydra.python.syntax.Name): Seq[hydra.python.sy
   lazy val returnIsinstance: hydra.python.syntax.Statement = hydra.python.utils.pySimpleStatementToPyStatement(hydra.python.syntax.SimpleStatement.`return`(Seq(hydra.python.syntax.StarExpression.simple(hydra.python.utils.functionCall(hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.name("isinstance")))(Seq(hydra.python.syntax.Expression.simple(Seq(Seq(hydra.python.syntax.Inversion.simple(hydra.python.syntax.Comparison(hydra.python.syntax.BitwiseOr(None,
      hydra.python.syntax.BitwiseXor(None, hydra.python.syntax.BitwiseAnd(None, hydra.python.syntax.ShiftExpression(None,
      hydra.python.syntax.Sum(None, hydra.python.syntax.Term(None, hydra.python.syntax.Factor.simple(hydra.python.syntax.Power(hydra.python.syntax.AwaitPrimary(false,
-     hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.name("other"))), None)))))))), Seq()))))),
-     hydra.python.syntax.Expression.simple(Seq(Seq(hydra.python.syntax.Inversion.simple(hydra.python.syntax.Comparison(hydra.python.syntax.BitwiseOr(None,
+     hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.name("other"))),
+     None)))))))), Seq()))))), hydra.python.syntax.Expression.simple(Seq(Seq(hydra.python.syntax.Inversion.simple(hydra.python.syntax.Comparison(hydra.python.syntax.BitwiseOr(None,
      hydra.python.syntax.BitwiseXor(None, hydra.python.syntax.BitwiseAnd(None, hydra.python.syntax.ShiftExpression(None,
      hydra.python.syntax.Sum(None, hydra.python.syntax.Term(None, hydra.python.syntax.Factor.simple(hydra.python.syntax.Power(hydra.python.syntax.AwaitPrimary(false,
-     hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.name(className))), None)))))))), Seq())))))))))))
+     hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.name(className))),
+     None)))))))), Seq())))))))))))
   lazy val eqMethod: hydra.python.syntax.Statement = hydra.python.syntax.Statement.compound(hydra.python.syntax.CompoundStatement.function(hydra.python.syntax.FunctionDefinition(None,
      hydra.python.syntax.FunctionDefRaw(false, "__eq__", Seq(), Some(hydra.python.utils.selfOtherParams),
      None, None, hydra.python.utils.indentedBlock(None)(Seq(Seq(returnIsinstance)))))))

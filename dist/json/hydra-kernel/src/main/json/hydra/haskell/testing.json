@@ -550,14 +550,14 @@
       "term": {
         "name": "hydra.haskell.testing.buildTestModule",
         "term": {
-          "typeLambda": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {"string": "Build the complete test module for Haskell HSpec"}}}],
             "body": {
-              "annotated": {
-                "annotation": [
-                  {
-                    "@key": "description",
-                    "@value": {
-                      "literal": {"string": "Build the complete test module for Haskell HSpec"}}}],
+              "lambda": {
                 "body": {
                   "lambda": {
                     "body": {
@@ -565,164 +565,159 @@
                         "body": {
                           "lambda": {
                             "body": {
-                              "lambda": {
-                                "body": {
-                                  "let": {
-                                    "bindings": [
-                                      {
-                                        "name": "ns_",
-                                        "term": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "ns_",
+                                    "term": {
+                                      "application": {
+                                        "argument": {"variable": "testModule"},
+                                        "function": {
+                                          "project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                                    "type": {"type": {"variable": "hydra.packaging.Namespace"}, "variables": []}},
+                                  {
+                                    "name": "specNs",
+                                    "term": {
+                                      "wrap": {
+                                        "body": {
                                           "application": {
-                                            "argument": {"variable": "testModule"},
+                                            "argument": {"literal": {"string": "Spec"}},
                                             "function": {
-                                              "project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
-                                        "type": {"type": {"variable": "hydra.packaging.Namespace"}, "variables": []}},
-                                      {
-                                        "name": "specNs",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {
-                                              "application": {
-                                                "argument": {"literal": {"string": "Spec"}},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "ns_"},
-                                                        "function": {"unwrap": "hydra.packaging.Namespace"}}},
-                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                            "typeName": "hydra.packaging.Namespace"}},
-                                        "type": {"type": {"variable": "hydra.packaging.Namespace"}, "variables": []}},
-                                      {
-                                        "name": "moduleNameString",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "specNs"},
-                                            "function": {"variable": "hydra.haskell.testing.namespaceToModuleName"}}},
-                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
-                                      {
-                                        "name": "groupName_",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "testGroup"},
-                                            "function": {"project": {"field": "name", "typeName": "hydra.testing.TestGroup"}}}},
-                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
-                                      {
-                                        "name": "domainImports",
-                                        "term": {
-                                          "application": {
-                                            "argument": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.sets.empty"},
-                                                "type": {"variable": "t0"}}},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"variable": "namespaces"},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.haskell.testing.findHaskellImports"},
-                                                    "type": {"set": {"variable": "t0"}}}}}}}},
-                                        "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
-                                      {
-                                        "name": "standardImports",
-                                        "term": {
-                                          "list": [
-                                            {"literal": {"string": "import Hydra.Kernel"}},
-                                            {"literal": {"string": "import qualified Test.Hspec as H"}},
-                                            {"literal": {"string": "import qualified Data.List as L"}},
-                                            {"literal": {"string": "import qualified Data.Map as M"}},
-                                            {"literal": {"string": "import qualified Data.Set as S"}},
-                                            {"literal": {"string": "import qualified Data.Maybe as Y"}}]},
-                                        "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
-                                      {
-                                        "name": "allImports",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "domainImports"},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"variable": "standardImports"},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.lists.concat2"},
-                                                    "type": {"literal": {"string": {}}}}}}}}},
-                                        "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
-                                      {
-                                        "name": "header",
-                                        "term": {
-                                          "application": {
-                                            "argument": {
                                               "application": {
                                                 "argument": {
-                                                  "list": [
-                                                    {
-                                                      "list": [
-                                                        {
-                                                          "application": {
-                                                            "argument": {"variable": "hydra.constants.warningAutoGeneratedFile"},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"literal": {"string": "-- "}},
-                                                                "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                        {"literal": {"string": ""}}]},
-                                                    {
-                                                      "list": [
-                                                        {"literal": {"string": ""}},
-                                                        {
-                                                          "application": {
-                                                            "argument": {
-                                                              "list": [
-                                                                {"literal": {"string": "module "}},
-                                                                {"variable": "moduleNameString"},
-                                                                {"literal": {"string": " where"}}]},
-                                                            "function": {"variable": "hydra.lib.strings.cat"}}},
-                                                        {"literal": {"string": ""}}]},
-                                                    {"variable": "allImports"},
-                                                    {
-                                                      "list": [
-                                                        {"literal": {"string": ""}},
-                                                        {"literal": {"string": "spec :: H.Spec"}},
-                                                        {
-                                                          "application": {
-                                                            "argument": {
-                                                              "list": [
-                                                                {"literal": {"string": "spec = H.describe "}},
-                                                                {
-                                                                  "application": {
-                                                                    "argument": {"variable": "groupName_"},
-                                                                    "function": {"variable": "hydra.lib.literals.showString"}}},
-                                                                {"literal": {"string": " $ do"}}]},
-                                                            "function": {"variable": "hydra.lib.strings.cat"}}}]}]},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.lists.concat"},
-                                                    "type": {"literal": {"string": {}}}}}}},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"literal": {"string": "\n"}},
-                                                "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
-                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
-                                    "body": {
+                                                  "application": {
+                                                    "argument": {"variable": "ns_"},
+                                                    "function": {"unwrap": "hydra.packaging.Namespace"}}},
+                                                "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                        "typeName": "hydra.packaging.Namespace"}},
+                                    "type": {"type": {"variable": "hydra.packaging.Namespace"}, "variables": []}},
+                                  {
+                                    "name": "moduleNameString",
+                                    "term": {
+                                      "application": {
+                                        "argument": {"variable": "specNs"},
+                                        "function": {"variable": "hydra.haskell.testing.namespaceToModuleName"}}},
+                                    "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                                  {
+                                    "name": "groupName_",
+                                    "term": {
+                                      "application": {
+                                        "argument": {"variable": "testGroup"},
+                                        "function": {"project": {"field": "name", "typeName": "hydra.testing.TestGroup"}}}},
+                                    "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                                  {
+                                    "name": "domainImports",
+                                    "term": {
                                       "application": {
                                         "argument": {
-                                          "list": [
-                                            {"variable": "header"},
-                                            {"literal": {"string": "\n"}},
-                                            {"variable": "testBody"},
-                                            {"literal": {"string": "\n"}}]},
-                                        "function": {"variable": "hydra.lib.strings.cat"}}}}},
-                                "domain": {
+                                          "typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"unit": {}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "namespaces"},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.haskell.testing.findHaskellImports"},
+                                                "type": {"set": {"unit": {}}}}}}}}},
+                                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                                  {
+                                    "name": "standardImports",
+                                    "term": {
+                                      "list": [
+                                        {"literal": {"string": "import Hydra.Kernel"}},
+                                        {"literal": {"string": "import qualified Test.Hspec as H"}},
+                                        {"literal": {"string": "import qualified Data.List as L"}},
+                                        {"literal": {"string": "import qualified Data.Map as M"}},
+                                        {"literal": {"string": "import qualified Data.Set as S"}},
+                                        {"literal": {"string": "import qualified Data.Maybe as Y"}}]},
+                                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                                  {
+                                    "name": "allImports",
+                                    "term": {
+                                      "application": {
+                                        "argument": {"variable": "domainImports"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "standardImports"},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.lists.concat2"},
+                                                "type": {"literal": {"string": {}}}}}}}}},
+                                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                                  {
+                                    "name": "header",
+                                    "term": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {
+                                              "list": [
+                                                {
+                                                  "list": [
+                                                    {
+                                                      "application": {
+                                                        "argument": {"variable": "hydra.constants.warningAutoGeneratedFile"},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {"literal": {"string": "-- "}},
+                                                            "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                    {"literal": {"string": ""}}]},
+                                                {
+                                                  "list": [
+                                                    {"literal": {"string": ""}},
+                                                    {
+                                                      "application": {
+                                                        "argument": {
+                                                          "list": [
+                                                            {"literal": {"string": "module "}},
+                                                            {"variable": "moduleNameString"},
+                                                            {"literal": {"string": " where"}}]},
+                                                        "function": {"variable": "hydra.lib.strings.cat"}}},
+                                                    {"literal": {"string": ""}}]},
+                                                {"variable": "allImports"},
+                                                {
+                                                  "list": [
+                                                    {"literal": {"string": ""}},
+                                                    {"literal": {"string": "spec :: H.Spec"}},
+                                                    {
+                                                      "application": {
+                                                        "argument": {
+                                                          "list": [
+                                                            {"literal": {"string": "spec = H.describe "}},
+                                                            {
+                                                              "application": {
+                                                                "argument": {"variable": "groupName_"},
+                                                                "function": {"variable": "hydra.lib.literals.showString"}}},
+                                                            {"literal": {"string": " $ do"}}]},
+                                                        "function": {"variable": "hydra.lib.strings.cat"}}}]}]},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.lists.concat"},
+                                                "type": {"literal": {"string": {}}}}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"literal": {"string": "\n"}},
+                                            "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
+                                    "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                "body": {
                                   "application": {
-                                    "argument": {"variable": "hydra.haskell.syntax.ModuleName"},
-                                    "function": {"variable": "hydra.packaging.Namespaces"}}},
-                                "parameter": "namespaces"}},
-                            "domain": {"literal": {"string": {}}},
-                            "parameter": "testBody"}},
-                        "domain": {"variable": "hydra.testing.TestGroup"},
-                        "parameter": "testGroup"}},
-                    "domain": {"variable": "hydra.packaging.Module"},
-                    "parameter": "testModule"}}}},
-            "parameter": "t0"}},
+                                    "argument": {
+                                      "list": [
+                                        {"variable": "header"},
+                                        {"literal": {"string": "\n"}},
+                                        {"variable": "testBody"},
+                                        {"literal": {"string": "\n"}}]},
+                                    "function": {"variable": "hydra.lib.strings.cat"}}}}},
+                            "domain": {
+                              "application": {
+                                "argument": {"variable": "hydra.haskell.syntax.ModuleName"},
+                                "function": {"variable": "hydra.packaging.Namespaces"}}},
+                            "parameter": "namespaces"}},
+                        "domain": {"literal": {"string": {}}},
+                        "parameter": "testBody"}},
+                    "domain": {"variable": "hydra.testing.TestGroup"},
+                    "parameter": "testGroup"}},
+                "domain": {"variable": "hydra.packaging.Module"},
+                "parameter": "testModule"}}}},
         "type": {
           "type": {
             "function": {
@@ -740,7 +735,7 @@
                       "domain": {"literal": {"string": {}}}}},
                   "domain": {"variable": "hydra.testing.TestGroup"}}},
               "domain": {"variable": "hydra.packaging.Module"}}},
-          "variables": ["t0"]}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.haskell.testing.collectNames",

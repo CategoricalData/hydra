@@ -14,20 +14,25 @@ lazy val getMethodName: scala.Predef.String = "get"
 
 lazy val hashCodeMethodName: scala.Predef.String = "hashCode"
 
-lazy val hydraCorePackageName: Option[hydra.java.syntax.PackageName] = Some(hydra.java.names.javaPackageName(Seq("hydra", "core")))
+lazy val hydraCorePackageName: Option[hydra.java.syntax.PackageName] = Some(hydra.java.names.javaPackageName(Seq("hydra",
+   "core")))
 
-lazy val hydraUtilPackageName: Option[hydra.java.syntax.PackageName] = Some(hydra.java.names.javaPackageName(Seq("hydra", "util")))
+lazy val hydraUtilPackageName: Option[hydra.java.syntax.PackageName] = Some(hydra.java.names.javaPackageName(Seq("hydra",
+   "util")))
 
 lazy val instanceName: scala.Predef.String = "instance"
 
-lazy val javaLangPackageName: Option[hydra.java.syntax.PackageName] = Some(hydra.java.names.javaPackageName(Seq("java", "lang")))
+lazy val javaLangPackageName: Option[hydra.java.syntax.PackageName] = Some(hydra.java.names.javaPackageName(Seq("java",
+   "lang")))
 
 def javaPackageName(parts: Seq[scala.Predef.String]): hydra.java.syntax.PackageName =
   hydra.lib.lists.map[scala.Predef.String, hydra.java.syntax.Identifier]((p: scala.Predef.String) => p)(parts)
 
-lazy val javaUtilFunctionPackageName: Option[hydra.java.syntax.PackageName] = Some(hydra.java.names.javaPackageName(Seq("java", "util", "function")))
+lazy val javaUtilFunctionPackageName: Option[hydra.java.syntax.PackageName] = Some(hydra.java.names.javaPackageName(Seq("java",
+   "util", "function")))
 
-lazy val javaUtilPackageName: Option[hydra.java.syntax.PackageName] = Some(hydra.java.names.javaPackageName(Seq("java", "util")))
+lazy val javaUtilPackageName: Option[hydra.java.syntax.PackageName] = Some(hydra.java.names.javaPackageName(Seq("java",
+   "util")))
 
 lazy val otherInstanceName: scala.Predef.String = "other"
 

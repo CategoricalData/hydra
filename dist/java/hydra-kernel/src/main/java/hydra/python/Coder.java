@@ -1934,7 +1934,7 @@ public interface Coder {
       }));
   }
 
-  static <T0> hydra.util.Either<hydra.errors.Error_, hydra.python.syntax.Expression> encodeTermInline(hydra.context.Context cx, hydra.python.environment.PythonEnvironment env, Boolean noCast, hydra.core.Term term) {
+  static hydra.util.Either<hydra.errors.Error_, hydra.python.syntax.Expression> encodeTermInline(hydra.context.Context cx, hydra.python.environment.PythonEnvironment env, Boolean noCast, hydra.core.Term term) {
     java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.python.syntax.Expression>> encode = (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.python.syntax.Expression>>) (t -> hydra.python.Coder.encodeTermInline(
       cx,
       env,
@@ -2372,24 +2372,24 @@ public interface Coder {
     });
   }
 
-  static <T1> hydra.util.Either<T1, hydra.python.syntax.Expression> encodeTermInline_withCast(hydra.context.Context cx, hydra.python.environment.PythonEnvironment env, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<java.util.List<hydra.core.Type>, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>>>> hydra_checking_typeOf, java.util.function.Function<hydra.python.syntax.Expression, java.util.function.Function<hydra.python.syntax.Expression, hydra.python.syntax.Expression>> hydra_python_utils_castTo, Boolean noCast, hydra.core.Term term, hydra.python.syntax.Expression pyexp) {
+  static <T0> hydra.util.Either<T0, hydra.python.syntax.Expression> encodeTermInline_withCast(hydra.context.Context cx, hydra.python.environment.PythonEnvironment env, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<java.util.List<hydra.core.Type>, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>>>> hydra_checking_typeOf, java.util.function.Function<hydra.python.syntax.Expression, java.util.function.Function<hydra.python.syntax.Expression, hydra.python.syntax.Expression>> hydra_python_utils_castTo, Boolean noCast, hydra.core.Term term, hydra.python.syntax.Expression pyexp) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.Or.apply(
         noCast,
         (env).skipCasts),
-      () -> hydra.util.Either.<T1, hydra.python.syntax.Expression>right(pyexp),
-      () -> ((java.util.function.Supplier<hydra.util.Either<T1, hydra.python.syntax.Expression>>) (() -> {
+      () -> hydra.util.Either.<T0, hydra.python.syntax.Expression>right(pyexp),
+      () -> ((java.util.function.Supplier<hydra.util.Either<T0, hydra.python.syntax.Expression>>) (() -> {
         hydra.graph.Graph tc = (env).graph;
-        return ((java.util.function.Supplier<hydra.util.Either<T1, hydra.python.syntax.Expression>>) (() -> {
+        return ((java.util.function.Supplier<hydra.util.Either<T0, hydra.python.syntax.Expression>>) (() -> {
           hydra.util.Lazy<hydra.util.Either<hydra.errors.Error_, hydra.core.Type>> mtyp = new hydra.util.Lazy<>(() -> hydra.lib.eithers.Map.apply(
             (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.core.Type>) (_r -> hydra.lib.pairs.First.apply(_r)),
             (hydra_checking_typeOf).apply(cx).apply(tc).apply((java.util.List<hydra.core.Type>) (java.util.Collections.<hydra.core.Type>emptyList())).apply(term)));
           return hydra.lib.eithers.Either.apply(
-            (java.util.function.Function<hydra.errors.Error_, hydra.util.Either<T1, hydra.python.syntax.Expression>>) (ignored -> hydra.util.Either.<T1, hydra.python.syntax.Expression>right(pyexp)),
-            (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.python.syntax.Expression>>) (typ -> hydra.lib.eithers.Either.apply(
-              ignored -> hydra.util.Either.<T1, hydra.python.syntax.Expression>right(pyexp),
-              (java.util.function.Function<hydra.python.syntax.Expression, hydra.util.Either<T1, hydra.python.syntax.Expression>>) (pytyp -> hydra.util.Either.<T1, hydra.python.syntax.Expression>right((hydra_python_utils_castTo).apply(pytyp).apply(pyexp))),
-              hydra.python.Coder.encodeType(
+            (java.util.function.Function<hydra.errors.Error_, hydra.util.Either<T0, hydra.python.syntax.Expression>>) (ignored -> hydra.util.Either.<T0, hydra.python.syntax.Expression>right(pyexp)),
+            (java.util.function.Function<hydra.core.Type, hydra.util.Either<T0, hydra.python.syntax.Expression>>) (typ -> hydra.lib.eithers.Either.apply(
+              (java.util.function.Function<java.lang.Void, hydra.util.Either<T0, hydra.python.syntax.Expression>>) (ignored -> hydra.util.Either.<T0, hydra.python.syntax.Expression>right(pyexp)),
+              (java.util.function.Function<hydra.python.syntax.Expression, hydra.util.Either<T0, hydra.python.syntax.Expression>>) (pytyp -> hydra.util.Either.<T0, hydra.python.syntax.Expression>right((hydra_python_utils_castTo).apply(pytyp).apply(pyexp))),
+              hydra.python.Coder.<java.lang.Void>encodeType(
                 env,
                 typ))),
             mtyp.get());

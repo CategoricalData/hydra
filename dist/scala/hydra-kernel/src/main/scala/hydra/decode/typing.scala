@@ -7,7 +7,8 @@ import hydra.errors.*
 import hydra.typing.*
 
 def functionStructure[T0](env: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError,
-   T0]))(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.typing.FunctionStructure[T0]] =
+   T0]))(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+   hydra.typing.FunctionStructure[T0]] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.typing.FunctionStructure[T0]]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
@@ -19,22 +20,26 @@ def functionStructure[T0](env: (hydra.graph.Graph => hydra.core.Term => Either[h
       hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[hydra.core.Name], hydra.typing.FunctionStructure[T0]](hydra.extract.core.requireField("params")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.core.decodeList(hydra.decode.core.name)(v1)(v2))(fieldMap)(cx))((field_params: Seq[hydra.core.Name]) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[hydra.core.Binding], hydra.typing.FunctionStructure[T0]](hydra.extract.core.requireField("bindings")((v1: hydra.graph.Graph) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[hydra.core.Binding],
+         hydra.typing.FunctionStructure[T0]](hydra.extract.core.requireField("bindings")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.core.decodeList(hydra.decode.core.binding)(v1)(v2))(fieldMap)(cx))((field_bindings: Seq[hydra.core.Binding]) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Term, hydra.typing.FunctionStructure[T0]](hydra.extract.core.requireField("body")(hydra.decode.core.term)(fieldMap)(cx))((field_body: hydra.core.Term) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[hydra.core.Type], hydra.typing.FunctionStructure[T0]](hydra.extract.core.requireField("domains")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.core.decodeList(hydra.decode.core.`type`)(v1)(v2))(fieldMap)(cx))((field_domains: Seq[hydra.core.Type]) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, Option[hydra.core.Type], hydra.typing.FunctionStructure[T0]](hydra.extract.core.requireField("codomain")((v1: hydra.graph.Graph) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, Option[hydra.core.Type],
+         hydra.typing.FunctionStructure[T0]](hydra.extract.core.requireField("codomain")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.core.decodeMaybe(hydra.decode.core.`type`)(v1)(v2))(fieldMap)(cx))((field_codomain: Option[hydra.core.Type]) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, T0, hydra.typing.FunctionStructure[T0]](hydra.extract.core.requireField("environment")(env)(fieldMap)(cx))((field_environment: T0) =>
-      Right(hydra.typing.FunctionStructure(field_typeParams, field_params, field_bindings, field_body, field_domains, field_codomain, field_environment)))))))))
+      Right(hydra.typing.FunctionStructure(field_typeParams, field_params, field_bindings,
+         field_body, field_domains, field_codomain, field_environment)))))))))
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
-def inferenceResult(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.typing.InferenceResult] =
+def inferenceResult(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+   hydra.typing.InferenceResult] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.typing.InferenceResult]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
@@ -49,7 +54,8 @@ def inferenceResult(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.e
       hydra.extract.core.decodeMap(hydra.decode.core.name)(hydra.decode.core.typeVariableMetadata)(v1)(v2))(fieldMap)(cx))((field_classConstraints: Map[hydra.core.Name,
          hydra.core.TypeVariableMetadata]) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.context.Context, hydra.typing.InferenceResult](hydra.extract.core.requireField("context")(hydra.decode.context.context)(fieldMap)(cx))((field_context: hydra.context.Context) =>
-      Right(hydra.typing.InferenceResult(field_term, field_type, field_subst, field_classConstraints, field_context)))))))
+      Right(hydra.typing.InferenceResult(field_term, field_type, field_subst, field_classConstraints,
+         field_context)))))))
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
@@ -57,11 +63,13 @@ def termSubst(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.typing.TermSubst]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
-  case hydra.core.Term.wrap(v_Term_wrap_wrappedTerm) => hydra.lib.eithers.map[Map[hydra.core.Name, hydra.core.Term],
-     hydra.typing.TermSubst, hydra.errors.DecodingError]((b: Map[hydra.core.Name, hydra.core.Term]) => b)(hydra.extract.core.decodeMap(hydra.decode.core.name)(hydra.decode.core.term)(cx)(v_Term_wrap_wrappedTerm.body))
+  case hydra.core.Term.wrap(v_Term_wrap_wrappedTerm) => hydra.lib.eithers.map[Map[hydra.core.Name,
+     hydra.core.Term], hydra.typing.TermSubst, hydra.errors.DecodingError]((b: Map[hydra.core.Name,
+     hydra.core.Term]) => b)(hydra.extract.core.decodeMap(hydra.decode.core.name)(hydra.decode.core.term)(cx)(v_Term_wrap_wrappedTerm.body))
   case _ => Left("expected wrapped type"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
-def typeConstraint(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.typing.TypeConstraint] =
+def typeConstraint(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+   hydra.typing.TypeConstraint] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.typing.TypeConstraint]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
@@ -86,6 +94,7 @@ def typeSubst(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.typing.TypeSubst]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
-  case hydra.core.Term.wrap(v_Term_wrap_wrappedTerm) => hydra.lib.eithers.map[Map[hydra.core.Name, hydra.core.Type],
-     hydra.typing.TypeSubst, hydra.errors.DecodingError]((b: Map[hydra.core.Name, hydra.core.Type]) => b)(hydra.extract.core.decodeMap(hydra.decode.core.name)(hydra.decode.core.`type`)(cx)(v_Term_wrap_wrappedTerm.body))
+  case hydra.core.Term.wrap(v_Term_wrap_wrappedTerm) => hydra.lib.eithers.map[Map[hydra.core.Name,
+     hydra.core.Type], hydra.typing.TypeSubst, hydra.errors.DecodingError]((b: Map[hydra.core.Name,
+     hydra.core.Type]) => b)(hydra.extract.core.decodeMap(hydra.decode.core.name)(hydra.decode.core.`type`)(cx)(v_Term_wrap_wrappedTerm.body))
   case _ => Left("expected wrapped type"))(hydra.extract.core.stripWithDecodingError(cx)(raw))

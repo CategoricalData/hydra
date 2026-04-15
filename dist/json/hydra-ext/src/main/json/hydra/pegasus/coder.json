@@ -2602,7 +2602,7 @@
         "term": {
           "typeLambda": {
             "body": {
-              "typeLambda": {
+              "lambda": {
                 "body": {
                   "lambda": {
                     "body": {
@@ -2610,29 +2610,60 @@
                         "body": {
                           "lambda": {
                             "body": {
-                              "lambda": {
-                                "body": {
+                              "application": {
+                                "argument": {
                                   "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {"variable": "t"},
-                                        "function": {"variable": "hydra.strip.deannotateType"}}},
-                                    "function": {
-                                      "cases": {
-                                        "cases": [
-                                          {
-                                            "name": "record",
-                                            "term": {
-                                              "lambda": {
-                                                "body": {
+                                    "argument": {"variable": "t"},
+                                    "function": {"variable": "hydra.strip.deannotateType"}}},
+                                "function": {
+                                  "cases": {
+                                    "cases": [
+                                      {
+                                        "name": "record",
+                                        "term": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {
                                                   "application": {
                                                     "argument": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "lambda": {
-                                                            "body": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "application": {
+                                                            "argument": {"variable": "res"},
+                                                            "function": {
                                                               "application": {
-                                                                "argument": {"variable": "res"},
+                                                                "argument": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "either": {
+                                                                                "@left": {
+                                                                                  "inject": {
+                                                                                    "field": {
+                                                                                      "name": "other",
+                                                                                      "term": {
+                                                                                        "wrap": {
+                                                                                          "body": {
+                                                                                            "application": {
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "t"},
+                                                                                                  "function": {"variable": "hydra.show.core.type"}}},
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "argument": {
+                                                                                                    "literal": {"string": "type resolved to an unsupported nested named schema: "}},
+                                                                                                  "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                                                          "typeName": "hydra.errors.OtherError"}}},
+                                                                                    "typeName": "hydra.errors.Error"}}}},
+                                                                            "type": {"variable": "hydra.errors.Error"}}},
+                                                                        "type": {"variable": "hydra.pegasus.pdl.Schema"}}},
+                                                                    "domain": {"unit": {}},
+                                                                    "parameter": "_"}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {
@@ -2641,111 +2672,34 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {
-                                                                                  "either": {
-                                                                                    "@left": {
-                                                                                      "inject": {
-                                                                                        "field": {
-                                                                                          "name": "other",
-                                                                                          "term": {
-                                                                                            "wrap": {
-                                                                                              "body": {
-                                                                                                "application": {
-                                                                                                  "argument": {
-                                                                                                    "application": {
-                                                                                                      "argument": {"variable": "t"},
-                                                                                                      "function": {"variable": "hydra.show.core.type"}}},
-                                                                                                  "function": {
-                                                                                                    "application": {
-                                                                                                      "argument": {
-                                                                                                        "literal": {"string": "type resolved to an unsupported nested named schema: "}},
-                                                                                                      "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                                              "typeName": "hydra.errors.OtherError"}}},
-                                                                                        "typeName": "hydra.errors.Error"}}}},
+                                                                                "body": {"either": {"@right": {"variable": "schema"}}},
                                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                                             "type": {"variable": "hydra.pegasus.pdl.Schema"}}},
-                                                                        "domain": {"variable": "t1"},
-                                                                        "parameter": "_"}},
+                                                                        "domain": {"variable": "hydra.pegasus.pdl.Schema"},
+                                                                        "parameter": "schema"}},
                                                                     "function": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "lambda": {
-                                                                            "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {"either": {"@right": {"variable": "schema"}}},
-                                                                                    "type": {"variable": "hydra.errors.Error"}}},
-                                                                                "type": {"variable": "hydra.pegasus.pdl.Schema"}}},
-                                                                            "domain": {"variable": "hydra.pegasus.pdl.Schema"},
-                                                                            "parameter": "schema"}},
-                                                                        "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                    "type": {"variable": "hydra.pegasus.pdl.Schema"}}},
-                                                                                "type": {"variable": "t1"}}},
-                                                                            "type": {
-                                                                              "either": {
-                                                                                "left": {"variable": "hydra.errors.Error"},
-                                                                                "right": {"variable": "hydra.pegasus.pdl.Schema"}}}}}}}}}}},
-                                                            "domain": {
-                                                              "either": {
-                                                                "left": {"variable": "hydra.pegasus.pdl.Schema"},
-                                                                "right": {"variable": "t1"}}},
-                                                            "parameter": "res"}},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "t"},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "aliases"},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "g"},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "cx"},
-                                                                            "function": {
-                                                                              "typeApplication": {
-                                                                                "body": {"variable": "hydra.pegasus.coder.encodeType"},
-                                                                                "type": {"variable": "t0"}}}}}}}}}}},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {"variable": "hydra.lib.eithers.bind"},
-                                                                        "type": {"variable": "hydra.errors.Error"}}},
-                                                                    "type": {
-                                                                      "either": {
-                                                                        "left": {"variable": "hydra.pegasus.pdl.Schema"},
-                                                                        "right": {"variable": "t1"}}}}},
-                                                                "type": {"variable": "hydra.pegasus.pdl.Schema"}}}}}}},
+                                                                                "body": {"variable": "hydra.lib.eithers.either"},
+                                                                                "type": {"variable": "hydra.pegasus.pdl.Schema"}}},
+                                                                            "type": {"unit": {}}}},
+                                                                        "type": {
+                                                                          "either": {
+                                                                            "left": {"variable": "hydra.errors.Error"},
+                                                                            "right": {"variable": "hydra.pegasus.pdl.Schema"}}}}}}}}}}},
+                                                        "domain": {
+                                                          "either": {
+                                                            "left": {"variable": "hydra.pegasus.pdl.Schema"},
+                                                            "right": {"unit": {}}}},
+                                                        "parameter": "res"}},
                                                     "function": {
                                                       "application": {
                                                         "argument": {
                                                           "application": {
-                                                            "argument": {
-                                                              "inject": {
-                                                                "field": {
-                                                                  "name": "literal",
-                                                                  "term": {
-                                                                    "inject": {
-                                                                      "field": {
-                                                                        "name": "integer",
-                                                                        "term": {
-                                                                          "inject": {
-                                                                            "field": {"name": "int32", "term": {"unit": {}}},
-                                                                            "typeName": "hydra.core.IntegerType"}}},
-                                                                      "typeName": "hydra.core.LiteralType"}}},
-                                                                "typeName": "hydra.core.Type"}},
+                                                            "argument": {"variable": "t"},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {"variable": "aliases"},
@@ -2757,33 +2711,110 @@
                                                                         "argument": {"variable": "cx"},
                                                                         "function": {
                                                                           "typeApplication": {
-                                                                            "body": {"variable": "hydra.pegasus.coder.encode"},
+                                                                            "body": {"variable": "hydra.pegasus.coder.encodeType"},
                                                                             "type": {"variable": "t0"}}}}}}}}}}},
                                                         "function": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "rt"},
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {"variable": "hydra.lib.lists.null"},
-                                                                    "type": {"variable": "hydra.core.FieldType"}}}}},
-                                                            "function": {
+                                                          "typeApplication": {
+                                                            "body": {
                                                               "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.eithers.bind"},
+                                                                    "type": {"variable": "hydra.errors.Error"}}},
                                                                 "type": {
                                                                   "either": {
-                                                                    "left": {"variable": "hydra.errors.Error"},
-                                                                    "right": {"variable": "hydra.pegasus.pdl.Schema"}}}}}}}}}}},
-                                                "domain": {"list": {"variable": "hydra.core.FieldType"}},
-                                                "parameter": "rt"}}}],
-                                        "default": {
-                                          "application": {
-                                            "argument": {
-                                              "lambda": {
-                                                "body": {
+                                                                    "left": {"variable": "hydra.pegasus.pdl.Schema"},
+                                                                    "right": {"unit": {}}}}}},
+                                                            "type": {"variable": "hydra.pegasus.pdl.Schema"}}}}}}},
+                                                "function": {
                                                   "application": {
-                                                    "argument": {"variable": "res"},
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "inject": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "inject": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "inject": {
+                                                                        "field": {"name": "int32", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.IntegerType"}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {"variable": "aliases"},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "g"},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "cx"},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.pegasus.coder.encode"},
+                                                                        "type": {"variable": "t0"}}}}}}}}}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "rt"},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.lib.lists.null"},
+                                                                "type": {"variable": "hydra.core.FieldType"}}}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                            "type": {
+                                                              "either": {
+                                                                "left": {"variable": "hydra.errors.Error"},
+                                                                "right": {"variable": "hydra.pegasus.pdl.Schema"}}}}}}}}}}},
+                                            "domain": {"list": {"variable": "hydra.core.FieldType"}},
+                                            "parameter": "rt"}}}],
+                                    "default": {
+                                      "application": {
+                                        "argument": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {"variable": "res"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "either": {
+                                                                    "@left": {
+                                                                      "inject": {
+                                                                        "field": {
+                                                                          "name": "other",
+                                                                          "term": {
+                                                                            "wrap": {
+                                                                              "body": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "t"},
+                                                                                      "function": {"variable": "hydra.show.core.type"}}},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {
+                                                                                        "literal": {"string": "type resolved to an unsupported nested named schema: "}},
+                                                                                      "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                                              "typeName": "hydra.errors.OtherError"}}},
+                                                                        "typeName": "hydra.errors.Error"}}}},
+                                                                "type": {"variable": "hydra.errors.Error"}}},
+                                                            "type": {"variable": "hydra.pegasus.pdl.Schema"}}},
+                                                        "domain": {"variable": "hydra.pegasus.pdl.NamedSchemaType"},
+                                                        "parameter": "_"}},
                                                     "function": {
                                                       "application": {
                                                         "argument": {
@@ -2792,107 +2823,73 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "typeApplication": {
-                                                                    "body": {
-                                                                      "either": {
-                                                                        "@left": {
-                                                                          "inject": {
-                                                                            "field": {
-                                                                              "name": "other",
-                                                                              "term": {
-                                                                                "wrap": {
-                                                                                  "body": {
-                                                                                    "application": {
-                                                                                      "argument": {
-                                                                                        "application": {
-                                                                                          "argument": {"variable": "t"},
-                                                                                          "function": {"variable": "hydra.show.core.type"}}},
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "argument": {
-                                                                                            "literal": {"string": "type resolved to an unsupported nested named schema: "}},
-                                                                                          "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                                  "typeName": "hydra.errors.OtherError"}}},
-                                                                            "typeName": "hydra.errors.Error"}}}},
+                                                                    "body": {"either": {"@right": {"variable": "schema"}}},
                                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                                 "type": {"variable": "hydra.pegasus.pdl.Schema"}}},
-                                                            "domain": {"variable": "hydra.pegasus.pdl.NamedSchemaType"},
-                                                            "parameter": "_"}},
+                                                            "domain": {"variable": "hydra.pegasus.pdl.Schema"},
+                                                            "parameter": "schema"}},
                                                         "function": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "lambda": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {"either": {"@right": {"variable": "schema"}}},
-                                                                        "type": {"variable": "hydra.errors.Error"}}},
-                                                                    "type": {"variable": "hydra.pegasus.pdl.Schema"}}},
-                                                                "domain": {"variable": "hydra.pegasus.pdl.Schema"},
-                                                                "parameter": "schema"}},
-                                                            "function": {
+                                                          "typeApplication": {
+                                                            "body": {
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "typeApplication": {
-                                                                    "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {"variable": "hydra.lib.eithers.either"},
-                                                                        "type": {"variable": "hydra.pegasus.pdl.Schema"}}},
-                                                                    "type": {"variable": "hydra.pegasus.pdl.NamedSchemaType"}}},
-                                                                "type": {
-                                                                  "either": {
-                                                                    "left": {"variable": "hydra.errors.Error"},
-                                                                    "right": {"variable": "hydra.pegasus.pdl.Schema"}}}}}}}}}}},
-                                                "domain": {
-                                                  "either": {
-                                                    "left": {"variable": "hydra.pegasus.pdl.Schema"},
-                                                    "right": {"variable": "hydra.pegasus.pdl.NamedSchemaType"}}},
-                                                "parameter": "res"}},
-                                            "function": {
+                                                                    "body": {"variable": "hydra.lib.eithers.either"},
+                                                                    "type": {"variable": "hydra.pegasus.pdl.Schema"}}},
+                                                                "type": {"variable": "hydra.pegasus.pdl.NamedSchemaType"}}},
+                                                            "type": {
+                                                              "either": {
+                                                                "left": {"variable": "hydra.errors.Error"},
+                                                                "right": {"variable": "hydra.pegasus.pdl.Schema"}}}}}}}}}}},
+                                            "domain": {
+                                              "either": {
+                                                "left": {"variable": "hydra.pegasus.pdl.Schema"},
+                                                "right": {"variable": "hydra.pegasus.pdl.NamedSchemaType"}}},
+                                            "parameter": "res"}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
                                               "application": {
-                                                "argument": {
+                                                "argument": {"variable": "t"},
+                                                "function": {
                                                   "application": {
-                                                    "argument": {"variable": "t"},
+                                                    "argument": {"variable": "aliases"},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {"variable": "aliases"},
+                                                        "argument": {"variable": "g"},
                                                         "function": {
                                                           "application": {
-                                                            "argument": {"variable": "g"},
+                                                            "argument": {"variable": "cx"},
                                                             "function": {
-                                                              "application": {
-                                                                "argument": {"variable": "cx"},
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {"variable": "hydra.pegasus.coder.encodeType"},
-                                                                    "type": {"variable": "t0"}}}}}}}}}}},
-                                                "function": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.pegasus.coder.encodeType"},
+                                                                "type": {"variable": "t0"}}}}}}}}}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.eithers.bind"},
-                                                            "type": {"variable": "hydra.errors.Error"}}},
-                                                        "type": {
-                                                          "either": {
-                                                            "left": {"variable": "hydra.pegasus.pdl.Schema"},
-                                                            "right": {"variable": "hydra.pegasus.pdl.NamedSchemaType"}}}}},
-                                                    "type": {"variable": "hydra.pegasus.pdl.Schema"}}}}}}},
-                                        "typeName": "hydra.core.Type"}}}},
-                                "domain": {"variable": "hydra.core.Type"},
-                                "parameter": "t"}},
-                            "domain": {
-                              "map": {
-                                "keys": {"variable": "hydra.packaging.Namespace"},
-                                "values": {"literal": {"string": {}}}}},
-                            "parameter": "aliases"}},
-                        "domain": {"variable": "hydra.graph.Graph"},
-                        "parameter": "g"}},
-                    "domain": {"variable": "t0"},
-                    "parameter": "cx"}},
-                "parameter": "t0"}},
-            "parameter": "t1"}},
+                                                        "body": {"variable": "hydra.lib.eithers.bind"},
+                                                        "type": {"variable": "hydra.errors.Error"}}},
+                                                    "type": {
+                                                      "either": {
+                                                        "left": {"variable": "hydra.pegasus.pdl.Schema"},
+                                                        "right": {"variable": "hydra.pegasus.pdl.NamedSchemaType"}}}}},
+                                                "type": {"variable": "hydra.pegasus.pdl.Schema"}}}}}}},
+                                    "typeName": "hydra.core.Type"}}}},
+                            "domain": {"variable": "hydra.core.Type"},
+                            "parameter": "t"}},
+                        "domain": {
+                          "map": {
+                            "keys": {"variable": "hydra.packaging.Namespace"},
+                            "values": {"literal": {"string": {}}}}},
+                        "parameter": "aliases"}},
+                    "domain": {"variable": "hydra.graph.Graph"},
+                    "parameter": "g"}},
+                "domain": {"variable": "t0"},
+                "parameter": "cx"}},
+            "parameter": "t0"}},
         "type": {
           "type": {
             "function": {
@@ -2913,7 +2910,7 @@
                           "values": {"literal": {"string": {}}}}}}},
                   "domain": {"variable": "hydra.graph.Graph"}}},
               "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.pegasus.coder.encodeRecordField",
