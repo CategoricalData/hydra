@@ -108,7 +108,8 @@ type Data_Anonymous = Unit
 
 case class Data_Select(qual: hydra.scala.syntax.Data, name: hydra.scala.syntax.Data_Name)
 
-case class Data_Interpolate(prefix: hydra.scala.syntax.Data_Name, parts: Seq[hydra.scala.syntax.Lit], args: Seq[hydra.scala.syntax.Data])
+case class Data_Interpolate(prefix: hydra.scala.syntax.Data_Name, parts: Seq[hydra.scala.syntax.Lit],
+   args: Seq[hydra.scala.syntax.Data])
 
 case class Data_Xml(parts: Seq[hydra.scala.syntax.Lit], args: Seq[hydra.scala.syntax.Data])
 
@@ -116,11 +117,11 @@ case class Data_Apply(fun: hydra.scala.syntax.Data, args: Seq[hydra.scala.syntax
 
 case class Data_ApplyUsing(fun: hydra.scala.syntax.Data, targs: Seq[hydra.scala.syntax.Data])
 
-case class Data_ApplyType(lhs: hydra.scala.syntax.Data, op: hydra.scala.syntax.Data_Name, targs: Seq[hydra.scala.syntax.Type],
-   args: Seq[hydra.scala.syntax.Data])
+case class Data_ApplyType(lhs: hydra.scala.syntax.Data, op: hydra.scala.syntax.Data_Name,
+   targs: Seq[hydra.scala.syntax.Type], args: Seq[hydra.scala.syntax.Data])
 
-case class Data_ApplyInfix(lhs: hydra.scala.syntax.Data, op: hydra.scala.syntax.Data_Name, targs: Seq[hydra.scala.syntax.Type],
-   args: Seq[hydra.scala.syntax.Data])
+case class Data_ApplyInfix(lhs: hydra.scala.syntax.Data, op: hydra.scala.syntax.Data_Name,
+   targs: Seq[hydra.scala.syntax.Type], args: Seq[hydra.scala.syntax.Data])
 
 case class Data_ApplyUnary(op: hydra.scala.syntax.Data_Name, arg: hydra.scala.syntax.Data)
 
@@ -150,9 +151,11 @@ case class Data_SplicedMacroExpr(body: hydra.scala.syntax.Data)
 
 case class Data_Match(expr: hydra.scala.syntax.Data, cases: Seq[hydra.scala.syntax.Case])
 
-case class Data_Try(expr: hydra.scala.syntax.Data, catchp: Seq[hydra.scala.syntax.Case], finallyp: Option[hydra.scala.syntax.Data])
+case class Data_Try(expr: hydra.scala.syntax.Data, catchp: Seq[hydra.scala.syntax.Case],
+   finallyp: Option[hydra.scala.syntax.Data])
 
-case class Data_TryWithHandler(expr: hydra.scala.syntax.Data, catchp: hydra.scala.syntax.Data, finallyp: Option[hydra.scala.syntax.Data])
+case class Data_TryWithHandler(expr: hydra.scala.syntax.Data, catchp: hydra.scala.syntax.Data,
+   finallyp: Option[hydra.scala.syntax.Data])
 
 enum Data_FunctionData :
    case contextFunction(value: hydra.scala.syntax.Data_ContextFunction) extends Data_FunctionData
@@ -182,8 +185,8 @@ case class Data_Eta(expr: hydra.scala.syntax.Data)
 
 case class Data_Repeated(expr: hydra.scala.syntax.Data)
 
-case class Data_Param(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Name, decltpe: Option[hydra.scala.syntax.Type],
-   default: Option[hydra.scala.syntax.Data])
+case class Data_Param(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Name,
+   decltpe: Option[hydra.scala.syntax.Type], default: Option[hydra.scala.syntax.Data])
 
 enum Type :
    case ref(value: hydra.scala.syntax.Type_Ref) extends Type
@@ -274,8 +277,9 @@ case class Type_Var(name: hydra.scala.syntax.Type_Name)
 
 case class Type_TypedParam(name: hydra.scala.syntax.Name, typ: hydra.scala.syntax.Type)
 
-case class Type_Param(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Name, tparams: Seq[hydra.scala.syntax.Type_Param],
-   tbounds: Seq[hydra.scala.syntax.TypeBounds], vbounds: Seq[hydra.scala.syntax.Type], cbounds: Seq[hydra.scala.syntax.Type])
+case class Type_Param(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Name,
+   tparams: Seq[hydra.scala.syntax.Type_Param], tbounds: Seq[hydra.scala.syntax.TypeBounds],
+   vbounds: Seq[hydra.scala.syntax.Type], cbounds: Seq[hydra.scala.syntax.Type])
 
 case class Type_Match(tpe: hydra.scala.syntax.Type, cases: Seq[hydra.scala.syntax.TypeCase])
 
@@ -307,7 +311,8 @@ case class Pat_Repeated(name: hydra.scala.syntax.Data_Name)
 
 case class Pat_Extract(fun: hydra.scala.syntax.Data, args: Seq[hydra.scala.syntax.Pat])
 
-case class Pat_ExtractInfix(lhs: hydra.scala.syntax.Pat, op: hydra.scala.syntax.Data_Name, rhs: Seq[hydra.scala.syntax.Pat])
+case class Pat_ExtractInfix(lhs: hydra.scala.syntax.Pat, op: hydra.scala.syntax.Data_Name,
+   rhs: Seq[hydra.scala.syntax.Pat])
 
 case class Pat_Interpolate(prefix: hydra.scala.syntax.Data_Name, parts: Seq[hydra.scala.syntax.Lit])
 
@@ -339,18 +344,22 @@ enum Decl :
    case `type`(value: hydra.scala.syntax.Decl_Type) extends Decl
    case `given`(value: hydra.scala.syntax.Decl_Given) extends Decl
 
-case class Decl_Val(mods: Seq[hydra.scala.syntax.Mod], pats: Seq[hydra.scala.syntax.Pat], decltpe: hydra.scala.syntax.Type)
+case class Decl_Val(mods: Seq[hydra.scala.syntax.Mod], pats: Seq[hydra.scala.syntax.Pat],
+   decltpe: hydra.scala.syntax.Type)
 
-case class Decl_Var(mods: Seq[hydra.scala.syntax.Mod], pats: Seq[hydra.scala.syntax.Pat], decltpe: hydra.scala.syntax.Type)
+case class Decl_Var(mods: Seq[hydra.scala.syntax.Mod], pats: Seq[hydra.scala.syntax.Pat],
+   decltpe: hydra.scala.syntax.Type)
 
-case class Decl_Def(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Data_Name, tparams: Seq[hydra.scala.syntax.Type_Param],
-   paramss: Seq[Seq[hydra.scala.syntax.Data_Param]], decltpe: hydra.scala.syntax.Type)
+case class Decl_Def(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Data_Name,
+   tparams: Seq[hydra.scala.syntax.Type_Param], paramss: Seq[Seq[hydra.scala.syntax.Data_Param]],
+   decltpe: hydra.scala.syntax.Type)
 
-case class Decl_Type(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Type_Name, tparams: Seq[hydra.scala.syntax.Type_Param],
-   bounds: hydra.scala.syntax.TypeBounds)
+case class Decl_Type(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Type_Name,
+   tparams: Seq[hydra.scala.syntax.Type_Param], bounds: hydra.scala.syntax.TypeBounds)
 
-case class Decl_Given(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Data_Name, tparams: Seq[hydra.scala.syntax.Type_Param],
-   sparams: Seq[Seq[hydra.scala.syntax.Data_Param]], decltpe: hydra.scala.syntax.Type)
+case class Decl_Given(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Data_Name,
+   tparams: Seq[hydra.scala.syntax.Type_Param], sparams: Seq[Seq[hydra.scala.syntax.Data_Param]],
+   decltpe: hydra.scala.syntax.Type)
 
 enum Defn :
    case `val`(value: hydra.scala.syntax.Defn_Val) extends Defn
@@ -368,64 +377,77 @@ enum Defn :
    case `trait`(value: hydra.scala.syntax.Defn_Trait) extends Defn
    case `object`(value: hydra.scala.syntax.Defn_Object) extends Defn
 
-case class Defn_Val(mods: Seq[hydra.scala.syntax.Mod], pats: Seq[hydra.scala.syntax.Pat], decltpe: Option[hydra.scala.syntax.Type],
-   rhs: hydra.scala.syntax.Data)
+case class Defn_Val(mods: Seq[hydra.scala.syntax.Mod], pats: Seq[hydra.scala.syntax.Pat],
+   decltpe: Option[hydra.scala.syntax.Type], rhs: hydra.scala.syntax.Data)
 
-case class Defn_Var(mods: Seq[hydra.scala.syntax.Mod], pats: Seq[hydra.scala.syntax.Pat], decltpe: hydra.scala.syntax.Type,
-   rhs: Option[hydra.scala.syntax.Data])
+case class Defn_Var(mods: Seq[hydra.scala.syntax.Mod], pats: Seq[hydra.scala.syntax.Pat],
+   decltpe: hydra.scala.syntax.Type, rhs: Option[hydra.scala.syntax.Data])
 
-case class Defn_Given(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Name, tparams: Seq[Seq[hydra.scala.syntax.Type_Param]],
-   sparams: Seq[Seq[hydra.scala.syntax.Data_Param]], templ: hydra.scala.syntax.Template)
+case class Defn_Given(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Name,
+   tparams: Seq[Seq[hydra.scala.syntax.Type_Param]], sparams: Seq[Seq[hydra.scala.syntax.Data_Param]],
+   templ: hydra.scala.syntax.Template)
 
-case class Defn_Enum(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Type_Name, tparams: Seq[hydra.scala.syntax.Type_Param],
-   ctor: hydra.scala.syntax.Ctor_Primary, template: hydra.scala.syntax.Template)
+case class Defn_Enum(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Type_Name,
+   tparams: Seq[hydra.scala.syntax.Type_Param], ctor: hydra.scala.syntax.Ctor_Primary,
+   template: hydra.scala.syntax.Template)
 
-case class Defn_EnumCase(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Data_Name, tparams: Seq[hydra.scala.syntax.Type_Param],
-   ctor: hydra.scala.syntax.Ctor_Primary, inits: Seq[hydra.scala.syntax.Init])
+case class Defn_EnumCase(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Data_Name,
+   tparams: Seq[hydra.scala.syntax.Type_Param], ctor: hydra.scala.syntax.Ctor_Primary,
+   inits: Seq[hydra.scala.syntax.Init])
 
 case class Defn_RepeatedEnumCase(mods: Seq[hydra.scala.syntax.Mod], cases: Seq[hydra.scala.syntax.Data_Name])
 
-case class Defn_GivenAlias(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Name, tparams: Seq[Seq[hydra.scala.syntax.Type_Param]],
-   sparams: Seq[Seq[hydra.scala.syntax.Data_Param]], decltpe: hydra.scala.syntax.Type, body: hydra.scala.syntax.Data)
+case class Defn_GivenAlias(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Name,
+   tparams: Seq[Seq[hydra.scala.syntax.Type_Param]], sparams: Seq[Seq[hydra.scala.syntax.Data_Param]],
+   decltpe: hydra.scala.syntax.Type, body: hydra.scala.syntax.Data)
 
-case class Defn_ExtensionGroup(tparams: Seq[hydra.scala.syntax.Type_Param], parmss: Seq[Seq[hydra.scala.syntax.Data_Param]], body: hydra.scala.syntax.Stat)
+case class Defn_ExtensionGroup(tparams: Seq[hydra.scala.syntax.Type_Param], parmss: Seq[Seq[hydra.scala.syntax.Data_Param]],
+   body: hydra.scala.syntax.Stat)
 
-case class Defn_Def(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Data_Name, tparams: Seq[hydra.scala.syntax.Type_Param],
-   paramss: Seq[Seq[hydra.scala.syntax.Data_Param]], decltpe: Option[hydra.scala.syntax.Type], body: hydra.scala.syntax.Data)
+case class Defn_Def(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Data_Name,
+   tparams: Seq[hydra.scala.syntax.Type_Param], paramss: Seq[Seq[hydra.scala.syntax.Data_Param]],
+   decltpe: Option[hydra.scala.syntax.Type], body: hydra.scala.syntax.Data)
 
-case class Defn_Macro(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Data_Name, tparams: Seq[hydra.scala.syntax.Type_Param],
-   paramss: Seq[Seq[hydra.scala.syntax.Data_Param]], decltpe: Option[hydra.scala.syntax.Type], body: hydra.scala.syntax.Data)
+case class Defn_Macro(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Data_Name,
+   tparams: Seq[hydra.scala.syntax.Type_Param], paramss: Seq[Seq[hydra.scala.syntax.Data_Param]],
+   decltpe: Option[hydra.scala.syntax.Type], body: hydra.scala.syntax.Data)
 
-case class Defn_Type(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Type_Name, tparams: Seq[hydra.scala.syntax.Type_Param],
-   body: hydra.scala.syntax.Type)
+case class Defn_Type(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Type_Name,
+   tparams: Seq[hydra.scala.syntax.Type_Param], body: hydra.scala.syntax.Type)
 
-case class Defn_Class(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Type_Name, tparams: Seq[hydra.scala.syntax.Type_Param],
-   ctor: hydra.scala.syntax.Ctor_Primary, template: hydra.scala.syntax.Template)
+case class Defn_Class(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Type_Name,
+   tparams: Seq[hydra.scala.syntax.Type_Param], ctor: hydra.scala.syntax.Ctor_Primary,
+   template: hydra.scala.syntax.Template)
 
-case class Defn_Trait(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Type_Name, tparams: Seq[hydra.scala.syntax.Type_Param],
-   ctor: hydra.scala.syntax.Ctor_Primary, template: hydra.scala.syntax.Template)
+case class Defn_Trait(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Type_Name,
+   tparams: Seq[hydra.scala.syntax.Type_Param], ctor: hydra.scala.syntax.Ctor_Primary,
+   template: hydra.scala.syntax.Template)
 
 case class Defn_Object(name: hydra.scala.syntax.Data_Name)
 
-case class Pkg(name: hydra.scala.syntax.Data_Name, ref: hydra.scala.syntax.Data_Ref, stats: Seq[hydra.scala.syntax.Stat])
+case class Pkg(name: hydra.scala.syntax.Data_Name, ref: hydra.scala.syntax.Data_Ref,
+   stats: Seq[hydra.scala.syntax.Stat])
 
-case class Pkg_Object(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Data_Name, template: hydra.scala.syntax.Template)
+case class Pkg_Object(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Data_Name,
+   template: hydra.scala.syntax.Template)
 
 enum Ctor :
    case primary(value: hydra.scala.syntax.Ctor_Primary) extends Ctor
    case secondary(value: hydra.scala.syntax.Ctor_Secondary) extends Ctor
 
-case class Ctor_Primary(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Name, paramss: Seq[Seq[hydra.scala.syntax.Data_Param]])
+case class Ctor_Primary(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Name,
+   paramss: Seq[Seq[hydra.scala.syntax.Data_Param]])
 
-case class Ctor_Secondary(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Name, paramss: Seq[Seq[hydra.scala.syntax.Data_Param]],
-   init: hydra.scala.syntax.Init, stats: Seq[hydra.scala.syntax.Stat])
+case class Ctor_Secondary(mods: Seq[hydra.scala.syntax.Mod], name: hydra.scala.syntax.Name,
+   paramss: Seq[Seq[hydra.scala.syntax.Data_Param]], init: hydra.scala.syntax.Init,
+   stats: Seq[hydra.scala.syntax.Stat])
 
 case class Init(tpe: hydra.scala.syntax.Type, name: hydra.scala.syntax.Name, argss: Seq[Seq[hydra.scala.syntax.Data]])
 
 type Self = Unit
 
-case class Template(early: Seq[hydra.scala.syntax.Stat], inits: Seq[hydra.scala.syntax.Init], self: hydra.scala.syntax.Self,
-   stats: Seq[hydra.scala.syntax.Stat])
+case class Template(early: Seq[hydra.scala.syntax.Stat], inits: Seq[hydra.scala.syntax.Init],
+   self: hydra.scala.syntax.Self, stats: Seq[hydra.scala.syntax.Stat])
 
 enum Mod :
    case annot(value: hydra.scala.syntax.Mod_Annot) extends Mod

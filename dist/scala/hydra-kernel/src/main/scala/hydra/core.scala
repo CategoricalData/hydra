@@ -132,7 +132,8 @@ case class TypeApplicationTerm(body: hydra.core.Term, `type`: hydra.core.Type)
 
 case class TypeLambda(parameter: hydra.core.Name, body: hydra.core.Term)
 
-case class TypeScheme(variables: Seq[hydra.core.Name], `type`: hydra.core.Type, constraints: Option[Map[hydra.core.Name, hydra.core.TypeVariableMetadata]])
+case class TypeScheme(variables: Seq[hydra.core.Name], `type`: hydra.core.Type, constraints: Option[Map[hydra.core.Name,
+   hydra.core.TypeVariableMetadata]])
 
 case class TypeVariableMetadata(classes: scala.collection.immutable.Set[hydra.core.Name])
 

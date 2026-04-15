@@ -123,7 +123,8 @@ lazy val fullBlockStyle: hydra.ast.BlockStyle = hydra.ast.BlockStyle(Some(hydra.
 
 lazy val halfBlockStyle: hydra.ast.BlockStyle = hydra.ast.BlockStyle(Some(hydra.serialization.doubleSpace), true, false)
 
-def ifx(op: hydra.ast.Op)(lhs: hydra.ast.Expr)(rhs: hydra.ast.Expr): hydra.ast.Expr = hydra.ast.Expr.op(hydra.ast.OpExpr(op, lhs, rhs))
+def ifx(op: hydra.ast.Op)(lhs: hydra.ast.Expr)(rhs: hydra.ast.Expr): hydra.ast.Expr = hydra.ast.Expr.op(hydra.ast.OpExpr(op,
+   lhs, rhs))
 
 def indent(v1: scala.Predef.String): scala.Predef.String = hydra.serialization.customIndent(hydra.serialization.doubleSpace)(v1)
 
@@ -161,7 +162,8 @@ def op(s: scala.Predef.String)(p: Int)(assoc: hydra.ast.Associativity): hydra.as
   hydra.ast.Op(hydra.serialization.sym(s), hydra.ast.Padding(hydra.ast.Ws.space, hydra.ast.Ws.space), p, assoc)
 
 def orOp(newlines: Boolean): hydra.ast.Op =
-  hydra.ast.Op(hydra.serialization.sym("|"), hydra.ast.Padding(hydra.ast.Ws.space, hydra.lib.logic.ifElse[hydra.ast.Ws](newlines)(hydra.ast.Ws.break)(hydra.ast.Ws.space)),
+  hydra.ast.Op(hydra.serialization.sym("|"), hydra.ast.Padding(hydra.ast.Ws.space,
+     hydra.lib.logic.ifElse[hydra.ast.Ws](newlines)(hydra.ast.Ws.break)(hydra.ast.Ws.space)),
      0, hydra.ast.Associativity.none)
 
 def orSep(style: hydra.ast.BlockStyle)(l: Seq[hydra.ast.Expr]): hydra.ast.Expr =
@@ -434,7 +436,8 @@ def symbolSep(symb: scala.Predef.String)(style: hydra.ast.BlockStyle)(l: Seq[hyd
   lazy val breakCount: Int = hydra.lib.lists.length[Boolean](hydra.lib.lists.filter[Boolean]((`x_`: Boolean) => `x_`)(Seq(style.newlineBeforeContent,
      (style.newlineAfterContent))))
   lazy val break: hydra.ast.Ws = hydra.lib.logic.ifElse[hydra.ast.Ws](hydra.lib.equality.equal[Int](breakCount)(0))(hydra.ast.Ws.space)(hydra.lib.logic.ifElse[hydra.ast.Ws](hydra.lib.equality.equal[Int](breakCount)(1))(hydra.ast.Ws.break)(hydra.ast.Ws.doubleBreak))
-  lazy val commaOp: hydra.ast.Op = hydra.ast.Op(hydra.serialization.sym(symb), hydra.ast.Padding(hydra.ast.Ws.none, break), 0, hydra.ast.Associativity.none)
+  lazy val commaOp: hydra.ast.Op = hydra.ast.Op(hydra.serialization.sym(symb), hydra.ast.Padding(hydra.ast.Ws.none,
+     break), 0, hydra.ast.Associativity.none)
   hydra.lib.maybes.maybe[hydra.ast.Expr, hydra.ast.Expr](hydra.serialization.cst(""))((h: hydra.ast.Expr) =>
     hydra.lib.lists.foldl[hydra.ast.Expr, hydra.ast.Expr]((acc: hydra.ast.Expr) =>
     (el: hydra.ast.Expr) => hydra.serialization.ifx(commaOp)(acc)(el))(h)(hydra.lib.lists.drop[hydra.ast.Expr](1)(l)))(hydra.lib.lists.safeHead[hydra.ast.Expr](l))

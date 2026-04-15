@@ -33,16 +33,19 @@ lazy val pythonLanguage: hydra.coders.Language = {
      hydra.variants.TypeVariant.unit, hydra.variants.TypeVariant.variable, hydra.variants.TypeVariant.void,
      hydra.variants.TypeVariant.wrap))
   def typePredicate[T0](_x: T0): Boolean = true
-  hydra.coders.Language("hydra.python", hydra.coders.LanguageConstraints(eliminationVariants, literalVariants,
-     floatTypes, functionVariants, integerTypes, termVariants, typeVariants, typePredicate))
+  hydra.coders.Language("hydra.python", hydra.coders.LanguageConstraints(eliminationVariants,
+     literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants,
+     typePredicate))
 }
 
 lazy val pythonReservedWords: scala.collection.immutable.Set[scala.Predef.String] = {
-  lazy val pythonKeywords: Seq[scala.Predef.String] = Seq("False", "None", "True", "and", "as", "assert",
-     "async", "await", "break", "class", "continue", "def", "del", "elif", "else", "except", "finally",
-     "for", "from", "global", "if", "import", "in", "is", "lambda", "nonlocal", "not", "or", "pass", "raise",
-     "return", "try", "while", "with", "yield")
+  lazy val pythonKeywords: Seq[scala.Predef.String] = Seq("False", "None", "True",
+     "and", "as", "assert", "async", "await", "break", "class", "continue", "def",
+     "del", "elif", "else", "except", "finally", "for", "from", "global", "if", "import",
+     "in", "is", "lambda", "nonlocal", "not", "or", "pass", "raise", "return", "try",
+     "while", "with", "yield")
   lazy val pythonBuiltInFunctions: Seq[scala.Predef.String] = Seq("range")
   lazy val hydraPythonKeywords: Seq[scala.Predef.String] = Seq("Node", "FrozenDict")
-  hydra.lib.sets.fromList[scala.Predef.String](hydra.lib.lists.concat[scala.Predef.String](Seq(pythonKeywords, pythonBuiltInFunctions, hydraPythonKeywords)))
+  hydra.lib.sets.fromList[scala.Predef.String](hydra.lib.lists.concat[scala.Predef.String](Seq(pythonKeywords,
+     pythonBuiltInFunctions, hydraPythonKeywords)))
 }

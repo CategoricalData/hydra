@@ -4,12 +4,13 @@ import hydra.ast.*
 
 import hydra.scala.syntax.*
 
-lazy val dotOp: hydra.ast.Op = hydra.ast.Op(".", hydra.ast.Padding(hydra.ast.Ws.none, hydra.ast.Ws.none), 0, hydra.ast.Associativity.left)
+lazy val dotOp: hydra.ast.Op = hydra.ast.Op(".", hydra.ast.Padding(hydra.ast.Ws.none,
+   hydra.ast.Ws.none), 0, hydra.ast.Associativity.left)
 
 lazy val functionArrowOp: hydra.ast.Op = hydra.serialization.op("=>")(hydra.lib.math.negate(1))(hydra.ast.Associativity.right)
 
-lazy val matchOp: hydra.ast.Op = hydra.ast.Op("match", hydra.ast.Padding(hydra.ast.Ws.space, hydra.ast.Ws.breakAndIndent("  ")),
-   0, hydra.ast.Associativity.none)
+lazy val matchOp: hydra.ast.Op = hydra.ast.Op("match", hydra.ast.Padding(hydra.ast.Ws.space,
+   hydra.ast.Ws.breakAndIndent("  ")), 0, hydra.ast.Associativity.none)
 
 def scalaFloatLiteralText(prefix: scala.Predef.String)(suffix: scala.Predef.String)(s: scala.Predef.String): scala.Predef.String =
   hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](s)("NaN"))(hydra.lib.strings.cat2(prefix)(".NaN"))(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](s)("Infinity"))(hydra.lib.strings.cat2(prefix)(".PositiveInfinity"))(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](s)("-Infinity"))(hydra.lib.strings.cat2(prefix)(".NegativeInfinity"))(hydra.lib.strings.cat2(s)(suffix))))
@@ -18,8 +19,8 @@ def writeCase(c: hydra.scala.syntax.Case): hydra.ast.Expr =
   {
   lazy val pat: hydra.scala.syntax.Pat = (c.pat)
   lazy val term: hydra.scala.syntax.Data = (c.body)
-  hydra.serialization.spaceSep(Seq(hydra.serialization.cst("case"), hydra.scala.serde.writePat(pat), hydra.serialization.cst("=>"),
-     hydra.scala.serde.writeTerm(term)))
+  hydra.serialization.spaceSep(Seq(hydra.serialization.cst("case"), hydra.scala.serde.writePat(pat),
+     hydra.serialization.cst("=>"), hydra.scala.serde.writeTerm(term)))
 }
 
 def writeData_FunctionData(ft: hydra.scala.syntax.Data_FunctionData): hydra.ast.Expr =
@@ -32,7 +33,8 @@ def writeData_FunctionData(ft: hydra.scala.syntax.Data_FunctionData): hydra.ast.
     hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.equality.gt[Int](bodyLen)(60))(hydra.serialization.noSep(Seq(hydra.serialization.parenList(false)(hydra.lib.lists.map[hydra.scala.syntax.Data_Param,
        hydra.ast.Expr](hydra.scala.serde.writeData_Param)(params)), hydra.serialization.cst(" =>\n  "),
        bodyExpr)))(hydra.serialization.spaceSep(Seq(hydra.serialization.parenList(false)(hydra.lib.lists.map[hydra.scala.syntax.Data_Param,
-       hydra.ast.Expr](hydra.scala.serde.writeData_Param)(params)), hydra.serialization.cst("=>"), bodyExpr)))
+       hydra.ast.Expr](hydra.scala.serde.writeData_Param)(params)), hydra.serialization.cst("=>"),
+       bodyExpr)))
   }
 
 def writeData_Name(dn: hydra.scala.syntax.Data_Name): hydra.ast.Expr = hydra.serialization.cst(dn.value)
@@ -68,22 +70,26 @@ def writeDefn(`def`: hydra.scala.syntax.Defn): hydra.ast.Expr =
     lazy val body: hydra.scala.syntax.Data = (v_Defn_def_dd.body)
     lazy val tparamsExpr: Option[hydra.ast.Expr] = hydra.lib.logic.ifElse[Option[hydra.ast.Expr]](hydra.lib.lists.`null`[hydra.scala.syntax.Type_Param](tparams))(None)(hydra.lib.maybes.pure[hydra.ast.Expr](hydra.serialization.bracketList(hydra.serialization.inlineStyle)(hydra.lib.lists.map[hydra.scala.syntax.Type_Param,
        hydra.ast.Expr](hydra.scala.serde.writeType_Param)(tparams))))
-    lazy val scodExpr: Option[hydra.ast.Expr] = hydra.lib.maybes.map[hydra.scala.syntax.Type, hydra.ast.Expr]((t: hydra.scala.syntax.Type) =>
+    lazy val scodExpr: Option[hydra.ast.Expr] = hydra.lib.maybes.map[hydra.scala.syntax.Type,
+       hydra.ast.Expr]((t: hydra.scala.syntax.Type) =>
       hydra.serialization.spaceSep(Seq(hydra.serialization.cst(":"), hydra.scala.serde.writeType(t))))(scod)
     lazy val paramssExprs: Seq[hydra.ast.Expr] = hydra.lib.lists.map[Seq[hydra.scala.syntax.Data_Param],
        hydra.ast.Expr]((ps: Seq[hydra.scala.syntax.Data_Param]) =>
-      hydra.serialization.parenList(false)(hydra.lib.lists.map[hydra.scala.syntax.Data_Param, hydra.ast.Expr](hydra.scala.serde.writeData_Param)(ps)))(paramss)
+      hydra.serialization.parenList(false)(hydra.lib.lists.map[hydra.scala.syntax.Data_Param,
+         hydra.ast.Expr](hydra.scala.serde.writeData_Param)(ps)))(paramss)
     lazy val nameAndParams: hydra.ast.Expr = hydra.serialization.noSep(hydra.lib.maybes.cat[hydra.ast.Expr](hydra.lib.lists.concat[Option[hydra.ast.Expr]](Seq(Seq(hydra.lib.maybes.pure[hydra.ast.Expr](hydra.scala.serde.writeData_Name(name))),
        Seq(tparamsExpr), hydra.lib.lists.map[hydra.ast.Expr, Option[hydra.ast.Expr]]((pe: hydra.ast.Expr) => hydra.lib.maybes.pure[hydra.ast.Expr](pe))(paramssExprs),
        Seq(scodExpr)))))
     {
       lazy val bodyExpr: hydra.ast.Expr = hydra.scala.serde.writeTerm(body)
       {
-        lazy val defSig: hydra.ast.Expr = hydra.serialization.spaceSep(Seq(hydra.serialization.cst("def"), nameAndParams, hydra.serialization.cst("=")))
+        lazy val defSig: hydra.ast.Expr = hydra.serialization.spaceSep(Seq(hydra.serialization.cst("def"),
+           nameAndParams, hydra.serialization.cst("=")))
         {
           lazy val bodyLen: Int = hydra.serialization.expressionLength(bodyExpr)
           hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.equality.gt[Int](bodyLen)(80))(hydra.serialization.noSep(Seq(defSig,
-             hydra.serialization.cst("\n  "), bodyExpr)))(hydra.serialization.spaceSep(Seq(defSig, bodyExpr)))
+             hydra.serialization.cst("\n  "), bodyExpr)))(hydra.serialization.spaceSep(Seq(defSig,
+             bodyExpr)))
         }
       }
     }
@@ -93,7 +99,8 @@ def writeDefn(`def`: hydra.scala.syntax.Defn): hydra.ast.Expr =
     lazy val tparams: Seq[hydra.scala.syntax.Type_Param] = (v_Defn_type_dt.tparams)
     lazy val body: hydra.scala.syntax.Type = (v_Defn_type_dt.body)
     hydra.serialization.spaceSep(hydra.lib.maybes.cat[hydra.ast.Expr](Seq(hydra.lib.maybes.pure[hydra.ast.Expr](hydra.serialization.cst("type")),
-       hydra.lib.maybes.pure[hydra.ast.Expr](hydra.scala.serde.writeType_Name(name)), hydra.lib.logic.ifElse[Option[hydra.ast.Expr]](hydra.lib.lists.`null`[hydra.scala.syntax.Type_Param](tparams))(None)(hydra.lib.maybes.pure[hydra.ast.Expr](hydra.serialization.bracketList(hydra.serialization.inlineStyle)(hydra.lib.lists.map[hydra.scala.syntax.Type_Param,
+       hydra.lib.maybes.pure[hydra.ast.Expr](hydra.scala.serde.writeType_Name(name)),
+       hydra.lib.logic.ifElse[Option[hydra.ast.Expr]](hydra.lib.lists.`null`[hydra.scala.syntax.Type_Param](tparams))(None)(hydra.lib.maybes.pure[hydra.ast.Expr](hydra.serialization.bracketList(hydra.serialization.inlineStyle)(hydra.lib.lists.map[hydra.scala.syntax.Type_Param,
        hydra.ast.Expr](hydra.scala.serde.writeType_Param)(tparams)))), hydra.lib.maybes.pure[hydra.ast.Expr](hydra.serialization.cst("=")),
        hydra.lib.maybes.pure[hydra.ast.Expr](hydra.scala.serde.writeType(body)))))
   }
@@ -106,10 +113,13 @@ def writeDefn(`def`: hydra.scala.syntax.Defn): hydra.ast.Expr =
     lazy val patName: hydra.scala.syntax.Data_Name = firstPat match
       case hydra.scala.syntax.Pat.`var`(v_Pat_var_pv) => (v_Pat_var_pv.name)
     lazy val nameStr: scala.Predef.String = (patName.value)
-    lazy val nameAndType: hydra.ast.Expr = hydra.lib.maybes.maybe[hydra.ast.Expr, hydra.scala.syntax.Type](hydra.serialization.cst(nameStr))((t: hydra.scala.syntax.Type) =>
-      hydra.serialization.spaceSep(Seq(hydra.serialization.cst(hydra.lib.strings.cat2(nameStr)(":")), hydra.scala.serde.writeType(t))))(typ)
+    lazy val nameAndType: hydra.ast.Expr = hydra.lib.maybes.maybe[hydra.ast.Expr,
+       hydra.scala.syntax.Type](hydra.serialization.cst(nameStr))((t: hydra.scala.syntax.Type) =>
+      hydra.serialization.spaceSep(Seq(hydra.serialization.cst(hydra.lib.strings.cat2(nameStr)(":")),
+         hydra.scala.serde.writeType(t))))(typ)
     lazy val valKeyword: scala.Predef.String = hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.lists.`null`[hydra.scala.syntax.Mod](mods))("val")("lazy val")
-    hydra.serialization.spaceSep(Seq(hydra.serialization.cst(valKeyword), nameAndType, hydra.serialization.cst("="), hydra.scala.serde.writeTerm(rhs)))
+    hydra.serialization.spaceSep(Seq(hydra.serialization.cst(valKeyword), nameAndType,
+       hydra.serialization.cst("="), hydra.scala.serde.writeTerm(rhs)))
   }
   case hydra.scala.syntax.Defn.`class`(v_Defn_class_dc) => {
     lazy val mods: Seq[hydra.scala.syntax.Mod] = (v_Defn_class_dc.mods)
@@ -124,7 +134,8 @@ def writeDefn(`def`: hydra.scala.syntax.Defn): hydra.ast.Expr =
     lazy val nameAndParams: hydra.ast.Expr = hydra.serialization.noSep(hydra.lib.maybes.cat[hydra.ast.Expr](Seq(hydra.lib.maybes.pure[hydra.ast.Expr](hydra.scala.serde.writeType_Name(name)),
        tparamsExpr, paramsExpr)))
     hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(hydra.lib.lists.map[hydra.scala.syntax.Mod,
-       hydra.ast.Expr](hydra.scala.serde.writeMod)(mods), Seq(hydra.serialization.cst("class"), nameAndParams))))
+       hydra.ast.Expr](hydra.scala.serde.writeMod)(mods), Seq(hydra.serialization.cst("class"),
+       nameAndParams))))
   }
   case hydra.scala.syntax.Defn.`enum`(v_Defn_enum_de) => {
     lazy val name: hydra.scala.syntax.Type_Name = (v_Defn_enum_de.name)
@@ -135,7 +146,8 @@ def writeDefn(`def`: hydra.scala.syntax.Defn): hydra.ast.Expr =
        hydra.serialization.noSep(hydra.lib.maybes.cat[hydra.ast.Expr](Seq(hydra.lib.maybes.pure[hydra.ast.Expr](hydra.scala.serde.writeType_Name(name)),
        hydra.lib.logic.ifElse[Option[hydra.ast.Expr]](hydra.lib.lists.`null`[hydra.scala.syntax.Type_Param](tparams))(None)(hydra.lib.maybes.pure[hydra.ast.Expr](hydra.serialization.bracketList(hydra.serialization.inlineStyle)(hydra.lib.lists.map[hydra.scala.syntax.Type_Param,
        hydra.ast.Expr](hydra.scala.serde.writeType_Param)(tparams))))))), hydra.serialization.cst(":")))
-    lazy val enumCases: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.scala.syntax.Stat, hydra.ast.Expr]((s: hydra.scala.syntax.Stat) =>
+    lazy val enumCases: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.scala.syntax.Stat,
+       hydra.ast.Expr]((s: hydra.scala.syntax.Stat) =>
       hydra.serialization.spaceSep(Seq(hydra.serialization.cst("  "), hydra.scala.serde.writeStat(s))))(stats)
     hydra.serialization.newlineSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(enumHeader), enumCases)))
   }
@@ -158,7 +170,8 @@ def writeImportExportStat(ie: hydra.scala.syntax.ImportExportStat): hydra.ast.Ex
   ie match
   case hydra.scala.syntax.ImportExportStat.`import`(v_ImportExportStat_import_imp) => {
     lazy val importers: Seq[hydra.scala.syntax.Importer] = (v_ImportExportStat_import_imp.importers)
-    hydra.serialization.newlineSep(hydra.lib.lists.map[hydra.scala.syntax.Importer, hydra.ast.Expr](hydra.scala.serde.writeImporter)(importers))
+    hydra.serialization.newlineSep(hydra.lib.lists.map[hydra.scala.syntax.Importer,
+       hydra.ast.Expr](hydra.scala.serde.writeImporter)(importers))
   }
 
 def writeImporter(imp: hydra.scala.syntax.Importer): hydra.ast.Expr =
@@ -178,7 +191,8 @@ def writeImporter(imp: hydra.scala.syntax.Importer): hydra.ast.Expr =
     case hydra.scala.syntax.Importee.wildcard => hydra.serialization.cst("*")
     case hydra.scala.syntax.Importee.name(v_Importee_name_in) => hydra.serialization.cst(v_Importee_name_in.name match
       case hydra.scala.syntax.Name.value(v_Name_value_s) => v_Name_value_s))(importees))))))
-  hydra.serialization.spaceSep(Seq(hydra.serialization.cst("import"), hydra.serialization.noSep(Seq(hydra.serialization.cst(refName), forImportees))))
+  hydra.serialization.spaceSep(Seq(hydra.serialization.cst("import"), hydra.serialization.noSep(Seq(hydra.serialization.cst(refName),
+     forImportees))))
 }
 
 def writeInit(init: hydra.scala.syntax.Init): hydra.ast.Expr = hydra.scala.serde.writeType(init.tpe)
@@ -221,7 +235,8 @@ def writePat(pat: hydra.scala.syntax.Pat): hydra.ast.Expr =
     lazy val fun: hydra.scala.syntax.Data = (v_Pat_extract_pe.fun)
     lazy val args: Seq[hydra.scala.syntax.Pat] = (v_Pat_extract_pe.args)
     hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.lists.`null`[hydra.scala.syntax.Pat](args))(hydra.scala.serde.writeTerm(fun))(hydra.serialization.noSep(Seq(hydra.scala.serde.writeTerm(fun),
-       hydra.serialization.parenList(false)(hydra.lib.lists.map[hydra.scala.syntax.Pat, hydra.ast.Expr](hydra.scala.serde.writePat)(args)))))
+       hydra.serialization.parenList(false)(hydra.lib.lists.map[hydra.scala.syntax.Pat,
+       hydra.ast.Expr](hydra.scala.serde.writePat)(args)))))
   }
   case hydra.scala.syntax.Pat.`var`(v_Pat_var_pv) => hydra.scala.serde.writeData_Name(v_Pat_var_pv.name)
   case hydra.scala.syntax.Pat.wildcard => hydra.serialization.cst("_")
@@ -230,9 +245,10 @@ def writePkg(pkg: hydra.scala.syntax.Pkg): hydra.ast.Expr =
   {
   lazy val name: hydra.scala.syntax.Data_Name = (pkg.name)
   lazy val stats: Seq[hydra.scala.syntax.Stat] = (pkg.stats)
-  lazy val `package`: hydra.ast.Expr = hydra.serialization.spaceSep(Seq(hydra.serialization.cst("package"), hydra.scala.serde.writeData_Name(name)))
-  hydra.serialization.doubleNewlineSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(`package`), hydra.lib.lists.map[hydra.scala.syntax.Stat,
-     hydra.ast.Expr](hydra.scala.serde.writeStat)(stats))))
+  lazy val `package`: hydra.ast.Expr = hydra.serialization.spaceSep(Seq(hydra.serialization.cst("package"),
+     hydra.scala.serde.writeData_Name(name)))
+  hydra.serialization.doubleNewlineSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(`package`),
+     hydra.lib.lists.map[hydra.scala.syntax.Stat, hydra.ast.Expr](hydra.scala.serde.writeStat)(stats))))
 }
 
 def writeStat(stat: hydra.scala.syntax.Stat): hydra.ast.Expr =
@@ -254,7 +270,8 @@ def writeTerm(term: hydra.scala.syntax.Data): hydra.ast.Expr =
   case hydra.scala.syntax.Data.assign(v_Data_assign_a) => {
     lazy val lhs: hydra.scala.syntax.Data = (v_Data_assign_a.lhs)
     lazy val rhs: hydra.scala.syntax.Data = (v_Data_assign_a.rhs)
-    hydra.serialization.spaceSep(Seq(hydra.scala.serde.writeTerm(lhs), hydra.serialization.cst("->"), hydra.scala.serde.writeTerm(rhs)))
+    hydra.serialization.spaceSep(Seq(hydra.scala.serde.writeTerm(lhs), hydra.serialization.cst("->"),
+       hydra.scala.serde.writeTerm(rhs)))
   }
   case hydra.scala.syntax.Data.tuple(v_Data_tuple_tup) => hydra.serialization.parenList(false)(hydra.lib.lists.map[hydra.scala.syntax.Data,
      hydra.ast.Expr](hydra.scala.serde.writeTerm)(v_Data_tuple_tup.args))

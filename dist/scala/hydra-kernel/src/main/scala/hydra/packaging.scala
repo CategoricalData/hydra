@@ -14,7 +14,8 @@ enum Definition :
 
 type FileExtension = scala.Predef.String
 
-case class Library(namespace: hydra.packaging.Namespace, prefix: scala.Predef.String, primitives: Seq[hydra.graph.Primitive])
+case class Library(namespace: hydra.packaging.Namespace, prefix: scala.Predef.String,
+   primitives: Seq[hydra.graph.Primitive])
 
 case class Module(namespace: hydra.packaging.Namespace, definitions: Seq[hydra.packaging.Definition],
    termDependencies: Seq[hydra.packaging.Namespace], typeDependencies: Seq[hydra.packaging.Namespace],
@@ -24,8 +25,8 @@ type Namespace = scala.Predef.String
 
 case class Namespaces[N](focus: Tuple2[hydra.packaging.Namespace, N], mapping: Map[hydra.packaging.Namespace, N])
 
-case class Package(name: hydra.packaging.PackageName, modules: Seq[hydra.packaging.Module], dependencies: Seq[hydra.packaging.PackageName],
-   description: Option[scala.Predef.String])
+case class Package(name: hydra.packaging.PackageName, modules: Seq[hydra.packaging.Module],
+   dependencies: Seq[hydra.packaging.PackageName], description: Option[scala.Predef.String])
 
 type PackageName = scala.Predef.String
 

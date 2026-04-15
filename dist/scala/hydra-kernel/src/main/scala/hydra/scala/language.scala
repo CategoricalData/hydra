@@ -17,8 +17,9 @@ lazy val scalaLanguage: hydra.coders.Language = {
   lazy val functionVariants: scala.collection.immutable.Set[hydra.variants.FunctionVariant] = hydra.lib.sets.fromList[hydra.variants.FunctionVariant](Seq(hydra.variants.FunctionVariant.elimination,
      hydra.variants.FunctionVariant.lambda))
   lazy val integerTypes: scala.collection.immutable.Set[hydra.core.IntegerType] = hydra.lib.sets.fromList[hydra.core.IntegerType](Seq(hydra.core.IntegerType.bigint,
-     hydra.core.IntegerType.int8, hydra.core.IntegerType.int16, hydra.core.IntegerType.int32, hydra.core.IntegerType.int64,
-     hydra.core.IntegerType.uint8, hydra.core.IntegerType.uint16, hydra.core.IntegerType.uint32, hydra.core.IntegerType.uint64))
+     hydra.core.IntegerType.int8, hydra.core.IntegerType.int16, hydra.core.IntegerType.int32,
+     hydra.core.IntegerType.int64, hydra.core.IntegerType.uint8, hydra.core.IntegerType.uint16,
+     hydra.core.IntegerType.uint32, hydra.core.IntegerType.uint64))
   lazy val termVariants: scala.collection.immutable.Set[hydra.variants.TermVariant] = hydra.lib.sets.fromList[hydra.variants.TermVariant](Seq(hydra.variants.TermVariant.application,
      hydra.variants.TermVariant.either, hydra.variants.TermVariant.cases, hydra.variants.TermVariant.lambda,
      hydra.variants.TermVariant.project, hydra.variants.TermVariant.unwrap, hydra.variants.TermVariant.typeApplication,
@@ -35,21 +36,25 @@ lazy val scalaLanguage: hydra.coders.Language = {
      hydra.variants.TypeVariant.forall, hydra.variants.TypeVariant.variable, hydra.variants.TypeVariant.void,
      hydra.variants.TypeVariant.wrap))
   def typePredicate[T0](_x: T0): Boolean = true
-  hydra.coders.Language("hydra.scala", hydra.coders.LanguageConstraints(eliminationVariants, literalVariants,
-     floatTypes, functionVariants, integerTypes, termVariants, typeVariants, typePredicate))
+  hydra.coders.Language("hydra.scala", hydra.coders.LanguageConstraints(eliminationVariants,
+     literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants,
+     typePredicate))
 }
 
 lazy val scalaReservedWords: scala.collection.immutable.Set[scala.Predef.String] = {
-  lazy val keywords: Seq[scala.Predef.String] = Seq("abstract", "case", "catch", "class", "def", "do",
-     "else", "end", "enum", "export", "extends", "false", "final", "finally", "for", "forSome", "given",
-     "if", "implicit", "import", "lazy", "macro", "match", "new", "null", "object", "override", "package",
-     "private", "protected", "return", "sealed", "super", "then", "this", "throw", "trait", "true", "try",
-     "type", "val", "var", "while", "with", "yield")
-  lazy val classNames: Seq[scala.Predef.String] = Seq("Any", "AnyVal", "App", "Array", "Boolean", "Byte",
-     "Char", "Console", "DelayedInit", "Double", "DummyExplicit", "Dynamic", "Enumeration", "Equals",
-     "Float", "Function", "Int", "Long", "MatchError", "None", "Nothing", "Null", "Option", "PartialFunction",
-     "Predef", "Product", "Proxy", "SerialVersionUID", "Short", "Singleton", "Some", "Specializable",
-     "StringContext", "Symbol", "Unit", "ValueOf")
+  lazy val keywords: Seq[scala.Predef.String] = Seq("abstract", "case", "catch", "class",
+     "def", "do", "else", "end", "enum", "export", "extends", "false", "final", "finally",
+     "for", "forSome", "given", "if", "implicit", "import", "lazy", "macro", "match",
+     "new", "null", "object", "override", "package", "private", "protected", "return",
+     "sealed", "super", "then", "this", "throw", "trait", "true", "try", "type", "val",
+     "var", "while", "with", "yield")
+  lazy val classNames: Seq[scala.Predef.String] = Seq("Any", "AnyVal", "App", "Array",
+     "Boolean", "Byte", "Char", "Console", "DelayedInit", "Double", "DummyExplicit",
+     "Dynamic", "Enumeration", "Equals", "Float", "Function", "Int", "Long", "MatchError",
+     "None", "Nothing", "Null", "Option", "PartialFunction", "Predef", "Product",
+     "Proxy", "SerialVersionUID", "Short", "Singleton", "Some", "Specializable", "StringContext",
+     "Symbol", "Unit", "ValueOf")
   def hydraScalaKeywords[T0]: Seq[T0] = Seq()
-  hydra.lib.sets.fromList[scala.Predef.String](hydra.lib.lists.concat[scala.Predef.String](Seq(keywords, classNames, hydraScalaKeywords)))
+  hydra.lib.sets.fromList[scala.Predef.String](hydra.lib.lists.concat[scala.Predef.String](Seq(keywords,
+     classNames, hydraScalaKeywords)))
 }

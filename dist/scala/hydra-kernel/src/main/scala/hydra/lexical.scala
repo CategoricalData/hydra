@@ -8,17 +8,19 @@ import hydra.errors.*
 
 import hydra.graph.*
 
-def buildGraph(elements: Seq[hydra.core.Binding])(environment: Map[hydra.core.Name, Option[hydra.core.Term]])(primitives: Map[hydra.core.Name,
-   hydra.graph.Primitive]): hydra.graph.Graph =
+def buildGraph(elements: Seq[hydra.core.Binding])(environment: Map[hydra.core.Name,
+   Option[hydra.core.Term]])(primitives: Map[hydra.core.Name, hydra.graph.Primitive]): hydra.graph.Graph =
   {
   lazy val elementTerms: Map[hydra.core.Name, hydra.core.Term] = hydra.lib.maps.fromList[hydra.core.Name,
-     hydra.core.Term](hydra.lib.lists.map[hydra.core.Binding, Tuple2[hydra.core.Name, hydra.core.Term]]((b: hydra.core.Binding) => Tuple2(b.name,
-     (b.term)))(elements))
+     hydra.core.Term](hydra.lib.lists.map[hydra.core.Binding, Tuple2[hydra.core.Name,
+     hydra.core.Term]]((b: hydra.core.Binding) => Tuple2(b.name, (b.term)))(elements))
   lazy val letTerms: Map[hydra.core.Name, hydra.core.Term] = hydra.lib.maps.map[Option[hydra.core.Term],
      hydra.core.Term, hydra.core.Name]((mt: Option[hydra.core.Term]) => hydra.lib.maybes.fromJust[hydra.core.Term](mt))(hydra.lib.maps.filter[Option[hydra.core.Term],
      hydra.core.Name]((mt: Option[hydra.core.Term]) => hydra.lib.maybes.isJust[hydra.core.Term](mt))(environment))
-  lazy val mergedTerms: Map[hydra.core.Name, hydra.core.Term] = hydra.lib.maps.union[hydra.core.Name, hydra.core.Term](elementTerms)(letTerms)
-  lazy val filteredTerms: Map[hydra.core.Name, hydra.core.Term] = hydra.lib.maps.filterWithKey[hydra.core.Name, hydra.core.Term]((k: hydra.core.Name) =>
+  lazy val mergedTerms: Map[hydra.core.Name, hydra.core.Term] = hydra.lib.maps.union[hydra.core.Name,
+     hydra.core.Term](elementTerms)(letTerms)
+  lazy val filteredTerms: Map[hydra.core.Name, hydra.core.Term] = hydra.lib.maps.filterWithKey[hydra.core.Name,
+     hydra.core.Term]((k: hydra.core.Name) =>
     (_v: hydra.core.Term) =>
     hydra.lib.logic.not(hydra.lib.maps.member[hydra.core.Name, hydra.graph.Primitive](k)(primitives)))(mergedTerms)
   lazy val elementTypes: Map[hydra.core.Name, hydra.core.TypeScheme] = hydra.lib.maps.fromList[hydra.core.Name,
@@ -30,9 +32,9 @@ def buildGraph(elements: Seq[hydra.core.Binding])(environment: Map[hydra.core.Na
      hydra.core.TypeScheme]((k: hydra.core.Name) =>
     (_v: hydra.core.TypeScheme) =>
     hydra.lib.logic.not(hydra.lib.maps.member[hydra.core.Name, hydra.graph.Primitive](k)(primitives)))(elementTypes)
-  hydra.graph.Graph(filteredTerms, filteredTypes, hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeVariableMetadata],
-     hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.maps.keys[hydra.core.Name, Option[hydra.core.Term]](hydra.lib.maps.filter[Option[hydra.core.Term],
-     hydra.core.Name]((mt: Option[hydra.core.Term]) => hydra.lib.maybes.isNothing[hydra.core.Term](mt))(environment))),
+  hydra.graph.Graph(filteredTerms, filteredTypes, hydra.lib.maps.empty[hydra.core.Name,
+     hydra.core.TypeVariableMetadata], hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.maps.keys[hydra.core.Name,
+     Option[hydra.core.Term]](hydra.lib.maps.filter[Option[hydra.core.Term], hydra.core.Name]((mt: Option[hydra.core.Term]) => hydra.lib.maybes.isNothing[hydra.core.Term](mt))(environment))),
      hydra.lib.maps.empty[hydra.core.Name, hydra.core.Term], primitives, hydra.lib.maps.empty[hydra.core.Name,
      hydra.core.TypeScheme], hydra.lib.sets.empty[hydra.core.Name])
 }
@@ -52,7 +54,8 @@ def dereferenceSchemaType(name: hydra.core.Name)(types: Map[hydra.core.Name, hyd
   def forType(t: hydra.core.Type): Option[hydra.core.TypeScheme] =
     t match
     case hydra.core.Type.annotated(v_Type_annotated_at) => forType(v_Type_annotated_at.body)
-    case hydra.core.Type.forall(v_Type_forall_ft) => hydra.lib.maybes.map[hydra.core.TypeScheme, hydra.core.TypeScheme]((ts: hydra.core.TypeScheme) =>
+    case hydra.core.Type.forall(v_Type_forall_ft) => hydra.lib.maybes.map[hydra.core.TypeScheme,
+       hydra.core.TypeScheme]((ts: hydra.core.TypeScheme) =>
       hydra.core.TypeScheme(hydra.lib.lists.cons[hydra.core.Name](v_Type_forall_ft.parameter)(ts.variables),
          (ts.`type`), (ts.constraints)))(forType(v_Type_forall_ft.body))
     case hydra.core.Type.variable(v_Type_variable_v) => hydra.lexical.dereferenceSchemaType(v_Type_variable_v)(types)
@@ -60,26 +63,32 @@ def dereferenceSchemaType(name: hydra.core.Name)(types: Map[hydra.core.Name, hyd
   hydra.lib.maybes.bind[hydra.core.TypeScheme, hydra.core.TypeScheme](hydra.lib.maps.lookup[hydra.core.Name,
      hydra.core.TypeScheme](name)(types))((ts: hydra.core.TypeScheme) =>
     hydra.lib.maybes.map[hydra.core.TypeScheme, hydra.core.TypeScheme]((ts2: hydra.core.TypeScheme) =>
-    hydra.core.TypeScheme(hydra.lib.lists.concat2[hydra.core.Name](ts.variables)(ts2.variables), (ts2.`type`), (ts2.constraints)))(forType(ts.`type`)))
+    hydra.core.TypeScheme(hydra.lib.lists.concat2[hydra.core.Name](ts.variables)(ts2.variables),
+       (ts2.`type`), (ts2.constraints)))(forType(ts.`type`)))
 }
 
-def dereferenceVariable(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.errors.Error, hydra.core.Binding] =
+def dereferenceVariable(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.errors.Error,
+   hydra.core.Binding] =
   hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.core.Binding], hydra.core.Binding](Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noSuchBinding(hydra.errors.NoSuchBindingError(name)))))((`right_`: hydra.core.Binding) => Right(`right_`))(hydra.lexical.lookupBinding(graph)(name))
 
 def elementsToGraph(parent: hydra.graph.Graph)(schemaTypes: Map[hydra.core.Name, hydra.core.TypeScheme])(elements: Seq[hydra.core.Binding]): hydra.graph.Graph =
   {
   lazy val prims: Map[hydra.core.Name, hydra.graph.Primitive] = (parent.primitives)
-  lazy val g: hydra.graph.Graph = hydra.lexical.buildGraph(elements)(hydra.lib.maps.empty[hydra.core.Name, Option[hydra.core.Term]])(prims)
-  hydra.graph.Graph(g.boundTerms, (g.boundTypes), (g.classConstraints), (g.lambdaVariables), (g.metadata), (g.primitives), schemaTypes, (g.typeVariables))
+  lazy val g: hydra.graph.Graph = hydra.lexical.buildGraph(elements)(hydra.lib.maps.empty[hydra.core.Name,
+     Option[hydra.core.Term]])(prims)
+  hydra.graph.Graph(g.boundTerms, (g.boundTypes), (g.classConstraints), (g.lambdaVariables),
+     (g.metadata), (g.primitives), schemaTypes, (g.typeVariables))
 }
 
-lazy val emptyContext: hydra.context.Context = hydra.context.Context(Seq(), Seq(), hydra.lib.maps.empty[hydra.core.Name, hydra.core.Term])
+lazy val emptyContext: hydra.context.Context = hydra.context.Context(Seq(), Seq(),
+   hydra.lib.maps.empty[hydra.core.Name, hydra.core.Term])
 
-lazy val emptyGraph: hydra.graph.Graph = hydra.graph.Graph(hydra.lib.maps.empty[hydra.core.Name, hydra.core.Term],
-   hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeScheme], hydra.lib.maps.empty[hydra.core.Name,
-   hydra.core.TypeVariableMetadata], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.maps.empty[hydra.core.Name,
-   hydra.core.Term], hydra.lib.maps.empty[hydra.core.Name, hydra.graph.Primitive], hydra.lib.maps.empty[hydra.core.Name,
-   hydra.core.TypeScheme], hydra.lib.sets.empty[hydra.core.Name])
+lazy val emptyGraph: hydra.graph.Graph = hydra.graph.Graph(hydra.lib.maps.empty[hydra.core.Name,
+   hydra.core.Term], hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeScheme],
+   hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeVariableMetadata], hydra.lib.sets.empty[hydra.core.Name],
+   hydra.lib.maps.empty[hydra.core.Name, hydra.core.Term], hydra.lib.maps.empty[hydra.core.Name,
+   hydra.graph.Primitive], hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeScheme],
+   hydra.lib.sets.empty[hydra.core.Name])
 
 def fieldsOf(t: hydra.core.Type): Seq[hydra.core.FieldType] =
   {
@@ -91,12 +100,14 @@ def fieldsOf(t: hydra.core.Type): Seq[hydra.core.FieldType] =
     case _ => Seq()
 }
 
-def getField[T0, T1](m: Map[hydra.core.Name, T0])(fname: hydra.core.Name)(decode: (T0 => Either[hydra.errors.Error, T1])): Either[hydra.errors.Error, T1] =
+def getField[T0, T1](m: Map[hydra.core.Name, T0])(fname: hydra.core.Name)(decode: (T0 => Either[hydra.errors.Error,
+   T1])): Either[hydra.errors.Error, T1] =
   hydra.lib.maybes.maybe[Either[hydra.errors.Error, T1], T0](Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noMatchingField(hydra.errors.NoMatchingFieldError(fname)))))(decode)(hydra.lib.maps.lookup[hydra.core.Name,
      T0](fname)(m))
 
 def graphToBindings(g: hydra.graph.Graph): Seq[hydra.core.Binding] =
-  hydra.lib.lists.map[Tuple2[hydra.core.Name, hydra.core.Term], hydra.core.Binding]((p: Tuple2[hydra.core.Name, hydra.core.Term]) =>
+  hydra.lib.lists.map[Tuple2[hydra.core.Name, hydra.core.Term], hydra.core.Binding]((p: Tuple2[hydra.core.Name,
+     hydra.core.Term]) =>
   {
   lazy val name: hydra.core.Name = hydra.lib.pairs.first[hydra.core.Name, hydra.core.Term](p)
   {
@@ -109,7 +120,8 @@ def graphWithPrimitives(builtIn: Seq[hydra.graph.Primitive])(userProvided: Seq[h
   {
   def toMap(ps: Seq[hydra.graph.Primitive]): Map[hydra.core.Name, hydra.graph.Primitive] =
     hydra.lib.maps.fromList[hydra.core.Name, hydra.graph.Primitive](hydra.lib.lists.map[hydra.graph.Primitive,
-       Tuple2[hydra.core.Name, hydra.graph.Primitive]]((p: hydra.graph.Primitive) => Tuple2(p.name, p))(ps))
+       Tuple2[hydra.core.Name, hydra.graph.Primitive]]((p: hydra.graph.Primitive) => Tuple2(p.name,
+       p))(ps))
   lazy val prims: Map[hydra.core.Name, hydra.graph.Primitive] = hydra.lib.maps.union[hydra.core.Name,
      hydra.graph.Primitive](toMap(userProvided))(toMap(builtIn))
   hydra.lexical.buildGraph(Seq())(hydra.lib.maps.empty[hydra.core.Name, Option[hydra.core.Term]])(prims)
@@ -128,9 +140,11 @@ def lookupTerm(graph: hydra.graph.Graph)(name: hydra.core.Name): Option[hydra.co
 
 def matchEnum[T0](graph: hydra.graph.Graph)(tname: hydra.core.Name)(pairs: Seq[Tuple2[hydra.core.Name,
    T0]])(v1: hydra.core.Term): Either[hydra.errors.Error, T0] =
-  hydra.lexical.matchUnion(graph)(tname)(hydra.lib.lists.map[Tuple2[hydra.core.Name, T0], Tuple2[hydra.core.Name,
-     (hydra.core.Term) => Either[hydra.errors.Error, T0]]]((pair: Tuple2[hydra.core.Name, T0]) =>
-  hydra.lexical.matchUnitField(hydra.lib.pairs.first[hydra.core.Name, T0](pair))(hydra.lib.pairs.second[hydra.core.Name, T0](pair)))(pairs))(v1)
+  hydra.lexical.matchUnion(graph)(tname)(hydra.lib.lists.map[Tuple2[hydra.core.Name,
+     T0], Tuple2[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.Error,
+     T0]]]((pair: Tuple2[hydra.core.Name, T0]) =>
+  hydra.lexical.matchUnitField(hydra.lib.pairs.first[hydra.core.Name, T0](pair))(hydra.lib.pairs.second[hydra.core.Name,
+     T0](pair)))(pairs))(v1)
 
 def matchRecord[T0, T1](graph: T0)(decode: (Map[hydra.core.Name, hydra.core.Term] => Either[hydra.errors.Error,
    T1]))(term: hydra.core.Term): Either[hydra.errors.Error, T1] =
@@ -138,8 +152,8 @@ def matchRecord[T0, T1](graph: T0)(decode: (Map[hydra.core.Name, hydra.core.Term
   lazy val stripped: hydra.core.Term = hydra.strip.deannotateAndDetypeTerm(term)
   stripped match
     case hydra.core.Term.record(v_Term_record_record) => decode(hydra.lib.maps.fromList[hydra.core.Name,
-       hydra.core.Term](hydra.lib.lists.map[hydra.core.Field, Tuple2[hydra.core.Name, hydra.core.Term]]((field: hydra.core.Field) => Tuple2(field.name,
-       (field.term)))(v_Term_record_record.fields)))
+       hydra.core.Term](hydra.lib.lists.map[hydra.core.Field, Tuple2[hydra.core.Name,
+       hydra.core.Term]]((field: hydra.core.Field) => Tuple2(field.name, (field.term)))(v_Term_record_record.fields)))
     case _ => Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.unexpectedShape(hydra.errors.UnexpectedShapeError("record",
        hydra.show.core.term(term)))))
 }
@@ -149,8 +163,9 @@ def matchUnion[T0](graph: hydra.graph.Graph)(tname: hydra.core.Name)(pairs: Seq[
    T0] =
   {
   lazy val stripped: hydra.core.Term = hydra.strip.deannotateAndDetypeTerm(term)
-  lazy val mapping: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.Error, T0])] = hydra.lib.maps.fromList[hydra.core.Name,
-     (hydra.core.Term) => Either[hydra.errors.Error, T0]](pairs)
+  lazy val mapping: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.Error,
+     T0])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.Error,
+     T0]](pairs)
   stripped match
     case hydra.core.Term.variable(v_Term_variable_name) => hydra.lib.eithers.bind[hydra.errors.Error,
        hydra.core.Binding, T0](hydra.lexical.requireBinding(graph)(v_Term_variable_name))((el: hydra.core.Binding) => hydra.lexical.matchUnion(graph)(tname)(pairs)(el.term))
@@ -172,7 +187,8 @@ def matchUnion[T0](graph: hydra.graph.Graph)(tname: hydra.core.Name)(pairs: Seq[
        hydra.show.core.term(stripped)))))
 }
 
-def matchUnitField[T0, T1, T2, T3](fname: T0)(x: T1): Tuple2[T0, (T2 => Either[T3, T1])] = Tuple2(fname, (ignored: T2) => Right(x))
+def matchUnitField[T0, T1, T2, T3](fname: T0)(x: T1): Tuple2[T0, (T2 => Either[T3,
+   T1])] = Tuple2(fname, (ignored: T2) => Right(x))
 
 def requireBinding(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.errors.Error, hydra.core.Binding] =
   {
@@ -184,12 +200,15 @@ def requireBinding(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydr
   hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.core.Binding], hydra.core.Binding](Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.other(errMsg))))((x: hydra.core.Binding) => Right(x))(hydra.lexical.lookupBinding(graph)(name))
 }
 
-def requirePrimitive(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.errors.Error, hydra.graph.Primitive] =
+def requirePrimitive(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.errors.Error,
+   hydra.graph.Primitive] =
   hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.graph.Primitive], hydra.graph.Primitive](Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noSuchPrimitive(hydra.errors.NoSuchPrimitiveError(name)))))((x: hydra.graph.Primitive) => Right(x))(hydra.lexical.lookupPrimitive(graph)(name))
 
-def requirePrimitiveType(tx: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.errors.Error, hydra.core.TypeScheme] =
+def requirePrimitiveType(tx: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.errors.Error,
+   hydra.core.TypeScheme] =
   {
-  lazy val mts: Option[hydra.core.TypeScheme] = hydra.lib.maybes.map[hydra.graph.Primitive, hydra.core.TypeScheme]((_p: hydra.graph.Primitive) => (_p.`type`))(hydra.lib.maps.lookup[hydra.core.Name,
+  lazy val mts: Option[hydra.core.TypeScheme] = hydra.lib.maybes.map[hydra.graph.Primitive,
+     hydra.core.TypeScheme]((_p: hydra.graph.Primitive) => (_p.`type`))(hydra.lib.maps.lookup[hydra.core.Name,
      hydra.graph.Primitive](name)(tx.primitives))
   hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.core.TypeScheme], hydra.core.TypeScheme](Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noSuchPrimitive(hydra.errors.NoSuchPrimitiveError(name)))))((ts: hydra.core.TypeScheme) => Right(ts))(mts)
 }
@@ -209,21 +228,23 @@ def resolveTerm(graph: hydra.graph.Graph)(name: hydra.core.Name): Option[hydra.c
   hydra.lib.maybes.maybe[Option[hydra.core.Term], hydra.core.Term](None)(recurse)(hydra.lexical.lookupTerm(graph)(name))
 }
 
-def stripAndDereferenceTerm(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.Error, hydra.core.Term] =
+def stripAndDereferenceTerm(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.Error,
+   hydra.core.Term] =
   {
   lazy val stripped: hydra.core.Term = hydra.strip.deannotateAndDetypeTerm(term)
   stripped match
-    case hydra.core.Term.variable(v_Term_variable_v) => hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term,
-       hydra.core.Term](hydra.lexical.requireTerm(graph)(v_Term_variable_v))((t: hydra.core.Term) => hydra.lexical.stripAndDereferenceTerm(graph)(t))
+    case hydra.core.Term.variable(v_Term_variable_v) => hydra.lib.eithers.bind[hydra.errors.Error,
+       hydra.core.Term, hydra.core.Term](hydra.lexical.requireTerm(graph)(v_Term_variable_v))((t: hydra.core.Term) => hydra.lexical.stripAndDereferenceTerm(graph)(t))
     case _ => Right(stripped)
 }
 
-def stripAndDereferenceTermEither(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.Error, hydra.core.Term] =
+def stripAndDereferenceTermEither(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.Error,
+   hydra.core.Term] =
   {
   lazy val stripped: hydra.core.Term = hydra.strip.deannotateAndDetypeTerm(term)
   stripped match
-    case hydra.core.Term.variable(v_Term_variable_v) => hydra.lib.eithers.either[hydra.errors.Error, hydra.core.Binding,
-       Either[hydra.errors.Error, hydra.core.Term]]((`left_`: hydra.errors.Error) => Left(`left_`))((binding: hydra.core.Binding) =>
+    case hydra.core.Term.variable(v_Term_variable_v) => hydra.lib.eithers.either[hydra.errors.Error,
+       hydra.core.Binding, Either[hydra.errors.Error, hydra.core.Term]]((`left_`: hydra.errors.Error) => Left(`left_`))((binding: hydra.core.Binding) =>
       hydra.lexical.stripAndDereferenceTermEither(graph)(binding.term))(hydra.lexical.dereferenceVariable(graph)(v_Term_variable_v))
     case _ => Right(stripped)
 }

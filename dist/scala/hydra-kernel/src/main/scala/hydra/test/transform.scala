@@ -29,8 +29,8 @@ def collectTestCases(tg: hydra.testing.TestGroup): Seq[hydra.testing.TestCaseWit
 
 def encodeAdjacencyList(pairs: Seq[Tuple2[Int, Seq[Int]]]): hydra.core.Term =
   hydra.core.Term.list(hydra.lib.lists.map[Tuple2[Int, Seq[Int]], hydra.core.Term]((p: Tuple2[Int, Seq[Int]]) =>
-  hydra.core.Term.pair(Tuple2(hydra.test.transform.encodeInt(hydra.lib.pairs.first[Int, Seq[Int]](p)),
-     hydra.core.Term.list(hydra.lib.lists.map[Int, hydra.core.Term]((d: Int) => hydra.test.transform.encodeInt(d))(hydra.lib.pairs.second[Int,
+  hydra.core.Term.pair(Tuple2(hydra.test.transform.encodeInt(hydra.lib.pairs.first[Int,
+     Seq[Int]](p)), hydra.core.Term.list(hydra.lib.lists.map[Int, hydra.core.Term]((d: Int) => hydra.test.transform.encodeInt(d))(hydra.lib.pairs.second[Int,
      Seq[Int]](p))))))(pairs))
 
 def encodeCaseConvention(conv: hydra.util.CaseConvention): hydra.core.Term =
@@ -41,7 +41,8 @@ def encodeCaseConvention(conv: hydra.util.CaseConvention): hydra.core.Term =
   case hydra.util.CaseConvention.pascal => "pascal", hydra.core.Term.unit)))
 
 def encodeEitherListList(e: Either[Seq[Seq[Int]], Seq[Int]]): hydra.core.Term =
-  hydra.core.Term.either(hydra.lib.eithers.bimap[Seq[Seq[Int]], Seq[Int], hydra.core.Term, hydra.core.Term]((cycles: Seq[Seq[Int]]) => hydra.test.transform.encodeListList(cycles))((sorted: Seq[Int]) => hydra.test.transform.encodeIntList(sorted))(e))
+  hydra.core.Term.either(hydra.lib.eithers.bimap[Seq[Seq[Int]], Seq[Int], hydra.core.Term,
+     hydra.core.Term]((cycles: Seq[Seq[Int]]) => hydra.test.transform.encodeListList(cycles))((sorted: Seq[Int]) => hydra.test.transform.encodeIntList(sorted))(e))
 
 def encodeInt(n: Int): hydra.core.Term =
   hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(n)))
@@ -53,7 +54,8 @@ def encodeListList(lists: Seq[Seq[Int]]): hydra.core.Term =
   hydra.core.Term.list(hydra.lib.lists.map[Seq[Int], hydra.core.Term]((l: Seq[Int]) => hydra.test.transform.encodeIntList(l))(lists))
 
 def transformModule(m: hydra.packaging.Module): hydra.packaging.Module =
-  hydra.packaging.Module(hydra.test.transform.addGenerationPrefix(m.namespace), (m.definitions), (m.termDependencies), (m.typeDependencies), (m.description))
+  hydra.packaging.Module(hydra.test.transform.addGenerationPrefix(m.namespace), (m.definitions),
+     (m.termDependencies), (m.typeDependencies), (m.description))
 
 def transformTestCase[T0](tcm: T0): Option[T0] = Some(tcm)
 

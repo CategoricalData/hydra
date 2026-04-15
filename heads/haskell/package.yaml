@@ -55,14 +55,6 @@ library:
     - ../../packages/hydra-scala/src/main/haskell
 
 executables:
-  update-kernel-tests:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-kernel-tests
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra
-
   update-json-kernel:
     main: Main.hs
     source-dirs:
@@ -95,30 +87,6 @@ executables:
     dependencies:
       - hydra
 
-  update-haskell-kernel:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-haskell-kernel
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra
-
-  update-haskell-eval-lib:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-haskell-eval-lib
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra
-
-  update-haskell-sources:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-haskell-sources
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra
-
   verify-json-kernel:
     main: Main.hs
     source-dirs:
@@ -134,24 +102,6 @@ executables:
     ghc-options: [-rtsopts]
     dependencies:
       - hydra
-
-  update-scala:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-scala
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra
-
-  update-scala-tests:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-scala-tests
-      - ../../dist/haskell/hydra-kernel/src/test/haskell
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra
-      - hspec                      >= 2.11.0 && < 2.12
 
   update-ext-sources:
     main: Main.hs

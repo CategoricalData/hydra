@@ -44,7 +44,7 @@ bindConstraints :: t0 -> Graph.Graph -> [Typing.TypeConstraint] -> Either Errors
 bindConstraints flowCx cx constraints =
     Eithers.bind (Eithers.bimap (\_e -> Errors.ErrorUnification _e) (\_a -> _a) (Unification.unifyTypeConstraints flowCx (Graph.graphSchemaTypes cx) constraints)) (\s -> Eithers.bind (Checking.checkTypeSubst flowCx cx s) (\_ -> Right s))
 
--- | Place unbound type variables appearing anywhere under a typed let binding in the type scheme of that binding. These variables may appear in the binding type scheme itself or in that of a subterm, in domain types attached to functions, and in type abstraction and type application terms. This process attempts to capture type variables which have escaped unification, e.g. due to unused code. However, unbound type variables not appearing beneath any typed let binding remain unbound.
+-- | Handle unbound type variables under a typed let binding. Variables appearing free in the binding's declared type (but not in schema types or the scheme's own quantified variables) are added to the scheme and the term is wrapped in matching TypeLambdas. Variables appearing only in the term body (at type-application or lambda-domain positions) are phantom — they have no external effect on the binding's type — and are substituted with hydra.core.Unit in the body rather than generalized. This keeps downstream stages from seeing vacuous foralls that target languages with non-polymorphic value bindings (e.g. Scala val) cannot express.
 bindUnboundTypeVariables :: Graph.Graph -> Core.Term -> Core.Term
 bindUnboundTypeVariables cx term0 =
 
@@ -61,9 +61,12 @@ bindUnboundTypeVariables cx term0 =
                                   Core.bindingTerm = (bindUnboundTypeVariables cx bterm),
                                   Core.bindingType = Nothing}) (\ts ->
                                   let bvars = Sets.fromList (Core.typeSchemeVariables ts)
-                                      unboundInType = Variables.freeVariablesInType (Core.typeSchemeType ts)
-                                      unboundInTerm = Variables.freeTypeVariablesInTerm bterm
-                                      unbound = Sets.toList (Sets.difference (Sets.union unboundInType unboundInTerm) (Sets.union svars bvars))
+                                      excluded = Sets.union svars bvars
+                                      inType = Sets.difference (Variables.freeVariablesInType (Core.typeSchemeType ts)) excluded
+                                      phantoms = Sets.difference (Variables.freeTypeVariablesInTerm bterm) (Sets.union excluded inType)
+                                      phantomSubst = Typing.TypeSubst (Maps.fromList (Lists.map (\v -> (v, Core.TypeUnit)) (Sets.toList phantoms)))
+                                      bterm1 = Substitution.substTypesInTerm phantomSubst bterm
+                                      unbound = Sets.toList inType
                                       ts2 =
                                               Core.TypeScheme {
                                                 Core.typeSchemeVariables = (Lists.concat2 (Core.typeSchemeVariables ts) unbound),
@@ -72,7 +75,7 @@ bindUnboundTypeVariables cx term0 =
                                       bterm2 =
                                               Lists.foldl (\t -> \v -> Core.TermTypeLambda (Core.TypeLambda {
                                                 Core.typeLambdaParameter = v,
-                                                Core.typeLambdaBody = t})) bterm unbound
+                                                Core.typeLambdaBody = t})) bterm1 unbound
                                   in Core.Binding {
                                     Core.bindingName = bname,
                                     Core.bindingTerm = bterm2,
