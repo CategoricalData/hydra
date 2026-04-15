@@ -32,19 +32,31 @@ def bindUnboundTypeVariables(cx: hydra.graph.Graph)(term0: hydra.core.Term): hyd
           {
           lazy val bvars: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.fromList[hydra.core.Name](ts.variables)
           {
-            lazy val unboundInType: scala.collection.immutable.Set[hydra.core.Name] = hydra.variables.freeVariablesInType(ts.`type`)
+            lazy val excluded: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.union[hydra.core.Name](svars)(bvars)
             {
-              lazy val unboundInTerm: scala.collection.immutable.Set[hydra.core.Name] = hydra.variables.freeTypeVariablesInTerm(bterm)
+              lazy val inType: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.difference[hydra.core.Name](hydra.variables.freeVariablesInType(ts.`type`))(excluded)
               {
-                lazy val unbound: Seq[hydra.core.Name] = hydra.lib.sets.toList[hydra.core.Name](hydra.lib.sets.difference[hydra.core.Name](hydra.lib.sets.union[hydra.core.Name](unboundInType)(unboundInTerm))(hydra.lib.sets.union[hydra.core.Name](svars)(bvars)))
+                lazy val phantoms: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.difference[hydra.core.Name](hydra.variables.freeTypeVariablesInTerm(bterm))(hydra.lib.sets.union[hydra.core.Name](excluded)(inType))
                 {
-                  lazy val ts2: hydra.core.TypeScheme = hydra.core.TypeScheme(hydra.lib.lists.concat2[hydra.core.Name](ts.variables)(unbound),
-                     (ts.`type`), (ts.constraints))
+                  lazy val phantomSubst: hydra.typing.TypeSubst = hydra.lib.maps.fromList[hydra.core.Name,
+                     hydra.core.Type](hydra.lib.lists.map[hydra.core.Name, Tuple2[hydra.core.Name,
+                     hydra.core.Type]]((v: hydra.core.Name) => Tuple2(v, hydra.core.Type.unit))(hydra.lib.sets.toList[hydra.core.Name](phantoms)))
                   {
-                    lazy val bterm2: hydra.core.Term = hydra.lib.lists.foldl[hydra.core.Term,
-                       hydra.core.Name]((t: hydra.core.Term) =>
-                      (v: hydra.core.Name) => hydra.core.Term.typeLambda(hydra.core.TypeLambda(v, t)))(bterm)(unbound)
-                    hydra.core.Binding(bname, bterm2, Some(ts2))
+                    lazy val bterm1: hydra.core.Term = hydra.substitution.substTypesInTerm(phantomSubst)(bterm)
+                    {
+                      lazy val unbound: Seq[hydra.core.Name] = hydra.lib.sets.toList[hydra.core.Name](inType)
+                      {
+                        lazy val ts2: hydra.core.TypeScheme = hydra.core.TypeScheme(hydra.lib.lists.concat2[hydra.core.Name](ts.variables)(unbound),
+                           (ts.`type`), (ts.constraints))
+                        {
+                          lazy val bterm2: hydra.core.Term = hydra.lib.lists.foldl[hydra.core.Term,
+                             hydra.core.Name]((t: hydra.core.Term) =>
+                            (v: hydra.core.Name) => hydra.core.Term.typeLambda(hydra.core.TypeLambda(v,
+                               t)))(bterm1)(unbound)
+                          hydra.core.Binding(bname, bterm2, Some(ts2))
+                        }
+                      }
+                    }
                   }
                 }
               }

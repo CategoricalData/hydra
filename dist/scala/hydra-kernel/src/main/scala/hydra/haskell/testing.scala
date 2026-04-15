@@ -59,7 +59,7 @@ def buildTestModule(testModule: hydra.packaging.Module)(testGroup: hydra.testing
   lazy val specNs: hydra.packaging.Namespace = hydra.lib.strings.cat2(`ns_`)("Spec")
   lazy val moduleNameString: scala.Predef.String = hydra.haskell.testing.namespaceToModuleName(specNs)
   lazy val `groupName_`: scala.Predef.String = (testGroup.name)
-  lazy val domainImports: Seq[scala.Predef.String] = hydra.haskell.testing.findHaskellImports(namespaces)(hydra.lib.sets.empty)
+  lazy val domainImports: Seq[scala.Predef.String] = hydra.haskell.testing.findHaskellImports(namespaces)(hydra.lib.sets.empty[Unit])
   lazy val standardImports: Seq[scala.Predef.String] = Seq("import Hydra.Kernel",
      "import qualified Test.Hspec as H", "import qualified Data.List as L", "import qualified Data.Map as M",
      "import qualified Data.Set as S", "import qualified Data.Maybe as Y")

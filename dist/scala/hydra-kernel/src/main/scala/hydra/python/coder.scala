@@ -1107,16 +1107,17 @@ def encodeTermInline(cx: hydra.context.Context)(env: hydra.python.environment.Py
     case hydra.core.Term.annotated(v_Term_annotated_ann) => stripTypeApps(v_Term_annotated_ann.body)
     case hydra.core.Term.typeApplication(v_Term_typeApplication_ta) => stripTypeApps(v_Term_typeApplication_ta.body)
     case _ => t
-  def withCast[T1](pyexp: hydra.python.syntax.Expression): Either[T1, hydra.python.syntax.Expression] =
-    hydra.lib.logic.ifElse[Either[T1, hydra.python.syntax.Expression]](hydra.lib.logic.or(noCast)(env.skipCasts))(Right(pyexp))({
+  def withCast[T0](pyexp: hydra.python.syntax.Expression): Either[T0, hydra.python.syntax.Expression] =
+    hydra.lib.logic.ifElse[Either[T0, hydra.python.syntax.Expression]](hydra.lib.logic.or(noCast)(env.skipCasts))(Right(pyexp))({
     lazy val tc: hydra.graph.Graph = (env.graph)
     {
       lazy val mtyp: Either[hydra.errors.Error, hydra.core.Type] = hydra.lib.eithers.map[Tuple2[hydra.core.Type,
          hydra.context.Context], hydra.core.Type, hydra.errors.Error]((_r: Tuple2[hydra.core.Type,
          hydra.context.Context]) =>
         hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](_r))(hydra.checking.typeOf(cx)(tc)(Seq())(term))
-      hydra.lib.eithers.either[hydra.errors.Error, hydra.core.Type, Either[T1, hydra.python.syntax.Expression]]((_x: hydra.errors.Error) => Right(pyexp))((typ: hydra.core.Type) =>
-        hydra.lib.eithers.either((_x) => Right(pyexp))((pytyp: hydra.python.syntax.Expression) => Right(hydra.python.utils.castTo(pytyp)(pyexp)))(hydra.python.coder.encodeType(env)(typ)))(mtyp)
+      hydra.lib.eithers.either[hydra.errors.Error, hydra.core.Type, Either[T0, hydra.python.syntax.Expression]]((_x: hydra.errors.Error) => Right(pyexp))((typ: hydra.core.Type) =>
+        hydra.lib.eithers.either[Unit, hydra.python.syntax.Expression, Either[T0,
+           hydra.python.syntax.Expression]]((_x: Unit) => Right(pyexp))((pytyp: hydra.python.syntax.Expression) => Right(hydra.python.utils.castTo(pytyp)(pyexp)))(hydra.python.coder.encodeType(env)(typ)))(mtyp)
     }
   })
   hydra.strip.deannotateAndDetypeTerm(term) match
