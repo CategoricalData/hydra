@@ -22,8 +22,10 @@ def sapply(fun: hydra.scala.syntax.Data)(args: Seq[hydra.scala.syntax.Data]): hy
 def sapplyTypes(fun: hydra.scala.syntax.Data)(typeArgs: Seq[hydra.scala.syntax.Type]): hydra.scala.syntax.Data =
   {
   def typeToStr(t: hydra.scala.syntax.Type): scala.Predef.String = hydra.scala.utils.typeToString(t)
-  lazy val typeStrings: Seq[scala.Predef.String] = hydra.lib.lists.map[hydra.scala.syntax.Type, scala.Predef.String](typeToStr)(typeArgs)
-  lazy val typeArgStr: scala.Predef.String = hydra.lib.strings.cat(Seq("[", hydra.lib.strings.intercalate(", ")(typeStrings), "]"))
+  lazy val typeStrings: Seq[scala.Predef.String] = hydra.lib.lists.map[hydra.scala.syntax.Type,
+     scala.Predef.String](typeToStr)(typeArgs)
+  lazy val typeArgStr: scala.Predef.String = hydra.lib.strings.cat(Seq("[", hydra.lib.strings.intercalate(", ")(typeStrings),
+     "]"))
   fun match
     case hydra.scala.syntax.Data.ref(v_Data_ref_ref) => v_Data_ref_ref match
       case hydra.scala.syntax.Data_Ref.name(v_Data_Ref_name_dn) => {
@@ -45,7 +47,8 @@ def scalaEscapeName(s: scala.Predef.String): scala.Predef.String =
   lazy val sanitized2: scala.Predef.String = hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](sanitized)("_"))("_x")(sanitized)
   lazy val sanitized3: scala.Predef.String = hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](sanitized2)("toString"))("toString_")(sanitized2)
   lazy val needsBackticks: Boolean = hydra.lib.logic.or(hydra.lib.sets.member[scala.Predef.String](sanitized3)(hydra.scala.utils.scalaReservedWords))(hydra.lib.logic.and(hydra.lib.equality.gt[Int](hydra.lib.strings.length(sanitized3))(0))(hydra.lib.equality.equal[Int](hydra.lib.strings.charAt(hydra.lib.math.sub(hydra.lib.strings.length(sanitized3))(1))(sanitized3))(95)))
-  hydra.lib.logic.ifElse[scala.Predef.String](needsBackticks)(hydra.lib.strings.cat(Seq("`", sanitized3, "`")))(sanitized3)
+  hydra.lib.logic.ifElse[scala.Predef.String](needsBackticks)(hydra.lib.strings.cat(Seq("`",
+     sanitized3, "`")))(sanitized3)
 }
 
 lazy val scalaReservedWords: scala.collection.immutable.Set[scala.Predef.String] = hydra.scala.language.scalaReservedWords
@@ -99,14 +102,16 @@ def typeToString(t: hydra.scala.syntax.Type): scala.Predef.String =
   case hydra.scala.syntax.Type.`var`(v_Type_var_tv) => (v_Type_var_tv.name.value)
   case hydra.scala.syntax.Type.functionType(v_Type_functionType_ft) => v_Type_functionType_ft match
     case hydra.scala.syntax.Type_FunctionType.function(v_Type_FunctionType_function_fn) => {
-      lazy val params: Seq[scala.Predef.String] = hydra.lib.lists.map[hydra.scala.syntax.Type, scala.Predef.String](hydra.scala.utils.typeToString)(v_Type_FunctionType_function_fn.params)
+      lazy val params: Seq[scala.Predef.String] = hydra.lib.lists.map[hydra.scala.syntax.Type,
+         scala.Predef.String](hydra.scala.utils.typeToString)(v_Type_FunctionType_function_fn.params)
       lazy val res: scala.Predef.String = hydra.scala.utils.typeToString(v_Type_FunctionType_function_fn.res)
       hydra.lib.strings.cat(Seq("(", hydra.lib.strings.intercalate(", ")(params), ") => ", res))
     }
     case _ => "Any"
   case hydra.scala.syntax.Type.apply(v_Type_apply_ta) => {
     lazy val base: scala.Predef.String = hydra.scala.utils.typeToString(v_Type_apply_ta.tpe)
-    lazy val argStrs: Seq[scala.Predef.String] = hydra.lib.lists.map[hydra.scala.syntax.Type, scala.Predef.String](hydra.scala.utils.typeToString)(v_Type_apply_ta.args)
+    lazy val argStrs: Seq[scala.Predef.String] = hydra.lib.lists.map[hydra.scala.syntax.Type,
+       scala.Predef.String](hydra.scala.utils.typeToString)(v_Type_apply_ta.args)
     hydra.lib.strings.cat(Seq(base, "[", hydra.lib.strings.intercalate(", ")(argStrs), "]"))
   }
   case _ => "Any"

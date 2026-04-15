@@ -23,7 +23,8 @@ def context(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.De
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
         case _ => Left("expected string literal")
       case _ => Left("expected literal"))(hydra.extract.core.stripWithDecodingError(cx2)(raw2)))(v1)(v2))(fieldMap)(cx))((field_trace: Seq[scala.Predef.String]) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[scala.Predef.String], hydra.context.Context](hydra.extract.core.requireField("messages")((v1: hydra.graph.Graph) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[scala.Predef.String],
+         hydra.context.Context](hydra.extract.core.requireField("messages")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.core.decodeList((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
@@ -34,7 +35,8 @@ def context(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.De
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
         case _ => Left("expected string literal")
       case _ => Left("expected literal"))(hydra.extract.core.stripWithDecodingError(cx2)(raw2)))(v1)(v2))(fieldMap)(cx))((field_messages: Seq[scala.Predef.String]) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, Map[hydra.core.Name, hydra.core.Term], hydra.context.Context](hydra.extract.core.requireField("other")((v1: hydra.graph.Graph) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, Map[hydra.core.Name, hydra.core.Term],
+         hydra.context.Context](hydra.extract.core.requireField("other")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.core.decodeMap(hydra.decode.core.name)(hydra.decode.core.term)(v1)(v2))(fieldMap)(cx))((field_other: Map[hydra.core.Name,
          hydra.core.Term]) =>
@@ -42,7 +44,8 @@ def context(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.De
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
-def inContext[T0](e: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError, T0]))(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+def inContext[T0](e: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError,
+   T0]))(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
    hydra.context.InContext[T0]] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.context.InContext[T0]]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
