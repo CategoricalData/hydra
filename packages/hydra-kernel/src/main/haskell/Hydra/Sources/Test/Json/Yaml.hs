@@ -25,6 +25,7 @@ import qualified Data.Scientific              as Sci
 
 -- Additional imports specific to this module
 import Hydra.Testing
+import Hydra.Json.Model (Value)
 import qualified Hydra.Dsl.Json.Model as Json
 import qualified Hydra.Sources.Json.Writer as JsonWriter
 import qualified Hydra.Sources.Json.Yaml.Encode as JsonYamlEncode
@@ -59,7 +60,7 @@ allTests = define "allTests" $
 
 -- | Round-trip a JSON value through YAML and back, asserting the result prints identically.
 -- JSON -> YAML -> JSON must preserve the full decimal value for any JSON number.
-yamlBridgeCase :: String -> TTerm Json.Value -> TTerm TestCaseWithMetadata
+yamlBridgeCase :: String -> TTerm Value -> TTerm TestCaseWithMetadata
 yamlBridgeCase testName jsonValue = universalCase testName
   (Eithers.either_
     (Phantoms.lambda "e" $ Phantoms.var "e")
