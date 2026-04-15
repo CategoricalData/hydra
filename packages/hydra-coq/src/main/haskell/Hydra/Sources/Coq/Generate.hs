@@ -584,14 +584,21 @@ buildAxiomOnlyContent = define "buildAxiomOnlyContent" $
   "termAxioms" <~ (Maybes.cat $ Lists.map
     ("td" ~>
       "name" <~ (Pairs.first $ var "td") $
+      "tvars" <~ (Pairs.first $ Pairs.second $ Pairs.second $ var "td") $
       "mty" <~ (Pairs.second $ Pairs.second $ Pairs.second $ var "td") $
       Maybes.maybe
         (Phantoms.nothing :: TTerm (Maybe C.Sentence))
         ("schemeTy" ~>
-          "ep" <~ (CoqUtils.extractTypeParams @@ var "schemeTy") $
-          "ty" <~ Pairs.second (var "ep") $
+          -- Re-wrap the TypeScheme's forall binders around the body type so
+          -- the emitted axiom has well-scoped type variables:
+          -- `Axiom f : forall (t0 : Type) (t1 : Type), <body>`.
+          "wrapped" <~ Lists.foldr
+            (lambdas ["v", "t"] $ Core.typeForall
+              (Core.forallType (var "v") (var "t")))
+            (var "schemeTy")
+            (var "tvars") $
           Phantoms.just $ CoqCoderSource.encodeAxiomDefinitionPair @@ var "env" @@
-            pair (var "name") (var "ty"))
+            pair (var "name") (var "wrapped"))
         (var "mty"))
     (var "termDefs")) $
   "deps" <~ (CoqUtils.moduleDependencies @@ var "mod_") $
