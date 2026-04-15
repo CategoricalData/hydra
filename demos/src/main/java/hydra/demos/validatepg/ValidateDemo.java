@@ -46,6 +46,7 @@ public class ValidateDemo {
         return lit.accept(new Literal.Visitor<String>() {
             @Override public String visit(Literal.Binary instance) { return "binary"; }
             @Override public String visit(Literal.Boolean_ instance) { return "boolean"; }
+            @Override public String visit(Literal.Decimal instance) { return "decimal"; }
             @Override public String visit(Literal.Float_ instance) {
                 return "float:" + instance.value.accept(new hydra.core.FloatValue.Visitor<String>() {
                     @Override public String visit(hydra.core.FloatValue.Bigfloat i) { return "bigfloat"; }

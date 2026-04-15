@@ -80,6 +80,11 @@ public class VisitorTest {
                 }
 
                 @Override
+                public String visit(LiteralType.Decimal instance) {
+                    return "decimal";
+                }
+
+                @Override
                 public String visit(LiteralType.Float_ instance) {
                     return "float64";
                 }
