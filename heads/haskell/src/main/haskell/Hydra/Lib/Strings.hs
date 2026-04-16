@@ -15,11 +15,6 @@ cat = L.concat
 cat2 :: String -> String -> String
 cat2 s1 s2 = s1 ++ s2
 
--- Bootstrap stub: removed in Phase 2.4 but kept so stale dist modules
--- continue to compile during Step 1. Not registered as a primitive.
-charAt :: Int -> String -> Int
-charAt i s = C.ord (s !! i)
-
 -- | Convert a list of Unicode code points to a string.
 fromList :: [Int] -> String
 fromList = fmap C.chr

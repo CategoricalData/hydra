@@ -26,25 +26,6 @@ add x y = x + y
 addFloat64 :: Double -> Double -> Double
 addFloat64 = add
 
--- Bootstrap stubs: removed in Phase 2.4 but kept here so stale dist/haskell
--- modules continue to compile during Step 1 of sync-haskell. Not registered
--- as primitives; will become unused after regeneration and can then be
--- deleted.
-div :: Integral a => a -> a -> a
-div = Prelude.div
-
-mod :: Integral a => a -> a -> a
-mod = Prelude.mod
-
-rem :: Integral a => a -> a -> a
-rem = Prelude.rem
-
-pred :: Enum a => a -> a
-pred = Prelude.pred
-
-succ :: Enum a => a -> a
-succ = Prelude.succ
-
 -- | Return the arc sine of x in radians.
 asin :: Double -> Double
 asin = Prelude.asin

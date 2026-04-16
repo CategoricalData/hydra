@@ -57,6 +57,10 @@ optionalString :: Maybe String -> TTerm Term
 optionalString Nothing = Core.termMaybe nothing
 optionalString (Just x) = Core.termMaybe  $ just (string x)
 
+optionalStringList :: Maybe [String] -> TTerm Term
+optionalStringList Nothing = Core.termMaybe nothing
+optionalStringList (Just xs) = Core.termMaybe $ just (stringList xs)
+
 stringList :: [String] -> TTerm Term
 stringList els = list (string <$> els)
 
@@ -286,25 +290,31 @@ allTests = define "allTests" $
           testStr name lst result = primCase name _lists_maybeHead [stringList lst] (optionalString result)
 
       listsMaybeInit = subgroup "maybeInit" [
-        test "three elements" [1, 2, 3] (Just [1, 2]),
-        test "single element" [42] (Just []),
-        test "empty list" [] Nothing]
+        testInt "three elements" [1, 2, 3] (Just [1, 2]),
+        testInt "single element" [42] (Just []),
+        testInt "empty list" [] Nothing,
+        testStr "string list" ["a", "b", "c"] (Just ["a", "b"])]
         where
-          test name lst result = primCase name _lists_maybeInit [intList lst] (optionalIntList result)
+          testInt name lst result = primCase name _lists_maybeInit [intList lst] (optionalIntList result)
+          testStr name lst result = primCase name _lists_maybeInit [stringList lst] (optionalStringList result)
 
       listsMaybeLast = subgroup "maybeLast" [
         testInt "three elements" [1, 2, 3] (Just 3),
         testInt "single element" [42] (Just 42),
-        testInt "empty list" [] Nothing]
+        testInt "empty list" [] Nothing,
+        testStr "string list" ["hello", "world"] (Just "world")]
         where
           testInt name lst result = primCase name _lists_maybeLast [intList lst] (optionalInt32 result)
+          testStr name lst result = primCase name _lists_maybeLast [stringList lst] (optionalString result)
 
       listsMaybeTail = subgroup "maybeTail" [
-        test "three elements" [1, 2, 3] (Just [2, 3]),
-        test "single element" [42] (Just []),
-        test "empty list" [] Nothing]
+        testInt "three elements" [1, 2, 3] (Just [2, 3]),
+        testInt "single element" [42] (Just []),
+        testInt "empty list" [] Nothing,
+        testStr "string list" ["a", "b", "c"] (Just ["b", "c"])]
         where
-          test name lst result = primCase name _lists_maybeTail [intList lst] (optionalIntList result)
+          testInt name lst result = primCase name _lists_maybeTail [intList lst] (optionalIntList result)
+          testStr name lst result = primCase name _lists_maybeTail [stringList lst] (optionalStringList result)
 
       listsNub = subgroup "nub" [
         testInt "remove duplicates" [1, 2, 1, 3, 2, 4] [1, 2, 3, 4],
