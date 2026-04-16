@@ -1172,48 +1172,72 @@
                                               "project": {"field": "rhs", "typeName": "hydra.scala.syntax.Defn_Val"}}}},
                                         "type": {"type": {"variable": "hydra.scala.syntax.Data"}, "variables": []}},
                                       {
-                                        "name": "firstPat",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "pats"},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.lists.head"},
-                                                "type": {"variable": "hydra.scala.syntax.Pat"}}}}},
-                                        "type": {"type": {"variable": "hydra.scala.syntax.Pat"}, "variables": []}},
-                                      {
-                                        "name": "patName",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "firstPat"},
-                                            "function": {
-                                              "cases": {
-                                                "cases": [
-                                                  {
-                                                    "name": "var",
-                                                    "term": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "pv"},
-                                                            "function": {
-                                                              "project": {"field": "name", "typeName": "hydra.scala.syntax.Pat_Var"}}}},
-                                                        "domain": {"variable": "hydra.scala.syntax.Pat_Var"},
-                                                        "parameter": "pv"}}}],
-                                                "typeName": "hydra.scala.syntax.Pat"}}}},
-                                        "type": {
-                                          "type": {"variable": "hydra.scala.syntax.Data_Name"},
-                                          "variables": []}},
-                                      {
                                         "name": "nameStr",
                                         "term": {
                                           "application": {
                                             "argument": {
                                               "application": {
-                                                "argument": {"variable": "patName"},
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "pats"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                                        "type": {"variable": "hydra.scala.syntax.Pat"}}}}},
                                                 "function": {
-                                                  "project": {"field": "value", "typeName": "hydra.scala.syntax.Data_Name"}}}},
-                                            "function": {"unwrap": "hydra.scala.syntax.PredefString"}}},
+                                                  "application": {
+                                                    "argument": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "let": {
+                                                            "bindings": [
+                                                              {
+                                                                "name": "patName",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "firstPat"},
+                                                                    "function": {
+                                                                      "cases": {
+                                                                        "cases": [
+                                                                          {
+                                                                            "name": "var",
+                                                                            "term": {
+                                                                              "lambda": {
+                                                                                "body": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "pv"},
+                                                                                    "function": {
+                                                                                      "project": {"field": "name", "typeName": "hydra.scala.syntax.Pat_Var"}}}},
+                                                                                "domain": {"variable": "hydra.scala.syntax.Pat_Var"},
+                                                                                "parameter": "pv"}}}],
+                                                                        "typeName": "hydra.scala.syntax.Pat"}}}},
+                                                                "type": {
+                                                                  "type": {"variable": "hydra.scala.syntax.Data_Name"},
+                                                                  "variables": []}}],
+                                                            "body": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "patName"},
+                                                                    "function": {
+                                                                      "project": {"field": "value", "typeName": "hydra.scala.syntax.Data_Name"}}}},
+                                                                "function": {"unwrap": "hydra.scala.syntax.PredefString"}}}}},
+                                                        "domain": {"variable": "hydra.scala.syntax.Pat"},
+                                                        "parameter": "firstPat"}},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.maybes.map"},
+                                                            "type": {"variable": "hydra.scala.syntax.Pat"}}},
+                                                        "type": {"literal": {"string": {}}}}}}}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"literal": {"string": ""}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                    "type": {"literal": {"string": {}}}}}}}}},
                                         "type": {"type": {"literal": {"string": {}}}, "variables": []}},
                                       {
                                         "name": "nameAndType",
@@ -2081,62 +2105,90 @@
                                     "argument": {
                                       "application": {
                                         "argument": {
-                                          "list": [
-                                            {
+                                          "application": {
+                                            "argument": {
                                               "application": {
-                                                "argument": {"literal": {"string": "."}},
-                                                "function": {"variable": "hydra.serialization.cst"}}},
-                                            {
+                                                "argument": {"variable": "importees"},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                                    "type": {"variable": "hydra.scala.syntax.Importee"}}}}},
+                                            "function": {
                                               "application": {
                                                 "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "importees"},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.head"},
-                                                        "type": {"variable": "hydra.scala.syntax.Importee"}}}}},
+                                                  "lambda": {
+                                                    "body": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "list": [
+                                                            {
+                                                              "application": {
+                                                                "argument": {"literal": {"string": "."}},
+                                                                "function": {"variable": "hydra.serialization.cst"}}},
+                                                            {
+                                                              "application": {
+                                                                "argument": {"variable": "firstImp"},
+                                                                "function": {
+                                                                  "cases": {
+                                                                    "cases": [
+                                                                      {
+                                                                        "name": "wildcard",
+                                                                        "term": {
+                                                                          "lambda": {
+                                                                            "body": {
+                                                                              "application": {
+                                                                                "argument": {"literal": {"string": "*"}},
+                                                                                "function": {"variable": "hydra.serialization.cst"}}},
+                                                                            "domain": {"unit": {}},
+                                                                            "parameter": "_"}}},
+                                                                      {
+                                                                        "name": "name",
+                                                                        "term": {
+                                                                          "lambda": {
+                                                                            "body": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "in"},
+                                                                                        "function": {
+                                                                                          "project": {"field": "name", "typeName": "hydra.scala.syntax.Importee_Name"}}}},
+                                                                                    "function": {
+                                                                                      "cases": {
+                                                                                        "cases": [
+                                                                                          {
+                                                                                            "name": "value",
+                                                                                            "term": {
+                                                                                              "lambda": {
+                                                                                                "body": {"variable": "s"},
+                                                                                                "domain": {"literal": {"string": {}}},
+                                                                                                "parameter": "s"}}}],
+                                                                                        "typeName": "hydra.scala.syntax.Name"}}}},
+                                                                                "function": {"variable": "hydra.serialization.cst"}}},
+                                                                            "domain": {"variable": "hydra.scala.syntax.Importee_Name"},
+                                                                            "parameter": "in"}}}],
+                                                                    "typeName": "hydra.scala.syntax.Importee"}}}}]},
+                                                        "function": {"variable": "hydra.serialization.noSep"}}},
+                                                    "domain": {"variable": "hydra.scala.syntax.Importee"},
+                                                    "parameter": "firstImp"}},
                                                 "function": {
-                                                  "cases": {
-                                                    "cases": [
-                                                      {
-                                                        "name": "wildcard",
-                                                        "term": {
-                                                          "lambda": {
-                                                            "body": {
-                                                              "application": {
-                                                                "argument": {"literal": {"string": "*"}},
-                                                                "function": {"variable": "hydra.serialization.cst"}}},
-                                                            "domain": {"unit": {}},
-                                                            "parameter": "_"}}},
-                                                      {
-                                                        "name": "name",
-                                                        "term": {
-                                                          "lambda": {
-                                                            "body": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "in"},
-                                                                        "function": {
-                                                                          "project": {"field": "name", "typeName": "hydra.scala.syntax.Importee_Name"}}}},
-                                                                    "function": {
-                                                                      "cases": {
-                                                                        "cases": [
-                                                                          {
-                                                                            "name": "value",
-                                                                            "term": {
-                                                                              "lambda": {
-                                                                                "body": {"variable": "s"},
-                                                                                "domain": {"literal": {"string": {}}},
-                                                                                "parameter": "s"}}}],
-                                                                        "typeName": "hydra.scala.syntax.Name"}}}},
-                                                                "function": {"variable": "hydra.serialization.cst"}}},
-                                                            "domain": {"variable": "hydra.scala.syntax.Importee_Name"},
-                                                            "parameter": "in"}}}],
-                                                    "typeName": "hydra.scala.syntax.Importee"}}}}]},
-                                        "function": {"variable": "hydra.serialization.noSep"}}},
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.maybes.map"},
+                                                        "type": {"variable": "hydra.scala.syntax.Importee"}}},
+                                                    "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"literal": {"string": ""}},
+                                                "function": {"variable": "hydra.serialization.cst"}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
                                     "function": {
                                       "application": {
                                         "argument": {
@@ -3292,26 +3344,35 @@
                                                   "let": {
                                                     "bindings": [
                                                       {
-                                                        "name": "dom",
-                                                        "term": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "tf"},
-                                                                "function": {
-                                                                  "project": {"field": "params", "typeName": "hydra.scala.syntax.Type_Function"}}}},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.lists.head"},
-                                                                "type": {"variable": "hydra.scala.syntax.Type"}}}}},
-                                                        "type": {"type": {"variable": "hydra.scala.syntax.Type"}, "variables": []}},
-                                                      {
                                                         "name": "cod",
                                                         "term": {
                                                           "application": {
                                                             "argument": {"variable": "tf"},
                                                             "function": {
                                                               "project": {"field": "res", "typeName": "hydra.scala.syntax.Type_Function"}}}},
+                                                        "type": {"type": {"variable": "hydra.scala.syntax.Type"}, "variables": []}},
+                                                      {
+                                                        "name": "dom",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "tf"},
+                                                                    "function": {
+                                                                      "project": {"field": "params", "typeName": "hydra.scala.syntax.Type_Function"}}}},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                                                    "type": {"variable": "hydra.scala.syntax.Type"}}}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "cod"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                                    "type": {"variable": "hydra.scala.syntax.Type"}}}}}}},
                                                         "type": {"type": {"variable": "hydra.scala.syntax.Type"}, "variables": []}}],
                                                     "body": {
                                                       "application": {

@@ -10,6 +10,7 @@ import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Testing as Testing
@@ -94,11 +95,11 @@ generateTestFileWithPythonCodec testModule testGroup =
       let testModuleContent = buildPythonTestModule testModule testGroup testBody
           ns_ = Packaging.moduleNamespace testModule
           parts = Strings.splitOn "." (Packaging.unNamespace ns_)
-          dirParts = Lists.init parts
+          dirParts = Maybes.fromMaybe [] (Lists.maybeInit parts)
           fileName =
                   Strings.cat [
                     "test_",
-                    (Lists.last parts),
+                    (Maybes.fromMaybe "" (Lists.maybeLast parts)),
                     ".py"]
           filePath =
                   Strings.cat [

@@ -130,10 +130,14 @@ public interface Testing {
         java.util.List<String> parts = hydra.lib.strings.SplitOn.apply(
           ".",
           (ns_).value);
-        hydra.util.Lazy<java.util.List<String>> dirParts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Init.apply(parts));
+        hydra.util.Lazy<java.util.List<String>> dirParts = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> (java.util.List<String>) (java.util.Collections.<String>emptyList()),
+          hydra.lib.lists.MaybeInit.apply(parts)));
         hydra.util.Lazy<String> fileName = new hydra.util.Lazy<>(() -> hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
           "test_",
-          hydra.lib.lists.Last.apply(parts),
+          hydra.lib.maybes.FromMaybe.applyLazy(
+            () -> "",
+            hydra.lib.lists.MaybeLast.apply(parts)),
           ".py")));
         String filePath = hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
           hydra.lib.strings.Intercalate.apply(

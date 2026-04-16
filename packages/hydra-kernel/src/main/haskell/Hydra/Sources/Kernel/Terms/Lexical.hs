@@ -111,8 +111,10 @@ buildGraph = define "buildGraph" $
   -- boundTerms: element bindings (name -> term) merged with let-bound vars from environment (Just term)
   "elementTerms" <~ Maps.fromList (Lists.map ("b" ~>
     pair (Core.bindingName (var "b")) (Core.bindingTerm (var "b"))) (var "elements")) $
-  "letTerms" <~ Maps.map ("mt" ~> Maybes.fromJust (var "mt"))
-    (Maps.filter ("mt" ~> Maybes.isJust (var "mt")) (var "environment")) $
+  -- Keep only entries whose value is Just, and strip the Just wrapper.
+  "letTerms" <~ Maps.fromList (Maybes.mapMaybe
+    ("kv" ~> Maybes.map ("t" ~> pair (Pairs.first $ var "kv") (var "t")) (Pairs.second $ var "kv"))
+    (Maps.toList $ var "environment")) $
   "mergedTerms" <~ Maps.union (var "elementTerms") (var "letTerms") $
   -- Construction-time shadowing: remove any binding whose name matches a primitive
   "filteredTerms" <~ Maps.filterWithKey ("k" ~> "_v" ~>

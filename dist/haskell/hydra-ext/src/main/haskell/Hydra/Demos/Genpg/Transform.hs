@@ -244,12 +244,12 @@ parseTableLines :: Bool -> [String] -> Either String (Tabular.Table String)
 parseTableLines hasHeader rawLines =
     Eithers.bind (Eithers.mapList (\ln -> parseSingleLine ln) rawLines) (\parsedRows ->
       let rows = Maybes.cat parsedRows
-      in (Logic.ifElse hasHeader (
-        let headerRow = Lists.head rows
-            dataRows = Lists.tail rows
+      in (Logic.ifElse hasHeader (Maybes.maybe (Left "empty rows: cannot parse header") (\p ->
+        let headerRow = Pairs.first p
+            dataRows = Pairs.second p
         in (Logic.ifElse (listAny (\m -> Maybes.isNothing m) headerRow) (Left "null header column(s)") (Right (Tabular.Table {
           Tabular.tableHeader = (Just (Tabular.HeaderRow (Maybes.cat headerRow))),
-          Tabular.tableData = (Lists.map (\r -> Tabular.DataRow r) dataRows)})))) (Right (Tabular.Table {
+          Tabular.tableData = (Lists.map (\r -> Tabular.DataRow r) dataRows)})))) (Lists.uncons rows)) (Right (Tabular.Table {
         Tabular.tableHeader = Nothing,
         Tabular.tableData = (Lists.map (\r -> Tabular.DataRow r) rows)}))))
 
@@ -277,7 +277,7 @@ tableForEdge edge =
                     id,
                     outId,
                     inId] (Maps.elems props))
-      in (Logic.ifElse (Equality.equal (Sets.size tables) 1) (Right (Lists.head (Sets.toList tables))) (Left (Strings.cat [
+      in (Logic.ifElse (Equality.equal (Sets.size tables) 1) (Maybes.maybe (Left "unreachable: empty tables set") (\x -> Right x) (Lists.maybeHead (Sets.toList tables))) (Left (Strings.cat [
         "Specification for ",
         (Model.unEdgeLabel label),
         " edges has wrong number of tables"])))
@@ -290,7 +290,7 @@ tableForVertex vertex =
           id = Model.vertexId vertex
           props = Model.vertexProperties vertex
           tables = findTablesInTerms (Lists.cons id (Maps.elems props))
-      in (Logic.ifElse (Equality.equal (Sets.size tables) 1) (Right (Lists.head (Sets.toList tables))) (Left (Strings.cat [
+      in (Logic.ifElse (Equality.equal (Sets.size tables) 1) (Maybes.maybe (Left "unreachable: empty tables set") (\x -> Right x) (Lists.maybeHead (Sets.toList tables))) (Left (Strings.cat [
         "Specification for ",
         (Model.unVertexLabel label),
         " vertices has wrong number of tables"])))

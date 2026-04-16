@@ -305,7 +305,7 @@ aesonToHydra v = case v of
       mapPair (k, v') = (AK.toString k, aesonToHydra v')
   A.Array a -> Json.ValueArray (aesonToHydra <$> V.toList a)
   A.String t -> Json.ValueString $ T.unpack t
-  A.Number s -> Json.ValueNumber $ SC.toRealFloat s
+  A.Number s -> Json.ValueNumber s
   A.Bool b -> Json.ValueBoolean b
   A.Null -> Json.ValueNull
 

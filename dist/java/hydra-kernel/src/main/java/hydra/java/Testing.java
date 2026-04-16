@@ -12,12 +12,16 @@ public interface Testing {
       ".",
       (ns_).value);
     hydra.util.Lazy<String> className_ = new hydra.util.Lazy<>(() -> hydra.lib.strings.Cat2.apply(
-      hydra.Formatting.capitalize(hydra.lib.lists.Last.apply(parts)),
+      hydra.Formatting.capitalize(hydra.lib.maybes.FromMaybe.applyLazy(
+        () -> "",
+        hydra.lib.lists.MaybeLast.apply(parts))),
       "Test"));
     String groupName_ = (testGroup).name;
     hydra.util.Lazy<String> packageName = new hydra.util.Lazy<>(() -> hydra.lib.strings.Intercalate.apply(
       ".",
-      hydra.lib.lists.Init.apply(parts)));
+      hydra.lib.maybes.FromMaybe.applyLazy(
+        () -> (java.util.List<String>) (java.util.Collections.<String>emptyList()),
+        hydra.lib.lists.MaybeInit.apply(parts))));
     java.util.List<String> standardImports = java.util.Arrays.asList(
       "import org.junit.jupiter.api.Test;",
       "import static org.junit.jupiter.api.Assertions.*;",
@@ -195,11 +199,15 @@ public interface Testing {
           ".",
           (ns_).value);
         hydra.util.Lazy<String> className_ = new hydra.util.Lazy<>(() -> hydra.lib.strings.Cat2.apply(
-          hydra.Formatting.capitalize(hydra.lib.lists.Last.apply(parts)),
+          hydra.Formatting.capitalize(hydra.lib.maybes.FromMaybe.applyLazy(
+            () -> "",
+            hydra.lib.lists.MaybeLast.apply(parts))),
           "Test"));
         hydra.util.Lazy<java.util.List<String>> dirParts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Drop.apply(
           1,
-          hydra.lib.lists.Init.apply(parts)));
+          hydra.lib.maybes.FromMaybe.applyLazy(
+            () -> (java.util.List<String>) (java.util.Collections.<String>emptyList()),
+            hydra.lib.lists.MaybeInit.apply(parts))));
         String fileName = hydra.lib.strings.Cat2.apply(
           className_.get(),
           ".java");

@@ -503,14 +503,14 @@ def encodeTypeWithClassAssertions[T0, T1](namespaces: hydra.packaging.Namespaces
        hydra.classes.TypeClass]](assertPairs))(Right(htyp))({
     lazy val encoded: Seq[hydra.haskell.syntax.Assertion] = hydra.lib.lists.map[Tuple2[hydra.core.Name,
        hydra.classes.TypeClass], hydra.haskell.syntax.Assertion](encodeAssertion)(assertPairs)
-    lazy val hassert: hydra.haskell.syntax.Assertion = hydra.lib.logic.ifElse[hydra.haskell.syntax.Assertion](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.haskell.syntax.Assertion](encoded))(1))(hydra.lib.lists.head[hydra.haskell.syntax.Assertion](encoded))(hydra.haskell.syntax.Assertion.tuple(encoded))
+    lazy val hassert: hydra.haskell.syntax.Assertion = hydra.lib.logic.ifElse[hydra.haskell.syntax.Assertion](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.haskell.syntax.Assertion](encoded))(1))(hydra.lib.maybes.fromMaybe[hydra.haskell.syntax.Assertion](hydra.haskell.syntax.Assertion.tuple(encoded))(hydra.lib.lists.maybeHead[hydra.haskell.syntax.Assertion](encoded)))(hydra.haskell.syntax.Assertion.tuple(encoded))
     Right(hydra.haskell.syntax.Type.ctx(hydra.haskell.syntax.ContextType(hassert, htyp)))
   }))
 }
 
 def encodeUnwrap[T0](namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.ModuleName])(name: hydra.core.Name): Either[T0,
    hydra.haskell.syntax.Expression] =
-  Right(hydra.haskell.syntax.Expression.variable(hydra.haskell.utils.elementReference(namespaces)(hydra.names.qname(hydra.lib.maybes.fromJust[hydra.packaging.Namespace](hydra.names.namespaceOf(name)))(hydra.haskell.utils.newtypeAccessorName(name)))))
+  Right(hydra.haskell.syntax.Expression.variable(hydra.haskell.utils.elementReference(namespaces)(hydra.names.qname(hydra.lib.maybes.fromMaybe[hydra.packaging.Namespace]("")(hydra.names.namespaceOf(name)))(hydra.haskell.utils.newtypeAccessorName(name)))))
 
 def extendMetaForTerm(meta: hydra.haskell.environment.HaskellModuleMetadata)(term: hydra.core.Term): hydra.haskell.environment.HaskellModuleMetadata =
   term match
@@ -729,13 +729,16 @@ def toTypeDeclarationsFrom(namespaces: hydra.packaging.Namespaces[hydra.haskell.
   lazy val lname: scala.Predef.String = hydra.names.localNameOf(elementName)
   lazy val hname: hydra.haskell.syntax.Name = hydra.haskell.utils.simpleName(lname)
   def declHead(name: hydra.haskell.syntax.Name)(`vars_`: Seq[hydra.core.Name]): hydra.haskell.syntax.DeclarationHead =
-    hydra.lib.logic.ifElse[hydra.haskell.syntax.DeclarationHead](hydra.lib.lists.`null`[hydra.core.Name](`vars_`))(hydra.haskell.syntax.DeclarationHead.simple(name))({
-    lazy val h: hydra.core.Name = hydra.lib.lists.head[hydra.core.Name](`vars_`)
-    lazy val rest: Seq[hydra.core.Name] = hydra.lib.lists.tail[hydra.core.Name](`vars_`)
+    hydra.lib.maybes.fromMaybe[hydra.haskell.syntax.DeclarationHead](hydra.haskell.syntax.DeclarationHead.simple(name))(hydra.lib.maybes.map[Tuple2[hydra.core.Name,
+       Seq[hydra.core.Name]], hydra.haskell.syntax.DeclarationHead]((p: Tuple2[hydra.core.Name,
+       Seq[hydra.core.Name]]) =>
+    {
+    lazy val h: hydra.core.Name = hydra.lib.pairs.first[hydra.core.Name, Seq[hydra.core.Name]](p)
+    lazy val rest: Seq[hydra.core.Name] = hydra.lib.pairs.second[hydra.core.Name, Seq[hydra.core.Name]](p)
     lazy val hvar: hydra.haskell.syntax.Variable = hydra.haskell.utils.simpleName(h)
     hydra.haskell.syntax.DeclarationHead.application(hydra.haskell.syntax.ApplicationDeclarationHead(declHead(name)(rest),
        hvar))
-  })
+  })(hydra.lib.lists.uncons[hydra.core.Name](`vars_`)))
   def newtypeCons(tname: hydra.core.Name)(`typ_`: hydra.core.Type): Either[hydra.errors.Error,
      hydra.haskell.syntax.ConstructorWithComments] =
     {

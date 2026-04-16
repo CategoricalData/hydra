@@ -647,13 +647,16 @@ bindingsToStatements = def "bindingsToStatements" $
     "recursiveVars" <~ Sets.fromList (Lists.concat (Lists.map
       (lambda "names" $
         Logic.ifElse (Equality.equal (Lists.length (var "names")) (int32 1))
-          ("singleName" <~ Lists.head (var "names") $
-            Maybes.cases (Maps.lookup (var "singleName") (var "allDeps"))
-              (list ([] :: [TTerm Name]))
-              (lambda "deps" $
-                Logic.ifElse (Sets.member (var "singleName") (var "deps"))
-                  (list [var "singleName"])
-                  (list ([] :: [TTerm Name]))))
+          (Maybes.maybe
+            (list ([] :: [TTerm Name]))
+            (lambda "singleName" $
+              Maybes.cases (Maps.lookup (var "singleName") (var "allDeps"))
+                (list ([] :: [TTerm Name]))
+                (lambda "deps" $
+                  Logic.ifElse (Sets.member (var "singleName") (var "deps"))
+                    (list [var "singleName"])
+                    (list ([] :: [TTerm Name]))))
+            (Lists.maybeHead (var "names")))
           (var "names"))
       (var "sorted"))) $
     -- Identify thunked vars
@@ -1238,17 +1241,20 @@ compareFieldExpr = def "compareFieldExpr" $
 -- | Shared helper: build the compareTo method body for a list of fields
 compareToBody :: TTermDefinition (JavaHelpers.Aliases -> String -> [FieldType] -> [Java.BlockStatement])
 compareToBody = def "compareToBody" $
-  lambda "aliases" $ lambda "otherVar" $ lambda "fields" $
-    Logic.ifElse (Lists.null (var "fields"))
-      (list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (JavaUtilsSource.javaIntExpression @@ bigintAsInt (bigint 0)))])
-      (Logic.ifElse (Equality.equal (Lists.length (var "fields")) (int32 1))
-        (list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (compareFieldExpr @@ var "otherVar" @@ Lists.head (var "fields")))])
-        (Lists.concat2
-          (list [cmpDeclStatement @@ var "aliases"])
+  lambda "aliases" $ lambda "otherVar" $ lambda "fields" $ lets [
+    "zeroStmts">: list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (JavaUtilsSource.javaIntExpression @@ bigintAsInt (bigint 0)))]] $
+    Maybes.fromMaybe (var "zeroStmts") (Maybes.map
+      (lambda "p" $ lets [
+        "firstField">: Pairs.first (var "p"),
+        "restFields">: Pairs.second (var "p")] $
+        Logic.ifElse (Lists.null (var "restFields"))
+          (list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (compareFieldExpr @@ var "otherVar" @@ var "firstField"))])
           (Lists.concat2
-            (Lists.concat (Lists.map (lambda "f" $ compareAndReturnStmts @@ var "otherVar" @@ var "f") (Lists.init (var "fields"))))
-            (list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (compareFieldExpr @@ var "otherVar" @@ Lists.last (var "fields")))]))
-          ))
+            (list [cmpDeclStatement @@ var "aliases"])
+            (Lists.concat2
+              (Lists.concat (Lists.map (lambda "f" $ compareAndReturnStmts @@ var "otherVar" @@ var "f") (Lists.cons (var "firstField") (Maybes.fromMaybe (list ([] :: [TTerm FieldType])) (Lists.maybeInit (var "restFields"))))))
+              (list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (compareFieldExpr @@ var "otherVar" @@ (Maybes.fromMaybe (var "firstField") (Lists.maybeLast (var "restFields")))))]))))
+      (Lists.uncons (var "fields")))
 
 -- | this.field.compareTo(other.field) == 0 for BigDecimal/BigInteger fields
 compareToZeroClause :: TTermDefinition (String -> String -> Java.InclusiveOrExpression)
@@ -1360,8 +1366,8 @@ correctCastType = def "correctCastType" $
       _Term_pair>>: lambda "_p" $
         Logic.ifElse (Equality.equal (Lists.length (var "typeArgs")) (int32 2))
           (right (inject _Type _Type_pair (Core.pairType
-            (Lists.head (var "typeArgs"))
-            (Lists.head (Lists.tail (var "typeArgs"))))))
+            (Maybes.fromMaybe (var "fallback") (Lists.maybeAt (int32 0) (var "typeArgs")))
+            (Maybes.fromMaybe (var "fallback") (Lists.maybeAt (int32 1) (var "typeArgs"))))))
           (right (var "fallback"))]
 
 -- | Compute corrected type applications for a function call.
@@ -1627,7 +1633,7 @@ decodeTypeFromTerm = def "decodeTypeFromTerm" $
                  (Just nothing) [
                  _Term_record>>: lambda "rec" $
                    Maybes.bind
-                     (Lists.safeHead (Lists.filter
+                     (Lists.maybeHead (Lists.filter
                        (lambda "f" $ Equality.equal (Core.fieldName (var "f")) (Core.name (string "body")))
                        (Core.recordFields (var "rec"))))
                      (lambda "bodyField" $
@@ -1638,13 +1644,13 @@ decodeTypeFromTerm = def "decodeTypeFromTerm" $
                    (Just nothing) [
                    _Term_record>>: lambda "rec" $
                      Maybes.bind
-                       (Lists.safeHead (Lists.filter
+                       (Lists.maybeHead (Lists.filter
                          (lambda "f" $ Equality.equal (Core.fieldName (var "f")) (Core.name (string "function")))
                          (Core.recordFields (var "rec"))))
                        (lambda "funcField" $
                          Maybes.bind (decodeTypeFromTerm @@ Core.fieldTerm (var "funcField")) (lambda "func" $
                            Maybes.bind
-                             (Lists.safeHead (Lists.filter
+                             (Lists.maybeHead (Lists.filter
                                (lambda "f" $ Equality.equal (Core.fieldName (var "f")) (Core.name (string "argument")))
                                (Core.recordFields (var "rec"))))
                              (lambda "argField" $
@@ -1657,13 +1663,13 @@ decodeTypeFromTerm = def "decodeTypeFromTerm" $
                      (Just nothing) [
                      _Term_record>>: lambda "rec" $
                        Maybes.bind
-                         (Lists.safeHead (Lists.filter
+                         (Lists.maybeHead (Lists.filter
                            (lambda "f" $ Equality.equal (Core.fieldName (var "f")) (Core.name (string "domain")))
                            (Core.recordFields (var "rec"))))
                          (lambda "domField" $
                            Maybes.bind (decodeTypeFromTerm @@ Core.fieldTerm (var "domField")) (lambda "dom" $
                              Maybes.bind
-                               (Lists.safeHead (Lists.filter
+                               (Lists.maybeHead (Lists.filter
                                  (lambda "f" $ Equality.equal (Core.fieldName (var "f")) (Core.name (string "codomain")))
                                  (Core.recordFields (var "rec"))))
                                (lambda "codField" $
@@ -1686,12 +1692,11 @@ decodeTypeFromTerm = def "decodeTypeFromTerm" $
 dedupBindings :: TTermDefinition (S.Set Name -> [Binding] -> [Binding])
 dedupBindings = def "dedupBindings" $
   lambda "inScope" $ lambda "bs" $
-    Logic.ifElse
-      (Lists.null (var "bs"))
-      (list ([] :: [TTerm Binding]))
-      ("b" <~ Lists.head (var "bs") $
-       "rest" <~ Lists.tail (var "bs") $
-       "name" <~ Core.bindingName (var "b") $
+    Maybes.fromMaybe (list ([] :: [TTerm Binding])) (Maybes.map
+      (lambda "p" $
+        "b" <~ Pairs.first (var "p") $
+        "rest" <~ Pairs.second (var "p") $
+        "name" <~ Core.bindingName (var "b") $
        Logic.ifElse
          (Sets.member (var "name") (var "inScope"))
          ("newName" <~ (freshJavaName @@ var "name" @@ var "inScope") $
@@ -1707,6 +1712,7 @@ dedupBindings = def "dedupBindings" $
             (dedupBindings @@ Sets.insert (var "newName") (var "inScope") @@ var "rest2"))
          (Lists.cons (var "b")
            (dedupBindings @@ Sets.insert (var "name") (var "inScope") @@ var "rest")))
+      (Lists.uncons (var "bs")))
 
 -- | Detect over-generalized type variables in a scheme type.
 detectAccumulatorUnification :: TTermDefinition ([Type] -> Type -> [Name] -> M.Map Name Type)
@@ -1842,7 +1848,7 @@ elementsClassName = def "elementsClassName" $
     "nsStr">: unwrap _Namespace @@ var "ns",
     "parts">: Strings.splitOn (string ".") (var "nsStr")] $
     Formatting.sanitizeWithUnderscores @@ JavaLanguageSource.reservedWords
-      @@ (Formatting.capitalize @@ (Lists.last (var "parts")))
+      @@ (Formatting.capitalize @@ (Maybes.fromMaybe (var "nsStr") (Lists.maybeLast (var "parts"))))
 
 -- | Produce the qualified name for a term module's elements interface.
 -- Uses the parent namespace so that e.g. "hydra.formatting" -> "hydra.Formatting" (not "hydra.formatting.Formatting").
@@ -2134,8 +2140,8 @@ encodeNullaryPrimitiveByName = def "encodeNullaryPrimitiveByName" $
            Java._MethodInvocation_arguments>>: list ([] :: [TTerm Java.Expression])])))
       ("fullName" <~ (unwrap Java._Identifier @@ (elementJavaIdentifier @@ boolean True @@ boolean False @@ var "aliases" @@ var "name")) $
        "parts" <~ Strings.splitOn (string ".") (var "fullName") $
-       "className" <~ JavaDsl.identifier (Strings.intercalate (string ".") (Lists.init (var "parts"))) $
-       "methodName" <~ JavaDsl.identifier (Lists.last (var "parts")) $
+       "className" <~ JavaDsl.identifier (Strings.intercalate (string ".") (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts")))) $
+       "methodName" <~ JavaDsl.identifier (Maybes.fromMaybe (var "fullName") (Lists.maybeLast (var "parts"))) $
        right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
          (JavaUtilsSource.methodInvocationStaticWithTypeArgs @@ var "className" @@ var "methodName" @@ var "targs" @@ (list ([] :: [TTerm Java.Expression])))))
 
@@ -3053,7 +3059,9 @@ encodeTermInternal = def "encodeTermInternal" $
               -- For Either<L,R>, TypeApp(typeR, TypeApp(typeL, Either(...))):
               --   outer TypeApp has typeR (right branch type), inner has typeL (left branch type)
               --   collectTypeApps starts with [atyp] and prepends, so allTypeArgs = [typeL, typeR]
-              ("eitherBranchTypes" <~ pair (Lists.head (var "allTypeArgs")) (Lists.head (Lists.tail (var "allTypeArgs"))) $
+              ("eitherBranchTypes" <~ pair
+                  (Maybes.fromMaybe (var "correctedTyp") (Lists.maybeAt (int32 0) (var "allTypeArgs")))
+                  (Maybes.fromMaybe (var "correctedTyp") (Lists.maybeAt (int32 1) (var "allTypeArgs"))) $
                 "jTypeArgs" <<~ (Eithers.mapList (lambda "t" $
                   "jt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "t" @@ var "cx" @@ var "g") $
                   JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") (var "allTypeArgs")) $
@@ -3170,7 +3178,7 @@ encodeTermTCO = def "encodeTermTCO" $
         "body2" <~ (Pairs.second $ var "gathered2") $
         Logic.ifElse (Equality.equal (Lists.length $ var "args2") (int32 1))
           -- Single argument: try to match as case statement
-          ("arg" <~ (Lists.head $ var "args2") $
+          ("arg" <~ (Maybes.fromMaybe Core.termUnit (Lists.maybeHead $ var "args2")) $
             cases _Term (Strip.deannotateAndDetypeTerm @@ var "body2") (Just $
               -- Default: not a case statement, encode as return
               "expr" <<~ (encodeTerm @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
@@ -3526,11 +3534,12 @@ encodeVariable = def "encodeVariable" $
 encodeVariable_buildCurried :: TTermDefinition ([Name] -> Java.Expression -> Java.Expression)
 encodeVariable_buildCurried = def "encodeVariable_buildCurried" $
   lambda "params" $ lambda "inner" $
-    Logic.ifElse (Lists.null (var "params"))
-      (var "inner")
-      (JavaUtilsSource.javaLambda @@ Lists.head (var "params") @@
-        (encodeVariable_buildCurried @@
-          Lists.tail (var "params") @@ var "inner"))
+    Maybes.fromMaybe (var "inner") (Maybes.map
+      (lambda "p" $
+        JavaUtilsSource.javaLambda @@ Pairs.first (var "p") @@
+          (encodeVariable_buildCurried @@
+            Pairs.second (var "p") @@ var "inner"))
+      (Lists.uncons (var "params")))
 
 -- | Handle the HoistedLambda case of encodeVariable
 encodeVariable_hoistedLambdaCase :: TTermDefinition (JavaHelpers.Aliases -> Name -> Int -> Context -> Graph -> Either Error Java.Expression)
@@ -3790,10 +3799,7 @@ findSelfRefVar = def "findSelfRefVar" $
     "selfRefs" <~ Lists.filter
       (lambda "entry" $ (Lists.elem :: TTerm Name -> TTerm [Name] -> TTerm Bool) (Pairs.first (var "entry")) (Pairs.second (var "entry")))
       (Maps.toList (var "grouped")) $
-    Logic.ifElse
-      (Lists.null (var "selfRefs"))
-      nothing
-      (just (Pairs.first (Lists.head (var "selfRefs"))))
+    Maybes.map (lambda "entry" $ Pairs.first (var "entry")) (Lists.maybeHead (var "selfRefs"))
 
 -- | First 20 prime numbers used as hash code multipliers.
 first20Primes :: TTermDefinition [Int]
@@ -4179,17 +4185,19 @@ isUnresolvedInferenceVar :: TTermDefinition (Name -> Bool)
 isUnresolvedInferenceVar = def "isUnresolvedInferenceVar" $
   lambda "name" $
     "chars" <~ Strings.toList (unwrap _Name @@ var "name") $
-    Logic.ifElse (Lists.null (var "chars"))
-      (boolean False)
-      (Logic.ifElse
-        (Logic.not $ Equality.equal (Lists.head (var "chars")) (int32 116))  -- 't'
-        (boolean False)
-        ("rest" <~ Lists.tail (var "chars") $
-          Logic.and
+    Maybes.fromMaybe (boolean False) (Maybes.map
+      (lambda "p" $ lets [
+        "firstCh">: Pairs.first (var "p"),
+        "rest">: Pairs.second (var "p")] $
+        Logic.ifElse
+          (Logic.not $ Equality.equal (var "firstCh") (int32 116))  -- 't'
+          (boolean False)
+          (Logic.and
             (Logic.not $ Lists.null (var "rest"))
             (Lists.null $ Lists.filter
               (lambda "c" $ Logic.not (isUnresolvedInferenceVar_isDigit @@ var "c"))
               (var "rest"))))
+      (Lists.uncons (var "chars")))
 
 isUnresolvedInferenceVar_isDigit :: TTermDefinition (Int -> Bool)
 isUnresolvedInferenceVar_isDigit = def "isUnresolvedInferenceVar_isDigit" $
@@ -4303,10 +4311,11 @@ nameMapToTypeMap = def "nameMapToTypeMap" $
 namespaceParent :: TTermDefinition (Namespace -> Maybe Namespace)
 namespaceParent = def "namespaceParent" $
   lambda "ns" $ lets [
-    "parts">: Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns")] $
-    Logic.ifElse (Lists.null (Lists.init (var "parts")))
+    "parts">: Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns"),
+    "initParts">: Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts"))] $
+    Logic.ifElse (Lists.null (var "initParts"))
       nothing
-      (just (wrap _Namespace (Strings.intercalate (string ".") (Lists.init (var "parts")))))
+      (just (wrap _Namespace (Strings.intercalate (string ".") (var "initParts"))))
 
 -- | Check if a term structurally needs lazy evaluation.
 needsThunking :: TTermDefinition (Term -> Bool)
@@ -4524,13 +4533,16 @@ rebuildApps = def "rebuildApps" $
           inject _Term _Term_application (Core.application (var "acc") (var "a")))
           (var "f") (var "args")) [
         _Type_function>>: lambda "ft" $
-          "arg" <~ Lists.head (var "args") $
-          "rest" <~ Lists.tail (var "args") $
-          "remainingType" <~ Core.functionTypeCodomain (var "ft") $
-          "app" <~ inject _Term _Term_application (Core.application (var "f") (var "arg")) $
-          "annotatedApp" <~ (Annotations.setTermAnnotation @@ asTerm Constants.key_type
-            @@ just (encodeTypeAsTerm @@ var "remainingType") @@ var "app") $
-          rebuildApps @@ var "annotatedApp" @@ var "rest" @@ var "remainingType"])
+          Maybes.fromMaybe (var "f") (Maybes.map
+            (lambda "p" $
+              "arg" <~ Pairs.first (var "p") $
+              "rest" <~ Pairs.second (var "p") $
+              "remainingType" <~ Core.functionTypeCodomain (var "ft") $
+              "app" <~ inject _Term _Term_application (Core.application (var "f") (var "arg")) $
+              "annotatedApp" <~ (Annotations.setTermAnnotation @@ asTerm Constants.key_type
+                @@ just (encodeTypeAsTerm @@ var "remainingType") @@ var "app") $
+              rebuildApps @@ var "annotatedApp" @@ var "rest" @@ var "remainingType")
+            (Lists.uncons (var "args")))])
 
 -- | Generate a compareTo method for a record type.
 recordCompareToMethod :: TTermDefinition (JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> [FieldType] -> Java.ClassBodyDeclaration)
@@ -4926,7 +4938,7 @@ toDeclInit = def "toDeclInit" $
   lambda "aliasesExt" $ lambda "gExt" $ lambda "recursiveVars" $ lambda "flatBindings" $ lambda "name" $
     "cx" ~> "g" ~>
     Logic.ifElse (Sets.member (var "name") (var "recursiveVars"))
-      ("binding" <~ Lists.head (Lists.filter (lambda "b" $ Equality.equal (Core.bindingName (var "b")) (var "name")) (var "flatBindings")) $
+      ("binding" <~ Maybes.fromMaybe (Core.binding (var "name") Core.termUnit nothing) (Lists.maybeHead (Lists.filter (lambda "b" $ Equality.equal (Core.bindingName (var "b")) (var "name")) (var "flatBindings"))) $
         "value" <~ Core.bindingTerm (var "binding") $
         "typ" <<~ Maybes.cases (Core.bindingType (var "binding"))
           (Checking.typeOfTerm @@ var "cx" @@ var "gExt" @@ var "value")
@@ -4951,7 +4963,7 @@ toDeclStatement :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.A
 toDeclStatement = def "toDeclStatement" $
   lambda "envExt" $ lambda "aliasesExt" $ lambda "gExt" $ lambda "recursiveVars" $ lambda "thunkedVars" $ lambda "flatBindings" $ lambda "name" $
     "cx" ~> "g" ~>
-    "binding" <~ Lists.head (Lists.filter (lambda "b" $ Equality.equal (Core.bindingName (var "b")) (var "name")) (var "flatBindings")) $
+    "binding" <~ Maybes.fromMaybe (Core.binding (var "name") Core.termUnit nothing) (Lists.maybeHead (Lists.filter (lambda "b" $ Equality.equal (Core.bindingName (var "b")) (var "name")) (var "flatBindings"))) $
     "value" <~ Core.bindingTerm (var "binding") $
     "typ" <<~ Maybes.cases (Core.bindingType (var "binding"))
       (Checking.typeOfTerm @@ var "cx" @@ var "gExt" @@ var "value")
@@ -5246,16 +5258,18 @@ wrapInSupplierLambda = def "wrapInSupplierLambda" $
 -- wrapped to avoid constructing expensive error messages on the success path.
 wrapLazyArguments :: TTermDefinition (Name -> [Java.Expression] -> ([Java.Expression], Maybe String))
 wrapLazyArguments = def "wrapLazyArguments" $
-  lambda "name" $ lambda "args" $
+  lambda "name" $ lambda "args" $ lets [
+    "dummyExpr">: JavaUtilsSource.javaIntExpression @@ bigintAsInt (bigint 0),
+    "argAt">: "i" ~> Maybes.fromMaybe (var "dummyExpr") (Lists.maybeAt (var "i") (var "args"))] $
     Logic.ifElse
       (Logic.and
         (Equality.equal (var "name") (Core.nameLift _logic_ifElse))
         (Equality.equal (Lists.length (var "args")) (int32 3)))
       (pair
         (list [
-          Lists.at (int32 0) (var "args"),
-          wrapInSupplierLambda @@ (Lists.at (int32 1) (var "args")),
-          wrapInSupplierLambda @@ (Lists.at (int32 2) (var "args"))])
+          var "argAt" @@ int32 0,
+          wrapInSupplierLambda @@ (var "argAt" @@ int32 1),
+          wrapInSupplierLambda @@ (var "argAt" @@ int32 2)])
         (just (string "lazy")))
       (Logic.ifElse
         (Logic.and
@@ -5263,9 +5277,9 @@ wrapLazyArguments = def "wrapLazyArguments" $
           (Equality.equal (Lists.length (var "args")) (int32 3)))
         (pair
           (list [
-            wrapInSupplierLambda @@ (Lists.at (int32 0) (var "args")),
-            Lists.at (int32 1) (var "args"),
-            Lists.at (int32 2) (var "args")])
+            wrapInSupplierLambda @@ (var "argAt" @@ int32 0),
+            var "argAt" @@ int32 1,
+            var "argAt" @@ int32 2])
           (just (string "applyLazy")))
       (Logic.ifElse
         (Logic.and
@@ -5273,9 +5287,9 @@ wrapLazyArguments = def "wrapLazyArguments" $
           (Equality.equal (Lists.length (var "args")) (int32 3)))
         (pair
           (list [
-            Lists.at (int32 0) (var "args"),
-            wrapInSupplierLambda @@ (Lists.at (int32 1) (var "args")),
-            Lists.at (int32 2) (var "args")])
+            var "argAt" @@ int32 0,
+            wrapInSupplierLambda @@ (var "argAt" @@ int32 1),
+            var "argAt" @@ int32 2])
           (just (string "applyLazy")))
       (Logic.ifElse
         (Logic.and
@@ -5283,9 +5297,9 @@ wrapLazyArguments = def "wrapLazyArguments" $
           (Equality.equal (Lists.length (var "args")) (int32 3)))
         (pair
           (list [
-            wrapInSupplierLambda @@ (Lists.at (int32 0) (var "args")),
-            Lists.at (int32 1) (var "args"),
-            Lists.at (int32 2) (var "args")])
+            wrapInSupplierLambda @@ (var "argAt" @@ int32 0),
+            var "argAt" @@ int32 1,
+            var "argAt" @@ int32 2])
           (just (string "applyLazy")))
       (Logic.ifElse
         (Logic.and
@@ -5297,7 +5311,7 @@ wrapLazyArguments = def "wrapLazyArguments" $
           (Equality.equal (Lists.length (var "args")) (int32 2)))
         (pair
           (list [
-            wrapInSupplierLambda @@ (Lists.at (int32 0) (var "args")),
-            Lists.at (int32 1) (var "args")])
+            wrapInSupplierLambda @@ (var "argAt" @@ int32 0),
+            var "argAt" @@ int32 1])
           (just (string "applyLazy")))
         (pair (var "args") (nothing :: TTerm (Maybe String)))))))

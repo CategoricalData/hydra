@@ -17,7 +17,7 @@ def adjacencyListToMap[T0, T1](pairs: Seq[Tuple2[T0, Seq[T1]]]): Map[T0, Seq[T1]
   }
 })(hydra.lib.maps.empty[T0, Seq[T1]])(pairs)
 
-def adjacencyListsToGraph[T0](edges0: Seq[Tuple2[T0, Seq[T0]]]): Tuple2[Map[Int, Seq[Int]], (Int => T0)] =
+def adjacencyListsToGraph[T0](edges0: Seq[Tuple2[T0, Seq[T0]]]): Tuple2[Map[Int, Seq[Int]], (Int => Option[T0])] =
   {
   lazy val sortedEdges: Seq[Tuple2[T0, Seq[T0]]] = hydra.lib.lists.sortOn[Tuple2[T0,
      Seq[T0]], T0](hydra.lib.pairs.first[T0, Seq[T0]])(edges0)
@@ -62,7 +62,7 @@ def adjacencyListsToGraph[T0](edges0: Seq[Tuple2[T0, Seq[T0]]]): Tuple2[Map[Int,
       }
     }
   })(indexedEdges))
-  def vertexToKey(v: Int): T0 = hydra.lib.maybes.fromJust[T0](hydra.lib.maps.lookup[Int, T0](v)(vertexMap))
+  def vertexToKey(v: Int): Option[T0] = hydra.lib.maps.lookup[Int, T0](v)(vertexMap)
   Tuple2(graph, vertexToKey)
 }
 
@@ -101,18 +101,29 @@ lazy val initialState: hydra.topology.TarjanState = hydra.topology.TarjanState(0
 def popStackUntil(v: Int)(st0: hydra.topology.TarjanState): Tuple2[Seq[Int], hydra.topology.TarjanState] =
   {
   def go(acc: Seq[Int])(st: hydra.topology.TarjanState): Tuple2[Seq[Int], hydra.topology.TarjanState] =
+    hydra.lib.maybes.maybe[Tuple2[Seq[Int], hydra.topology.TarjanState], Tuple2[Int,
+       Seq[Int]]](Tuple2(hydra.lib.lists.reverse[Int](acc), st))((uc: Tuple2[Int,
+       Seq[Int]]) =>
     {
-    lazy val x: Int = hydra.lib.lists.head[Int](st.stack)
-    lazy val xs: Seq[Int] = hydra.lib.lists.tail[Int](st.stack)
-    lazy val newSt: hydra.topology.TarjanState = hydra.topology.TarjanState(st.counter,
-       (st.indices), (st.lowLinks), xs, (st.onStack), (st.sccs))
-    lazy val newSt2: hydra.topology.TarjanState = hydra.topology.TarjanState(newSt.counter,
-       (newSt.indices), (newSt.lowLinks), (newSt.stack), hydra.lib.sets.delete[Int](x)(st.onStack),
-       (newSt.sccs))
-    lazy val `acc_`: Seq[Int] = hydra.lib.lists.cons[Int](x)(acc)
-    hydra.lib.logic.ifElse[Tuple2[Seq[Int], hydra.topology.TarjanState]](hydra.lib.equality.equal[Int](x)(v))(Tuple2(hydra.lib.lists.reverse[Int](`acc_`),
-       newSt2))(go(`acc_`)(newSt2))
-  }
+    lazy val x: Int = hydra.lib.pairs.first[Int, Seq[Int]](uc)
+    {
+      lazy val xs: Seq[Int] = hydra.lib.pairs.second[Int, Seq[Int]](uc)
+      {
+        lazy val newSt: hydra.topology.TarjanState = hydra.topology.TarjanState(st.counter,
+           (st.indices), (st.lowLinks), xs, (st.onStack), (st.sccs))
+        {
+          lazy val newSt2: hydra.topology.TarjanState = hydra.topology.TarjanState(newSt.counter,
+             (newSt.indices), (newSt.lowLinks), (newSt.stack), hydra.lib.sets.delete[Int](x)(st.onStack),
+             (newSt.sccs))
+          {
+            lazy val `acc_`: Seq[Int] = hydra.lib.lists.cons[Int](x)(acc)
+            hydra.lib.logic.ifElse[Tuple2[Seq[Int], hydra.topology.TarjanState]](hydra.lib.equality.equal[Int](x)(v))(Tuple2(hydra.lib.lists.reverse[Int](`acc_`),
+               newSt2))(go(`acc_`)(newSt2))
+          }
+        }
+      }
+    }
+  })(hydra.lib.lists.uncons[Int](st.stack))
   go(Seq())(st0)
 }
 
@@ -202,17 +213,18 @@ def stronglyConnectedComponents(graph: Map[Int, Seq[Int]]): Seq[Seq[Int]] =
 def topologicalSort[T0](pairs: Seq[Tuple2[T0, Seq[T0]]]): Either[Seq[Seq[T0]], Seq[T0]] =
   {
   lazy val sccs: Seq[Seq[T0]] = hydra.sorting.topologicalSortComponents(pairs)
-  def isCycle[T1](scc: Seq[T1]): Boolean = hydra.lib.logic.not(hydra.lib.lists.`null`[T1](hydra.lib.lists.tail[T1](scc)))
+  def isCycle[T1](scc: Seq[T1]): Boolean = hydra.lib.equality.gt[Int](hydra.lib.lists.length[T1](scc))(1)
   lazy val withCycles: Seq[Seq[T0]] = hydra.lib.lists.filter[Seq[T0]](isCycle)(sccs)
   hydra.lib.logic.ifElse[Either[Seq[Seq[T0]], Seq[T0]]](hydra.lib.lists.`null`[Seq[T0]](withCycles))(Right(hydra.lib.lists.concat[T0](sccs)))(Left(withCycles))
 }
 
 def topologicalSortComponents[T0](pairs: Seq[Tuple2[T0, Seq[T0]]]): Seq[Seq[T0]] =
   {
-  lazy val graphResult: Tuple2[Map[Int, Seq[Int]], (Int => T0)] = hydra.sorting.adjacencyListsToGraph(pairs)
-  lazy val g: Map[Int, Seq[Int]] = hydra.lib.pairs.first[Map[Int, Seq[Int]], (Int) => T0](graphResult)
+  lazy val graphResult: Tuple2[Map[Int, Seq[Int]], (Int => Option[T0])] = hydra.sorting.adjacencyListsToGraph(pairs)
+  lazy val g: Map[Int, Seq[Int]] = hydra.lib.pairs.first[Map[Int, Seq[Int]], (Int) => Option[T0]](graphResult)
   hydra.lib.lists.map[Seq[Int], Seq[T0]]((comp: Seq[Int]) =>
-    hydra.lib.lists.map[Int, T0](hydra.lib.pairs.second[Map[Int, Seq[Int]], (Int) => T0](graphResult))(comp))(hydra.sorting.stronglyConnectedComponents(g))
+    hydra.lib.maybes.mapMaybe[Int, T0](hydra.lib.pairs.second[Map[Int, Seq[Int]],
+       (Int) => Option[T0]](graphResult))(comp))(hydra.sorting.stronglyConnectedComponents(g))
 }
 
 def topologicalSortNodes[T0, T1](getKey: (T0 => T1))(getAdj: (T0 => Seq[T1]))(nodes: Seq[T0]): Seq[Seq[T0]] =

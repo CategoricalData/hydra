@@ -185,9 +185,6 @@ evalLibLists = standardLibrary _hydra_lib_lists [
   mkPrim _lists_replicate 2 $ \cx g args -> case args of
     [n, x] -> coerceError $ EvalLists.replicate cx g n x
     _ -> unexpected cx "lists.replicate" 2,
-  mkPrim _lists_safeHead 1 $ \cx g args -> case args of
-    [lt] -> EvalLists.safeHead cx g lt
-    _ -> unexpected cx "lists.safeHead" 1,
   mkPrim _lists_singleton 1 $ \cx g args -> case args of
     [x] -> coerceError $ EvalLists.singleton cx g x
     _ -> unexpected cx "lists.singleton" 1,
@@ -253,13 +250,7 @@ evalLibMath = standardLibrary _hydra_lib_math [
     _ -> unexpected cx "math.even" 1,
   mkPrim _math_odd 1 $ \cx g args -> case args of
     [x] -> coerceError $ EvalMath.odd cx g x
-    _ -> unexpected cx "math.odd" 1,
-  mkPrim _math_pred 1 $ \cx g args -> case args of
-    [x] -> coerceError $ EvalMath.pred cx g x
-    _ -> unexpected cx "math.pred" 1,
-  mkPrim _math_succ 1 $ \cx g args -> case args of
-    [x] -> coerceError $ EvalMath.succ cx g x
-    _ -> unexpected cx "math.succ" 1]
+    _ -> unexpected cx "math.odd" 1]
 
 -- ---- Maybes ----
 
@@ -280,9 +271,6 @@ evalLibMaybes = standardLibrary _hydra_lib_maybes [
   mkPrim _maybes_compose 3 $ \cx g args -> case args of
     [f, g_, x] -> coerceError $ EvalMaybes.compose cx g f g_ x
     _ -> unexpected cx "maybes.compose" 3,
-  mkPrim _maybes_fromJust 1 $ \cx g args -> case args of
-    [t] -> EvalMaybes.fromJust cx g t
-    _ -> unexpected cx "maybes.fromJust" 1,
   mkPrim _maybes_fromMaybe 2 $ \cx g args -> case args of
     [def, t] -> EvalMaybes.fromMaybe cx g def t
     _ -> unexpected cx "maybes.fromMaybe" 2,

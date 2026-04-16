@@ -499,7 +499,7 @@ def encode_tuple(t: hydra.python.syntax.Tuple) -> hydra.ast.Expr:
     r"""Serialize a Python tuple."""
 
     es = t.value
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(es), 1), (lambda : hydra.serialization.parens(hydra.serialization.no_sep((encode_star_named_expression(hydra.lib.lists.head(es)), hydra.serialization.cst(","))))), (lambda : hydra.serialization.paren_list(False, hydra.lib.lists.map((lambda x1: encode_star_named_expression(x1)), es))))
+    return hydra.lib.maybes.from_maybe((lambda : hydra.serialization.paren_list(False, hydra.lib.lists.map((lambda x1: encode_star_named_expression(x1)), es))), hydra.lib.maybes.map((lambda first_es: hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(es), 1), (lambda : hydra.serialization.parens(hydra.serialization.no_sep((encode_star_named_expression(first_es), hydra.serialization.cst(","))))), (lambda : hydra.serialization.paren_list(False, hydra.lib.lists.map((lambda x1: encode_star_named_expression(x1)), es))))), hydra.lib.lists.maybe_head(es)))
 
 def encode_star_expression(se: hydra.python.syntax.StarExpression) -> hydra.ast.Expr:
     r"""Serialize a star expression."""

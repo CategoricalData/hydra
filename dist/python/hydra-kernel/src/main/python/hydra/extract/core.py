@@ -133,7 +133,7 @@ def case_field(name: hydra.core.Name, n: str, graph: hydra.graph.Graph, term: hy
     r"""Extract a specific case handler from a case statement term."""
 
     field_name = hydra.core.Name(n)
-    return hydra.lib.eithers.bind(cases(name, graph, term), (lambda cs: (matching := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name.value, field_name.value)), cs.cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError("matching case", "no matching case"))))))), (lambda : Right(hydra.lib.lists.head(matching)))))[1]))
+    return hydra.lib.eithers.bind(cases(name, graph, term), (lambda cs: (matching := hydra.lib.lists.find((lambda f: hydra.lib.equality.equal(f.name.value, field_name.value)), cs.cases), hydra.lib.maybes.maybe((lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError("matching case", "no matching case"))))))), (lambda mf: Right(mf)), matching))[1]))
 
 def decimal_literal(v: hydra.core.Literal) -> Either[hydra.errors.Error, Decimal]:
     r"""Extract a decimal literal from a Literal value."""
@@ -264,7 +264,10 @@ def field(fname: hydra.core.Name, mapping: Callable[[hydra.core.Term], Either[hy
     @lru_cache(1)
     def matching_fields() -> frozenlist[hydra.core.Field]:
         return hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name.value, fname.value)), fields)
-    return hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields()), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2("field ", fname.value), "no matching field"))))))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_fields()), 1), (lambda : hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(graph, hydra.lib.lists.head(matching_fields()).term), (lambda stripped: mapping(stripped)))), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError("single field", hydra.lib.strings.cat2("multiple fields named ", fname.value)))))))))))
+    @lru_cache(1)
+    def no_match_err() -> Either[hydra.errors.Error, T1]:
+        return Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2("field ", fname.value), "no matching field"))))))
+    return hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields()), (lambda : no_match_err()), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_fields()), 1), (lambda : hydra.lib.maybes.maybe((lambda : no_match_err()), (lambda mf: hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(graph, mf.term), (lambda stripped: mapping(stripped)))), hydra.lib.lists.maybe_head(matching_fields()))), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError("single field", hydra.lib.strings.cat2("multiple fields named ", fname.value)))))))))))
 
 def float32_value(v: hydra.core.FloatValue) -> Either[hydra.errors.Error, float]:
     r"""Extract a float32 value from a FloatValue."""
@@ -418,7 +421,7 @@ def let_binding(n: str, graph: hydra.graph.Graph, term: hydra.core.Term) -> Eith
     r"""Extract a binding with the given name from a let term."""
 
     name = hydra.core.Name(n)
-    return hydra.lib.eithers.bind(let(graph, term), (lambda let_expr: (matching_bindings := hydra.lib.lists.filter((lambda b: hydra.lib.equality.equal(b.name.value, name.value)), let_expr.bindings), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_bindings), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorNoSuchBinding(hydra.errors.NoSuchBindingError(name))))))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_bindings), 1), (lambda : Right(hydra.lib.lists.head(matching_bindings).term)), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorMultipleBindings(hydra.errors.MultipleBindingsError(name)))))))))))[1]))
+    return hydra.lib.eithers.bind(let(graph, term), (lambda let_expr: (matching_bindings := hydra.lib.lists.filter((lambda b: hydra.lib.equality.equal(b.name.value, name.value)), let_expr.bindings), no_binding_err := Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorNoSuchBinding(hydra.errors.NoSuchBindingError(name)))))), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_bindings), (lambda : no_binding_err), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_bindings), 1), (lambda : hydra.lib.maybes.maybe((lambda : no_binding_err), (lambda b: Right(b.term)), hydra.lib.lists.maybe_head(matching_bindings))), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorMultipleBindings(hydra.errors.MultipleBindingsError(name)))))))))))[2]))
 
 def list(graph: hydra.graph.Graph, term: hydra.core.Term):
     def _hoist_hydra_extract_core_list_1(stripped, v1):
@@ -433,7 +436,7 @@ def list(graph: hydra.graph.Graph, term: hydra.core.Term):
 def list_head(graph: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.errors.Error, hydra.core.Term]:
     r"""Extract the first element of a list term."""
 
-    return hydra.lib.eithers.bind(list(graph, term), (lambda l: hydra.lib.logic.if_else(hydra.lib.lists.null(l), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError("non-empty list", "empty list"))))))), (lambda : Right(hydra.lib.lists.head(l))))))
+    return hydra.lib.eithers.bind(list(graph, term), (lambda l: hydra.lib.maybes.maybe((lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError("non-empty list", "empty list"))))))), (lambda h: Right(h)), hydra.lib.lists.maybe_head(l))))
 
 def list_of(f: Callable[[hydra.core.Term], Either[hydra.errors.Error, T0]], graph: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.errors.Error, frozenlist[T0]]:
     r"""Extract a list of values from a term, mapping a function over each element."""

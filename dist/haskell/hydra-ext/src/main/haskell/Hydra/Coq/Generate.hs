@@ -353,9 +353,7 @@ generateTypeGroup env group =
 
       let cyclic = Pairs.first group
           defs = Pairs.second group
-      in (Logic.ifElse (Logic.and (Logic.not cyclic) (Equality.equal (Lists.length defs) 1)) (
-        let d = Lists.head defs
-        in (generateTypeSentence env (Pairs.first d) (Pairs.second d))) (
+      in (Logic.ifElse (Logic.and (Logic.not cyclic) (Equality.equal (Lists.length defs) 1)) (Maybes.fromMaybe [] (Maybes.map (\d -> generateTypeSentence env (Pairs.first d) (Pairs.second d)) (Lists.maybeHead defs))) (
         let groupNames = Sets.fromList (Lists.map (\d -> Pairs.first d) defs)
             hasPositivity = Utils.hasPositivityIssue groupNames defs
             sanitizedGroup =
@@ -636,22 +634,22 @@ makeOneAccessor typeName constrPat fieldVars idx ft =
 -- | Emit nested `prod (T1) (prod ...)` textual type expression
 makeProdType :: [String] -> String
 makeProdType ts =
-    Logic.ifElse (Lists.null ts) "unit" (Logic.ifElse (Equality.equal (Lists.length ts) 1) (Lists.head ts) (Strings.cat [
+    Maybes.fromMaybe "unit" (Maybes.map (\p -> Logic.ifElse (Equality.equal (Lists.length ts) 1) (Pairs.first p) (Strings.cat [
       "prod (",
-      (Lists.head ts),
+      (Pairs.first p),
       ") (",
-      (makeProdType (Lists.tail ts)),
-      ")"]))
+      (makeProdType (Pairs.second p)),
+      ")"])) (Lists.uncons ts))
 
 -- | Emit a nested `(pair (b1) (...))` textual value expression
 makeProdVal :: [String] -> String
 makeProdVal bs =
-    Logic.ifElse (Lists.null bs) "tt" (Logic.ifElse (Equality.equal (Lists.length bs) 1) (Lists.head bs) (Strings.cat [
+    Maybes.fromMaybe "tt" (Maybes.map (\p -> Logic.ifElse (Equality.equal (Lists.length bs) 1) (Pairs.first p) (Strings.cat [
       "(pair (",
-      (Lists.head bs),
+      (Pairs.first p),
       ") (",
-      (makeProdVal (Lists.tail bs)),
-      "))"]))
+      (makeProdVal (Pairs.second p)),
+      "))"])) (Lists.uncons bs))
 
 -- | Emit the n projection expressions extracting each member of a nested pair bundle
 makeProjectionExprs :: Int -> String -> [String]
@@ -743,10 +741,10 @@ namespaceToPath :: String -> String
 namespaceToPath ns =
 
       let parts = Strings.splitOn "." ns
-          dirParts = Lists.init parts
+          dirParts = Maybes.fromMaybe [] (Lists.maybeInit parts)
           fileName =
                   Strings.cat [
-                    Lists.last parts,
+                    Maybes.fromMaybe ns (Lists.maybeLast parts),
                     ".v"]
       in (Logic.ifElse (Lists.null dirParts) fileName (Strings.cat [
         Strings.intercalate "/" dirParts,

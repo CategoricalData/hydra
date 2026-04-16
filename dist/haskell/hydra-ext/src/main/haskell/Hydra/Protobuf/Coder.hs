@@ -311,9 +311,9 @@ encodeTypeReference localNs name =
       let qn = Names.qualifyName name
           local = Packaging.qualifiedNameLocal qn
           ns_ = Packaging.qualifiedNameNamespace qn
-          localNsParts = Lists.init (Strings.splitOn "." (Packaging.unNamespace localNs))
+          localNsParts = Maybes.fromMaybe [] (Lists.maybeInit (Strings.splitOn "." (Packaging.unNamespace localNs)))
       in (Proto3.TypeName (Maybes.maybe local (\nsVal ->
-        let nsParts = Lists.init (Strings.splitOn "." (Packaging.unNamespace nsVal))
+        let nsParts = Maybes.fromMaybe [] (Lists.maybeInit (Strings.splitOn "." (Packaging.unNamespace nsVal)))
         in (Logic.ifElse (Equality.equal nsParts localNsParts) local (Strings.intercalate "." (Lists.concat [
           nsParts,
           [
@@ -453,7 +453,7 @@ namespaceToFileReference ns_ =
 -- | Convert a Hydra namespace to a Protobuf package name
 namespaceToPackageName :: Packaging.Namespace -> Proto3.PackageName
 namespaceToPackageName ns_ =
-    Proto3.PackageName (Strings.intercalate "." (Lists.map (\s -> Formatting.convertCaseCamelToLowerSnake s) (Lists.init (Strings.splitOn "." (Packaging.unNamespace ns_)))))
+    Proto3.PackageName (Strings.intercalate "." (Lists.map (\s -> Formatting.convertCaseCamelToLowerSnake s) (Maybes.fromMaybe [] (Lists.maybeInit (Strings.splitOn "." (Packaging.unNamespace ns_))))))
 
 -- | Read a boolean annotation from a type
 readBooleanAnnotation :: t0 -> Graph.Graph -> Core.Name -> Core.Type -> Either Errors.Error Bool

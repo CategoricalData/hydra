@@ -65,13 +65,13 @@ escapeControlCharsInJson input =
                     117,
                     48,
                     48,
-                    (hexDigit (Math.div b 16)),
-                    (hexDigit (Math.mod b 16))]
+                    (hexDigit (Maybes.fromMaybe 0 (Math.maybeDiv b 16))),
+                    (hexDigit (Maybes.fromMaybe 0 (Math.maybeMod b 16)))]
           go =
-                  \inStr -> \esc -> \bytes -> Logic.ifElse (Lists.null bytes) [] (
-                    let b = Lists.head bytes
-                        bs = Lists.tail bytes
-                    in (Logic.ifElse esc (Lists.cons b (go inStr False bs)) (Logic.ifElse (Logic.and (Equality.equal b 92) inStr) (Lists.cons b (go inStr True bs)) (Logic.ifElse (Equality.equal b 34) (Lists.cons b (go (Logic.not inStr) False bs)) (Logic.ifElse (Logic.and inStr (Equality.lt b 32)) (Lists.concat2 (escapeToUnicode b) (go inStr False bs)) (Lists.cons b (go inStr False bs)))))))
+                  \inStr -> \esc -> \bytes -> Maybes.maybe [] (\uc ->
+                    let b = Pairs.first uc
+                        bs = Pairs.second uc
+                    in (Logic.ifElse esc (Lists.cons b (go inStr False bs)) (Logic.ifElse (Logic.and (Equality.equal b 92) inStr) (Lists.cons b (go inStr True bs)) (Logic.ifElse (Equality.equal b 34) (Lists.cons b (go (Logic.not inStr) False bs)) (Logic.ifElse (Logic.and inStr (Equality.lt b 32)) (Lists.concat2 (escapeToUnicode b) (go inStr False bs)) (Lists.cons b (go inStr False bs))))))) (Lists.uncons bytes)
       in (go False False input)
 
 -- | Format a primitive for the lexicon

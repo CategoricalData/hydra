@@ -46,60 +46,73 @@ public interface Dsls {
   }
 
   static hydra.core.Name dslBindingName(hydra.core.Name n) {
+    String localPart = hydra.Formatting.decapitalize(hydra.Names.localNameOf(n));
+    hydra.core.Name localResult = new hydra.core.Name(localPart);
     java.util.List<String> parts = hydra.lib.strings.SplitOn.apply(
       ".",
       (n).value);
-    return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(hydra.lib.lists.Tail.apply(parts))),
-      () -> hydra.lib.logic.IfElse.lazy(
-        hydra.lib.equality.Equal.apply(
-          hydra.lib.lists.Head.apply(parts),
-          "hydra"),
-        () -> new hydra.core.Name(hydra.lib.strings.Intercalate.apply(
-          ".",
-          hydra.lib.lists.Concat2.apply(
-            java.util.Arrays.asList(
-              "hydra",
-              "dsl"),
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> localResult,
+      (java.util.function.Function<java.util.List<String>, hydra.core.Name>) (nsParts -> hydra.lib.maybes.Maybe.applyLazy(
+        () -> localResult,
+        (java.util.function.Function<hydra.util.Pair<String, java.util.List<String>>, hydra.core.Name>) (nsHeadTail -> {
+          hydra.util.Lazy<java.util.List<String>> dslNsParts = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
+            hydra.lib.equality.Equal.apply(
+              hydra.lib.pairs.First.apply(nsHeadTail),
+              "hydra"),
+            () -> hydra.lib.lists.Concat2.apply(
+              java.util.Arrays.asList(
+                "hydra",
+                "dsl"),
+              hydra.lib.pairs.Second.apply(nsHeadTail)),
+            () -> hydra.lib.lists.Concat2.apply(
+              java.util.Arrays.asList(
+                "hydra",
+                "dsl"),
+              nsParts)));
+          return new hydra.core.Name(hydra.lib.strings.Intercalate.apply(
+            ".",
             hydra.lib.lists.Concat2.apply(
-              hydra.lib.lists.Tail.apply(hydra.lib.lists.Init.apply(parts)),
-              java.util.Arrays.asList(hydra.Formatting.decapitalize(hydra.Names.localNameOf(n))))))),
-        () -> new hydra.core.Name(hydra.lib.strings.Intercalate.apply(
-          ".",
-          hydra.lib.lists.Concat2.apply(
-            java.util.Arrays.asList(
-              "hydra",
-              "dsl"),
-            hydra.lib.lists.Concat2.apply(
-              hydra.lib.lists.Init.apply(parts),
-              java.util.Arrays.asList(hydra.Formatting.decapitalize(hydra.Names.localNameOf(n)))))))),
-      () -> new hydra.core.Name(hydra.Formatting.decapitalize(hydra.Names.localNameOf(n))));
+              dslNsParts.get(),
+              java.util.Arrays.asList(localPart))));
+        }),
+        hydra.lib.lists.Uncons.apply(nsParts))),
+      hydra.lib.lists.MaybeInit.apply(parts));
   }
 
   static hydra.core.Name dslDefinitionName(hydra.core.Name typeName, String localName) {
     java.util.List<String> parts = hydra.lib.strings.SplitOn.apply(
       ".",
       (typeName).value);
-    hydra.util.Lazy<java.util.List<String>> nsParts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Init.apply(parts));
-    hydra.util.Lazy<java.util.List<String>> dslNsParts = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
-      hydra.lib.equality.Equal.apply(
-        hydra.lib.lists.Head.apply(nsParts.get()),
-        "hydra"),
-      () -> hydra.lib.lists.Concat2.apply(
-        java.util.Arrays.asList(
-          "hydra",
-          "dsl"),
-        hydra.lib.lists.Tail.apply(nsParts.get())),
-      () -> hydra.lib.lists.Concat2.apply(
-        java.util.Arrays.asList(
-          "hydra",
-          "dsl"),
-        nsParts.get())));
-    return new hydra.core.Name(hydra.lib.strings.Intercalate.apply(
-      ".",
-      hydra.lib.lists.Concat2.apply(
-        dslNsParts.get(),
-        java.util.Arrays.asList(localName))));
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> new hydra.core.Name(localName),
+      (java.util.function.Function<java.util.List<String>, hydra.core.Name>) (nsParts -> {
+        hydra.util.Lazy<java.util.List<String>> dslNsParts = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+          () -> java.util.Arrays.asList(
+            "hydra",
+            "dsl"),
+          (java.util.function.Function<hydra.util.Pair<String, java.util.List<String>>, java.util.List<String>>) (nsHeadTail -> hydra.lib.logic.IfElse.lazy(
+            hydra.lib.equality.Equal.apply(
+              hydra.lib.pairs.First.apply(nsHeadTail),
+              "hydra"),
+            () -> hydra.lib.lists.Concat2.apply(
+              java.util.Arrays.asList(
+                "hydra",
+                "dsl"),
+              hydra.lib.pairs.Second.apply(nsHeadTail)),
+            () -> hydra.lib.lists.Concat2.apply(
+              java.util.Arrays.asList(
+                "hydra",
+                "dsl"),
+              nsParts))),
+          hydra.lib.lists.Uncons.apply(nsParts)));
+        return new hydra.core.Name(hydra.lib.strings.Intercalate.apply(
+          ".",
+          hydra.lib.lists.Concat2.apply(
+            dslNsParts.get(),
+            java.util.Arrays.asList(localName))));
+      }),
+      hydra.lib.lists.MaybeInit.apply(parts));
   }
 
   static <T0> hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.packaging.Module>> dslModule(T0 cx, hydra.graph.Graph graph, hydra.packaging.Module mod) {
@@ -156,18 +169,22 @@ public interface Dsls {
     java.util.List<String> parts = hydra.lib.strings.SplitOn.apply(
       ".",
       (ns).value);
-    return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.equality.Equal.apply(
-        hydra.lib.lists.Head.apply(parts),
-        "hydra"),
-      () -> new hydra.packaging.Namespace(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
-        "hydra.dsl.",
-        hydra.lib.strings.Intercalate.apply(
-          ".",
-          hydra.lib.lists.Tail.apply(parts))))),
-      () -> new hydra.packaging.Namespace(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
-        "hydra.dsl.",
-        (ns).value))));
+    hydra.packaging.Namespace prefixFull = new hydra.packaging.Namespace(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
+      "hydra.dsl.",
+      (ns).value)));
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> prefixFull,
+      (java.util.function.Function<hydra.util.Pair<String, java.util.List<String>>, hydra.packaging.Namespace>) (ht -> hydra.lib.logic.IfElse.lazy(
+        hydra.lib.equality.Equal.apply(
+          hydra.lib.pairs.First.apply(ht),
+          "hydra"),
+        () -> new hydra.packaging.Namespace(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
+          "hydra.dsl.",
+          hydra.lib.strings.Intercalate.apply(
+            ".",
+            hydra.lib.pairs.Second.apply(ht))))),
+        () -> prefixFull)),
+      hydra.lib.lists.Uncons.apply(parts));
   }
 
   static hydra.core.TypeScheme dslTypeScheme(hydra.core.Type origType, java.util.List<hydra.core.Type> paramTypes, hydra.core.Type resultType) {

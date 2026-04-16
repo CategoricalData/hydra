@@ -9,13 +9,13 @@ public abstract class TemporalInstantType implements Serializable, Comparable<Te
 
   public static final hydra.core.Name DATETIME_TYPE = new hydra.core.Name("datetimeType");
 
-  public static final hydra.core.Name LOCALDATETIME_TYPE = new hydra.core.Name("localdatetimeType");
+  public static final hydra.core.Name LOCAL_DATETIME_TYPE_CHOICE = new hydra.core.Name("localDatetimeTypeChoice");
 
   public static final hydra.core.Name DATE_TYPE = new hydra.core.Name("dateType");
 
   public static final hydra.core.Name TIME_TYPE = new hydra.core.Name("timeType");
 
-  public static final hydra.core.Name LOCALTIME_TYPE = new hydra.core.Name("localtimeType");
+  public static final hydra.core.Name LOCAL_TIME_TYPE_CHOICE = new hydra.core.Name("localTimeTypeChoice");
 
   private TemporalInstantType () {
 
@@ -26,13 +26,13 @@ public abstract class TemporalInstantType implements Serializable, Comparable<Te
   public interface Visitor<R> {
     R visit(DatetimeType instance) ;
 
-    R visit(LocaldatetimeType instance) ;
+    R visit(LocalDatetimeTypeChoice instance) ;
 
     R visit(DateType instance) ;
 
     R visit(TimeType instance) ;
 
-    R visit(LocaltimeType instance) ;
+    R visit(LocalTimeTypeChoice instance) ;
   }
 
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -44,7 +44,7 @@ public abstract class TemporalInstantType implements Serializable, Comparable<Te
       return otherwise(instance);
     }
 
-    default R visit(LocaldatetimeType instance) {
+    default R visit(LocalDatetimeTypeChoice instance) {
       return otherwise(instance);
     }
 
@@ -56,7 +56,7 @@ public abstract class TemporalInstantType implements Serializable, Comparable<Te
       return otherwise(instance);
     }
 
-    default R visit(LocaltimeType instance) {
+    default R visit(LocalTimeTypeChoice instance) {
       return otherwise(instance);
     }
   }
@@ -103,19 +103,19 @@ public abstract class TemporalInstantType implements Serializable, Comparable<Te
     }
   }
 
-  public static final class LocaldatetimeType extends openGql.grammar.TemporalInstantType implements Serializable {
-    public final openGql.grammar.LocaldatetimeType value;
+  public static final class LocalDatetimeTypeChoice extends openGql.grammar.TemporalInstantType implements Serializable {
+    public final openGql.grammar.LocalDatetimeTypeChoice value;
 
-    public LocaldatetimeType (openGql.grammar.LocaldatetimeType value) {
+    public LocalDatetimeTypeChoice (openGql.grammar.LocalDatetimeTypeChoice value) {
       this.value = value;
     }
 
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof LocaldatetimeType)) {
+      if (!(other instanceof LocalDatetimeTypeChoice)) {
         return false;
       }
-      LocaldatetimeType o = (LocaldatetimeType) other;
+      LocalDatetimeTypeChoice o = (LocalDatetimeTypeChoice) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -133,7 +133,7 @@ public abstract class TemporalInstantType implements Serializable, Comparable<Te
       if (tagCmp != 0) {
         return tagCmp;
       }
-      LocaldatetimeType o = (LocaldatetimeType) other;
+      LocalDatetimeTypeChoice o = (LocalDatetimeTypeChoice) other;
       return hydra.util.Comparing.compare(
         value,
         o.value);
@@ -229,19 +229,19 @@ public abstract class TemporalInstantType implements Serializable, Comparable<Te
     }
   }
 
-  public static final class LocaltimeType extends openGql.grammar.TemporalInstantType implements Serializable {
-    public final openGql.grammar.LocaltimeType value;
+  public static final class LocalTimeTypeChoice extends openGql.grammar.TemporalInstantType implements Serializable {
+    public final openGql.grammar.LocalTimeTypeChoice value;
 
-    public LocaltimeType (openGql.grammar.LocaltimeType value) {
+    public LocalTimeTypeChoice (openGql.grammar.LocalTimeTypeChoice value) {
       this.value = value;
     }
 
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof LocaltimeType)) {
+      if (!(other instanceof LocalTimeTypeChoice)) {
         return false;
       }
-      LocaltimeType o = (LocaltimeType) other;
+      LocalTimeTypeChoice o = (LocalTimeTypeChoice) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -259,7 +259,7 @@ public abstract class TemporalInstantType implements Serializable, Comparable<Te
       if (tagCmp != 0) {
         return tagCmp;
       }
-      LocaltimeType o = (LocaltimeType) other;
+      LocalTimeTypeChoice o = (LocalTimeTypeChoice) other;
       return hydra.util.Comparing.compare(
         value,
         o.value);

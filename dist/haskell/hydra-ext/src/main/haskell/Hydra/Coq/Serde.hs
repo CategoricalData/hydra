@@ -195,11 +195,11 @@ inductiveDefinitionToExpr id =
           kwPart =
                   Logic.ifElse (Syntax.inductiveDefinitionCoinductive id) (Serialization.cst "CoInductive") (Serialization.cst "Inductive")
           bodyExprs = Lists.map (\b -> inductiveBodyToExpr b) (Syntax.inductiveDefinitionBodies id)
-          firstBody = Lists.head bodyExprs
+          firstBody = Maybes.fromMaybe (Serialization.cst "") (Lists.maybeHead bodyExprs)
           restBodies =
                   Lists.map (\b -> Serialization.spaceSep [
                     Serialization.cst "with",
-                    b]) (Lists.tail bodyExprs)
+                    b]) (Lists.drop 1 bodyExprs)
           firstLine =
                   Serialization.spaceSep (Lists.concat [
                     locPart,

@@ -109,10 +109,13 @@ def writeDefn(`def`: hydra.scala.syntax.Defn): hydra.ast.Expr =
     lazy val pats: Seq[hydra.scala.syntax.Pat] = (v_Defn_val_dv.pats)
     lazy val typ: Option[hydra.scala.syntax.Type] = (v_Defn_val_dv.decltpe)
     lazy val rhs: hydra.scala.syntax.Data = (v_Defn_val_dv.rhs)
-    lazy val firstPat: hydra.scala.syntax.Pat = hydra.lib.lists.head[hydra.scala.syntax.Pat](pats)
-    lazy val patName: hydra.scala.syntax.Data_Name = firstPat match
-      case hydra.scala.syntax.Pat.`var`(v_Pat_var_pv) => (v_Pat_var_pv.name)
-    lazy val nameStr: scala.Predef.String = (patName.value)
+    lazy val nameStr: scala.Predef.String = hydra.lib.maybes.fromMaybe[scala.Predef.String]("")(hydra.lib.maybes.map[hydra.scala.syntax.Pat,
+       scala.Predef.String]((firstPat: hydra.scala.syntax.Pat) =>
+      {
+      lazy val patName: hydra.scala.syntax.Data_Name = firstPat match
+        case hydra.scala.syntax.Pat.`var`(v_Pat_var_pv) => (v_Pat_var_pv.name)
+      (patName.value)
+    })(hydra.lib.lists.maybeHead[hydra.scala.syntax.Pat](pats)))
     lazy val nameAndType: hydra.ast.Expr = hydra.lib.maybes.maybe[hydra.ast.Expr,
        hydra.scala.syntax.Type](hydra.serialization.cst(nameStr))((t: hydra.scala.syntax.Type) =>
       hydra.serialization.spaceSep(Seq(hydra.serialization.cst(hydra.lib.strings.cat2(nameStr)(":")),
@@ -180,11 +183,12 @@ def writeImporter(imp: hydra.scala.syntax.Importer): hydra.ast.Expr =
   lazy val importees: Seq[hydra.scala.syntax.Importee] = (imp.importees)
   lazy val refName: scala.Predef.String = ref match
     case hydra.scala.syntax.Data_Ref.name(v_Data_Ref_name_dn) => (v_Data_Ref_name_dn.value)
-  lazy val forImportees: hydra.ast.Expr = hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.lists.`null`[hydra.scala.syntax.Importee](importees))(hydra.serialization.cst(""))(hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.scala.syntax.Importee](importees))(1))(hydra.serialization.noSep(Seq(hydra.serialization.cst("."),
-     hydra.lib.lists.head[hydra.scala.syntax.Importee](importees) match
+  lazy val forImportees: hydra.ast.Expr = hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.lists.`null`[hydra.scala.syntax.Importee](importees))(hydra.serialization.cst(""))(hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.scala.syntax.Importee](importees))(1))(hydra.lib.maybes.fromMaybe[hydra.ast.Expr](hydra.serialization.cst(""))(hydra.lib.maybes.map[hydra.scala.syntax.Importee,
+     hydra.ast.Expr]((firstImp: hydra.scala.syntax.Importee) =>
+    hydra.serialization.noSep(Seq(hydra.serialization.cst("."), firstImp match
     case hydra.scala.syntax.Importee.wildcard => hydra.serialization.cst("*")
     case hydra.scala.syntax.Importee.name(v_Importee_name_in) => hydra.serialization.cst(v_Importee_name_in.name match
-      case hydra.scala.syntax.Name.value(v_Name_value_s) => v_Name_value_s))))(hydra.serialization.noSep(Seq(hydra.serialization.cst("."),
+      case hydra.scala.syntax.Name.value(v_Name_value_s) => v_Name_value_s))))(hydra.lib.lists.maybeHead[hydra.scala.syntax.Importee](importees))))(hydra.serialization.noSep(Seq(hydra.serialization.cst("."),
          hydra.serialization.curlyBracesList(None)(hydra.serialization.inlineStyle)(hydra.lib.lists.map[hydra.scala.syntax.Importee,
          hydra.ast.Expr]((it: hydra.scala.syntax.Importee) =>
     it match
@@ -300,8 +304,8 @@ def writeType(typ: hydra.scala.syntax.Type): hydra.ast.Expr =
   }
   case hydra.scala.syntax.Type.functionType(v_Type_functionType_ft) => v_Type_functionType_ft match
     case hydra.scala.syntax.Type_FunctionType.function(v_Type_FunctionType_function_tf) => {
-      lazy val dom: hydra.scala.syntax.Type = hydra.lib.lists.head[hydra.scala.syntax.Type](v_Type_FunctionType_function_tf.params)
       lazy val cod: hydra.scala.syntax.Type = (v_Type_FunctionType_function_tf.res)
+      lazy val dom: hydra.scala.syntax.Type = hydra.lib.maybes.fromMaybe[hydra.scala.syntax.Type](cod)(hydra.lib.lists.maybeHead[hydra.scala.syntax.Type](v_Type_FunctionType_function_tf.params))
       hydra.serialization.ifx(hydra.scala.serde.functionArrowOp)(hydra.scala.serde.writeType(dom))(hydra.scala.serde.writeType(cod))
     }
   case hydra.scala.syntax.Type.lambda(v_Type_lambda_tl) => {

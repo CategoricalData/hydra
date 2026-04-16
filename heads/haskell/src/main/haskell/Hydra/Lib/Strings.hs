@@ -15,11 +15,6 @@ cat = L.concat
 cat2 :: String -> String -> String
 cat2 s1 s2 = s1 ++ s2
 
--- | Get the Unicode code point of the character at a specific index in a string.
--- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
-charAt :: Int -> String -> Int
-charAt i s = C.ord (s !! i)
-
 -- | Convert a list of Unicode code points to a string.
 fromList :: [Int] -> String
 fromList = fmap C.chr

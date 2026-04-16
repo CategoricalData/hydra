@@ -5679,7 +5679,7 @@
                                                                                                 "argument": {"variable": "bindings"},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {"variable": "hydra.lib.lists.safeHead"},
+                                                                                                    "body": {"variable": "hydra.lib.lists.maybeHead"},
                                                                                                     "type": {"variable": "hydra.core.Binding"}}}}},
                                                                                             "function": {
                                                                                               "application": {
@@ -6218,148 +6218,183 @@
                             "body": {
                               "application": {
                                 "argument": {
-                                  "let": {
-                                    "bindings": [
-                                      {
-                                        "name": "first",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "remaining"},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.lists.head"},
-                                                "type": {"variable": "hydra.paths.SubtermStep"}}}}},
-                                        "type": {"type": {"variable": "hydra.paths.SubtermStep"}, "variables": []}}],
-                                    "body": {
-                                      "let": {
-                                        "bindings": [
-                                          {
-                                            "name": "second",
-                                            "term": {
-                                              "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "remaining"},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.tail"},
-                                                        "type": {"variable": "hydra.paths.SubtermStep"}}}}},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.lists.head"},
-                                                    "type": {"variable": "hydra.paths.SubtermStep"}}}}},
-                                            "type": {"type": {"variable": "hydra.paths.SubtermStep"}, "variables": []}}],
+                                  "application": {
+                                    "argument": {"variable": "remaining"},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.lib.lists.uncons"},
+                                        "type": {"variable": "hydra.paths.SubtermStep"}}}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "lambda": {
                                         "body": {
                                           "let": {
                                             "bindings": [
                                               {
-                                                "name": "rest",
+                                                "name": "first",
                                                 "term": {
                                                   "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "remaining"},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.lists.tail"},
-                                                            "type": {"variable": "hydra.paths.SubtermStep"}}}}},
+                                                    "argument": {"variable": "uc1"},
                                                     "function": {
                                                       "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.tail"},
-                                                        "type": {"variable": "hydra.paths.SubtermStep"}}}}},
-                                                "type": {
-                                                  "type": {"list": {"variable": "hydra.paths.SubtermStep"}},
-                                                  "variables": []}}],
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.pairs.first"},
+                                                            "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                        "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}}}},
+                                                "type": {"type": {"variable": "hydra.paths.SubtermStep"}, "variables": []}}],
                                             "body": {
-                                              "application": {
-                                                "argument": {
+                                              "let": {
+                                                "bindings": [
+                                                  {
+                                                    "name": "afterFirst",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {"variable": "uc1"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.lib.pairs.second"},
+                                                                "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                            "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}}}},
+                                                    "type": {
+                                                      "type": {"list": {"variable": "hydra.paths.SubtermStep"}},
+                                                      "variables": []}}],
+                                                "body": {
                                                   "application": {
                                                     "argument": {
                                                       "application": {
+                                                        "argument": {"variable": "afterFirst"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.lists.uncons"},
+                                                            "type": {"variable": "hydra.paths.SubtermStep"}}}}},
+                                                    "function": {
+                                                      "application": {
                                                         "argument": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "let": {
+                                                                "bindings": [
+                                                                  {
+                                                                    "name": "second",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "uc2"},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"variable": "hydra.lib.pairs.first"},
+                                                                                "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                            "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}}}},
+                                                                    "type": {"type": {"variable": "hydra.paths.SubtermStep"}, "variables": []}}],
+                                                                "body": {
+                                                                  "let": {
+                                                                    "bindings": [
+                                                                      {
+                                                                        "name": "rest",
+                                                                        "term": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "uc2"},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"variable": "hydra.lib.pairs.second"},
+                                                                                    "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                                "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}}}},
+                                                                        "type": {
+                                                                          "type": {"list": {"variable": "hydra.paths.SubtermStep"}},
+                                                                          "variables": []}}],
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "afterFirst"},
+                                                                                "function": {"variable": "go"}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "first"},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"variable": "hydra.lib.lists.cons"},
+                                                                                    "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {"argument": {"variable": "rest"}, "function": {"variable": "go"}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "inject": {
+                                                                                        "field": {"name": "letBody", "term": {"unit": {}}},
+                                                                                        "typeName": "hydra.paths.SubtermStep"}},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"variable": "hydra.lib.lists.cons"},
+                                                                                        "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "second"},
+                                                                                        "function": {"variable": "hydra.hoisting.isLambdaBody"}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "first"},
+                                                                                            "function": {"variable": "hydra.hoisting.isApplicationFunction"}}},
+                                                                                        "function": {"variable": "hydra.lib.logic.and"}}}}},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                    "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}}}}}}}}}}}},
+                                                            "domain": {
+                                                              "pair": {
+                                                                "first": {"variable": "hydra.paths.SubtermStep"},
+                                                                "second": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
+                                                            "parameter": "uc2"}},
+                                                        "function": {
                                                           "application": {
                                                             "argument": {"variable": "remaining"},
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.lists.tail"},
-                                                                "type": {"variable": "hydra.paths.SubtermStep"}}}}},
-                                                        "function": {"variable": "go"}}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"variable": "first"},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.lists.cons"},
-                                                            "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "application": {"argument": {"variable": "rest"}, "function": {"variable": "go"}}},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "inject": {
-                                                                "field": {"name": "letBody", "term": {"unit": {}}},
-                                                                "typeName": "hydra.paths.SubtermStep"}},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.lists.cons"},
-                                                                "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "second"},
-                                                                "function": {"variable": "hydra.hoisting.isLambdaBody"}}},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "first"},
-                                                                    "function": {"variable": "hydra.hoisting.isApplicationFunction"}}},
-                                                                "function": {"variable": "hydra.lib.logic.and"}}}}},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                            "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}}}}}}}}}}}}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "remaining"},
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.maybes.maybe"},
+                                                                    "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
+                                                                "type": {
+                                                                  "pair": {
+                                                                    "first": {"variable": "hydra.paths.SubtermStep"},
+                                                                    "second": {"list": {"variable": "hydra.paths.SubtermStep"}}}}}}}}}}}}}}}},
+                                        "domain": {
+                                          "pair": {
+                                            "first": {"variable": "hydra.paths.SubtermStep"},
+                                            "second": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
+                                        "parameter": "uc1"}},
                                     "function": {
                                       "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "remaining"},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.tail"},
-                                                        "type": {"variable": "hydra.paths.SubtermStep"}}}}},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.lists.null"},
-                                                    "type": {"variable": "hydra.paths.SubtermStep"}}}}},
-                                            "function": {
-                                              "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "remaining"},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.null"},
-                                                        "type": {"variable": "hydra.paths.SubtermStep"}}}}},
-                                                "function": {"variable": "hydra.lib.logic.or"}}}}},
+                                        "argument": {"variable": "remaining"},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"variable": "hydra.lib.logic.ifElse"},
-                                            "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}}}}}}}},
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.maybes.maybe"},
+                                                "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
+                                            "type": {
+                                              "pair": {
+                                                "first": {"variable": "hydra.paths.SubtermStep"},
+                                                "second": {"list": {"variable": "hydra.paths.SubtermStep"}}}}}}}}}}}},
                             "domain": {"list": {"variable": "hydra.paths.SubtermStep"}},
                             "parameter": "remaining"}},
                         "type": {

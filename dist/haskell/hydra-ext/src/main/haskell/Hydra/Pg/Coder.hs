@@ -218,7 +218,7 @@ findLabelString cx g source tname labelKey =
 -- | Find a projection spec for a field
 findProjectionSpec :: t0 -> Graph.Graph -> Core.Name -> Core.Name -> Core.Name -> [Core.FieldType] -> Either Errors.Error (Maybe (Core.FieldType, (Mapping.ValueSpec, (Maybe String))))
 findProjectionSpec cx g tname key aliasKey fields =
-    Eithers.bind (findSingleFieldWithAnnotationKey cx tname key fields) (\mfield -> Maybes.maybe (Right Nothing) (\field -> Eithers.bind (TermsToElements.decodeValueSpec cx g (Maybes.fromJust (Annotations.getTypeAnnotation key (Core.fieldTypeType field)))) (\spec -> Eithers.bind (Maybes.maybe (Right Nothing) (\t -> Eithers.map (\x -> Just x) (extractString cx g t)) (Annotations.getTypeAnnotation aliasKey (Core.fieldTypeType field))) (\alias -> Right (Just (field, (spec, alias)))))) mfield)
+    Eithers.bind (findSingleFieldWithAnnotationKey cx tname key fields) (\mfield -> Maybes.maybe (Right Nothing) (\field -> Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError "findProjectionSpec: missing type annotation for key"))) (\annot -> Eithers.bind (TermsToElements.decodeValueSpec cx g annot) (\spec -> Eithers.bind (Maybes.maybe (Right Nothing) (\t -> Eithers.map (\x -> Just x) (extractString cx g t)) (Annotations.getTypeAnnotation aliasKey (Core.fieldTypeType field))) (\alias -> Right (Just (field, (spec, alias)))))) (Annotations.getTypeAnnotation key (Core.fieldTypeType field))) mfield)
 
 -- | Find property specs for element fields
 findPropertySpecs :: t0 -> Graph.Graph -> Mapping.Schema t1 t2 t3 -> Model.ElementKind -> [Core.FieldType] -> Either Errors.Error [(Core.FieldType, (Mapping.ValueSpec, (Maybe String)))]
@@ -254,7 +254,7 @@ findSingleFieldWithAnnotationKey :: t0 -> Core.Name -> Core.Name -> [Core.FieldT
 findSingleFieldWithAnnotationKey cx tname key fields =
 
       let matches = Lists.filter (\f -> Maybes.isJust (Annotations.getTypeAnnotation key (Core.fieldTypeType f))) fields
-      in (Logic.ifElse (Equality.gt (Lists.length matches) 1) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "Multiple fields marked as '" (Core.unName key)) "' in record type ") (Core.unName tname))))) (Right (Lists.safeHead matches)))
+      in (Logic.ifElse (Equality.gt (Lists.length matches) 1) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "Multiple fields marked as '" (Core.unName key)) "' in record type ") (Core.unName tname))))) (Right (Lists.maybeHead matches)))
 
 -- | Determine whether the spec has vertex adapters based on direction and out/in specs
 hasVertexAdapters :: Model.Direction -> Maybe t0 -> Maybe t1 -> Bool
@@ -326,7 +326,7 @@ selectVertexId cx fields ad =
 -- | Traverse to a single term, failing if zero or multiple terms are found
 traverseToSingleTerm :: t0 -> String -> (t1 -> Either Errors.Error [t2]) -> t1 -> Either Errors.Error t2
 traverseToSingleTerm cx desc traversal term =
-    Eithers.bind (traversal term) (\terms -> Logic.ifElse (Lists.null terms) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 desc " did not resolve to a term")))) (Logic.ifElse (Equality.equal (Lists.length terms) 1) (Right (Lists.head terms)) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 desc " resolved to multiple terms"))))))
+    Eithers.bind (traversal term) (\terms -> Logic.ifElse (Lists.null terms) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 desc " did not resolve to a term")))) (Logic.ifElse (Equality.equal (Lists.length terms) 1) (Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 desc " resolved to multiple terms")))) (\x -> Right x) (Lists.maybeHead terms)) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 desc " resolved to multiple terms"))))))
 
 -- | Create a vertex coder given all components
 vertexCoder :: t0 -> Mapping.Schema t1 t2 t3 -> t4 -> t5 -> t6 -> Model.VertexLabel -> (Core.Name, (Coders.Adapter t7 t8 Core.Term t3)) -> [Coders.Adapter Core.FieldType (Model.PropertyType t5) Core.Field (Model.Property t3)] -> [(Model.Direction, (Core.FieldType, (Model.EdgeLabel, (Coders.Adapter t9 (Model.ElementTypeTree t5) Core.Term (Model.ElementTree t3)))))] -> Coders.Adapter t4 (Model.ElementTypeTree t5) Core.Term (Model.ElementTree t3)
@@ -410,4 +410,4 @@ vertexCoder g schema source vidType tname vlabel idAdapter propAdapters edgeAdap
 -- | Create a vertex id adapter
 vertexIdAdapter :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> t5 -> Core.Name -> Core.Name -> [Core.FieldType] -> Either Errors.Error (Core.Name, (Coders.Adapter Core.Type t5 Core.Term t4))
 vertexIdAdapter cx g schema vidType name idKey fields =
-    Eithers.bind (findIdProjectionSpec cx True name idKey fields) (\mIdSpec -> Eithers.bind (Right (Maybes.fromJust mIdSpec)) (\idSpec -> projectionAdapter cx g vidType (Mapping.schemaVertexIds schema) idSpec "id"))
+    Eithers.bind (findIdProjectionSpec cx True name idKey fields) (\mIdSpec -> Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError "vertexIdAdapter: no id projection spec"))) (\idSpec -> projectionAdapter cx g vidType (Mapping.schemaVertexIds schema) idSpec "id") mIdSpec)

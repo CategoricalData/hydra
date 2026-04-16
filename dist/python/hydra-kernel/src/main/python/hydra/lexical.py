@@ -38,7 +38,7 @@ def build_graph(elements: frozenlist[hydra.core.Binding], environment: FrozenDic
         return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda b: (b.name, b.term)), elements))
     @lru_cache(1)
     def let_terms() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-        return hydra.lib.maps.map((lambda mt: hydra.lib.maybes.from_just(mt)), hydra.lib.maps.filter((lambda mt: hydra.lib.maybes.is_just(mt)), environment))
+        return hydra.lib.maps.from_list(hydra.lib.maybes.map_maybe((lambda kv: hydra.lib.maybes.map((lambda t: (hydra.lib.pairs.first(kv), t)), hydra.lib.pairs.second(kv))), hydra.lib.maps.to_list(environment)))
     @lru_cache(1)
     def merged_terms() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
         return hydra.lib.maps.union(element_terms(), let_terms())

@@ -1,8 +1,7 @@
 (define-library (hydra lib lists)
   (import (scheme base)
           (scheme write))
-  (export hydra_lib_lists_at
-          hydra_lib_lists_concat
+  (export hydra_lib_lists_concat
           hydra_lib_lists_concat2
           hydra_lib_lists_cons
           hydra_lib_lists_drop
@@ -12,8 +11,6 @@
           hydra_lib_lists_find
           hydra_lib_lists_foldl
           hydra_lib_lists_foldr
-          hydra_lib_lists_head
-          hydra_lib_lists_init
           hydra_lib_lists_intercalate
           hydra_lib_lists_intersperse
           hydra_lib_lists_length
@@ -29,18 +26,16 @@
           hydra_lib_lists_pure
           hydra_lib_lists_replicate
           hydra_lib_lists_reverse
-          hydra_lib_lists_safe_head
           hydra_lib_lists_singleton
           hydra_lib_lists_sort
           hydra_lib_lists_sort_on
           hydra_lib_lists_span
-          hydra_lib_lists_tail
           hydra_lib_lists_take
           hydra_lib_lists_transpose
+          hydra_lib_lists_uncons
           hydra_lib_lists_apply
           hydra_lib_lists_bind
           hydra_lib_lists_group
-          hydra_lib_lists_last
           hydra_lib_lists_zip
           hydra_lib_lists_zip_with)
   (begin
@@ -96,12 +91,6 @@
           (let ((halves (split lst)))
             (merge (merge-sort less? (car halves))
                    (merge-sort less? (cdr halves))))))
-
-    ;; at :: Int -> [a] -> a
-    (define hydra_lib_lists_at
-      (lambda (n)
-        (lambda (xs)
-          (list-ref xs n))))
 
     ;; concat :: [[a]] -> [a]
     (define hydra_lib_lists_concat
@@ -188,18 +177,6 @@
               (if (null? rest)
                   acc
                   (loop (cdr rest) ((f (car rest)) acc))))))))
-
-    ;; head :: [a] -> a
-    (define hydra_lib_lists_head
-      (lambda (xs)
-        (car xs)))
-
-    ;; init :: [a] -> [a]
-    (define hydra_lib_lists_init
-      (lambda (xs)
-        (if (null? (cdr xs))
-            '()
-            (cons (car xs) (hydra_lib_lists_init (cdr xs))))))
 
     ;; intercalate :: [a] -> [[a]] -> [a]
     (define hydra_lib_lists_intercalate
@@ -322,13 +299,6 @@
       (lambda (xs)
         (reverse xs)))
 
-    ;; safe_head :: [a] -> Maybe a
-    (define hydra_lib_lists_safe_head
-      (lambda (xs)
-        (if (null? xs)
-            (list 'nothing)
-            (list 'just (car xs)))))
-
     ;; singleton :: a -> [a]
     (define hydra_lib_lists_singleton
       (lambda (x)
@@ -354,11 +324,6 @@
                 (list (reverse acc) rest)
                 (loop (cdr rest) (cons (car rest) acc)))))))
 
-    ;; tail :: [a] -> [a]
-    (define hydra_lib_lists_tail
-      (lambda (xs)
-        (cdr xs)))
-
     ;; take :: Int -> [a] -> [a]
     (define hydra_lib_lists_take
       (lambda (n)
@@ -377,6 +342,13 @@
               '()
               (cons (map car non-empty)
                     (hydra_lib_lists_transpose (map cdr non-empty)))))))
+
+    ;; uncons :: [a] -> Maybe (a, [a])
+    (define hydra_lib_lists_uncons
+      (lambda (xs)
+        (if (null? xs)
+            (list 'nothing)
+            (list 'just (list (car xs) (cdr xs))))))
 
     ;; zip :: [a] -> [b] -> [Pair a b]
     (define hydra_lib_lists_zip
@@ -436,9 +408,4 @@
                       (loop (cdr rest) (car rest) (list (car rest))
                             (cons (reverse current-group) groups))))))))
 
-    ;; last :: [a] -> a
-    (define hydra_lib_lists_last
-      (lambda (xs)
-        (if (null? (cdr xs))
-            (car xs)
-            (hydra_lib_lists_last (cdr xs)))))))
+))

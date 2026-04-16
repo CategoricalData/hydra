@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from decimal import Decimal
 from typing import Generic, TypeVar
 
 from hydra.json.model import (
@@ -35,7 +36,7 @@ def from_hydra_json(v: Value) -> JsonValue:
 def test_json():
     v0 = ValueObject(
         {
-            "a": ValueArray([ValueNumber(5), ValueNumber(6)]),
+            "a": ValueArray([ValueNumber(Decimal(5)), ValueNumber(Decimal(6))]),
             "c": ValueString("hello"),
             "d": ValueBoolean(True),
             "e": ValueNull(),

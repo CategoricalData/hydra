@@ -237,7 +237,7 @@ Once all functions are promoted and the staging module just re-exports from the 
 
 doubleValueToJson :: G.DoubleValue -> Json.Value
 doubleValueToJson v = case v of
-  G.DoubleValueFinite d -> Json.ValueNumber d
+  G.DoubleValueFinite d -> Json.ValueNumber (realToFrac d) -- Double -> Scientific
   G.DoubleValueInfinity -> Json.ValueString "Infinity"
   G.DoubleValueNegativeInfinity -> Json.ValueString "-Infinity"
   G.DoubleValueNotANumber -> Json.ValueString "NaN"
@@ -255,7 +255,7 @@ doubleValueToJson :: TTermDefinition (G.DoubleValue -> JM.Value)
 doubleValueToJson = define "doubleValueToJson" $
   doc "Convert a GraphSON DoubleValue to a JSON Value" $
   match G._DoubleValue Nothing [
-    G._DoubleValue_finite>>: lambda "d" $ Json.valueNumber (var "d"),
+    G._DoubleValue_finite>>: lambda "d" $ Json.valueNumber (Literals.float64ToDecimal $ var "d"),
     G._DoubleValue_infinity>>: constant $ Json.valueString (string "Infinity"),
     G._DoubleValue_negativeInfinity>>: constant $ Json.valueString (string "-Infinity"),
     G._DoubleValue_notANumber>>: constant $ Json.valueString (string "NaN")]

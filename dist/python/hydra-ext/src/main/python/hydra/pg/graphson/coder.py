@@ -23,7 +23,7 @@ def double_value_to_json(v1: hydra.pg.graphson.syntax.DoubleValue) -> hydra.json
 
     match v1:
         case hydra.pg.graphson.syntax.DoubleValueFinite(value=d):
-            return cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.float64_to_bigfloat(d)))
+            return cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.float64_to_decimal(d)))
 
         case hydra.pg.graphson.syntax.DoubleValueInfinity():
             return cast(hydra.json.model.Value, hydra.json.model.ValueString("Infinity"))
@@ -42,7 +42,7 @@ def float_value_to_json(v1: hydra.pg.graphson.syntax.FloatValue) -> hydra.json.m
 
     match v1:
         case hydra.pg.graphson.syntax.FloatValueFinite(value=f):
-            return cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.float32_to_bigfloat(f)))
+            return cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.float32_to_decimal(f)))
 
         case hydra.pg.graphson.syntax.FloatValueInfinity():
             return cast(hydra.json.model.Value, hydra.json.model.ValueString("Infinity"))
@@ -79,7 +79,7 @@ def value_to_json(v1: hydra.pg.graphson.syntax.Value) -> hydra.json.model.Value:
             return typed_value_to_json("g:BigDecimal", cast(hydra.json.model.Value, hydra.json.model.ValueString(bd.value)))
 
         case hydra.pg.graphson.syntax.ValueBigInteger(value=i):
-            return typed_value_to_json("g:BigInteger", cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(i))))
+            return typed_value_to_json("g:BigInteger", cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_decimal(i))))
 
         case hydra.pg.graphson.syntax.ValueBinary(value=b):
             return typed_value_to_json("g:Binary", cast(hydra.json.model.Value, hydra.json.model.ValueString(b)))
@@ -88,7 +88,7 @@ def value_to_json(v1: hydra.pg.graphson.syntax.Value) -> hydra.json.model.Value:
             return cast(hydra.json.model.Value, hydra.json.model.ValueBoolean(b2))
 
         case hydra.pg.graphson.syntax.ValueByte(value=b3):
-            return typed_value_to_json("g:Byte", cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.uint8_to_bigint(b3)))))
+            return typed_value_to_json("g:Byte", cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_decimal(hydra.lib.literals.uint8_to_bigint(b3)))))
 
         case hydra.pg.graphson.syntax.ValueChar(value=c):
             return typed_value_to_json("g:Char", cast(hydra.json.model.Value, hydra.json.model.ValueString(hydra.lib.strings.from_list(hydra.lib.lists.pure(hydra.lib.literals.bigint_to_int32(hydra.lib.literals.uint32_to_bigint(c)))))))
@@ -109,13 +109,13 @@ def value_to_json(v1: hydra.pg.graphson.syntax.Value) -> hydra.json.model.Value:
             return typed_value_to_json("g:Float", float_value_to_json(fv))
 
         case hydra.pg.graphson.syntax.ValueInteger(value=i2):
-            return typed_value_to_json("g:Int32", cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.int32_to_bigint(i2)))))
+            return typed_value_to_json("g:Int32", cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_decimal(hydra.lib.literals.int32_to_bigint(i2)))))
 
         case hydra.pg.graphson.syntax.ValueList(value=vals):
             return typed_value_to_json("g:List", cast(hydra.json.model.Value, hydra.json.model.ValueArray(hydra.lib.lists.map((lambda x1: value_to_json(x1)), vals))))
 
         case hydra.pg.graphson.syntax.ValueLong(value=l):
-            return typed_value_to_json("g:Long", cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.int64_to_bigint(l)))))
+            return typed_value_to_json("g:Long", cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_decimal(hydra.lib.literals.int64_to_bigint(l)))))
 
         case hydra.pg.graphson.syntax.ValueMap(value=m):
             return typed_value_to_json("g:Map", map_to_json(m))
@@ -130,7 +130,7 @@ def value_to_json(v1: hydra.pg.graphson.syntax.Value) -> hydra.json.model.Value:
             return typed_value_to_json("g:Set", cast(hydra.json.model.Value, hydra.json.model.ValueArray(hydra.lib.lists.map((lambda x1: value_to_json(x1)), vals2))))
 
         case hydra.pg.graphson.syntax.ValueShort(value=i3):
-            return typed_value_to_json("g:Int16", cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.int16_to_bigint(i3)))))
+            return typed_value_to_json("g:Int16", cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_decimal(hydra.lib.literals.int16_to_bigint(i3)))))
 
         case hydra.pg.graphson.syntax.ValueString(value=s):
             return cast(hydra.json.model.Value, hydra.json.model.ValueString(s))

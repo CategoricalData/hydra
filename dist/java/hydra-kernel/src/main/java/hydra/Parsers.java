@@ -187,7 +187,7 @@ public interface Parsers {
             () -> (hydra.parsing.ParseResult<Integer>) (new hydra.parsing.ParseResult.Success((hydra.parsing.ParseSuccess<Integer>) (new hydra.parsing.ParseSuccess<Integer>(c, rest.get())))),
             () -> (hydra.parsing.ParseResult<Integer>) (new hydra.parsing.ParseResult.Failure(new hydra.parsing.ParseError("character did not satisfy predicate", input))));
         }),
-        hydra.lib.lists.SafeHead.apply(codes));
+        hydra.lib.lists.MaybeHead.apply(codes));
     });
     return (hydra.parsing.Parser<Integer>) (new hydra.parsing.Parser(parse));
   }

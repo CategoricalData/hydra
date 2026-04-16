@@ -43,7 +43,6 @@ allTests = define "allTests" $
     supergroup "hydra.lib.strings primitives" [
       stringsCat,
       stringsCat2,
-      stringsCharAt,
       stringsFromList,
       stringsIntercalate,
       stringsLength,
@@ -100,19 +99,6 @@ allTests = define "allTests" $
           test name s1 s2 result = stringEvalPair name
             (Strings.cat2 (Phantoms.string s1) (Phantoms.string s2))
             (Phantoms.string result)
-  
-      stringsCharAt = subgroup "charAt" [
-        test "first character" 0 "hello" 104,  -- 'h'
-        test "middle character" 2 "hello" 108, -- 'l'
-        test "last character" 4 "hello" 111,   -- 'o'
-        test "single character string" 0 "a" 97,      -- 'a'
-        test "unicode character" 0 "\241" 241,    -- ñ
-        test "multi-byte unicode" 0 "\19990" 19990,  -- 世
-        test "second of combining pair" 1 "e\769" 769]  -- combining acute accent
-        where
-          test name idx s result = evalPair name showInt32
-            (Strings.charAt (Phantoms.int32 idx) (Phantoms.string s))
-            (Phantoms.int32 result)
   
       stringsFromList = subgroup "fromList" [
         test "basic ascii string" [104, 101, 108, 108, 111] "hello",
@@ -185,6 +171,10 @@ allTests = define "allTests" $
         test "first character" 0 "hello" (Just 104),
         test "middle character" 2 "hello" (Just 108),
         test "last character" 4 "hello" (Just 111),
+        test "single character string" 0 "a" (Just 97),
+        test "unicode character" 0 "\241" (Just 241),           -- ñ
+        test "multi-byte unicode" 0 "\19990" (Just 19990),      -- 世
+        test "second of combining pair" 1 "e\769" (Just 769),   -- combining acute accent
         test "out of bounds" 5 "hello" Nothing,
         test "negative index" (-1) "hello" Nothing,
         test "empty string" 0 "" Nothing]
