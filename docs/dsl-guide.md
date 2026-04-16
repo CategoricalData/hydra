@@ -307,11 +307,13 @@ Type constructs use the `T.` prefix.
 
 ```haskell
 -- Numeric literals
-int32 42                    -- Int32
-int64 1000000               -- Int64
-float32 3.14                -- Float32
-float64 2.71828             -- Float64
-bigint 123456789            -- BigInteger
+int32 42                             -- Int32
+int64 1000000                        -- Int64
+float32 3.14                         -- Float32
+float64 2.71828                      -- Float64
+bigint 123456789                     -- BigInteger
+bigfloat 3.14                        -- Bigfloat (Double in Haskell; arbitrary precision in other hosts)
+decimal (Sci.scientific 314 (-2))    -- Decimal (arbitrary-precision Scientific/BigDecimal/Decimal)
 
 -- String and character
 string "hello"              -- String
@@ -859,8 +861,11 @@ import qualified Hydra.Dsl.Types as T
 -- Primitive types
 T.int32
 T.int64
+T.bigint
 T.float32
 T.float64
+T.bigfloat
+T.decimal
 T.string
 T.boolean
 T.binary
