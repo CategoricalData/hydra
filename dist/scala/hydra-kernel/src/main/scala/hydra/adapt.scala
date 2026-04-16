@@ -294,18 +294,18 @@ def adaptType(constraints: hydra.coders.LanguageConstraints)(litmap: Map[hydra.c
        hydra.core.LiteralType](Some(hydra.core.Type.literal(hydra.core.LiteralType.string)))((lt2: hydra.core.LiteralType) => Some(hydra.core.Type.literal(lt2)))(hydra.lib.maps.lookup[hydra.core.LiteralType,
        hydra.core.LiteralType](v_Type_literal_lt)(litmap)))
     case _ => Some(typ)
-  def forUnsupported(typ: hydra.core.Type): Option[hydra.core.Type] =
-    {
-    def tryAlts(alts: Seq[hydra.core.Type]): Option[hydra.core.Type] =
-      hydra.lib.logic.ifElse[Option[hydra.core.Type]](hydra.lib.lists.`null`[hydra.core.Type](alts))(None)(hydra.lib.maybes.maybe[Option[hydra.core.Type],
-         hydra.core.Type](tryAlts(hydra.lib.lists.tail[hydra.core.Type](alts)))((t: hydra.core.Type) => Some(t))(tryType(hydra.lib.lists.head[hydra.core.Type](alts))))
-    lazy val alts0: Seq[hydra.core.Type] = hydra.adapt.typeAlternatives(typ)
-    tryAlts(alts0)
-  }
   def tryType(typ: hydra.core.Type): Option[hydra.core.Type] =
     {
     lazy val supportedVariant: Boolean = hydra.lib.sets.member[hydra.variants.TypeVariant](hydra.reflect.typeVariant(typ))(constraints.typeVariants)
-    hydra.lib.logic.ifElse[Option[hydra.core.Type]](supportedVariant)(forSupported(typ))(forUnsupported(typ))
+    hydra.lib.logic.ifElse[Option[hydra.core.Type]](supportedVariant)(forSupported(typ))({
+      def tryAlts(alts: Seq[hydra.core.Type]): Option[hydra.core.Type] =
+        hydra.lib.logic.ifElse[Option[hydra.core.Type]](hydra.lib.lists.`null`[hydra.core.Type](alts))(None)(hydra.lib.maybes.maybe[Option[hydra.core.Type],
+           hydra.core.Type](tryAlts(hydra.lib.lists.tail[hydra.core.Type](alts)))((t: hydra.core.Type) => Some(t))(tryType(hydra.lib.lists.head[hydra.core.Type](alts))))
+      {
+        lazy val alts0: Seq[hydra.core.Type] = hydra.adapt.typeAlternatives(typ)
+        tryAlts(alts0)
+      }
+    })
   }
   def rewrite(recurse: (hydra.core.Type => Either[hydra.errors.Error, hydra.core.Type]))(typ: hydra.core.Type): Either[hydra.errors.Error,
      hydra.core.Type] =
