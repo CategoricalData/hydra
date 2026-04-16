@@ -348,7 +348,7 @@
                             "application": {
                               "argument": {"variable": "n"},
                               "function": {"variable": "hydra.lib.literals.int32ToBigint"}}},
-                          "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
+                          "function": {"variable": "hydra.lib.literals.bigintToDecimal"}}}},
                     "typeName": "hydra.json.model.Value"}},
                 "domain": {"literal": {"integer": {"int32": {}}}},
                 "parameter": "n"}}}},
@@ -1590,7 +1590,7 @@
                                                         "application": {
                                                           "argument": {"variable": "n"},
                                                           "function": {"variable": "hydra.lib.literals.int32ToBigint"}}},
-                                                      "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
+                                                      "function": {"variable": "hydra.lib.literals.bigintToDecimal"}}}},
                                                 "typeName": "hydra.json.model.Value"}}}},
                                         "type": {"literal": {"string": {}}}}},
                                     "type": {"variable": "hydra.json.model.Value"}}},
@@ -1617,7 +1617,7 @@
                                                         "application": {
                                                           "argument": {"variable": "n"},
                                                           "function": {"variable": "hydra.lib.literals.int32ToBigint"}}},
-                                                      "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
+                                                      "function": {"variable": "hydra.lib.literals.bigintToDecimal"}}}},
                                                 "typeName": "hydra.json.model.Value"}}}},
                                         "type": {"literal": {"string": {}}}}},
                                     "type": {"variable": "hydra.json.model.Value"}}},
