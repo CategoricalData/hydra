@@ -12,7 +12,9 @@ import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
+import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
+import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
@@ -81,8 +83,16 @@ literalYamlCoder lt =
                 Model.ScalarBool v0 -> Right (Core.LiteralBoolean v0)
                 _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                   "expected boolean, found scalar"])))
+          decodeDecimal =
+                  \cx -> \s -> case s of
+                    Model.ScalarDecimal v0 -> Right (Core.LiteralDecimal v0)
+                    Model.ScalarFloat v0 -> Right (Core.LiteralDecimal (Literals.float64ToDecimal (Literals.bigfloatToFloat64 v0)))
+                    Model.ScalarInt v0 -> Right (Core.LiteralDecimal (Literals.bigintToDecimal v0))
+                    _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
+                      "expected decimal, found scalar"])))
           decodeFloat =
                   \cx -> \s -> case s of
+                    Model.ScalarDecimal v0 -> Right (Core.LiteralFloat (Core.FloatValueBigfloat (Literals.float64ToBigfloat (Literals.decimalToFloat64 v0))))
                     Model.ScalarFloat v0 -> Right (Core.LiteralFloat (Core.FloatValueBigfloat v0))
                     _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                       "expected float, found scalar"])))
@@ -101,8 +111,15 @@ literalYamlCoder lt =
                     Core.LiteralTypeBoolean -> Coders.Coder {
                       Coders.coderEncode = (\cx -> \lit -> Eithers.bind (ExtractCore.booleanLiteral lit) (\b -> Right (Model.ScalarBool b))),
                       Coders.coderDecode = decodeBool}
+                    Core.LiteralTypeDecimal -> Coders.Coder {
+                      Coders.coderEncode = (\cx -> \lit -> Eithers.bind (ExtractCore.decimalLiteral lit) (\d -> Right (Model.ScalarDecimal d))),
+                      Coders.coderDecode = decodeDecimal}
                     Core.LiteralTypeFloat _ -> Coders.Coder {
-                      Coders.coderEncode = (\cx -> \lit -> Eithers.bind (ExtractCore.floatLiteral lit) (\f -> Eithers.bind (ExtractCore.bigfloatValue f) (\bf -> Right (Model.ScalarFloat bf)))),
+                      Coders.coderEncode = (\cx -> \lit -> Eithers.bind (ExtractCore.floatLiteral lit) (\f -> Eithers.bind (ExtractCore.bigfloatValue f) (\bf ->
+                        let shown = Literals.showBigfloat bf
+                        in (Logic.ifElse (requiresYamlStringSentinel shown) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
+                          "YAML cannot represent bigfloat value: ",
+                          shown])))) (Right (Model.ScalarFloat bf)))))),
                       Coders.coderDecode = decodeFloat}
                     Core.LiteralTypeInteger _ -> Coders.Coder {
                       Coders.coderEncode = (\cx -> \lit -> Eithers.bind (ExtractCore.integerLiteral lit) (\i -> Eithers.bind (ExtractCore.bigintValue i) (\bi -> Right (Model.ScalarInt bi)))),
@@ -120,6 +137,11 @@ recordCoder tname rt cx g =
       in (Eithers.bind (Eithers.mapList getCoder rt) (\coders -> Right (Coders.Coder {
         Coders.coderEncode = (\cx2 -> \term -> encodeRecord coders cx2 g term),
         Coders.coderDecode = (\cx2 -> \val -> decodeRecord tname coders cx2 val)})))
+
+-- | True for IEEE sentinel strings that Hydra YAML cannot represent as a float scalar.
+requiresYamlStringSentinel :: String -> Bool
+requiresYamlStringSentinel s =
+    Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))
 
 -- | Create a YAML coder for term types
 termCoder :: Core.Type -> t0 -> Graph.Graph -> Either Errors.Error (Coders.Coder Core.Term Model.Node)

@@ -18,7 +18,6 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
@@ -53,10 +52,8 @@ avroHydraAdapter cx schema env0 =
                 Coders.adapterCoder = Coders.Coder {
                   Coders.coderEncode = encode,
                   Coders.coderDecode = decode}}, env)
-          doubleToInt =
-                  \d -> Literals.bigintToInt32 (Literals.decimalToBigint d)
-          doubleToLong =
-                  \d -> Literals.bigintToInt64 (Literals.decimalToBigint d)
+          doubleToInt = \d -> Literals.bigintToInt32 (Literals.decimalToBigint d)
+          doubleToLong = \d -> Literals.bigintToInt64 (Literals.decimalToBigint d)
       in case schema of
         Schema.SchemaArray v0 -> Eithers.bind (avroHydraAdapter cx (Schema.arrayItems v0) env0) (\adEnv ->
           let ad = Pairs.first adEnv
