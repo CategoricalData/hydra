@@ -306,6 +306,7 @@
   "namespace": "hydra.json.yaml.encode",
   "termDependencies": ["hydra.json.encode", "hydra.yaml.model"],
   "typeDependencies": [
+    "hydra.yaml.model",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
