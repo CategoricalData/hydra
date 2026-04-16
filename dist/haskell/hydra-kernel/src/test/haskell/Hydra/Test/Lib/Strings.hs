@@ -169,60 +169,6 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "charAt",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [],
-          Testing.testGroupCases = [
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "first character",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Strings.charAt 0 "hello")),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 104)})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "middle character",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Strings.charAt 2 "hello")),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 108)})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "last character",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Strings.charAt 4 "hello")),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 111)})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "single character string",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Strings.charAt 0 "a")),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 97)})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "unicode character",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Strings.charAt 0 "\241")),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 241)})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "multi-byte unicode",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Strings.charAt 0 "\19990")),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 19990)})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "second of combining pair",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Strings.charAt 1 "e\769")),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 769)})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []}]},
-        Testing.TestGroup {
           Testing.testGroupName = "fromList",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],

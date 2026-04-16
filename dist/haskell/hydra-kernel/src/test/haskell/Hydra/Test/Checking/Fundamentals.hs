@@ -178,20 +178,20 @@ applicationsWithComplexArgumentsTests =
             Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
               Core.letBindings = [
                 Core.Binding {
-                  Core.bindingName = (Core.Name "head"),
+                  Core.bindingName = (Core.Name "maybeHead"),
                   Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "xs"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.head")),
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.maybeHead")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))})),
                   Core.bindingType = Nothing}],
               Core.letBody = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "head")),
+                Core.applicationFunction = (Core.TermVariable (Core.Name "maybeHead")),
                 Core.applicationArgument = (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "first"),
                   (Core.TermLiteral (Core.LiteralString "second"))])}))})))),
-            Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeLiteral Core.LiteralTypeString))})),
+            Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
 
@@ -2155,14 +2155,14 @@ unaryPrimitivesTests =
       Testing.testGroupSubgroups = [],
       Testing.testGroupCases = [
         Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "lists head",
+          Testing.testCaseWithMetadataName = "lists maybeHead",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermVariable (Core.Name "hydra.lib.lists.head")))),
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> ShowCore.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermVariable (Core.Name "hydra.lib.lists.maybeHead")))),
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
               Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
-                Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))}))})))})),
+                Core.functionTypeCodomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0")))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
         Testing.TestCaseWithMetadata {
