@@ -1,0 +1,26 @@
+{
+  "name": "hydra-typescript",
+  "version": "0.15.0",
+  "description": "TypeScript implementation of the Hydra type system and kernel",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.4",
+    "vitest": "^3.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "Apache-2.0"
+}
