@@ -24,7 +24,7 @@ public interface Coder {
     return (v1).accept(new hydra.pg.graphson.syntax.DoubleValue.PartialVisitor<>() {
       @Override
       public hydra.json.model.Value visit(hydra.pg.graphson.syntax.DoubleValue.Finite d) {
-        return new hydra.json.model.Value.Number_(hydra.lib.literals.Float64ToBigfloat.apply((d).value));
+        return new hydra.json.model.Value.Number_(hydra.lib.literals.Float64ToDecimal.apply((d).value));
       }
 
       @Override
@@ -70,7 +70,7 @@ public interface Coder {
     return (v1).accept(new hydra.pg.graphson.syntax.FloatValue.PartialVisitor<>() {
       @Override
       public hydra.json.model.Value visit(hydra.pg.graphson.syntax.FloatValue.Finite f) {
-        return new hydra.json.model.Value.Number_(hydra.lib.literals.Float32ToBigfloat.apply((f).value));
+        return new hydra.json.model.Value.Number_(hydra.lib.literals.Float32ToDecimal.apply((f).value));
       }
 
       @Override
@@ -125,7 +125,7 @@ public interface Coder {
       public hydra.json.model.Value visit(hydra.pg.graphson.syntax.Value.BigInteger i) {
         return hydra.pg.graphson.Coder.typedValueToJson(
           "g:BigInteger",
-          new hydra.json.model.Value.Number_(hydra.lib.literals.BigintToBigfloat.apply((i).value)));
+          new hydra.json.model.Value.Number_(hydra.lib.literals.BigintToDecimal.apply((i).value)));
       }
 
       @Override
@@ -144,7 +144,7 @@ public interface Coder {
       public hydra.json.model.Value visit(hydra.pg.graphson.syntax.Value.Byte_ b) {
         return hydra.pg.graphson.Coder.typedValueToJson(
           "g:Byte",
-          new hydra.json.model.Value.Number_(hydra.lib.literals.BigintToBigfloat.apply(hydra.lib.literals.Uint8ToBigint.apply((b).value))));
+          new hydra.json.model.Value.Number_(hydra.lib.literals.BigintToDecimal.apply(hydra.lib.literals.Uint8ToBigint.apply((b).value))));
       }
 
       @Override
@@ -193,7 +193,7 @@ public interface Coder {
       public hydra.json.model.Value visit(hydra.pg.graphson.syntax.Value.Integer_ i) {
         return hydra.pg.graphson.Coder.typedValueToJson(
           "g:Int32",
-          new hydra.json.model.Value.Number_(hydra.lib.literals.BigintToBigfloat.apply(hydra.lib.literals.Int32ToBigint.apply((i).value))));
+          new hydra.json.model.Value.Number_(hydra.lib.literals.BigintToDecimal.apply(hydra.lib.literals.Int32ToBigint.apply((i).value))));
       }
 
       @Override
@@ -209,7 +209,7 @@ public interface Coder {
       public hydra.json.model.Value visit(hydra.pg.graphson.syntax.Value.Long_ l) {
         return hydra.pg.graphson.Coder.typedValueToJson(
           "g:Long",
-          new hydra.json.model.Value.Number_(hydra.lib.literals.BigintToBigfloat.apply(hydra.lib.literals.Int64ToBigint.apply((l).value))));
+          new hydra.json.model.Value.Number_(hydra.lib.literals.BigintToDecimal.apply(hydra.lib.literals.Int64ToBigint.apply((l).value))));
       }
 
       @Override
@@ -244,7 +244,7 @@ public interface Coder {
       public hydra.json.model.Value visit(hydra.pg.graphson.syntax.Value.Short_ i) {
         return hydra.pg.graphson.Coder.typedValueToJson(
           "g:Int16",
-          new hydra.json.model.Value.Number_(hydra.lib.literals.BigintToBigfloat.apply(hydra.lib.literals.Int16ToBigint.apply((i).value))));
+          new hydra.json.model.Value.Number_(hydra.lib.literals.BigintToDecimal.apply(hydra.lib.literals.Int16ToBigint.apply((i).value))));
       }
 
       @Override

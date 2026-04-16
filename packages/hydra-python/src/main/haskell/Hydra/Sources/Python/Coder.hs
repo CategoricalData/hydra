@@ -2285,6 +2285,8 @@ extendMetaForTerm = def "extendMetaForTerm" $
             var "forBinding") (var "meta") (var "bindings"),
         _Term_literal>>: "l" ~>
           cases _Literal (var "l") (Just $ var "meta") [
+            _Literal_decimal>>: constant $
+              setMetaUsesDecimal @@ var "meta" @@ true,
             _Literal_float>>: "fv" ~>
               cases _FloatValue (var "fv") (Just $ var "meta") [
                 _FloatValue_bigfloat>>: constant $
@@ -2342,9 +2344,12 @@ extendMetaForType = def "extendMetaForType" $
       -- Either type: need Either import
       _Type_either>>: constant $
         setMetaUsesEither @@ var "metaWithSubtypes" @@ true,
-      -- Literal type: check for Decimal
+      -- Literal type: check for Decimal (both the decimal literal type and bigfloat,
+      -- which is represented as Python's Decimal in the Python host).
       _Type_literal>>: "lt" ~>
         cases _LiteralType (var "lt") (Just $ var "metaWithSubtypes") [
+          _LiteralType_decimal>>: constant $
+            setMetaUsesDecimal @@ var "metaWithSubtypes" @@ true,
           _LiteralType_float>>: "ft" ~>
             cases _FloatType (var "ft") (Just $ var "metaWithSubtypes") [
               _FloatType_bigfloat>>: constant $

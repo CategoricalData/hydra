@@ -215,7 +215,8 @@
               e (- precision scale 1)
               sign (if (neg? (.signum bd)) "-" "")
               plain (.toString (.abs (.unscaledValue bd)))]
-          (if (or (>= e 7) (< e -3))
+          ;; Haskell Scientific uses plain form iff -1 <= e <= 6; otherwise scientific.
+          (if (or (>= e 7) (< e -1))
             (let [mantissa (if (= (count plain) 1)
                              (str plain ".0")
                              (str (subs plain 0 1) "." (subs plain 1)))]

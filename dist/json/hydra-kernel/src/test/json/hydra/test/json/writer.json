@@ -567,9 +567,7 @@
                                                             "application": {
                                                               "argument": {
                                                                 "inject": {
-                                                                  "field": {
-                                                                    "name": "number",
-                                                                    "term": {"literal": {"decimal": 100000000000000000000}}},
+                                                                  "field": {"name": "number", "term": {"literal": {"decimal": 1.0e20}}},
                                                                   "typeName": "hydra.json.model.Value"}},
                                                               "function": {"variable": "hydra.json.writer.printJson"}}}},
                                                         {"name": "expected", "term": {"literal": {"string": "1.0e20"}}}],

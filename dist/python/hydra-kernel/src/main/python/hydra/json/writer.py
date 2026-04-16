@@ -3,7 +3,6 @@
 r"""JSON serialization functions using the Hydra AST."""
 
 from __future__ import annotations
-from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import FrozenDict, frozenlist
 from typing import cast
@@ -68,11 +67,17 @@ def value_to_expr(value: hydra.json.model.Value) -> hydra.ast.Expr:
         case hydra.json.model.ValueNumber(value=n):
             @lru_cache(1)
             def rounded() -> int:
-                return hydra.lib.literals.bigfloat_to_bigint(n)
+                return hydra.lib.literals.decimal_to_bigint(n)
             @lru_cache(1)
             def shown() -> str:
-                return hydra.lib.literals.show_bigfloat(n)
-            return hydra.serialization.cst(hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.equal(n, hydra.lib.literals.bigint_to_bigfloat(rounded())), hydra.lib.logic.not_(hydra.lib.equality.equal(shown(), "-0.0"))), (lambda : hydra.lib.literals.show_bigint(rounded())), (lambda : shown())))
+                return hydra.lib.literals.show_decimal(n)
+            @lru_cache(1)
+            def is_whole() -> bool:
+                return hydra.lib.equality.equal(n, hydra.lib.literals.bigint_to_decimal(rounded()))
+            @lru_cache(1)
+            def plain() -> str:
+                return hydra.lib.literals.show_bigint(rounded())
+            return hydra.serialization.cst(hydra.lib.logic.if_else(hydra.lib.logic.and_(is_whole(), hydra.lib.equality.lte(hydra.lib.strings.length(plain()), hydra.lib.strings.length(shown()))), (lambda : plain()), (lambda : shown())))
 
         case hydra.json.model.ValueObject(value=obj):
             return hydra.serialization.braces_list_adaptive(hydra.lib.lists.map((lambda x1: key_value_to_expr(x1)), hydra.lib.maps.to_list(obj)))

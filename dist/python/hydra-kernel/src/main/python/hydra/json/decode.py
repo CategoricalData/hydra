@@ -4,7 +4,6 @@ r"""JSON decoding for Hydra terms. Converts JSON Values to Terms using Either fo
 
 from __future__ import annotations
 from collections.abc import Callable
-from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Just, Left, Maybe, Nothing, Right, frozenlist
 from typing import cast
@@ -33,7 +32,7 @@ def expect_string(value: hydra.json.model.Value) -> Either[str, str]:
             return Left("expected string")
 
 def parse_special_float(s: str) -> Maybe[float]:
-    r"""Parse a special float sentinel string to a float64. Returns Nothing for unrecognized strings."""
+    r"""Parse an IEEE sentinel string (NaN, Infinity, -Infinity, -0.0) to a float64. Returns Nothing for unrecognized strings."""
 
     return hydra.lib.logic.if_else(hydra.lib.logic.or_(hydra.lib.equality.equal(s, "NaN"), hydra.lib.logic.or_(hydra.lib.equality.equal(s, "Infinity"), hydra.lib.logic.or_(hydra.lib.equality.equal(s, "-Infinity"), hydra.lib.equality.equal(s, "-0.0")))), (lambda : hydra.lib.literals.read_float64(s)), (lambda : Nothing()))
 
@@ -41,14 +40,17 @@ def decode_float(ft: hydra.core.FloatType, value: hydra.json.model.Value):
     def _hoist_hydra_json_decode_decode_float_1(v1):
         match v1:
             case hydra.json.model.ValueNumber(value=n):
-                return Right(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueBigfloat(n)))))))
+                return Right(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueBigfloat(hydra.lib.literals.float64_to_bigfloat(hydra.lib.literals.decimal_to_float64(n)))))))))
+
+            case hydra.json.model.ValueString(value=s):
+                return hydra.lib.maybes.maybe((lambda : Left(hydra.lib.strings.cat(("invalid bigfloat sentinel: ", s)))), (lambda v: Right(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueBigfloat(hydra.lib.literals.float64_to_bigfloat(v))))))))), parse_special_float(s))
 
             case _:
-                return Left("expected number for bigfloat")
+                return Left("expected number or special float string for bigfloat")
     def _hoist_hydra_json_decode_decode_float_2(v1):
         match v1:
             case hydra.json.model.ValueNumber(value=n):
-                return Right(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueFloat64(hydra.lib.literals.bigfloat_to_float64(n))))))))
+                return Right(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueFloat64(hydra.lib.literals.decimal_to_float64(n))))))))
 
             case hydra.json.model.ValueString(value=s):
                 return hydra.lib.maybes.maybe((lambda : Left(hydra.lib.strings.cat(("invalid float64 sentinel: ", s)))), (lambda v: Right(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueFloat64(v)))))))), parse_special_float(s))
@@ -113,31 +115,31 @@ def decode_integer(it: hydra.core.IntegerType, value: hydra.json.model.Value) ->
             @lru_cache(1)
             def num_result() -> Either[str, Decimal]:
                 return expect_number(value)
-            return hydra.lib.eithers.map((lambda n: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt8(hydra.lib.literals.bigint_to_int8(hydra.lib.literals.bigfloat_to_bigint(n))))))))), num_result())
+            return hydra.lib.eithers.map((lambda n: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt8(hydra.lib.literals.bigint_to_int8(hydra.lib.literals.decimal_to_bigint(n))))))))), num_result())
 
         case hydra.core.IntegerType.INT16:
             @lru_cache(1)
             def num_result() -> Either[str, Decimal]:
                 return expect_number(value)
-            return hydra.lib.eithers.map((lambda n: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt16(hydra.lib.literals.bigint_to_int16(hydra.lib.literals.bigfloat_to_bigint(n))))))))), num_result())
+            return hydra.lib.eithers.map((lambda n: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt16(hydra.lib.literals.bigint_to_int16(hydra.lib.literals.decimal_to_bigint(n))))))))), num_result())
 
         case hydra.core.IntegerType.INT32:
             @lru_cache(1)
             def num_result() -> Either[str, Decimal]:
                 return expect_number(value)
-            return hydra.lib.eithers.map((lambda n: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(hydra.lib.literals.bigint_to_int32(hydra.lib.literals.bigfloat_to_bigint(n))))))))), num_result())
+            return hydra.lib.eithers.map((lambda n: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(hydra.lib.literals.bigint_to_int32(hydra.lib.literals.decimal_to_bigint(n))))))))), num_result())
 
         case hydra.core.IntegerType.UINT8:
             @lru_cache(1)
             def num_result() -> Either[str, Decimal]:
                 return expect_number(value)
-            return hydra.lib.eithers.map((lambda n: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueUint8(hydra.lib.literals.bigint_to_uint8(hydra.lib.literals.bigfloat_to_bigint(n))))))))), num_result())
+            return hydra.lib.eithers.map((lambda n: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueUint8(hydra.lib.literals.bigint_to_uint8(hydra.lib.literals.decimal_to_bigint(n))))))))), num_result())
 
         case hydra.core.IntegerType.UINT16:
             @lru_cache(1)
             def num_result() -> Either[str, Decimal]:
                 return expect_number(value)
-            return hydra.lib.eithers.map((lambda n: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueUint16(hydra.lib.literals.bigint_to_uint16(hydra.lib.literals.bigfloat_to_bigint(n))))))))), num_result())
+            return hydra.lib.eithers.map((lambda n: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueUint16(hydra.lib.literals.bigint_to_uint16(hydra.lib.literals.decimal_to_bigint(n))))))))), num_result())
 
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -153,7 +155,7 @@ def decode_literal(lt: hydra.core.LiteralType, value: hydra.json.model.Value):
     def _hoist_hydra_json_decode_decode_literal_2(v1):
         match v1:
             case hydra.json.model.ValueNumber(value=n):
-                return Right(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralDecimal(hydra.lib.literals.float64_to_decimal(hydra.lib.literals.bigfloat_to_float64(n)))))))
+                return Right(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralDecimal(n)))))
 
             case _:
                 return Left("expected number for decimal")

@@ -31,6 +31,7 @@ public interface TestSuite {
       hydra.test.inference.All.allTests(),
       hydra.test.json.Roundtrip.allTests(),
       hydra.test.json.Writer.allTests(),
+      hydra.test.json.Yaml.allTests(),
       hydra.test.Reduction.allTests(),
       hydra.test.Rewriting.allTests(),
       hydra.test.Serialization.allTests(),

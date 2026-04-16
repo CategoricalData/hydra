@@ -116,17 +116,19 @@ public interface Writer {
 
       @Override
       public hydra.ast.Expr visit(hydra.json.model.Value.Number_ n) {
-        java.math.BigInteger rounded = hydra.lib.literals.BigfloatToBigint.apply((n).value);
-        String shown = hydra.lib.literals.ShowBigfloat.apply((n).value);
+        java.math.BigInteger rounded = hydra.lib.literals.DecimalToBigint.apply((n).value);
+        hydra.util.Lazy<Boolean> isWhole = new hydra.util.Lazy<>(() -> hydra.lib.equality.Equal.apply(
+          (n).value,
+          hydra.lib.literals.BigintToDecimal.apply(rounded)));
+        String plain = hydra.lib.literals.ShowBigint.apply(rounded);
+        String shown = hydra.lib.literals.ShowDecimal.apply((n).value);
         return hydra.Serialization.cst(hydra.lib.logic.IfElse.lazy(
           hydra.lib.logic.And.apply(
-            hydra.lib.equality.Equal.apply(
-              (n).value,
-              hydra.lib.literals.BigintToBigfloat.apply(rounded)),
-            hydra.lib.logic.Not.apply(hydra.lib.equality.Equal.apply(
-              shown,
-              "-0.0"))),
-          () -> hydra.lib.literals.ShowBigint.apply(rounded),
+            isWhole.get(),
+            hydra.lib.equality.Lte.apply(
+              hydra.lib.strings.Length.apply(plain),
+              hydra.lib.strings.Length.apply(shown))),
+          () -> plain,
           () -> shown));
       }
 

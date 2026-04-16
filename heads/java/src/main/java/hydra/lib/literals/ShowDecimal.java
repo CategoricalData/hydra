@@ -66,8 +66,10 @@ public class ShowDecimal extends PrimitiveFunction {
         // coefficient-exponent form: stripped = coefficient * 10^(-scale)
         // Haskell Scientific "e" = precision - scale - 1 for the canonical
         // single-digit-before-decimal representation.
+        // Haskell's threshold for plain form is -1 <= e <= 6 (values like 0.1, 1.0,
+        // 10.0, ..., 1000000.0). Outside that range, use scientific notation.
         int e = precision - scale - 1;
-        if (e >= 7 || e < -3) {
+        if (e >= 7 || e < -1) {
             // Scientific notation: "c.dddeE"
             String plain = stripped.unscaledValue().abs().toString();
             String sign = stripped.signum() < 0 ? "-" : "";

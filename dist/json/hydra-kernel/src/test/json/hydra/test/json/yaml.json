@@ -589,9 +589,7 @@
                                                                     "application": {
                                                                       "argument": {
                                                                         "inject": {
-                                                                          "field": {
-                                                                            "name": "number",
-                                                                            "term": {"literal": {"decimal": 100000000000000000000}}},
+                                                                          "field": {"name": "number", "term": {"literal": {"decimal": 1.0e20}}},
                                                                           "typeName": "hydra.json.model.Value"}},
                                                                       "function": {"variable": "hydra.json.yaml.encode.jsonToYaml"}}},
                                                                   "function": {"variable": "hydra.json.yaml.decode.yamlToJson"}}},
@@ -628,9 +626,7 @@
                                                             "application": {
                                                               "argument": {
                                                                 "inject": {
-                                                                  "field": {
-                                                                    "name": "number",
-                                                                    "term": {"literal": {"decimal": 100000000000000000000}}},
+                                                                  "field": {"name": "number", "term": {"literal": {"decimal": 1.0e20}}},
                                                                   "typeName": "hydra.json.model.Value"}},
                                                               "function": {"variable": "hydra.json.writer.printJson"}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
