@@ -1,0 +1,15 @@
+{
+  "dslModules": [],
+  "evalLibModules": [],
+  "mainModules": [
+    "hydra.owl.syntax",
+    "hydra.rdf.serde",
+    "hydra.rdf.syntax",
+    "hydra.rdf.utils",
+    "hydra.shacl.coder",
+    "hydra.shacl.language",
+    "hydra.shacl.model",
+    "hydra.shex.syntax",
+    "hydra.xml.schema"],
+  "package": "hydra-rdf",
+  "testModules": []}

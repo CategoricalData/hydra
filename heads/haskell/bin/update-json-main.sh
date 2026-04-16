@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# Wrapper script to generate main modules to JSON
+# Wrapper script to generate every package's main modules to JSON.
+# Writes fanned-out output to dist/json/<package>/src/main/json/ based on
+# the routing table in Hydra.PackageRouting.
 
 set -e
 
@@ -10,4 +12,4 @@ stack build hydra:update-json-main
 
 echo ""
 echo "Running update-json-main..."
-stack exec update-json-main -- --output-dir "$(pwd)/../../dist/json/hydra-kernel/src/main/json"
+stack exec update-json-main -- --dist-root "$(pwd)/../../dist/json"
