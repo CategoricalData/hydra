@@ -71,6 +71,14 @@ executables:
     dependencies:
       - hydra
 
+  transform-haskell-dsl-to-json:
+    main: Main.hs
+    source-dirs:
+      - src/exec/transform-haskell-dsl-to-json
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
   update-json-test:
     main: Main.hs
     source-dirs:
