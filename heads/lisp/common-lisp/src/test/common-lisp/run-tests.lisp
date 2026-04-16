@@ -202,6 +202,7 @@
 ;; Remaining test categories
 (load-test-file "dependencies.lisp")
 (load-test-file "differentiation.lisp")
+(load-test-file "generation.lisp")
 (load-test-file "reduction.lisp")
 (load-test-file "rewriting.lisp")
 (load-test-file "serialization.lisp")
