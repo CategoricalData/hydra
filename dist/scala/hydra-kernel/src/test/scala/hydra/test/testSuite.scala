@@ -9,9 +9,9 @@ lazy val allTests: hydra.testing.TestGroup = hydra.testing.TestGroup("common", N
    hydra.test.lib.pairs.allTests, hydra.test.lib.regex.allTests, hydra.test.lib.sets.allTests,
    hydra.test.lib.strings.allTests, hydra.test.annotations.allTests, hydra.test.checking.all.allTests,
    hydra.test.dependencies.allTests, hydra.test.differentiation.allTests, hydra.test.etaExpansion.allTests,
-   hydra.test.formatting.allTests, hydra.test.hoisting.all.allTests, hydra.test.inference.all.allTests,
-   hydra.test.json.roundtrip.allTests, hydra.test.json.writer.allTests, hydra.test.json.yaml.allTests,
-   hydra.test.reduction.allTests, hydra.test.rewriting.allTests, hydra.test.serialization.allTests,
-   hydra.test.sorting.allTests, hydra.test.strip.allTests, hydra.test.substitution.allTests,
-   hydra.test.unification.allTests, hydra.test.validate.all.allTests, hydra.test.variables.allTests),
-   Seq())
+   hydra.test.formatting.allTests, hydra.test.generation.allTests, hydra.test.hoisting.all.allTests,
+   hydra.test.inference.all.allTests, hydra.test.json.roundtrip.allTests, hydra.test.json.writer.allTests,
+   hydra.test.json.yaml.allTests, hydra.test.reduction.allTests, hydra.test.rewriting.allTests,
+   hydra.test.serialization.allTests, hydra.test.sorting.allTests, hydra.test.strip.allTests,
+   hydra.test.substitution.allTests, hydra.test.unification.allTests, hydra.test.validate.all.allTests,
+   hydra.test.variables.allTests), Seq())
