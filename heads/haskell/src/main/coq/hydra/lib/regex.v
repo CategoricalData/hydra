@@ -1,5 +1,3 @@
-(* Note: this is an automatically generated file. Do not edit. *)
-
 (* Hydra primitive library: hydra.lib.regex *)
 
 Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdlib.QArith.QArith.
