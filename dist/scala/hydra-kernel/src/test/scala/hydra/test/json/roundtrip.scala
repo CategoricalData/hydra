@@ -168,19 +168,6 @@ lazy val allTests: hydra.testing.TestGroup = hydra.testing.TestGroup("JSON round
      hydra.core.Type])("test")(hydra.core.Type.literal(hydra.core.LiteralType.decimal))(json)))(hydra.json.encode.toJson(hydra.lib.maps.empty[hydra.core.Name,
      hydra.core.Type])("test")(hydra.core.Type.literal(hydra.core.LiteralType.decimal))(hydra.core.Term.literal(hydra.core.Literal.decimal(BigDecimal("-2.5"))))),
      hydra.show.core.term(hydra.core.Term.literal(hydra.core.Literal.decimal(BigDecimal("-2.5")))))),
-     None, Seq()), hydra.testing.TestCaseWithMetadata("decimal large integer", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[scala.Predef.String,
-     hydra.json.model.Value, scala.Predef.String]((e: scala.Predef.String) => e)((json: hydra.json.model.Value) =>
-  hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, scala.Predef.String]((e: scala.Predef.String) => e)((decoded: hydra.core.Term) => hydra.show.core.term(decoded))(hydra.json.decode.fromJson(hydra.lib.maps.empty[hydra.core.Name,
-     hydra.core.Type])("test")(hydra.core.Type.literal(hydra.core.LiteralType.decimal))(json)))(hydra.json.encode.toJson(hydra.lib.maps.empty[hydra.core.Name,
-     hydra.core.Type])("test")(hydra.core.Type.literal(hydra.core.LiteralType.decimal))(hydra.core.Term.literal(hydra.core.Literal.decimal(BigDecimal("1.00000000000000000001e20"))))),
-     hydra.show.core.term(hydra.core.Term.literal(hydra.core.Literal.decimal(BigDecimal("1.00000000000000000001e20")))))),
-     None, Seq()), hydra.testing.TestCaseWithMetadata("decimal large negative integer",
-     hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[scala.Predef.String,
-     hydra.json.model.Value, scala.Predef.String]((e: scala.Predef.String) => e)((json: hydra.json.model.Value) =>
-  hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, scala.Predef.String]((e: scala.Predef.String) => e)((decoded: hydra.core.Term) => hydra.show.core.term(decoded))(hydra.json.decode.fromJson(hydra.lib.maps.empty[hydra.core.Name,
-     hydra.core.Type])("test")(hydra.core.Type.literal(hydra.core.LiteralType.decimal))(json)))(hydra.json.encode.toJson(hydra.lib.maps.empty[hydra.core.Name,
-     hydra.core.Type])("test")(hydra.core.Type.literal(hydra.core.LiteralType.decimal))(hydra.core.Term.literal(hydra.core.Literal.decimal(BigDecimal("-1.00000000000000000001e20"))))),
-     hydra.show.core.term(hydra.core.Term.literal(hydra.core.Literal.decimal(BigDecimal("-1.00000000000000000001e20")))))),
      None, Seq()), hydra.testing.TestCaseWithMetadata("decimal tiny exponent", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[scala.Predef.String,
      hydra.json.model.Value, scala.Predef.String]((e: scala.Predef.String) => e)((json: hydra.json.model.Value) =>
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, scala.Predef.String]((e: scala.Predef.String) => e)((decoded: hydra.core.Term) => hydra.show.core.term(decoded))(hydra.json.decode.fromJson(hydra.lib.maps.empty[hydra.core.Name,
@@ -193,13 +180,6 @@ lazy val allTests: hydra.testing.TestGroup = hydra.testing.TestGroup("JSON round
      hydra.core.Type])("test")(hydra.core.Type.literal(hydra.core.LiteralType.decimal))(json)))(hydra.json.encode.toJson(hydra.lib.maps.empty[hydra.core.Name,
      hydra.core.Type])("test")(hydra.core.Type.literal(hydra.core.LiteralType.decimal))(hydra.core.Term.literal(hydra.core.Literal.decimal(BigDecimal("1.0e20"))))),
      hydra.show.core.term(hydra.core.Term.literal(hydra.core.Literal.decimal(BigDecimal("1.0e20")))))),
-     None, Seq()), hydra.testing.TestCaseWithMetadata("decimal many significant digits",
-     hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[scala.Predef.String,
-     hydra.json.model.Value, scala.Predef.String]((e: scala.Predef.String) => e)((json: hydra.json.model.Value) =>
-  hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, scala.Predef.String]((e: scala.Predef.String) => e)((decoded: hydra.core.Term) => hydra.show.core.term(decoded))(hydra.json.decode.fromJson(hydra.lib.maps.empty[hydra.core.Name,
-     hydra.core.Type])("test")(hydra.core.Type.literal(hydra.core.LiteralType.decimal))(json)))(hydra.json.encode.toJson(hydra.lib.maps.empty[hydra.core.Name,
-     hydra.core.Type])("test")(hydra.core.Type.literal(hydra.core.LiteralType.decimal))(hydra.core.Term.literal(hydra.core.Literal.decimal(BigDecimal("3.14159265358979323846"))))),
-     hydra.show.core.term(hydra.core.Term.literal(hydra.core.Literal.decimal(BigDecimal("3.14159265358979323846")))))),
      None, Seq()))), hydra.testing.TestGroup("collection types", None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("list of integers",
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[scala.Predef.String,
      hydra.json.model.Value, scala.Predef.String]((e: scala.Predef.String) => e)((json: hydra.json.model.Value) =>

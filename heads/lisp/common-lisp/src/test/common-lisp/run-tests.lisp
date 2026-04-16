@@ -196,7 +196,8 @@
 (dolist (f '("json/coder.lisp"
              "json/parser.lisp"
              "json/roundtrip.lisp"
-             "json/writer.lisp"))
+             "json/writer.lisp"
+             "json/yaml.lisp"))
   (load-test-file f))
 
 ;; Remaining test categories

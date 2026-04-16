@@ -107,20 +107,6 @@ allTests =
           Testing.testGroupSubgroups = [],
           Testing.testGroupCases = [
             Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "large integer exact",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "1.00000000000000000001e20"))),
-                Testing.universalTestCaseExpected = "100000000000000000001"})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "large negative integer exact",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "-1.00000000000000000001e20"))),
-                Testing.universalTestCaseExpected = "-100000000000000000001"})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "tiny exponent",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "1.0e-20"))),

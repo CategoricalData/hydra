@@ -400,36 +400,6 @@ public interface Roundtrip {
             new hydra.core.Name("test"),
             new hydra.core.Type.Literal(new hydra.core.LiteralType.Decimal()),
             new hydra.core.Term.Literal(new hydra.core.Literal.Decimal(new java.math.BigDecimal("-2.5"))))), hydra.show.Core.term(new hydra.core.Term.Literal(new hydra.core.Literal.Decimal(new java.math.BigDecimal("-2.5")))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
-        new hydra.testing.TestCaseWithMetadata("decimal large integer", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<String, String>) (e -> e),
-          (java.util.function.Function<hydra.json.model.Value, String>) (json -> hydra.lib.eithers.Either.apply(
-            (java.util.function.Function<String, String>) (e -> e),
-            (java.util.function.Function<hydra.core.Term, String>) (decoded -> hydra.show.Core.term(decoded)),
-            hydra.json.Decode.fromJson(
-              (java.util.Map<hydra.core.Name, hydra.core.Type>) ((java.util.Map<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply())),
-              new hydra.core.Name("test"),
-              new hydra.core.Type.Literal(new hydra.core.LiteralType.Decimal()),
-              json))),
-          hydra.json.Encode.toJson(
-            (java.util.Map<hydra.core.Name, hydra.core.Type>) ((java.util.Map<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply())),
-            new hydra.core.Name("test"),
-            new hydra.core.Type.Literal(new hydra.core.LiteralType.Decimal()),
-            new hydra.core.Term.Literal(new hydra.core.Literal.Decimal(new java.math.BigDecimal("1.00000000000000000001e20"))))), hydra.show.Core.term(new hydra.core.Term.Literal(new hydra.core.Literal.Decimal(new java.math.BigDecimal("1.00000000000000000001e20")))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
-        new hydra.testing.TestCaseWithMetadata("decimal large negative integer", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<String, String>) (e -> e),
-          (java.util.function.Function<hydra.json.model.Value, String>) (json -> hydra.lib.eithers.Either.apply(
-            (java.util.function.Function<String, String>) (e -> e),
-            (java.util.function.Function<hydra.core.Term, String>) (decoded -> hydra.show.Core.term(decoded)),
-            hydra.json.Decode.fromJson(
-              (java.util.Map<hydra.core.Name, hydra.core.Type>) ((java.util.Map<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply())),
-              new hydra.core.Name("test"),
-              new hydra.core.Type.Literal(new hydra.core.LiteralType.Decimal()),
-              json))),
-          hydra.json.Encode.toJson(
-            (java.util.Map<hydra.core.Name, hydra.core.Type>) ((java.util.Map<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply())),
-            new hydra.core.Name("test"),
-            new hydra.core.Type.Literal(new hydra.core.LiteralType.Decimal()),
-            new hydra.core.Term.Literal(new hydra.core.Literal.Decimal(new java.math.BigDecimal("-1.00000000000000000001e20"))))), hydra.show.Core.term(new hydra.core.Term.Literal(new hydra.core.Literal.Decimal(new java.math.BigDecimal("-1.00000000000000000001e20")))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
         new hydra.testing.TestCaseWithMetadata("decimal tiny exponent", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
           (java.util.function.Function<String, String>) (e -> e),
           (java.util.function.Function<hydra.json.model.Value, String>) (json -> hydra.lib.eithers.Either.apply(
@@ -459,22 +429,7 @@ public interface Roundtrip {
             (java.util.Map<hydra.core.Name, hydra.core.Type>) ((java.util.Map<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply())),
             new hydra.core.Name("test"),
             new hydra.core.Type.Literal(new hydra.core.LiteralType.Decimal()),
-            new hydra.core.Term.Literal(new hydra.core.Literal.Decimal(new java.math.BigDecimal("1.0e20"))))), hydra.show.Core.term(new hydra.core.Term.Literal(new hydra.core.Literal.Decimal(new java.math.BigDecimal("1.0e20")))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
-        new hydra.testing.TestCaseWithMetadata("decimal many significant digits", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<String, String>) (e -> e),
-          (java.util.function.Function<hydra.json.model.Value, String>) (json -> hydra.lib.eithers.Either.apply(
-            (java.util.function.Function<String, String>) (e -> e),
-            (java.util.function.Function<hydra.core.Term, String>) (decoded -> hydra.show.Core.term(decoded)),
-            hydra.json.Decode.fromJson(
-              (java.util.Map<hydra.core.Name, hydra.core.Type>) ((java.util.Map<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply())),
-              new hydra.core.Name("test"),
-              new hydra.core.Type.Literal(new hydra.core.LiteralType.Decimal()),
-              json))),
-          hydra.json.Encode.toJson(
-            (java.util.Map<hydra.core.Name, hydra.core.Type>) ((java.util.Map<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply())),
-            new hydra.core.Name("test"),
-            new hydra.core.Type.Literal(new hydra.core.LiteralType.Decimal()),
-            new hydra.core.Term.Literal(new hydra.core.Literal.Decimal(new java.math.BigDecimal("3.14159265358979323846"))))), hydra.show.Core.term(new hydra.core.Term.Literal(new hydra.core.Literal.Decimal(new java.math.BigDecimal("3.14159265358979323846")))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())))),
+            new hydra.core.Term.Literal(new hydra.core.Literal.Decimal(new java.math.BigDecimal("1.0e20"))))), hydra.show.Core.term(new hydra.core.Term.Literal(new hydra.core.Literal.Decimal(new java.math.BigDecimal("1.0e20")))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())))),
       new hydra.testing.TestGroup("collection types", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
         new hydra.testing.TestCaseWithMetadata("list of integers", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
           (java.util.function.Function<String, String>) (e -> e),

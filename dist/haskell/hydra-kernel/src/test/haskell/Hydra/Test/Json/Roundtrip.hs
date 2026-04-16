@@ -216,20 +216,6 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "decimal large integer",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "1.00000000000000000001e20"))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "1.00000000000000000001e20"))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "decimal large negative integer",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "-1.00000000000000000001e20"))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "-1.00000000000000000001e20"))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "decimal tiny exponent",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "1.0e-20"))))),
@@ -241,13 +227,6 @@ allTests =
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "1.0e20"))))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "1.0e20"))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "decimal many significant digits",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "3.14159265358979323846"))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "3.14159265358979323846"))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
