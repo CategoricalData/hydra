@@ -829,7 +829,7 @@ import Hydra.Dsl.Meta.Lib.Lists as Lists
 doubleList = Lists.map (lambda "x" (Math.mul (var "x") (int32 2))) myList
 
 -- Filter a list
-evens = Lists.filter (lambda "x" (Math.mod (var "x") (int32 2) `Math.eq` int32 0)) myList
+evens = Lists.filter (lambda "x" (Math.even (var "x"))) myList
 
 -- Fold a list
 sum = Lists.foldl (lambda "acc" (lambda "x" (Math.add (var "acc") (var "x")))) (int32 0) myList
@@ -1029,8 +1029,8 @@ import Hydra.Dsl.Meta.Lib.Math as Math
 Math.add (int32 2) (int32 3)        -- Addition
 Math.sub (int32 5) (int32 2)        -- Subtraction
 Math.mul (int32 4) (int32 3)        -- Multiplication
-Math.div (int32 10) (int32 2)       -- Division
-Math.mod (int32 10) (int32 3)       -- Modulo
+Math.maybeDiv (int32 10) (int32 2)  -- Safe division (returns Maybe; Nothing on divisor 0)
+Math.maybeMod (int32 10) (int32 3)  -- Safe modulo (returns Maybe; Nothing on divisor 0)
 Math.abs (int32 (-5))               -- Absolute value
 ```
 
@@ -1054,8 +1054,9 @@ import Hydra.Dsl.Meta.Lib.Lists as Lists
 Lists.map (lambda "x" (Math.add (var "x") (int32 1))) myList
 Lists.filter (lambda "x" (Math.gt (var "x") (int32 0))) myList
 Lists.foldl (lambda "acc" (lambda "x" (Math.add (var "acc") (var "x")))) (int32 0) myList
-Lists.head myList
-Lists.tail myList
+Lists.maybeHead myList              -- Maybe<a>: first element, Nothing if empty
+Lists.maybeTail myList              -- Maybe<[a]>: all but first, Nothing if empty
+Lists.uncons myList                 -- Maybe<(a, [a])>: head-and-tail combined
 Lists.concat list1 list2
 Lists.reverse myList
 Lists.length myList
@@ -1082,8 +1083,8 @@ import Hydra.Dsl.Meta.Lib.Maybes as Maybes
 
 Maybes.isJust maybeValue
 Maybes.isNothing maybeValue
-Maybes.fromJust maybeValue
-Maybes.fromMaybe defaultValue maybeValue
+Maybes.fromMaybe defaultValue maybeValue                        -- extract with fallback
+Maybes.maybe defaultValue (lambda "x" ...) maybeValue           -- fold over the two branches
 Maybes.map (lambda "x" (Math.add (var "x") (int32 1))) maybeValue
 ```
 
@@ -1323,9 +1324,10 @@ import Hydra.Dsl.Meta.Lib.Eithers as Eithers
 
 safeDivide :: TTerm (Int -> Int -> Either String Int)
 safeDivide = "x" ~> "y" ~>
-  Logic.ifElse (Equality.eq (var "y") (int32 0))
+  Maybes.maybe
     (left (string "Division by zero"))
-    (right (Math.div (var "x") (var "y")))
+    ("q" ~> right (var "q"))
+    (Math.maybeDiv (var "x") (var "y"))
 ```
 
 ## Import conventions

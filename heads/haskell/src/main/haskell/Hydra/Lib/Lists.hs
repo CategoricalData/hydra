@@ -14,30 +14,6 @@ import qualified Data.List as L
 apply :: [a -> b] -> [a] -> [b]
 apply = (<*>)
 
--- Bootstrap stubs: these are removed in Phase 2.4 but retained so that stale
--- dist/haskell Hydra.Ext.*.{Serde,Coder,...} modules (generated from a prior
--- source layout) continue to compile during Step 1 of sync-haskell. They are
--- unreachable at runtime because the primitive registry no longer mentions
--- them, and will become unused (and deletable) once Step 4 regenerates the
--- affected dist files.
-at :: Int -> [a] -> a
-at i l = l !! i
-
-head :: [a] -> a
-head = L.head
-
-init :: [a] -> [a]
-init = L.init
-
-last :: [a] -> a
-last = L.last
-
-safeHead :: [a] -> Maybe a
-safeHead = maybeHead
-
-tail :: [a] -> [a]
-tail = L.tail
-
 -- | Apply a function that returns lists to each element and flatten results.
 bind :: [a] -> (a -> [b]) -> [b]
 bind = (>>=)
