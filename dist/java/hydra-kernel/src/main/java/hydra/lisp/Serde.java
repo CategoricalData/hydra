@@ -1070,16 +1070,55 @@ public interface Serde {
         return (kind).accept(new hydra.lisp.syntax.LetKind.PartialVisitor<>() {
           @Override
           public hydra.ast.Expr visit(hydra.lisp.syntax.LetKind.Recursive _2) {
+            hydra.util.Lazy<java.util.List<hydra.ast.Expr>> letfnBindings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+              (java.util.function.Function<hydra.lisp.syntax.LetBinding, hydra.ast.Expr>) (b -> (b).accept(new hydra.lisp.syntax.LetBinding.PartialVisitor<>() {
+                @Override
+                public hydra.ast.Expr visit(hydra.lisp.syntax.LetBinding.Simple sb) {
+                  hydra.ast.Expr sbName = hydra.lisp.Serde.symbolToExpr((sb).value.name);
+                  hydra.lisp.syntax.Expression sbVal = (sb).value.value;
+                  return (sbVal).accept(new hydra.lisp.syntax.Expression.PartialVisitor<>() {
+                    @Override
+                    public hydra.ast.Expr otherwise(hydra.lisp.syntax.Expression instance) {
+                      return hydra.Serialization.parens(hydra.Serialization.spaceSep(java.util.Arrays.asList(
+                        sbName,
+                        hydra.lisp.Serde.expressionToExpr(
+                          d,
+                          sbVal))));
+                    }
+
+                    @Override
+                    public hydra.ast.Expr visit(hydra.lisp.syntax.Expression.Lambda lam) {
+                      hydra.util.Lazy<java.util.List<hydra.ast.Expr>> lamBody = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+                        (java.util.function.Function<hydra.lisp.syntax.Expression, hydra.ast.Expr>) (v1 -> hydra.lisp.Serde.expressionToExpr(
+                          d,
+                          v1)),
+                        (lam).value.body));
+                      hydra.util.Lazy<java.util.List<hydra.ast.Expr>> params = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+                        hydra.lisp.Serde::symbolToExpr,
+                        (lam).value.params));
+                      return hydra.Serialization.parens(hydra.Serialization.spaceSep(hydra.lib.lists.Concat.apply(java.util.Arrays.asList(
+                        java.util.Arrays.asList(sbName),
+                        java.util.Arrays.asList(hydra.Serialization.brackets(
+                          hydra.Serialization.squareBrackets(),
+                          hydra.Serialization.inlineStyle(),
+                          hydra.Serialization.spaceSep(params.get()))),
+                        lamBody.get()))));
+                    }
+                  });
+                }
+
+                @Override
+                public hydra.ast.Expr visit(hydra.lisp.syntax.LetBinding.Destructuring _3) {
+                  return hydra.Serialization.cst("<destructuring>");
+                }
+              })),
+              bindings));
             return hydra.Serialization.parens(hydra.Serialization.spaceSep(hydra.lib.lists.Concat.apply(java.util.Arrays.asList(
-              java.util.Arrays.asList(hydra.Serialization.cst("let")),
+              java.util.Arrays.asList(hydra.Serialization.cst("letfn")),
               java.util.Arrays.asList(hydra.Serialization.brackets(
                 hydra.Serialization.squareBrackets(),
                 hydra.Serialization.inlineStyle(),
-                hydra.Serialization.spaceSep(hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-                  (java.util.function.Function<hydra.util.Pair<hydra.ast.Expr, hydra.ast.Expr>, java.util.List<hydra.ast.Expr>>) (p -> java.util.Arrays.asList(
-                    hydra.lib.pairs.First.apply(p),
-                    hydra.lib.pairs.Second.apply(p))),
-                  bindingPairs.get()))))),
+                hydra.Serialization.spaceSep(letfnBindings.get()))),
               body.get()))));
           }
 

@@ -4,120 +4,38 @@ package openGql.grammar;
 
 import java.io.Serializable;
 
-public abstract class LocaldatetimeType implements Serializable, Comparable<LocaldatetimeType> {
-  public static final hydra.core.Name TYPE_ = new hydra.core.Name("openGql.grammar.LocaldatetimeType");
+public class LocalDatetimeType implements Serializable, Comparable<LocalDatetimeType> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("openGql.grammar.LocalDatetimeType");
 
-  public static final hydra.core.Name LOCAL_DATETIME = new hydra.core.Name("localDatetime");
+  public static final hydra.core.Name NOT_NULL = new hydra.core.Name("notNull");
 
-  public static final hydra.core.Name TIMESTAMP_WITHOUT_TIME_ZONE = new hydra.core.Name("timestampWithoutTimeZone");
+  public final Boolean notNull;
 
-  private LocaldatetimeType () {
-
+  public LocalDatetimeType (Boolean notNull) {
+    this.notNull = notNull;
   }
 
-  public abstract <R> R accept(Visitor<R> visitor) ;
-
-  public interface Visitor<R> {
-    R visit(LocalDatetime instance) ;
-
-    R visit(TimestampWithoutTimeZone instance) ;
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof LocalDatetimeType)) {
+      return false;
+    }
+    LocalDatetimeType o = (LocalDatetimeType) other;
+    return java.util.Objects.equals(
+      this.notNull,
+      o.notNull);
   }
 
-  public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(LocaldatetimeType instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
-    }
-
-    default R visit(LocalDatetime instance) {
-      return otherwise(instance);
-    }
-
-    default R visit(TimestampWithoutTimeZone instance) {
-      return otherwise(instance);
-    }
+  @Override
+  public int hashCode() {
+    return 2 * java.util.Objects.hashCode(notNull);
   }
 
-  public static final class LocalDatetime extends openGql.grammar.LocaldatetimeType implements Serializable {
-    public final openGql.grammar.LocalDatetimeType value;
-
-    public LocalDatetime (openGql.grammar.LocalDatetimeType value) {
-      this.value = value;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof LocalDatetime)) {
-        return false;
-      }
-      LocalDatetime o = (LocalDatetime) other;
-      return java.util.Objects.equals(
-        this.value,
-        o.value);
-    }
-
-    @Override
-    public int hashCode() {
-      return 2 * java.util.Objects.hashCode(value);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public int compareTo(LocaldatetimeType other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
-      if (tagCmp != 0) {
-        return tagCmp;
-      }
-      LocalDatetime o = (LocalDatetime) other;
-      return hydra.util.Comparing.compare(
-        value,
-        o.value);
-    }
-
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-
-  public static final class TimestampWithoutTimeZone extends openGql.grammar.LocaldatetimeType implements Serializable {
-    public final openGql.grammar.TimestampWithoutTimeZoneType value;
-
-    public TimestampWithoutTimeZone (openGql.grammar.TimestampWithoutTimeZoneType value) {
-      this.value = value;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof TimestampWithoutTimeZone)) {
-        return false;
-      }
-      TimestampWithoutTimeZone o = (TimestampWithoutTimeZone) other;
-      return java.util.Objects.equals(
-        this.value,
-        o.value);
-    }
-
-    @Override
-    public int hashCode() {
-      return 2 * java.util.Objects.hashCode(value);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public int compareTo(LocaldatetimeType other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
-      if (tagCmp != 0) {
-        return tagCmp;
-      }
-      TimestampWithoutTimeZone o = (TimestampWithoutTimeZone) other;
-      return hydra.util.Comparing.compare(
-        value,
-        o.value);
-    }
-
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(LocalDatetimeType other) {
+    return hydra.util.Comparing.compare(
+      notNull,
+      other.notNull);
   }
 }
