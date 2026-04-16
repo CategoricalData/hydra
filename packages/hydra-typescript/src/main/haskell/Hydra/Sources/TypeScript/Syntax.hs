@@ -114,6 +114,22 @@ module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
       methodDefinition,
       methodKind,
 
+      -- TypeScript-specific declarations
+      interfaceDeclaration,
+      typeAliasDeclaration,
+      enumDeclaration,
+      enumMember,
+
+      -- TypeScript-specific type expressions
+      tupleTypeExpression,
+      intersectionTypeExpression,
+      conditionalTypeExpression,
+      mappedTypeExpression,
+      indexedAccessTypeExpression,
+      keyofTypeExpression,
+      typeofTypeExpression,
+      literalTypeExpression,
+
       -- Modules
       program,
       sourceType,
@@ -269,14 +285,47 @@ typeExpression = define "TypeExpression" $
     "optional">:
       doc "An optional type (?T)" $
       js "TypeExpression",
+    "tuple">:
+      doc "A tuple type ([A, B])" $
+      js "TupleTypeExpression",
+    "intersection">:
+      doc "An intersection type (A & B)" $
+      js "IntersectionTypeExpression",
+    "conditional">:
+      doc "A conditional type (T extends U ? X : Y)" $
+      js "ConditionalTypeExpression",
+    "mapped">:
+      doc "A mapped type" $
+      js "MappedTypeExpression",
+    "indexedAccess">:
+      doc "An indexed access type (T[K])" $
+      js "IndexedAccessTypeExpression",
+    "keyof">:
+      doc "A keyof type (keyof T)" $
+      js "KeyofTypeExpression",
+    "typeof">:
+      doc "A typeof type (typeof x)" $
+      js "TypeofTypeExpression",
+    "literalType">:
+      doc "A literal type ('hello', 42, true)" $
+      js "LiteralTypeExpression",
     "any">:
       doc "The 'any' type"
+      T.unit,
+    "unknown">:
+      doc "The 'unknown' type"
       T.unit,
     "void">:
       doc "The 'void' type"
       T.unit,
     "never">:
       doc "The 'never' type"
+      T.unit,
+    "undefined">:
+      doc "The 'undefined' type"
+      T.unit,
+    "null">:
+      doc "The 'null' type"
       T.unit]
 
 functionTypeExpression :: Binding
@@ -702,6 +751,15 @@ statement = define "Statement" $
     "classDeclaration">:
       doc "A class declaration" $
       js "ClassDeclaration",
+    "interfaceDeclaration">:
+      doc "An interface declaration" $
+      js "InterfaceDeclaration",
+    "typeAliasDeclaration">:
+      doc "A type alias declaration" $
+      js "TypeAliasDeclaration",
+    "enumDeclaration">:
+      doc "An enum declaration" $
+      js "EnumDeclaration",
     "labeled">:
       doc "A labeled statement" $
       js "LabeledStatement"]
@@ -936,6 +994,125 @@ methodKind = define "MethodKind" $
     "method">: T.unit,
     "get">: T.unit,
     "set">: T.unit]
+
+-- ============================================================================
+-- TypeScript-specific Declarations
+-- ============================================================================
+
+interfaceDeclaration :: Binding
+interfaceDeclaration = define "InterfaceDeclaration" $
+  doc "A TypeScript interface declaration" $
+  T.record [
+    "name">:
+      doc "Interface name" $
+      js "Identifier",
+    "typeParameters">:
+      doc "Type parameters (generics)" $
+      T.list $ js "TypeParameter",
+    "extends">:
+      doc "Extended interfaces" $
+      T.list $ js "TypeExpression",
+    "body">:
+      doc "Interface body (property signatures)" $
+      T.list $ js "PropertySignature"]
+
+typeAliasDeclaration :: Binding
+typeAliasDeclaration = define "TypeAliasDeclaration" $
+  doc "A TypeScript type alias declaration (type X = ...)" $
+  T.record [
+    "name">:
+      doc "Type alias name" $
+      js "Identifier",
+    "typeParameters">:
+      doc "Type parameters" $
+      T.list $ js "TypeParameter",
+    "type">:
+      doc "The aliased type" $
+      js "TypeExpression"]
+
+enumDeclaration :: Binding
+enumDeclaration = define "EnumDeclaration" $
+  doc "A TypeScript enum declaration" $
+  T.record [
+    "name">:
+      doc "Enum name" $
+      js "Identifier",
+    "const">:
+      doc "Whether this is a const enum"
+      T.boolean,
+    "members">:
+      doc "Enum members" $
+      T.list $ js "EnumMember"]
+
+enumMember :: Binding
+enumMember = define "EnumMember" $
+  doc "A member of a TypeScript enum" $
+  T.record [
+    "name">:
+      doc "Member name" $
+      js "Identifier",
+    "initializer">:
+      doc "Optional initializer expression" $
+      T.optional $ js "Expression"]
+
+-- ============================================================================
+-- TypeScript-specific Type Expressions
+-- ============================================================================
+
+tupleTypeExpression :: Binding
+tupleTypeExpression = define "TupleTypeExpression" $
+  doc "A tuple type ([A, B, C])" $
+  T.list $ js "TypeExpression"
+
+intersectionTypeExpression :: Binding
+intersectionTypeExpression = define "IntersectionTypeExpression" $
+  doc "An intersection type (A & B & C)" $
+  T.list $ js "TypeExpression"
+
+conditionalTypeExpression :: Binding
+conditionalTypeExpression = define "ConditionalTypeExpression" $
+  doc "A conditional type (T extends U ? X : Y)" $
+  T.record [
+    "checkType">: js "TypeExpression",
+    "extendsType">: js "TypeExpression",
+    "trueType">: js "TypeExpression",
+    "falseType">: js "TypeExpression"]
+
+mappedTypeExpression :: Binding
+mappedTypeExpression = define "MappedTypeExpression" $
+  doc "A mapped type ({ [K in keyof T]: V })" $
+  T.record [
+    "parameter">: js "Identifier",
+    "constraint">: js "TypeExpression",
+    "type">: js "TypeExpression",
+    "readonly">:
+      doc "Whether the mapped type is readonly"
+      T.boolean,
+    "optional">:
+      doc "Whether the mapped type properties are optional"
+      T.boolean]
+
+indexedAccessTypeExpression :: Binding
+indexedAccessTypeExpression = define "IndexedAccessTypeExpression" $
+  doc "An indexed access type (T[K])" $
+  T.record [
+    "object">: js "TypeExpression",
+    "index">: js "TypeExpression"]
+
+keyofTypeExpression :: Binding
+keyofTypeExpression = define "KeyofTypeExpression" $
+  doc "A keyof type (keyof T)" $
+  T.wrap $ js "TypeExpression"
+
+typeofTypeExpression :: Binding
+typeofTypeExpression = define "TypeofTypeExpression" $
+  doc "A typeof type (typeof x)" $
+  T.wrap $ js "Expression"
+
+literalTypeExpression :: Binding
+literalTypeExpression = define "LiteralTypeExpression" $
+  doc "A literal type (e.g., 'hello', 42, true)" $
+  T.wrap $ js "Literal"
 
 -- ============================================================================
 -- Modules
