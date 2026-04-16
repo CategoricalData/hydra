@@ -194,6 +194,7 @@
     "hydra.test.differentiation",
     "hydra.test.etaExpansion",
     "hydra.test.formatting",
+    "hydra.test.generation",
     "hydra.test.json.roundtrip",
     "hydra.test.json.writer",
     "hydra.test.reduction",
