@@ -110,7 +110,9 @@ module_ = Module ns definitions
       toDefinition moduleToSourceModule,
       toDefinition generateLexicon,
       toDefinition moduleToJson,
+      toDefinition refreshModule,
       toDefinition inferModules,
+      toDefinition inferModulesGiven,
       toDefinition generateCoderModules,
       toDefinition inferAndGenerateLexicon,
       toDefinition escapeControlCharsInJson,
@@ -220,6 +222,9 @@ moduleTypeDepsTransitive = define "moduleTypeDepsTransitive" $
 
 -- | Build a graph from a list of modules, using an explicit bootstrap graph.
 -- Type definitions become schema elements and term definitions become data elements.
+-- Any type schemes already present on universe term bindings (e.g. from a prior
+-- inference run) are installed as the graph's boundTypes so incremental inference
+-- can use them as a read-only lookup.
 modulesToGraph :: TTermDefinition (Graph -> [Module] -> [Module] -> Graph)
 modulesToGraph = define "modulesToGraph" $
   doc "Build a graph from universe modules and working modules, using an explicit bootstrap graph" $
@@ -239,7 +244,17 @@ modulesToGraph = define "modulesToGraph" $
     (constant (Maps.empty :: TTerm (M.Map Name TypeScheme)))
     ("_r" ~> var "_r")
     (Environment.schemaGraphToTypingEnvironment @@ var "schemaGraph") $
-  Lexical.elementsToGraph @@ var "bsGraph" @@ var "schemaTypes" @@ var "dataElements"
+  "baseGraph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ var "schemaTypes" @@ var "dataElements" $
+  -- Collect pre-existing type schemes from universe term bindings and install them as boundTypes.
+  -- Inference coins fresh type variables for any binding it is actively solving, so stale schemes
+  -- for target bindings are transparently overridden; schemes for non-target bindings act as a
+  -- read-only lookup that lets incremental inference skip re-solving known definitions.
+  "universeDataElements" <~ Lists.concat (Lists.map
+      ("m" ~> moduleTermBindings (var "m")) (var "universeModules")) $
+  "universeBoundTypes" <~ Maps.fromList (Maybes.cat (Lists.map ("b" ~>
+    Maybes.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
+      (Core.bindingType (var "b"))) (var "universeDataElements"))) $
+  Graph.graphWithBoundTypes (var "baseGraph") (var "universeBoundTypes")
 
 -- | Pure core of code generation: given a coder, language, flags, bootstrap graph, universe,
 -- and modules to generate, produce a list of (filePath, content) pairs.
@@ -440,6 +455,32 @@ moduleToJson = define "moduleToJson" $
     (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError $ var "_e") ("_a" ~> var "_a")
       (var "hydra.json.encode.toJson" @@ var "schemaMap" @@ Core.nameLift _Module @@ var "modType" @@ var "term"))
 
+-- | Rebuild a module's term definitions using freshly inferred bindings.
+-- Type-only modules (containing only native type definitions) are returned unchanged.
+-- Term definitions that are not present in the inferred-bindings list are dropped.
+refreshModule :: TTermDefinition ([Binding] -> Module -> Module)
+refreshModule = define "refreshModule" $
+  doc "Rebuild a module's term definitions using freshly inferred bindings" $
+  "inferredElements" ~> "m" ~>
+  Logic.ifElse (Logic.not $ hasTermDefinitions (var "m"))
+    (var "m")
+    (Packaging.module_
+      (Packaging.moduleNamespace $ var "m")
+      (Maybes.cat $ Lists.map
+        ("d" ~> cases _Definition (var "d") Nothing [
+          _Definition_type>>: "td" ~> just (Packaging.definitionType (var "td")),
+          _Definition_term>>: "td" ~> Maybes.map
+            ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
+              (Core.bindingName $ var "b")
+              (Core.bindingTerm $ var "b")
+              (Core.bindingType $ var "b")))
+            (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td"))
+              (var "inferredElements"))])
+        (Packaging.moduleDefinitions $ var "m"))
+      (Packaging.moduleTermDependencies $ var "m")
+      (Packaging.moduleTypeDependencies $ var "m")
+      (Packaging.moduleDescription $ var "m"))
+
 -- | Perform type inference on a set of modules and reconstruct the target modules
 -- with inferred types. Type-only modules (containing only native type definitions)
 -- are passed through unchanged.
@@ -451,32 +492,25 @@ inferModules = define "inferModules" $
   "dataElements" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m")) (var "universeMods")) $
   "inferResultWithCx" <<~ Inference.inferGraphTypes @@ var "cx" @@ var "dataElements" @@ var "g0" $
   "inferResult" <~ Pairs.first (var "inferResultWithCx") $
-  "g1" <~ Pairs.first (var "inferResult") $
   "inferredElements" <~ Pairs.second (var "inferResult") $
-  "isTypeOnlyModule" <~ ("mod" ~> Logic.not $ hasTermDefinitions (var "mod")) $
-  "defName" <~ ("d" ~> cases _Definition (var "d") Nothing [
-    _Definition_term>>: "td" ~> Packaging.termDefinitionName (var "td"),
-    _Definition_type>>: "td" ~> Packaging.typeDefinitionName (var "td")]) $
-  "refreshModule" <~ ("m" ~>
-    Logic.ifElse (var "isTypeOnlyModule" @@ var "m")
-      (var "m")
-      (Packaging.module_
-        (Packaging.moduleNamespace $ var "m")
-        (Maybes.cat $ Lists.map
-          ("d" ~> cases _Definition (var "d") Nothing [
-            _Definition_type>>: "td" ~> just (Packaging.definitionType (var "td")),
-            _Definition_term>>: "td" ~> Maybes.map
-              ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
-                (Core.bindingName $ var "b")
-                (Core.bindingTerm $ var "b")
-                (Core.bindingType $ var "b")))
-              (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td"))
-                (var "inferredElements"))])
-          (Packaging.moduleDefinitions $ var "m"))
-        (Packaging.moduleTermDependencies $ var "m")
-        (Packaging.moduleTypeDependencies $ var "m")
-        (Packaging.moduleDescription $ var "m"))) $
-  right $ Lists.map (var "refreshModule") (var "targetMods")
+  right $ Lists.map (refreshModule @@ var "inferredElements") (var "targetMods")
+
+-- | Incrementally infer types for target modules, using the universe as a seeded inference context.
+-- Type schemes already present on universe term bindings (e.g. loaded from a prior inference run)
+-- are used as a read-only lookup for references from the targets, and only the target modules'
+-- term bindings are re-inferred. When universe and targets are equal, this is equivalent to
+-- inferModules, but when targets is a strict subset of the universe it avoids re-inferring
+-- definitions whose types are already known.
+inferModulesGiven :: TTermDefinition (Context -> Graph -> [Module] -> [Module] -> Prelude.Either Error [Module])
+inferModulesGiven = define "inferModulesGiven" $
+  doc "Incrementally infer types for target modules, using the universe as a seeded inference context" $
+  "cx" ~> "bsGraph" ~> "universeMods" ~> "targetMods" ~>
+  "g0" <~ modulesToGraph @@ var "bsGraph" @@ var "universeMods" @@ var "universeMods" $
+  "targetBindings" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m")) (var "targetMods")) $
+  "inferResultWithCx" <<~ Inference.inferGraphTypes @@ var "cx" @@ var "targetBindings" @@ var "g0" $
+  "inferResult" <~ Pairs.first (var "inferResultWithCx") $
+  "inferredElements" <~ Pairs.second (var "inferResult") $
+  right $ Lists.map (refreshModule @@ var "inferredElements") (var "targetMods")
 
 -- | Generate encoder or decoder modules for a list of type modules.
 -- Takes a codec function, bootstrap graph, universe modules, and type modules.

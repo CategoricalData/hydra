@@ -1,0 +1,14 @@
+{
+  "dslModules": [],
+  "evalLibModules": [],
+  "mainModules": [
+    "hydra.python.coder",
+    "hydra.python.environment",
+    "hydra.python.language",
+    "hydra.python.names",
+    "hydra.python.serde",
+    "hydra.python.syntax",
+    "hydra.python.testing",
+    "hydra.python.utils"],
+  "package": "hydra-python",
+  "testModules": []}
