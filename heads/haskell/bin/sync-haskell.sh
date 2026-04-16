@@ -5,9 +5,11 @@ set -euo pipefail
 # from Hydra sources, via the two-stage DSL → JSON → Haskell pipeline.
 #
 # Stage 1 — DSL → JSON:
-#   Runs the kernel DSL through the Haskell head and exports the complete
-#   kernel universe (types, terms, eval lib, DSL modules, tests, and the
-#   hydra.dsls aggregator) to dist/json/hydra-kernel/src/{main,test}/json/.
+#   Runs the kernel DSL through the Haskell head and exports the universe
+#   of Hydra modules (kernel + haskell coder + java/python/scala/lisp coders
+#   + pg + rdf) to dist/json/<pkg>/src/main/json/ via the per-package
+#   routing table in Hydra.PackageRouting. Test modules go to
+#   dist/json/hydra-kernel/src/test/json/.
 #
 # Stage 2 — JSON → Haskell:
 #   Runs bootstrap-from-json with --package-split, so that each loaded module
