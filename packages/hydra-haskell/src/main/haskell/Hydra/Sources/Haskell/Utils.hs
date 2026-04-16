@@ -368,12 +368,19 @@ toTypeApplication :: TTermDefinition ([H.Type] -> H.Type)
 toTypeApplication = haskellUtilsDefinition "toTypeApplication" $
   doc "Convert a list of types into a nested type application" $
   "types" ~> lets [
+    "dummyType">: inject H._Type H._Type_variable $ inject H._Name H._Name_normal $
+      record H._QualifiedName [
+        H._QualifiedName_qualifiers>>: list ([] :: [TTerm H.NamePart]),
+        H._QualifiedName_unqualified>>: wrap H._NamePart $ string ""],
     "app">: "l" ~>
-      Logic.ifElse (Equality.gt (Lists.length (var "l")) (int32 1))
-        (inject H._Type H._Type_application $ record H._ApplicationType [
-          H._ApplicationType_context>>: var "app" @@ (Lists.tail (var "l")),
-          H._ApplicationType_argument>>: Lists.head (var "l")])
-        (Lists.head $ var "l")] $
+      Maybes.fromMaybe (var "dummyType")
+        (Maybes.map
+          ("p" ~> Logic.ifElse (Lists.null (Pairs.second (var "p")))
+            (Pairs.first (var "p"))
+            (inject H._Type H._Type_application $ record H._ApplicationType [
+              H._ApplicationType_context>>: var "app" @@ (Pairs.second (var "p")),
+              H._ApplicationType_argument>>: Pairs.first (var "p")]))
+          (Lists.uncons (var "l")))] $
     var "app" @@ (Lists.reverse $ var "types")
 
 typeNameForRecord :: TTermDefinition (Name -> String)
@@ -382,7 +389,7 @@ typeNameForRecord = haskellUtilsDefinition "typeNameForRecord" $
   "sname" ~> lets [
     "snameStr">: Core.unName $ var "sname",
     "parts">: Strings.splitOn (string ".") (var "snameStr")] $
-    Lists.last $ var "parts"
+    Maybes.fromMaybe (var "snameStr") (Lists.maybeLast (var "parts"))
 
 unionFieldReference :: TTermDefinition (S.Set Name -> HaskellNamespaces -> Name -> Name -> H.Name)
 unionFieldReference = haskellUtilsDefinition "unionFieldReference" $

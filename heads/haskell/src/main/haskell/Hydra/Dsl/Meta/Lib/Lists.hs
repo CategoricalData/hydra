@@ -15,10 +15,6 @@ import Hydra.Sources.Libraries
 apply :: TTerm [a -> b] -> TTerm [a] -> TTerm [b]
 apply = primitive2 _lists_apply
 
--- | Get the element at a specified index in a list.
-at :: TTerm Int -> TTerm [a] -> TTerm a
-at = primitive2 _lists_at
-
 -- | Apply a function that returns lists to each element and flatten results.
 bind :: TTerm [a] -> TTerm (a -> [b]) -> TTerm [b]
 bind = primitive2 _lists_bind
@@ -67,14 +63,6 @@ foldr f = primitive3 _lists_foldr (asTerm f)
 group :: Eq a => TTerm [a] -> TTerm [[a]]
 group = primitive1 _lists_group
 
--- | Get the first element of a list.
-head :: TTerm [a] -> TTerm a
-head = primitive1 _lists_head
-
--- | Return all elements except the last one.
-init :: TTerm [a] -> TTerm [a]
-init = primitive1 _lists_init
-
 -- | Intercalate a list of lists with a separator list between each.
 intercalate :: TTerm [a] -> TTerm [[a]] -> TTerm [a]
 intercalate = primitive2 _lists_intercalate
@@ -82,10 +70,6 @@ intercalate = primitive2 _lists_intercalate
 -- | Intersperse a value between elements of a list.
 intersperse :: TTerm a -> TTerm [a] -> TTerm [a]
 intersperse = primitive2 _lists_intersperse
-
--- | Get the last element of a list.
-last :: TTerm [a] -> TTerm a
-last = primitive1 _lists_last
 
 -- | Get the length of a list.
 length :: TTerm [a] -> TTerm Int
@@ -139,11 +123,6 @@ replicate n x = primitive2 _lists_replicate n (asTerm x)
 reverse :: TTerm [a] -> TTerm [a]
 reverse = primitive1 _lists_reverse
 
--- | Get the first element of a list, returning Nothing if the list is empty.
--- Deprecated: use maybeHead instead.
-safeHead :: TTerm [a] -> TTerm (Maybe a)
-safeHead = primitive1 _lists_safeHead
-
 -- | Create a single-element list.
 singleton :: TTerm a -> TTerm [a]
 singleton = primitive1 _lists_singleton
@@ -159,10 +138,6 @@ sortOn = primitive2 _lists_sortOn
 -- | Split a list at the first element where predicate fails.
 span :: TTerm (a -> Bool) -> TTerm [a] -> TTerm ([a], [a])
 span = primitive2 _lists_span
-
--- | Get all elements of a list except the first.
-tail :: TTerm [a] -> TTerm [a]
-tail = primitive1 _lists_tail
 
 -- | Take the first n elements from a list.
 take :: TTerm Int -> TTerm [a] -> TTerm [a]

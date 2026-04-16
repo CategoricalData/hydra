@@ -195,7 +195,7 @@ encodeCase = def "encodeCase" $
     -- Use type name + field name + lambda param name for unique variable names.
     -- The lambda param suffix prevents shadowing in nested matches on the same union type
     -- (e.g., outer "sf" -> "v_ParseResult_success_sf", inner "sa" -> "v_ParseResult_success_sa").
-    "shortTypeName">: Lists.last (Strings.splitOn (string ".") (Maybes.maybe (string "x") ("n" ~> Core.unName (var "n")) (var "sn"))),
+    "shortTypeName">: Maybes.fromMaybe (string "x") (Lists.maybeLast (Strings.splitOn (string ".") (Maybes.maybe (string "x") ("n" ~> Core.unName (var "n")) (var "sn")))),
     -- Sanitize lambda param name for use as suffix: replace apostrophes with underscores
     "lamParamSuffix">: cases _Term (Strip.deannotateAndDetypeTerm @@ var "fterm") (Just $ string "") [
       _Term_lambda>>: ("lam" ~> lets [
@@ -759,7 +759,7 @@ encodeTerm = def "encodeTerm" $
           (ScalaUtilsSource.scalaEscapeName @@ var "fullName")
           (Logic.ifElse (Equality.equal (var "numParts") (int32 2))
             -- 2 parts: always qualify (e.g. lists.map)
-            (Strings.cat2 (Lists.head (var "parts")) (Strings.cat2 (string ".") (ScalaUtilsSource.scalaEscapeName @@ var "localName")))
+            (Strings.cat2 (Maybes.fromMaybe (var "fullName") (Lists.maybeHead (var "parts"))) (Strings.cat2 (string ".") (ScalaUtilsSource.scalaEscapeName @@ var "localName")))
             -- 3+ parts: fully qualify (module-level functions)
             (Strings.intercalate (string ".") (Lists.concat2
               (Lists.take (Math.sub (var "numParts") (int32 1)) (var "parts"))

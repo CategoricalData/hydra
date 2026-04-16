@@ -527,17 +527,19 @@ avroHydraAdapter = define "avroHydraAdapter" $
               (var "env1")))] $
         Logic.ifElse (Equality.gt (Lists.length (var "nonNulls")) (int32 1))
           (err @@ var "cx" @@ string "general-purpose unions are not yet supported")
-          (Logic.ifElse (Lists.null (var "nonNulls"))
+          (Maybes.maybe
             (err @@ var "cx" @@ string "cannot generate the empty type")
-            (Logic.ifElse (var "hasNull")
-              (var "forOptional" @@ Lists.head (var "nonNulls"))
-              (Eithers.bind (avroHydraAdapter @@ var "cx" @@ Lists.head (var "nonNulls") @@ var "env0") (lambda "adEnv" $ lets [
-                "ad">: Pairs.first (var "adEnv"),
-                "env1">: Pairs.second (var "adEnv")] $
-                right (pair
-                  (Coders.adapter (Coders.adapterIsLossy (var "ad")) (var "schema")
-                    (Coders.adapterTarget (var "ad")) (Coders.adapterCoder (var "ad")))
-                  (var "env1"))))))
+            (lambda "nonNullHead" $
+              Logic.ifElse (var "hasNull")
+                (var "forOptional" @@ var "nonNullHead")
+                (Eithers.bind (avroHydraAdapter @@ var "cx" @@ var "nonNullHead" @@ var "env0") (lambda "adEnv" $ lets [
+                  "ad">: Pairs.first (var "adEnv"),
+                  "env1">: Pairs.second (var "adEnv")] $
+                  right (pair
+                    (Coders.adapter (Coders.adapterIsLossy (var "ad")) (var "schema")
+                      (Coders.adapterTarget (var "ad")) (Coders.adapterCoder (var "ad")))
+                    (var "env1")))))
+            (Lists.maybeHead (var "nonNulls")))
       ]
 
 prepareFields :: TTermDefinition (Context -> AvroEnv.AvroEnvironment -> [Avro.Field] -> Result (M.Map String (Avro.Field, AvroHydraAdapter), AvroEnv.AvroEnvironment))
@@ -646,7 +648,7 @@ findAvroPrimaryKeyField = define "findAvroPrimaryKeyField" $
     Logic.ifElse (Lists.null (var "keys"))
       (right nothing)
       (Logic.ifElse (Equality.equal (Lists.length (var "keys")) (int32 1))
-        (right (just (Lists.head (var "keys"))))
+        (right (Lists.maybeHead (var "keys")))
         (err @@ var "cx" @@ Strings.cat2 (string "multiple primary key fields for ") (showQname @@ var "qname")))
 
 avroNameToHydraName :: TTermDefinition (AvroEnv.AvroQualifiedName -> Name)
@@ -756,13 +758,13 @@ parseAvroName = define "parseAvroName" $
   doc "Parse a dotted Avro name into a qualified name" $
   lambda "mns" $ lambda "name_" $ lets [
     "parts">: Strings.splitOn (string ".") (var "name_"),
-    "local">: Lists.last (var "parts")] $
+    "local">: Maybes.fromMaybe (var "name_") (Lists.maybeLast (var "parts"))] $
     Logic.ifElse (Equality.equal (Lists.length (var "parts")) (int32 1))
       (record AvroEnv._AvroQualifiedName [
         AvroEnv._AvroQualifiedName_namespace>>: var "mns",
         AvroEnv._AvroQualifiedName_name>>: var "local"])
       (record AvroEnv._AvroQualifiedName [
-        AvroEnv._AvroQualifiedName_namespace>>: just (Strings.intercalate (string ".") (Lists.init (var "parts"))),
+        AvroEnv._AvroQualifiedName_namespace>>: Maybes.map (lambda "ps" $ Strings.intercalate (string ".") (var "ps")) (Lists.maybeInit (var "parts")),
         AvroEnv._AvroQualifiedName_name>>: var "local"])
 
 putAvroHydraAdapter :: TTermDefinition (AvroEnv.AvroQualifiedName -> AvroHydraAdapter -> AvroEnv.AvroEnvironment -> AvroEnv.AvroEnvironment)

@@ -74,7 +74,6 @@ module_ = Module ns definitions
 
       -- lists primitives
       toDefinition listsApply,
-      toDefinition listsAt,
       toDefinition listsBind,
       toDefinition listsConcat,
       toDefinition listsConcat2,
@@ -87,11 +86,8 @@ module_ = Module ns definitions
       toDefinition listsFoldl,
       toDefinition listsFoldr,
       toDefinition listsGroup,
-      toDefinition listsHead,
-      toDefinition listsInit,
       toDefinition listsIntercalate,
       toDefinition listsIntersperse,
-      toDefinition listsLast,
       toDefinition listsLength,
       toDefinition listsMap,
       toDefinition listsMaybeAt,
@@ -106,12 +102,10 @@ module_ = Module ns definitions
       toDefinition listsPure,
       toDefinition listsReplicate,
       toDefinition listsReverse,
-      toDefinition listsSafeHead,
       toDefinition listsSingleton,
       toDefinition listsSort,
       toDefinition listsSortOn,
       toDefinition listsSpan,
-      toDefinition listsTail,
       toDefinition listsTake,
       toDefinition listsTranspose,
       toDefinition listsUncons,
@@ -223,7 +217,6 @@ module_ = Module ns definitions
       toDefinition mathCeiling,
       toDefinition mathCos,
       toDefinition mathCosh,
-      toDefinition mathDiv,
       toDefinition mathE,
       toDefinition mathEven,
       toDefinition mathExp,
@@ -237,7 +230,6 @@ module_ = Module ns definitions
       toDefinition mathMaybeRem,
       toDefinition mathMaybeSucc,
       toDefinition mathMin,
-      toDefinition mathMod,
       toDefinition mathMul,
       toDefinition mathMulFloat64,
       toDefinition mathNegate,
@@ -245,9 +237,7 @@ module_ = Module ns definitions
       toDefinition mathOdd,
       toDefinition mathPi,
       toDefinition mathPow,
-      toDefinition mathPred,
       toDefinition mathRange,
-      toDefinition mathRem,
       toDefinition mathRound,
       toDefinition mathRoundBigfloat,
       toDefinition mathRoundFloat32,
@@ -258,7 +248,6 @@ module_ = Module ns definitions
       toDefinition mathSqrt,
       toDefinition mathSub,
       toDefinition mathSubFloat64,
-      toDefinition mathSucc,
       toDefinition mathTan,
       toDefinition mathTanh,
       toDefinition mathTruncate,
@@ -269,7 +258,6 @@ module_ = Module ns definitions
       toDefinition maybesCases,
       toDefinition maybesCat,
       toDefinition maybesCompose,
-      toDefinition maybesFromJust,
       toDefinition maybesFromMaybe,
       toDefinition maybesIsJust,
       toDefinition maybesIsNothing,
@@ -311,7 +299,6 @@ module_ = Module ns definitions
       -- strings primitives
       toDefinition stringsCat,
       toDefinition stringsCat2,
-      toDefinition stringsCharAt,
       toDefinition stringsFromList,
       toDefinition stringsIntercalate,
       toDefinition stringsNull,
@@ -427,7 +414,6 @@ equalityMin      = defineName "equalityMin" "hydra.lib.equality" "min"
 -- Lists primitives
 
 listsApply       = defineName "listsApply" "hydra.lib.lists" "apply"
-listsAt          = defineName "listsAt" "hydra.lib.lists" "at"
 listsBind        = defineName "listsBind" "hydra.lib.lists" "bind"
 listsConcat      = defineName "listsConcat" "hydra.lib.lists" "concat"
 listsConcat2     = defineName "listsConcat2" "hydra.lib.lists" "concat2"
@@ -440,11 +426,8 @@ listsFind        = defineName "listsFind" "hydra.lib.lists" "find"
 listsFoldl       = defineName "listsFoldl" "hydra.lib.lists" "foldl"
 listsFoldr       = defineName "listsFoldr" "hydra.lib.lists" "foldr"
 listsGroup       = defineName "listsGroup" "hydra.lib.lists" "group"
-listsHead        = defineName "listsHead" "hydra.lib.lists" "head"
-listsInit        = defineName "listsInit" "hydra.lib.lists" "init"
 listsIntercalate = defineName "listsIntercalate" "hydra.lib.lists" "intercalate"
 listsIntersperse = defineName "listsIntersperse" "hydra.lib.lists" "intersperse"
-listsLast        = defineName "listsLast" "hydra.lib.lists" "last"
 listsLength      = defineName "listsLength" "hydra.lib.lists" "length"
 listsMap         = defineName "listsMap" "hydra.lib.lists" "map"
 listsMaybeAt     = defineName "listsMaybeAt" "hydra.lib.lists" "maybeAt"
@@ -458,12 +441,10 @@ listsPartition   = defineName "listsPartition" "hydra.lib.lists" "partition"
 listsPure        = defineName "listsPure" "hydra.lib.lists" "pure"
 listsReplicate   = defineName "listsReplicate" "hydra.lib.lists" "replicate"
 listsReverse     = defineName "listsReverse" "hydra.lib.lists" "reverse"
-listsSafeHead    = defineName "listsSafeHead" "hydra.lib.lists" "safeHead"
 listsSingleton   = defineName "listsSingleton" "hydra.lib.lists" "singleton"
 listsSort        = defineName "listsSort" "hydra.lib.lists" "sort"
 listsSortOn      = defineName "listsSortOn" "hydra.lib.lists" "sortOn"
 listsSpan        = defineName "listsSpan" "hydra.lib.lists" "span"
-listsTail        = defineName "listsTail" "hydra.lib.lists" "tail"
 listsTake        = defineName "listsTake" "hydra.lib.lists" "take"
 listsTranspose   = defineName "listsTranspose" "hydra.lib.lists" "transpose"
 listsUncons      = defineName "listsUncons" "hydra.lib.lists" "uncons"
@@ -579,7 +560,6 @@ mathAtanh    = defineName "mathAtanh" "hydra.lib.math" "atanh"
 mathCeiling  = defineName "mathCeiling" "hydra.lib.math" "ceiling"
 mathCos      = defineName "mathCos" "hydra.lib.math" "cos"
 mathCosh     = defineName "mathCosh" "hydra.lib.math" "cosh"
-mathDiv      = defineName "mathDiv" "hydra.lib.math" "div"
 mathE        = defineName "mathE" "hydra.lib.math" "e"
 mathEven     = defineName "mathEven" "hydra.lib.math" "even"
 mathExp      = defineName "mathExp" "hydra.lib.math" "exp"
@@ -590,7 +570,6 @@ mathMax      = defineName "mathMax" "hydra.lib.math" "max"
 mathMaybeDiv = defineName "mathMaybeDiv" "hydra.lib.math" "maybeDiv"
 mathMin      = defineName "mathMin" "hydra.lib.math" "min"
 mathMaybeMod = defineName "mathMaybeMod" "hydra.lib.math" "maybeMod"
-mathMod      = defineName "mathMod" "hydra.lib.math" "mod"
 mathMul      = defineName "mathMul" "hydra.lib.math" "mul"
 mathMulFloat64 = defineName "mathMulFloat64" "hydra.lib.math" "mulFloat64"
 mathNegate   = defineName "mathNegate" "hydra.lib.math" "negate"
@@ -599,10 +578,8 @@ mathOdd      = defineName "mathOdd" "hydra.lib.math" "odd"
 mathPi       = defineName "mathPi" "hydra.lib.math" "pi"
 mathPow      = defineName "mathPow" "hydra.lib.math" "pow"
 mathMaybePred = defineName "mathMaybePred" "hydra.lib.math" "maybePred"
-mathPred     = defineName "mathPred" "hydra.lib.math" "pred"
 mathRange    = defineName "mathRange" "hydra.lib.math" "range"
 mathMaybeRem = defineName "mathMaybeRem" "hydra.lib.math" "maybeRem"
-mathRem          = defineName "mathRem" "hydra.lib.math" "rem"
 mathRound        = defineName "mathRound" "hydra.lib.math" "round"
 mathRoundBigfloat = defineName "mathRoundBigfloat" "hydra.lib.math" "roundBigfloat"
 mathRoundFloat32 = defineName "mathRoundFloat32" "hydra.lib.math" "roundFloat32"
@@ -614,7 +591,6 @@ mathSqrt     = defineName "mathSqrt" "hydra.lib.math" "sqrt"
 mathSub      = defineName "mathSub" "hydra.lib.math" "sub"
 mathSubFloat64 = defineName "mathSubFloat64" "hydra.lib.math" "subFloat64"
 mathMaybeSucc = defineName "mathMaybeSucc" "hydra.lib.math" "maybeSucc"
-mathSucc     = defineName "mathSucc" "hydra.lib.math" "succ"
 mathTan      = defineName "mathTan" "hydra.lib.math" "tan"
 mathTanh     = defineName "mathTanh" "hydra.lib.math" "tanh"
 mathTruncate = defineName "mathTruncate" "hydra.lib.math" "truncate"
@@ -626,7 +602,6 @@ maybesBind      = defineName "maybesBind" "hydra.lib.maybes" "bind"
 maybesCases     = defineName "maybesCases" "hydra.lib.maybes" "cases"
 maybesCat       = defineName "maybesCat" "hydra.lib.maybes" "cat"
 maybesCompose   = defineName "maybesCompose" "hydra.lib.maybes" "compose"
-maybesFromJust  = defineName "maybesFromJust" "hydra.lib.maybes" "fromJust"
 maybesFromMaybe = defineName "maybesFromMaybe" "hydra.lib.maybes" "fromMaybe"
 maybesIsJust    = defineName "maybesIsJust" "hydra.lib.maybes" "isJust"
 maybesIsNothing = defineName "maybesIsNothing" "hydra.lib.maybes" "isNothing"
@@ -672,7 +647,6 @@ regexSplit      = defineName "regexSplit" "hydra.lib.regex" "split"
 
 stringsCat         = defineName "stringsCat" "hydra.lib.strings" "cat"
 stringsCat2        = defineName "stringsCat2" "hydra.lib.strings" "cat2"
-stringsCharAt      = defineName "stringsCharAt" "hydra.lib.strings" "charAt"
 stringsFromList    = defineName "stringsFromList" "hydra.lib.strings" "fromList"
 stringsIntercalate = defineName "stringsIntercalate" "hydra.lib.strings" "intercalate"
 stringsNull        = defineName "stringsNull" "hydra.lib.strings" "null"

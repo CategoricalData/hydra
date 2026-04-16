@@ -14,10 +14,29 @@ import qualified Data.List as L
 apply :: [a -> b] -> [a] -> [b]
 apply = (<*>)
 
--- | Get the element at a specified index in a list.
--- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
+-- Bootstrap stubs: these are removed in Phase 2.4 but retained so that stale
+-- dist/haskell Hydra.Ext.*.{Serde,Coder,...} modules (generated from a prior
+-- source layout) continue to compile during Step 1 of sync-haskell. They are
+-- unreachable at runtime because the primitive registry no longer mentions
+-- them, and will become unused (and deletable) once Step 4 regenerates the
+-- affected dist files.
 at :: Int -> [a] -> a
 at i l = l !! i
+
+head :: [a] -> a
+head = L.head
+
+init :: [a] -> [a]
+init = L.init
+
+last :: [a] -> a
+last = L.last
+
+safeHead :: [a] -> Maybe a
+safeHead = maybeHead
+
+tail :: [a] -> [a]
+tail = L.tail
 
 -- | Apply a function that returns lists to each element and flatten results.
 bind :: [a] -> (a -> [b]) -> [b]
@@ -67,16 +86,6 @@ foldr = L.foldr
 group :: Eq a => [a] -> [[a]]
 group = L.group
 
--- | Get the first element of a list.
--- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
-head :: [a] -> a
-head = L.head
-
--- | Return all elements except the last one.
--- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
-init :: [a] -> [a]
-init = L.init
-
 -- | Intercalate a list of lists with a separator list between each.
 intercalate :: [a] -> [[a]] -> [a]
 intercalate = L.intercalate
@@ -84,11 +93,6 @@ intercalate = L.intercalate
 -- | Intersperse a value between elements of a list.
 intersperse :: a -> [a] -> [a]
 intersperse = L.intersperse
-
--- | Get the last element of a list.
--- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
-last :: [a] -> a
-last = L.last
 
 -- | Get the length of a list.
 length :: [a] -> Int
@@ -148,11 +152,6 @@ replicate = L.replicate
 reverse :: [a] -> [a]
 reverse = L.reverse
 
--- | Get the first element of a list, returning Nothing if the list is empty.
--- Deprecated: use maybeHead instead.
-safeHead :: [a] -> Maybe a
-safeHead = maybeHead
-
 -- | Create a single-element list.
 singleton :: a -> [a]
 singleton e = [e]
@@ -168,11 +167,6 @@ sortOn = L.sortOn
 -- | Split a list at the first element where predicate fails.
 span :: (a -> Bool) -> [a] -> ([a], [a])
 span = L.span
-
--- | Get all elements of a list except the first.
--- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
-tail :: [a] -> [a]
-tail = L.tail
 
 -- | Take the first n elements from a list.
 take :: Int -> [a] -> [a]

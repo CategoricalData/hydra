@@ -16,10 +16,6 @@ cat = primitive1 _strings_cat
 cat2 :: TTerm String -> TTerm String -> TTerm String
 cat2 = primitive2 _strings_cat2
 
--- | Get the Unicode code point of the character at a specific index in a string.
-charAt :: TTerm Int -> TTerm String -> TTerm Int
-charAt = primitive2 _strings_charAt
-
 -- | Convert a list of Unicode code points to a string.
 fromList :: TTerm [Int] -> TTerm String
 fromList = primitive1 _strings_fromList

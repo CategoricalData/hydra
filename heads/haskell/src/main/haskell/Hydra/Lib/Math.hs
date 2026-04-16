@@ -26,6 +26,25 @@ add x y = x + y
 addFloat64 :: Double -> Double -> Double
 addFloat64 = add
 
+-- Bootstrap stubs: removed in Phase 2.4 but kept here so stale dist/haskell
+-- modules continue to compile during Step 1 of sync-haskell. Not registered
+-- as primitives; will become unused after regeneration and can then be
+-- deleted.
+div :: Integral a => a -> a -> a
+div = Prelude.div
+
+mod :: Integral a => a -> a -> a
+mod = Prelude.mod
+
+rem :: Integral a => a -> a -> a
+rem = Prelude.rem
+
+pred :: Enum a => a -> a
+pred = Prelude.pred
+
+succ :: Enum a => a -> a
+succ = Prelude.succ
+
 -- | Return the arc sine of x in radians.
 asin :: Double -> Double
 asin = Prelude.asin
@@ -66,11 +85,6 @@ cos = Prelude.cos
 -- | Return the hyperbolic cosine of x.
 cosh :: Double -> Double
 cosh = Prelude.cosh
-
--- | Divide two integers using integer division.
--- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
-div :: Integral a => a -> a -> a
-div = Prelude.div
 
 -- | Euler's number (e ≈ 2.71828).
 e :: Double
@@ -119,11 +133,6 @@ maybeMod :: Int -> Int -> Maybe Int
 maybeMod _ 0 = Nothing
 maybeMod x y = Just (Prelude.mod x y)
 
--- | Mathematical modulo.
--- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
-mod :: Integral a => a -> a -> a
-mod = Prelude.mod
-
 -- | Multiply two numbers.
 mul :: Num a => a -> a -> a
 mul x y = x * y
@@ -158,10 +167,6 @@ maybePred x
   | x == (-2147483648) = Nothing
   | Prelude.otherwise = Just (x - 1)
 
--- | Return the predecessor (x - 1).
-pred :: Enum a => a -> a
-pred = Prelude.pred
-
 -- | Generate a range of values from start to end (inclusive).
 range :: Enum a => a -> a -> [a]
 range start end = [start .. end]
@@ -170,11 +175,6 @@ range start end = [start .. end]
 maybeRem :: Int -> Int -> Maybe Int
 maybeRem _ 0 = Nothing
 maybeRem x y = Just (Prelude.rem x y)
-
--- | Integer remainder.
--- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
-rem :: Integral a => a -> a -> a
-rem = Prelude.rem
 
 -- | Return x rounded to the nearest integer, as a float.
 --
@@ -238,10 +238,6 @@ maybeSucc :: Int -> Maybe Int
 maybeSucc x
   | x == 2147483647 = Nothing
   | Prelude.otherwise = Just (x + 1)
-
--- | Return the successor (x + 1).
-succ :: Enum a => a -> a
-succ = Prelude.succ
 
 -- | Return the tangent of x radians.
 tan :: Double -> Double

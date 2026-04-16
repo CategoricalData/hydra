@@ -25,7 +25,9 @@ cat = Y.catMaybes
 compose :: (a -> Y.Maybe b) -> (b -> Y.Maybe c) -> (a -> Y.Maybe c)
 compose f g = \x -> f x >>= g
 
--- | Extract value from a Just, or error on Nothing (partial function).
+-- Bootstrap stub: removed in Phase 2.4 but retained here so stale dist
+-- modules continue to compile during Step 1 of sync-haskell. Not registered
+-- as a primitive.
 fromJust :: Y.Maybe a -> a
 fromJust = Y.fromJust
 

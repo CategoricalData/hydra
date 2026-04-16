@@ -52,15 +52,6 @@ mathAdd = subgroup "add" [
   where
     test name x y result = primCase name _math_add [int32 x, int32 y] (int32 result)
 
-mathDiv :: TTerm TestGroup
-mathDiv = subgroup "div" [
-  test "exact division" 10 2 5,
-  test "truncates toward negative infinity" 10 3 3,
-  test "negative dividend" (-10) 3 (-4),
-  test "negative divisor" 10 (-3) (-4)]
-  where
-    test name x y result = primCase name _math_div [int32 x, int32 y] (int32 result)
-
 mathEven :: TTerm TestGroup
 mathEven = subgroup "even" [
   test "even positive" 4 true,
@@ -114,15 +105,6 @@ mathMaybeMod = subgroup "maybeMod" [
   where
     test name x y result = primCase name _math_maybeMod [int32 x, int32 y] (optionalInt32 result)
 
-mathMod :: TTerm TestGroup
-mathMod = subgroup "mod" [
-  test "basic modulo" 10 3 1,
-  test "exact division" 10 2 0,
-  test "negative dividend" (-10) 3 2,
-  test "negative divisor" 10 (-3) (-2)]
-  where
-    test name x y result = primCase name _math_mod [int32 x, int32 y] (int32 result)
-
 mathMul :: TTerm TestGroup
 mathMul = subgroup "mul" [
   test "positive numbers" 3 5 15,
@@ -160,14 +142,6 @@ mathMaybePred = subgroup "maybePred" [
   where
     test name x result = primCase name _math_maybePred [int32 x] (optionalInt32 result)
 
-mathPred :: TTerm TestGroup
-mathPred = subgroup "pred" [
-  test "positive" 5 4,
-  test "zero" 0 (-1),
-  test "negative" (-5) (-6)]
-  where
-    test name x result = primCase name _math_pred [int32 x] (int32 result)
-
 mathRange :: TTerm TestGroup
 mathRange = subgroup "range" [
   test "ascending range" 1 5 [1, 2, 3, 4, 5],
@@ -186,15 +160,6 @@ mathMaybeRem = subgroup "maybeRem" [
   test "negative divisor" 10 (-3) (Just 1)]
   where
     test name x y result = primCase name _math_maybeRem [int32 x, int32 y] (optionalInt32 result)
-
-mathRem :: TTerm TestGroup
-mathRem = subgroup "rem" [
-  test "basic remainder" 10 3 1,
-  test "exact division" 10 2 0,
-  test "negative dividend" (-10) 3 (-1),
-  test "negative divisor" 10 (-3) 1]
-  where
-    test name x y result = primCase name _math_rem [int32 x, int32 y] (int32 result)
 
 mathSignum :: TTerm TestGroup
 mathSignum = subgroup "signum" [
@@ -221,14 +186,6 @@ mathMaybeSucc = subgroup "maybeSucc" [
   test "maxBound" 2147483647 Nothing]
   where
     test name x result = primCase name _math_maybeSucc [int32 x] (optionalInt32 result)
-
-mathSucc :: TTerm TestGroup
-mathSucc = subgroup "succ" [
-  test "positive" 5 6,
-  test "zero" 0 1,
-  test "negative" (-5) (-4)]
-  where
-    test name x result = primCase name _math_succ [int32 x] (int32 result)
 
 -- Float64 tests
 --
@@ -714,25 +671,20 @@ allTests = definitionInModule module_ "allTests" $
       -- Int32 primitives
       mathAbs,
       mathAdd,
-      mathDiv,
       mathEven,
       mathMax,
       mathMaybeDiv,
       mathMin,
       mathMaybeMod,
-      mathMod,
       mathMul,
       mathNegate,
       mathOdd,
       mathMaybePred,
-      mathPred,
       mathRange,
       mathMaybeRem,
-      mathRem,
       mathSignum,
       mathSub,
       mathMaybeSucc,
-      mathSucc,
       -- Float64 primitives
       mathAddFloat64,
       mathMulFloat64,

@@ -116,11 +116,11 @@ monomorphicPrimitiveTests = subgroup "monomorphic primitives" [
     (primitive _math_mul @@ int32 100 @@ int32 0)
     (int32 0),
   test "divide integers"
-    (primitive _math_div @@ int32 20 @@ int32 4)
-    (int32 5),
+    (primitive _math_maybeDiv @@ int32 20 @@ int32 4)
+    (Core.termMaybe $ just (int32 5)),
   test "modulo"
-    (primitive _math_mod @@ int32 17 @@ int32 5)
-    (int32 2),
+    (primitive _math_maybeMod @@ int32 17 @@ int32 5)
+    (Core.termMaybe $ just (int32 2)),
   -- Binary string functions
   test "splitOn basic"
     (primitive _strings_splitOn @@ string "," @@ string "a,b,c")
@@ -149,17 +149,17 @@ polymorphicPrimitiveTests = subgroup "polymorphic primitives" [
   test "length of single element list"
     (primitive _lists_length @@ list [true])
     (int32 1),
-  -- List head
-  test "head of integer list"
-    (primitive _lists_head @@ list [int32 10, int32 20, int32 30])
-    (int32 10),
-  test "head of string list"
-    (primitive _lists_head @@ list [string "first", string "second"])
-    (string "first"),
-  -- List last
-  test "last of integer list"
-    (primitive _lists_last @@ list [int32 10, int32 20, int32 30])
-    (int32 30),
+  -- List maybeHead
+  test "maybeHead of integer list"
+    (primitive _lists_maybeHead @@ list [int32 10, int32 20, int32 30])
+    (Core.termMaybe $ just (int32 10)),
+  test "maybeHead of string list"
+    (primitive _lists_maybeHead @@ list [string "first", string "second"])
+    (Core.termMaybe $ just (string "first")),
+  -- List maybeLast
+  test "maybeLast of integer list"
+    (primitive _lists_maybeLast @@ list [int32 10, int32 20, int32 30])
+    (Core.termMaybe $ just (int32 30)),
   -- List concat
   test "concat two integer lists"
     (primitive _lists_concat2 @@ list [int32 1, int32 2] @@ list [int32 3, int32 4])

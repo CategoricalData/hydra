@@ -84,7 +84,6 @@ _equality_min      = LibNames.equalityMin
 
 -- Lists
 _lists_apply       = LibNames.listsApply
-_lists_at          = LibNames.listsAt
 _lists_bind        = LibNames.listsBind
 _lists_concat      = LibNames.listsConcat
 _lists_concat2     = LibNames.listsConcat2
@@ -97,11 +96,8 @@ _lists_find        = LibNames.listsFind
 _lists_foldl       = LibNames.listsFoldl
 _lists_foldr       = LibNames.listsFoldr
 _lists_group       = LibNames.listsGroup
-_lists_head        = LibNames.listsHead
-_lists_init        = LibNames.listsInit
 _lists_intercalate = LibNames.listsIntercalate
 _lists_intersperse = LibNames.listsIntersperse
-_lists_last        = LibNames.listsLast
 _lists_length      = LibNames.listsLength
 _lists_map         = LibNames.listsMap
 _lists_maybeAt     = LibNames.listsMaybeAt
@@ -115,12 +111,10 @@ _lists_partition   = LibNames.listsPartition
 _lists_pure        = LibNames.listsPure
 _lists_replicate   = LibNames.listsReplicate
 _lists_reverse     = LibNames.listsReverse
-_lists_safeHead    = LibNames.listsSafeHead
 _lists_singleton   = LibNames.listsSingleton
 _lists_sort        = LibNames.listsSort
 _lists_sortOn      = LibNames.listsSortOn
 _lists_span        = LibNames.listsSpan
-_lists_tail        = LibNames.listsTail
 _lists_take        = LibNames.listsTake
 _lists_transpose   = LibNames.listsTranspose
 _lists_uncons      = LibNames.listsUncons
@@ -232,7 +226,6 @@ _math_atanh    = LibNames.mathAtanh
 _math_ceiling  = LibNames.mathCeiling
 _math_cos      = LibNames.mathCos
 _math_cosh     = LibNames.mathCosh
-_math_div      = LibNames.mathDiv
 _math_e        = LibNames.mathE
 _math_even     = LibNames.mathEven
 _math_exp      = LibNames.mathExp
@@ -243,7 +236,6 @@ _math_max      = LibNames.mathMax
 _math_maybeDiv = LibNames.mathMaybeDiv
 _math_min      = LibNames.mathMin
 _math_maybeMod = LibNames.mathMaybeMod
-_math_mod      = LibNames.mathMod
 _math_mul      = LibNames.mathMul
 _math_mulFloat64 = LibNames.mathMulFloat64
 _math_negate   = LibNames.mathNegate
@@ -252,10 +244,8 @@ _math_odd      = LibNames.mathOdd
 _math_pi       = LibNames.mathPi
 _math_pow      = LibNames.mathPow
 _math_maybePred = LibNames.mathMaybePred
-_math_pred     = LibNames.mathPred
 _math_range    = LibNames.mathRange
 _math_maybeRem = LibNames.mathMaybeRem
-_math_rem      = LibNames.mathRem
 _math_round         = LibNames.mathRound
 _math_roundBigfloat = LibNames.mathRoundBigfloat
 _math_roundFloat32  = LibNames.mathRoundFloat32
@@ -267,7 +257,6 @@ _math_sqrt     = LibNames.mathSqrt
 _math_sub      = LibNames.mathSub
 _math_subFloat64 = LibNames.mathSubFloat64
 _math_maybeSucc = LibNames.mathMaybeSucc
-_math_succ     = LibNames.mathSucc
 _math_tan      = LibNames.mathTan
 _math_tanh     = LibNames.mathTanh
 _math_truncate = LibNames.mathTruncate
@@ -278,7 +267,6 @@ _maybes_bind      = LibNames.maybesBind
 _maybes_cases     = LibNames.maybesCases
 _maybes_cat       = LibNames.maybesCat
 _maybes_compose   = LibNames.maybesCompose
-_maybes_fromJust  = LibNames.maybesFromJust
 _maybes_fromMaybe = LibNames.maybesFromMaybe
 _maybes_isJust    = LibNames.maybesIsJust
 _maybes_isNothing = LibNames.maybesIsNothing
@@ -320,7 +308,6 @@ _regex_split      = LibNames.regexSplit
 -- Strings
 _strings_cat         = LibNames.stringsCat
 _strings_cat2        = LibNames.stringsCat2
-_strings_charAt      = LibNames.stringsCharAt
 _strings_fromList    = LibNames.stringsFromList
 _strings_intercalate = LibNames.stringsIntercalate
 _strings_length      = LibNames.stringsLength
@@ -458,7 +445,6 @@ hydraLibEquality = standardLibrary _hydra_lib_equality [
 hydraLibLists :: Library
 hydraLibLists = standardLibrary _hydra_lib_lists [
     prim2     _lists_apply        Lists.apply         [_x, _y]     (list $ fun x_ y_) (list x_) (list y_),
-    prim2     _lists_at          Lists.at            [_x]         int32 (list x_) x_,
     prim2     _lists_bind        Lists.bind          [_x, _y]     (list x_) (fun x_ (list y_)) (list y_),
     prim1     _lists_concat      Lists.concat        [_x]         (list (list x_)) (list x_),
     prim2     _lists_concat2     Lists.concat2       [_x]         (list x_) (list x_) (list x_),
@@ -471,11 +457,8 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim3     _lists_foldl       Lists.foldl         [_y, _x]     (fun y_ (fun x_ y_)) y_ (list x_) y_,
     prim3     _lists_foldr       Lists.foldr         [_x, _y]     (fun x_ (fun y_ y_)) y_ (list x_) y_,
     prim1     _lists_group       Lists.group         [_xEq]       (list x_) (list (list x_)),
-    prim1     _lists_head        Lists.head          [_x]         (list x_) x_,
-    prim1     _lists_init        Lists.init          [_x]         (list x_) (list x_),
     prim2     _lists_intercalate Lists.intercalate   [_x]         (list x_) (list (list x_)) (list x_),
     prim2     _lists_intersperse Lists.intersperse   [_x]         x_ (list x_) (list x_),
-    prim1     _lists_last        Lists.last          [_x]         (list x_) x_,
     prim1     _lists_length      Lists.length        [_x]         (list x_) int32,
     prim2     _lists_map         Lists.map           [_x, _y]     (fun x_ y_) (list x_) (list y_),
     prim2     _lists_maybeAt     Lists.maybeAt       [_x]         int32 (list x_) (optional x_),
@@ -489,12 +472,10 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim1     _lists_pure        Lists.pure          [_x]         x_ (list x_),
     prim2     _lists_replicate   Lists.replicate     [_x]         int32 x_ (list x_),
     prim1     _lists_reverse     Lists.reverse       [_x]         (list x_) (list x_),
-    prim1     _lists_safeHead    Lists.safeHead      [_x]         (list x_) (optional x_),
     prim1     _lists_singleton   Lists.singleton     [_x]         x_ (list x_),
     prim1     _lists_sort        Lists.sort          [_xOrd]      (list x_) (list x_),
     prim2     _lists_sortOn      Lists.sortOn        [_x, _yOrd]  (fun x_ y_) (list x_) (list x_),
     prim2     _lists_span        Lists.span          [_x]         (fun x_ boolean) (list x_) (pair (list x_) (list x_)),
-    prim1     _lists_tail        Lists.tail          [_x]         (list x_) (list x_),
     prim2     _lists_take        Lists.take          [_x]         int32 (list x_) (list x_),
     prim1     _lists_transpose   Lists.transpose     [_x]         (list (list x_)) (list (list x_)),
     prim1     _lists_uncons      Lists.uncons        [_x]         (list x_) (optional (pair x_ (list x_))),
@@ -635,25 +616,20 @@ hydraLibMathInt32 :: Library
 hydraLibMathInt32 = standardLibrary _hydra_lib_math [
   prim1 _math_abs    Math.abs    [] int32 int32,
   prim2 _math_add    Math.add    [] int32 int32 int32,
-  prim2 _math_div    Math.div    [] int32 int32 int32,
   prim1 _math_even   Math.even   [] int32 boolean,
   prim2 _math_max    Math.max    [] int32 int32 int32,
   prim2 _math_maybeDiv Math.maybeDiv [] int32 int32 (optional int32),
   prim2 _math_min    Math.min    [] int32 int32 int32,
   prim2 _math_maybeMod Math.maybeMod [] int32 int32 (optional int32),
-  prim2 _math_mod    Math.mod    [] int32 int32 int32,
   prim2 _math_mul    Math.mul    [] int32 int32 int32,
   prim1 _math_negate Math.negate [] int32 int32,
   prim1 _math_odd    Math.odd    [] int32 boolean,
   prim1 _math_maybePred Math.maybePred [] int32 (optional int32),
-  prim1 _math_pred   Math.pred   [] int32 int32,
   prim2 _math_range  Math.range  [] int32 int32 (list int32),
   prim2 _math_maybeRem Math.maybeRem [] int32 int32 (optional int32),
-  prim2 _math_rem    Math.rem    [] int32 int32 int32,
   prim1 _math_signum Math.signum [] int32 int32,
   prim2 _math_sub    Math.sub    [] int32 int32 int32,
-  prim1 _math_maybeSucc Math.maybeSucc [] int32 (optional int32),
-  prim1 _math_succ   Math.succ   [] int32 int32]
+  prim1 _math_maybeSucc Math.maybeSucc [] int32 (optional int32)]
 
 hydraLibMaybes :: Library
 hydraLibMaybes = standardLibrary _hydra_lib_maybes [
@@ -662,7 +638,6 @@ hydraLibMaybes = standardLibrary _hydra_lib_maybes [
     prim3     _maybes_cases     Maybes.cases        [_x, _y]     (optional x_) y_ (fun x_ y_) y_,
     prim1     _maybes_cat       Maybes.cat          [_x]         (list $ optional x_) (list x_),
     prim3     _maybes_compose   Maybes.compose      [_x, _y, _z] (fun x_ $ optional y_) (fun y_ $ optional z_) x_ (optional z_),
-    prim1     _maybes_fromJust  Maybes.fromJust     [_x]         (optional x_) x_,
     prim2     _maybes_fromMaybe Maybes.fromMaybe    [_x]         x_ (optional x_) x_,
     prim1     _maybes_isJust    Maybes.isJust       [_x]         (optional x_) boolean,
     prim1     _maybes_isNothing Maybes.isNothing    [_x]         (optional x_) boolean,
@@ -708,7 +683,6 @@ hydraLibStrings :: Library
 hydraLibStrings = standardLibrary _hydra_lib_strings [
   prim1 _strings_cat         Strings.cat         [] (list string) string,
   prim2 _strings_cat2        Strings.cat2        [] string string string,
-  prim2 _strings_charAt      Strings.charAt      [] int32 string int32,
   prim1 _strings_fromList    Strings.fromList    [] (list int32) string,
   prim2 _strings_intercalate Strings.intercalate [] string (list string) string,
   prim1 _strings_length      Strings.length      [] string int32,
