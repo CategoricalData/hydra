@@ -49,6 +49,7 @@ module_ = Module ns definitions
   where
     definitions = [
       toDefinition applicationToExpr,
+      toDefinition axiomDeclarationToExpr,
       toDefinition binderToExpr,
       toDefinition commentToExpr,
       toDefinition constructorToExpr,
@@ -61,6 +62,10 @@ module_ = Module ns definitions
       toDefinition localityToExpr,
       toDefinition matchToExpr,
       toDefinition moduleDefinitionToExpr,
+      toDefinition pattern0ToExpr,
+      toDefinition pattern10ToExpr,
+      toDefinition pattern1ToExpr,
+      toDefinition patternToExpr,
       toDefinition qualidToExpr,
       toDefinition recordDefinitionToExpr,
       toDefinition recordFieldToExpr,
@@ -357,6 +362,67 @@ applicationToExpr = define "applicationToExpr" $
       kw "@",
       qualidAnnotatedToExpr (project C._AnnotatedApplication C._AnnotatedApplication_annot @@ var "aa")]]
 
+-- | Serialize an AxiomDeclaration: `Axiom name : type.`
+axiomDeclarationToExpr :: TTermDefinition (C.AxiomDeclaration -> Expr)
+axiomDeclarationToExpr = define "axiomDeclarationToExpr" $
+  lambda "a" $
+    withDot $ sp [
+      kw "Axiom",
+      identToExpr @@ (project C._AxiomDeclaration C._AxiomDeclaration_name @@ var "a"),
+      kw ":",
+      typeToExpr @@ (project C._AxiomDeclaration C._AxiomDeclaration_type @@ var "a")]
+
+-- | Serialize a Pattern0 (primitive / grouped pattern)
+pattern0ToExpr :: TTermDefinition (C.Pattern0 -> Expr)
+pattern0ToExpr = define "pattern0ToExpr" $
+  lambda "p" $ cases C._Pattern0 (var "p") Nothing [
+    C._Pattern0_qualid>>: lambda "q" $ qualidToExpr @@ var "q",
+    C._Pattern0_qualIdAndPattern>>: constant $ kw "...",
+    C._Pattern0_placeholder>>: constant $ kw "_",
+    C._Pattern0_parens>>: lambda "ps" $ Serialization.parens @@
+      (Serialization.infixWsList @@ string ", " @@
+        Lists.map (lambda "p2" $ patternToExpr @@ var "p2") (var "ps")),
+    C._Pattern0_number>>: lambda "n" $ lets [
+      "v">: unwrap C._Number @@ var "n"] $
+      Serialization.cst @@ (Literals.showBigfloat (var "v")),
+    C._Pattern0_string>>: lambda "s" $ sp [
+      kw "\"", Serialization.cst @@ (unwrap C._String @@ var "s"), kw "\""]]
+
+-- | Serialize a Pattern1 (scoped pattern; we ignore the scope for now)
+pattern1ToExpr :: TTermDefinition (C.Pattern1 -> Expr)
+pattern1ToExpr = define "pattern1ToExpr" $
+  lambda "p" $ pattern0ToExpr @@ (project C._Pattern1 C._Pattern1_pattern @@ var "p")
+
+-- | Serialize a Pattern10 (as-binding, juxtaposition, or qualid-with-args)
+pattern10ToExpr :: TTermDefinition (C.Pattern10 -> Expr)
+pattern10ToExpr = define "pattern10ToExpr" $
+  lambda "p" $ cases C._Pattern10 (var "p") Nothing [
+    C._Pattern10_as>>: lambda "pa" $ sp [
+      pattern1ToExpr @@ (project C._Pattern10_As C._Pattern10_As_pattern @@ var "pa"),
+      kw "as",
+      Maybes.maybe (kw "_")
+        (lambda "i" $ identToExpr @@ var "i")
+        (unwrap C._Name @@ (project C._Pattern10_As C._Pattern10_As_as @@ var "pa"))],
+    C._Pattern10_patterns>>: lambda "pps" $ lets [
+      "first">: pattern1ToExpr @@ (project C._Pattern10_Patterns C._Pattern10_Patterns_pattern @@ var "pps"),
+      "rest">: Lists.map (lambda "p2" $ pattern1ToExpr @@ var "p2")
+        (project C._Pattern10_Patterns C._Pattern10_Patterns_patterns @@ var "pps")] $
+      Serialization.spaceSep @@ Lists.cons (var "first") (var "rest"),
+    C._Pattern10_qualiid>>: lambda "pq" $ lets [
+      "q">: qualidToExpr @@ (project C._Pattern10_Qualid C._Pattern10_Qualid_qualid @@ var "pq"),
+      "args">: Lists.map (lambda "p2" $ pattern1ToExpr @@ var "p2")
+        (project C._Pattern10_Qualid C._Pattern10_Qualid_patterns @@ var "pq")] $
+      Logic.ifElse (Lists.null (var "args"))
+        (var "q")
+        (Serialization.spaceSep @@ Lists.cons (var "q") (var "args"))]
+
+-- | Serialize a Pattern (top-level; we delegate to Pattern10 and ignore the annotation term)
+patternToExpr :: TTermDefinition (C.Pattern -> Expr)
+patternToExpr = define "patternToExpr" $
+  lambda "p" $ cases C._Pattern (var "p") Nothing [
+    C._Pattern_pattern>>: lambda "p10" $ pattern10ToExpr @@ var "p10",
+    C._Pattern_term>>: constant $ kw "_"]
+
 -- | Serialize a Match expression
 matchToExpr :: TTermDefinition (C.Match -> Expr)
 matchToExpr = define "matchToExpr" $
@@ -375,7 +441,11 @@ matchToExpr = define "matchToExpr" $
       (project C._Match C._Match_return @@ var "m"),
     "eqs">: Lists.map
       (lambda "eq" $ lets [
-        "pats">: kw "| ...",
+        "patGroups">: Lists.map
+          (lambda "grp" $ Serialization.spaceSep @@
+            Lists.map (lambda "p" $ patternToExpr @@ var "p") (var "grp"))
+          (project C._Equation C._Equation_pattern @@ var "eq"),
+        "pats">: Serialization.infixWsList @@ string " | " @@ (var "patGroups"),
         "body">: termToExpr @@ (project C._Equation C._Equation_term @@ var "eq")] $
         sp [kw "|", var "pats", kw "=>", var "body"])
       (project C._Match C._Match_equations @@ var "m")] $
@@ -464,7 +534,8 @@ inductiveBodyToExpr = define "inductiveBodyToExpr" $
         list [kw ":="]])],
       var "constrs"])
 
--- | Serialize an InductiveDefinition
+-- | Serialize an InductiveDefinition.
+-- Produces "[Locality] Inductive body1 with body2 with body3." for mutual inductives.
 inductiveDefinitionToExpr :: TTermDefinition (C.InductiveDefinition -> Expr)
 inductiveDefinitionToExpr = define "inductiveDefinitionToExpr" $
   lambda "id" $ lets [
@@ -475,12 +546,15 @@ inductiveDefinitionToExpr = define "inductiveDefinitionToExpr" $
       (kw "CoInductive")
       (kw "Inductive"),
     "bodyExprs">: Lists.map (lambda "b" $ inductiveBodyToExpr @@ var "b")
-      (project C._InductiveDefinition C._InductiveDefinition_bodies @@ var "id")] $
-    withDot $ Serialization.newlineSep @@ Lists.concat (list [
-      list [Serialization.spaceSep @@ Lists.concat (list [
-        var "locPart",
-        list [var "kwPart"]])],
-      var "bodyExprs"])
+      (project C._InductiveDefinition C._InductiveDefinition_bodies @@ var "id"),
+    "firstBody">: Lists.head $ var "bodyExprs",
+    "restBodies">: Lists.map
+      (lambda "b" $ Serialization.spaceSep @@ list [kw "with", var "b"])
+      (Lists.tail $ var "bodyExprs"),
+    "firstLine">: Serialization.spaceSep @@ Lists.concat (list [
+      var "locPart",
+      list [var "kwPart", var "firstBody"]])] $
+    withDot $ Serialization.newlineSep @@ Lists.cons (var "firstLine") (var "restBodies")
 
 -- | Serialize a RecordField
 recordFieldToExpr :: TTermDefinition (C.RecordField -> Expr)
@@ -616,6 +690,7 @@ sectionDefinitionToExpr = define "sectionDefinitionToExpr" $
 sentenceContentToExpr :: TTermDefinition (C.SentenceContent -> Expr)
 sentenceContentToExpr = define "sentenceContentToExpr" $
   lambda "sc" $ cases C._SentenceContent (var "sc") Nothing [
+    C._SentenceContent_axiom>>: lambda "a" $ axiomDeclarationToExpr @@ var "a",
     C._SentenceContent_definition>>: lambda "d" $ definitionToExpr @@ var "d",
     C._SentenceContent_fixpoint>>: lambda "f" $ fixpointDefinitionToExpr @@ var "f",
     C._SentenceContent_inductive>>: lambda "i" $ inductiveDefinitionToExpr @@ var "i",

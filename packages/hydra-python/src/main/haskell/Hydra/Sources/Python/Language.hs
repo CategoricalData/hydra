@@ -98,6 +98,7 @@ pythonLanguage = define "pythonLanguage" $
     "literalVariants">: Sets.fromList $ list [
       Variants.literalVariantBinary, -- bytes
       Variants.literalVariantBoolean, -- bool
+      Variants.literalVariantDecimal, -- decimal.Decimal
       Variants.literalVariantFloat, -- (see float types)
       Variants.literalVariantInteger, -- (see integer types)
       Variants.literalVariantString], -- str

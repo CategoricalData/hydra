@@ -172,6 +172,8 @@ literals_bigfloat_to_float64 = hydra.core.Name("hydra.lib.literals.bigfloatToFlo
 
 literals_bigint_to_bigfloat = hydra.core.Name("hydra.lib.literals.bigintToBigfloat")
 
+literals_bigint_to_decimal = hydra.core.Name("hydra.lib.literals.bigintToDecimal")
+
 literals_bigint_to_int16 = hydra.core.Name("hydra.lib.literals.bigintToInt16")
 
 literals_bigint_to_int32 = hydra.core.Name("hydra.lib.literals.bigintToInt32")
@@ -192,9 +194,19 @@ literals_binary_to_bytes = hydra.core.Name("hydra.lib.literals.binaryToBytes")
 
 literals_binary_to_string = hydra.core.Name("hydra.lib.literals.binaryToString")
 
+literals_decimal_to_bigint = hydra.core.Name("hydra.lib.literals.decimalToBigint")
+
+literals_decimal_to_float32 = hydra.core.Name("hydra.lib.literals.decimalToFloat32")
+
+literals_decimal_to_float64 = hydra.core.Name("hydra.lib.literals.decimalToFloat64")
+
 literals_float32_to_bigfloat = hydra.core.Name("hydra.lib.literals.float32ToBigfloat")
 
+literals_float32_to_decimal = hydra.core.Name("hydra.lib.literals.float32ToDecimal")
+
 literals_float64_to_bigfloat = hydra.core.Name("hydra.lib.literals.float64ToBigfloat")
+
+literals_float64_to_decimal = hydra.core.Name("hydra.lib.literals.float64ToDecimal")
 
 literals_int16_to_bigint = hydra.core.Name("hydra.lib.literals.int16ToBigint")
 
@@ -209,6 +221,8 @@ literals_read_bigfloat = hydra.core.Name("hydra.lib.literals.readBigfloat")
 literals_read_bigint = hydra.core.Name("hydra.lib.literals.readBigint")
 
 literals_read_boolean = hydra.core.Name("hydra.lib.literals.readBoolean")
+
+literals_read_decimal = hydra.core.Name("hydra.lib.literals.readDecimal")
 
 literals_read_float32 = hydra.core.Name("hydra.lib.literals.readFloat32")
 
@@ -237,6 +251,8 @@ literals_show_bigfloat = hydra.core.Name("hydra.lib.literals.showBigfloat")
 literals_show_bigint = hydra.core.Name("hydra.lib.literals.showBigint")
 
 literals_show_boolean = hydra.core.Name("hydra.lib.literals.showBoolean")
+
+literals_show_decimal = hydra.core.Name("hydra.lib.literals.showDecimal")
 
 literals_show_float32 = hydra.core.Name("hydra.lib.literals.showFloat32")
 

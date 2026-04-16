@@ -988,6 +988,22 @@
           "variables": []}}},
     {
       "type": {
+        "name": "hydra.coq.syntax.AxiomDeclaration",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "An Axiom declaration: `Axiom <name> : <type>.`"}}}],
+              "body": {
+                "record": [
+                  {"name": "name", "type": {"variable": "hydra.coq.syntax.Ident"}},
+                  {"name": "type", "type": {"variable": "hydra.coq.syntax.Type"}}]}}},
+          "variables": []}}},
+    {
+      "type": {
         "name": "hydra.coq.syntax.Comment",
         "type": {
           "type": {
@@ -1337,6 +1353,9 @@
                   "@value": {"literal": {"string": "The content of a top-level sentence"}}}],
               "body": {
                 "union": [
+                  {
+                    "name": "axiom",
+                    "type": {"variable": "hydra.coq.syntax.AxiomDeclaration"}},
                   {
                     "name": "definition",
                     "type": {"variable": "hydra.coq.syntax.Definition"}},

@@ -319,6 +319,8 @@ literal = define "Literal" $
       doc "A binary literal" T.binary,
     "boolean">:
       doc "A boolean literal" T.boolean,
+    "decimal">:
+      doc "An arbitrary-precision decimal literal" T.decimal,
     "float">:
       doc "A floating-point literal"
       floatValue,
@@ -336,6 +338,8 @@ literalType = define "LiteralType" $
        doc "The type of a binary (byte string) value" T.unit,
     "boolean">:
       doc "The type of a boolean (true/false) value" T.unit,
+    "decimal">:
+      doc "The type of an arbitrary-precision decimal value" T.unit,
     "float">:
       doc "The type of a floating-point value"
       floatType,

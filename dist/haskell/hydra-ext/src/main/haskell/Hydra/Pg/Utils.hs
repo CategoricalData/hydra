@@ -23,6 +23,7 @@ import qualified Hydra.Pg.Mapping as Mapping
 import qualified Hydra.Pg.Model as PgModel
 import qualified Hydra.Show.Core as ShowCore
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Default Tinkerpop annotation schema
 defaultTinkerpopAnnotations :: Mapping.AnnotationSchema

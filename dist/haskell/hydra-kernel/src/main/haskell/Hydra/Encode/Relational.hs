@@ -10,6 +10,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Relational as Relational
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 columnName :: Relational.ColumnName -> Core.Term
 columnName x =

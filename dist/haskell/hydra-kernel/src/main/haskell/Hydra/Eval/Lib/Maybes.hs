@@ -13,6 +13,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Show.Core as ShowCore
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Interpreter-friendly applicative apply for Maybe terms.
 apply :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term

@@ -6,6 +6,7 @@ module Hydra.Eval.Lib.Logic where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Interpreter-friendly logical AND.
 and :: t0 -> t1 -> Core.Term -> Core.Term -> Either t2 Core.Term

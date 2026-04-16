@@ -13,6 +13,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 annotatedTerm :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.AnnotatedTerm
 annotatedTerm cx raw =
@@ -332,6 +333,11 @@ literal cx raw =
                           Core.LiteralBoolean v2 -> Right v2
                           _ -> Left (Errors.DecodingError "expected boolean literal")
                         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (Core.Name "decimal", (\input -> Eithers.map (\t -> Core.LiteralDecimal t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                        Core.TermLiteral v1 -> case v1 of
+                          Core.LiteralDecimal v2 -> Right v2
+                          _ -> Left (Errors.DecodingError "expected decimal literal")
+                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
                       (Core.Name "float", (\input -> Eithers.map (\t -> Core.LiteralFloat t) (floatValue cx input))),
                       (Core.Name "integer", (\input -> Eithers.map (\t -> Core.LiteralInteger t) (integerValue cx input))),
                       (Core.Name "string", (\input -> Eithers.map (\t -> Core.LiteralString t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
@@ -356,6 +362,7 @@ literalType cx raw =
                     Maps.fromList [
                       (Core.Name "binary", (\input -> Eithers.map (\t -> Core.LiteralTypeBinary) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "boolean", (\input -> Eithers.map (\t -> Core.LiteralTypeBoolean) (ExtractCore.decodeUnit cx input))),
+                      (Core.Name "decimal", (\input -> Eithers.map (\t -> Core.LiteralTypeDecimal) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "float", (\input -> Eithers.map (\t -> Core.LiteralTypeFloat t) (floatType cx input))),
                       (Core.Name "integer", (\input -> Eithers.map (\t -> Core.LiteralTypeInteger t) (integerType cx input))),
                       (Core.Name "string", (\input -> Eithers.map (\t -> Core.LiteralTypeString) (ExtractCore.decodeUnit cx input)))]

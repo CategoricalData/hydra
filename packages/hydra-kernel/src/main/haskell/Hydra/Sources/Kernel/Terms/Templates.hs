@@ -113,6 +113,7 @@ instantiateTemplate = define "instantiateTemplate" $
     Nothing [
     _LiteralType_binary>>: constant (Core.literalString (string "")),
     _LiteralType_boolean>>: constant (Core.literalBoolean false),
+    _LiteralType_decimal>>: constant (Core.literalDecimal (decimal 0)),
     _LiteralType_integer>>: "it" ~> Core.literalInteger (var "forInteger" @@ var "it"),
     _LiteralType_float>>: "ft" ~> Core.literalFloat (var "forFloat" @@ var "ft"),
     _LiteralType_string>>: constant (Core.literalString (string ""))]) $

@@ -6,6 +6,7 @@ import Hydra.Core
 
 import Data.Int
 import qualified Data.ByteString as B
+import qualified Data.Scientific as Sci
 
 
 -- | Create an arbitrary-precision floating point literal
@@ -27,6 +28,11 @@ binary = LiteralBinary
 -- Example: boolean True
 boolean :: Bool -> Literal
 boolean = LiteralBoolean
+
+-- | Create an arbitrary-precision decimal literal
+-- Example: decimal (Sci.scientific 314159265359 (-11))
+decimal :: Sci.Scientific -> Literal
+decimal = LiteralDecimal
 
 -- | Create a 32-bit floating point literal
 -- Example: float32 3.14

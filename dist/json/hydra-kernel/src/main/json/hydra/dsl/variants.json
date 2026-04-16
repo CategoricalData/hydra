@@ -317,6 +317,51 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.dsl.variants.literalVariantDecimal",
+        "term": {
+          "wrap": {
+            "body": {
+              "inject": {
+                "field": {
+                  "name": "inject",
+                  "term": {
+                    "record": {
+                      "fields": [
+                        {
+                          "name": "typeName",
+                          "term": {
+                            "wrap": {
+                              "body": {"literal": {"string": "hydra.variants.LiteralVariant"}},
+                              "typeName": "hydra.core.Name"}}},
+                        {
+                          "name": "field",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "name",
+                                  "term": {
+                                    "wrap": {
+                                      "body": {"literal": {"string": "decimal"}},
+                                      "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "term",
+                                  "term": {
+                                    "inject": {
+                                      "field": {"name": "unit", "term": {"unit": {}}},
+                                      "typeName": "hydra.core.Term"}}}],
+                              "typeName": "hydra.core.Field"}}}],
+                      "typeName": "hydra.core.Injection"}}},
+                "typeName": "hydra.core.Term"}},
+            "typeName": "hydra.phantoms.TTerm"}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.LiteralVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.literalVariantFloat",
         "term": {
           "wrap": {

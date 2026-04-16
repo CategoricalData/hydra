@@ -13,6 +13,7 @@ import qualified Hydra.Strip as Strip
 import qualified Hydra.Tinkerpop.Features as Features
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Populate language constraints based on TinkerPop Graph.Features
 tinkerpopLanguage :: Coders.LanguageName -> Features.Features -> Features.ExtraFeatures t0 -> Coders.Language

@@ -95,6 +95,11 @@ public interface Encode {
       }
 
       @Override
+      public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.Literal.Decimal d) {
+        return hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.Number_(hydra.lib.literals.Float64ToBigfloat.apply(hydra.lib.literals.DecimalToFloat64.apply((d).value))));
+      }
+
+      @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.Literal.Float_ f) {
         return hydra.json.Encode.<T0>encodeFloat((f).value);
       }

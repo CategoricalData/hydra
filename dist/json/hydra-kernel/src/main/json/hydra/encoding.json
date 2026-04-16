@@ -2991,6 +2991,96 @@
                         "domain": {"unit": {}},
                         "parameter": "_"}}},
                   {
+                    "name": "decimal",
+                    "term": {
+                      "lambda": {
+                        "body": {
+                          "inject": {
+                            "field": {
+                              "name": "lambda",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "parameter",
+                                      "term": {
+                                        "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "domain",
+                                      "term": {
+                                        "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                    {
+                                      "name": "body",
+                                      "term": {
+                                        "inject": {
+                                          "field": {
+                                            "name": "inject",
+                                            "term": {
+                                              "record": {
+                                                "fields": [
+                                                  {
+                                                    "name": "typeName",
+                                                    "term": {
+                                                      "wrap": {
+                                                        "body": {"literal": {"string": "hydra.core.Term"}},
+                                                        "typeName": "hydra.core.Name"}}},
+                                                  {
+                                                    "name": "field",
+                                                    "term": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {
+                                                            "name": "name",
+                                                            "term": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "literal"}},
+                                                                "typeName": "hydra.core.Name"}}},
+                                                          {
+                                                            "name": "term",
+                                                            "term": {
+                                                              "inject": {
+                                                                "field": {
+                                                                  "name": "inject",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "typeName",
+                                                                          "term": {
+                                                                            "wrap": {
+                                                                              "body": {"literal": {"string": "hydra.core.Literal"}},
+                                                                              "typeName": "hydra.core.Name"}}},
+                                                                        {
+                                                                          "name": "field",
+                                                                          "term": {
+                                                                            "record": {
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "name",
+                                                                                  "term": {
+                                                                                    "wrap": {
+                                                                                      "body": {"literal": {"string": "decimal"}},
+                                                                                      "typeName": "hydra.core.Name"}}},
+                                                                                {
+                                                                                  "name": "term",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "field": {
+                                                                                        "name": "variable",
+                                                                                        "term": {
+                                                                                          "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                                      "typeName": "hydra.core.Term"}}}],
+                                                                              "typeName": "hydra.core.Field"}}}],
+                                                                      "typeName": "hydra.core.Injection"}}},
+                                                                "typeName": "hydra.core.Term"}}}],
+                                                        "typeName": "hydra.core.Field"}}}],
+                                                "typeName": "hydra.core.Injection"}}},
+                                          "typeName": "hydra.core.Term"}}}],
+                                  "typeName": "hydra.core.Lambda"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "domain": {"unit": {}},
+                        "parameter": "_"}}},
+                  {
                     "name": "string",
                     "term": {
                       "lambda": {

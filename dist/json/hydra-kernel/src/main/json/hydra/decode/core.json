@@ -7265,6 +7265,162 @@
                                                                       "pair": {
                                                                         "@first": {
                                                                           "wrap": {
+                                                                            "body": {"literal": {"string": "decimal"}},
+                                                                            "typeName": "hydra.core.Name"}},
+                                                                        "@second": {
+                                                                          "lambda": {
+                                                                            "body": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "input"},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "cx"},
+                                                                                        "function": {
+                                                                                          "lambda": {
+                                                                                            "body": {
+                                                                                              "lambda": {
+                                                                                                "body": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "raw"},
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "cx"},
+                                                                                                            "function": {"variable": "hydra.extract.core.stripWithDecodingError"}}}}},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "lambda": {
+                                                                                                            "body": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "stripped"},
+                                                                                                                "function": {
+                                                                                                                  "cases": {
+                                                                                                                    "cases": [
+                                                                                                                      {
+                                                                                                                        "name": "literal",
+                                                                                                                        "term": {
+                                                                                                                          "lambda": {
+                                                                                                                            "body": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {"variable": "v"},
+                                                                                                                                "function": {
+                                                                                                                                  "cases": {
+                                                                                                                                    "cases": [
+                                                                                                                                      {
+                                                                                                                                        "name": "decimal",
+                                                                                                                                        "term": {
+                                                                                                                                          "lambda": {
+                                                                                                                                            "body": {
+                                                                                                                                              "typeApplication": {
+                                                                                                                                                "body": {
+                                                                                                                                                  "typeApplication": {
+                                                                                                                                                    "body": {"either": {"@right": {"variable": "d"}}},
+                                                                                                                                                    "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                                                                                                                "type": {"literal": {"decimal": {}}}}},
+                                                                                                                                            "domain": {"literal": {"decimal": {}}},
+                                                                                                                                            "parameter": "d"}}}],
+                                                                                                                                    "default": {
+                                                                                                                                      "typeApplication": {
+                                                                                                                                        "body": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {
+                                                                                                                                              "either": {
+                                                                                                                                                "@left": {
+                                                                                                                                                  "wrap": {
+                                                                                                                                                    "body": {"literal": {"string": "expected decimal literal"}},
+                                                                                                                                                    "typeName": "hydra.errors.DecodingError"}}}},
+                                                                                                                                            "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                                                                                                        "type": {"literal": {"decimal": {}}}}},
+                                                                                                                                    "typeName": "hydra.core.Literal"}}}},
+                                                                                                                            "domain": {"variable": "hydra.core.Literal"},
+                                                                                                                            "parameter": "v"}}}],
+                                                                                                                    "default": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {
+                                                                                                                              "either": {
+                                                                                                                                "@left": {
+                                                                                                                                  "wrap": {
+                                                                                                                                    "body": {"literal": {"string": "expected literal"}},
+                                                                                                                                    "typeName": "hydra.errors.DecodingError"}}}},
+                                                                                                                            "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                                                                                        "type": {"literal": {"decimal": {}}}}},
+                                                                                                                    "typeName": "hydra.core.Term"}}}},
+                                                                                                            "domain": {"variable": "hydra.core.Term"},
+                                                                                                            "parameter": "stripped"}},
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "argument": {
+                                                                                                              "lambda": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {"either": {"@left": {"variable": "err"}}},
+                                                                                                                        "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                                                                                    "type": {"literal": {"decimal": {}}}}},
+                                                                                                                "domain": {"variable": "hydra.errors.DecodingError"},
+                                                                                                                "parameter": "err"}},
+                                                                                                            "function": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {"variable": "hydra.lib.eithers.either"},
+                                                                                                                        "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                "type": {
+                                                                                                                  "either": {
+                                                                                                                    "left": {"variable": "hydra.errors.DecodingError"},
+                                                                                                                    "right": {"literal": {"decimal": {}}}}}}}}}}}}},
+                                                                                                "domain": {"variable": "hydra.core.Term"},
+                                                                                                "parameter": "raw"}},
+                                                                                            "domain": {"variable": "hydra.graph.Graph"},
+                                                                                            "parameter": "cx"}}}}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "lambda": {
+                                                                                        "body": {
+                                                                                          "inject": {
+                                                                                            "field": {"name": "decimal", "term": {"variable": "t"}},
+                                                                                            "typeName": "hydra.core.Literal"}},
+                                                                                        "domain": {"literal": {"decimal": {}}},
+                                                                                        "parameter": "t"}},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"variable": "hydra.lib.eithers.map"},
+                                                                                                "type": {"literal": {"decimal": {}}}}},
+                                                                                            "type": {"variable": "hydra.core.Literal"}}},
+                                                                                        "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
+                                                                            "domain": {"variable": "hydra.core.Term"},
+                                                                            "parameter": "input"}}}},
+                                                                    "type": {"variable": "hydra.core.Name"}}},
+                                                                "type": {
+                                                                  "function": {
+                                                                    "codomain": {
+                                                                      "either": {
+                                                                        "left": {"variable": "hydra.errors.DecodingError"},
+                                                                        "right": {"variable": "hydra.core.Literal"}}},
+                                                                    "domain": {"variable": "hydra.core.Term"}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {
+                                                                          "wrap": {
                                                                             "body": {"literal": {"string": "float"}},
                                                                             "typeName": "hydra.core.Name"}},
                                                                         "@second": {
@@ -7839,6 +7995,69 @@
                                                                                         "body": {
                                                                                           "inject": {
                                                                                             "field": {"name": "boolean", "term": {"variable": "t"}},
+                                                                                            "typeName": "hydra.core.LiteralType"}},
+                                                                                        "domain": {"unit": {}},
+                                                                                        "parameter": "t"}},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"unit": {}}}},
+                                                                                            "type": {"variable": "hydra.core.LiteralType"}}},
+                                                                                        "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
+                                                                            "domain": {"variable": "hydra.core.Term"},
+                                                                            "parameter": "input"}}}},
+                                                                    "type": {"variable": "hydra.core.Name"}}},
+                                                                "type": {
+                                                                  "function": {
+                                                                    "codomain": {
+                                                                      "either": {
+                                                                        "left": {"variable": "hydra.errors.DecodingError"},
+                                                                        "right": {"variable": "hydra.core.LiteralType"}}},
+                                                                    "domain": {"variable": "hydra.core.Term"}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {
+                                                                          "wrap": {
+                                                                            "body": {"literal": {"string": "decimal"}},
+                                                                            "typeName": "hydra.core.Name"}},
+                                                                        "@second": {
+                                                                          "lambda": {
+                                                                            "body": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "input"},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "cx"},
+                                                                                        "function": {
+                                                                                          "lambda": {
+                                                                                            "body": {
+                                                                                              "lambda": {
+                                                                                                "body": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "t"},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "cx"},
+                                                                                                        "function": {"variable": "hydra.extract.core.decodeUnit"}}}}},
+                                                                                                "domain": {"variable": "hydra.core.Term"},
+                                                                                                "parameter": "t"}},
+                                                                                            "domain": {"variable": "hydra.graph.Graph"},
+                                                                                            "parameter": "cx"}}}}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "lambda": {
+                                                                                        "body": {
+                                                                                          "inject": {
+                                                                                            "field": {"name": "decimal", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.core.LiteralType"}},
                                                                                         "domain": {"unit": {}},
                                                                                         "parameter": "t"}},

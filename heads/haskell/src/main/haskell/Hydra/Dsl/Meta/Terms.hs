@@ -17,6 +17,7 @@ import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Data.ByteString as B
 import qualified Data.List as L
 import qualified Data.Map as M
+import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import Data.Int
@@ -73,6 +74,15 @@ bigint = bigintLift . TTerm . Terms.bigint
 -- Example: bigintLift (varPhantom "x" :: TTerm Integer)
 bigintLift :: TTerm Integer -> TTerm Term
 bigintLift = Core.termLiteral . Core.literalInteger . Core.integerValueBigint
+
+-- | Create a term-encoded arbitrary-precision exact decimal literal
+-- Example: decimal 42
+decimal :: Sci.Scientific -> TTerm Term
+decimal = decimalLift . TTerm . Terms.decimal
+
+-- | Lift a TTerm Scientific to a term-encoded decimal literal
+decimalLift :: TTerm Sci.Scientific -> TTerm Term
+decimalLift = Core.termLiteral . Core.literalDecimal
 
 -- | Create a term-encoded boolean literal
 -- Example: boolean True

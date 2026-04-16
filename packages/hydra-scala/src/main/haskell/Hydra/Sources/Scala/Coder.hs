@@ -468,6 +468,7 @@ encodeLiteral = def "encodeLiteral" $
     (cases _Literal (var "av") (Just $ left (Error.errorOther $ Error.otherError (string "unexpected literal"))) [
       _Literal_binary>>: ("b" ~> right (inject _Lit (Name "bytes") (Literals.binaryToBytes (var "b")))),
       _Literal_boolean>>: ("b" ~> right (inject _Lit _Lit_boolean (var "b"))),
+      _Literal_decimal>>: ("d" ~> right (inject _Lit _Lit_string (Literals.showDecimal (var "d")))),
       _Literal_float>>: ("fv" ~> cases _FloatValue (var "fv") (Just $ left (Error.errorOther $ Error.otherError (string "unexpected float value"))) [
         _FloatValue_bigfloat>>: ("bf" ~> right (inject _Lit _Lit_double (Literals.bigfloatToFloat64 (var "bf")))),
         _FloatValue_float32>>: ("f" ~> right (inject _Lit _Lit_float (var "f"))),
@@ -679,6 +680,7 @@ encodeTerm = def "encodeTerm" $
             "litData">: inject _Data _Data_lit (var "slit")] $
             -- Wrap BigInt and BigDecimal literals in constructor calls
             cases _Literal (var "v") (Just $ right (var "litData")) [
+              _Literal_decimal>>: (constant $ right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigDecimal") @@ list [var "litData"])),
               _Literal_integer>>: ("iv" ~> cases _IntegerValue (var "iv") (Just $ right (var "litData")) [
                 _IntegerValue_bigint>>: ("bi" ~> right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigInt") @@ list [inject _Data _Data_lit (inject _Lit _Lit_string (Literals.showBigint (var "bi")))])),
                 _IntegerValue_uint64>>: ("ui" ~> right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigInt") @@ list [inject _Data _Data_lit (inject _Lit _Lit_string (Literals.showBigint (Literals.uint64ToBigint (var "ui"))))]))]),
@@ -881,6 +883,7 @@ encodeType = def "encodeType" $
       _Type_literal>>: ("lt" ~> cases _LiteralType (var "lt") (Just $ left (Error.errorOther $ Error.otherError (string "unsupported literal type"))) [
         _LiteralType_binary>>: (constant $ right (ScalaUtilsSource.stapply @@ stref (string "Array") @@ list [stref (string "Byte")])),
         _LiteralType_boolean>>: (constant $ right (stref (string "Boolean"))),
+        _LiteralType_decimal>>: (constant $ right (stref (string "BigDecimal"))),
         _LiteralType_float>>: ("ft" ~> cases _FloatType (var "ft") (Just $ left (Error.errorOther $ Error.otherError (string "unsupported float type"))) [
           _FloatType_bigfloat>>: (constant $ right (stref (string "BigDecimal"))),
           _FloatType_float32>>: (constant $ right (stref (string "Float"))),

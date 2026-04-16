@@ -9,6 +9,7 @@ import qualified Hydra.Pg.Model as Model
 import qualified Hydra.Pg.Query as Query
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 aggregationQueryCount :: Phantoms.TTerm Query.AggregationQuery
 aggregationQueryCount =

@@ -127,16 +127,6 @@ executables:
     dependencies:
       - hydra
 
-  generate-lisp:
-    main: Main.hs
-    source-dirs:
-      - src/exec/generate-lisp
-      - ../../dist/haskell/hydra-kernel/src/test/haskell
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra
-      - hspec                      >= 2.11.0 && < 2.12
-
   generate-coq:
     main: Main.hs
     source-dirs:

@@ -7,6 +7,7 @@ module Hydra.Json.Schema where
 import qualified Hydra.Core as Core
 import qualified Hydra.Json.Model as Model
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 data Document =

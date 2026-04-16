@@ -31,6 +31,7 @@ import qualified Hydra.Show.Errors as ShowErrors
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Alpha convert a variable in a term
 alphaConvert :: Core.Name -> Core.Name -> Core.Term -> Core.Term

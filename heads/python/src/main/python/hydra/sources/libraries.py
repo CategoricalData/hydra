@@ -1006,6 +1006,10 @@ def register_literals_primitives() -> dict[Name, Primitive]:
         qname(namespace, "bigintToBigfloat"), literals.bigint_to_bigfloat, [],
         prims.bigint(), prims.bigfloat()
     )
+    primitives[qname(namespace, "bigintToDecimal")] = prims.prim1(
+        qname(namespace, "bigintToDecimal"), literals.bigint_to_decimal, [],
+        prims.bigint(), prims.decimal()
+    )
     primitives[qname(namespace, "bigintToInt8")] = prims.prim1(
         qname(namespace, "bigintToInt8"), literals.bigint_to_int8, [],
         prims.bigint(), prims.int8()
@@ -1046,13 +1050,33 @@ def register_literals_primitives() -> dict[Name, Primitive]:
         qname(namespace, "binaryToString"), literals.binary_to_string, [],
         prims.binary(), prims.string()
     )
+    primitives[qname(namespace, "decimalToBigint")] = prims.prim1(
+        qname(namespace, "decimalToBigint"), literals.decimal_to_bigint, [],
+        prims.decimal(), prims.bigint()
+    )
+    primitives[qname(namespace, "decimalToFloat32")] = prims.prim1(
+        qname(namespace, "decimalToFloat32"), literals.decimal_to_float32, [],
+        prims.decimal(), prims.float32()
+    )
+    primitives[qname(namespace, "decimalToFloat64")] = prims.prim1(
+        qname(namespace, "decimalToFloat64"), literals.decimal_to_float64, [],
+        prims.decimal(), prims.float64()
+    )
     primitives[qname(namespace, "float32ToBigfloat")] = prims.prim1(
         qname(namespace, "float32ToBigfloat"), literals.float32_to_bigfloat, [],
         prims.float32(), prims.bigfloat()
     )
+    primitives[qname(namespace, "float32ToDecimal")] = prims.prim1(
+        qname(namespace, "float32ToDecimal"), literals.float32_to_decimal, [],
+        prims.float32(), prims.decimal()
+    )
     primitives[qname(namespace, "float64ToBigfloat")] = prims.prim1(
         qname(namespace, "float64ToBigfloat"), literals.float64_to_bigfloat, [],
         prims.float64(), prims.bigfloat()
+    )
+    primitives[qname(namespace, "float64ToDecimal")] = prims.prim1(
+        qname(namespace, "float64ToDecimal"), literals.float64_to_decimal, [],
+        prims.float64(), prims.decimal()
     )
     primitives[qname(namespace, "int8ToBigint")] = prims.prim1(
         qname(namespace, "int8ToBigint"), literals.int8_to_bigint, [],
@@ -1083,6 +1107,10 @@ def register_literals_primitives() -> dict[Name, Primitive]:
     primitives[qname(namespace, "readBoolean")] = prims.prim1(
         qname(namespace, "readBoolean"), literals.read_boolean, [],
         prims.string(), prims.optional(prims.boolean())
+    )
+    primitives[qname(namespace, "readDecimal")] = prims.prim1(
+        qname(namespace, "readDecimal"), literals.read_decimal, [],
+        prims.string(), prims.optional(prims.decimal())
     )
     primitives[qname(namespace, "readFloat32")] = prims.prim1(
         qname(namespace, "readFloat32"), literals.read_float32, [],
@@ -1141,6 +1169,10 @@ def register_literals_primitives() -> dict[Name, Primitive]:
     primitives[qname(namespace, "showBoolean")] = prims.prim1(
         qname(namespace, "showBoolean"), literals.show_boolean, [],
         prims.boolean(), prims.string()
+    )
+    primitives[qname(namespace, "showDecimal")] = prims.prim1(
+        qname(namespace, "showDecimal"), literals.show_decimal, [],
+        prims.decimal(), prims.string()
     )
     primitives[qname(namespace, "showFloat32")] = prims.prim1(
         qname(namespace, "showFloat32"), literals.show_float32, [],

@@ -928,6 +928,137 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.extract.core.decimal",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {"string": "Extract an arbitrary-precision decimal value from a term"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {"variable": "l"},
+                                "function": {"variable": "hydra.extract.core.decimalLiteral"}}},
+                            "domain": {"variable": "hydra.core.Literal"},
+                            "parameter": "l"}},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"variable": "t"},
+                                "function": {
+                                  "application": {
+                                    "argument": {"variable": "graph"},
+                                    "function": {"variable": "hydra.extract.core.literal"}}}}},
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.lib.eithers.bind"},
+                                        "type": {"variable": "hydra.errors.Error"}}},
+                                    "type": {"variable": "hydra.core.Literal"}}},
+                                "type": {"literal": {"decimal": {}}}}}}}}},
+                    "domain": {"variable": "hydra.core.Term"},
+                    "parameter": "t"}},
+                "domain": {"variable": "hydra.graph.Graph"},
+                "parameter": "graph"}}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "either": {
+                      "left": {"variable": "hydra.errors.Error"},
+                      "right": {"literal": {"decimal": {}}}}},
+                  "domain": {"variable": "hydra.core.Term"}}},
+              "domain": {"variable": "hydra.graph.Graph"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.extract.core.decimalLiteral",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {"string": "Extract a decimal literal from a Literal value"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "v"},
+                    "function": {
+                      "cases": {
+                        "cases": [
+                          {
+                            "name": "decimal",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {"either": {"@right": {"variable": "d"}}},
+                                        "type": {"variable": "hydra.errors.Error"}}},
+                                    "type": {"literal": {"decimal": {}}}}},
+                                "domain": {"literal": {"decimal": {}}},
+                                "parameter": "d"}}}],
+                        "default": {
+                          "typeApplication": {
+                            "body": {
+                              "typeApplication": {
+                                "body": {
+                                  "either": {
+                                    "@left": {
+                                      "inject": {
+                                        "field": {
+                                          "name": "extraction",
+                                          "term": {
+                                            "inject": {
+                                              "field": {
+                                                "name": "unexpectedShape",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {"name": "expected", "term": {"literal": {"string": "decimal"}}},
+                                                      {
+                                                        "name": "actual",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {"variable": "v"},
+                                                            "function": {"variable": "hydra.show.core.literal"}}}}],
+                                                    "typeName": "hydra.errors.UnexpectedShapeError"}}},
+                                              "typeName": "hydra.errors.ExtractionError"}}},
+                                        "typeName": "hydra.errors.Error"}}}},
+                                "type": {"variable": "hydra.errors.Error"}}},
+                            "type": {"literal": {"decimal": {}}}}},
+                        "typeName": "hydra.core.Literal"}}}},
+                "domain": {"variable": "hydra.core.Literal"},
+                "parameter": "v"}}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "either": {
+                  "left": {"variable": "hydra.errors.Error"},
+                  "right": {"literal": {"decimal": {}}}}},
+              "domain": {"variable": "hydra.core.Literal"}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.extract.core.decodeEither",
         "term": {
           "typeLambda": {

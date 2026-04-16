@@ -355,6 +355,9 @@ def encode_literal(lit: hydra.core.Literal) -> Either[T0, hydra.python.syntax.Ex
         case hydra.core.LiteralBoolean(value=b):
             return Right(hydra.python.utils.py_atom_to_py_expression(hydra.lib.logic.if_else(b, (lambda : cast(hydra.python.syntax.Atom, hydra.python.syntax.AtomTrue())), (lambda : cast(hydra.python.syntax.Atom, hydra.python.syntax.AtomFalse())))))
 
+        case hydra.core.LiteralDecimal(value=d):
+            return Right(hydra.python.utils.function_call(hydra.python.utils.py_name_to_py_primary(hydra.python.syntax.Name("Decimal")), (hydra.python.utils.single_quoted_string(hydra.lib.literals.show_decimal(d)),)))
+
         case hydra.core.LiteralFloat(value=f):
             return encode_float_value(f)
 
@@ -391,6 +394,9 @@ def encode_literal_type(lt: hydra.core.LiteralType) -> Either[T0, hydra.python.s
 
             case hydra.core.LiteralTypeBoolean():
                 return "bool"
+
+            case hydra.core.LiteralTypeDecimal():
+                return "Decimal"
 
             case hydra.core.LiteralTypeFloat(value=ft):
                 return _hoist_find_name_1(ft)

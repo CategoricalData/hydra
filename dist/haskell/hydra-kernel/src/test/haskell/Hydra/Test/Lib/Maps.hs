@@ -13,6 +13,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as Core
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 -- | Test cases for hydra.lib.maps primitives

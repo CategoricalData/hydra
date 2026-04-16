@@ -730,6 +730,14 @@
         "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
+        "name": "hydra.lib.names.literalsBigintToDecimal",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.literals.bigintToDecimal"}},
+            "typeName": "hydra.core.Name"}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+    {
+      "term": {
         "name": "hydra.lib.names.literalsBigintToInt8",
         "term": {
           "wrap": {
@@ -810,6 +818,30 @@
         "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
+        "name": "hydra.lib.names.literalsDecimalToBigint",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.literals.decimalToBigint"}},
+            "typeName": "hydra.core.Name"}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.lib.names.literalsDecimalToFloat32",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.literals.decimalToFloat32"}},
+            "typeName": "hydra.core.Name"}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.lib.names.literalsDecimalToFloat64",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.literals.decimalToFloat64"}},
+            "typeName": "hydra.core.Name"}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+    {
+      "term": {
         "name": "hydra.lib.names.literalsFloat32ToBigfloat",
         "term": {
           "wrap": {
@@ -818,10 +850,26 @@
         "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
+        "name": "hydra.lib.names.literalsFloat32ToDecimal",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.literals.float32ToDecimal"}},
+            "typeName": "hydra.core.Name"}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+    {
+      "term": {
         "name": "hydra.lib.names.literalsFloat64ToBigfloat",
         "term": {
           "wrap": {
             "body": {"literal": {"string": "hydra.lib.literals.float64ToBigfloat"}},
+            "typeName": "hydra.core.Name"}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.lib.names.literalsFloat64ToDecimal",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.literals.float64ToDecimal"}},
             "typeName": "hydra.core.Name"}},
         "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
@@ -878,6 +926,14 @@
         "term": {
           "wrap": {
             "body": {"literal": {"string": "hydra.lib.literals.readBoolean"}},
+            "typeName": "hydra.core.Name"}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.lib.names.literalsReadDecimal",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.literals.readDecimal"}},
             "typeName": "hydra.core.Name"}},
         "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
@@ -990,6 +1046,14 @@
         "term": {
           "wrap": {
             "body": {"literal": {"string": "hydra.lib.literals.showBoolean"}},
+            "typeName": "hydra.core.Name"}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.lib.names.literalsShowDecimal",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.literals.showDecimal"}},
             "typeName": "hydra.core.Name"}},
         "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {

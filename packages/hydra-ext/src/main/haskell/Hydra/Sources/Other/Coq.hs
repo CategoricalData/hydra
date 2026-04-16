@@ -109,6 +109,7 @@ module_ = Module ns (map toTypeDef definitions) [] [] $
 
     -- Vernacular commands (for generating complete .v files)
     vernacular = [
+      axiomDeclaration,
       comment,
       constructor,
       definition,
@@ -145,6 +146,13 @@ arg = define "Arg" $ T.union [
   "ident">: coq "IdentArg",
   "natural">: coq "NaturalArg",
   "term">: coq "Term1"]
+
+axiomDeclaration :: Binding
+axiomDeclaration = define "AxiomDeclaration" $
+  doc "An Axiom declaration: `Axiom <name> : <type>.`" $
+  T.record [
+    "name">: coq "Ident",
+    "type">: coq "Type"]
 
 binder :: Binding
 binder = define "Binder" $ T.union [
@@ -716,6 +724,7 @@ sentenceContent :: Binding
 sentenceContent = define "SentenceContent" $
   doc "The content of a top-level sentence" $
   T.union [
+    "axiom">: coq "AxiomDeclaration",
     "definition">: coq "Definition",
     "fixpoint">: coq "FixpointDefinition",
     "inductive">: coq "InductiveDefinition",

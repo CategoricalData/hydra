@@ -7,6 +7,7 @@ module Hydra.Encode.Classes where
 import qualified Hydra.Classes as Classes
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 typeClass :: Classes.TypeClass -> Core.Term
 typeClass x =

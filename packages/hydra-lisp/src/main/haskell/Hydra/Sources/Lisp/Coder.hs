@@ -443,6 +443,14 @@ encodeLiteral = def "encodeLiteral" $
     _Literal_boolean>>: lambda "b" $
       inject L._Expression L._Expression_literal $
         inject L._Literal L._Literal_boolean (var "b"),
+    _Literal_decimal>>: lambda "d" $
+      -- Lisp dialects have no native decimal; this case is only hit if adaptation
+      -- is skipped. Fall back to emitting the decimal as a float literal.
+      inject L._Expression L._Expression_literal $
+        inject L._Literal L._Literal_float $
+          record L._FloatLiteral [
+            L._FloatLiteral_value>>: Literals.float64ToBigfloat (Literals.decimalToFloat64 (var "d")),
+            L._FloatLiteral_precision>>: nothing],
     _Literal_string>>: lambda "s" $
       inject L._Expression L._Expression_literal $
         inject L._Literal L._Literal_string (var "s"),
@@ -717,6 +725,8 @@ encodeType = def "encodeType" $
            inject L._TypeSpecifier L._TypeSpecifier_named $ wrap L._Symbol (string "ByteArray"),
          _LiteralType_boolean>>: constant $
            inject L._TypeSpecifier L._TypeSpecifier_named $ wrap L._Symbol (string "Boolean"),
+         _LiteralType_decimal>>: constant $
+           inject L._TypeSpecifier L._TypeSpecifier_named $ wrap L._Symbol (string "Decimal"),
          _LiteralType_float>>: constant $
            inject L._TypeSpecifier L._TypeSpecifier_named $ wrap L._Symbol (string "Float"),
          _LiteralType_integer>>: constant $

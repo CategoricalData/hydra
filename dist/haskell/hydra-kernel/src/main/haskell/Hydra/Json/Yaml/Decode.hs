@@ -13,6 +13,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Yaml.Model as YamlModel
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 -- | Decode a YAML node to a Hydra term via JSON decoding.

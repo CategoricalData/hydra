@@ -15,6 +15,7 @@ import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Add generation namespace prefix
 addGenerationPrefix :: Packaging.Namespace -> Packaging.Namespace

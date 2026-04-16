@@ -14,6 +14,7 @@ import qualified Data.ByteString as B
 import qualified Data.Char as C
 import qualified Data.List as L
 import qualified Data.Map as M
+import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 
 
@@ -67,6 +68,11 @@ bigint = literal . Literals.bigint
 -- Example: boolean True
 boolean :: Bool -> Term
 boolean = literal . Literals.boolean
+
+-- | Create an arbitrary-precision decimal literal.
+-- Example: decimal (Sci.scientific 314159265359 (-11))
+decimal :: Sci.Scientific -> Term
+decimal = literal . Literals.decimal
 
 char :: Char -> Term
 char = int32 . C.ord

@@ -9,6 +9,7 @@ import qualified Hydra.Error.Pg as Pg
 import qualified Hydra.Pg.Model as Model
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 invalidEdgeErrorId :: Phantoms.TTerm Pg.InvalidValueError -> Phantoms.TTerm Pg.InvalidEdgeError
 invalidEdgeErrorId x =

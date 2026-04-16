@@ -578,6 +578,11 @@ public interface Coder {
       }
 
       @Override
+      public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Lit> visit(hydra.core.Literal.Decimal d) {
+        return hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Lit>right(new hydra.scala.syntax.Lit.String_(hydra.lib.literals.ShowDecimal.apply((d).value)));
+      }
+
+      @Override
       public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Lit> visit(hydra.core.Literal.Float_ fv) {
         return (fv).value.accept(new hydra.core.FloatValue.PartialVisitor<>() {
           @Override
@@ -1059,6 +1064,13 @@ public interface Coder {
               @Override
               public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> otherwise(hydra.core.Literal instance) {
                 return hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Data>right(litData);
+              }
+
+              @Override
+              public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Literal.Decimal ignored) {
+                return hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Data>right(hydra.scala.Utils.sapply(
+                  hydra.scala.Utils.sname("BigDecimal"),
+                  java.util.Arrays.asList(litData)));
               }
 
               @Override
@@ -1545,6 +1557,11 @@ public interface Coder {
           @Override
           public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Type> visit(hydra.core.LiteralType.Boolean_ ignored) {
             return hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Type>right(new hydra.scala.syntax.Type.Ref(new hydra.scala.syntax.Type_Ref.Name(new hydra.scala.syntax.Type_Name("Boolean"))));
+          }
+
+          @Override
+          public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Type> visit(hydra.core.LiteralType.Decimal ignored) {
+            return hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Type>right(new hydra.scala.syntax.Type.Ref(new hydra.scala.syntax.Type_Ref.Name(new hydra.scala.syntax.Type_Name("BigDecimal"))));
           }
 
           @Override

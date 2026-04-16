@@ -12,6 +12,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Show a type constraint as a string
 typeConstraint :: Typing.TypeConstraint -> String
