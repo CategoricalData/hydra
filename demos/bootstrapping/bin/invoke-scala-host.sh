@@ -7,7 +7,7 @@ set -eo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
-HYDRA_SCALA_DIR="$HYDRA_ROOT/heads/scala"
+HYDRA_SCALA_DIR="$HYDRA_ROOT/packages/hydra-scala"
 
 # Parse arguments to find target (for coder module check)
 TARGET=""
@@ -30,7 +30,7 @@ if [ -z "$TARGET" ]; then
 fi
 
 if [ -z "$JSON_DIR" ]; then
-    JSON_DIR="$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json"
+    JSON_DIR="$HYDRA_ROOT/dist/json"
     EXTRA_ARGS="$EXTRA_ARGS --json-dir $JSON_DIR"
 fi
 

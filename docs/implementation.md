@@ -305,7 +305,8 @@ heads/haskell/src/main/haskell/Hydra/Dsl/Meta/     # Hand-written meta DSL wrapp
 heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/ # Library DSLs (13 files)
 dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/      # Generated DSLs (from hydra.dsls)
 heads/haskell/src/main/haskell/Hydra/                    # Extension generation and sources
-dist/haskell/hydra-ext/src/main/haskell/Hydra/          # Generated extension modules
+dist/haskell/hydra-ext/src/main/haskell/Hydra/          # Generated extension modules (long-tail)
+dist/haskell/hydra-<lang>/src/main/haskell/Hydra/       # Generated per-package coder modules
 ```
 
 **See also:** [DSL guide](dsl-guide.md) - Comprehensive guide with examples and operator reference
@@ -843,10 +844,18 @@ to write Hydra code in their preferred language and compile it to any other supp
 
 ### Coder locations
 
+Generated Haskell coder output is distributed across per-package directories
+and a catch-all `hydra-ext` directory for the long tail:
+
 ```
+dist/haskell/hydra-haskell/src/main/haskell/Hydra/
+├── Haskell/        # Haskell coder (Coder, Serde, Language, ...)
+
 dist/haskell/hydra-ext/src/main/haskell/Hydra/
 ├── Java/           # Full OOP with generics
 ├── Python/         # Dynamic with dataclasses
+├── Scala/          # Scala 3
+├── Lisp/           # Common Lisp, Clojure, Scheme, Emacs Lisp
 ├── Cpp/            # Systems language with templates
 ├── Csharp/         # Modern .NET
 ├── GraphQL/        # Schema definition language
@@ -855,7 +864,7 @@ dist/haskell/hydra-ext/src/main/haskell/Hydra/
 ├── Pegasus/        # LinkedIn's data format
 ├── JsonSchema/     # JSON schemas
 ├── Graphviz/       # Visualization
-├── Pg/             # PostgreSQL with GraphSON
+├── Pg/             # Property graphs, GraphSON
 ├── Rdf/            # RDF and SHACL
 └── Tinkerpop/      # Graph databases
 ```
@@ -1288,10 +1297,13 @@ dist/haskell/hydra-kernel/src/main/haskell/   # Generated kernel code
 │   ├── Checking.hs         # Generated type checking
 │   └── ...                 # All kernel modules
 
-dist/haskell/hydra-ext/src/main/haskell/Hydra/ # Generated ext-coder code
+dist/haskell/hydra-haskell/src/main/haskell/Hydra/ # Generated Haskell coder
+├── Haskell/Coder.hs        # Generated Haskell coder
+
+dist/haskell/hydra-ext/src/main/haskell/Hydra/ # Generated ext-coder code (long-tail)
 ├── Java/Coder.hs           # Generated Java coder
 ├── Python/Coder.hs         # Generated Python coder
-└── ...                     # All other ext coders
+└── ...                     # All other coders
 ```
 
 ---
@@ -1374,7 +1386,10 @@ Per-language DSL sources live in `packages/hydra-<lang>/src/main/haskell/Hydra/S
 - [`packages/hydra-lisp/src/main/haskell/Hydra/Sources/Lisp/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-lisp/src/main/haskell/Hydra/Sources/Lisp)
 - [`packages/hydra-ext/src/main/haskell/Hydra/Sources/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-ext/src/main/haskell/Hydra/Sources) — Avro, Cpp, Csharp, Go, GraphQL, Pegasus, Protobuf, Rust, TypeScript, Yaml, ...
 
-Generated coder output lands under [`dist/haskell/hydra-ext/src/main/haskell/Hydra/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-ext/src/main/haskell/Hydra).
+Generated coder output lands under `dist/haskell/` in per-package directories
+(e.g. [`dist/haskell/hydra-haskell/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-haskell/src/main/haskell/Hydra))
+and the catch-all [`dist/haskell/hydra-ext/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-ext/src/main/haskell/Hydra)
+for the remaining coders.
 
 ### Generated code
 
@@ -1446,10 +1461,9 @@ Shell script wrappers live in `heads/haskell/bin/`. Executables without shell wr
 
 | Script / Executable | Purpose |
 |---------------------|---------|
-| `bin/sync-ext.sh` | **Ext sync script.** Regenerate ext Haskell modules and JSON exports. |
+| `bin/sync-ext.sh` | **Ext sync script.** Regenerate ext Haskell modules. |
 | `bin/sync-haskell.sh` | **Haskell sync script (from JSON).** Regenerate Haskell test files from JSON. Supports `--quick`. |
 | `bin/sync-java.sh` | **Main Java sync script.** Regenerate all Java artifacts, compile, and optionally run tests. Supports `--quick`. |
 | `bin/sync-python.sh` | **Main Python sync script.** Regenerate all Python artifacts and optionally run tests. Supports `--quick`. |
 | `update-haskell-ext-main` | Regenerate ext Haskell gen-main modules (executable only, called by `sync-ext.sh`) |
-| `update-json-ext` | Export ext modules to JSON (executable only, called by `sync-ext.sh`) |
-| `bootstrap-from-json` | Bootstrap Hydra implementations from JSON module exports (executable only, called by all sync scripts) |
+| `bootstrap-from-json` | Bootstrap Hydra implementations from per-package JSON module exports (executable only, called by all sync scripts) |
