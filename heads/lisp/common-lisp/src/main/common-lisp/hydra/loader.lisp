@@ -410,6 +410,8 @@
                      "inference.lisp" "checking.lisp" "serialization.lisp" "reduction.lisp"
                      "json/coder.lisp" "json/parser.lisp" "json/writer.lisp"
                      "json/encode.lisp" "json/decode.lisp" "json/bootstrap.lisp"
+                     "yaml/model.lisp" "dsl/yaml/model.lisp"
+                     "json/yaml/encode.lisp" "json/yaml/decode.lisp"
                      ;; Language-specific coder modules (dependency order: syntax, environment, names, utils, serde, language, testing, coder)
                      "haskell/syntax.lisp" "haskell/language.lisp" "haskell/operators.lisp"
                      "haskell/environment.lisp" "haskell/utils.lisp"
