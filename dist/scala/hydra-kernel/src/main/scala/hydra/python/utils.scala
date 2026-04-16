@@ -52,14 +52,16 @@ def decodePyComparisonToPyAwaitPrimary(c: hydra.python.syntax.Comparison): Optio
 def decodePyConjunctionToPyPrimary(c: hydra.python.syntax.Conjunction): Option[hydra.python.syntax.Primary] =
   {
   lazy val inversions: Seq[hydra.python.syntax.Inversion] = c
-  hydra.lib.logic.ifElse[Option[hydra.python.syntax.Primary]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.python.syntax.Inversion](inversions))(1))(hydra.python.utils.decodePyInversionToPyPrimary(hydra.lib.lists.head[hydra.python.syntax.Inversion](inversions)))(None)
+  hydra.lib.logic.ifElse[Option[hydra.python.syntax.Primary]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.python.syntax.Inversion](inversions))(1))(hydra.lib.maybes.bind[hydra.python.syntax.Inversion,
+     hydra.python.syntax.Primary](hydra.lib.lists.maybeHead[hydra.python.syntax.Inversion](inversions))((i: hydra.python.syntax.Inversion) => hydra.python.utils.decodePyInversionToPyPrimary(i)))(None)
 }
 
 def decodePyExpressionToPyPrimary(e: hydra.python.syntax.Expression): Option[hydra.python.syntax.Primary] =
   e match
   case hydra.python.syntax.Expression.simple(v_Expression_simple_disj) => {
     lazy val conjunctions: Seq[hydra.python.syntax.Conjunction] = v_Expression_simple_disj
-    hydra.lib.logic.ifElse[Option[hydra.python.syntax.Primary]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.python.syntax.Conjunction](conjunctions))(1))(hydra.python.utils.decodePyConjunctionToPyPrimary(hydra.lib.lists.head[hydra.python.syntax.Conjunction](conjunctions)))(None)
+    hydra.lib.logic.ifElse[Option[hydra.python.syntax.Primary]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.python.syntax.Conjunction](conjunctions))(1))(hydra.lib.maybes.bind[hydra.python.syntax.Conjunction,
+       hydra.python.syntax.Primary](hydra.lib.lists.maybeHead[hydra.python.syntax.Conjunction](conjunctions))((c2: hydra.python.syntax.Conjunction) => hydra.python.utils.decodePyConjunctionToPyPrimary(c2)))(None)
   }
   case _ => None
 
@@ -122,9 +124,16 @@ def newtypeStatement(name: hydra.python.syntax.Name)(mcomment: Option[scala.Pred
 def orExpression(prims: Seq[hydra.python.syntax.Primary]): hydra.python.syntax.Expression =
   {
   def build(prev: Option[hydra.python.syntax.BitwiseOr])(ps: Seq[hydra.python.syntax.Primary]): hydra.python.syntax.BitwiseOr =
-    hydra.lib.logic.ifElse[hydra.python.syntax.BitwiseOr](hydra.lib.lists.`null`[hydra.python.syntax.Primary](hydra.lib.lists.tail[hydra.python.syntax.Primary](ps)))(hydra.python.syntax.BitwiseOr(prev,
-       hydra.python.utils.pyPrimaryToPyBitwiseXor(hydra.lib.lists.head[hydra.python.syntax.Primary](ps))))(build(Some(hydra.python.syntax.BitwiseOr(prev,
-       hydra.python.utils.pyPrimaryToPyBitwiseXor(hydra.lib.lists.head[hydra.python.syntax.Primary](ps)))))(hydra.lib.lists.tail[hydra.python.syntax.Primary](ps)))
+    hydra.lib.maybes.maybe[hydra.python.syntax.BitwiseOr, Tuple2[hydra.python.syntax.Primary,
+       Seq[hydra.python.syntax.Primary]]](hydra.python.syntax.BitwiseOr(prev, hydra.python.utils.pyPrimaryToPyBitwiseXor(hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.ellipsis))))((p: Tuple2[hydra.python.syntax.Primary,
+       Seq[hydra.python.syntax.Primary]]) =>
+    hydra.lib.logic.ifElse[hydra.python.syntax.BitwiseOr](hydra.lib.lists.`null`[hydra.python.syntax.Primary](hydra.lib.pairs.second[hydra.python.syntax.Primary,
+       Seq[hydra.python.syntax.Primary]](p)))(hydra.python.syntax.BitwiseOr(prev,
+       hydra.python.utils.pyPrimaryToPyBitwiseXor(hydra.lib.pairs.first[hydra.python.syntax.Primary,
+       Seq[hydra.python.syntax.Primary]](p))))(build(Some(hydra.python.syntax.BitwiseOr(prev,
+       hydra.python.utils.pyPrimaryToPyBitwiseXor(hydra.lib.pairs.first[hydra.python.syntax.Primary,
+       Seq[hydra.python.syntax.Primary]](p)))))(hydra.lib.pairs.second[hydra.python.syntax.Primary,
+       Seq[hydra.python.syntax.Primary]](p))))(hydra.lib.lists.uncons[hydra.python.syntax.Primary](ps))
   hydra.python.utils.pyBitwiseOrToPyExpression(build(None)(prims))
 }
 
@@ -132,9 +141,14 @@ def primaryAndParams(prim: hydra.python.syntax.Primary)(params: Seq[hydra.python
   hydra.python.utils.pyPrimaryToPyExpression(hydra.python.utils.primaryWithExpressionSlices(prim)(params))
 
 def primaryWithExpressionSlices(prim: hydra.python.syntax.Primary)(exprs: Seq[hydra.python.syntax.Expression]): hydra.python.syntax.Primary =
-  hydra.python.utils.primaryWithSlices(prim)(hydra.python.utils.pyExpressionToPySlice(hydra.lib.lists.head[hydra.python.syntax.Expression](exprs)))(hydra.lib.lists.map[hydra.python.syntax.Expression,
+  hydra.lib.maybes.fromMaybe[hydra.python.syntax.Primary](prim)(hydra.lib.maybes.map[Tuple2[hydra.python.syntax.Expression,
+     Seq[hydra.python.syntax.Expression]], hydra.python.syntax.Primary]((p: Tuple2[hydra.python.syntax.Expression,
+     Seq[hydra.python.syntax.Expression]]) =>
+  hydra.python.utils.primaryWithSlices(prim)(hydra.python.utils.pyExpressionToPySlice(hydra.lib.pairs.first[hydra.python.syntax.Expression,
+     Seq[hydra.python.syntax.Expression]](p)))(hydra.lib.lists.map[hydra.python.syntax.Expression,
      hydra.python.syntax.SliceOrStarredExpression]((e: hydra.python.syntax.Expression) =>
-  hydra.python.syntax.SliceOrStarredExpression.slice(hydra.python.utils.pyExpressionToPySlice(e)))(hydra.lib.lists.tail[hydra.python.syntax.Expression](exprs)))
+  hydra.python.syntax.SliceOrStarredExpression.slice(hydra.python.utils.pyExpressionToPySlice(e)))(hydra.lib.pairs.second[hydra.python.syntax.Expression,
+     Seq[hydra.python.syntax.Expression]](p))))(hydra.lib.lists.uncons[hydra.python.syntax.Expression](exprs)))
 
 def primaryWithRhs(prim: hydra.python.syntax.Primary)(rhs: hydra.python.syntax.PrimaryRhs): hydra.python.syntax.Primary =
   hydra.python.syntax.Primary.compound(hydra.python.syntax.PrimaryWithRhs(prim, rhs))

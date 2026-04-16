@@ -8,7 +8,7 @@
 
 (def hydra_scala_utils_scala_reserved_words hydra_scala_language_scala_reserved_words)
 
-(def hydra_scala_utils_scala_escape_name (fn [s] (let [sanitized (hydra_lib_strings_from_list ((hydra_lib_lists_map (fn [c] (if ((hydra_lib_equality_equal c) 39) 95 c))) (hydra_lib_strings_to_list s))) sanitized2 (if ((hydra_lib_equality_equal sanitized) "_") "_x" sanitized) sanitized3 (if ((hydra_lib_equality_equal sanitized2) "toString") "toString_" sanitized2) needs_backticks ((hydra_lib_logic_or ((hydra_lib_sets_member sanitized3) hydra_scala_utils_scala_reserved_words)) ((hydra_lib_logic_and ((hydra_lib_equality_gt (hydra_lib_strings_length sanitized3)) 0)) ((hydra_lib_equality_equal ((hydra_lib_strings_char_at ((hydra_lib_math_sub (hydra_lib_strings_length sanitized3)) 1)) sanitized3)) 95)))] (if needs_backticks (hydra_lib_strings_cat (list "`" sanitized3 "`")) sanitized3))))
+(def hydra_scala_utils_scala_escape_name (fn [s] (let [sanitized (hydra_lib_strings_from_list ((hydra_lib_lists_map (fn [c] (if ((hydra_lib_equality_equal c) 39) 95 c))) (hydra_lib_strings_to_list s))) sanitized2 (if ((hydra_lib_equality_equal sanitized) "_") "_x" sanitized) sanitized3 (if ((hydra_lib_equality_equal sanitized2) "toString") "toString_" sanitized2) needs_backticks ((hydra_lib_logic_or ((hydra_lib_sets_member sanitized3) hydra_scala_utils_scala_reserved_words)) ((hydra_lib_logic_and ((hydra_lib_equality_gt (hydra_lib_strings_length sanitized3)) 0)) ((hydra_lib_equality_equal ((hydra_lib_maybes_from_maybe (fn [] 0)) ((hydra_lib_strings_maybe_char_at ((hydra_lib_math_sub (hydra_lib_strings_length sanitized3)) 1)) sanitized3))) 95)))] (if needs_backticks (hydra_lib_strings_cat (list "`" sanitized3 "`")) sanitized3))))
 
 (def hydra_scala_utils_scala_type_name (fn [qualify] (fn [name] (if ((hydra_lib_logic_or qualify) ((hydra_lib_sets_member (hydra_names_local_name_of name)) hydra_scala_utils_scala_reserved_words)) ((fn [v] v) name) (hydra_names_local_name_of name)))))
 
@@ -26,7 +26,7 @@
 
 (def hydra_scala_utils_slambda (fn [v] (fn [body] (fn [sdom] (list :function_data (list :function (->hydra_scala_syntax_data_function (list (->hydra_scala_syntax_data_param (list) (list :value v) sdom (list :nothing))) body)))))))
 
-(def hydra_scala_utils_sprim (fn [name] (let [qname (hydra_names_qualify_name name) local (hydra_scala_utils_scala_escape_name ((fn [v] (:local v)) qname)) prefix ((fn [v] v) (hydra_lib_maybes_from_just ((fn [v] (:namespace v)) qname)))] (hydra_scala_utils_sname ((hydra_lib_strings_cat2 ((hydra_lib_strings_cat2 prefix) ".")) local)))))
+(def hydra_scala_utils_sprim (fn [name] (let [qname (hydra_names_qualify_name name) local (hydra_scala_utils_scala_escape_name ((fn [v] (:local v)) qname)) prefix ((fn [v] v) ((hydra_lib_maybes_from_maybe (fn [] "")) ((fn [v] (:namespace v)) qname)))] (hydra_scala_utils_sname ((hydra_lib_strings_cat2 ((hydra_lib_strings_cat2 prefix) ".")) local)))))
 
 (def hydra_scala_utils_stapply (fn [t_] (fn [args] (list :apply (->hydra_scala_syntax_type_apply t_ args)))))
 

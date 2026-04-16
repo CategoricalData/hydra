@@ -196,10 +196,14 @@ simpleValueBinding hname rhs bindings =
 toTypeApplication :: [Syntax.Type] -> Syntax.Type
 toTypeApplication types =
 
-      let app =
-              \l -> Logic.ifElse (Equality.gt (Lists.length l) 1) (Syntax.TypeApplication (Syntax.ApplicationType {
-                Syntax.applicationTypeContext = (app (Lists.tail l)),
-                Syntax.applicationTypeArgument = (Lists.head l)})) (Lists.head l)
+      let dummyType =
+              Syntax.TypeVariable (Syntax.NameNormal (Syntax.QualifiedName {
+                Syntax.qualifiedNameQualifiers = [],
+                Syntax.qualifiedNameUnqualified = (Syntax.NamePart "")}))
+          app =
+                  \l -> Maybes.fromMaybe dummyType (Maybes.map (\p -> Logic.ifElse (Lists.null (Pairs.second p)) (Pairs.first p) (Syntax.TypeApplication (Syntax.ApplicationType {
+                    Syntax.applicationTypeContext = (app (Pairs.second p)),
+                    Syntax.applicationTypeArgument = (Pairs.first p)}))) (Lists.uncons l))
       in (app (Lists.reverse types))
 
 -- | Extract the local type name from a fully qualified record type name
@@ -208,7 +212,7 @@ typeNameForRecord sname =
 
       let snameStr = Core.unName sname
           parts = Strings.splitOn "." snameStr
-      in (Lists.last parts)
+      in (Maybes.fromMaybe snameStr (Lists.maybeLast parts))
 
 -- | Generate a Haskell name for a union variant constructor, with disambiguation
 unionFieldReference :: S.Set Core.Name -> Packaging.Namespaces Syntax.ModuleName -> Core.Name -> Core.Name -> Syntax.Name

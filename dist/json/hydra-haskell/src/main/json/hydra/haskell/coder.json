@@ -4980,9 +4980,15 @@
                                                               "argument": {"variable": "name"},
                                                               "function": {"variable": "hydra.names.namespaceOf"}}},
                                                           "function": {
-                                                            "typeApplication": {
-                                                              "body": {"variable": "hydra.lib.maybes.fromJust"},
-                                                              "type": {"variable": "hydra.packaging.Namespace"}}}}},
+                                                            "application": {
+                                                              "argument": {
+                                                                "wrap": {
+                                                                  "body": {"literal": {"string": ""}},
+                                                                  "typeName": "hydra.packaging.Namespace"}},
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                                  "type": {"variable": "hydra.packaging.Namespace"}}}}}}},
                                                       "function": {"variable": "hydra.names.qname"}}}}},
                                               "function": {
                                                 "application": {
@@ -6595,11 +6601,23 @@
                                                                       "application": {
                                                                         "argument": {
                                                                           "application": {
-                                                                            "argument": {"variable": "encoded"},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "encoded"},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                                                                    "type": {"variable": "hydra.haskell.syntax.Assertion"}}}}},
                                                                             "function": {
-                                                                              "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.lists.head"},
-                                                                                "type": {"variable": "hydra.haskell.syntax.Assertion"}}}}},
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "inject": {
+                                                                                    "field": {"name": "tuple", "term": {"variable": "encoded"}},
+                                                                                    "typeName": "hydra.haskell.syntax.Assertion"}},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                                                    "type": {"variable": "hydra.haskell.syntax.Assertion"}}}}}}},
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {
@@ -9262,62 +9280,96 @@
                                                 "body": {
                                                   "application": {
                                                     "argument": {
-                                                      "let": {
-                                                        "bindings": [
-                                                          {
-                                                            "name": "h",
-                                                            "term": {
-                                                              "application": {
-                                                                "argument": {"variable": "vars'"},
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {"variable": "hydra.lib.lists.head"},
-                                                                    "type": {"variable": "hydra.core.Name"}}}}},
-                                                            "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}},
-                                                          {
-                                                            "name": "rest",
-                                                            "term": {
-                                                              "application": {
-                                                                "argument": {"variable": "vars'"},
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {"variable": "hydra.lib.lists.tail"},
-                                                                    "type": {"variable": "hydra.core.Name"}}}}},
-                                                            "type": {"type": {"list": {"variable": "hydra.core.Name"}}, "variables": []}},
-                                                          {
-                                                            "name": "hvar",
-                                                            "term": {
-                                                              "wrap": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "vars'"},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.lib.lists.uncons"},
+                                                                "type": {"variable": "hydra.core.Name"}}}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "lambda": {
                                                                 "body": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "h"},
-                                                                        "function": {"unwrap": "hydra.core.Name"}}},
-                                                                    "function": {"variable": "hydra.haskell.utils.simpleName"}}},
-                                                                "typeName": "hydra.haskell.syntax.Variable"}},
-                                                            "type": {
-                                                              "type": {"variable": "hydra.haskell.syntax.Variable"},
-                                                              "variables": []}}],
-                                                        "body": {
-                                                          "inject": {
-                                                            "field": {
-                                                              "name": "application",
-                                                              "term": {
-                                                                "record": {
-                                                                  "fields": [
-                                                                    {
-                                                                      "name": "function",
-                                                                      "term": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "rest"},
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "argument": {"variable": "name"},
-                                                                              "function": {"variable": "declHead"}}}}}},
-                                                                    {"name": "operand", "term": {"variable": "hvar"}}],
-                                                                  "typeName": "hydra.haskell.syntax.ApplicationDeclarationHead"}}},
-                                                            "typeName": "hydra.haskell.syntax.DeclarationHead"}}}},
+                                                                  "let": {
+                                                                    "bindings": [
+                                                                      {
+                                                                        "name": "h",
+                                                                        "term": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "p"},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"variable": "hydra.lib.pairs.first"},
+                                                                                    "type": {"variable": "hydra.core.Name"}}},
+                                                                                "type": {"list": {"variable": "hydra.core.Name"}}}}}},
+                                                                        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}},
+                                                                      {
+                                                                        "name": "rest",
+                                                                        "term": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "p"},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"variable": "hydra.lib.pairs.second"},
+                                                                                    "type": {"variable": "hydra.core.Name"}}},
+                                                                                "type": {"list": {"variable": "hydra.core.Name"}}}}}},
+                                                                        "type": {"type": {"list": {"variable": "hydra.core.Name"}}, "variables": []}},
+                                                                      {
+                                                                        "name": "hvar",
+                                                                        "term": {
+                                                                          "wrap": {
+                                                                            "body": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "h"},
+                                                                                    "function": {"unwrap": "hydra.core.Name"}}},
+                                                                                "function": {"variable": "hydra.haskell.utils.simpleName"}}},
+                                                                            "typeName": "hydra.haskell.syntax.Variable"}},
+                                                                        "type": {
+                                                                          "type": {"variable": "hydra.haskell.syntax.Variable"},
+                                                                          "variables": []}}],
+                                                                    "body": {
+                                                                      "inject": {
+                                                                        "field": {
+                                                                          "name": "application",
+                                                                          "term": {
+                                                                            "record": {
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "function",
+                                                                                  "term": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "rest"},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "name"},
+                                                                                          "function": {"variable": "declHead"}}}}}},
+                                                                                {"name": "operand", "term": {"variable": "hvar"}}],
+                                                                              "typeName": "hydra.haskell.syntax.ApplicationDeclarationHead"}}},
+                                                                        "typeName": "hydra.haskell.syntax.DeclarationHead"}}}},
+                                                                "domain": {
+                                                                  "pair": {
+                                                                    "first": {"variable": "hydra.core.Name"},
+                                                                    "second": {"list": {"variable": "hydra.core.Name"}}}},
+                                                                "parameter": "p"}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.maybes.map"},
+                                                                    "type": {
+                                                                      "pair": {
+                                                                        "first": {"variable": "hydra.core.Name"},
+                                                                        "second": {"list": {"variable": "hydra.core.Name"}}}}}},
+                                                                "type": {"variable": "hydra.haskell.syntax.DeclarationHead"}}}}}}},
                                                     "function": {
                                                       "application": {
                                                         "argument": {
@@ -9325,18 +9377,9 @@
                                                             "field": {"name": "simple", "term": {"variable": "name"}},
                                                             "typeName": "hydra.haskell.syntax.DeclarationHead"}},
                                                         "function": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "vars'"},
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {"variable": "hydra.lib.lists.null"},
-                                                                    "type": {"variable": "hydra.core.Name"}}}}},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                "type": {"variable": "hydra.haskell.syntax.DeclarationHead"}}}}}}}}},
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                            "type": {"variable": "hydra.haskell.syntax.DeclarationHead"}}}}}}},
                                                 "domain": {"list": {"variable": "hydra.core.Name"}},
                                                 "parameter": "vars'"}},
                                             "domain": {"variable": "hydra.haskell.syntax.Name"},

@@ -12,6 +12,7 @@ import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Terms                           as Terms
 import qualified Hydra.Dsl.Types                           as Types
@@ -141,22 +142,26 @@ looksLikeNumber = define "looksLikeNumber" $
   doc "Check if a string looks like a number" $
   "s" ~>
   "chars" <~ Strings.toList (var "s") $
-  Logic.ifElse (Lists.null $ var "chars") false $
-  -- Handle leading minus
-  "rest" <~ Logic.ifElse (Equality.equal (Lists.head $ var "chars") (int32 45))  -- '-'
-    (Lists.tail $ var "chars")
-    (var "chars") $
-  Logic.ifElse (Lists.null $ var "rest") false $
-  -- All digits?
-  "isDigitFn" <~ ("c" ~> Logic.and
-    (Equality.gte (var "c") (int32 48))   -- '0'
-    (Equality.lte (var "c") (int32 57))) $  -- '9'
-  "allDigits" <~ Lists.null (Lists.filter
-    ("c" ~> Logic.not (var "isDigitFn" @@ var "c"))
-    (var "rest")) $
-  Logic.ifElse (var "allDigits") true $
-  -- Decimal?
-  isDecimalString @@ var "rest"
+  Maybes.fromMaybe false $ Maybes.map
+    (lambda "p" $ lets [
+      "firstCh">: Pairs.first (var "p"),
+      "tailCh">: Pairs.second (var "p"),
+      -- Handle leading minus
+      "rest">: Logic.ifElse (Equality.equal (var "firstCh") (int32 45))  -- '-'
+        (var "tailCh")
+        (var "chars"),
+      "isDigitFn">: "c" ~> Logic.and
+        (Equality.gte (var "c") (int32 48))   -- '0'
+        (Equality.lte (var "c") (int32 57)),  -- '9'
+      "allDigits">: Logic.and
+        (Logic.not (Lists.null (var "rest")))
+        (Lists.null (Lists.filter
+          ("c" ~> Logic.not (var "isDigitFn" @@ var "c"))
+          (var "rest")))] $
+      Logic.ifElse (var "allDigits") true $
+      -- Decimal?
+      isDecimalString @@ var "rest")
+    (Lists.uncons (var "chars"))
 
 -- | Check if a list of character codes represents a decimal number (digits.digits)
 isDecimalString :: TTermDefinition ([Int] -> Bool)
@@ -172,7 +177,7 @@ isDecimalString = define "isDecimalString" $
   -- Must have the dot
   Logic.ifElse (Lists.null $ var "afterWithDot") false $
   -- Drop the dot
-  "after" <~ Lists.tail (var "afterWithDot") $
+  "after" <~ Lists.drop (int32 1) (var "afterWithDot") $
   -- Must have something after the dot
   Logic.ifElse (Lists.null $ var "after") false $
   -- Both parts must be all digits
@@ -189,10 +194,9 @@ hasLeadingTrailingSpace = define "hasLeadingTrailingSpace" $
   doc "Check if a string has leading or trailing whitespace" $
   "s" ~>
   "chars" <~ Strings.toList (var "s") $
-  Logic.ifElse (Lists.null $ var "chars") false $
   Logic.or
-    (Chars.isSpace $ Lists.head $ var "chars")
-    (Chars.isSpace $ Lists.last $ var "chars")
+    (Maybes.fromMaybe false (Maybes.map (lambda "c" $ Chars.isSpace (var "c")) (Lists.maybeHead (var "chars"))))
+    (Maybes.fromMaybe false (Maybes.map (lambda "c" $ Chars.isSpace (var "c")) (Lists.maybeLast (var "chars"))))
 
 -- | Escape single quotes by doubling them
 escapeSingleQuotes :: TTermDefinition (String -> String)
@@ -219,11 +223,14 @@ writeSequenceItem = define "writeSequenceItem" $
       Logic.ifElse (Equality.equal (Maps.size (var "m")) (int32 0))
         (string "- {}\n")
         ("entries" <~ Maps.toList (var "m") $
-         "firstEntry" <~ Lists.head (var "entries") $
-         "restEntries" <~ Lists.tail (var "entries") $
-         "firstStr" <~ (writeMappingEntryInline @@ var "firstEntry") $
-         "restStr" <~ (Strings.cat $ Lists.map (lambda "e" $ writeMappingEntry @@ var "e") (var "restEntries")) $
-         Strings.cat $ list [string "- ", var "firstStr", indentString @@ var "restStr"])]
+         Maybes.fromMaybe (string "") $ Maybes.map
+           (lambda "p" $ lets [
+             "firstEntry">: Pairs.first (var "p"),
+             "restEntries">: Pairs.second (var "p"),
+             "firstStr">: writeMappingEntryInline @@ var "firstEntry",
+             "restStr">: Strings.cat $ Lists.map (lambda "e" $ writeMappingEntry @@ var "e") (var "restEntries")] $
+             Strings.cat $ list [string "- ", var "firstStr", indentString @@ var "restStr"])
+           (Lists.uncons (var "entries")))]
 
 -- | Write a mapping entry in block style (key: value\n)
 writeMappingEntry :: TTermDefinition ((YM.Node, YM.Node) -> String)

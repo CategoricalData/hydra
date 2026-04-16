@@ -13,13 +13,6 @@
     (lambda (b)
       (concatenate 'string a b))))
 
-;; char_at :: Int -> String -> Int32 (char as codepoint)
-;; Get the Unicode code point of the character at a specific index in a string.
-(defvar hydra_lib_strings_char_at
-  (lambda (n)
-    (lambda (s)
-      (char-code (char s n)))))
-
 ;; cons :: Int32 (char as codepoint) -> String -> String
 ;; Prepend a character (as a code point) to a string.
 (defvar hydra_lib_strings_cons

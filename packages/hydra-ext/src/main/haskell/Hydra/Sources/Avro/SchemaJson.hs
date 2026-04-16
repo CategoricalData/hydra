@@ -772,7 +772,7 @@ getAnnotations = define "getAnnotations" $
         "k">: Pairs.first (var "entry"),
         "v">: Pairs.second (var "entry")] $
         Logic.ifElse
-          (Equality.equal (Strings.charAt (int32 0) (var "k")) (int32 64))  -- 64 = '@'
+          (Equality.equal (Maybes.fromMaybe (int32 0) (Strings.maybeCharAt (int32 0) (var "k"))) (int32 64))  -- 64 = '@'
           (Maybes.pure (pair (Strings.fromList (Lists.drop (int32 1) (Strings.toList (var "k")))) (var "v")))
           nothing)
       (Maps.toList (var "m"))))

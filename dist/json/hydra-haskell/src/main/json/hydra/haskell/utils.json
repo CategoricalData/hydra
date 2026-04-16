@@ -2518,6 +2518,35 @@
                   "let": {
                     "bindings": [
                       {
+                        "name": "dummyType",
+                        "term": {
+                          "inject": {
+                            "field": {
+                              "name": "variable",
+                              "term": {
+                                "inject": {
+                                  "field": {
+                                    "name": "normal",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "qualifiers",
+                                            "term": {
+                                              "typeApplication": {
+                                                "body": {"list": []},
+                                                "type": {"variable": "hydra.haskell.syntax.NamePart"}}}},
+                                          {
+                                            "name": "unqualified",
+                                            "term": {
+                                              "wrap": {
+                                                "body": {"literal": {"string": ""}},
+                                                "typeName": "hydra.haskell.syntax.NamePart"}}}],
+                                        "typeName": "hydra.haskell.syntax.QualifiedName"}}},
+                                  "typeName": "hydra.haskell.syntax.Name"}}},
+                            "typeName": "hydra.haskell.syntax.Type"}},
+                        "type": {"type": {"variable": "hydra.haskell.syntax.Type"}, "variables": []}},
+                      {
                         "name": "app",
                         "term": {
                           "lambda": {
@@ -2525,65 +2554,111 @@
                               "application": {
                                 "argument": {
                                   "application": {
-                                    "argument": {"variable": "l"},
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {"variable": "hydra.lib.lists.head"},
-                                        "type": {"variable": "hydra.haskell.syntax.Type"}}}}},
-                                "function": {
-                                  "application": {
                                     "argument": {
-                                      "inject": {
-                                        "field": {
-                                          "name": "application",
-                                          "term": {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "context",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {
-                                                        "application": {
-                                                          "argument": {"variable": "l"},
-                                                          "function": {
-                                                            "typeApplication": {
-                                                              "body": {"variable": "hydra.lib.lists.tail"},
-                                                              "type": {"variable": "hydra.haskell.syntax.Type"}}}}},
-                                                      "function": {"variable": "app"}}}},
-                                                {
-                                                  "name": "argument",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "l"},
-                                                      "function": {
-                                                        "typeApplication": {
-                                                          "body": {"variable": "hydra.lib.lists.head"},
-                                                          "type": {"variable": "hydra.haskell.syntax.Type"}}}}}}],
-                                              "typeName": "hydra.haskell.syntax.ApplicationType"}}},
-                                        "typeName": "hydra.haskell.syntax.Type"}},
+                                      "application": {
+                                        "argument": {"variable": "l"},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.lib.lists.uncons"},
+                                            "type": {"variable": "hydra.haskell.syntax.Type"}}}}},
                                     "function": {
                                       "application": {
                                         "argument": {
-                                          "application": {
-                                            "argument": {"literal": {"integer": {"int32": 1}}},
-                                            "function": {
+                                          "lambda": {
+                                            "body": {
                                               "application": {
                                                 "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "l"},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.length"},
-                                                        "type": {"variable": "hydra.haskell.syntax.Type"}}}}},
+                                                  "inject": {
+                                                    "field": {
+                                                      "name": "application",
+                                                      "term": {
+                                                        "record": {
+                                                          "fields": [
+                                                            {
+                                                              "name": "context",
+                                                              "term": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "p"},
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"variable": "hydra.lib.pairs.second"},
+                                                                              "type": {"variable": "hydra.haskell.syntax.Type"}}},
+                                                                          "type": {"list": {"variable": "hydra.haskell.syntax.Type"}}}}}},
+                                                                  "function": {"variable": "app"}}}},
+                                                            {
+                                                              "name": "argument",
+                                                              "term": {
+                                                                "application": {
+                                                                  "argument": {"variable": "p"},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {"variable": "hydra.lib.pairs.first"},
+                                                                          "type": {"variable": "hydra.haskell.syntax.Type"}}},
+                                                                      "type": {"list": {"variable": "hydra.haskell.syntax.Type"}}}}}}}],
+                                                          "typeName": "hydra.haskell.syntax.ApplicationType"}}},
+                                                    "typeName": "hydra.haskell.syntax.Type"}},
                                                 "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.equality.gt"},
-                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "p"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.lib.pairs.first"},
+                                                                "type": {"variable": "hydra.haskell.syntax.Type"}}},
+                                                            "type": {"list": {"variable": "hydra.haskell.syntax.Type"}}}}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "p"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.lib.pairs.second"},
+                                                                        "type": {"variable": "hydra.haskell.syntax.Type"}}},
+                                                                    "type": {"list": {"variable": "hydra.haskell.syntax.Type"}}}}}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.lib.lists.null"},
+                                                                "type": {"variable": "hydra.haskell.syntax.Type"}}}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                            "type": {"variable": "hydra.haskell.syntax.Type"}}}}}}}}},
+                                            "domain": {
+                                              "pair": {
+                                                "first": {"variable": "hydra.haskell.syntax.Type"},
+                                                "second": {"list": {"variable": "hydra.haskell.syntax.Type"}}}},
+                                            "parameter": "p"}},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"variable": "hydra.lib.logic.ifElse"},
-                                            "type": {"variable": "hydra.haskell.syntax.Type"}}}}}}}}},
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.maybes.map"},
+                                                "type": {
+                                                  "pair": {
+                                                    "first": {"variable": "hydra.haskell.syntax.Type"},
+                                                    "second": {"list": {"variable": "hydra.haskell.syntax.Type"}}}}}},
+                                            "type": {"variable": "hydra.haskell.syntax.Type"}}}}}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {"variable": "dummyType"},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                        "type": {"variable": "hydra.haskell.syntax.Type"}}}}}}},
                             "domain": {"list": {"variable": "hydra.haskell.syntax.Type"}},
                             "parameter": "l"}},
                         "type": {
@@ -2645,11 +2720,20 @@
                         "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                     "body": {
                       "application": {
-                        "argument": {"variable": "parts"},
+                        "argument": {
+                          "application": {
+                            "argument": {"variable": "parts"},
+                            "function": {
+                              "typeApplication": {
+                                "body": {"variable": "hydra.lib.lists.maybeLast"},
+                                "type": {"literal": {"string": {}}}}}}},
                         "function": {
-                          "typeApplication": {
-                            "body": {"variable": "hydra.lib.lists.last"},
-                            "type": {"literal": {"string": {}}}}}}}}},
+                          "application": {
+                            "argument": {"variable": "snameStr"},
+                            "function": {
+                              "typeApplication": {
+                                "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                "type": {"literal": {"string": {}}}}}}}}}}},
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "sname"}}}},
         "type": {

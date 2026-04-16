@@ -1027,7 +1027,9 @@ public interface Coder {
             hydra.lib.equality.Equal.apply(
               hydra.lib.lists.Length.apply(encoded.get()),
               1),
-            () -> hydra.lib.lists.Head.apply(encoded.get()),
+            () -> hydra.lib.maybes.FromMaybe.applyLazy(
+              () -> new hydra.haskell.syntax.Assertion.Tuple(encoded.get()),
+              hydra.lib.lists.MaybeHead.apply(encoded.get())),
             () -> new hydra.haskell.syntax.Assertion.Tuple(encoded.get())));
           return hydra.util.Either.<hydra.errors.Error_, hydra.haskell.syntax.Type>right(new hydra.haskell.syntax.Type.Ctx(new hydra.haskell.syntax.ContextType(hassert.get(), htyp)));
         })).get())));
@@ -1061,7 +1063,9 @@ public interface Coder {
     return hydra.util.Either.<T0, hydra.haskell.syntax.Expression>right(new hydra.haskell.syntax.Expression.Variable(hydra.haskell.Utils.elementReference(
       namespaces,
       hydra.Names.qname(
-        hydra.lib.maybes.FromJust.apply(hydra.Names.namespaceOf(name)),
+        hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> new hydra.packaging.Namespace(""),
+          hydra.Names.namespaceOf(name)),
         hydra.haskell.Utils.newtypeAccessorName(name)))));
   }
 
@@ -1486,15 +1490,16 @@ public interface Coder {
 
   static hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.haskell.syntax.DeclarationWithComments>> toTypeDeclarationsFrom(hydra.packaging.Namespaces<hydra.haskell.syntax.ModuleName> namespaces, hydra.core.Name elementName, hydra.core.Type typ, hydra.context.Context cx, hydra.graph.Graph g) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.haskell.syntax.Name, java.util.function.Function<java.util.List<hydra.core.Name>, hydra.haskell.syntax.DeclarationHead>>> declHead = new java.util.concurrent.atomic.AtomicReference<>();
-    declHead.set((java.util.function.Function<hydra.haskell.syntax.Name, java.util.function.Function<java.util.List<hydra.core.Name>, hydra.haskell.syntax.DeclarationHead>>) (name -> (java.util.function.Function<java.util.List<hydra.core.Name>, hydra.haskell.syntax.DeclarationHead>) (vars_ -> hydra.lib.logic.IfElse.lazy(
-      hydra.lib.lists.Null.apply(vars_),
+    declHead.set((java.util.function.Function<hydra.haskell.syntax.Name, java.util.function.Function<java.util.List<hydra.core.Name>, hydra.haskell.syntax.DeclarationHead>>) (name -> (java.util.function.Function<java.util.List<hydra.core.Name>, hydra.haskell.syntax.DeclarationHead>) (vars_ -> hydra.lib.maybes.FromMaybe.applyLazy(
       () -> new hydra.haskell.syntax.DeclarationHead.Simple(name),
-      () -> ((java.util.function.Supplier<hydra.haskell.syntax.DeclarationHead>) (() -> {
-        hydra.util.Lazy<hydra.core.Name> h = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(vars_));
-        hydra.haskell.syntax.Variable hvar = new hydra.haskell.syntax.Variable(hydra.haskell.Utils.simpleName(h.get().value));
-        hydra.util.Lazy<java.util.List<hydra.core.Name>> rest = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply(vars_));
-        return new hydra.haskell.syntax.DeclarationHead.Application(new hydra.haskell.syntax.ApplicationDeclarationHead(declHead.get().apply(name).apply(rest.get()), hvar));
-      })).get()))));
+      hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>, hydra.haskell.syntax.DeclarationHead>) (p -> {
+          hydra.util.Lazy<hydra.core.Name> h = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(p));
+          hydra.haskell.syntax.Variable hvar = new hydra.haskell.syntax.Variable(hydra.haskell.Utils.simpleName(h.get().value));
+          hydra.util.Lazy<java.util.List<hydra.core.Name>> rest = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(p));
+          return new hydra.haskell.syntax.DeclarationHead.Application(new hydra.haskell.syntax.ApplicationDeclarationHead(declHead.get().apply(name).apply(rest.get()), hvar));
+        }),
+        hydra.lib.lists.Uncons.apply(vars_))))));
     String lname = hydra.Names.localNameOf(elementName);
     hydra.haskell.syntax.Name hname = hydra.haskell.Utils.simpleName(lname);
     java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.Error_, hydra.haskell.syntax.ConstructorWithComments>>> newtypeCons = (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.Error_, hydra.haskell.syntax.ConstructorWithComments>>>) (tname -> (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.Error_, hydra.haskell.syntax.ConstructorWithComments>>) (typ_ -> {

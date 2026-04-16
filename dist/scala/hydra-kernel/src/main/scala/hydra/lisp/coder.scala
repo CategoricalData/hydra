@@ -134,9 +134,9 @@ def encodeLetAsNative[T0, T1, T2](dialect: hydra.lisp.syntax.Dialect)(cx: T0)(g:
             {
               lazy val sortedBindings: Seq[hydra.core.Binding] = hydra.lib.eithers.either[Seq[Seq[hydra.core.Name]],
                  Seq[hydra.core.Name], Seq[hydra.core.Binding]]((_x: Seq[Seq[hydra.core.Name]]) => bindings)((sorted: Seq[hydra.core.Name]) =>
-                hydra.lib.lists.map[hydra.core.Name, hydra.core.Binding]((name: hydra.core.Name) =>
-                hydra.lib.maybes.fromMaybe[hydra.core.Binding](hydra.lib.lists.head[hydra.core.Binding](bindings))(hydra.lib.maps.lookup[hydra.core.Name,
-                   hydra.core.Binding](name)(nameToBinding)))(sorted))(sortResult)
+                hydra.lib.maybes.cat[hydra.core.Binding](hydra.lib.lists.map[hydra.core.Name,
+                   Option[hydra.core.Binding]]((name: hydra.core.Name) =>
+                hydra.lib.maps.lookup[hydra.core.Name, hydra.core.Binding](name)(nameToBinding))(sorted)))(sortResult)
               hydra.lib.eithers.bind[T2, Seq[Tuple2[scala.Predef.String, hydra.lisp.syntax.Expression]],
                  hydra.lisp.syntax.Expression](hydra.lib.eithers.mapList[hydra.core.Binding,
                  Tuple2[scala.Predef.String, hydra.lisp.syntax.Expression], T2]((b: hydra.core.Binding) =>
@@ -184,7 +184,7 @@ def encodeLetAsNative[T0, T1, T2](dialect: hydra.lisp.syntax.Dialect)(cx: T0)(g:
                       {
                         lazy val isRecursive: Boolean = hydra.lib.logic.ifElse[Boolean](isClojure2)(hasCycle)(hasSelfRef)
                         {
-                          lazy val letKind: hydra.lisp.syntax.LetKind = hydra.lib.logic.ifElse[hydra.lisp.syntax.LetKind](isRecursive)(hydra.lisp.syntax.LetKind.recursive)(hydra.lib.logic.ifElse[hydra.lisp.syntax.LetKind](hydra.lib.lists.`null`[hydra.core.Binding](hydra.lib.lists.tail[hydra.core.Binding](bindings)))(hydra.lisp.syntax.LetKind.parallel)(hydra.lisp.syntax.LetKind.sequential))
+                          lazy val letKind: hydra.lisp.syntax.LetKind = hydra.lib.logic.ifElse[hydra.lisp.syntax.LetKind](isRecursive)(hydra.lisp.syntax.LetKind.recursive)(hydra.lib.logic.ifElse[hydra.lisp.syntax.LetKind](hydra.lib.equality.lte[Int](hydra.lib.lists.length[hydra.core.Binding](bindings))(1))(hydra.lisp.syntax.LetKind.parallel)(hydra.lisp.syntax.LetKind.sequential))
                           {
                             lazy val lispBindings: Seq[hydra.lisp.syntax.LetBinding] = hydra.lib.lists.map[Tuple2[scala.Predef.String,
                                hydra.lisp.syntax.Expression], hydra.lisp.syntax.LetBinding]((eb: Tuple2[scala.Predef.String,

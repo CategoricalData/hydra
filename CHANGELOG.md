@@ -12,6 +12,29 @@ The format is inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0
 
 ## [0.15.0] - in progress
 
+### Removed
+
+- **13 unsafe (partial) primitives removed from the standard library** (#201).
+  Each primitive that could crash on a runtime edge case has been removed in
+  favor of a `Maybe`-returning alternative, which was added in Phase 1.
+  - `hydra.lib.lists.at` -> use `hydra.lib.lists.maybeAt`
+  - `hydra.lib.lists.head` -> use `hydra.lib.lists.maybeHead`
+  - `hydra.lib.lists.init` -> use `hydra.lib.lists.maybeInit`
+  - `hydra.lib.lists.last` -> use `hydra.lib.lists.maybeLast`
+  - `hydra.lib.lists.tail` -> use `hydra.lib.lists.maybeTail`
+  - `hydra.lib.lists.safeHead` -> use `hydra.lib.lists.maybeHead` (rename)
+  - `hydra.lib.math.div` -> use `hydra.lib.math.maybeDiv` (Nothing on divisor 0)
+  - `hydra.lib.math.mod` -> use `hydra.lib.math.maybeMod` (Nothing on divisor 0)
+  - `hydra.lib.math.rem` -> use `hydra.lib.math.maybeRem` (Nothing on divisor 0)
+  - `hydra.lib.math.pred` -> use `hydra.lib.math.maybePred` (Nothing at minBound)
+  - `hydra.lib.math.succ` -> use `hydra.lib.math.maybeSucc` (Nothing at maxBound)
+  - `hydra.lib.strings.charAt` -> use `hydra.lib.strings.maybeCharAt`
+  - `hydra.lib.maybes.fromJust` -> use `hydra.lib.maybes.fromMaybe`,
+    `hydra.lib.maybes.maybe`, or `hydra.lib.maybes.cases`
+  **Breaking**: any direct call to these primitives at the Hydra (DSL) level
+  must be rewritten. At the host-language level (e.g., hand-written Haskell
+  under `heads/haskell/`), nothing in standard build or test flows breaks.
+
 ### Changed
 
 - **JSON `Value.number` migrated from `bigfloat` to `decimal`** (#340).

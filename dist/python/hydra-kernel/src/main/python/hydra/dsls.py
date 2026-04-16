@@ -59,7 +59,11 @@ def dsl_binding_name(n: hydra.core.Name) -> hydra.core.Name:
     @lru_cache(1)
     def parts() -> frozenlist[str]:
         return hydra.lib.strings.split_on(".", n.value)
-    return hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.lists.null(hydra.lib.lists.tail(parts()))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.head(parts()), "hydra"), (lambda : hydra.core.Name(hydra.lib.strings.intercalate(".", hydra.lib.lists.concat2(("hydra", "dsl"), hydra.lib.lists.concat2(hydra.lib.lists.tail(hydra.lib.lists.init(parts())), (hydra.formatting.decapitalize(hydra.names.local_name_of(n)),)))))), (lambda : hydra.core.Name(hydra.lib.strings.intercalate(".", hydra.lib.lists.concat2(("hydra", "dsl"), hydra.lib.lists.concat2(hydra.lib.lists.init(parts()), (hydra.formatting.decapitalize(hydra.names.local_name_of(n)),)))))))), (lambda : hydra.core.Name(hydra.formatting.decapitalize(hydra.names.local_name_of(n)))))
+    @lru_cache(1)
+    def local_part() -> str:
+        return hydra.formatting.decapitalize(hydra.names.local_name_of(n))
+    local_result = hydra.core.Name(local_part())
+    return hydra.lib.maybes.maybe((lambda : local_result), (lambda ns_parts: hydra.lib.maybes.maybe((lambda : local_result), (lambda ns_head_tail: (dsl_ns_parts := hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.pairs.first(ns_head_tail), "hydra"), (lambda : hydra.lib.lists.concat2(("hydra", "dsl"), hydra.lib.pairs.second(ns_head_tail))), (lambda : hydra.lib.lists.concat2(("hydra", "dsl"), ns_parts))), hydra.core.Name(hydra.lib.strings.intercalate(".", hydra.lib.lists.concat2(dsl_ns_parts, (local_part(),)))))[1]), hydra.lib.lists.uncons(ns_parts))), hydra.lib.lists.maybe_init(parts()))
 
 def dsl_definition_name(type_name: hydra.core.Name, local_name: str) -> hydra.core.Name:
     r"""Generate a qualified DSL element name from a type name and local element name."""
@@ -67,13 +71,7 @@ def dsl_definition_name(type_name: hydra.core.Name, local_name: str) -> hydra.co
     @lru_cache(1)
     def parts() -> frozenlist[str]:
         return hydra.lib.strings.split_on(".", type_name.value)
-    @lru_cache(1)
-    def ns_parts() -> frozenlist[str]:
-        return hydra.lib.lists.init(parts())
-    @lru_cache(1)
-    def dsl_ns_parts() -> frozenlist[str]:
-        return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.head(ns_parts()), "hydra"), (lambda : hydra.lib.lists.concat2(("hydra", "dsl"), hydra.lib.lists.tail(ns_parts()))), (lambda : hydra.lib.lists.concat2(("hydra", "dsl"), ns_parts())))
-    return hydra.core.Name(hydra.lib.strings.intercalate(".", hydra.lib.lists.concat2(dsl_ns_parts(), (local_name,))))
+    return hydra.lib.maybes.maybe((lambda : hydra.core.Name(local_name)), (lambda ns_parts: (dsl_ns_parts := hydra.lib.maybes.maybe((lambda : ("hydra", "dsl")), (lambda ns_head_tail: hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.pairs.first(ns_head_tail), "hydra"), (lambda : hydra.lib.lists.concat2(("hydra", "dsl"), hydra.lib.pairs.second(ns_head_tail))), (lambda : hydra.lib.lists.concat2(("hydra", "dsl"), ns_parts)))), hydra.lib.lists.uncons(ns_parts)), hydra.core.Name(hydra.lib.strings.intercalate(".", hydra.lib.lists.concat2(dsl_ns_parts, (local_name,)))))[1]), hydra.lib.lists.maybe_init(parts()))
 
 def dsl_namespace(ns: hydra.packaging.Namespace) -> hydra.packaging.Namespace:
     r"""Generate a DSL module namespace from a source module namespace."""
@@ -81,7 +79,10 @@ def dsl_namespace(ns: hydra.packaging.Namespace) -> hydra.packaging.Namespace:
     @lru_cache(1)
     def parts() -> frozenlist[str]:
         return hydra.lib.strings.split_on(".", ns.value)
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.head(parts()), "hydra"), (lambda : hydra.packaging.Namespace(hydra.lib.strings.cat(("hydra.dsl.", hydra.lib.strings.intercalate(".", hydra.lib.lists.tail(parts())))))), (lambda : hydra.packaging.Namespace(hydra.lib.strings.cat(("hydra.dsl.", ns.value)))))
+    @lru_cache(1)
+    def prefix_full() -> hydra.packaging.Namespace:
+        return hydra.packaging.Namespace(hydra.lib.strings.cat(("hydra.dsl.", ns.value)))
+    return hydra.lib.maybes.maybe((lambda : prefix_full()), (lambda ht: hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.pairs.first(ht), "hydra"), (lambda : hydra.packaging.Namespace(hydra.lib.strings.cat(("hydra.dsl.", hydra.lib.strings.intercalate(".", hydra.lib.pairs.second(ht)))))), (lambda : prefix_full()))), hydra.lib.lists.uncons(parts()))
 
 def is_dsl_eligible_binding(cx: T0, graph: T1, b: hydra.core.Binding) -> Either[T2, Maybe[hydra.core.Binding]]:
     r"""Check if a binding is eligible for DSL generation."""

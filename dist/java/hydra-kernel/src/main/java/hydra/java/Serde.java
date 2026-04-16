@@ -104,24 +104,28 @@ public interface Serde {
           n,
           65536);
         return ((java.util.function.Supplier<String>) (() -> {
-          Integer hi = hydra.lib.math.Add.apply(
+          hydra.util.Lazy<Integer> hi = new hydra.util.Lazy<>(() -> hydra.lib.math.Add.apply(
             55296,
-            hydra.lib.math.Div.apply(
-              n_,
-              1024));
-          return ((java.util.function.Supplier<String>) (() -> {
-            Integer lo = hydra.lib.math.Add.apply(
-              56320,
-              hydra.lib.math.Mod.apply(
+            hydra.lib.maybes.FromMaybe.applyLazy(
+              () -> 0,
+              hydra.lib.math.MaybeDiv.apply(
                 n_,
-                1024));
+                1024))));
+          return ((java.util.function.Supplier<String>) (() -> {
+            hydra.util.Lazy<Integer> lo = new hydra.util.Lazy<>(() -> hydra.lib.math.Add.apply(
+              56320,
+              hydra.lib.maybes.FromMaybe.applyLazy(
+                () -> 0,
+                hydra.lib.math.MaybeMod.apply(
+                  n_,
+                  1024))));
             return hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 "\\u",
-                hydra.java.Serde.padHex4(hi)),
+                hydra.java.Serde.padHex4(hi.get())),
               hydra.lib.strings.Cat2.apply(
                 "\\u",
-                hydra.java.Serde.padHex4(lo)));
+                hydra.java.Serde.padHex4(lo.get())));
           })).get();
         })).get();
       })).get(),
@@ -131,29 +135,41 @@ public interface Serde {
   }
 
   static String padHex4(Integer n) {
-    Integer r3 = hydra.lib.math.Mod.apply(
-      n,
-      4096);
-    Integer r2 = hydra.lib.math.Mod.apply(
-      r3,
-      256);
-    Integer d0 = hydra.lib.math.Mod.apply(
-      r2,
-      16);
-    Integer d1 = hydra.lib.math.Div.apply(
-      r2,
-      16);
-    Integer d2 = hydra.lib.math.Div.apply(
-      r3,
-      256);
-    Integer d3 = hydra.lib.math.Div.apply(
-      n,
-      4096);
+    hydra.util.Lazy<Integer> r3 = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> 0,
+      hydra.lib.math.MaybeMod.apply(
+        n,
+        4096)));
+    hydra.util.Lazy<Integer> r2 = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> 0,
+      hydra.lib.math.MaybeMod.apply(
+        r3.get(),
+        256)));
+    hydra.util.Lazy<Integer> d0 = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> 0,
+      hydra.lib.math.MaybeMod.apply(
+        r2.get(),
+        16)));
+    hydra.util.Lazy<Integer> d1 = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> 0,
+      hydra.lib.math.MaybeDiv.apply(
+        r2.get(),
+        16)));
+    hydra.util.Lazy<Integer> d2 = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> 0,
+      hydra.lib.math.MaybeDiv.apply(
+        r3.get(),
+        256)));
+    hydra.util.Lazy<Integer> d3 = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> 0,
+      hydra.lib.math.MaybeDiv.apply(
+        n,
+        4096)));
     return hydra.lib.strings.FromList.apply(java.util.Arrays.asList(
-      hydra.java.Serde.hexDigit(d3),
-      hydra.java.Serde.hexDigit(d2),
-      hydra.java.Serde.hexDigit(d1),
-      hydra.java.Serde.hexDigit(d0)));
+      hydra.java.Serde.hexDigit(d3.get()),
+      hydra.java.Serde.hexDigit(d2.get()),
+      hydra.java.Serde.hexDigit(d1.get()),
+      hydra.java.Serde.hexDigit(d0.get())));
   }
 
   static String sanitizeJavaComment(String s) {
@@ -302,19 +318,23 @@ public interface Serde {
 
   static hydra.ast.Expr writeArrayInitializer(hydra.java.syntax.ArrayInitializer ai) {
     java.util.List<java.util.List<hydra.java.syntax.VariableInitializer>> groups = (ai).value;
-    return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.equality.Equal.apply(
-        hydra.lib.lists.Length.apply(groups),
-        1),
-      () -> hydra.Serialization.noSep(java.util.Arrays.asList(
-        hydra.Serialization.cst("{"),
-        hydra.Serialization.commaSep(
-          hydra.Serialization.inlineStyle(),
-          hydra.lib.lists.Map.apply(
-            hydra.java.Serde::writeVariableInitializer,
-            hydra.lib.lists.Head.apply(groups))),
-        hydra.Serialization.cst("}"))),
-      () -> hydra.Serialization.cst("{}"));
+    return hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> hydra.Serialization.cst("{}"),
+      hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<java.util.List<hydra.java.syntax.VariableInitializer>, hydra.ast.Expr>) (firstGroup -> hydra.lib.logic.IfElse.lazy(
+          hydra.lib.equality.Equal.apply(
+            hydra.lib.lists.Length.apply(groups),
+            1),
+          () -> hydra.Serialization.noSep(java.util.Arrays.asList(
+            hydra.Serialization.cst("{"),
+            hydra.Serialization.commaSep(
+              hydra.Serialization.inlineStyle(),
+              hydra.lib.lists.Map.apply(
+                hydra.java.Serde::writeVariableInitializer,
+                firstGroup)),
+            hydra.Serialization.cst("}"))),
+          () -> hydra.Serialization.cst("{}"))),
+        hydra.lib.lists.MaybeHead.apply(groups)));
   }
 
   static hydra.ast.Expr writeArrayType(hydra.java.syntax.ArrayType at) {

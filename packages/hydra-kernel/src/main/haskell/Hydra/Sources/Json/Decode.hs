@@ -154,8 +154,12 @@ fromJson = define "fromJson" $
       Logic.ifElse (var "isNestedMaybe")
         -- Nested Maybe: use array-wrapped encoding (null -> Nothing, [v] -> Just v)
         ("decodeJust" <~ ("arr" ~>
-          Eithers.map ("v" ~> Core.termMaybe $ just $ var "v")
-            (fromJson @@ var "types" @@ var "tname" @@ var "innerType" @@ (Lists.head $ var "arr"))) $
+          Maybes.maybe
+            (left $ string "expected single-element array for Just")
+            ("firstVal" ~>
+              Eithers.map ("v" ~> Core.termMaybe $ just $ var "v")
+                (fromJson @@ var "types" @@ var "tname" @@ var "innerType" @@ var "firstVal"))
+            (Lists.maybeHead $ var "arr")) $
         "decodeMaybeArray" <~ ("arr" ~>
           "len" <~ (Lists.length $ var "arr") $
           Logic.ifElse (Equality.equal (var "len") (int32 0))
@@ -206,25 +210,24 @@ fromJson = define "fromJson" $
             (var "tname")
             (Core.field (Core.name $ var "key") (var "v")))
           (var "decoded")) $
-      -- Helper to check if a field matches and decode it
-      "tryField" <~ ("key" ~> "val" ~> "ft" ~>
-        Logic.ifElse (Equality.equal (Core.unName $ Core.fieldTypeName $ var "ft") (var "key"))
-          (just $ var "decodeVariant" @@ var "key" @@ var "val" @@ (Core.fieldTypeType $ var "ft"))
-          nothing) $
-      -- Find matching field and decode (uses tryField which returns Maybe, then either unwraps or recurses)
+      -- Find matching field and decode (finds the field whose name matches `key`,
+      -- then decodes its value; returns an error if no matching variant is present).
       "findAndDecode" <~ ("key" ~> "val" ~> "fts" ~>
-        Logic.ifElse (Lists.null $ var "fts")
+        Maybes.maybe
           (left $ Strings.cat $ list [string "unknown variant: ", var "key"])
-          (Maybes.maybe
-            (var "findAndDecode" @@ var "key" @@ var "val" @@ (Lists.tail $ var "fts"))
-            ("r" ~> var "r")
-            (var "tryField" @@ var "key" @@ var "val" @@ (Lists.head $ var "fts")))) $
+          ("ft" ~> var "decodeVariant" @@ var "key" @@ var "val" @@ (Core.fieldTypeType $ var "ft"))
+          (Lists.find
+            ("ft" ~> Equality.equal (Core.unName $ Core.fieldTypeName $ var "ft") (var "key"))
+            (var "fts"))) $
       -- Helper to decode a single-key object
       "decodeSingleKey" <~ ("obj" ~>
-        var "findAndDecode"
-          @@ (Lists.head $ Maps.keys $ var "obj")
-          @@ (Maps.lookup (Lists.head $ Maps.keys $ var "obj") (var "obj"))
-          @@ var "rt") $
+        Maybes.maybe
+          (left $ string "expected single-key object for union")
+          ("k" ~> var "findAndDecode"
+            @@ var "k"
+            @@ (Maps.lookup (var "k") (var "obj"))
+            @@ var "rt")
+          (Lists.maybeHead $ Maps.keys $ var "obj")) $
       -- Process the union object
       "processUnion" <~ ("obj" ~>
         Logic.ifElse (Equality.equal (Lists.length $ Maps.keys $ var "obj") (int32 1))

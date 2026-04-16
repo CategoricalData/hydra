@@ -131,7 +131,7 @@ encodeLetAsNative dialect cx g bindings body =
             nameToBinding = Maps.fromList (Lists.map (\b -> (Core.bindingName b, b)) bindings)
             hasCycle = Eithers.either (\_ -> True) (\_ -> False) sortResult
             sortedBindings =
-                    Eithers.either (\_ -> bindings) (\sorted -> Lists.map (\name -> Maybes.fromMaybe (Lists.head bindings) (Maps.lookup name nameToBinding)) sorted) sortResult
+                    Eithers.either (\_ -> bindings) (\sorted -> Maybes.cat (Lists.map (\name -> Maps.lookup name nameToBinding) sorted)) sortResult
         in (Eithers.bind (Eithers.mapList (\b ->
           let bname =
                   Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.bindingName b)))
@@ -169,7 +169,7 @@ encodeLetAsNative dialect cx g bindings body =
                         _ -> False
               isRecursive = Logic.ifElse isClojure2 hasCycle hasSelfRef
               letKind =
-                      Logic.ifElse isRecursive Syntax.LetKindRecursive (Logic.ifElse (Lists.null (Lists.tail bindings)) Syntax.LetKindParallel Syntax.LetKindSequential)
+                      Logic.ifElse isRecursive Syntax.LetKindRecursive (Logic.ifElse (Equality.lte (Lists.length bindings) 1) Syntax.LetKindParallel Syntax.LetKindSequential)
               lispBindings =
                       Lists.map (\eb -> Syntax.LetBindingSimple (Syntax.SimpleBinding {
                         Syntax.simpleBindingName = (Syntax.Symbol (Pairs.first eb)),

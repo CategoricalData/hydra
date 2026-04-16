@@ -457,10 +457,10 @@ public interface Unification {
         }
       });
     }));
-    return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.lists.Null.apply(constraints),
+    return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.util.Either.<hydra.errors.UnificationError, hydra.typing.TypeSubst>right(hydra.Substitution.idTypeSubst()),
-      () -> (withConstraint).apply(hydra.lib.lists.Head.apply(constraints)).apply(hydra.lib.lists.Tail.apply(constraints)));
+      (java.util.function.Function<hydra.util.Pair<hydra.typing.TypeConstraint, java.util.List<hydra.typing.TypeConstraint>>, hydra.util.Either<hydra.errors.UnificationError, hydra.typing.TypeSubst>>) (uc -> (withConstraint).apply(hydra.lib.pairs.First.apply(uc)).apply(hydra.lib.pairs.Second.apply(uc))),
+      hydra.lib.lists.Uncons.apply(constraints));
   }
 
   static <T0, T1> hydra.util.Either<hydra.errors.UnificationError, hydra.typing.TypeSubst> unifyTypeLists(T0 cx, java.util.Map<hydra.core.Name, T1> schemaTypes, java.util.List<hydra.core.Type> l, java.util.List<hydra.core.Type> r, String comment) {

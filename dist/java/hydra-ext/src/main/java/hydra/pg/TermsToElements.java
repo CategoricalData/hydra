@@ -252,22 +252,22 @@ public interface TermsToElements {
   }
 
   static <T0> hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.core.Term>> evalPath(T0 cx, java.util.List<String> path, hydra.core.Term term) {
-    return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.lists.Null.apply(path),
+    return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.util.Either.<hydra.errors.Error_, java.util.List<hydra.core.Term>>right(java.util.Arrays.asList(term)),
-      () -> hydra.lib.eithers.Bind.apply(
+      (java.util.function.Function<hydra.util.Pair<String, java.util.List<String>>, hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.core.Term>>>) (p -> hydra.lib.eithers.Bind.apply(
         hydra.pg.TermsToElements.<T0>evalStep(
           cx,
-          hydra.lib.lists.Head.apply(path),
+          hydra.lib.pairs.First.apply(p),
           term),
         (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.core.Term>>>) (results -> hydra.lib.eithers.Map.apply(
           (java.util.function.Function<java.util.List<java.util.List<hydra.core.Term>>, java.util.List<hydra.core.Term>>) (xs -> hydra.lib.lists.Concat.apply(xs)),
           hydra.lib.eithers.MapList.apply(
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.core.Term>>>) (v1 -> hydra.pg.TermsToElements.<T0>evalPath(
               cx,
-              hydra.lib.lists.Tail.apply(path),
+              hydra.lib.pairs.Second.apply(p),
               v1)),
-            results)))));
+            results))))),
+      hydra.lib.lists.Uncons.apply(path));
   }
 
   static <T0> hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.core.Term>> evalStep(T0 cx, String step, hydra.core.Term term) {
@@ -454,8 +454,12 @@ public interface TermsToElements {
     java.util.List<String> segments = hydra.lib.strings.SplitOn.apply(
       "${",
       pat);
-    hydra.util.Lazy<String> firstLit = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(segments));
-    hydra.util.Lazy<java.util.List<String>> rest = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply(segments));
+    hydra.util.Lazy<String> firstLit = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> pat,
+      hydra.lib.lists.MaybeHead.apply(segments)));
+    hydra.util.Lazy<java.util.List<String>> rest = new hydra.util.Lazy<>(() -> hydra.lib.lists.Drop.apply(
+      1,
+      segments));
     hydra.util.Lazy<java.util.List<hydra.util.Pair<java.util.List<String>, String>>> parsed = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<String, hydra.util.Pair<java.util.List<String>, String>>) (seg -> {
         java.util.List<String> parts = hydra.lib.strings.SplitOn.apply(
@@ -463,8 +467,12 @@ public interface TermsToElements {
           seg);
         hydra.util.Lazy<String> litPart = new hydra.util.Lazy<>(() -> hydra.lib.strings.Intercalate.apply(
           "}",
-          hydra.lib.lists.Tail.apply(parts)));
-        hydra.util.Lazy<String> pathStr = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(parts));
+          hydra.lib.lists.Drop.apply(
+            1,
+            parts)));
+        hydra.util.Lazy<String> pathStr = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> "",
+          hydra.lib.lists.MaybeHead.apply(parts)));
         java.util.List<String> pathSteps = hydra.lib.strings.SplitOn.apply(
           "/",
           pathStr.get());
@@ -588,25 +596,21 @@ public interface TermsToElements {
         encoded),
       (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, T1>>) (mp -> {
         hydra.util.Lazy<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>> entries = new hydra.util.Lazy<>(() -> hydra.lib.maps.ToList.apply(mp));
-        return hydra.lib.logic.IfElse.lazy(
-          hydra.lib.lists.Null.apply(entries.get()),
+        return hydra.lib.maybes.Maybe.applyLazy(
           () -> hydra.util.Either.<hydra.errors.Error_, T1>left(new hydra.errors.Error_.Other(new hydra.errors.OtherError("empty injection"))),
-          () -> ((java.util.function.Supplier<hydra.util.Either<hydra.errors.Error_, T1>>) (() -> {
-            hydra.util.Lazy<hydra.util.Pair<hydra.core.Name, hydra.core.Term>> f = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(entries.get()));
-            hydra.util.Lazy<hydra.core.Name> key = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(f.get()));
-            hydra.util.Lazy<hydra.core.Term> val = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(f.get()));
-            return ((java.util.function.Supplier<hydra.util.Either<hydra.errors.Error_, T1>>) (() -> {
-              hydra.util.Lazy<java.util.List<hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, T1>>>>> matching = new hydra.util.Lazy<>(() -> hydra.pg.TermsToElements.<T1>readInjection_matching(
+          (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, T1>>) (f -> {
+            hydra.util.Lazy<hydra.core.Name> key = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(f));
+            hydra.util.Lazy<hydra.core.Term> val = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(f));
+            return hydra.lib.maybes.Maybe.applyLazy(
+              () -> hydra.util.Either.<hydra.errors.Error_, T1>left(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
+                "unexpected field: ",
+                key.get().value)))),
+              (java.util.function.Function<hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, T1>>>, hydra.util.Either<hydra.errors.Error_, T1>>) (m -> hydra.lib.pairs.Second.apply(m).apply(val.get())),
+              hydra.lib.lists.MaybeHead.apply(hydra.pg.TermsToElements.<T1>readInjection_matching(
                 cases,
-                key.get()));
-              return hydra.lib.logic.IfElse.lazy(
-                hydra.lib.lists.Null.apply(matching.get()),
-                () -> hydra.util.Either.<hydra.errors.Error_, T1>left(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
-                  "unexpected field: ",
-                  key.get().value)))),
-                () -> hydra.lib.pairs.Second.apply(hydra.lib.lists.Head.apply(matching.get())).apply(val.get()));
-            })).get();
-          })).get());
+                key.get())));
+          }),
+          hydra.lib.lists.MaybeHead.apply(entries.get()));
       }));
   }
 
@@ -644,7 +648,12 @@ public interface TermsToElements {
           hydra.lib.equality.Equal.apply(
             hydra.lib.lists.Length.apply(results),
             1),
-          () -> hydra.util.Either.<hydra.errors.Error_, T2>right(hydra.lib.lists.Head.apply(results)),
+          () -> hydra.lib.maybes.Maybe.applyLazy(
+            () -> hydra.util.Either.<hydra.errors.Error_, T2>left(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
+              "Multiple values found: ",
+              context)))),
+            (java.util.function.Function<T2, hydra.util.Either<hydra.errors.Error_, T2>>) (x -> hydra.util.Either.<hydra.errors.Error_, T2>right(x)),
+            hydra.lib.lists.MaybeHead.apply(results)),
           () -> hydra.util.Either.<hydra.errors.Error_, T2>left(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
             "Multiple values found: ",
             context))))))));

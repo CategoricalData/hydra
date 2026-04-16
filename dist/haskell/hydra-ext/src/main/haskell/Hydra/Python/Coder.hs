@@ -276,8 +276,8 @@ encodeApplication cx env app =
 encodeApplicationInner :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.Term -> [Syntax.Expression] -> [Syntax.Expression] -> Either Errors.Error (Syntax.Expression, [Syntax.Expression])
 encodeApplicationInner cx env fun hargs rargs =
 
-      let firstArg = Lists.head hargs
-          restArgs = Lists.tail hargs
+      let firstArg = Maybes.fromMaybe (Utils.pyNameToPyExpression (Syntax.Name "")) (Lists.maybeHead hargs)
+          restArgs = Lists.drop 1 hargs
           withRest = \e -> Logic.ifElse (Lists.null restArgs) e (Utils.functionCall (Utils.pyExpressionToPyPrimary e) restArgs)
           defaultCase =
                   Eithers.bind (encodeTermInline cx env False fun) (\pfun -> Right (Utils.functionCall (Utils.pyExpressionToPyPrimary pfun) hargs, rargs))
@@ -348,7 +348,7 @@ encodeBindingAs cx env binding =
             mcsa = isCaseStatementApplication innerBody
         in (Maybes.maybe (
           let mcs = extractCaseElimination term1
-          in (Maybes.maybe (Eithers.map (\stmts -> Lists.head stmts) (encodeTermMultiline cx env term1)) (\cs ->
+          in (Maybes.maybe (Eithers.bind (encodeTermMultiline cx env term1) (\stmts -> Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError "encodeTermMultiline returned no statements"))) (\x -> Right x) (Lists.maybeHead stmts))) (\cs ->
             let tname = Core.caseStatementTypeName cs
                 dflt = Core.caseStatementDefault cs
                 cases_ = Core.caseStatementCases cs
@@ -392,7 +392,7 @@ encodeBindingAs cx env binding =
                   Syntax.functionDefinitionDecorators = Nothing,
                   Syntax.functionDefinitionRaw = funcDefRaw})))))))))) mcs)) (\csa -> Logic.ifElse (Lists.null lambdaParams) (
           let mcs = extractCaseElimination term1
-          in (Maybes.maybe (Eithers.map (\stmts -> Lists.head stmts) (encodeTermMultiline cx env term1)) (\cs ->
+          in (Maybes.maybe (Eithers.bind (encodeTermMultiline cx env term1) (\stmts -> Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError "encodeTermMultiline returned no statements"))) (\x -> Right x) (Lists.maybeHead stmts))) (\cs ->
             let tname = Core.caseStatementTypeName cs
                 dflt = Core.caseStatementDefault cs
                 cases_ = Core.caseStatementCases cs
@@ -443,8 +443,8 @@ encodeBindingAs cx env binding =
           in (Eithers.bind (Resolution.requireUnionType cx (pythonEnvironmentGetGraph env) tname) (\rt ->
             let isEnum = Predicates.isEnumRowType rt
                 isFull = isCasesFull rt cases_
-                capturedVarNames = Lists.init lambdaParams
-                matchLambdaParam = Lists.last lambdaParams
+                capturedVarNames = Maybes.fromMaybe [] (Lists.maybeInit lambdaParams)
+                matchLambdaParam = Maybes.fromMaybe (Core.Name "") (Lists.maybeLast lambdaParams)
                 capturedParams =
                         Lists.map (\n -> Syntax.ParamNoDefault {
                           Syntax.paramNoDefaultParam = Syntax.Param {
@@ -1113,7 +1113,7 @@ encodeTermMultiline cx env term =
           args = Pairs.first gathered
           body = Pairs.second gathered
       in (Logic.ifElse (Equality.equal (Lists.length args) 1) (
-        let arg = Lists.head args
+        let arg = Maybes.fromMaybe Core.TermUnit (Lists.maybeHead args)
         in case (Strip.deannotateAndDetypeTerm body) of
           Core.TermCases v0 ->
             let tname = Core.caseStatementTypeName v0
@@ -1159,7 +1159,7 @@ encodeTermMultilineTCO cx env funcName paramNames term =
             args2 = Pairs.first gathered2
             body2 = Pairs.second gathered2
         in (Logic.ifElse (Equality.equal (Lists.length args2) 1) (
-          let arg = Lists.head args2
+          let arg = Maybes.fromMaybe Core.TermUnit (Lists.maybeHead args2)
           in case (Strip.deannotateAndDetypeTerm body2) of
             Core.TermCases v0 ->
               let tname = Core.caseStatementTypeName v0
@@ -1704,7 +1704,7 @@ isCaseStatementApplication term =
           args = Pairs.first gathered
           body = Pairs.second gathered
       in (Logic.ifElse (Logic.not (Equality.equal (Lists.length args) 1)) Nothing (
-        let arg = Lists.head args
+        let arg = Maybes.fromMaybe Core.TermUnit (Lists.maybeHead args)
         in case (Strip.deannotateAndDetypeTerm body) of
           Core.TermCases v0 -> Just (Core.caseStatementTypeName v0, (Core.caseStatementDefault v0, (Core.caseStatementCases v0, arg)))
           _ -> Nothing))
@@ -2651,10 +2651,13 @@ wrapInNullaryLambda expr =
 -- | Wrap specific arguments in nullary lambdas for primitives that require lazy evaluation
 wrapLazyArguments :: Core.Name -> [Syntax.Expression] -> [Syntax.Expression]
 wrapLazyArguments name args =
-    Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.logic.ifElse")) (Equality.equal (Lists.length args) 3)) [
-      Lists.at 0 args,
-      (wrapInNullaryLambda (Lists.at 1 args)),
-      (wrapInNullaryLambda (Lists.at 2 args))] (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maybes.cases")) (Equality.equal (Lists.length args) 3)) [
-      Lists.at 0 args,
-      (wrapInNullaryLambda (Lists.at 1 args)),
-      (Lists.at 2 args)] (Logic.ifElse (Logic.and (Logic.or (Equality.equal name (Core.Name "hydra.lib.maybes.maybe")) (Equality.equal name (Core.Name "hydra.lib.maybes.fromMaybe"))) (Equality.gte (Lists.length args) 1)) (Lists.cons (wrapInNullaryLambda (Lists.at 0 args)) (Lists.tail args)) args))
+
+      let dummyExpr = Utils.pyNameToPyExpression (Syntax.Name "")
+          argAt = \i -> Maybes.fromMaybe dummyExpr (Lists.maybeAt i args)
+      in (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.logic.ifElse")) (Equality.equal (Lists.length args) 3)) [
+        argAt 0,
+        (wrapInNullaryLambda (argAt 1)),
+        (wrapInNullaryLambda (argAt 2))] (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maybes.cases")) (Equality.equal (Lists.length args) 3)) [
+        argAt 0,
+        (wrapInNullaryLambda (argAt 1)),
+        (argAt 2)] (Logic.ifElse (Logic.and (Logic.or (Equality.equal name (Core.Name "hydra.lib.maybes.maybe")) (Equality.equal name (Core.Name "hydra.lib.maybes.fromMaybe"))) (Equality.gte (Lists.length args) 1)) (Lists.cons (wrapInNullaryLambda (argAt 0)) (Lists.drop 1 args)) args)))

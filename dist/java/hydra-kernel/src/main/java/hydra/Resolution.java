@@ -121,13 +121,20 @@ public interface Resolution {
       fields));
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(matchingFields.get()),
-      () -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Type>left(new hydra.errors.Error_.Resolution(new hydra.errors.ResolutionError.NoMatchingField(new hydra.errors.NoMatchingFieldError(fname)))),
+      () -> hydra.Resolution.findFieldType_noMatch(fname),
       () -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.equality.Equal.apply(
           hydra.lib.lists.Length.apply(matchingFields.get()),
           1),
-        () -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Type>right(hydra.lib.lists.Head.apply(matchingFields.get()).type),
+        () -> hydra.lib.maybes.Maybe.applyLazy(
+          () -> hydra.Resolution.findFieldType_noMatch(fname),
+          (java.util.function.Function<hydra.core.FieldType, hydra.util.Either<hydra.errors.Error_, hydra.core.Type>>) (ft -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Type>right((ft).type)),
+          hydra.lib.lists.MaybeHead.apply(matchingFields.get())),
         () -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Type>left(new hydra.errors.Error_.Extraction(new hydra.errors.ExtractionError.MultipleFields(new hydra.errors.MultipleFieldsError(fname))))));
+  }
+
+  static <T1> hydra.util.Either<hydra.errors.Error_, T1> findFieldType_noMatch(hydra.core.Name fname) {
+    return hydra.util.Either.<hydra.errors.Error_, T1>left(new hydra.errors.Error_.Resolution(new hydra.errors.ResolutionError.NoMatchingField(new hydra.errors.NoMatchingFieldError(fname))));
   }
 
   static hydra.core.Type fullyStripAndNormalizeType(hydra.core.Type typ) {
@@ -298,23 +305,24 @@ public interface Resolution {
   }
 
   static <T0> hydra.util.Either<hydra.errors.Error_, hydra.core.Type> requireUnionField(T0 cx, hydra.graph.Graph graph, hydra.core.Name tname, hydra.core.Name fname) {
-    java.util.function.Function<java.util.List<hydra.core.FieldType>, hydra.util.Either<hydra.errors.Error_, hydra.core.Type>> withRowType = (java.util.function.Function<java.util.List<hydra.core.FieldType>, hydra.util.Either<hydra.errors.Error_, hydra.core.Type>>) (rt -> {
-      hydra.util.Lazy<java.util.List<hydra.core.FieldType>> matches = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+    java.util.function.Function<java.util.List<hydra.core.FieldType>, hydra.util.Either<hydra.errors.Error_, hydra.core.Type>> withRowType = (java.util.function.Function<java.util.List<hydra.core.FieldType>, hydra.util.Either<hydra.errors.Error_, hydra.core.Type>>) (rt -> hydra.lib.maybes.Maybe.applyLazy(
+      () -> hydra.Resolution.requireUnionField_noMatchErr(fname),
+      (java.util.function.Function<hydra.core.FieldType, hydra.util.Either<hydra.errors.Error_, hydra.core.Type>>) (ft -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Type>right((ft).type)),
+      hydra.lib.lists.Find.apply(
         (java.util.function.Function<hydra.core.FieldType, Boolean>) (ft -> hydra.lib.equality.Equal.apply(
           (ft).name,
           fname)),
-        rt));
-      return hydra.lib.logic.IfElse.lazy(
-        hydra.lib.lists.Null.apply(matches.get()),
-        () -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Type>left(new hydra.errors.Error_.Resolution(new hydra.errors.ResolutionError.NoMatchingField(new hydra.errors.NoMatchingFieldError(fname)))),
-        () -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Type>right(hydra.lib.lists.Head.apply(matches.get()).type));
-    });
+        rt)));
     return hydra.lib.eithers.Bind.apply(
       hydra.Resolution.<T0>requireUnionType(
         cx,
         graph,
         tname),
       withRowType);
+  }
+
+  static <T1> hydra.util.Either<hydra.errors.Error_, T1> requireUnionField_noMatchErr(hydra.core.Name fname) {
+    return hydra.util.Either.<hydra.errors.Error_, T1>left(new hydra.errors.Error_.Resolution(new hydra.errors.ResolutionError.NoMatchingField(new hydra.errors.NoMatchingFieldError(fname))));
   }
 
   static <T0> hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.core.FieldType>> requireUnionType(T0 cx, hydra.graph.Graph graph, hydra.core.Name name) {

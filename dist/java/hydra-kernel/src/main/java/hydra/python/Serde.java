@@ -1456,18 +1456,26 @@ public interface Serde {
 
   static hydra.ast.Expr encodeTuple(hydra.python.syntax.Tuple t) {
     java.util.List<hydra.python.syntax.StarNamedExpression> es = (t).value;
-    return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.equality.Equal.apply(
-        hydra.lib.lists.Length.apply(es),
-        1),
-      () -> hydra.Serialization.parens(hydra.Serialization.noSep(java.util.Arrays.asList(
-        hydra.python.Serde.encodeStarNamedExpression(hydra.lib.lists.Head.apply(es)),
-        hydra.Serialization.cst(",")))),
+    return hydra.lib.maybes.FromMaybe.applyLazy(
       () -> hydra.Serialization.parenList(
         false,
         hydra.lib.lists.Map.apply(
           hydra.python.Serde::encodeStarNamedExpression,
-          es)));
+          es)),
+      hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<hydra.python.syntax.StarNamedExpression, hydra.ast.Expr>) (firstEs -> hydra.lib.logic.IfElse.lazy(
+          hydra.lib.equality.Equal.apply(
+            hydra.lib.lists.Length.apply(es),
+            1),
+          () -> hydra.Serialization.parens(hydra.Serialization.noSep(java.util.Arrays.asList(
+            hydra.python.Serde.encodeStarNamedExpression(firstEs),
+            hydra.Serialization.cst(",")))),
+          () -> hydra.Serialization.parenList(
+            false,
+            hydra.lib.lists.Map.apply(
+              hydra.python.Serde::encodeStarNamedExpression,
+              es)))),
+        hydra.lib.lists.MaybeHead.apply(es)));
   }
 
   static hydra.ast.Expr encodeTypeAlias(hydra.python.syntax.TypeAlias ta) {

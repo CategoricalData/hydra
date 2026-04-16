@@ -156,18 +156,6 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "fromJust",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [],
-          Testing.testGroupCases = [
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "extract from just",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Maybes.fromJust (Just 42))),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 42)})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []}]},
-        Testing.TestGroup {
           Testing.testGroupName = "fromMaybe",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
