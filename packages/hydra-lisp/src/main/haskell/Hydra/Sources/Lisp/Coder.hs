@@ -334,29 +334,29 @@ encodeLetAsNative = def "encodeLetAsNative" $
     "isClojureTop" <~ (cases L._Dialect (var "dialect") (Just $ boolean False)
       [L._Dialect_clojure>>: constant $ boolean True]) $
     "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "body") $
-    -- For Clojure: topologically sort bindings so dependencies come before dependents.
-    -- Clojure's let is sequential, so referenced bindings must be defined first.
+    -- Topologically sort bindings so dependencies come before dependents.
     -- Build adjacency list: each binding depends on other bindings it references.
-    -- Topologically sort bindings for ALL Lisp dialects (all are eager)
-    "sortedBindings" <~ (Logic.ifElse (boolean True)
-      (lets [
-        "allNames">: Sets.fromList (Lists.map (lambda "b" $ Core.bindingName (var "b")) (var "bindings")),
-        "adjList">: Lists.map (lambda "b" $
-          pair (Core.bindingName (var "b"))
-            (Sets.toList (Sets.intersection (var "allNames")
-              (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b")))))
-          (var "bindings"),
-        "sortResult">: Sorting.topologicalSort @@ var "adjList",
-        "nameToBinding">: Maps.fromList (Lists.map (lambda "b" $ pair (Core.bindingName (var "b")) (var "b")) (var "bindings"))] $
-        -- If sort succeeds, reorder. If cyclic, keep original order.
-        Eithers.either_ (constant (var "bindings"))
-          (lambda "sorted" $
-            Lists.map (lambda "name" $
-              Maybes.fromMaybe (Lists.head (var "bindings"))
-                (Maps.lookup (var "name") (var "nameToBinding")))
-              (var "sorted"))
-          (var "sortResult"))
-      (var "bindings")) $
+    "allNames" <~ Sets.fromList (Lists.map (lambda "b" $ Core.bindingName (var "b")) (var "bindings")) $
+    "adjList" <~ Lists.map (lambda "b" $
+      pair (Core.bindingName (var "b"))
+        (Sets.toList (Sets.intersection (var "allNames")
+          (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b")))))
+      (var "bindings") $
+    "sortResult" <~ (Sorting.topologicalSort @@ var "adjList") $
+    "nameToBinding" <~ Maps.fromList (Lists.map (lambda "b" $ pair (Core.bindingName (var "b")) (var "b")) (var "bindings")) $
+    -- A cycle exists iff topologicalSort returned Left.
+    -- If sort succeeds, reorder; if cyclic, keep original order.
+    "hasCycle" <~ (Eithers.either_
+      (constant (boolean True))
+      (constant (boolean False))
+      (var "sortResult")) $
+    "sortedBindings" <~ (Eithers.either_ (constant (var "bindings"))
+      (lambda "sorted" $
+        Lists.map (lambda "name" $
+          Maybes.fromMaybe (Lists.head (var "bindings"))
+            (Maps.lookup (var "name") (var "nameToBinding")))
+          (var "sorted"))
+      (var "sortResult")) $
     -- Encode each binding, eta-expanding self-referential non-lambda bindings
     -- so that letrec doesn't evaluate the self-reference during initialization.
     -- E.g., `recurse = f(fsub(recurse))` becomes `recurse = (lambda (_arg) ((f (fsub recurse)) _arg))`
@@ -417,7 +417,13 @@ encodeLetAsNative = def "encodeLetAsNative" $
             (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b"))))
       (boolean False)
       (var "bindings")) $
-    "isRecursive" <~ (var "hasSelfRef") $
+    "isClojure2" <~ (cases L._Dialect (var "dialect") (Just $ boolean False)
+      [L._Dialect_clojure>>: constant $ boolean True]) $
+    -- For Clojure: recursive kind (letfn) only when there's an actual cycle;
+    -- otherwise the topological sort gives a valid ordering for plain let.
+    "isRecursive" <~ (Logic.ifElse (var "isClojure2")
+      (var "hasCycle")
+      (var "hasSelfRef")) $
     "letKind" <~ (Logic.ifElse (var "isRecursive")
       (inject L._LetKind L._LetKind_recursive unit)
       (Logic.ifElse (Lists.null (Lists.tail (var "bindings")))

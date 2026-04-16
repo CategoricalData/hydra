@@ -22,7 +22,9 @@ This supports [issue #243](https://github.com/CategoricalData/hydra/issues/243)
 
 ## Generated Files
 
-There are three sets of JSON exports:
+JSON modules are exported per package under `dist/json/`.
+The `update-json-main` executable fans out modules to per-package directories
+based on the routing table in `Hydra.PackageRouting`.
 
 **Kernel modules** (`dist/json/hydra-kernel/src/main/json/`):
 ```
@@ -34,9 +36,6 @@ dist/json/hydra-kernel/src/main/json/
 │   └── ...
 ```
 
-**Main modules** (also `dist/json/hydra-kernel/src/main/json/`):
-Includes all kernel modules plus additional main modules (encoders, decoders, JSON support, etc.).
-
 **Test modules** (`dist/json/hydra-kernel/src/test/json/`):
 ```
 dist/json/hydra-kernel/src/test/json/
@@ -44,6 +43,11 @@ dist/json/hydra-kernel/src/test/json/
 │   └── test/
 │       ├── ...
 ```
+
+**Per-package modules** (e.g. `dist/json/hydra-java/src/main/json/`):
+Each package gets its own directory with a `manifest.json` listing its modules.
+Current packages: `hydra-kernel`, `hydra-haskell`, `hydra-java`, `hydra-python`,
+`hydra-scala`, `hydra-lisp`, `hydra-pg`, `hydra-rdf`.
 
 Each file contains a single module encoded as JSON, using Hydra's type-directed JSON encoding.
 
@@ -56,12 +60,14 @@ cd heads/haskell
 ./bin/update-json-kernel.sh
 ```
 
-### Export all main modules to JSON
+### Export all packages to JSON
 
 ```bash
 cd heads/haskell
 ./bin/update-json-main.sh
 ```
+
+This exports kernel, coder, PG, and RDF modules to their per-package directories.
 
 ### Export test modules to JSON
 
@@ -85,7 +91,7 @@ All scripts build the necessary executables automatically.
 
 - **update-json-kernel**: Run after changes to kernel type definitions (`Hydra.Sources.*`), module structure,
   or term encodings
-- **update-json-main**: Run after changes to any main modules (kernel + encoders, decoders, JSON support, etc.)
+- **update-json-main**: Run after changes to any main modules (kernel + coders + PG + RDF)
 - **update-json-test**: Run after changes to test modules (`Hydra.Sources.Test.*`)
 
 ### Verify JSON (verify-json-kernel)
@@ -212,15 +218,16 @@ The tool uses Aeson for fast JSON parsing to minimize overhead.
 | File | Purpose |
 |------|---------|
 | `heads/haskell/src/exec/update-json-kernel/Main.hs` | Executable to generate kernel module JSON files |
-| `heads/haskell/src/exec/update-json-main/Main.hs` | Executable to generate main module JSON files |
+| `heads/haskell/src/exec/update-json-main/Main.hs` | Executable to generate per-package JSON files |
 | `heads/haskell/src/exec/update-json-test/Main.hs` | Executable to generate test module JSON files |
 | `heads/haskell/src/exec/verify-json-kernel/Main.hs` | Executable to verify JSON consistency |
 | `heads/haskell/bin/update-json-kernel.sh` | Wrapper script for kernel generation |
 | `heads/haskell/bin/update-json-main.sh` | Wrapper script for main generation |
 | `heads/haskell/bin/update-json-test.sh` | Wrapper script for test generation |
 | `heads/haskell/bin/verify-json-kernel.sh` | Wrapper script for verification |
-| `dist/json/hydra-kernel/src/main/json/` | Generated JSON output (kernel + main) |
+| `dist/json/hydra-kernel/src/main/json/` | Generated JSON output (kernel) |
 | `dist/json/hydra-kernel/src/test/json/` | Generated JSON output (test) |
+| `dist/json/hydra-<pkg>/src/main/json/` | Generated JSON output (per-package: coders, PG, RDF) |
 
 ### Dependencies
 
