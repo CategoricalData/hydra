@@ -1,49 +1,98 @@
-(* Note: this is an automatically generated file. Do not edit. *)
-
 (* Hydra primitive library: hydra.lib.maps *)
 
 (* Maps are represented as association lists: list (k * v) *)
 
 Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdlib.QArith.QArith.
+Require Import hydra.lib.base.
 Import ListNotations.
 
-Axiom alter : forall (v k : Type), (option v -> option v) -> k -> list (k * v) -> list (k * v).
+Open Scope Z_scope.
+
+Definition alter {v k : Type} (f : option v -> option v) (key : k) (m : list (k * v)) : list (k * v) :=
+  let existing := List.find (fun '(k', _) => hydra_eq key k') m in
+  let rest := List.filter (fun '(k', _) => negb (hydra_eq key k')) m in
+  match f (match existing with Some (_, v0) => Some v0 | None => None end) with
+  | Some v0 => (key, v0) :: rest
+  | None => rest
+  end.
 Arguments alter {v k}.
-Axiom bimap : forall (k1 k2 v1 v2 : Type), (k1 -> k2) -> (v1 -> v2) -> list (k1 * v1) -> list (k2 * v2).
+
+Definition bimap {k1 k2 v1 v2 : Type} (f : k1 -> k2) (g : v1 -> v2) (m : list (k1 * v1)) : list (k2 * v2) :=
+  List.map (fun '(k, v) => (f k, g v)) m.
 Arguments bimap {k1 k2 v1 v2}.
-Axiom delete : forall (k v : Type), k -> list (k * v) -> list (k * v).
+
+Definition delete {k v : Type} (key : k) (m : list (k * v)) : list (k * v) :=
+  List.filter (fun '(k', _) => negb (hydra_eq key k')) m.
 Arguments delete {k v}.
-Axiom elems : forall (k v : Type), list (k * v) -> list v.
+
+Definition elems {k v : Type} (m : list (k * v)) : list v :=
+  List.map snd m.
 Arguments elems {k v}.
-Axiom empty : forall (k v : Type), list (k * v).
+
+Definition empty {k v : Type} : list (k * v) := [].
 Arguments empty {k v}.
-Axiom filter : forall (v k : Type), (v -> bool) -> list (k * v) -> list (k * v).
+
+Definition filter {v k : Type} (p : v -> bool) (m : list (k * v)) : list (k * v) :=
+  List.filter (fun '(_, v0) => p v0) m.
 Arguments filter {v k}.
-Axiom filterWithKey : forall (k v : Type), (k -> v -> bool) -> list (k * v) -> list (k * v).
+
+Definition filterWithKey {k v : Type} (p : k -> v -> bool) (m : list (k * v)) : list (k * v) :=
+  List.filter (fun '(k0, v0) => p k0 v0) m.
 Arguments filterWithKey {k v}.
-Axiom findWithDefault : forall (v k : Type), v -> k -> list (k * v) -> v.
+
+Definition findWithDefault {v k : Type} (def : v) (key : k) (m : list (k * v)) : v :=
+  match List.find (fun '(k', _) => hydra_eq key k') m with
+  | Some (_, v0) => v0
+  | None => def
+  end.
 Arguments findWithDefault {v k}.
-Axiom fromList : forall (k v : Type), list (k * v) -> list (k * v).
+
+Definition fromList {k v : Type} (pairs : list (k * v)) : list (k * v) := pairs.
 Arguments fromList {k v}.
-Axiom insert : forall (k v : Type), k -> v -> list (k * v) -> list (k * v).
+
+Definition insert {k v : Type} (key : k) (val : v) (m : list (k * v)) : list (k * v) :=
+  (key, val) :: List.filter (fun '(k', _) => negb (hydra_eq key k')) m.
 Arguments insert {k v}.
-Axiom keys : forall (k v : Type), list (k * v) -> list k.
+
+Definition keys {k v : Type} (m : list (k * v)) : list k :=
+  List.map fst m.
 Arguments keys {k v}.
-Axiom lookup : forall (k v : Type), k -> list (k * v) -> option v.
+
+Definition lookup {k v : Type} (key : k) (m : list (k * v)) : option v :=
+  match List.find (fun '(k', _) => hydra_eq key k') m with
+  | Some (_, v0) => Some v0
+  | None => None
+  end.
 Arguments lookup {k v}.
-Axiom map : forall (k v1 v2 : Type), (v1 -> v2) -> list (k * v1) -> list (k * v2).
+
+Definition map {k v1 v2 : Type} (f : v1 -> v2) (m : list (k * v1)) : list (k * v2) :=
+  List.map (fun '(k0, v0) => (k0, f v0)) m.
 Arguments map {k v1 v2}.
-Axiom mapKeys : forall (k1 k2 v : Type), (k1 -> k2) -> list (k1 * v) -> list (k2 * v).
+
+Definition mapKeys {k1 k2 v : Type} (f : k1 -> k2) (m : list (k1 * v)) : list (k2 * v) :=
+  List.map (fun '(k0, v0) => (f k0, v0)) m.
 Arguments mapKeys {k1 k2 v}.
-Axiom member : forall (k v : Type), k -> list (k * v) -> bool.
+
+Definition member {k v : Type} (key : k) (m : list (k * v)) : bool :=
+  List.existsb (fun '(k', _) => hydra_eq key k') m.
 Arguments member {k v}.
-Axiom null : forall (k v : Type), list (k * v) -> bool.
+
+Definition null {k v : Type} (m : list (k * v)) : bool :=
+  match m with [] => true | _ => false end.
 Arguments null {k v}.
-Axiom singleton : forall (k v : Type), k -> v -> list (k * v).
+
+Definition singleton {k v : Type} (key : k) (val : v) : list (k * v) := [(key, val)].
 Arguments singleton {k v}.
-Axiom size : forall (k v : Type), list (k * v) -> Z.
+
+Definition size {k v : Type} (m : list (k * v)) : Z :=
+  Z.of_nat (List.length m).
 Arguments size {k v}.
-Axiom toList : forall (k v : Type), list (k * v) -> list (k * v).
+
+Definition toList {k v : Type} (m : list (k * v)) : list (k * v) := m.
 Arguments toList {k v}.
-Axiom union : forall (k v : Type), list (k * v) -> list (k * v) -> list (k * v).
+
+Definition union {k v : Type} (m1 m2 : list (k * v)) : list (k * v) :=
+  List.fold_right (fun '(k0, v0) acc => insert k0 v0 acc) m2 m1.
 Arguments union {k v}.
+
+Close Scope Z_scope.
