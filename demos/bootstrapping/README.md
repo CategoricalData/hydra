@@ -243,7 +243,8 @@ repository. Three executables produce the JSON exports (run by the sync scripts)
 
 - `hydra-haskell:update-json-main` — exports main + eval lib modules
 - `hydra-haskell:update-json-test` — exports test modules
-- `hydra-haskell:update-json-ext` — exports extension modules
+- `hydra-haskell:update-json-main` also exports per-package extension modules
+  (coders, PG, RDF) to `dist/json/hydra-<pkg>/`
 
 The JSON includes System F type annotations.
 
