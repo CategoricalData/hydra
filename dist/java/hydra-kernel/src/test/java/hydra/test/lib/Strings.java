@@ -224,6 +224,38 @@ public interface Strings {
             hydra.test.TestGraph.testGraph(),
             true,
             new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.strings.maybeCharAt")), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(4))))), new hydra.core.Term.Literal(new hydra.core.Literal.String_("hello")))))), hydra.show.Core.term(new hydra.core.Term.Maybe(hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(111)))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
+        new hydra.testing.TestCaseWithMetadata("single character string", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> "<<eval error>>"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.reduceTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            true,
+            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.strings.maybeCharAt")), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(0))))), new hydra.core.Term.Literal(new hydra.core.Literal.String_("a")))))), hydra.show.Core.term(new hydra.core.Term.Maybe(hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(97)))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
+        new hydra.testing.TestCaseWithMetadata("unicode character", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> "<<eval error>>"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.reduceTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            true,
+            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.strings.maybeCharAt")), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(0))))), new hydra.core.Term.Literal(new hydra.core.Literal.String_("\u00F1")))))), hydra.show.Core.term(new hydra.core.Term.Maybe(hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(241)))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
+        new hydra.testing.TestCaseWithMetadata("multi-byte unicode", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> "<<eval error>>"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.reduceTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            true,
+            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.strings.maybeCharAt")), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(0))))), new hydra.core.Term.Literal(new hydra.core.Literal.String_("\u4E16")))))), hydra.show.Core.term(new hydra.core.Term.Maybe(hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(19990)))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
+        new hydra.testing.TestCaseWithMetadata("second of combining pair", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> "<<eval error>>"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.reduceTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            true,
+            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.strings.maybeCharAt")), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(1))))), new hydra.core.Term.Literal(new hydra.core.Literal.String_("e\u0301")))))), hydra.show.Core.term(new hydra.core.Term.Maybe(hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(769)))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
         new hydra.testing.TestCaseWithMetadata("out of bounds", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
           (java.util.function.Function<hydra.errors.Error_, String>) (e -> "<<eval error>>"),
           (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),

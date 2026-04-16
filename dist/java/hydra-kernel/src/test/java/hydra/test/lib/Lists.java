@@ -1207,7 +1207,20 @@ public interface Lists {
             hydra.test.TestGraph.testContext(),
             hydra.test.TestGraph.testGraph(),
             true,
-            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.lists.maybeInit")), new hydra.core.Term.List((java.util.List<hydra.core.Term>) (java.util.Collections.<hydra.core.Term>emptyList())))))), hydra.show.Core.term(new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())))),
+            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.lists.maybeInit")), new hydra.core.Term.List((java.util.List<hydra.core.Term>) (java.util.Collections.<hydra.core.Term>emptyList())))))), hydra.show.Core.term(new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
+        new hydra.testing.TestCaseWithMetadata("string list", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> "<<eval error>>"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.reduceTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            true,
+            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.lists.maybeInit")), new hydra.core.Term.List(java.util.Arrays.asList(
+              new hydra.core.Term.Literal(new hydra.core.Literal.String_("a")),
+              new hydra.core.Term.Literal(new hydra.core.Literal.String_("b")),
+              new hydra.core.Term.Literal(new hydra.core.Literal.String_("c")))))))), hydra.show.Core.term(new hydra.core.Term.Maybe(hydra.util.Maybe.just(new hydra.core.Term.List(java.util.Arrays.asList(
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("a")),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("b"))))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())))),
       new hydra.testing.TestGroup("maybeLast", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
         new hydra.testing.TestCaseWithMetadata("three elements", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
           (java.util.function.Function<hydra.errors.Error_, String>) (e -> "<<eval error>>"),
@@ -1235,7 +1248,17 @@ public interface Lists {
             hydra.test.TestGraph.testContext(),
             hydra.test.TestGraph.testGraph(),
             true,
-            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.lists.maybeLast")), new hydra.core.Term.List((java.util.List<hydra.core.Term>) (java.util.Collections.<hydra.core.Term>emptyList())))))), hydra.show.Core.term(new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())))),
+            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.lists.maybeLast")), new hydra.core.Term.List((java.util.List<hydra.core.Term>) (java.util.Collections.<hydra.core.Term>emptyList())))))), hydra.show.Core.term(new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
+        new hydra.testing.TestCaseWithMetadata("string list", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> "<<eval error>>"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.reduceTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            true,
+            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.lists.maybeLast")), new hydra.core.Term.List(java.util.Arrays.asList(
+              new hydra.core.Term.Literal(new hydra.core.Literal.String_("hello")),
+              new hydra.core.Term.Literal(new hydra.core.Literal.String_("world")))))))), hydra.show.Core.term(new hydra.core.Term.Maybe(hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.String_("world"))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())))),
       new hydra.testing.TestGroup("maybeTail", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
         new hydra.testing.TestCaseWithMetadata("three elements", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
           (java.util.function.Function<hydra.errors.Error_, String>) (e -> "<<eval error>>"),
@@ -1265,7 +1288,20 @@ public interface Lists {
             hydra.test.TestGraph.testContext(),
             hydra.test.TestGraph.testGraph(),
             true,
-            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.lists.maybeTail")), new hydra.core.Term.List((java.util.List<hydra.core.Term>) (java.util.Collections.<hydra.core.Term>emptyList())))))), hydra.show.Core.term(new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())))),
+            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.lists.maybeTail")), new hydra.core.Term.List((java.util.List<hydra.core.Term>) (java.util.Collections.<hydra.core.Term>emptyList())))))), hydra.show.Core.term(new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
+        new hydra.testing.TestCaseWithMetadata("string list", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> "<<eval error>>"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.reduceTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            true,
+            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.lists.maybeTail")), new hydra.core.Term.List(java.util.Arrays.asList(
+              new hydra.core.Term.Literal(new hydra.core.Literal.String_("a")),
+              new hydra.core.Term.Literal(new hydra.core.Literal.String_("b")),
+              new hydra.core.Term.Literal(new hydra.core.Literal.String_("c")))))))), hydra.show.Core.term(new hydra.core.Term.Maybe(hydra.util.Maybe.just(new hydra.core.Term.List(java.util.Arrays.asList(
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("b")),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("c"))))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())))),
       new hydra.testing.TestGroup("nub", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
         new hydra.testing.TestCaseWithMetadata("remove duplicates", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
           (java.util.function.Function<hydra.errors.Error_, String>) (e -> "<<eval error>>"),
