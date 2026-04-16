@@ -34,13 +34,6 @@
           (dolist (x xs)
             (push (funcall f x) acc)))))))
 
-;; at :: Int -> [a] -> a
-(defvar hydra_lib_lists_at
-  (lambda (n)
-    "Get the element at a specified index in a list."
-    (lambda (xs)
-      (nth n xs))))
-
 ;; bind :: [a] -> (a -> [b]) -> [b]
 (defvar hydra_lib_lists_bind
   (lambda (xs)
@@ -148,18 +141,6 @@
           (push (nreverse current-group) groups)
           (nreverse groups)))))
 
-;; head :: [a] -> a
-(defvar hydra_lib_lists_head
-  (lambda (xs)
-    "Get the first element of a list."
-    (car xs)))
-
-;; init :: [a] -> [a]
-(defvar hydra_lib_lists_init
-  (lambda (xs)
-    "Return all elements except the last one."
-    (butlast xs)))
-
 ;; intercalate :: [a] -> [[a]] -> [a]
 (defvar hydra_lib_lists_intercalate
   (lambda (sep)
@@ -183,12 +164,6 @@
                   (dolist (x (cdr xs) (nreverse acc))
                     (push sep acc)
                     (push x acc))))))))
-
-;; last :: [a] -> a
-(defvar hydra_lib_lists_last
-  (lambda (xs)
-    "Get the last element of a list."
-    (car (last xs))))
 
 ;; length :: [a] -> Int
 (defvar hydra_lib_lists_length
@@ -293,14 +268,6 @@
     "Reverse a list."
     (reverse xs)))
 
-;; safe_head :: [a] -> Maybe a
-(defvar hydra_lib_lists_safe_head
-  (lambda (xs)
-    "Get the first element of a list, returning Nothing if the list is empty."
-    (if (null xs)
-        (list :nothing)
-        (list :just (car xs)))))
-
 ;; singleton :: a -> [a]
 (defvar hydra_lib_lists_singleton
   (lambda (x)
@@ -333,12 +300,6 @@
           (push (car rest) acc)
           (setq rest (cdr rest)))
         (list (nreverse acc) rest)))))
-
-;; tail :: [a] -> [a]
-(defvar hydra_lib_lists_tail
-  (lambda (xs)
-    "Get all elements of a list except the first."
-    (cdr xs)))
 
 ;; take :: Int -> [a] -> [a]
 (defvar hydra_lib_lists_take

@@ -20,11 +20,6 @@ def cat2(s1: TTerm, s2: TTerm) -> TTerm:
     return primitive2(s1, s2)
 
 
-def char_at(index: TTerm, s: TTerm) -> TTerm:
-    """Get the character at a given index in a string."""
-    return primitive2(index, s)
-
-
 def concat(strings: Sequence[TTerm]) -> TTerm:
     """Concatenate a Python sequence of string terms into a single string."""
     return cat(list_(strings))

@@ -3,7 +3,6 @@
           (scheme char))
   (export hydra_lib_strings_cat
           hydra_lib_strings_cat2
-          hydra_lib_strings_char_at
           hydra_lib_strings_cons
           hydra_lib_strings_drop
           hydra_lib_strings_from_list
@@ -43,12 +42,6 @@
       (lambda (a)
         (lambda (b)
           (string-append a b))))
-
-    ;; Get the Unicode code point of the character at a specific index in a string.
-    (define hydra_lib_strings_char_at
-      (lambda (n)
-        (lambda (s)
-          (char->int (string-ref s n)))))
 
     ;; Prepend a character (as code point) to a string.
     (define hydra_lib_strings_cons

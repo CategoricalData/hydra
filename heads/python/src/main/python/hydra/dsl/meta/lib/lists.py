@@ -9,11 +9,6 @@ def apply(fs: TTerm, values: TTerm) -> TTerm:
     return primitive2(fs, values)
 
 
-def at(i: TTerm, values: TTerm) -> TTerm:
-    """Get the element at specified index of a list."""
-    return primitive2(i, values)
-
-
 def bind(values: TTerm, f: TTerm) -> TTerm:
     """Apply a function that returns lists to each element and flatten results."""
     return primitive2(values, f)
@@ -74,16 +69,6 @@ def group(values: TTerm) -> TTerm:
     return primitive1(values)
 
 
-def head(values: TTerm) -> TTerm:
-    """Get the first element of a list."""
-    return primitive1(values)
-
-
-def init(values: TTerm) -> TTerm:
-    """Return all elements except the last one."""
-    return primitive1(values)
-
-
 def intercalate(separator: TTerm, values: TTerm) -> TTerm:
     """Intercalate a list of lists."""
     return primitive2(separator, values)
@@ -92,11 +77,6 @@ def intercalate(separator: TTerm, values: TTerm) -> TTerm:
 def intersperse(separator: TTerm, values: TTerm) -> TTerm:
     """Intersperse a value between elements of a list."""
     return primitive2(separator, values)
-
-
-def last(values: TTerm) -> TTerm:
-    """Get the last element of a list."""
-    return primitive1(values)
 
 
 def length(values: TTerm) -> TTerm:
@@ -164,11 +144,6 @@ def reverse(values: TTerm) -> TTerm:
     return primitive1(values)
 
 
-def safe_head(values: TTerm) -> TTerm:
-    """Get the first element of a list, returning None if the list is empty."""
-    return primitive1(values)
-
-
 def singleton(value: TTerm) -> TTerm:
     """Create a single-element list."""
     return primitive1(value)
@@ -187,11 +162,6 @@ def sort_on(key: TTerm, values: TTerm) -> TTerm:
 def span(predicate: TTerm, values: TTerm) -> TTerm:
     """Split a list at the first element where predicate fails."""
     return primitive2(predicate, values)
-
-
-def tail(values: TTerm) -> TTerm:
-    """Get all elements of a list except the first."""
-    return primitive1(values)
 
 
 def take(n: TTerm, values: TTerm) -> TTerm:

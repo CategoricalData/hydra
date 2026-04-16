@@ -1,10 +1,6 @@
 (ns hydra.lib.lists
   (:require [hydra.lib.equality :refer [generic-compare]]))
 
-;; at :: Int -> [a] -> a
-(def hydra_lib_lists_at
-  (fn [n] (fn [xs] (nth xs n))))
-
 ;; concat :: [[a]] -> [a]
 (def hydra_lib_lists_concat
   (fn [xss] (apply concat xss)))
@@ -59,14 +55,6 @@
 (def hydra_lib_lists_foldr
   (fn [f] (fn [init_] (fn [xs]
     (reduce (fn [acc el] ((f el) acc)) init_ (reverse xs))))))
-
-;; head :: [a] -> a
-(def hydra_lib_lists_head
-  (fn [xs] (first xs)))
-
-;; init :: [a] -> [a]  (all but last)
-(def hydra_lib_lists_init
-  (fn [xs] (or (butlast xs) ())))
 
 ;; intercalate :: [a] -> [[a]] -> [a]
 (def hydra_lib_lists_intercalate
@@ -168,13 +156,6 @@
 (def hydra_lib_lists_reverse
   (fn [xs] (reverse xs)))
 
-;; safe_head :: [a] -> Maybe a
-(def hydra_lib_lists_safe_head
-  (fn [xs]
-    (if (empty? xs)
-      (list :nothing)
-      (list :just (first xs)))))
-
 ;; singleton :: a -> [a]
 (def hydra_lib_lists_singleton
   (fn [x] (list x)))
@@ -195,10 +176,6 @@
         (nil? rest_) (list (reverse acc) ())
         (pred_ (first rest_)) (recur (next rest_) (cons (first rest_) acc))
         :else (list (reverse acc) rest_))))))
-
-;; tail :: [a] -> [a]
-(def hydra_lib_lists_tail
-  (fn [xs] (rest xs)))
 
 ;; take :: Int -> [a] -> [a]
 (def hydra_lib_lists_take
@@ -253,10 +230,6 @@
             (if (= x curr)
               (recur (next rest_) curr (cons x acc-group) groups)
               (recur (next rest_) x (list x) (cons (reverse acc-group) groups)))))))))
-
-;; last :: [a] -> a
-(def hydra_lib_lists_last
-  (fn [xs] (last xs)))
 
 ;; zip :: [a] -> [b] -> [Pair a b]
 (def hydra_lib_lists_zip

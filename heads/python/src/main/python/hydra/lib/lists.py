@@ -17,11 +17,6 @@ def apply(fs: Sequence[Callable[[A], B]], values: Sequence[A]) -> frozenlist[B]:
     return tuple(f(v) for f in fs for v in values)
 
 
-def at(i: int, values: Sequence[A]) -> A:
-    """Get the element at a specified index in a list."""
-    return values[i]
-
-
 def bind(values: Sequence[A], f: Callable[[A], Sequence[B]]) -> frozenlist[B]:
     """Apply a function that returns lists to each element and flatten results."""
     return tuple(s for v in values for s in f(v))
@@ -110,16 +105,6 @@ def group(values: Sequence[A]) -> frozenlist[frozenlist[A]]:
     return tuple(result)
 
 
-def head(values: Sequence[A]) -> A:
-    """Get the first element of a list."""
-    return values[0]
-
-
-def init(values: Sequence[A]) -> frozenlist[A]:
-    """Return all elements except the last one."""
-    return tuple(values[:-1])
-
-
 def intercalate(
     separator: Sequence[A], values: Sequence[Sequence[A]]
 ) -> frozenlist[A]:
@@ -139,11 +124,6 @@ def intersperse(separator: A, values: Sequence[A]) -> frozenlist[A]:
     return tuple(x for pair in zip(values, [separator] * len(values)) for x in pair)[
         :-1
     ]
-
-
-def last(values: Sequence[A]) -> A:
-    """Get the last element of a list."""
-    return values[-1]
 
 
 def length(values: Sequence[Any]) -> int:
@@ -219,11 +199,6 @@ def reverse(values: Sequence[A]) -> frozenlist[A]:
     return tuple(values[::-1])
 
 
-def safe_head(values: Sequence[A]) -> Maybe[A]:
-    """Get the first element of a list, returning Nothing if the list is empty."""
-    return Just(values[0]) if len(values) > 0 else Nothing()
-
-
 def singleton(value: A) -> frozenlist[A]:
     """Create a single-element list."""
     return (value,)
@@ -247,11 +222,6 @@ def span(predicate: Callable[[A], bool], values: Sequence[A]) -> tuple[frozenlis
         if not predicate(value):
             return (tuple(values[:i]), tuple(values[i:]))
     return (tuple(values), ())
-
-
-def tail(values: Sequence[A]) -> frozenlist[A]:
-    """Get all elements of a list except the first."""
-    return tuple(values[1:])
 
 
 def take(n: int, values: Sequence[A]) -> frozenlist[A]:

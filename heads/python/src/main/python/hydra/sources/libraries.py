@@ -210,11 +210,6 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         qname(namespace, "apply"), lists.apply, [_a, _b],
         prims.list_(fun(a, b)), prims.list_(a), prims.list_(b)
     )
-    # prim2: at :: Int32 -> [a] -> a
-    primitives[qname(namespace, "at")] = prims.prim2(
-        qname(namespace, "at"), lists.at, [_a],
-        prims.int32(), prims.list_(a), a
-    )
     # prim2: bind :: [a] -> (a -> [b]) -> [b]
     primitives[qname(namespace, "bind")] = prims.prim2(
         qname(namespace, "bind"), lists.bind, [_a, _b],
@@ -275,14 +270,6 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         qname(namespace, "group"), lists.group, [_aEq],
         prims.list_(a), prims.list_(prims.list_(a))
     )
-    # prim1: head :: [a] -> a
-    primitives[qname(namespace, "head")] = prims.prim1(
-        qname(namespace, "head"), lists.head, [_a], prims.list_(a), a
-    )
-    # prim1: init :: [a] -> [a]
-    primitives[qname(namespace, "init")] = prims.prim1(
-        qname(namespace, "init"), lists.init, [_a], prims.list_(a), prims.list_(a)
-    )
     # prim2: intercalate :: [a] -> [[a]] -> [a]
     primitives[qname(namespace, "intercalate")] = prims.prim2(
         qname(namespace, "intercalate"), lists.intercalate, [_a],
@@ -292,10 +279,6 @@ def register_lists_primitives() -> dict[Name, Primitive]:
     primitives[qname(namespace, "intersperse")] = prims.prim2(
         qname(namespace, "intersperse"), lists.intersperse, [_a],
         a, prims.list_(a), prims.list_(a)
-    )
-    # prim1: last :: [a] -> a
-    primitives[qname(namespace, "last")] = prims.prim1(
-        qname(namespace, "last"), lists.last, [_a], prims.list_(a), a
     )
     # prim1: length :: [a] -> Int32
     primitives[qname(namespace, "length")] = prims.prim1(
@@ -360,11 +343,6 @@ def register_lists_primitives() -> dict[Name, Primitive]:
     primitives[qname(namespace, "reverse")] = prims.prim1(
         qname(namespace, "reverse"), lists.reverse, [_a], prims.list_(a), prims.list_(a)
     )
-    # prim1: safeHead :: [a] -> Maybe a
-    primitives[qname(namespace, "safeHead")] = prims.prim1(
-        qname(namespace, "safeHead"), lists.safe_head, [_a],
-        prims.list_(a), prims.optional(a)
-    )
     # prim1: singleton :: a -> [a]
     primitives[qname(namespace, "singleton")] = prims.prim1(
         qname(namespace, "singleton"), lists.singleton, [_a],
@@ -384,10 +362,6 @@ def register_lists_primitives() -> dict[Name, Primitive]:
     primitives[qname(namespace, "span")] = prims.prim2(
         qname(namespace, "span"), lists.span, [_a],
         fun(a, prims.boolean()), prims.list_(a), prims.pair(prims.list_(a), prims.list_(a))
-    )
-    # prim1: tail :: [a] -> [a]
-    primitives[qname(namespace, "tail")] = prims.prim1(
-        qname(namespace, "tail"), lists.tail, [_a], prims.list_(a), prims.list_(a)
     )
     # prim2: take :: Int32 -> [a] -> [a]
     primitives[qname(namespace, "take")] = prims.prim2(
@@ -587,14 +561,8 @@ def register_math_primitives() -> dict[Name, Primitive]:
     primitives[qname(namespace, "addFloat64")] = prims.prim2(
         qname(namespace, "addFloat64"), math.add_float64, [], prims.float64(), prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "div")] = prims.prim2(
-        qname(namespace, "div"), math.div, [], prims.int32(), prims.int32(), prims.int32()
-    )
     primitives[qname(namespace, "even")] = prims.prim1(
         qname(namespace, "even"), math.even, [], prims.int32(), prims.boolean()
-    )
-    primitives[qname(namespace, "mod")] = prims.prim2(
-        qname(namespace, "mod"), math.mod, [], prims.int32(), prims.int32(), prims.int32()
     )
     primitives[qname(namespace, "mul")] = prims.prim2(
         qname(namespace, "mul"), math.mul, [], prims.int32(), prims.int32(), prims.int32()
@@ -611,14 +579,8 @@ def register_math_primitives() -> dict[Name, Primitive]:
     primitives[qname(namespace, "odd")] = prims.prim1(
         qname(namespace, "odd"), math.odd, [], prims.int32(), prims.boolean()
     )
-    primitives[qname(namespace, "pred")] = prims.prim1(
-        qname(namespace, "pred"), math.pred, [], prims.int32(), prims.int32()
-    )
     primitives[qname(namespace, "range")] = prims.prim2(
         qname(namespace, "range"), math.range_, [], prims.int32(), prims.int32(), prims.list_(prims.int32())
-    )
-    primitives[qname(namespace, "rem")] = prims.prim2(
-        qname(namespace, "rem"), math.rem, [], prims.int32(), prims.int32(), prims.int32()
     )
     primitives[qname(namespace, "signum")] = prims.prim1(
         qname(namespace, "signum"), math.signum, [], prims.int32(), prims.int32()
@@ -628,9 +590,6 @@ def register_math_primitives() -> dict[Name, Primitive]:
     )
     primitives[qname(namespace, "subFloat64")] = prims.prim2(
         qname(namespace, "subFloat64"), math.sub_float64, [], prims.float64(), prims.float64(), prims.float64()
-    )
-    primitives[qname(namespace, "succ")] = prims.prim1(
-        qname(namespace, "succ"), math.succ, [], prims.int32(), prims.int32()
     )
     primitives[qname(namespace, "max")] = prims.prim2(
         qname(namespace, "max"), math.max, [], prims.int32(), prims.int32(), prims.int32()
@@ -779,11 +738,6 @@ def register_maybes_primitives() -> dict[Name, Primitive]:
         qname(namespace, "compose"), maybes.compose, [_a, _b, _c],
         fun(a, prims.optional(b)), fun(b, prims.optional(c)),
         a, prims.optional(c)
-    )
-    # fromJust :: Maybe a -> a
-    primitives[qname(namespace, "fromJust")] = prims.prim1(
-        qname(namespace, "fromJust"), maybes.from_just, [_a],
-        prims.optional(a), a
     )
     primitives[qname(namespace, "fromMaybe")] = prims.prim2(
         qname(namespace, "fromMaybe"), maybes.from_maybe, [_a],
@@ -940,9 +894,6 @@ def register_strings_primitives() -> dict[Name, Primitive]:
     )
     primitives[qname(namespace, "cat2")] = prims.prim2(
         qname(namespace, "cat2"), strings.cat2, [], prims.string(), prims.string(), prims.string()
-    )
-    primitives[qname(namespace, "charAt")] = prims.prim2(
-        qname(namespace, "charAt"), strings.char_at, [], prims.int32(), prims.string(), prims.int32()
     )
     primitives[qname(namespace, "fromList")] = prims.prim1(
         qname(namespace, "fromList"), strings.from_list, [], prims.list_(prims.int32()), prims.string()
