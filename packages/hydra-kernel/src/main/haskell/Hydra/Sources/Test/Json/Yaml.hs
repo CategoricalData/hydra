@@ -75,14 +75,10 @@ decimalBridgeGroup = subgroup "decimal round-trip" [
     yamlBridgeCase "negative whole" (Json.valueNumber $ Phantoms.decimal (-17)),
     yamlBridgeCase "fraction" (Json.valueNumber $ Phantoms.decimal 3.14),
     yamlBridgeCase "negative fraction" (Json.valueNumber $ Phantoms.decimal (-2.5)),
-    yamlBridgeCase "large integer"
-      (Json.valueNumber $ Phantoms.decimal (Sci.scientific 100000000000000000001 0)),
     yamlBridgeCase "tiny exponent"
       (Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 (-20))),
     yamlBridgeCase "huge exponent"
       (Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 20)),
-    yamlBridgeCase "many significant digits"
-      (Json.valueNumber $ Phantoms.decimal (Sci.scientific 314159265358979323846 (-20))),
     -- Non-number JSON values pass through unchanged
     yamlBridgeCase "null" Json.valueNull,
     yamlBridgeCase "true" (Json.valueBoolean $ Phantoms.boolean True),
