@@ -40,6 +40,7 @@ import qualified Hydra.Sources.Test.Checking.Fundamentals as CheckingFundamental
 import qualified Hydra.Sources.Test.Checking.NominalTypes as CheckingNominalTypes
 import qualified Hydra.Sources.Test.EtaExpansion as EtaExpansion
 import qualified Hydra.Sources.Test.Formatting as Formatting
+import qualified Hydra.Sources.Test.Generation as Generation
 import qualified Hydra.Sources.Test.Inference.All as InferenceAll
 import qualified Hydra.Sources.Test.Inference.AlgebraicTypes as InferenceAlgebraicTypes
 import qualified Hydra.Sources.Test.Inference.AlgorithmW as InferenceAlgorithmW
@@ -110,6 +111,7 @@ otherPairs = [
   (Differentiation.ns, Differentiation.allTests),
   (EtaExpansion.ns, EtaExpansion.allTests),
   (Formatting.ns, Formatting.allTests),
+  (Generation.ns, Generation.allTests),
   (HoistingAll.ns, HoistingAll.allTests),
   (InferenceAll.ns, InferenceAll.allTests),
   -- TODO #336: JsonParser temporarily excluded — polymorphic ParseResult type blocks code generation
@@ -141,6 +143,7 @@ testSuiteModules =
    HoistingAll.module_, HoistingCases.module_, HoistingLet.module_,
    -- Other tests
    Annotations.module_, Dependencies.module_, Differentiation.module_, EtaExpansion.module_, Formatting.module_,
+   Generation.module_,
    JsonRoundtrip.module_, JsonWriter.module_,
    Reduction.module_, Rewriting.module_, Serialization.module_, Sorting.module_,
    Strip.module_, Variables.module_,

@@ -289,32 +289,25 @@ inferModules cx bsGraph universeMods targetMods =
                     _ -> Nothing) (Packaging.moduleDefinitions m))) universeMods)
       in (Eithers.bind (Inference.inferGraphTypes cx dataElements g0) (\inferResultWithCx ->
         let inferResult = Pairs.first inferResultWithCx
-            g1 = Pairs.first inferResult
             inferredElements = Pairs.second inferResult
-            isTypeOnlyModule =
-                    \mod -> Logic.not (Logic.not (Lists.null (Maybes.cat (Lists.map (\d -> case d of
-                      Packaging.DefinitionTerm v0 -> Just (Core.Binding {
-                        Core.bindingName = (Packaging.termDefinitionName v0),
-                        Core.bindingTerm = (Packaging.termDefinitionTerm v0),
-                        Core.bindingType = (Packaging.termDefinitionType v0)})
-                      _ -> Nothing) (Packaging.moduleDefinitions mod)))))
-            defName =
-                    \d -> case d of
-                      Packaging.DefinitionTerm v0 -> Packaging.termDefinitionName v0
-                      Packaging.DefinitionType v0 -> Packaging.typeDefinitionName v0
-            refreshModule =
-                    \m -> Logic.ifElse (isTypeOnlyModule m) m (Packaging.Module {
-                      Packaging.moduleNamespace = (Packaging.moduleNamespace m),
-                      Packaging.moduleDefinitions = (Maybes.cat (Lists.map (\d -> case d of
-                        Packaging.DefinitionType v0 -> Just (Packaging.DefinitionType v0)
-                        Packaging.DefinitionTerm v0 -> Maybes.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
-                          Packaging.termDefinitionName = (Core.bindingName b),
-                          Packaging.termDefinitionTerm = (Core.bindingTerm b),
-                          Packaging.termDefinitionType = (Core.bindingType b)})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (Packaging.termDefinitionName v0)) inferredElements)) (Packaging.moduleDefinitions m))),
-                      Packaging.moduleTermDependencies = (Packaging.moduleTermDependencies m),
-                      Packaging.moduleTypeDependencies = (Packaging.moduleTypeDependencies m),
-                      Packaging.moduleDescription = (Packaging.moduleDescription m)})
-        in (Right (Lists.map refreshModule targetMods))))
+        in (Right (Lists.map (refreshModule inferredElements) targetMods))))
+
+-- | Incrementally infer types for target modules, using the universe as a seeded inference context
+inferModulesGiven :: Context.Context -> Graph.Graph -> [Packaging.Module] -> [Packaging.Module] -> Either Errors.Error [Packaging.Module]
+inferModulesGiven cx bsGraph universeMods targetMods =
+
+      let g0 = modulesToGraph bsGraph universeMods universeMods
+          targetBindings =
+                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                    Packaging.DefinitionTerm v0 -> Just (Core.Binding {
+                      Core.bindingName = (Packaging.termDefinitionName v0),
+                      Core.bindingTerm = (Packaging.termDefinitionTerm v0),
+                      Core.bindingType = (Packaging.termDefinitionType v0)})
+                    _ -> Nothing) (Packaging.moduleDefinitions m))) targetMods)
+      in (Eithers.bind (Inference.inferGraphTypes cx targetBindings g0) (\inferResultWithCx ->
+        let inferResult = Pairs.first inferResultWithCx
+            inferredElements = Pairs.second inferResult
+        in (Right (Lists.map (refreshModule inferredElements) targetMods))))
 
 -- | Compute transitive closure of term dependencies for a set of modules
 moduleTermDepsTransitive :: M.Map Packaging.Namespace Packaging.Module -> [Packaging.Module] -> [Packaging.Module]
@@ -395,11 +388,49 @@ modulesToGraph bsGraph universeModules modules =
                     _ -> Nothing) (Packaging.moduleDefinitions m))) dataModules)
           schemaGraph = Lexical.elementsToGraph bsGraph Maps.empty schemaElements
           schemaTypes = Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Environment.schemaGraphToTypingEnvironment schemaGraph)
-      in (Lexical.elementsToGraph bsGraph schemaTypes dataElements)
+          baseGraph = Lexical.elementsToGraph bsGraph schemaTypes dataElements
+          universeDataElements =
+                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                    Packaging.DefinitionTerm v0 -> Just (Core.Binding {
+                      Core.bindingName = (Packaging.termDefinitionName v0),
+                      Core.bindingTerm = (Packaging.termDefinitionTerm v0),
+                      Core.bindingType = (Packaging.termDefinitionType v0)})
+                    _ -> Nothing) (Packaging.moduleDefinitions m))) universeModules)
+          universeBoundTypes =
+                  Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, ts)) (Core.bindingType b)) universeDataElements))
+      in Graph.Graph {
+        Graph.graphBoundTerms = (Graph.graphBoundTerms baseGraph),
+        Graph.graphBoundTypes = universeBoundTypes,
+        Graph.graphClassConstraints = (Graph.graphClassConstraints baseGraph),
+        Graph.graphLambdaVariables = (Graph.graphLambdaVariables baseGraph),
+        Graph.graphMetadata = (Graph.graphMetadata baseGraph),
+        Graph.graphPrimitives = (Graph.graphPrimitives baseGraph),
+        Graph.graphSchemaTypes = (Graph.graphSchemaTypes baseGraph),
+        Graph.graphTypeVariables = (Graph.graphTypeVariables baseGraph)}
 
 -- | Convert a namespace to a file path (e.g., hydra.core -> hydra/core)
 namespaceToPath :: Packaging.Namespace -> String
 namespaceToPath ns = Strings.intercalate "/" (Strings.splitOn "." (Packaging.unNamespace ns))
+
+-- | Rebuild a module's term definitions using freshly inferred bindings
+refreshModule :: [Core.Binding] -> Packaging.Module -> Packaging.Module
+refreshModule inferredElements m =
+    Logic.ifElse (Logic.not (Logic.not (Lists.null (Maybes.cat (Lists.map (\d -> case d of
+      Packaging.DefinitionTerm v0 -> Just (Core.Binding {
+        Core.bindingName = (Packaging.termDefinitionName v0),
+        Core.bindingTerm = (Packaging.termDefinitionTerm v0),
+        Core.bindingType = (Packaging.termDefinitionType v0)})
+      _ -> Nothing) (Packaging.moduleDefinitions m)))))) m (Packaging.Module {
+      Packaging.moduleNamespace = (Packaging.moduleNamespace m),
+      Packaging.moduleDefinitions = (Maybes.cat (Lists.map (\d -> case d of
+        Packaging.DefinitionType v0 -> Just (Packaging.DefinitionType v0)
+        Packaging.DefinitionTerm v0 -> Maybes.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.bindingName b),
+          Packaging.termDefinitionTerm = (Core.bindingTerm b),
+          Packaging.termDefinitionType = (Core.bindingType b)})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (Packaging.termDefinitionName v0)) inferredElements)) (Packaging.moduleDefinitions m))),
+      Packaging.moduleTermDependencies = (Packaging.moduleTermDependencies m),
+      Packaging.moduleTypeDependencies = (Packaging.moduleTypeDependencies m),
+      Packaging.moduleDescription = (Packaging.moduleDescription m)})
 
 -- | Compute transitive closure of module dependencies
 transitiveDeps :: (Packaging.Module -> [Packaging.Namespace]) -> M.Map Packaging.Namespace Packaging.Module -> [Packaging.Module] -> S.Set Packaging.Namespace
