@@ -95,7 +95,7 @@ define = definitionInNamespace ns
 module_ :: Module
 module_ = Module ns definitions
     [JsonDecode.ns, YamlModel.ns]
-    KernelTypes.kernelTypesNamespaces $
+    (YamlModel.ns : KernelTypes.kernelTypesNamespaces) $
     Just "YAML-to-JSON decoding. Converts YAML Nodes to JSON Values (may fail for non-JSON YAML), and YAML Nodes to Hydra Terms via JSON."
   where
     definitions = [
