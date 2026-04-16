@@ -480,11 +480,26 @@ main = do
     then do
       putStrLn "Loading test modules from JSON..."
       testNamespaces <- readManifestField kernelJsonDir "testModules"
-      testMods <- loadModulesFromJson testJsonDir kernelModules testNamespaces
-      putStrLn $ "  Loaded " ++ show (length testMods) ++ " test modules"
+      testModsAll <- loadModulesFromJson testJsonDir kernelModules testNamespaces
+      putStrLn $ "  Loaded " ++ show (length testModsAll) ++ " test modules"
+
+      -- Layer 1 per-package scoping for tests: if --package <pkg> is set,
+      -- narrow testMods to modules owned by that package. The universe is
+      -- unchanged so cross-package refs still resolve.
+      let testMods = case optPackage opts of
+            Nothing  -> testModsAll
+            Just pkg ->
+              Prelude.filter
+                (\m -> namespaceToPackage (moduleNamespace m) == pkg)
+                testModsAll
+      case optPackage opts of
+        Just pkg | length testMods /= length testModsAll ->
+          putStrLn $ "  Scoping to package " ++ pkg ++ ": "
+            ++ show (length testMods) ++ " of " ++ show (length testModsAll) ++ " test modules"
+        _ -> return ()
       putStrLn ""
 
-      let allUniverse = allMods ++ testMods
+      let allUniverse = allMods ++ testModsAll
 
       -- When --kernel-only is active, non-kernel modules are excluded from allMainMods.
       -- But test modules may depend on non-kernel modules (e.g. hydra.test.serialization
