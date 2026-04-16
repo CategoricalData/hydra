@@ -1,12 +1,13 @@
-(* Note: this is an automatically generated file. Do not edit. *)
-
 (* Hydra primitive library: hydra.lib.pairs *)
 
 Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdlib.QArith.QArith.
 
-Axiom bimap : forall (a b c d : Type), (a -> c) -> (b -> d) -> (a * b) -> (c * d).
+Definition bimap (a b c d : Type) (f : a -> c) (g : b -> d) (p : a * b) : c * d :=
+  (f (fst p), g (snd p)).
 Arguments bimap {a b c d}.
-Axiom first : forall (a b : Type), (a * b) -> a.
+
+Definition first (a b : Type) (p : a * b) : a := fst p.
 Arguments first {a b}.
-Axiom second : forall (a b : Type), (a * b) -> b.
+
+Definition second (a b : Type) (p : a * b) : b := snd p.
 Arguments second {a b}.
