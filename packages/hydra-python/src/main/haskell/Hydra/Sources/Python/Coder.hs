@@ -569,7 +569,7 @@ encodeApplicationInner :: TTermDefinition (Context -> PyHelpers.PythonEnvironmen
 encodeApplicationInner = def "encodeApplicationInner" $
   doc "Inner helper for encodeApplication" $
   "cx" ~> "env" ~> "fun" ~> "hargs" ~> "rargs" ~>
-    "firstArg" <~ (Maybes.fromMaybe (PyDsl.name $ string "") (Lists.maybeHead $ var "hargs")) $
+    "firstArg" <~ (Maybes.fromMaybe (PyUtils.pyNameToPyExpression @@ (PyDsl.name $ string "")) (Lists.maybeHead $ var "hargs")) $
     "restArgs" <~ (Lists.drop (int32 1) $ var "hargs") $
     "withRest" <~ ("e" ~>
       Logic.ifElse (Lists.null $ var "restArgs")
@@ -4145,7 +4145,7 @@ wrapLazyArguments :: TTermDefinition (Name -> [Py.Expression] -> [Py.Expression]
 wrapLazyArguments = def "wrapLazyArguments" $
   doc "Wrap specific arguments in nullary lambdas for primitives that require lazy evaluation" $
   "name" ~> "args" ~> lets [
-    "dummyExpr">: PyDsl.name $ string "",
+    "dummyExpr">: PyUtils.pyNameToPyExpression @@ (PyDsl.name $ string ""),
     "argAt">: "i" ~> Maybes.fromMaybe (var "dummyExpr") (Lists.maybeAt (var "i") (var "args"))] $
     Logic.ifElse
       (Logic.and
