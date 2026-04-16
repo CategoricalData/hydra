@@ -1747,6 +1747,20 @@ allTests =
                   Core.applicationArgument = (Core.TermList [])})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe Nothing))})),
               Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "string list",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.maybeInit")),
+                  Core.applicationArgument = (Core.TermList [
+                    Core.TermLiteral (Core.LiteralString "a"),
+                    (Core.TermLiteral (Core.LiteralString "b")),
+                    (Core.TermLiteral (Core.LiteralString "c"))])})))),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermList [
+                  Core.TermLiteral (Core.LiteralString "a"),
+                  (Core.TermLiteral (Core.LiteralString "b"))]))))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
           Testing.testGroupName = "maybeLast",
@@ -1782,6 +1796,17 @@ allTests =
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.maybeLast")),
                   Core.applicationArgument = (Core.TermList [])})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe Nothing))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "string list",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.maybeLast")),
+                  Core.applicationArgument = (Core.TermList [
+                    Core.TermLiteral (Core.LiteralString "hello"),
+                    (Core.TermLiteral (Core.LiteralString "world"))])})))),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "world")))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -1820,6 +1845,20 @@ allTests =
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.maybeTail")),
                   Core.applicationArgument = (Core.TermList [])})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe Nothing))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "string list",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.maybeTail")),
+                  Core.applicationArgument = (Core.TermList [
+                    Core.TermLiteral (Core.LiteralString "a"),
+                    (Core.TermLiteral (Core.LiteralString "b")),
+                    (Core.TermLiteral (Core.LiteralString "c"))])})))),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermList [
+                  Core.TermLiteral (Core.LiteralString "b"),
+                  (Core.TermLiteral (Core.LiteralString "c"))]))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
