@@ -257,16 +257,14 @@ adaptType constraints litmap type0 =
               \typ -> case typ of
                 Core.TypeLiteral v0 -> Logic.ifElse (literalTypeSupported constraints v0) (Just typ) (Maybes.maybe (Just (Core.TypeLiteral Core.LiteralTypeString)) (\lt2 -> Just (Core.TypeLiteral lt2)) (Maps.lookup v0 litmap))
                 _ -> Just typ
-          forUnsupported =
-                  \typ ->
-                    let tryAlts =
-                            \alts -> Logic.ifElse (Lists.null alts) Nothing (Maybes.maybe (tryAlts (Lists.tail alts)) (\t -> Just t) (tryType (Lists.head alts)))
-                        alts0 = typeAlternatives typ
-                    in (tryAlts alts0)
           tryType =
                   \typ ->
                     let supportedVariant = Sets.member (Reflect.typeVariant typ) (Coders.languageConstraintsTypeVariants constraints)
-                    in (Logic.ifElse supportedVariant (forSupported typ) (forUnsupported typ))
+                    in (Logic.ifElse supportedVariant (forSupported typ) (
+                      let tryAlts =
+                              \alts -> Logic.ifElse (Lists.null alts) Nothing (Maybes.maybe (tryAlts (Lists.tail alts)) (\t -> Just t) (tryType (Lists.head alts)))
+                          alts0 = typeAlternatives typ
+                      in (tryAlts alts0)))
           rewrite =
                   \recurse -> \typ -> Eithers.bind (recurse typ) (\type1 -> Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "no alternatives for type: " (ShowCore.type_ typ))))) (\type2 -> Right type2) (tryType type1))
       in (Rewriting.rewriteTypeM rewrite type0)
