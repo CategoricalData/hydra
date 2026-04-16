@@ -14,6 +14,17 @@ The format is inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0
 
 ### Changed
 
+- **JSON `Value.number` migrated from `bigfloat` to `decimal`** (#340).
+  The `number` field of `hydra.json.model.Value` is now an arbitrary-precision `decimal`
+  (Haskell `Scientific`, Java `BigDecimal`, Python `Decimal`) instead of a host-`Double` `bigfloat`.
+  JSON numeric output uses a "shorter wins" lexical rule: whole-valued decimals render in plain
+  form when that is no longer than the `Scientific`-style output, otherwise scientific notation.
+  IEEE special values that `decimal` cannot hold (`NaN`, `Infinity`, `-Infinity`, `-0.0`) continue
+  to round-trip through JSON as the corresponding string sentinels. The YAML scalar union gained
+  a matching `decimal` variant. **Breaking**: consumers constructing or pattern-matching on
+  `Json.ValueNumber` must use the decimal type of their host (e.g. `realToFrac` to convert
+  `Double -> Scientific` in Haskell).
+
 - **Packaging restructure: `packages/`, `heads/`, `dist/` layout** (#290).
   The repository has been reorganized around three top-level trees:
   - `packages/hydra-*/` — language-independent package definitions and DSL sources
