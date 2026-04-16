@@ -96,18 +96,11 @@ def adapt_type(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict
 
             case _:
                 return Just(typ)
-    def for_unsupported(typ: hydra.core.Type) -> Maybe[hydra.core.Type]:
-        def try_alts(alts: frozenlist[hydra.core.Type]) -> Maybe[hydra.core.Type]:
-            return hydra.lib.logic.if_else(hydra.lib.lists.null(alts), (lambda : Nothing()), (lambda : hydra.lib.maybes.maybe((lambda : try_alts(hydra.lib.lists.tail(alts))), (lambda t: Just(t)), try_type(hydra.lib.lists.head(alts)))))
-        @lru_cache(1)
-        def alts0() -> frozenlist[hydra.core.Type]:
-            return type_alternatives(typ)
-        return try_alts(alts0())
     def try_type(typ: hydra.core.Type) -> Maybe[hydra.core.Type]:
         @lru_cache(1)
         def supported_variant() -> bool:
             return hydra.lib.sets.member(hydra.reflect.type_variant(typ), constraints.type_variants)
-        return hydra.lib.logic.if_else(supported_variant(), (lambda : for_supported(typ)), (lambda : for_unsupported(typ)))
+        return hydra.lib.logic.if_else(supported_variant(), (lambda : for_supported(typ)), (lambda : (try_alts := (lambda alts: hydra.lib.logic.if_else(hydra.lib.lists.null(alts), (lambda : Nothing()), (lambda : hydra.lib.maybes.maybe((lambda : try_alts(hydra.lib.lists.tail(alts))), (lambda t: Just(t)), try_type(hydra.lib.lists.head(alts)))))), (alts0 := type_alternatives(typ), try_alts(alts0))[1])[1]))
     def rewrite(recurse: Callable[[hydra.core.Type], Either[hydra.errors.Error, hydra.core.Type]], typ: hydra.core.Type) -> Either[hydra.errors.Error, hydra.core.Type]:
         return hydra.lib.eithers.bind(recurse(typ), (lambda type1: hydra.lib.maybes.maybe((lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2("no alternatives for type: ", hydra.show.core.type(typ))))))), (lambda type2: Right(type2)), try_type(type1))))
     return hydra.rewriting.rewrite_type_m((lambda x1, x2: rewrite(x1, x2)), type0)
