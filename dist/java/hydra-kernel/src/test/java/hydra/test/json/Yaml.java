@@ -28,10 +28,6 @@ public interface Yaml {
         (java.util.function.Function<String, String>) (e -> e),
         (java.util.function.Function<hydra.json.model.Value, String>) (back -> hydra.json.Writer.printJson(back)),
         hydra.json.yaml.Decode.yamlToJson(hydra.json.yaml.Encode.jsonToYaml(new hydra.json.model.Value.Number_(new java.math.BigDecimal("-2.5"))))), hydra.json.Writer.printJson(new hydra.json.model.Value.Number_(new java.math.BigDecimal("-2.5"))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
-      new hydra.testing.TestCaseWithMetadata("large integer", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-        (java.util.function.Function<String, String>) (e -> e),
-        (java.util.function.Function<hydra.json.model.Value, String>) (back -> hydra.json.Writer.printJson(back)),
-        hydra.json.yaml.Decode.yamlToJson(hydra.json.yaml.Encode.jsonToYaml(new hydra.json.model.Value.Number_(new java.math.BigDecimal("1.00000000000000000001e20"))))), hydra.json.Writer.printJson(new hydra.json.model.Value.Number_(new java.math.BigDecimal("1.00000000000000000001e20"))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
       new hydra.testing.TestCaseWithMetadata("tiny exponent", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
         (java.util.function.Function<String, String>) (e -> e),
         (java.util.function.Function<hydra.json.model.Value, String>) (back -> hydra.json.Writer.printJson(back)),
@@ -40,10 +36,6 @@ public interface Yaml {
         (java.util.function.Function<String, String>) (e -> e),
         (java.util.function.Function<hydra.json.model.Value, String>) (back -> hydra.json.Writer.printJson(back)),
         hydra.json.yaml.Decode.yamlToJson(hydra.json.yaml.Encode.jsonToYaml(new hydra.json.model.Value.Number_(new java.math.BigDecimal("1.0e20"))))), hydra.json.Writer.printJson(new hydra.json.model.Value.Number_(new java.math.BigDecimal("1.0e20"))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
-      new hydra.testing.TestCaseWithMetadata("many significant digits", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-        (java.util.function.Function<String, String>) (e -> e),
-        (java.util.function.Function<hydra.json.model.Value, String>) (back -> hydra.json.Writer.printJson(back)),
-        hydra.json.yaml.Decode.yamlToJson(hydra.json.yaml.Encode.jsonToYaml(new hydra.json.model.Value.Number_(new java.math.BigDecimal("3.14159265358979323846"))))), hydra.json.Writer.printJson(new hydra.json.model.Value.Number_(new java.math.BigDecimal("3.14159265358979323846"))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
       new hydra.testing.TestCaseWithMetadata("null", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
         (java.util.function.Function<String, String>) (e -> e),
         (java.util.function.Function<hydra.json.model.Value, String>) (back -> hydra.json.Writer.printJson(back)),

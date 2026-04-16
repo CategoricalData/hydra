@@ -103,6 +103,7 @@
    "hydra.test.inference.all" "hydra.test.unification"
    "hydra.test.json.coder" "hydra.test.json.parser"
    "hydra.test.json.roundtrip" "hydra.test.json.writer"
+   "hydra.test.json.yaml"
    "hydra.test.validate.all" "hydra.test.validate.core"
    "hydra.test.testSuite" "hydra.test.test_suite"])
 
@@ -176,6 +177,7 @@
    "hydra.test.inference.all" "hydra.test.unification"
    "hydra.test.json.coder" "hydra.test.json.parser"
    "hydra.test.json.roundtrip" "hydra.test.json.writer"
+   "hydra.test.json.yaml"
    "hydra.test.validate.all" "hydra.test.validate.core"
    "hydra.test.testSuite" "hydra.test.test_suite"])
 

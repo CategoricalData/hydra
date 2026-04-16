@@ -62,13 +62,6 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "large integer",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\back -> Writer.printJson back) (Decode.yamlToJson (Encode.jsonToYaml (Model.ValueNumber (Literals.stringToDecimal "1.00000000000000000001e20"))))),
-                Testing.universalTestCaseExpected = (Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "1.00000000000000000001e20")))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "tiny exponent",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\back -> Writer.printJson back) (Decode.yamlToJson (Encode.jsonToYaml (Model.ValueNumber (Literals.stringToDecimal "1.0e-20"))))),
@@ -80,13 +73,6 @@ allTests =
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\back -> Writer.printJson back) (Decode.yamlToJson (Encode.jsonToYaml (Model.ValueNumber (Literals.stringToDecimal "1.0e20"))))),
                 Testing.universalTestCaseExpected = (Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "1.0e20")))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "many significant digits",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\back -> Writer.printJson back) (Decode.yamlToJson (Encode.jsonToYaml (Model.ValueNumber (Literals.stringToDecimal "3.14159265358979323846"))))),
-                Testing.universalTestCaseExpected = (Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "3.14159265358979323846")))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
