@@ -5176,9 +5176,7 @@
                                                                         "name": "literal",
                                                                         "term": {
                                                                           "inject": {
-                                                                            "field": {
-                                                                              "name": "decimal",
-                                                                              "term": {"literal": {"decimal": 100000000000000000000}}},
+                                                                            "field": {"name": "decimal", "term": {"literal": {"decimal": 1.0e20}}},
                                                                             "typeName": "hydra.core.Literal"}}},
                                                                       "typeName": "hydra.core.Term"}},
                                                                   "function": {
@@ -5300,9 +5298,7 @@
                                                                     "name": "literal",
                                                                     "term": {
                                                                       "inject": {
-                                                                        "field": {
-                                                                          "name": "decimal",
-                                                                          "term": {"literal": {"decimal": 100000000000000000000}}},
+                                                                        "field": {"name": "decimal", "term": {"literal": {"decimal": 1.0e20}}},
                                                                         "typeName": "hydra.core.Literal"}}},
                                                                   "typeName": "hydra.core.Term"}},
                                                               "function": {"variable": "hydra.show.core.term"}}}}],
