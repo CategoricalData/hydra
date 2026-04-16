@@ -165,6 +165,16 @@ Day-to-day git operations work normally inside a worktree —
 `git status`, `git commit`, `git push`, `git log` all behave as expected.
 A few things to know:
 
+- **Read freely from other worktrees; modify only the assigned one.**
+  Reading from other worktrees is fine and often necessary — e.g., comparing
+  the current branch against `worktrees/integration/`, inspecting how
+  another feature branch solved a similar problem, or reading files from
+  `wiki/`. Modifications (edits, commits, merges, branch operations,
+  `git add`/`restore`/`reset`, etc.) must happen inside the assigned
+  worktree only, unless the user explicitly asks you to act on another
+  one. Other worktrees may have in-progress merges, uncommitted work, or a
+  different Claude session acting on them. If a task seems to require
+  modifying another worktree, ask first.
 - **One branch per worktree**: git refuses to check out the same branch in two
   worktrees simultaneously. This is a feature: it prevents two Claude sessions
   from racing on the same branch. If a branch is already checked out elsewhere,
