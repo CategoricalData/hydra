@@ -1,25 +1,43 @@
-(* Note: this is an automatically generated file. Do not edit. *)
-
 (* Hydra primitive library: hydra.lib.equality *)
 
 Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdlib.QArith.QArith.
 Require Import hydra.util.
+Require Import hydra.lib.base.
 
-Axiom compare : forall (x : Type), x -> x -> Comparison.
+Definition compare {x : Type} (a b : x) : Comparison :=
+  match hydra_compare a b with
+  | Lt => Comparison_LessThan tt
+  | Eq => Comparison_EqualTo tt
+  | Gt => Comparison_GreaterThan tt
+  end.
 Arguments compare {x}.
-Axiom equal : forall (x : Type), x -> x -> bool.
+
+Definition equal {x : Type} (a b : x) : bool := hydra_eq a b.
 Arguments equal {x}.
-Axiom gt : forall (x : Type), x -> x -> bool.
+
+Definition gt {x : Type} (a b : x) : bool :=
+  match hydra_compare a b with Gt => true | _ => false end.
 Arguments gt {x}.
-Axiom gte : forall (x : Type), x -> x -> bool.
+
+Definition gte {x : Type} (a b : x) : bool :=
+  match hydra_compare a b with Lt => false | _ => true end.
 Arguments gte {x}.
-Axiom identity : forall (x : Type), x -> x.
+
+Definition identity {x : Type} (v : x) : x := v.
 Arguments identity {x}.
-Axiom lt : forall (x : Type), x -> x -> bool.
+
+Definition lt {x : Type} (a b : x) : bool :=
+  match hydra_compare a b with Lt => true | _ => false end.
 Arguments lt {x}.
-Axiom lte : forall (x : Type), x -> x -> bool.
+
+Definition lte {x : Type} (a b : x) : bool :=
+  match hydra_compare a b with Gt => false | _ => true end.
 Arguments lte {x}.
-Axiom max : forall (x : Type), x -> x -> x.
+
+Definition max {x : Type} (a b : x) : x :=
+  match hydra_compare a b with Lt => b | _ => a end.
 Arguments max {x}.
-Axiom min : forall (x : Type), x -> x -> x.
+
+Definition min {x : Type} (a b : x) : x :=
+  match hydra_compare a b with Gt => b | _ => a end.
 Arguments min {x}.

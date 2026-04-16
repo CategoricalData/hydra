@@ -14,4 +14,17 @@ Arguments hydra_fix {X}.
 Axiom hydra_unreachable : forall (X : Type), X.
 Arguments hydra_unreachable {X}.
 
+(* Universal equality. Hydra's type system has no Eq class, so lib primitives
+   like `elem`/`nub`/`group` must compare values of unconstrained type. Coq
+   cannot provide this for arbitrary types, so it is declared as an axiom.
+   Tests that need concrete equality should specialise this via a rewrite
+   lemma for the specific element type. *)
+Axiom hydra_eq : forall (X : Type), X -> X -> bool.
+Arguments hydra_eq {X}.
+
+(* Universal comparison. Same story as `hydra_eq`, used by `sort` and
+   `sortOn`. Returns a Coq `comparison` (`Lt`/`Eq`/`Gt`). *)
+Axiom hydra_compare : forall (X : Type), X -> X -> comparison.
+Arguments hydra_compare {X}.
+
 
