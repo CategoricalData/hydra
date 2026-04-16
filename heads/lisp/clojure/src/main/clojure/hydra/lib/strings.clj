@@ -10,11 +10,6 @@
   "Concatenate two strings."
   (fn [a] (fn [b] (str a b))))
 
-;; char_at :: Int -> String -> Int (codepoint)
-(def hydra_lib_strings_char_at
-  "Get the Unicode code point of the character at a specific index in a string."
-  (fn [n] (fn [s] (.codePointAt s (int (.offsetByCodePoints s 0 (int n)))))))
-
 ;; from_list :: [Int] -> String (codepoints to string)
 (def hydra_lib_strings_from_list
   "Convert a list of Unicode code points to a string."

@@ -73,11 +73,6 @@ def cosh(x: TTerm) -> TTerm:
     return primitive1(x)
 
 
-def div(x: TTerm, y: TTerm) -> TTerm:
-    """Divide two integers using integer division."""
-    return primitive2(x, y)
-
-
 def e() -> TTerm:
     """Euler's number (e ≈ 2.71828)."""
     return primitive()
@@ -143,11 +138,6 @@ def min_(x: TTerm, y: TTerm) -> TTerm:
     return primitive2(x, y)
 
 
-def mod(a: TTerm, b: TTerm) -> TTerm:
-    """Mathematical modulo operation."""
-    return primitive2(a, b)
-
-
 def mul(x: TTerm, y: TTerm) -> TTerm:
     """Multiply two numbers."""
     return primitive2(x, y)
@@ -183,19 +173,9 @@ def pow_(x: TTerm, y: TTerm) -> TTerm:
     return primitive2(x, y)
 
 
-def pred(x: TTerm) -> TTerm:
-    """Return the predecessor of a number (x - 1)."""
-    return primitive1(x)
-
-
 def range_(start: TTerm, end: TTerm) -> TTerm:
     """Generate a range of values from start to end (inclusive)."""
     return primitive2(start, end)
-
-
-def rem(a: TTerm, b: TTerm) -> TTerm:
-    """Integer remainder operation."""
-    return primitive2(a, b)
 
 
 def round_(x: TTerm) -> TTerm:
@@ -246,11 +226,6 @@ def sub(x: TTerm, y: TTerm) -> TTerm:
 def sub_float64(x: TTerm, y: TTerm) -> TTerm:
     """Subtract two Float64 numbers."""
     return primitive2(x, y)
-
-
-def succ(x: TTerm) -> TTerm:
-    """Return the successor of a number (x + 1)."""
-    return primitive1(x)
 
 
 def tan(x: TTerm) -> TTerm:

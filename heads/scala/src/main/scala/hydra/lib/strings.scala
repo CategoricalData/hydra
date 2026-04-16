@@ -3,7 +3,6 @@ package hydra.lib
 object strings:
   def cat(ss: Seq[String]): String = ss.mkString
   def cat2(a: String)(b: String): String = a + b
-  def charAt(i: Int)(s: String): Int = if i >= 0 && i < s.length then s.codePointAt(i) else 0
   def fromList(cs: Seq[Int]): String = new String(cs.flatMap(Character.toChars(_)).toArray)
   def intercalate(sep: String)(ss: Seq[String]): String = ss.mkString(sep)
   def isEmpty(s: String): Boolean = s.isEmpty

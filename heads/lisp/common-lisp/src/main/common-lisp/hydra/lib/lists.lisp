@@ -40,13 +40,6 @@
       (loop for f in fs
             append (mapcar f xs)))))
 
-;; at :: Int -> [a] -> a
-;; Get the element at a specified index in a list.
-(defvar hydra_lib_lists_at
-  (lambda (n)
-    (lambda (xs)
-      (nth n xs))))
-
 ;; bind :: [a] -> (a -> [b]) -> [b]
 ;; Apply a function that returns lists to each element and flatten results.
 (defvar hydra_lib_lists_bind
@@ -154,18 +147,6 @@
           (push (nreverse current-group) groups)
           (nreverse groups)))))
 
-;; head :: [a] -> a
-;; Get the first element of a list.
-(defvar hydra_lib_lists_head
-  (lambda (xs)
-    (car xs)))
-
-;; init :: [a] -> [a]
-;; Return all elements except the last one.
-(defvar hydra_lib_lists_init
-  (lambda (xs)
-    (butlast xs)))
-
 ;; intercalate :: [a] -> [[a]] -> [a]
 ;; Intercalate a list of lists with a separator list between each.
 (defvar hydra_lib_lists_intercalate
@@ -187,12 +168,6 @@
           (cons (car xs)
                 (loop for x in (cdr xs)
                       append (list sep x)))))))
-
-;; last :: [a] -> a
-;; Get the last element of a list.
-(defvar hydra_lib_lists_last
-  (lambda (xs)
-    (car (last xs))))
 
 ;; length :: [a] -> Int
 ;; Get the length of a list.
@@ -295,14 +270,6 @@
   (lambda (xs)
     (reverse xs)))
 
-;; safe_head :: [a] -> Maybe a
-;; Get the first element of a list, returning Nothing if the list is empty.
-(defvar hydra_lib_lists_safe_head
-  (lambda (xs)
-    (if (null xs)
-        (list :nothing)
-        (list :just (car xs)))))
-
 ;; singleton :: a -> [a]
 ;; Create a single-element list.
 (defvar hydra_lib_lists_singleton
@@ -334,12 +301,6 @@
               while (funcall pred (car rest))
               do (push (car rest) acc)
               finally (return (list (nreverse acc) rest)))))))
-
-;; tail :: [a] -> [a]
-;; Get all elements of a list except the first.
-(defvar hydra_lib_lists_tail
-  (lambda (xs)
-    (cdr xs)))
 
 ;; take :: Int -> [a] -> [a]
 ;; Take the first n elements from a list.
