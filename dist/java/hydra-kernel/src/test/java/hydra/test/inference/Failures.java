@@ -664,7 +664,7 @@ public interface Failures {
           hydra.Inference.inferTypeOf(
             hydra.test.TestGraph.testContext(),
             hydra.test.TestGraph.testGraph(),
-            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.lists.head")), new hydra.core.Term.Literal(new hydra.core.Literal.String_("not a list")))))), "FAIL")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
+            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.lists.maybeHead")), new hydra.core.Term.Literal(new hydra.core.Literal.String_("not a list")))))), "FAIL")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
         new hydra.testing.TestCaseWithMetadata("#4", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
           (java.util.function.Function<hydra.errors.Error_, String>) (e -> "FAIL"),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.lib.strings.Cat2.apply(
@@ -701,7 +701,7 @@ public interface Failures {
           hydra.Inference.inferTypeOf(
             hydra.test.TestGraph.testContext(),
             hydra.test.TestGraph.testGraph(),
-            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.div")), new hydra.core.Term.List(java.util.Arrays.asList(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))))))), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(2))))))), "FAIL")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
+            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.maybeDiv")), new hydra.core.Term.List(java.util.Arrays.asList(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))))))), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(2))))))), "FAIL")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
         new hydra.testing.TestCaseWithMetadata("#4", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
           (java.util.function.Function<hydra.errors.Error_, String>) (e -> "FAIL"),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.lib.strings.Cat2.apply(
@@ -710,7 +710,7 @@ public interface Failures {
           hydra.Inference.inferTypeOf(
             hydra.test.TestGraph.testContext(),
             hydra.test.TestGraph.testGraph(),
-            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.mod")), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))))), new hydra.core.Term.Literal(new hydra.core.Literal.String_("not a number")))))), "FAIL")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList()))))), (java.util.List<hydra.testing.TestCaseWithMetadata>) (java.util.Collections.<hydra.testing.TestCaseWithMetadata>emptyList()));
+            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.maybeMod")), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))))), new hydra.core.Term.Literal(new hydra.core.Literal.String_("not a number")))))), "FAIL")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList()))))), (java.util.List<hydra.testing.TestCaseWithMetadata>) (java.util.Collections.<hydra.testing.TestCaseWithMetadata>emptyList()));
   }
 
   static hydra.testing.TestGroup recursiveTypeTests() {
@@ -891,7 +891,7 @@ public interface Failures {
           hydra.Inference.inferTypeOf(
             hydra.test.TestGraph.testContext(),
             hydra.test.TestGraph.testGraph(),
-            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.lists.head")), new hydra.core.Term.Literal(new hydra.core.Literal.String_("not a list")))))), "FAIL")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
+            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.lists.maybeHead")), new hydra.core.Term.Literal(new hydra.core.Literal.String_("not a list")))))), "FAIL")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
         new hydra.testing.TestCaseWithMetadata("#4", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
           (java.util.function.Function<hydra.errors.Error_, String>) (e -> "FAIL"),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.lib.strings.Cat2.apply(
@@ -900,7 +900,7 @@ public interface Failures {
           hydra.Inference.inferTypeOf(
             hydra.test.TestGraph.testContext(),
             hydra.test.TestGraph.testGraph(),
-            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.lists.tail")), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))))))), "FAIL")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())))),
+            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.lists.maybeTail")), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))))))), "FAIL")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())))),
       new hydra.testing.TestGroup("String constructor errors", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
         new hydra.testing.TestCaseWithMetadata("#1", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
           (java.util.function.Function<hydra.errors.Error_, String>) (e -> "FAIL"),
@@ -974,7 +974,7 @@ public interface Failures {
           hydra.Inference.inferTypeOf(
             hydra.test.TestGraph.testContext(),
             hydra.test.TestGraph.testGraph(),
-            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.div")), new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(true)))), new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(false)))))), "FAIL")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList()))))), (java.util.List<hydra.testing.TestCaseWithMetadata>) (java.util.Collections.<hydra.testing.TestCaseWithMetadata>emptyList()));
+            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.maybeDiv")), new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(true)))), new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(false)))))), "FAIL")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList()))))), (java.util.List<hydra.testing.TestCaseWithMetadata>) (java.util.Collections.<hydra.testing.TestCaseWithMetadata>emptyList()));
   }
 
   static hydra.testing.TestGroup undefinedVariableTests() {

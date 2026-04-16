@@ -25,7 +25,7 @@ def check_all(checks: frozenlist[Maybe[T0]]) -> Maybe[T0]:
     @lru_cache(1)
     def errors() -> frozenlist[T0]:
         return hydra.lib.maybes.cat(checks)
-    return hydra.lib.lists.safe_head(errors())
+    return hydra.lib.lists.maybe_head(errors())
 
 def validate_properties(check_value: Callable[[T0, T1], Maybe[hydra.error.pg.InvalidValueError]], types: frozenlist[hydra.pg.model.PropertyType[T0]], props: FrozenDict[hydra.pg.model.PropertyKey, T1]) -> Maybe[hydra.error.pg.InvalidElementPropertyError]:
     @lru_cache(1)

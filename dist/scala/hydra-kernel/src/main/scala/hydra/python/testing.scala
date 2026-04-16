@@ -66,8 +66,8 @@ def generateTestFileWithPythonCodec[T0](testModule: hydra.packaging.Module)(test
   lazy val testModuleContent: scala.Predef.String = hydra.python.testing.buildPythonTestModule(testModule)(testGroup)(testBody)
   lazy val `ns_`: hydra.packaging.Namespace = (testModule.namespace)
   lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(`ns_`)
-  lazy val dirParts: Seq[scala.Predef.String] = hydra.lib.lists.init[scala.Predef.String](parts)
-  lazy val fileName: scala.Predef.String = hydra.lib.strings.cat(Seq("test_", hydra.lib.lists.last[scala.Predef.String](parts),
+  lazy val dirParts: Seq[scala.Predef.String] = hydra.lib.maybes.fromMaybe[Seq[scala.Predef.String]](Seq())(hydra.lib.lists.maybeInit[scala.Predef.String](parts))
+  lazy val fileName: scala.Predef.String = hydra.lib.strings.cat(Seq("test_", hydra.lib.maybes.fromMaybe[scala.Predef.String]("")(hydra.lib.lists.maybeLast[scala.Predef.String](parts)),
      ".py"))
   lazy val filePath: scala.Predef.String = hydra.lib.strings.cat(Seq(hydra.lib.strings.intercalate("/")(dirParts),
      "/", fileName))

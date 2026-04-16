@@ -7,19 +7,19 @@ import hydra.json.model.*
 lazy val colonOp: hydra.ast.Op = hydra.ast.Op(":", hydra.ast.Padding(hydra.ast.Ws.none,
    hydra.ast.Ws.space), 0, hydra.ast.Associativity.none)
 
-def jsonString(s: scala.Predef.String): scala.Predef.String =
+def hexByte(c: Int): scala.Predef.String =
   {
-  def hexChar(i: Int): scala.Predef.String =
+  def nibble(i: Int): scala.Predef.String =
     hydra.lib.maybes.fromMaybe[scala.Predef.String]("?")(hydra.lib.maybes.map[Int,
        scala.Predef.String]((ch: Int) => hydra.lib.strings.fromList(hydra.lib.lists.pure[Int](ch)))(hydra.lib.strings.maybeCharAt(i)("0123456789abcdef")))
-  def hexEscape(c: Int): scala.Predef.String =
-    {
-    lazy val hi: scala.Predef.String = hydra.lib.maybes.fromMaybe[scala.Predef.String]("?")(hydra.lib.maybes.map[Int,
-       scala.Predef.String](hexChar)(hydra.lib.math.maybeDiv(c)(16)))
-    lazy val lo: scala.Predef.String = hydra.lib.maybes.fromMaybe[scala.Predef.String]("?")(hydra.lib.maybes.map[Int,
-       scala.Predef.String](hexChar)(hydra.lib.math.maybeMod(c)(16)))
-    hydra.lib.strings.cat2(hydra.lib.strings.cat2("\\u00")(hi))(lo)
-  }
+  lazy val hi: scala.Predef.String = nibble(hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.math.maybeDiv(c)(16)))
+  lazy val lo: scala.Predef.String = nibble(hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.math.maybeMod(c)(16)))
+  hydra.lib.strings.cat2(hi)(lo)
+}
+
+def jsonString(s: scala.Predef.String): scala.Predef.String =
+  {
+  def hexEscape(c: Int): scala.Predef.String = hydra.lib.strings.cat2("\\u00")(hydra.json.writer.hexByte(c))
   def escape(c: Int): scala.Predef.String =
     hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(34))("\\\"")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(92))("\\\\")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(8))("\\b")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(12))("\\f")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(10))("\\n")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(13))("\\r")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(9))("\\t")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.lt[Int](c)(32))(hexEscape(c))(hydra.lib.strings.fromList(hydra.lib.lists.pure[Int](c))))))))))
   lazy val escaped: scala.Predef.String = hydra.lib.strings.cat(hydra.lib.lists.map[Int,

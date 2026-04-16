@@ -146,7 +146,7 @@ termCoder typ cx g =
                   \maybeElementCoder -> \cx2 -> \maybeTerm ->
                     let strippedMaybeTerm = Strip.deannotateTerm maybeTerm
                     in case strippedMaybeTerm of
-                      Core.TermMaybe v0 -> Logic.ifElse (Maybes.isNothing v0) (Right (Model.NodeScalar Model.ScalarNull)) (Eithers.bind (Coders.coderEncode maybeElementCoder cx2 (Maybes.fromJust v0)) (\encodedInner -> Right encodedInner))
+                      Core.TermMaybe v0 -> Maybes.maybe (Right (Model.NodeScalar Model.ScalarNull)) (\innerTerm -> Eithers.bind (Coders.coderEncode maybeElementCoder cx2 innerTerm) (\encodedInner -> Right encodedInner)) v0
                       _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                         "expected optional term, found: ",
                         (ShowCore.term maybeTerm)])))

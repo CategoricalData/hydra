@@ -146,10 +146,6 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.lists.apply");
   }
 
-  static hydra.core.Name listsAt() {
-    return new hydra.core.Name("hydra.lib.lists.at");
-  }
-
   static hydra.core.Name listsBind() {
     return new hydra.core.Name("hydra.lib.lists.bind");
   }
@@ -198,24 +194,12 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.lists.group");
   }
 
-  static hydra.core.Name listsHead() {
-    return new hydra.core.Name("hydra.lib.lists.head");
-  }
-
-  static hydra.core.Name listsInit() {
-    return new hydra.core.Name("hydra.lib.lists.init");
-  }
-
   static hydra.core.Name listsIntercalate() {
     return new hydra.core.Name("hydra.lib.lists.intercalate");
   }
 
   static hydra.core.Name listsIntersperse() {
     return new hydra.core.Name("hydra.lib.lists.intersperse");
-  }
-
-  static hydra.core.Name listsLast() {
-    return new hydra.core.Name("hydra.lib.lists.last");
   }
 
   static hydra.core.Name listsLength() {
@@ -270,10 +254,6 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.lists.reverse");
   }
 
-  static hydra.core.Name listsSafeHead() {
-    return new hydra.core.Name("hydra.lib.lists.safeHead");
-  }
-
   static hydra.core.Name listsSingleton() {
     return new hydra.core.Name("hydra.lib.lists.singleton");
   }
@@ -288,10 +268,6 @@ public interface Names {
 
   static hydra.core.Name listsSpan() {
     return new hydra.core.Name("hydra.lib.lists.span");
-  }
-
-  static hydra.core.Name listsTail() {
-    return new hydra.core.Name("hydra.lib.lists.tail");
   }
 
   static hydra.core.Name listsTake() {
@@ -722,10 +698,6 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.math.cosh");
   }
 
-  static hydra.core.Name mathDiv() {
-    return new hydra.core.Name("hydra.lib.math.div");
-  }
-
   static hydra.core.Name mathE() {
     return new hydra.core.Name("hydra.lib.math.e");
   }
@@ -778,10 +750,6 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.math.min");
   }
 
-  static hydra.core.Name mathMod() {
-    return new hydra.core.Name("hydra.lib.math.mod");
-  }
-
   static hydra.core.Name mathMul() {
     return new hydra.core.Name("hydra.lib.math.mul");
   }
@@ -810,16 +778,8 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.math.pow");
   }
 
-  static hydra.core.Name mathPred() {
-    return new hydra.core.Name("hydra.lib.math.pred");
-  }
-
   static hydra.core.Name mathRange() {
     return new hydra.core.Name("hydra.lib.math.range");
-  }
-
-  static hydra.core.Name mathRem() {
-    return new hydra.core.Name("hydra.lib.math.rem");
   }
 
   static hydra.core.Name mathRound() {
@@ -862,10 +822,6 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.math.subFloat64");
   }
 
-  static hydra.core.Name mathSucc() {
-    return new hydra.core.Name("hydra.lib.math.succ");
-  }
-
   static hydra.core.Name mathTan() {
     return new hydra.core.Name("hydra.lib.math.tan");
   }
@@ -900,10 +856,6 @@ public interface Names {
 
   static hydra.core.Name maybesCompose() {
     return new hydra.core.Name("hydra.lib.maybes.compose");
-  }
-
-  static hydra.core.Name maybesFromJust() {
-    return new hydra.core.Name("hydra.lib.maybes.fromJust");
   }
 
   static hydra.core.Name maybesFromMaybe() {
@@ -1052,10 +1004,6 @@ public interface Names {
 
   static hydra.core.Name stringsCat2() {
     return new hydra.core.Name("hydra.lib.strings.cat2");
-  }
-
-  static hydra.core.Name stringsCharAt() {
-    return new hydra.core.Name("hydra.lib.strings.charAt");
   }
 
   static hydra.core.Name stringsFromList() {

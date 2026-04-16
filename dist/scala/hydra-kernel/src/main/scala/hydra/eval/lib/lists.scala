@@ -47,7 +47,7 @@ def filter[T0](cx: T0)(g: hydra.graph.Graph)(predTerm: hydra.core.Term)(listTerm
      hydra.core.Term.list(Seq()))))(elements))))))
 
 def find[T0, T1, T2](cx: T0)(g: T1)(predTerm: hydra.core.Term)(listTerm: hydra.core.Term): Either[T2, hydra.core.Term] =
-  Right(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.lists.safeHead"),
+  Right(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.lists.maybeHead"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.lists.filter"),
      predTerm)), listTerm)))))
 
@@ -95,7 +95,7 @@ def group[T0, T1, T2](cx: T0)(g: T1)(listTerm: hydra.core.Term): Either[T2, hydr
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.lists.concat2"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.pairs.second"),
      hydra.core.Term.variable("acc"))))), hydra.core.Term.list(Seq(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.pairs.first"),
-     hydra.core.Term.variable("acc"))))))))))))))), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.lists.safeHead"),
+     hydra.core.Term.variable("acc"))))))))))))))), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.lists.maybeHead"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.pairs.first"),
      hydra.core.Term.variable("acc"))))))))))))), hydra.core.Term.pair(Tuple2(hydra.core.Term.list(Seq()),
      hydra.core.Term.list(Seq()))))), listTerm)))))
@@ -109,8 +109,11 @@ def intercalate[T0, T1, T2](cx: T0)(g: T1)(sep: hydra.core.Term)(listsTerm: hydr
 def intersperse[T0](cx: T0)(g: hydra.graph.Graph)(sep: hydra.core.Term)(listTerm: hydra.core.Term): Either[hydra.errors.Error,
    hydra.core.Term] =
   hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.Term], hydra.core.Term](hydra.extract.core.list(g)(listTerm))((elements: Seq[hydra.core.Term]) =>
-  Right(hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.lists.`null`[hydra.core.Term](elements))(hydra.core.Term.list(Seq()))(hydra.core.Term.list(hydra.lib.lists.cons[hydra.core.Term](hydra.lib.lists.head[hydra.core.Term](elements))(hydra.lib.lists.concat[hydra.core.Term](hydra.lib.lists.map[hydra.core.Term,
-     Seq[hydra.core.Term]]((el: hydra.core.Term) => Seq(sep, el))(hydra.lib.lists.tail[hydra.core.Term](elements))))))))
+  Right(hydra.core.Term.list(hydra.lib.maybes.maybe[Seq[hydra.core.Term], Tuple2[hydra.core.Term,
+     Seq[hydra.core.Term]]](Seq())((p: Tuple2[hydra.core.Term, Seq[hydra.core.Term]]) =>
+  hydra.lib.lists.cons[hydra.core.Term](hydra.lib.pairs.first[hydra.core.Term, Seq[hydra.core.Term]](p))(hydra.lib.lists.concat[hydra.core.Term](hydra.lib.lists.map[hydra.core.Term,
+     Seq[hydra.core.Term]]((el: hydra.core.Term) => Seq(sep, el))(hydra.lib.pairs.second[hydra.core.Term,
+     Seq[hydra.core.Term]](p)))))(hydra.lib.lists.uncons[hydra.core.Term](elements)))))
 
 def map[T0](cx: T0)(g: hydra.graph.Graph)(funTerm: hydra.core.Term)(listTerm: hydra.core.Term): Either[hydra.errors.Error,
    hydra.core.Term] =
@@ -124,7 +127,9 @@ def map[T0](cx: T0)(g: hydra.graph.Graph)(funTerm: hydra.core.Term)(listTerm: hy
 def maybeHead[T0](cx: T0)(g: hydra.graph.Graph)(listTerm: hydra.core.Term): Either[hydra.errors.Error,
    hydra.core.Term] =
   hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.Term], hydra.core.Term](hydra.extract.core.list(g)(listTerm))((elements: Seq[hydra.core.Term]) =>
-  Right(hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.lists.`null`[hydra.core.Term](elements))(hydra.core.Term.maybe(None))(hydra.core.Term.maybe(Some(hydra.lib.lists.head[hydra.core.Term](elements))))))
+  Right(hydra.core.Term.maybe(hydra.lib.maybes.maybe[Option[hydra.core.Term], Tuple2[hydra.core.Term,
+     Seq[hydra.core.Term]]](None)((p: Tuple2[hydra.core.Term, Seq[hydra.core.Term]]) =>
+  Some(hydra.lib.pairs.first[hydra.core.Term, Seq[hydra.core.Term]](p)))(hydra.lib.lists.uncons[hydra.core.Term](elements)))))
 
 def nub[T0](cx: T0)(g: hydra.graph.Graph)(listTerm: hydra.core.Term): Either[hydra.errors.Error, hydra.core.Term] =
   hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.Term], hydra.core.Term](hydra.extract.core.list(g)(listTerm))((elements: Seq[hydra.core.Term]) =>
@@ -171,10 +176,6 @@ def replicate[T0, T1, T2](cx: T0)(g: T1)(n: hydra.core.Term)(x: hydra.core.Term)
      hydra.core.Term.lambda(hydra.core.Lambda("_", None, x)))), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.range"),
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(1))))),
      n)))))
-
-def safeHead[T0](cx: T0)(g: hydra.graph.Graph)(listTerm: hydra.core.Term): Either[hydra.errors.Error, hydra.core.Term] =
-  hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.Term], hydra.core.Term](hydra.extract.core.list(g)(listTerm))((elements: Seq[hydra.core.Term]) =>
-  Right(hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.lists.`null`[hydra.core.Term](elements))(hydra.core.Term.maybe(None))(hydra.core.Term.maybe(Some(hydra.lib.lists.head[hydra.core.Term](elements))))))
 
 def singleton[T0, T1, T2](cx: T0)(g: T1)(x: hydra.core.Term): Either[T2, hydra.core.Term] = Right(hydra.core.Term.list(Seq(x)))
 
@@ -248,8 +249,8 @@ def span[T0](cx: T0)(g: hydra.graph.Graph)(predTerm: hydra.core.Term)(listTerm: 
 
 def uncons[T0](cx: T0)(g: hydra.graph.Graph)(listTerm: hydra.core.Term): Either[hydra.errors.Error, hydra.core.Term] =
   hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.Term], hydra.core.Term](hydra.extract.core.list(g)(listTerm))((elements: Seq[hydra.core.Term]) =>
-  Right(hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.lists.`null`[hydra.core.Term](elements))(hydra.core.Term.maybe(None))(hydra.core.Term.maybe(Some(hydra.core.Term.pair(Tuple2(hydra.lib.lists.head[hydra.core.Term](elements),
-     hydra.core.Term.list(hydra.lib.lists.tail[hydra.core.Term](elements)))))))))
+  Right(hydra.core.Term.maybe(hydra.lib.maybes.maybe[Option[hydra.core.Term], hydra.core.Term](None)((h: hydra.core.Term) =>
+  Some(hydra.core.Term.pair(Tuple2(h, hydra.core.Term.list(hydra.lib.lists.drop[hydra.core.Term](1)(elements))))))(hydra.lib.lists.maybeAt[hydra.core.Term](0)(elements)))))
 
 def zipWith[T0](cx: T0)(g: hydra.graph.Graph)(funTerm: hydra.core.Term)(listTerm1: hydra.core.Term)(listTerm2: hydra.core.Term): Either[hydra.errors.Error,
    hydra.core.Term] =

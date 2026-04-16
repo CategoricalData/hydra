@@ -7,7 +7,7 @@ package hydra.validate;
  */
 public interface Pg {
   static <T0> hydra.util.Maybe<T0> checkAll(java.util.List<hydra.util.Maybe<T0>> checks) {
-    return hydra.lib.lists.SafeHead.apply(hydra.validate.Pg.<T0>checkAll_errors(checks));
+    return hydra.lib.lists.MaybeHead.apply(hydra.validate.Pg.<T0>checkAll_errors(checks));
   }
 
   static <T0> java.util.List<T0> checkAll_errors(java.util.List<hydra.util.Maybe<T0>> checks) {

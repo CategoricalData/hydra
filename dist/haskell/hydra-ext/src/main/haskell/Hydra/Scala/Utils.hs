@@ -77,7 +77,7 @@ scalaEscapeName s =
           sanitized2 = Logic.ifElse (Equality.equal sanitized "_") "_x" sanitized
           sanitized3 = Logic.ifElse (Equality.equal sanitized2 "toString") "toString_" sanitized2
           needsBackticks =
-                  Logic.or (Sets.member sanitized3 scalaReservedWords) (Logic.and (Equality.gt (Strings.length sanitized3) 0) (Equality.equal (Strings.charAt (Math.sub (Strings.length sanitized3) 1) sanitized3) 95))
+                  Logic.or (Sets.member sanitized3 scalaReservedWords) (Logic.and (Equality.gt (Strings.length sanitized3) 0) (Equality.equal (Maybes.fromMaybe 0 (Strings.maybeCharAt (Math.sub (Strings.length sanitized3) 1) sanitized3)) 95))
       in (Logic.ifElse needsBackticks (Strings.cat [
         "`",
         sanitized3,
@@ -114,7 +114,7 @@ sprim :: Core.Name -> Syntax.Data
 sprim name =
 
       let qname = Names.qualifyName name
-          prefix = Packaging.unNamespace (Maybes.fromJust (Packaging.qualifiedNameNamespace qname))
+          prefix = Packaging.unNamespace (Maybes.fromMaybe (Packaging.Namespace "") (Packaging.qualifiedNameNamespace qname))
           local = scalaEscapeName (Packaging.qualifiedNameLocal qname)
       in (sname (Strings.cat2 (Strings.cat2 prefix ".") local))
 
