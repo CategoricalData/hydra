@@ -406,7 +406,7 @@ floatValueToDouble = define "floatValueToDouble" $
   doc "Convert any float value to a JSON decimal number" $
   lambda "fv" $
     cases _FloatValue (var "fv") Nothing [
-      _FloatValue_bigfloat>>: lambda "d" $ Literals.float64ToDecimal (Literals.decimalToFloat64 (var "d")),
+      _FloatValue_bigfloat>>: lambda "d" $ Literals.float64ToDecimal (Literals.bigfloatToFloat64 (var "d")),
       _FloatValue_float32>>: lambda "f" $ Literals.float32ToDecimal (var "f"),
       _FloatValue_float64>>: lambda "d" $ Literals.float64ToDecimal (var "d")]
 
