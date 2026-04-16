@@ -428,30 +428,35 @@ adaptTerm = define "adaptTerm" $
 adaptType :: TTermDefinition (LanguageConstraints -> M.Map LiteralType LiteralType -> Type -> Prelude.Either Error Type)
 adaptType = define "adaptType" $
   doc "Adapt a type using the given language constraints" $
+  -- Note: previously used a three-way mutually recursive let over forSupported,
+  -- forUnsupported, and tryType. The forUnsupported/tryType cycle broke Clojure
+  -- code generation (Clojure let is sequential and cannot resolve forward
+  -- references across cyclic bindings). See issue on Lisp coder mutual-recursion
+  -- handling. Refactored so that only tryType is a recursive binding: it calls
+  -- itself through an inlined forUnsupported/tryAlts helper, which the coders
+  -- already handle correctly (named fn in Clojure, letrec in other Lisps).
   "constraints" ~> "litmap" ~> "type0" ~>
-  lets [
-  "forSupported">: ("typ" ~> cases _Type (var "typ")
+  "forSupported" <~ ("typ" ~> cases _Type (var "typ")
     (Just $ just $ var "typ") [
     _Type_literal>>: "lt" ~> Logic.ifElse (literalTypeSupported @@ var "constraints" @@ var "lt")
       (just $ var "typ")
       (optCases (Maps.lookup (var "lt") (var "litmap"))
         (just $ Core.typeLiteral Core.literalTypeString)
-        ("lt2" ~> just $ Core.typeLiteral $ var "lt2"))]),
-  "forUnsupported">: ("typ" ~>
-    "tryAlts" <~ ("alts" ~> Logic.ifElse (Lists.null $ var "alts")
-      nothing
-      (optCases (var "tryType" @@ Lists.head (var "alts"))
-        (var "tryAlts" @@ Lists.tail (var "alts"))
-        ("t" ~> just $ var "t"))) $
-    "alts0" <~ typeAlternatives @@ var "typ" $
-    var "tryAlts" @@ var "alts0"),
-  "tryType">: ("typ" ~>
+        ("lt2" ~> just $ Core.typeLiteral $ var "lt2"))]) $
+  "tryType" <~ ("typ" ~>
     "supportedVariant" <~ Sets.member
       (Reflect.typeVariant @@ var "typ")
       (Coders.languageConstraintsTypeVariants $ var "constraints") $
     Logic.ifElse (var "supportedVariant")
       (var "forSupported" @@ var "typ")
-      (var "forUnsupported" @@ var "typ"))] $
+      -- Inlined forUnsupported: walk alternatives with a self-referential tryAlts.
+      ("tryAlts" <~ ("alts" ~> Logic.ifElse (Lists.null $ var "alts")
+        nothing
+        (optCases (var "tryType" @@ Lists.head (var "alts"))
+          (var "tryAlts" @@ Lists.tail (var "alts"))
+          ("t" ~> just $ var "t"))) $
+       "alts0" <~ typeAlternatives @@ var "typ" $
+       var "tryAlts" @@ var "alts0")) $
   "rewrite" <~ ("recurse" ~> "typ" ~>
     "type1" <<~ var "recurse" @@ var "typ" $
     optCases (var "tryType" @@ var "type1")
