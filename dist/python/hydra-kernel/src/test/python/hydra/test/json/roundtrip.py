@@ -3,6 +3,7 @@
 r"""Round-trip test cases for JSON encoding and decoding."""
 
 from __future__ import annotations
+from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import Just, Nothing
 from typing import cast

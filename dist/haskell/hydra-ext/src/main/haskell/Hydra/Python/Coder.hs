@@ -1519,6 +1519,7 @@ extendMetaForTerm topLevel meta0 term =
                               in (Logic.ifElse (Analysis.isSimpleAssignment term1) m (extendMetaForType True True (Core.typeSchemeType ts) m))) (Core.bindingType b)
                     in forBinding) meta bindings)
                 Core.TermLiteral v0 -> case v0 of
+                  Core.LiteralDecimal _ -> setMetaUsesDecimal meta True
                   Core.LiteralFloat v1 -> case v1 of
                     Core.FloatValueBigfloat _ -> setMetaUsesDecimal meta True
                     _ -> meta
@@ -1549,6 +1550,7 @@ extendMetaForType topLevel isTermAnnot typ meta =
         Core.TypeMaybe _ -> setMetaUsesMaybe metaWithSubtypes True
         Core.TypeEither _ -> setMetaUsesEither metaWithSubtypes True
         Core.TypeLiteral v0 -> case v0 of
+          Core.LiteralTypeDecimal -> setMetaUsesDecimal metaWithSubtypes True
           Core.LiteralTypeFloat v1 -> case v1 of
             Core.FloatTypeBigfloat -> setMetaUsesDecimal metaWithSubtypes True
             _ -> metaWithSubtypes

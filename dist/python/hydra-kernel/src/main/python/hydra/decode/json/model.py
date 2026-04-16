@@ -4,6 +4,7 @@ r"""Term decoders for hydra.json.model."""
 
 from __future__ import annotations
 from collections.abc import Callable
+from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Left, Right, frozenlist
 from typing import cast

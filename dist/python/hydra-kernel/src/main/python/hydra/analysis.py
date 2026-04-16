@@ -4,6 +4,7 @@ r"""Module dependency namespace analysis."""
 
 from __future__ import annotations
 from collections.abc import Callable
+from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import Either, Just, Maybe, Nothing, Right, frozenlist
 from typing import TypeVar, cast

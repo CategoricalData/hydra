@@ -4,6 +4,7 @@ r"""JSON-to-YAML encoding. Converts JSON Values to YAML Nodes (always succeeds),
 
 from __future__ import annotations
 from collections.abc import Callable
+from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, frozenlist
 from typing import cast
