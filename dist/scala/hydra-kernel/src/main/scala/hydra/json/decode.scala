@@ -7,8 +7,12 @@ import hydra.json.model.*
 def decodeFloat(ft: hydra.core.FloatType)(value: hydra.json.model.Value): Either[scala.Predef.String, hydra.core.Term] =
   ft match
   case hydra.core.FloatType.bigfloat => value match
-    case hydra.json.model.Value.number(v_Value_number_n) => Right(hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.bigfloat(v_Value_number_n))))
-    case _ => Left("expected number for bigfloat")
+    case hydra.json.model.Value.number(v_Value_number_n) => Right(hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.bigfloat(hydra.lib.literals.float64ToBigfloat(hydra.lib.literals.decimalToFloat64(v_Value_number_n))))))
+    case hydra.json.model.Value.string(v_Value_string_s) => hydra.lib.maybes.maybe[Either[scala.Predef.String,
+       hydra.core.Term], Double](Left(hydra.lib.strings.cat(Seq("invalid bigfloat sentinel: ",
+       v_Value_string_s))))((v: Double) =>
+      Right(hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.bigfloat(hydra.lib.literals.float64ToBigfloat(v))))))(hydra.json.decode.parseSpecialFloat(v_Value_string_s))
+    case _ => Left("expected number or special float string for bigfloat")
   case hydra.core.FloatType.float32 => {
     lazy val strResult: Either[scala.Predef.String, scala.Predef.String] = hydra.json.decode.expectString(value)
     hydra.lib.eithers.either[scala.Predef.String, scala.Predef.String, Either[scala.Predef.String,
@@ -21,7 +25,7 @@ def decodeFloat(ft: hydra.core.FloatType)(value: hydra.json.model.Value): Either
     })(strResult)
   }
   case hydra.core.FloatType.float64 => value match
-    case hydra.json.model.Value.number(v_Value_number_n) => Right(hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(hydra.lib.literals.bigfloatToFloat64(v_Value_number_n)))))
+    case hydra.json.model.Value.number(v_Value_number_n) => Right(hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(hydra.lib.literals.decimalToFloat64(v_Value_number_n)))))
     case hydra.json.model.Value.string(v_Value_string_s) => hydra.lib.maybes.maybe[Either[scala.Predef.String,
        hydra.core.Term], Double](Left(hydra.lib.strings.cat(Seq("invalid float64 sentinel: ",
        v_Value_string_s))))((v: Double) =>
@@ -78,27 +82,27 @@ def decodeInteger(it: hydra.core.IntegerType)(value: hydra.json.model.Value): Ei
   case hydra.core.IntegerType.int8 => {
     lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
     hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
-      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int8(hydra.lib.literals.bigintToInt8(hydra.lib.literals.bigfloatToBigint(n))))))(numResult)
+      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int8(hydra.lib.literals.bigintToInt8(hydra.lib.literals.decimalToBigint(n))))))(numResult)
   }
   case hydra.core.IntegerType.int16 => {
     lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
     hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
-      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int16(hydra.lib.literals.bigintToInt16(hydra.lib.literals.bigfloatToBigint(n))))))(numResult)
+      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int16(hydra.lib.literals.bigintToInt16(hydra.lib.literals.decimalToBigint(n))))))(numResult)
   }
   case hydra.core.IntegerType.int32 => {
     lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
     hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
-      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(hydra.lib.literals.bigintToInt32(hydra.lib.literals.bigfloatToBigint(n))))))(numResult)
+      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(hydra.lib.literals.bigintToInt32(hydra.lib.literals.decimalToBigint(n))))))(numResult)
   }
   case hydra.core.IntegerType.uint8 => {
     lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
     hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
-      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint8(hydra.lib.literals.bigintToUint8(hydra.lib.literals.bigfloatToBigint(n))))))(numResult)
+      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint8(hydra.lib.literals.bigintToUint8(hydra.lib.literals.decimalToBigint(n))))))(numResult)
   }
   case hydra.core.IntegerType.uint16 => {
     lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
     hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
-      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint16(hydra.lib.literals.bigintToUint16(hydra.lib.literals.bigfloatToBigint(n))))))(numResult)
+      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint16(hydra.lib.literals.bigintToUint16(hydra.lib.literals.decimalToBigint(n))))))(numResult)
   }
 
 def decodeLiteral(lt: hydra.core.LiteralType)(value: hydra.json.model.Value): Either[scala.Predef.String,
@@ -113,7 +117,7 @@ def decodeLiteral(lt: hydra.core.LiteralType)(value: hydra.json.model.Value): Ei
     case hydra.json.model.Value.boolean(v_Value_boolean_b) => Right(hydra.core.Term.literal(hydra.core.Literal.boolean(v_Value_boolean_b)))
     case _ => Left("expected boolean")
   case hydra.core.LiteralType.decimal => value match
-    case hydra.json.model.Value.number(v_Value_number_n) => Right(hydra.core.Term.literal(hydra.core.Literal.decimal(hydra.lib.literals.float64ToDecimal(hydra.lib.literals.bigfloatToFloat64(v_Value_number_n)))))
+    case hydra.json.model.Value.number(v_Value_number_n) => Right(hydra.core.Term.literal(hydra.core.Literal.decimal(v_Value_number_n)))
     case _ => Left("expected number for decimal")
   case hydra.core.LiteralType.float(v_LiteralType_float_ft) => hydra.json.decode.decodeFloat(v_LiteralType_float_ft)(value)
   case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => hydra.json.decode.decodeInteger(v_LiteralType_integer_it)(value)

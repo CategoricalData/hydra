@@ -1895,6 +1895,7 @@ def extendMetaForTerm(topLevel: Boolean)(meta0: hydra.python.environment.PythonM
       })(meta)(bindings)
     }
     case hydra.core.Term.literal(v_Term_literal_l) => v_Term_literal_l match
+      case hydra.core.Literal.decimal(v_Literal_decimal__) => hydra.python.coder.setMetaUsesDecimal(meta)(true)
       case hydra.core.Literal.float(v_Literal_float_fv) => v_Literal_float_fv match
         case hydra.core.FloatValue.bigfloat(v_FloatValue_bigfloat__) => hydra.python.coder.setMetaUsesDecimal(meta)(true)
         case _ => meta
@@ -1935,6 +1936,7 @@ def extendMetaForType(topLevel: Boolean)(isTermAnnot: Boolean)(typ: hydra.core.T
     case hydra.core.Type.maybe(v_Type_maybe__) => hydra.python.coder.setMetaUsesMaybe(metaWithSubtypes)(true)
     case hydra.core.Type.either(v_Type_either__) => hydra.python.coder.setMetaUsesEither(metaWithSubtypes)(true)
     case hydra.core.Type.literal(v_Type_literal_lt) => v_Type_literal_lt match
+      case hydra.core.LiteralType.decimal => hydra.python.coder.setMetaUsesDecimal(metaWithSubtypes)(true)
       case hydra.core.LiteralType.float(v_LiteralType_float_ft) => v_LiteralType_float_ft match
         case hydra.core.FloatType.bigfloat => hydra.python.coder.setMetaUsesDecimal(metaWithSubtypes)(true)
         case _ => metaWithSubtypes

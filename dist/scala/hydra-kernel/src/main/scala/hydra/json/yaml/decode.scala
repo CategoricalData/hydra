@@ -49,8 +49,9 @@ def yamlToJson(node: hydra.yaml.model.Node): Either[scala.Predef.String, hydra.j
   }
   case hydra.yaml.model.Node.scalar(v_Node_scalar_s) => v_Node_scalar_s match
     case hydra.yaml.model.Scalar.bool(v_Scalar_bool_b) => Right(hydra.json.model.Value.boolean(v_Scalar_bool_b))
-    case hydra.yaml.model.Scalar.float(v_Scalar_float_f) => Right(hydra.json.model.Value.number(v_Scalar_float_f))
-    case hydra.yaml.model.Scalar.int(v_Scalar_int_i) => Right(hydra.json.model.Value.number(hydra.lib.literals.bigintToBigfloat(v_Scalar_int_i)))
+    case hydra.yaml.model.Scalar.decimal(v_Scalar_decimal_d) => Right(hydra.json.model.Value.number(v_Scalar_decimal_d))
+    case hydra.yaml.model.Scalar.float(v_Scalar_float_f) => Right(hydra.json.model.Value.number(hydra.lib.literals.float64ToDecimal(hydra.lib.literals.bigfloatToFloat64(v_Scalar_float_f))))
+    case hydra.yaml.model.Scalar.int(v_Scalar_int_i) => Right(hydra.json.model.Value.number(hydra.lib.literals.bigintToDecimal(v_Scalar_int_i)))
     case hydra.yaml.model.Scalar.`null` => Right(hydra.json.model.Value.`null`)
     case hydra.yaml.model.Scalar.str(v_Scalar_str_str) => Right(hydra.json.model.Value.string(v_Scalar_str_str))
   case hydra.yaml.model.Node.sequence(v_Node_sequence_nodes) => {

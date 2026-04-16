@@ -4,16 +4,17 @@ import hydra.core.*
 
 import hydra.json.model.*
 
-def encodeFloat[T0](fv: hydra.core.FloatValue): Either[T0, hydra.json.model.Value] =
+def encodeFloat(fv: hydra.core.FloatValue): Either[scala.Predef.String, hydra.json.model.Value] =
   fv match
   case hydra.core.FloatValue.bigfloat(v_FloatValue_bigfloat_bf) => {
     lazy val s: scala.Predef.String = hydra.lib.literals.showBigfloat(v_FloatValue_bigfloat_bf)
-    hydra.lib.logic.ifElse[Either[T0, hydra.json.model.Value]](hydra.json.encode.isSpecialFloatString(s))(Right(hydra.json.model.Value.string(s)))(Right(hydra.json.model.Value.number(v_FloatValue_bigfloat_bf)))
+    hydra.lib.logic.ifElse[Either[scala.Predef.String, hydra.json.model.Value]](hydra.json.encode.requiresJsonStringSentinel(s))(Left(hydra.lib.strings.cat(Seq("JSON cannot represent bigfloat value: ",
+       s))))(Right(hydra.json.model.Value.number(hydra.lib.literals.float64ToDecimal(hydra.lib.literals.bigfloatToFloat64(v_FloatValue_bigfloat_bf)))))
   }
   case hydra.core.FloatValue.float32(v_FloatValue_float32_f) => Right(hydra.json.model.Value.string(hydra.lib.literals.showFloat32(v_FloatValue_float32_f)))
   case hydra.core.FloatValue.float64(v_FloatValue_float64_f) => {
     lazy val s: scala.Predef.String = hydra.lib.literals.showFloat64(v_FloatValue_float64_f)
-    hydra.lib.logic.ifElse[Either[T0, hydra.json.model.Value]](hydra.json.encode.isSpecialFloatString(s))(Right(hydra.json.model.Value.string(s)))(Right(hydra.json.model.Value.number(hydra.lib.literals.float64ToBigfloat(v_FloatValue_float64_f))))
+    hydra.lib.logic.ifElse[Either[scala.Predef.String, hydra.json.model.Value]](hydra.json.encode.requiresJsonStringSentinel(s))(Right(hydra.json.model.Value.string(s)))(Right(hydra.json.model.Value.number(hydra.lib.literals.float64ToDecimal(v_FloatValue_float64_f))))
   }
 
 def encodeInteger[T0](iv: hydra.core.IntegerValue): Either[T0, hydra.json.model.Value] =
@@ -22,22 +23,22 @@ def encodeInteger[T0](iv: hydra.core.IntegerValue): Either[T0, hydra.json.model.
   case hydra.core.IntegerValue.int64(v_IntegerValue_int64_i) => Right(hydra.json.model.Value.string(hydra.lib.literals.showInt64(v_IntegerValue_int64_i)))
   case hydra.core.IntegerValue.uint32(v_IntegerValue_uint32_i) => Right(hydra.json.model.Value.string(hydra.lib.literals.showUint32(v_IntegerValue_uint32_i)))
   case hydra.core.IntegerValue.uint64(v_IntegerValue_uint64_i) => Right(hydra.json.model.Value.string(hydra.lib.literals.showUint64(v_IntegerValue_uint64_i)))
-  case hydra.core.IntegerValue.int8(v_IntegerValue_int8_i) => Right(hydra.json.model.Value.number(hydra.lib.literals.bigintToBigfloat(hydra.lib.literals.int8ToBigint(v_IntegerValue_int8_i))))
-  case hydra.core.IntegerValue.int16(v_IntegerValue_int16_i) => Right(hydra.json.model.Value.number(hydra.lib.literals.bigintToBigfloat(hydra.lib.literals.int16ToBigint(v_IntegerValue_int16_i))))
-  case hydra.core.IntegerValue.int32(v_IntegerValue_int32_i) => Right(hydra.json.model.Value.number(hydra.lib.literals.bigintToBigfloat(hydra.lib.literals.int32ToBigint(v_IntegerValue_int32_i))))
-  case hydra.core.IntegerValue.uint8(v_IntegerValue_uint8_i) => Right(hydra.json.model.Value.number(hydra.lib.literals.bigintToBigfloat(hydra.lib.literals.uint8ToBigint(v_IntegerValue_uint8_i))))
-  case hydra.core.IntegerValue.uint16(v_IntegerValue_uint16_i) => Right(hydra.json.model.Value.number(hydra.lib.literals.bigintToBigfloat(hydra.lib.literals.uint16ToBigint(v_IntegerValue_uint16_i))))
+  case hydra.core.IntegerValue.int8(v_IntegerValue_int8_i) => Right(hydra.json.model.Value.number(hydra.lib.literals.bigintToDecimal(hydra.lib.literals.int8ToBigint(v_IntegerValue_int8_i))))
+  case hydra.core.IntegerValue.int16(v_IntegerValue_int16_i) => Right(hydra.json.model.Value.number(hydra.lib.literals.bigintToDecimal(hydra.lib.literals.int16ToBigint(v_IntegerValue_int16_i))))
+  case hydra.core.IntegerValue.int32(v_IntegerValue_int32_i) => Right(hydra.json.model.Value.number(hydra.lib.literals.bigintToDecimal(hydra.lib.literals.int32ToBigint(v_IntegerValue_int32_i))))
+  case hydra.core.IntegerValue.uint8(v_IntegerValue_uint8_i) => Right(hydra.json.model.Value.number(hydra.lib.literals.bigintToDecimal(hydra.lib.literals.uint8ToBigint(v_IntegerValue_uint8_i))))
+  case hydra.core.IntegerValue.uint16(v_IntegerValue_uint16_i) => Right(hydra.json.model.Value.number(hydra.lib.literals.bigintToDecimal(hydra.lib.literals.uint16ToBigint(v_IntegerValue_uint16_i))))
 
-def encodeLiteral[T0](lit: hydra.core.Literal): Either[T0, hydra.json.model.Value] =
+def encodeLiteral(lit: hydra.core.Literal): Either[scala.Predef.String, hydra.json.model.Value] =
   lit match
   case hydra.core.Literal.binary(v_Literal_binary_b) => Right(hydra.json.model.Value.string(hydra.lib.literals.binaryToString(v_Literal_binary_b)))
   case hydra.core.Literal.boolean(v_Literal_boolean_b) => Right(hydra.json.model.Value.boolean(v_Literal_boolean_b))
-  case hydra.core.Literal.decimal(v_Literal_decimal_d) => Right(hydra.json.model.Value.number(hydra.lib.literals.float64ToBigfloat(hydra.lib.literals.decimalToFloat64(v_Literal_decimal_d))))
+  case hydra.core.Literal.decimal(v_Literal_decimal_d) => Right(hydra.json.model.Value.number(v_Literal_decimal_d))
   case hydra.core.Literal.float(v_Literal_float_f) => hydra.json.encode.encodeFloat(v_Literal_float_f)
   case hydra.core.Literal.integer(v_Literal_integer_i) => hydra.json.encode.encodeInteger(v_Literal_integer_i)
   case hydra.core.Literal.string(v_Literal_string_s) => Right(hydra.json.model.Value.string(v_Literal_string_s))
 
-def isSpecialFloatString(s: scala.Predef.String): Boolean =
+def requiresJsonStringSentinel(s: scala.Predef.String): Boolean =
   hydra.lib.logic.or(hydra.lib.equality.equal[scala.Predef.String](s)("NaN"))(hydra.lib.logic.or(hydra.lib.equality.equal[scala.Predef.String](s)("Infinity"))(hydra.lib.logic.or(hydra.lib.equality.equal[scala.Predef.String](s)("-Infinity"))(hydra.lib.equality.equal[scala.Predef.String](s)("-0.0"))))
 
 def toJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)(typ: hydra.core.Type)(term: hydra.core.Term): Either[scala.Predef.String,

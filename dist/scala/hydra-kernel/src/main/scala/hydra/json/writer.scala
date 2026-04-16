@@ -38,10 +38,16 @@ def valueToExpr(value: hydra.json.model.Value): hydra.ast.Expr =
   case hydra.json.model.Value.boolean(v_Value_boolean_b) => hydra.serialization.cst(hydra.lib.logic.ifElse[scala.Predef.String](v_Value_boolean_b)("true")("false"))
   case hydra.json.model.Value.`null` => hydra.serialization.cst("null")
   case hydra.json.model.Value.number(v_Value_number_n) => {
-    lazy val rounded: BigInt = hydra.lib.literals.bigfloatToBigint(v_Value_number_n)
+    lazy val rounded: BigInt = hydra.lib.literals.decimalToBigint(v_Value_number_n)
     {
-      lazy val shown: scala.Predef.String = hydra.lib.literals.showBigfloat(v_Value_number_n)
-      hydra.serialization.cst(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.logic.and(hydra.lib.equality.equal[BigDecimal](v_Value_number_n)(hydra.lib.literals.bigintToBigfloat(rounded)))(hydra.lib.logic.not(hydra.lib.equality.equal[scala.Predef.String](shown)("-0.0"))))(hydra.lib.literals.showBigint(rounded))(shown))
+      lazy val shown: scala.Predef.String = hydra.lib.literals.showDecimal(v_Value_number_n)
+      {
+        lazy val isWhole: Boolean = hydra.lib.equality.equal[BigDecimal](v_Value_number_n)(hydra.lib.literals.bigintToDecimal(rounded))
+        {
+          lazy val plain: scala.Predef.String = hydra.lib.literals.showBigint(rounded)
+          hydra.serialization.cst(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.logic.and(isWhole)(hydra.lib.equality.lte[Int](hydra.lib.strings.length(plain))(hydra.lib.strings.length(shown))))(plain)(shown))
+        }
+      }
     }
   }
   case hydra.json.model.Value.`object`(v_Value_object_obj) => hydra.serialization.bracesListAdaptive(hydra.lib.lists.map[Tuple2[scala.Predef.String,
