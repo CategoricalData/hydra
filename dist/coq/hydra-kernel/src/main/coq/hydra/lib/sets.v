@@ -1,37 +1,75 @@
-(* Note: this is an automatically generated file. Do not edit. *)
-
 (* Hydra primitive library: hydra.lib.sets *)
 
-(* Sets are represented as sorted lists *)
+(* Sets are represented as deduplicated lists *)
 
 Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdlib.QArith.QArith.
+Require Import hydra.lib.base.
 Import ListNotations.
 
-Axiom delete : forall (x : Type), x -> list x -> list x.
+Open Scope Z_scope.
+
+Definition contains {x : Type} (v : x) (s : list x) : bool :=
+  List.existsb (fun y => hydra_eq v y) s.
+
+Definition delete {x : Type} (v : x) (s : list x) : list x :=
+  List.filter (fun y => negb (hydra_eq v y)) s.
 Arguments delete {x}.
-Axiom difference : forall (x : Type), list x -> list x -> list x.
+
+Definition difference {x : Type} (s1 s2 : list x) : list x :=
+  List.filter (fun v => negb (contains v s2)) s1.
 Arguments difference {x}.
-Axiom empty : forall (x : Type), list x.
+
+Definition empty {x : Type} : list x := [].
 Arguments empty {x}.
-Axiom fromList : forall (x : Type), list x -> list x.
+
+Fixpoint nubAux {x : Type} (seen : list x) (xs : list x) : list x :=
+  match xs with
+  | [] => []
+  | h :: t =>
+      if List.existsb (fun y => hydra_eq h y) seen
+      then nubAux seen t
+      else h :: nubAux (h :: seen) t
+  end.
+
+Definition fromList {x : Type} (xs : list x) : list x := nubAux [] xs.
 Arguments fromList {x}.
-Axiom insert : forall (x : Type), x -> list x -> list x.
+
+Definition insert {x : Type} (v : x) (s : list x) : list x :=
+  if contains v s then s else v :: s.
 Arguments insert {x}.
-Axiom intersection : forall (x : Type), list x -> list x -> list x.
+
+Definition intersection {x : Type} (s1 s2 : list x) : list x :=
+  List.filter (fun v => contains v s2) s1.
 Arguments intersection {x}.
-Axiom map : forall (x y : Type), (x -> y) -> list x -> list y.
+
+Definition map {x y : Type} (f : x -> y) (s : list x) : list y :=
+  nubAux [] (List.map f s).
 Arguments map {x y}.
-Axiom member : forall (x : Type), x -> list x -> bool.
+
+Definition member {x : Type} (v : x) (s : list x) : bool :=
+  contains v s.
 Arguments member {x}.
-Axiom null : forall (x : Type), list x -> bool.
+
+Definition null {x : Type} (s : list x) : bool :=
+  match s with [] => true | _ => false end.
 Arguments null {x}.
-Axiom singleton : forall (x : Type), x -> list x.
+
+Definition singleton {x : Type} (v : x) : list x := [v].
 Arguments singleton {x}.
-Axiom size : forall (x : Type), list x -> Z.
+
+Definition size {x : Type} (s : list x) : Z :=
+  Z.of_nat (List.length s).
 Arguments size {x}.
-Axiom toList : forall (x : Type), list x -> list x.
+
+Definition toList {x : Type} (s : list x) : list x := s.
 Arguments toList {x}.
-Axiom union : forall (x : Type), list x -> list x -> list x.
+
+Definition union {x : Type} (s1 s2 : list x) : list x :=
+  List.fold_right (fun v acc => if List.existsb (fun y => hydra_eq v y) acc then acc else v :: acc) s2 s1.
 Arguments union {x}.
-Axiom unions : forall (x : Type), list (list x) -> list x.
+
+Definition unions {x : Type} (ss : list (list x)) : list x :=
+  List.fold_right union [] ss.
 Arguments unions {x}.
+
+Close Scope Z_scope.
