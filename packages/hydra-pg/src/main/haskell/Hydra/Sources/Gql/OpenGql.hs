@@ -490,14 +490,14 @@ module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns]
       datetimeType,
       zonedDatetimeType,
       timestampWithTimeZoneType,
-      localdatetimeType,
+      localDatetimeTypeChoice,
       localDatetimeType,
       timestampWithoutTimeZoneType,
       dateType,
       timeType,
       zonedTimeType,
       timeWithTimeZoneType,
-      localtimeType,
+      localTimeTypeChoice,
       localTimeType,
       timeWithoutTimeZoneType,
       temporalDurationType,
@@ -3250,10 +3250,10 @@ temporalInstantType :: Binding
 temporalInstantType = def "TemporalInstantType" $
   T.union [
     "datetimeType">: gql "DatetimeType",
-    "localdatetimeType">: gql "LocaldatetimeType",
+    "localDatetimeTypeChoice">: gql "LocalDatetimeTypeChoice",
     "dateType">: gql "DateType",
     "timeType">: gql "TimeType",
-    "localtimeType">: gql "LocaltimeType"]
+    "localTimeTypeChoice">: gql "LocalTimeTypeChoice"]
 
 datetimeType :: Binding
 datetimeType = def "DatetimeType" $
@@ -3271,8 +3271,8 @@ timestampWithTimeZoneType = def "TimestampWithTimeZoneType" $
   T.record [
     "notNull">: T.boolean]
 
-localdatetimeType :: Binding
-localdatetimeType = def "LocaldatetimeType" $
+localDatetimeTypeChoice :: Binding
+localDatetimeTypeChoice = def "LocalDatetimeTypeChoice" $
   T.union [
     "localDatetime">: gql "LocalDatetimeType",
     "timestampWithoutTimeZone">: gql "TimestampWithoutTimeZoneType"]
@@ -3308,8 +3308,8 @@ timeWithTimeZoneType = def "TimeWithTimeZoneType" $
   T.record [
     "notNull">: T.boolean]
 
-localtimeType :: Binding
-localtimeType = def "LocaltimeType" $
+localTimeTypeChoice :: Binding
+localTimeTypeChoice = def "LocalTimeTypeChoice" $
   T.union [
     "localTime">: gql "LocalTimeType",
     "timeWithoutTimeZone">: gql "TimeWithoutTimeZoneType"]
