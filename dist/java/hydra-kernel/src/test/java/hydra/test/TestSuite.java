@@ -27,6 +27,7 @@ public interface TestSuite {
       hydra.test.Differentiation.allTests(),
       hydra.test.EtaExpansion.allTests(),
       hydra.test.Formatting.allTests(),
+      hydra.test.Generation.allTests(),
       hydra.test.hoisting.All.allTests(),
       hydra.test.inference.All.allTests(),
       hydra.test.json.Roundtrip.allTests(),

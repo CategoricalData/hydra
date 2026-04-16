@@ -111,14 +111,6 @@ executables:
     dependencies:
       - hydra
 
-  update-json-ext:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-json-ext
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra
-
   diag-module:
     main: Main.hs
     source-dirs:

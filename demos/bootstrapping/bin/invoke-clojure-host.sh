@@ -38,6 +38,8 @@ if [ -z "$TARGET" ]; then
 fi
 
 if [ -z "$JSON_DIR" ]; then
+    # The Clojure bootstrap still takes a single kernel JSON directory.
+    # Full per-package walking (see issue #290 Phase 1c) is not yet implemented.
     JSON_DIR="$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json"
     EXTRA_ARGS="$EXTRA_ARGS --json-dir $JSON_DIR"
 fi
@@ -62,19 +64,19 @@ case "$TARGET" in
 esac
 
 if [ -n "$CODER_CHECK" ] && [ ! -f "$CODER_CHECK" ]; then
-    echo "  Coder modules not found. Generating from ext JSON..."
+    echo "  Coder modules not found. Generating from per-package JSON..."
 
     # Build the Haskell bootstrap-from-json if needed
     cd "$HYDRA_ROOT/heads/haskell"
     stack build bootstrap-from-json 2>&1 | grep -v "^$"
 
-    EXT_JSON_DIR="$HYDRA_ROOT/dist/json/hydra-ext/src/main/json"
+    # --json-dir points at the dist/json root; the bootstrap walks
+    # per-package subdirectories in dependency order.
     stack exec bootstrap-from-json -- \
         --target clojure \
         --output "$HYDRA_ROOT/dist/clojure/hydra-kernel" \
         --include-coders \
-        --ext-json-dir "$EXT_JSON_DIR" \
-        --json-dir "$JSON_DIR" 2>&1
+        --json-dir "$HYDRA_ROOT/dist/json" 2>&1
 
     echo "  Coder modules generated."
     echo ""

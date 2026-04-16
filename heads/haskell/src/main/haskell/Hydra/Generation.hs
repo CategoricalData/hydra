@@ -7,6 +7,7 @@ module Hydra.Generation (
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
+import Hydra.PackageRouting (groupByPackage)
 import Hydra.Packaging (_Module)
 import Hydra.Testing (TestGroup(..))
 import qualified Hydra.Json.Model as Json
@@ -181,12 +182,38 @@ writeModulesJson doInfer basePath universeMods mods = do
       schemaMap = buildSchemaMap graph
   mapM_ (writeModuleJson schemaMap basePath) mods'
 
+-- | Write multiple modules to JSON files, routing each module to the
+-- dist/json/<package>/src/main/json/ directory of its owning package.
+--
+-- Like 'writeModulesJson', but fans the modules out across package
+-- subdirectories based on 'namespaceToPackage'. Inference and schema-map
+-- construction happen once over the full universe, so each per-module write
+-- is as cheap as the single-directory version.
+writeModulesJsonPackageSplit :: Bool -> FilePath -> [Module] -> [Module] -> IO ()
+writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
+  mods' <- if doInfer then inferModulesIO universeMods mods else return mods
+  let graph = modulesToGraph universeMods universeMods
+      schemaMap = buildSchemaMap graph
+      groups = groupByPackage mods'
+  CM.forM_ groups $ \(pkg, pkgMods) -> do
+    let pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
+    putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules -> " ++ pkgDir
+    mapM_ (writeModuleJson schemaMap pkgDir) pkgMods
+
 -- | Write DSL modules to JSON files.
 writeDslJson :: FilePath -> [Module] -> [Module] -> IO ()
 writeDslJson basePath universeModules typeModules = do
     dslMods <- generateDslModules universeModules typeModules
     let nonEmpty = filter (not . null . moduleDefinitions) dslMods
     writeModulesJson False basePath universeModules nonEmpty
+
+-- | Write DSL modules to JSON files, routed per package. Like 'writeDslJson'
+-- but uses 'writeModulesJsonPackageSplit' under the hood.
+writeDslJsonPackageSplit :: FilePath -> [Module] -> [Module] -> IO ()
+writeDslJsonPackageSplit distJsonRoot universeModules typeModules = do
+    dslMods <- generateDslModules universeModules typeModules
+    let nonEmpty = filter (not . null . moduleDefinitions) dslMods
+    writeModulesJsonPackageSplit False distJsonRoot universeModules nonEmpty
 
 -- | Write a manifest.json listing module namespaces for kernelModules, mainModules, and testModules.
 -- This allows Java and Python hosts to load the correct set of modules without directory scanning.
@@ -212,6 +239,57 @@ writeManifestJson basePath kernelModules kernelTypesModules mainModules testModu
         filePath = basePath FP.</> "manifest.json"
     writeFile filePath (jsonStr ++ "\n")
     putStrLn $ "Wrote manifest: " ++ filePath
+  where
+    namespacesJson mods = Json.ValueArray $ fmap (Json.ValueString . unNamespace . moduleNamespace) mods
+
+-- | Write per-package manifest.json files at
+-- <root>/<pkg>/src/main/json/manifest.json for every package owning at least
+-- one module in the given lists.
+--
+-- Each per-package manifest has the same schema as the legacy monolithic
+-- manifest, but the field values are scoped to modules owned by that package.
+-- A package appears only if it owns at least one module in mainModules
+-- (testModules alone aren't enough — test packages use their own
+-- src/test/json/manifest.json path, not covered here).
+--
+-- The 'kernelTypesModules' argument is used only for DSL synthesis, same as
+-- 'writeManifestJson'. 'dslSynthUniverse' is the module universe passed to
+-- the DSL generator.
+writePerPackageManifestsJson :: FilePath
+                             -> [Module] -- ^ dslSynthUniverse (for DSL generation)
+                             -> [Module] -- ^ kernelTypesModules
+                             -> [Module] -- ^ mainModules (to partition)
+                             -> [Module] -- ^ testModules (today always hydra-kernel)
+                             -> IO ()
+writePerPackageManifestsJson distJsonRoot dslSynthUniverse kernelTypesModules mainModules testModules = do
+    dslMods <- generateDslModules dslSynthUniverse kernelTypesModules
+    let nonEmptyDsls = filter (not . null . moduleDefinitions) dslMods
+    let mainByPkg = groupByPackage mainModules
+    let dslByPkg  = M.fromList (groupByPackage nonEmptyDsls)
+    let testByPkg = M.fromList (groupByPackage testModules)
+    let evalLibSet = M.fromList (groupByPackage EvalLib.evalLibModules)
+    let packages = L.nub
+          $ fmap fst mainByPkg
+          ++ M.keys dslByPkg
+          ++ M.keys testByPkg
+          ++ M.keys evalLibSet
+    CM.forM_ (L.sort packages) $ \pkg -> do
+      let mainForPkg   = Y.fromMaybe [] (lookup pkg mainByPkg)
+          dslForPkg    = M.findWithDefault [] pkg dslByPkg
+          testForPkg   = M.findWithDefault [] pkg testByPkg
+          evalForPkg   = M.findWithDefault [] pkg evalLibSet
+          jsonVal = Json.ValueObject $ M.fromList [
+              ("package",        Json.ValueString pkg),
+              ("dslModules",     namespacesJson dslForPkg),
+              ("evalLibModules", namespacesJson evalForPkg),
+              ("mainModules",    namespacesJson mainForPkg),
+              ("testModules",    namespacesJson testForPkg)]
+          jsonStr = JsonWriter.printJson jsonVal
+          pkgDir  = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
+          filePath = pkgDir FP.</> "manifest.json"
+      SD.createDirectoryIfMissing True pkgDir
+      writeFile filePath (jsonStr ++ "\n")
+      putStrLn $ "Wrote manifest: " ++ filePath
   where
     namespacesJson mods = Json.ValueArray $ fmap (Json.ValueString . unNamespace . moduleNamespace) mods
 
@@ -259,6 +337,28 @@ readManifestField basePath fieldName = do
           Just (Json.ValueArray arr) -> return $ fmap toNamespace arr
           Just _ -> fail $ "manifest.json field " ++ fieldName ++ " is not an array"
         _ -> fail "manifest.json is not a JSON object"
+  where
+    toNamespace (Json.ValueString s) = Namespace s
+    toNamespace _ = error $ "manifest.json: expected string in " ++ fieldName
+
+-- | Read a manifest field or return an empty list if the field (or the
+-- manifest itself) is missing. Differs from 'readManifestField', which
+-- fails hard on a missing field.
+readManifestFieldOrEmpty :: FilePath -> String -> IO [Namespace]
+readManifestFieldOrEmpty basePath fieldName = do
+    let manifestPath = basePath FP.</> "manifest.json"
+    exists <- SD.doesFileExist manifestPath
+    if not exists
+      then return []
+      else do
+        parseResult <- parseJsonFile manifestPath
+        case parseResult of
+          Left _ -> return []
+          Right jsonVal -> case jsonVal of
+            Json.ValueObject obj -> case M.lookup fieldName obj of
+              Just (Json.ValueArray arr) -> return $ fmap toNamespace arr
+              _                          -> return []
+            _ -> return []
   where
     toNamespace (Json.ValueString s) = Namespace s
     toNamespace _ = error $ "manifest.json: expected string in " ++ fieldName
