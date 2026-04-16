@@ -560,7 +560,7 @@ localName = define "localName" $
   lambda "name_" $ lets [
     "s">: unwrap _Name @@ var "name_",
     "parts">: Strings.splitOn (string ".") (var "s")] $
-    Lists.last (var "parts")
+    Maybes.fromMaybe (var "s") (Lists.maybeLast (var "parts"))
 
 nameNamespace :: TTermDefinition (Name -> Maybe String)
 nameNamespace = define "nameNamespace" $
@@ -570,7 +570,7 @@ nameNamespace = define "nameNamespace" $
     "parts">: Strings.splitOn (string ".") (var "s")] $
     Logic.ifElse (Equality.equal (Lists.length (var "parts")) (int32 1))
       nothing
-      (just (Strings.intercalate (string ".") (Lists.init (var "parts"))))
+      (Maybes.map (lambda "ps" $ Strings.intercalate (string ".") (var "ps")) (Lists.maybeInit (var "parts")))
 
 namedTypeAdapter :: TTermDefinition (Context -> Type -> Maybe Name -> M.Map Name Term -> [FieldType] -> AvroEnv.EncodeEnvironment
   -> ([Avro.Field] -> Avro.NamedType)
@@ -731,11 +731,11 @@ unionAsRecordAdapter = define "unionAsRecordAdapter" $
             cases JM._Value (var "j") (Just (err @@ var "cx1" @@ string "expected JSON object for union-as-record")) [
               JM._Value_object>>: lambda "m" $ lets [
                 "findActive">: lambda "remaining" $
-                  Logic.ifElse (Lists.null (var "remaining"))
+                  Maybes.maybe
                     (err @@ var "cx1" @@ string "no non-null field in union record")
-                    (lets [
-                      "head_">: Lists.head (var "remaining"),
-                      "rest_">: Lists.tail (var "remaining"),
+                    (lambda "p" $ lets [
+                      "head_">: Pairs.first (var "p"),
+                      "rest_">: Pairs.second (var "p"),
                       "fname">: Pairs.first (var "head_"),
                       "ad">: Pairs.second (var "head_"),
                       "mjv">: Maps.lookup (localName @@ var "fname") (var "m")] $
@@ -746,7 +746,8 @@ unionAsRecordAdapter = define "unionAsRecordAdapter" $
                             Eithers.map (lambda "t" $ Core.termInject (Core.injection (var "typeName") (Core.field (var "fname") (var "t"))))
                               (Coders.coderDecode (Coders.adapterCoder (var "ad")) @@ var "cx1" @@ var "jv"))) [
                             JM._Value_null>>: constant (var "findActive" @@ var "rest_")])
-                        (var "mjv"))] $
+                        (var "mjv"))
+                    (Lists.uncons (var "remaining"))] $
                 var "findActive" @@ var "fieldAdapters"])),
       "env2">: record AvroEnv._EncodeEnvironment [
         AvroEnv._EncodeEnvironment_typeMap>>: project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_typeMap @@ var "env1",

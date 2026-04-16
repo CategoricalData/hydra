@@ -88,7 +88,6 @@ module_ = Module ns definitions
       toDefinition partition_,
       toDefinition pure_,
       toDefinition replicate_,
-      toDefinition safeHead_,
       toDefinition singleton_,
       toDefinition sort_,
       toDefinition sortOn_,
@@ -180,9 +179,9 @@ find_ = define "find" $
   doc "Interpreter-friendly find for List terms." $
   "cx" ~> "g" ~>
   "predTerm" ~> "listTerm" ~>
-  -- Build: safeHead (filter predTerm listTerm) - delegate to filter and safeHead
+  -- Build: maybeHead (filter predTerm listTerm) - delegate to filter and maybeHead
   right $ Core.termApplication $ Core.application
-    (Core.termVariable $ encodedName _lists_safeHead)
+    (Core.termVariable $ encodedName _lists_maybeHead)
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
         (Core.termVariable $ encodedName _lists_filter)
@@ -430,19 +429,19 @@ span_ = define "span" $
       (var "finalState"))
 
 -- | Interpreter-friendly uncons for List terms.
--- uncons xs = if null xs then Nothing else Just (head xs, tail xs)
+-- uncons xs = maybe Nothing (\h -> Just (h, drop 1 xs)) (maybeAt 0 xs)
 uncons_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
 uncons_ = define "uncons" $
   doc "Interpreter-friendly uncons for List terms." $
   "cx" ~> "g" ~>
   "listTerm" ~>
   "elements" <<~ (ExtractCore.list @@ var "g" @@ var "listTerm") $
-  right $ Logic.ifElse
-    (Lists.null (var "elements"))
-    (Core.termMaybe nothing)
-    (Core.termMaybe $ just $ Core.termPair $ pair
-      (Lists.head (var "elements"))
-      (Core.termList $ Lists.tail (var "elements")))
+  right $ Core.termMaybe $ Maybes.maybe
+    nothing
+    ("h" ~> just $ Core.termPair $ pair
+      (var "h")
+      (Core.termList $ Lists.drop (int32 1) (var "elements")))
+    (Lists.maybeAt (int32 0) (var "elements"))
 
 -- | Interpreter-friendly zipWith for List terms.
 -- Applies funTerm to corresponding pairs of elements.
@@ -486,7 +485,7 @@ elem_ = define "elem" $
 -- Returns a term that delegates to the lists.foldl primitive with a term-level lambda.
 -- The interpreter's native foldl uses functionWithReduce, which reduces each step
 -- via reduceTerm — so the accumulator is always a value, not an unreduced expression.
--- Uses safeHead+maybe instead of null+head+ifElse to avoid eager evaluation of head on empty lists.
+-- Uses maybeHead+maybe instead of null+head+ifElse to avoid eager evaluation of head on empty lists.
 group_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
 group_ = define "group" $
   doc "Interpreter-friendly group for List terms." $
@@ -503,7 +502,7 @@ group_ = define "group" $
     -- Helper: term-level lambda
     lam s body = Core.termLambda $ Core.lambda (wrap _Name $ string s) nothing body
 
-    -- stepFn: \acc el -> maybe ([el], snd acc) (\h -> ifElse (equal el h) (extend) (flush)) (safeHead (fst acc))
+    -- stepFn: \acc el -> maybe ([el], snd acc) (\h -> ifElse (equal el h) (extend) (flush)) (maybeHead (fst acc))
     stepFn = lam "acc" $ lam "el" $
       prim3 _maybes_maybe
         -- Nothing (empty group): start new with [el]
@@ -524,8 +523,8 @@ group_ = define "group" $
               (prim2 _lists_concat2
                 (prim1 _pairs_second (tv "acc"))
                 (Core.termList $ list [prim1 _pairs_first (tv "acc")]))))
-        -- safeHead (fst acc)
-        (prim1 _lists_safeHead (prim1 _pairs_first (tv "acc")))
+        -- maybeHead (fst acc)
+        (prim1 _lists_maybeHead (prim1 _pairs_first (tv "acc")))
 
     initState = Core.termPair $ pair
       (Core.termList $ list ([] :: [TTerm Term]))
@@ -566,27 +565,27 @@ intersperse_ = define "intersperse" $
   "cx" ~> "g" ~>
   "sep" ~> "listTerm" ~>
   "elements" <<~ (ExtractCore.list @@ var "g" @@ var "listTerm") $
-  right $ Logic.ifElse
-    (Lists.null (var "elements"))
-    (Core.termList $ list ([] :: [TTerm Term]))
-    (Core.termList $ Lists.cons
-      (Lists.head (var "elements"))
+  right $ Core.termList $ Maybes.maybe
+    (list ([] :: [TTerm Term]))
+    ("p" ~> Lists.cons
+      (Pairs.first (var "p"))
       (Lists.concat $ Lists.map
         ("el" ~> list [var "sep", var "el"])
-        (Lists.tail (var "elements"))))
+        (Pairs.second (var "p"))))
+    (Lists.uncons (var "elements"))
 
 -- | Interpreter-friendly maybeHead for List terms.
--- maybeHead xs = if null xs then Nothing else Just (head xs)
+-- maybeHead xs = maybe Nothing (Just . fst) (uncons xs)
 maybeHead_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
 maybeHead_ = define "maybeHead" $
   doc "Interpreter-friendly maybeHead for List terms." $
   "cx" ~> "g" ~>
   "listTerm" ~>
   "elements" <<~ (ExtractCore.list @@ var "g" @@ var "listTerm") $
-  right $ Logic.ifElse
-    (Lists.null (var "elements"))
-    (Core.termMaybe nothing)
-    (Core.termMaybe $ just $ Lists.head (var "elements"))
+  right $ Core.termMaybe $ Maybes.maybe
+    nothing
+    ("p" ~> just (Pairs.first (var "p")))
+    (Lists.uncons (var "elements"))
 
 -- | Interpreter-friendly nub for List terms.
 -- Removes duplicates using equality. nub xs = foldl (\acc x -> ifElse (elem x acc) acc (concat2 acc [x])) [] xs
@@ -652,19 +651,6 @@ replicate_ = define "replicate" $
         (Core.termVariable $ encodedName _math_range)
         (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ MetaLiterals.int32 1))
       (var "n"))
-
--- | Interpreter-friendly safeHead for List terms.
--- safeHead xs = if null xs then Nothing else Just (head xs)
-safeHead_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
-safeHead_ = define "safeHead" $
-  doc "Interpreter-friendly safeHead for List terms." $
-  "cx" ~> "g" ~>
-  "listTerm" ~>
-  "elements" <<~ (ExtractCore.list @@ var "g" @@ var "listTerm") $
-  right $ Logic.ifElse
-    (Lists.null (var "elements"))
-    (Core.termMaybe nothing)
-    (Core.termMaybe $ just $ Lists.head (var "elements"))
 
 -- | Interpreter-friendly singleton for List terms.
 -- singleton x = [x]
