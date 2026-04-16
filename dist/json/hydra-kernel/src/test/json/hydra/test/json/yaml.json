@@ -978,6 +978,7 @@
     "hydra.json.yaml.encode",
     "hydra.json.yaml.decode"],
   "typeDependencies": [
+    "hydra.yaml.model",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
