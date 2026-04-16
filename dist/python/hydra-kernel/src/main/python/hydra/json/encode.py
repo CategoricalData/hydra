@@ -294,11 +294,9 @@ def to_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], tname: hydra.co
                 field = inj.field
                 fname = field.name.value
                 fterm = field.term
-                def find_field_type(fts: frozenlist[hydra.core.FieldType]) -> Either[str, hydra.core.Type]:
-                    return hydra.lib.logic.if_else(hydra.lib.lists.null(fts), (lambda : Left(hydra.lib.strings.cat(("unknown variant: ", fname)))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.head(fts).name.value, fname), (lambda : Right(hydra.lib.lists.head(fts).type)), (lambda : find_field_type(hydra.lib.lists.tail(fts))))))
                 @lru_cache(1)
                 def ftype_result() -> Either[str, hydra.core.Type]:
-                    return find_field_type(rt)
+                    return hydra.lib.maybes.maybe((lambda : Left(hydra.lib.strings.cat(("unknown variant: ", fname)))), (lambda ft: Right(ft.type)), hydra.lib.lists.find((lambda ft: hydra.lib.equality.equal(ft.name.value, fname)), rt))
                 return hydra.lib.eithers.either((lambda err: Left(err)), (lambda ftype: (encoded_union := to_json(types, tname, ftype, fterm), hydra.lib.eithers.map((lambda v: cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(((fname, v),))))), encoded_union))[1]), ftype_result())
 
             case _:

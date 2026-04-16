@@ -33,7 +33,7 @@ convertCase from to original =
 
                           let splitOnUppercase =
                                   \acc -> \c -> Lists.concat2 (Logic.ifElse (Chars.isUpper c) [
-                                    []] []) (Lists.cons (Lists.cons c (Lists.head acc)) (Lists.tail acc))
+                                    []] []) (Maybes.fromMaybe acc (Maybes.map (\uc -> Lists.cons (Lists.cons c (Pairs.first uc)) (Pairs.second uc)) (Lists.uncons acc)))
                           in (Lists.map Strings.fromList (Lists.foldl splitOnUppercase [
                             []] (Lists.reverse (Strings.toList (decapitalize original)))))
                     byUnderscores = Strings.splitOn "_" original
@@ -92,8 +92,9 @@ mapFirstLetter :: (String -> String) -> String -> String
 mapFirstLetter mapping s =
     Logic.ifElse (Strings.null s) s (
       let list = Strings.toList s
-          firstLetter = mapping (Strings.fromList (Lists.pure (Lists.head list)))
-      in (Strings.cat2 firstLetter (Strings.fromList (Lists.tail list))))
+      in (Maybes.fromMaybe s (Maybes.map (\uc ->
+        let firstLetter = mapping (Strings.fromList (Lists.pure (Pairs.first uc)))
+        in (Strings.cat2 firstLetter (Strings.fromList (Pairs.second uc)))) (Lists.uncons list))))
 
 -- | Replace sequences of non-alphanumeric characters with single underscores
 nonAlnumToUnderscores :: String -> String
@@ -116,8 +117,8 @@ normalizeComment s =
       let stripped = stripLeadingAndTrailingWhitespace s
       in (Logic.ifElse (Strings.null stripped) "" (
         let lastIdx = Math.sub (Strings.length stripped) 1
-            lastChar = Strings.charAt lastIdx stripped
-        in (Logic.ifElse (Equality.equal lastChar 46) stripped (Strings.cat2 stripped "."))))
+            appended = Strings.cat2 stripped "."
+        in (Maybes.maybe appended (\lastChar -> Logic.ifElse (Equality.equal lastChar 46) stripped appended) (Strings.maybeCharAt lastIdx stripped))))
 
 -- | Sanitize a string by replacing non-alphanumeric characters and escaping reserved words
 sanitizeWithUnderscores :: S.Set String -> String -> String
@@ -189,6 +190,6 @@ wrapLine maxlen input =
                             Lists.span (\c -> Logic.and (Logic.not (Equality.equal c 32)) (Logic.not (Equality.equal c 9))) (Lists.reverse trunc)
                     prefix = Lists.reverse (Pairs.second spanResult)
                     suffix = Lists.reverse (Pairs.first spanResult)
-                in (Logic.ifElse (Equality.lte (Lists.length rem) maxlen) (Lists.reverse (Lists.cons rem prev)) (Logic.ifElse (Lists.null prefix) (helper (Lists.cons trunc prev) (Lists.drop maxlen rem)) (helper (Lists.cons (Lists.init prefix) prev) (Lists.concat2 suffix (Lists.drop maxlen rem)))))
+                in (Logic.ifElse (Equality.lte (Lists.length rem) maxlen) (Lists.reverse (Lists.cons rem prev)) (Logic.ifElse (Lists.null prefix) (helper (Lists.cons trunc prev) (Lists.drop maxlen rem)) (Maybes.fromMaybe (helper (Lists.cons trunc prev) (Lists.drop maxlen rem)) (Maybes.map (\pfxInit -> helper (Lists.cons pfxInit prev) (Lists.concat2 suffix (Lists.drop maxlen rem))) (Lists.maybeInit prefix)))))
       in (Strings.fromList (Lists.intercalate [
         10] (helper [] (Strings.toList input))))

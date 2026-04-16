@@ -34,16 +34,19 @@ lazy val allTests: hydra.testing.TestGroup = hydra.testing.TestGroup("hydra.lib.
    None, Seq()))), hydra.testing.TestGroup("filter", None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("filter values starting with a",
    hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.show.core.map((n: Int) => hydra.lib.literals.showInt32(n))((s: scala.Predef.String) => hydra.lib.literals.showString(s))(hydra.lib.maps.filter[scala.Predef.String,
    Int]((v: scala.Predef.String) =>
-  hydra.lib.equality.equal[Int](hydra.lib.chars.toLower(hydra.lib.strings.charAt(0)(v)))(97))(Map(1 -> "a",
+  hydra.lib.equality.equal[Int](hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.maybes.map[Int,
+     Int]((c: Int) => hydra.lib.chars.toLower(c))(hydra.lib.strings.maybeCharAt(0)(v))))(97))(Map(1 -> "a",
      2 -> "b", 3 -> "ab"))), hydra.show.core.map((n: Int) => hydra.lib.literals.showInt32(n))((s: scala.Predef.String) => hydra.lib.literals.showString(s))(Map(1 -> "a",
      3 -> "ab")))), None, Seq()), hydra.testing.TestCaseWithMetadata("filter all",
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.show.core.map((n: Int) => hydra.lib.literals.showInt32(n))((s: scala.Predef.String) => hydra.lib.literals.showString(s))(hydra.lib.maps.filter[scala.Predef.String,
      Int]((v: scala.Predef.String) =>
-  hydra.lib.equality.equal[Int](hydra.lib.chars.toLower(hydra.lib.strings.charAt(0)(v)))(97))(Map(1 -> "b",
+  hydra.lib.equality.equal[Int](hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.maybes.map[Int,
+     Int]((c: Int) => hydra.lib.chars.toLower(c))(hydra.lib.strings.maybeCharAt(0)(v))))(97))(Map(1 -> "b",
      2 -> "c"))), hydra.show.core.map((n: Int) => hydra.lib.literals.showInt32(n))((s: scala.Predef.String) => hydra.lib.literals.showString(s))(Map()))),
      None, Seq()), hydra.testing.TestCaseWithMetadata("empty map", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.show.core.map((n: Int) => hydra.lib.literals.showInt32(n))((s: scala.Predef.String) => hydra.lib.literals.showString(s))(hydra.lib.maps.filter[scala.Predef.String,
      Int]((v: scala.Predef.String) =>
-  hydra.lib.equality.equal[Int](hydra.lib.chars.toLower(hydra.lib.strings.charAt(0)(v)))(97))(Map())),
+  hydra.lib.equality.equal[Int](hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.maybes.map[Int,
+     Int]((c: Int) => hydra.lib.chars.toLower(c))(hydra.lib.strings.maybeCharAt(0)(v))))(97))(Map())),
      hydra.show.core.map((n: Int) => hydra.lib.literals.showInt32(n))((s: scala.Predef.String) => hydra.lib.literals.showString(s))(Map()))),
      None, Seq()))), hydra.testing.TestGroup("filterWithKey", None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("filter by key > 1",
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.show.core.map((n: Int) => hydra.lib.literals.showInt32(n))((s: scala.Predef.String) => hydra.lib.literals.showString(s))(hydra.lib.maps.filterWithKey[Int,

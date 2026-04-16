@@ -62,28 +62,6 @@ public interface Strings {
         new hydra.testing.TestCaseWithMetadata("null characters", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.strings.Cat2.apply(
           "hello\u0000",
           "world"), "hello\u0000world")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())))),
-      new hydra.testing.TestGroup("charAt", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
-        new hydra.testing.TestCaseWithMetadata("first character", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.literals.ShowInt32.apply(hydra.lib.strings.CharAt.apply(
-          0,
-          "hello")), hydra.lib.literals.ShowInt32.apply(104))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
-        new hydra.testing.TestCaseWithMetadata("middle character", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.literals.ShowInt32.apply(hydra.lib.strings.CharAt.apply(
-          2,
-          "hello")), hydra.lib.literals.ShowInt32.apply(108))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
-        new hydra.testing.TestCaseWithMetadata("last character", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.literals.ShowInt32.apply(hydra.lib.strings.CharAt.apply(
-          4,
-          "hello")), hydra.lib.literals.ShowInt32.apply(111))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
-        new hydra.testing.TestCaseWithMetadata("single character string", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.literals.ShowInt32.apply(hydra.lib.strings.CharAt.apply(
-          0,
-          "a")), hydra.lib.literals.ShowInt32.apply(97))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
-        new hydra.testing.TestCaseWithMetadata("unicode character", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.literals.ShowInt32.apply(hydra.lib.strings.CharAt.apply(
-          0,
-          "\u00F1")), hydra.lib.literals.ShowInt32.apply(241))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
-        new hydra.testing.TestCaseWithMetadata("multi-byte unicode", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.literals.ShowInt32.apply(hydra.lib.strings.CharAt.apply(
-          0,
-          "\u4E16")), hydra.lib.literals.ShowInt32.apply(19990))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
-        new hydra.testing.TestCaseWithMetadata("second of combining pair", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.literals.ShowInt32.apply(hydra.lib.strings.CharAt.apply(
-          1,
-          "e\u0301")), hydra.lib.literals.ShowInt32.apply(769))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())))),
       new hydra.testing.TestGroup("fromList", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
         new hydra.testing.TestCaseWithMetadata("basic ascii string", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.strings.FromList.apply(java.util.Arrays.asList(
           104,

@@ -134,11 +134,10 @@ toJson types tname typ term =
             let field = Core.injectionField v1
                 fname = Core.unName (Core.fieldName field)
                 fterm = Core.fieldTerm field
-                findFieldType =
-                        \fts -> Logic.ifElse (Lists.null fts) (Left (Strings.cat [
+                ftypeResult =
+                        Maybes.maybe (Left (Strings.cat [
                           "unknown variant: ",
-                          fname])) (Logic.ifElse (Equality.equal (Core.unName (Core.fieldTypeName (Lists.head fts))) fname) (Right (Core.fieldTypeType (Lists.head fts))) (findFieldType (Lists.tail fts)))
-                ftypeResult = findFieldType v0
+                          fname])) (\ft -> Right (Core.fieldTypeType ft)) (Lists.find (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) fname) v0)
             in (Eithers.either (\err -> Left err) (\ftype ->
               let encodedUnion = toJson types tname ftype fterm
               in (Eithers.map (\v -> Model.ValueObject (Maps.fromList [

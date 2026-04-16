@@ -158,21 +158,19 @@ def toJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)
           {
             lazy val fterm: hydra.core.Term = (field.term)
             {
-              def findFieldType(fts: Seq[hydra.core.FieldType]): Either[scala.Predef.String, hydra.core.Type] =
-                hydra.lib.logic.ifElse[Either[scala.Predef.String, hydra.core.Type]](hydra.lib.lists.`null`[hydra.core.FieldType](fts))(Left(hydra.lib.strings.cat(Seq("unknown variant: ",
-                   fname))))(hydra.lib.logic.ifElse[Either[scala.Predef.String, hydra.core.Type]](hydra.lib.equality.equal[scala.Predef.String](hydra.lib.lists.head[hydra.core.FieldType](fts).name)(fname))(Right(hydra.lib.lists.head[hydra.core.FieldType](fts).`type`))(findFieldType(hydra.lib.lists.tail[hydra.core.FieldType](fts))))
-              {
-                lazy val ftypeResult: Either[scala.Predef.String, hydra.core.Type] = findFieldType(v_Type_union_rt)
-                hydra.lib.eithers.either[scala.Predef.String, hydra.core.Type, Either[scala.Predef.String,
-                   hydra.json.model.Value]]((err: scala.Predef.String) => Left(err))((ftype: hydra.core.Type) =>
-                  {
-                  lazy val encodedUnion: Either[scala.Predef.String, hydra.json.model.Value] = hydra.json.encode.toJson(types)(tname)(ftype)(fterm)
-                  hydra.lib.eithers.map[hydra.json.model.Value, hydra.json.model.Value,
-                     scala.Predef.String]((v: hydra.json.model.Value) =>
-                    hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String,
-                       hydra.json.model.Value](Seq(Tuple2(fname, v)))))(encodedUnion)
-                })(ftypeResult)
-              }
+              lazy val ftypeResult: Either[scala.Predef.String, hydra.core.Type] = hydra.lib.maybes.maybe[Either[scala.Predef.String,
+                 hydra.core.Type], hydra.core.FieldType](Left(hydra.lib.strings.cat(Seq("unknown variant: ",
+                 fname))))((ft: hydra.core.FieldType) => Right(ft.`type`))(hydra.lib.lists.find[hydra.core.FieldType]((ft: hydra.core.FieldType) =>
+                hydra.lib.equality.equal[scala.Predef.String](ft.name)(fname))(v_Type_union_rt))
+              hydra.lib.eithers.either[scala.Predef.String, hydra.core.Type, Either[scala.Predef.String,
+                 hydra.json.model.Value]]((err: scala.Predef.String) => Left(err))((ftype: hydra.core.Type) =>
+                {
+                lazy val encodedUnion: Either[scala.Predef.String, hydra.json.model.Value] = hydra.json.encode.toJson(types)(tname)(ftype)(fterm)
+                hydra.lib.eithers.map[hydra.json.model.Value, hydra.json.model.Value,
+                   scala.Predef.String]((v: hydra.json.model.Value) =>
+                  hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String,
+                     hydra.json.model.Value](Seq(Tuple2(fname, v)))))(encodedUnion)
+              })(ftypeResult)
             }
           }
         }

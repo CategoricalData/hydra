@@ -130,7 +130,7 @@ public interface Serialization {
           hydra.Serialization.newlineSep(hydra.lib.lists.Drop.apply(
             1,
             els))))),
-      hydra.lib.lists.SafeHead.apply(els));
+      hydra.lib.lists.MaybeHead.apply(els));
   }
 
   static hydra.ast.Expr dotSep(java.util.List<hydra.ast.Expr> v1) {
@@ -394,7 +394,7 @@ public interface Serialization {
         hydra.lib.lists.Drop.apply(
           1,
           l))),
-      hydra.lib.lists.SafeHead.apply(l));
+      hydra.lib.lists.MaybeHead.apply(l));
   }
 
   static hydra.ast.Expr parenList(Boolean newlines, java.util.List<hydra.ast.Expr> els) {
@@ -638,13 +638,17 @@ public interface Serialization {
                 hydra.lib.lists.Length.apply(lns),
                 1),
               () -> lns,
-              () -> hydra.lib.lists.Cons.apply(
-                hydra.lib.lists.Head.apply(lns),
-                hydra.lib.lists.Map.apply(
-                  (java.util.function.Function<String, String>) (line -> hydra.lib.strings.Cat2.apply(
-                    (idt2).value,
-                    line)),
-                  hydra.lib.lists.Tail.apply(lns))));
+              () -> hydra.lib.maybes.FromMaybe.applyLazy(
+                () -> lns,
+                hydra.lib.maybes.Map.apply(
+                  (java.util.function.Function<hydra.util.Pair<String, java.util.List<String>>, java.util.List<String>>) (uc -> hydra.lib.lists.Cons.apply(
+                    hydra.lib.pairs.First.apply(uc),
+                    hydra.lib.lists.Map.apply(
+                      (java.util.function.Function<String, String>) (line -> hydra.lib.strings.Cat2.apply(
+                        (idt2).value,
+                        line)),
+                      hydra.lib.pairs.Second.apply(uc)))),
+                  hydra.lib.lists.Uncons.apply(lns))));
           }
         }));
         return hydra.lib.strings.Intercalate.apply(
@@ -752,7 +756,7 @@ public interface Serialization {
         hydra.lib.lists.Drop.apply(
           1,
           els))),
-      hydra.lib.lists.SafeHead.apply(els));
+      hydra.lib.lists.MaybeHead.apply(els));
   }
 
   static hydra.ast.Expr spaceSep(java.util.List<hydra.ast.Expr> v1) {
@@ -773,7 +777,9 @@ public interface Serialization {
         hydra.lib.equality.Equal.apply(
           hydra.lib.lists.Length.apply(els),
           1),
-        () -> hydra.lib.lists.Head.apply(els),
+        () -> hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> hydra.Serialization.cst(""),
+          hydra.lib.lists.MaybeHead.apply(els)),
         () -> new hydra.ast.Expr.Seq(new hydra.ast.SeqExpr(op, els))));
   }
 
@@ -824,7 +830,7 @@ public interface Serialization {
         hydra.lib.lists.Drop.apply(
           1,
           l))),
-      hydra.lib.lists.SafeHead.apply(l));
+      hydra.lib.lists.MaybeHead.apply(l));
   }
 
   static hydra.ast.Expr tabIndent(hydra.ast.Expr e) {

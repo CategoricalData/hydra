@@ -383,8 +383,12 @@ public interface Coder {
       (java.util.function.Function<hydra.python.syntax.Expression, hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<hydra.python.syntax.Expression, java.util.List<hydra.python.syntax.Expression>>>>) (pfun -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Pair<hydra.python.syntax.Expression, java.util.List<hydra.python.syntax.Expression>>>right((hydra.util.Pair<hydra.python.syntax.Expression, java.util.List<hydra.python.syntax.Expression>>) ((hydra.util.Pair<hydra.python.syntax.Expression, java.util.List<hydra.python.syntax.Expression>>) (new hydra.util.Pair<hydra.python.syntax.Expression, java.util.List<hydra.python.syntax.Expression>>(hydra.python.Utils.functionCall(
         hydra.python.Utils.pyExpressionToPyPrimary(pfun),
         hargs), rargs)))))));
-    hydra.util.Lazy<hydra.python.syntax.Expression> firstArg = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(hargs));
-    hydra.util.Lazy<java.util.List<hydra.python.syntax.Expression>> restArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply(hargs));
+    hydra.util.Lazy<hydra.python.syntax.Expression> firstArg = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> hydra.python.Utils.pyNameToPyExpression(new hydra.python.syntax.Name("")),
+      hydra.lib.lists.MaybeHead.apply(hargs)));
+    hydra.util.Lazy<java.util.List<hydra.python.syntax.Expression>> restArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Drop.apply(
+      1,
+      hargs));
     java.util.function.Function<hydra.python.syntax.Expression, hydra.python.syntax.Expression> withRest = (java.util.function.Function<hydra.python.syntax.Expression, hydra.python.syntax.Expression>) (e -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(restArgs.get()),
       () -> e,
@@ -652,12 +656,15 @@ public interface Coder {
                 () -> ((java.util.function.Supplier<hydra.util.Either<hydra.errors.Error_, hydra.python.syntax.Statement>>) (() -> {
                   hydra.util.Maybe<hydra.core.CaseStatement> mcs = hydra.python.Coder.extractCaseElimination(term1);
                   return hydra.lib.maybes.Maybe.applyLazy(
-                    () -> hydra.lib.eithers.Map.apply(
-                      (java.util.function.Function<java.util.List<hydra.python.syntax.Statement>, hydra.python.syntax.Statement>) (stmts -> hydra.lib.lists.Head.apply(stmts)),
+                    () -> hydra.lib.eithers.Bind.apply(
                       hydra.python.Coder.encodeTermMultiline(
                         cx,
                         env,
-                        term1)),
+                        term1),
+                      (java.util.function.Function<java.util.List<hydra.python.syntax.Statement>, hydra.util.Either<hydra.errors.Error_, hydra.python.syntax.Statement>>) (stmts -> hydra.lib.maybes.Maybe.applyLazy(
+                        () -> hydra.util.Either.<hydra.errors.Error_, hydra.python.syntax.Statement>left(new hydra.errors.Error_.Other(new hydra.errors.OtherError("encodeTermMultiline returned no statements"))),
+                        (java.util.function.Function<hydra.python.syntax.Statement, hydra.util.Either<hydra.errors.Error_, hydra.python.syntax.Statement>>) (x -> hydra.util.Either.<hydra.errors.Error_, hydra.python.syntax.Statement>right(x)),
+                        hydra.lib.lists.MaybeHead.apply(stmts)))),
                     (java.util.function.Function<hydra.core.CaseStatement, hydra.util.Either<hydra.errors.Error_, hydra.python.syntax.Statement>>) (cs -> {
                       java.util.List<hydra.core.Field> cases_ = (cs).cases;
                       hydra.util.Maybe<hydra.core.Term> dflt = (cs).default_;
@@ -720,12 +727,15 @@ public interface Coder {
                   () -> ((java.util.function.Supplier<hydra.util.Either<hydra.errors.Error_, hydra.python.syntax.Statement>>) (() -> {
                     hydra.util.Maybe<hydra.core.CaseStatement> mcs = hydra.python.Coder.extractCaseElimination(term1);
                     return hydra.lib.maybes.Maybe.applyLazy(
-                      () -> hydra.lib.eithers.Map.apply(
-                        (java.util.function.Function<java.util.List<hydra.python.syntax.Statement>, hydra.python.syntax.Statement>) (stmts -> hydra.lib.lists.Head.apply(stmts)),
+                      () -> hydra.lib.eithers.Bind.apply(
                         hydra.python.Coder.encodeTermMultiline(
                           cx,
                           env,
-                          term1)),
+                          term1),
+                        (java.util.function.Function<java.util.List<hydra.python.syntax.Statement>, hydra.util.Either<hydra.errors.Error_, hydra.python.syntax.Statement>>) (stmts -> hydra.lib.maybes.Maybe.applyLazy(
+                          () -> hydra.util.Either.<hydra.errors.Error_, hydra.python.syntax.Statement>left(new hydra.errors.Error_.Other(new hydra.errors.OtherError("encodeTermMultiline returned no statements"))),
+                          (java.util.function.Function<hydra.python.syntax.Statement, hydra.util.Either<hydra.errors.Error_, hydra.python.syntax.Statement>>) (x -> hydra.util.Either.<hydra.errors.Error_, hydra.python.syntax.Statement>right(x)),
+                          hydra.lib.lists.MaybeHead.apply(stmts)))),
                       (java.util.function.Function<hydra.core.CaseStatement, hydra.util.Either<hydra.errors.Error_, hydra.python.syntax.Statement>>) (cs -> {
                         java.util.List<hydra.core.Field> cases_ = (cs).cases;
                         hydra.util.Maybe<hydra.core.Term> dflt = (cs).default_;
@@ -799,7 +809,9 @@ public interface Coder {
                                 hydra.python.Coder.pythonEnvironmentGetGraph(env),
                                 tname.get()),
                               (java.util.function.Function<java.util.List<hydra.core.FieldType>, hydra.util.Either<hydra.errors.Error_, hydra.python.syntax.Statement>>) (rt -> {
-                                hydra.util.Lazy<java.util.List<hydra.core.Name>> capturedVarNames = new hydra.util.Lazy<>(() -> hydra.lib.lists.Init.apply(lambdaParams.get()));
+                                hydra.util.Lazy<java.util.List<hydra.core.Name>> capturedVarNames = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+                                  () -> (java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()),
+                                  hydra.lib.lists.MaybeInit.apply(lambdaParams.get())));
                                 hydra.util.Lazy<java.util.List<hydra.python.syntax.ParamNoDefault>> capturedParams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
                                   (java.util.function.Function<hydra.core.Name, hydra.python.syntax.ParamNoDefault>) (n -> new hydra.python.syntax.ParamNoDefault(new hydra.python.syntax.Param(hydra.python.Names.encodeName(
                                     false,
@@ -807,7 +819,9 @@ public interface Coder {
                                     env,
                                     n), (hydra.util.Maybe<hydra.python.syntax.Annotation>) (hydra.util.Maybe.<hydra.python.syntax.Annotation>nothing())), (hydra.util.Maybe<hydra.python.syntax.TypeComment>) (hydra.util.Maybe.<hydra.python.syntax.TypeComment>nothing()))),
                                   capturedVarNames.get()));
-                                hydra.util.Lazy<hydra.core.Name> matchLambdaParam = new hydra.util.Lazy<>(() -> hydra.lib.lists.Last.apply(lambdaParams.get()));
+                                hydra.util.Lazy<hydra.core.Name> matchLambdaParam = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+                                  () -> new hydra.core.Name(""),
+                                  hydra.lib.lists.MaybeLast.apply(lambdaParams.get())));
                                 hydra.python.syntax.Name matchArgName = hydra.python.Names.encodeName(
                                   false,
                                   new hydra.util.CaseConvention.LowerSnake(),
@@ -2441,7 +2455,9 @@ public interface Coder {
         hydra.lib.lists.Length.apply(args.get()),
         1),
       () -> ((java.util.function.Supplier<hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.python.syntax.Statement>>>) (() -> {
-        hydra.util.Lazy<hydra.core.Term> arg = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(args.get()));
+        hydra.util.Lazy<hydra.core.Term> arg = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> new hydra.core.Term.Unit(),
+          hydra.lib.lists.MaybeHead.apply(args.get())));
         return hydra.Strip.deannotateAndDetypeTerm(body.get()).accept(new hydra.core.Term.PartialVisitor<>() {
           @Override
           public hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.python.syntax.Statement>> otherwise(hydra.core.Term instance) {
@@ -2572,7 +2588,9 @@ public interface Coder {
                 hydra.lib.lists.Length.apply(args2.get()),
                 1),
               () -> ((java.util.function.Supplier<hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.python.syntax.Statement>>>) (() -> {
-                hydra.util.Lazy<hydra.core.Term> arg = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(args2.get()));
+                hydra.util.Lazy<hydra.core.Term> arg = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+                  () -> new hydra.core.Term.Unit(),
+                  hydra.lib.lists.MaybeHead.apply(args2.get())));
                 return hydra.Strip.deannotateAndDetypeTerm(body2.get()).accept(new hydra.core.Term.PartialVisitor<>() {
                   @Override
                   public hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.python.syntax.Statement>> otherwise(hydra.core.Term instance) {
@@ -3977,7 +3995,9 @@ public interface Coder {
         1)),
       () -> (hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>>) (hydra.util.Maybe.<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>>nothing()),
       () -> ((java.util.function.Supplier<hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>>>) (() -> {
-        hydra.util.Lazy<hydra.core.Term> arg = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(args.get()));
+        hydra.util.Lazy<hydra.core.Term> arg = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> new hydra.core.Term.Unit(),
+          hydra.lib.lists.MaybeHead.apply(args.get())));
         return hydra.Strip.deannotateAndDetypeTerm(body.get()).accept(new hydra.core.Term.PartialVisitor<>() {
           @Override
           public hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>> otherwise(hydra.core.Term instance) {
@@ -4590,6 +4610,12 @@ public interface Coder {
   }
 
   static java.util.List<hydra.python.syntax.Expression> wrapLazyArguments(hydra.core.Name name, java.util.List<hydra.python.syntax.Expression> args) {
+    hydra.python.syntax.Expression dummyExpr = hydra.python.Utils.pyNameToPyExpression(new hydra.python.syntax.Name(""));
+    java.util.function.Function<Integer, hydra.python.syntax.Expression> argAt = (java.util.function.Function<Integer, hydra.python.syntax.Expression>) (i -> hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> dummyExpr,
+      hydra.lib.lists.MaybeAt.apply(
+        i,
+        args)));
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.And.apply(
         hydra.lib.equality.Equal.apply(
@@ -4599,15 +4625,9 @@ public interface Coder {
           hydra.lib.lists.Length.apply(args),
           3)),
       () -> java.util.Arrays.asList(
-        hydra.lib.lists.At.apply(
-          0,
-          args),
-        hydra.python.Coder.wrapInNullaryLambda(hydra.lib.lists.At.apply(
-          1,
-          args)),
-        hydra.python.Coder.wrapInNullaryLambda(hydra.lib.lists.At.apply(
-          2,
-          args))),
+        (argAt).apply(0),
+        hydra.python.Coder.wrapInNullaryLambda((argAt).apply(1)),
+        hydra.python.Coder.wrapInNullaryLambda((argAt).apply(2))),
       () -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.logic.And.apply(
           hydra.lib.equality.Equal.apply(
@@ -4617,15 +4637,9 @@ public interface Coder {
             hydra.lib.lists.Length.apply(args),
             3)),
         () -> java.util.Arrays.asList(
-          hydra.lib.lists.At.apply(
-            0,
-            args),
-          hydra.python.Coder.wrapInNullaryLambda(hydra.lib.lists.At.apply(
-            1,
-            args)),
-          hydra.lib.lists.At.apply(
-            2,
-            args)),
+          (argAt).apply(0),
+          hydra.python.Coder.wrapInNullaryLambda((argAt).apply(1)),
+          (argAt).apply(2)),
         () -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.logic.And.apply(
             hydra.lib.logic.Or.apply(
@@ -4639,10 +4653,10 @@ public interface Coder {
               hydra.lib.lists.Length.apply(args),
               1)),
           () -> hydra.lib.lists.Cons.apply(
-            hydra.python.Coder.wrapInNullaryLambda(hydra.lib.lists.At.apply(
-              0,
+            hydra.python.Coder.wrapInNullaryLambda((argAt).apply(0)),
+            hydra.lib.lists.Drop.apply(
+              1,
               args)),
-            hydra.lib.lists.Tail.apply(args)),
           () -> args)));
   }
 }

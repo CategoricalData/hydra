@@ -50,7 +50,7 @@
 
 (defvar hydra_python_utils_py_expression_to_py_slice (lambda (expr) (list :named (list :simple expr))))
 
-(defvar hydra_python_utils_primary_with_expression_slices (lambda (prim) (lambda (exprs) (funcall (funcall (hydra_python_utils_primary_with_slices prim) (hydra_python_utils_py_expression_to_py_slice (hydra_lib_lists_head exprs))) (funcall (hydra_lib_lists_map (lambda (e) (list :slice (hydra_python_utils_py_expression_to_py_slice e)))) (hydra_lib_lists_tail exprs))))))
+(defvar hydra_python_utils_primary_with_expression_slices (lambda (prim) (lambda (exprs) (funcall (hydra_lib_maybes_from_maybe (lambda () prim)) (funcall (hydra_lib_maybes_map (lambda (p) (funcall (funcall (hydra_python_utils_primary_with_slices prim) (hydra_python_utils_py_expression_to_py_slice (hydra_lib_pairs_first p))) (funcall (hydra_lib_lists_map (lambda (e) (list :slice (hydra_python_utils_py_expression_to_py_slice e)))) (hydra_lib_pairs_second p))))) (hydra_lib_lists_uncons exprs))))))
 
 (defvar hydra_python_utils_py_name_to_py_primary (lambda (name) (list :simple (list :name name))))
 
@@ -90,9 +90,9 @@
 
 (defvar hydra_python_utils_decode_py_inversion_to_py_primary (lambda (i) (funcall (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :simple) (funcall (lambda (comparison) (hydra_python_utils_decode_py_comparison_to_py_await_primary comparison)) match_value)) (t (list :nothing)))) (cadr match_target))) i)))
 
-(defvar hydra_python_utils_decode_py_conjunction_to_py_primary (lambda (c) (let ((inversions (funcall (lambda (v) v) c))) (if (funcall (hydra_lib_equality_equal (hydra_lib_lists_length inversions)) 1) (hydra_python_utils_decode_py_inversion_to_py_primary (hydra_lib_lists_head inversions)) (list :nothing)))))
+(defvar hydra_python_utils_decode_py_conjunction_to_py_primary (lambda (c) (let ((inversions (funcall (lambda (v) v) c))) (if (funcall (hydra_lib_equality_equal (hydra_lib_lists_length inversions)) 1) (funcall (hydra_lib_maybes_bind (hydra_lib_lists_maybe_head inversions)) (lambda (i) (hydra_python_utils_decode_py_inversion_to_py_primary i))) (list :nothing)))))
 
-(defvar hydra_python_utils_decode_py_expression_to_py_primary (lambda (e) (funcall (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :simple) (funcall (lambda (disj) (let ((conjunctions (funcall (lambda (v) v) disj))) (if (funcall (hydra_lib_equality_equal (hydra_lib_lists_length conjunctions)) 1) (hydra_python_utils_decode_py_conjunction_to_py_primary (hydra_lib_lists_head conjunctions)) (list :nothing)))) match_value)) (t (list :nothing)))) (cadr match_target))) e)))
+(defvar hydra_python_utils_decode_py_expression_to_py_primary (lambda (e) (funcall (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :simple) (funcall (lambda (disj) (let ((conjunctions (funcall (lambda (v) v) disj))) (if (funcall (hydra_lib_equality_equal (hydra_lib_lists_length conjunctions)) 1) (funcall (hydra_lib_maybes_bind (hydra_lib_lists_maybe_head conjunctions)) (lambda (c2) (hydra_python_utils_decode_py_conjunction_to_py_primary c2))) (list :nothing)))) match_value)) (t (list :nothing)))) (cadr match_target))) e)))
 
 (defvar hydra_python_utils_dotted_assignment_statement (lambda (obj) (lambda (attr) (lambda (expr) (let ((target (list :unstarred (list :project (make-hydra_python_syntax_t_primary_and_name (list :atom (list :name obj)) attr))))) (hydra_python_utils_py_assignment_to_py_statement (list :untyped (make-hydra_python_syntax_untyped_assignment (list target) (hydra_python_utils_py_expression_to_py_annotated_rhs expr) (list :nothing)))))))))
 
@@ -112,7 +112,7 @@
 
 (defvar hydra_python_utils_py_primary_to_py_bitwise_xor (lambda (prim) (make-hydra_python_syntax_bitwise_xor (list :nothing) (make-hydra_python_syntax_bitwise_and (list :nothing) (make-hydra_python_syntax_shift_expression (list :nothing) (make-hydra_python_syntax_sum (list :nothing) (make-hydra_python_syntax_term (list :nothing) (list :simple (make-hydra_python_syntax_power (make-hydra_python_syntax_await_primary nil prim) (list :nothing))))))))))
 
-(defvar hydra_python_utils_or_expression (lambda (prims) (letrec ((build (lambda (prev) (lambda (ps) (if (hydra_lib_lists_null (hydra_lib_lists_tail ps)) (make-hydra_python_syntax_bitwise_or prev (hydra_python_utils_py_primary_to_py_bitwise_xor (hydra_lib_lists_head ps))) (funcall (build (list :just (make-hydra_python_syntax_bitwise_or prev (hydra_python_utils_py_primary_to_py_bitwise_xor (hydra_lib_lists_head ps))))) (hydra_lib_lists_tail ps))))))) (hydra_python_utils_py_bitwise_or_to_py_expression (funcall (build (list :nothing)) prims)))))
+(defvar hydra_python_utils_or_expression (lambda (prims) (letrec ((build (lambda (prev) (lambda (ps) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (make-hydra_python_syntax_bitwise_or prev (hydra_python_utils_py_primary_to_py_bitwise_xor (list :simple (list :ellipsis nil)))))) (lambda (p) (if (hydra_lib_lists_null (hydra_lib_pairs_second p)) (make-hydra_python_syntax_bitwise_or prev (hydra_python_utils_py_primary_to_py_bitwise_xor (hydra_lib_pairs_first p))) (funcall (build (list :just (make-hydra_python_syntax_bitwise_or prev (hydra_python_utils_py_primary_to_py_bitwise_xor (hydra_lib_pairs_first p))))) (hydra_lib_pairs_second p))))) (hydra_lib_lists_uncons ps)))))) (hydra_python_utils_py_bitwise_or_to_py_expression (funcall (build (list :nothing)) prims)))))
 
 (defvar hydra_python_utils_project_from_expression (lambda (exp) (lambda (name) (let ((prim (list :simple (list :group (list :expression (list :simple exp)))))) (hydra_python_utils_py_primary_to_py_expression (list :compound (make-hydra_python_syntax_primary_with_rhs prim (list :project name))))))))
 

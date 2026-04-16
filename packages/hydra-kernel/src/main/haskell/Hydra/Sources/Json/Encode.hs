@@ -210,13 +210,13 @@ toJson = define "toJson" $
           "fname" <~ (Core.unName $ Core.fieldName $ var "field") $
           "fterm" <~ (Core.fieldTerm $ var "field") $
           -- Find the field type that matches this variant
-          "findFieldType" <~ ("fts" ~>
-            Logic.ifElse (Lists.null $ var "fts")
+          "ftypeResult" <~ (
+            Maybes.maybe
               (left $ Strings.cat $ list [string "unknown variant: ", var "fname"])
-              (Logic.ifElse (Equality.equal (Core.unName $ Core.fieldTypeName $ Lists.head $ var "fts") (var "fname"))
-                (right $ Core.fieldTypeType $ Lists.head $ var "fts")
-                (var "findFieldType" @@ (Lists.tail $ var "fts")))) $
-          "ftypeResult" <~ (var "findFieldType" @@ var "rt") $
+              ("ft" ~> right $ Core.fieldTypeType $ var "ft")
+              (Lists.find
+                ("ft" ~> Equality.equal (Core.unName $ Core.fieldTypeName $ var "ft") (var "fname"))
+                (var "rt"))) $
           Eithers.either_
             ("err" ~> left $ var "err")
             ("ftype" ~>

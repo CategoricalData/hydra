@@ -188,7 +188,8 @@ def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Nam
           case _ => false
         hydra.lib.logic.ifElse[Either[scala.Predef.String, hydra.core.Term]](isNestedMaybe)({
           def decodeJust(arr: Seq[hydra.json.model.Value]): Either[scala.Predef.String, hydra.core.Term] =
-            hydra.lib.eithers.map[hydra.core.Term, hydra.core.Term, scala.Predef.String]((v: hydra.core.Term) => hydra.core.Term.maybe(Some(v)))(hydra.json.decode.fromJson(types)(tname)(v_Type_maybe_innerType)(hydra.lib.lists.head[hydra.json.model.Value](arr)))
+            hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], hydra.json.model.Value](Left("expected single-element array for Just"))((firstVal: hydra.json.model.Value) =>
+            hydra.lib.eithers.map[hydra.core.Term, hydra.core.Term, scala.Predef.String]((v: hydra.core.Term) => hydra.core.Term.maybe(Some(v)))(hydra.json.decode.fromJson(types)(tname)(v_Type_maybe_innerType)(firstVal)))(hydra.lib.lists.maybeHead[hydra.json.model.Value](arr))
           {
             def decodeMaybeArray(arr: Seq[hydra.json.model.Value]): Either[scala.Predef.String, hydra.core.Term] =
               {
@@ -242,35 +243,27 @@ def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Nam
           hydra.core.Term.inject(hydra.core.Injection(tname, hydra.core.Field(key, v))))(decoded)
       }
       {
-        def tryField(key: scala.Predef.String)(`val`: Option[hydra.json.model.Value])(ft: hydra.core.FieldType): Option[Either[scala.Predef.String,
-           hydra.core.Term]] =
-          hydra.lib.logic.ifElse[Option[Either[scala.Predef.String, hydra.core.Term]]](hydra.lib.equality.equal[scala.Predef.String](ft.name)(key))(Some(decodeVariant(key)(`val`)(ft.`type`)))(None)
+        def findAndDecode(key: scala.Predef.String)(`val`: Option[hydra.json.model.Value])(fts: Seq[hydra.core.FieldType]): Either[scala.Predef.String,
+           hydra.core.Term] =
+          hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], hydra.core.FieldType](Left(hydra.lib.strings.cat(Seq("unknown variant: ",
+             key))))((ft: hydra.core.FieldType) => decodeVariant(key)(`val`)(ft.`type`))(hydra.lib.lists.find[hydra.core.FieldType]((ft: hydra.core.FieldType) => hydra.lib.equality.equal[scala.Predef.String](ft.name)(key))(fts))
         {
-          def findAndDecode(key: scala.Predef.String)(`val`: Option[hydra.json.model.Value])(fts: Seq[hydra.core.FieldType]): Either[scala.Predef.String,
+          def decodeSingleKey(obj: Map[scala.Predef.String, hydra.json.model.Value]): Either[scala.Predef.String,
              hydra.core.Term] =
-            hydra.lib.logic.ifElse[Either[scala.Predef.String, hydra.core.Term]](hydra.lib.lists.`null`[hydra.core.FieldType](fts))(Left(hydra.lib.strings.cat(Seq("unknown variant: ",
-               key))))(hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term],
-               Either[scala.Predef.String, hydra.core.Term]](findAndDecode(key)(`val`)(hydra.lib.lists.tail[hydra.core.FieldType](fts)))((r: Either[scala.Predef.String,
-               hydra.core.Term]) => r)(tryField(key)(`val`)(hydra.lib.lists.head[hydra.core.FieldType](fts))))
+            hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], scala.Predef.String](Left("expected single-key object for union"))((k: scala.Predef.String) =>
+            findAndDecode(k)(hydra.lib.maps.lookup[scala.Predef.String, hydra.json.model.Value](k)(obj))(v_Type_union_rt))(hydra.lib.lists.maybeHead[scala.Predef.String](hydra.lib.maps.keys[scala.Predef.String,
+               hydra.json.model.Value](obj)))
           {
-            def decodeSingleKey(obj: Map[scala.Predef.String, hydra.json.model.Value]): Either[scala.Predef.String,
+            def processUnion(obj: Map[scala.Predef.String, hydra.json.model.Value]): Either[scala.Predef.String,
                hydra.core.Term] =
-              findAndDecode(hydra.lib.lists.head[scala.Predef.String](hydra.lib.maps.keys[scala.Predef.String,
-                 hydra.json.model.Value](obj)))(hydra.lib.maps.lookup[scala.Predef.String,
-                 hydra.json.model.Value](hydra.lib.lists.head[scala.Predef.String](hydra.lib.maps.keys[scala.Predef.String,
-                 hydra.json.model.Value](obj)))(obj))(v_Type_union_rt)
+              hydra.lib.logic.ifElse[Either[scala.Predef.String, hydra.core.Term]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[scala.Predef.String](hydra.lib.maps.keys[scala.Predef.String,
+                 hydra.json.model.Value](obj)))(1))(decodeSingleKey(obj))(Left("expected single-key object for union"))
             {
-              def processUnion(obj: Map[scala.Predef.String, hydra.json.model.Value]): Either[scala.Predef.String,
-                 hydra.core.Term] =
-                hydra.lib.logic.ifElse[Either[scala.Predef.String, hydra.core.Term]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[scala.Predef.String](hydra.lib.maps.keys[scala.Predef.String,
-                   hydra.json.model.Value](obj)))(1))(decodeSingleKey(obj))(Left("expected single-key object for union"))
-              {
-                lazy val objResult: Either[scala.Predef.String, Map[scala.Predef.String,
-                   hydra.json.model.Value]] = hydra.json.decode.expectObject(value)
-                hydra.lib.eithers.either[scala.Predef.String, Map[scala.Predef.String,
-                   hydra.json.model.Value], Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((obj: Map[scala.Predef.String,
-                   hydra.json.model.Value]) => processUnion(obj))(objResult)
-              }
+              lazy val objResult: Either[scala.Predef.String, Map[scala.Predef.String,
+                 hydra.json.model.Value]] = hydra.json.decode.expectObject(value)
+              hydra.lib.eithers.either[scala.Predef.String, Map[scala.Predef.String,
+                 hydra.json.model.Value], Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((obj: Map[scala.Predef.String,
+                 hydra.json.model.Value]) => processUnion(obj))(objResult)
             }
           }
         }

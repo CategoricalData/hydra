@@ -113,78 +113,6 @@ allTests =
                   Testing.testCaseWithMetadataTags = []}]}],
           Testing.testGroupCases = []},
         Testing.TestGroup {
-          Testing.testGroupName = "at",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [],
-          Testing.testGroupCases = [
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "first element",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.at")),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "middle element",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.at")),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "last element",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.at")),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))})),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "single element list",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.at")),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "string list access",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.at")),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralString "hello"),
-                    (Core.TermLiteral (Core.LiteralString "world"))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralString "world")))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []}]},
-        Testing.TestGroup {
           Testing.testGroupName = "bind",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
@@ -1278,113 +1206,6 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "head",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [],
-          Testing.testGroupCases = [
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "three element list",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.head")),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "single element list",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.head")),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "negative numbers",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.head")),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-1))),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-2)))),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-3))))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-1)))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "string list",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.head")),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralString "hello"),
-                    (Core.TermLiteral (Core.LiteralString "world"))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralString "hello")))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []}]},
-        Testing.TestGroup {
-          Testing.testGroupName = "init",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [],
-          Testing.testGroupCases = [
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "multiple elements",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.init")),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "two elements",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.init")),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))]))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "single element",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.init")),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermList []))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "string list",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.init")),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralString "a"),
-                    (Core.TermLiteral (Core.LiteralString "b")),
-                    (Core.TermLiteral (Core.LiteralString "c"))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermList [
-                  Core.TermLiteral (Core.LiteralString "a"),
-                  (Core.TermLiteral (Core.LiteralString "b"))]))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []}]},
-        Testing.TestGroup {
           Testing.testGroupName = "intercalate",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
@@ -1600,56 +1421,6 @@ allTests =
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []}]},
-        Testing.TestGroup {
-          Testing.testGroupName = "last",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [],
-          Testing.testGroupCases = [
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "three element list",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.last")),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "single element list",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.last")),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "negative numbers",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.last")),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-1))),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-2)))),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-3))))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-3)))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "string list",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.last")),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralString "hello"),
-                    (Core.TermLiteral (Core.LiteralString "world"))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralString "world")))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -1976,6 +1747,20 @@ allTests =
                   Core.applicationArgument = (Core.TermList [])})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe Nothing))})),
               Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "string list",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.maybeInit")),
+                  Core.applicationArgument = (Core.TermList [
+                    Core.TermLiteral (Core.LiteralString "a"),
+                    (Core.TermLiteral (Core.LiteralString "b")),
+                    (Core.TermLiteral (Core.LiteralString "c"))])})))),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermList [
+                  Core.TermLiteral (Core.LiteralString "a"),
+                  (Core.TermLiteral (Core.LiteralString "b"))]))))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
           Testing.testGroupName = "maybeLast",
@@ -2011,6 +1796,17 @@ allTests =
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.maybeLast")),
                   Core.applicationArgument = (Core.TermList [])})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe Nothing))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "string list",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.maybeLast")),
+                  Core.applicationArgument = (Core.TermList [
+                    Core.TermLiteral (Core.LiteralString "hello"),
+                    (Core.TermLiteral (Core.LiteralString "world"))])})))),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "world")))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -2049,6 +1845,20 @@ allTests =
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.maybeTail")),
                   Core.applicationArgument = (Core.TermList [])})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe Nothing))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "string list",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.maybeTail")),
+                  Core.applicationArgument = (Core.TermList [
+                    Core.TermLiteral (Core.LiteralString "a"),
+                    (Core.TermLiteral (Core.LiteralString "b")),
+                    (Core.TermLiteral (Core.LiteralString "c"))])})))),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermList [
+                  Core.TermLiteral (Core.LiteralString "b"),
+                  (Core.TermLiteral (Core.LiteralString "c"))]))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -2494,62 +2304,6 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "safeHead",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [],
-          Testing.testGroupCases = [
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "non-empty int list",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.safeHead")),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "empty int list",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.safeHead")),
-                  Core.applicationArgument = (Core.TermList [])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe Nothing))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "single element",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.safeHead")),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "non-empty string list",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.safeHead")),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralString "hello"),
-                    (Core.TermLiteral (Core.LiteralString "world"))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "hello")))))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "empty string list",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.safeHead")),
-                  Core.applicationArgument = (Core.TermList [])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe Nothing))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []}]},
-        Testing.TestGroup {
           Testing.testGroupName = "singleton",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
@@ -2882,63 +2636,6 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
-          Testing.testGroupName = "tail",
-          Testing.testGroupDescription = Nothing,
-          Testing.testGroupSubgroups = [],
-          Testing.testGroupCases = [
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "multiple elements",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.tail")),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))]))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "two elements",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.tail")),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))]))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "single element",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.tail")),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermList []))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "string list",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.tail")),
-                  Core.applicationArgument = (Core.TermList [
-                    Core.TermLiteral (Core.LiteralString "a"),
-                    (Core.TermLiteral (Core.LiteralString "b")),
-                    (Core.TermLiteral (Core.LiteralString "c"))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermList [
-                  Core.TermLiteral (Core.LiteralString "b"),
-                  (Core.TermLiteral (Core.LiteralString "c"))]))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = []}]},
-        Testing.TestGroup {
           Testing.testGroupName = "take",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
@@ -3135,6 +2832,44 @@ allTests =
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))]),
                   (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6))])]))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}]},
+        Testing.TestGroup {
+          Testing.testGroupName = "uncons",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = [
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "three elements",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.uncons")),
+                  Core.applicationArgument = (Core.TermList [
+                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})))),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermList [
+                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))))))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "single element",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.uncons")),
+                  Core.applicationArgument = (Core.TermList [
+                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))])})))),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)), (Core.TermList []))))))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "empty list",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.uncons")),
+                  Core.applicationArgument = (Core.TermList [])})))),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe Nothing))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {

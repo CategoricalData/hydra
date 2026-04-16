@@ -148,7 +148,7 @@ fi
 
 step 7 $TOTAL_STEPS "Regenerating lexicon"
 echo ""
-stack ghci hydra:lib --ghci-options='-e ":m Hydra.Haskell.Generation" -e "writeLexiconToStandardPath"' 2>&1 | grep -E "^Lexicon|^Error" || true
+stack ghci hydra:lib --ghci-options='-e ":m Hydra.Haskell.Generation" -e "writeLexiconToStandardPath"' 2>&1 | grep -E "^Lexicon|^Error|does not exist" || true
 
 echo ""
 echo "Checking for new files..."

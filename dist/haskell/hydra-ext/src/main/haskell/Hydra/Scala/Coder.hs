@@ -104,7 +104,7 @@ encodeCase cx g ftypes sn f =
                     Core.TypeUnit -> True
                     Core.TypeRecord v0 -> Equality.equal (Lists.length v0) 0
                     _ -> False) (Maps.lookup fname ftypes)
-          shortTypeName = Lists.last (Strings.splitOn "." (Maybes.maybe "x" (\n -> Core.unName n) sn))
+          shortTypeName = Maybes.fromMaybe "x" (Lists.maybeLast (Strings.splitOn "." (Maybes.maybe "x" (\n -> Core.unName n) sn)))
           lamParamSuffix =
                   case (Strip.deannotateAndDetypeTerm fterm) of
                     Core.TermLambda v0 ->
@@ -446,7 +446,7 @@ encodeTerm cx g term0 =
               parts = Strings.splitOn "." fullName
               numParts = Lists.length parts
               escaped =
-                      Logic.ifElse (Equality.lte numParts 1) (Utils.scalaEscapeName fullName) (Logic.ifElse (Equality.equal numParts 2) (Strings.cat2 (Lists.head parts) (Strings.cat2 "." (Utils.scalaEscapeName localName))) (Strings.intercalate "." (Lists.concat2 (Lists.take (Math.sub numParts 1) parts) [
+                      Logic.ifElse (Equality.lte numParts 1) (Utils.scalaEscapeName fullName) (Logic.ifElse (Equality.equal numParts 2) (Strings.cat2 (Maybes.fromMaybe fullName (Lists.maybeHead parts)) (Strings.cat2 "." (Utils.scalaEscapeName localName))) (Strings.intercalate "." (Lists.concat2 (Lists.take (Math.sub numParts 1) parts) [
                         Utils.scalaEscapeName localName])))
           in (Right (Utils.sname escaped))
         Core.TermAnnotated v0 -> encodeTerm cx g (Core.annotatedTermBody v0)

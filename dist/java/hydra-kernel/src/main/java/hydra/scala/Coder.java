@@ -122,12 +122,14 @@ public interface Coder {
           safeName.get());
       }
     }));
-    hydra.util.Lazy<String> shortTypeName = new hydra.util.Lazy<>(() -> hydra.lib.lists.Last.apply(hydra.lib.strings.SplitOn.apply(
-      ".",
-      hydra.lib.maybes.Maybe.applyLazy(
-        () -> "x",
-        (java.util.function.Function<hydra.core.Name, String>) (n -> (n).value),
-        sn))));
+    hydra.util.Lazy<String> shortTypeName = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> "x",
+      hydra.lib.lists.MaybeLast.apply(hydra.lib.strings.SplitOn.apply(
+        ".",
+        hydra.lib.maybes.Maybe.applyLazy(
+          () -> "x",
+          (java.util.function.Function<hydra.core.Name, String>) (n -> (n).value),
+          sn)))));
     hydra.core.Name v = new hydra.core.Name(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "v_",
       shortTypeName.get(),
@@ -1282,7 +1284,9 @@ public interface Coder {
               numParts.get(),
               2),
             () -> hydra.lib.strings.Cat2.apply(
-              hydra.lib.lists.Head.apply(parts),
+              hydra.lib.maybes.FromMaybe.applyLazy(
+                () -> fullName,
+                hydra.lib.lists.MaybeHead.apply(parts)),
               hydra.lib.strings.Cat2.apply(
                 ".",
                 hydra.scala.Utils.scalaEscapeName(localName))),

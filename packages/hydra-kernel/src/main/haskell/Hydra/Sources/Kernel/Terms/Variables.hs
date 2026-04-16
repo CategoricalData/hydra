@@ -259,10 +259,11 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
         "body0"     <~ Core.letBody (var "lt") $
         -- Sequentially rewrite bindings without advancing 'next' across siblings
         "step" <~ ("acc" ~> "bs" ~>
-          Logic.ifElse (Lists.null (var "bs"))
+          Maybes.maybe
             (Lists.reverse (var "acc"))
-            ("b"  <~ Lists.head (var "bs") $
-          "tl" <~ Lists.tail (var "bs") $
+            ("uc" ~>
+          "b"  <~ Pairs.first (var "uc") $
+          "tl" <~ Pairs.second (var "uc") $
           "noType" <~ (
             "newVal" <~ var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ (Core.bindingTerm $ var "b") $
             "b1"     <~ Core.binding (Core.bindingName $ var "b") (var "newVal") nothing $
@@ -306,7 +307,8 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
                -- Untyped binding: rewrite its term with current state; 'next' unchanged for siblings
                (var "noType")
                -- Typed binding: allocate |vars| fresh t{next+i}; bump 'next' only for the binding's TERM
-               ("ts" ~> var "withType" @@ var "ts"))) $
+               ("ts" ~> var "withType" @@ var "ts"))
+          (Lists.uncons $ var "bs")) $
         "bindings1" <~ var "step" @@ (list ([] :: [TTerm Binding])) @@ (var "bindings0") $
         Core.termLet $ Core.let_
           (var "bindings1")

@@ -2880,11 +2880,26 @@
                                         "name": "firstArg",
                                         "term": {
                                           "application": {
-                                            "argument": {"variable": "hargs"},
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "hargs"},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                                    "type": {"variable": "hydra.python.syntax.Expression"}}}}},
                                             "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.lists.head"},
-                                                "type": {"variable": "hydra.python.syntax.Expression"}}}}},
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "wrap": {
+                                                        "body": {"literal": {"string": ""}},
+                                                        "typeName": "hydra.python.syntax.Name"}},
+                                                    "function": {"variable": "hydra.python.utils.pyNameToPyExpression"}}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                    "type": {"variable": "hydra.python.syntax.Expression"}}}}}}},
                                         "type": {
                                           "type": {"variable": "hydra.python.syntax.Expression"},
                                           "variables": []}}],
@@ -2897,9 +2912,12 @@
                                               "application": {
                                                 "argument": {"variable": "hargs"},
                                                 "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.lists.tail"},
-                                                    "type": {"variable": "hydra.python.syntax.Expression"}}}}},
+                                                  "application": {
+                                                    "argument": {"literal": {"integer": {"int32": 1}}},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.lists.drop"},
+                                                        "type": {"variable": "hydra.python.syntax.Expression"}}}}}}},
                                             "type": {
                                               "type": {"list": {"variable": "hydra.python.syntax.Expression"}},
                                               "variables": []}}],
@@ -4720,11 +4738,21 @@
                                                                                                                                 "name": "capturedVarNames",
                                                                                                                                 "term": {
                                                                                                                                   "application": {
-                                                                                                                                    "argument": {"variable": "lambdaParams"},
+                                                                                                                                    "argument": {
+                                                                                                                                      "application": {
+                                                                                                                                        "argument": {"variable": "lambdaParams"},
+                                                                                                                                        "function": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {"variable": "hydra.lib.lists.maybeInit"},
+                                                                                                                                            "type": {"variable": "hydra.core.Name"}}}}},
                                                                                                                                     "function": {
-                                                                                                                                      "typeApplication": {
-                                                                                                                                        "body": {"variable": "hydra.lib.lists.init"},
-                                                                                                                                        "type": {"variable": "hydra.core.Name"}}}}},
+                                                                                                                                      "application": {
+                                                                                                                                        "argument": {
+                                                                                                                                          "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                                        "function": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                                                                                                            "type": {"list": {"variable": "hydra.core.Name"}}}}}}}},
                                                                                                                                 "type": {"type": {"list": {"variable": "hydra.core.Name"}}, "variables": []}}],
                                                                                                                             "body": {
                                                                                                                               "let": {
@@ -4733,11 +4761,21 @@
                                                                                                                                     "name": "matchLambdaParam",
                                                                                                                                     "term": {
                                                                                                                                       "application": {
-                                                                                                                                        "argument": {"variable": "lambdaParams"},
+                                                                                                                                        "argument": {
+                                                                                                                                          "application": {
+                                                                                                                                            "argument": {"variable": "lambdaParams"},
+                                                                                                                                            "function": {
+                                                                                                                                              "typeApplication": {
+                                                                                                                                                "body": {"variable": "hydra.lib.lists.maybeLast"},
+                                                                                                                                                "type": {"variable": "hydra.core.Name"}}}}},
                                                                                                                                         "function": {
-                                                                                                                                          "typeApplication": {
-                                                                                                                                            "body": {"variable": "hydra.lib.lists.last"},
-                                                                                                                                            "type": {"variable": "hydra.core.Name"}}}}},
+                                                                                                                                          "application": {
+                                                                                                                                            "argument": {
+                                                                                                                                              "wrap": {"body": {"literal": {"string": ""}}, "typeName": "hydra.core.Name"}},
+                                                                                                                                            "function": {
+                                                                                                                                              "typeApplication": {
+                                                                                                                                                "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                                                                                                                "type": {"variable": "hydra.core.Name"}}}}}}},
                                                                                                                                     "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}],
                                                                                                                                 "body": {
                                                                                                                                   "let": {
@@ -5685,38 +5723,82 @@
                                                                                                         "argument": {
                                                                                                           "application": {
                                                                                                             "argument": {
-                                                                                                              "application": {
-                                                                                                                "argument": {"variable": "term1"},
-                                                                                                                "function": {
+                                                                                                              "lambda": {
+                                                                                                                "body": {
                                                                                                                   "application": {
-                                                                                                                    "argument": {"variable": "env"},
-                                                                                                                    "function": {
-                                                                                                                      "application": {
-                                                                                                                        "argument": {"variable": "cx"},
-                                                                                                                        "function": {"variable": "hydra.python.coder.encodeTermMultiline"}}}}}}},
-                                                                                                            "function": {
-                                                                                                              "application": {
-                                                                                                                "argument": {
-                                                                                                                  "lambda": {
-                                                                                                                    "body": {
+                                                                                                                    "argument": {
                                                                                                                       "application": {
                                                                                                                         "argument": {"variable": "stmts"},
                                                                                                                         "function": {
                                                                                                                           "typeApplication": {
-                                                                                                                            "body": {"variable": "hydra.lib.lists.head"},
+                                                                                                                            "body": {"variable": "hydra.lib.lists.maybeHead"},
                                                                                                                             "type": {"variable": "hydra.python.syntax.Statement"}}}}},
-                                                                                                                    "domain": {"list": {"variable": "hydra.python.syntax.Statement"}},
-                                                                                                                    "parameter": "stmts"}},
+                                                                                                                    "function": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {
+                                                                                                                          "lambda": {
+                                                                                                                            "body": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"either": {"@right": {"variable": "x"}}},
+                                                                                                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                                "type": {"variable": "hydra.python.syntax.Statement"}}},
+                                                                                                                            "domain": {"variable": "hydra.python.syntax.Statement"},
+                                                                                                                            "parameter": "x"}},
+                                                                                                                        "function": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {
+                                                                                                                                      "either": {
+                                                                                                                                        "@left": {
+                                                                                                                                          "inject": {
+                                                                                                                                            "field": {
+                                                                                                                                              "name": "other",
+                                                                                                                                              "term": {
+                                                                                                                                                "wrap": {
+                                                                                                                                                  "body": {"literal": {"string": "encodeTermMultiline returned no statements"}},
+                                                                                                                                                  "typeName": "hydra.errors.OtherError"}}},
+                                                                                                                                            "typeName": "hydra.errors.Error"}}}},
+                                                                                                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                                "type": {"variable": "hydra.python.syntax.Statement"}}},
+                                                                                                                            "function": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"variable": "hydra.lib.maybes.maybe"},
+                                                                                                                                    "type": {
+                                                                                                                                      "either": {
+                                                                                                                                        "left": {"variable": "hydra.errors.Error"},
+                                                                                                                                        "right": {"variable": "hydra.python.syntax.Statement"}}}}},
+                                                                                                                                "type": {"variable": "hydra.python.syntax.Statement"}}}}}}}}},
+                                                                                                                "domain": {"list": {"variable": "hydra.python.syntax.Statement"}},
+                                                                                                                "parameter": "stmts"}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "argument": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"variable": "term1"},
+                                                                                                                    "function": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {"variable": "env"},
+                                                                                                                        "function": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {"variable": "cx"},
+                                                                                                                            "function": {"variable": "hydra.python.coder.encodeTermMultiline"}}}}}}},
                                                                                                                 "function": {
                                                                                                                   "typeApplication": {
                                                                                                                     "body": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {
                                                                                                                           "typeApplication": {
-                                                                                                                            "body": {"variable": "hydra.lib.eithers.map"},
-                                                                                                                            "type": {"list": {"variable": "hydra.python.syntax.Statement"}}}},
-                                                                                                                        "type": {"variable": "hydra.python.syntax.Statement"}}},
-                                                                                                                    "type": {"variable": "hydra.errors.Error"}}}}}}},
+                                                                                                                            "body": {"variable": "hydra.lib.eithers.bind"},
+                                                                                                                            "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                        "type": {"list": {"variable": "hydra.python.syntax.Statement"}}}},
+                                                                                                                    "type": {"variable": "hydra.python.syntax.Statement"}}}}}}},
                                                                                                         "function": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {
@@ -6221,38 +6303,82 @@
                                                                                                 "argument": {
                                                                                                   "application": {
                                                                                                     "argument": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "term1"},
-                                                                                                        "function": {
+                                                                                                      "lambda": {
+                                                                                                        "body": {
                                                                                                           "application": {
-                                                                                                            "argument": {"variable": "env"},
-                                                                                                            "function": {
-                                                                                                              "application": {
-                                                                                                                "argument": {"variable": "cx"},
-                                                                                                                "function": {"variable": "hydra.python.coder.encodeTermMultiline"}}}}}}},
-                                                                                                    "function": {
-                                                                                                      "application": {
-                                                                                                        "argument": {
-                                                                                                          "lambda": {
-                                                                                                            "body": {
+                                                                                                            "argument": {
                                                                                                               "application": {
                                                                                                                 "argument": {"variable": "stmts"},
                                                                                                                 "function": {
                                                                                                                   "typeApplication": {
-                                                                                                                    "body": {"variable": "hydra.lib.lists.head"},
+                                                                                                                    "body": {"variable": "hydra.lib.lists.maybeHead"},
                                                                                                                     "type": {"variable": "hydra.python.syntax.Statement"}}}}},
-                                                                                                            "domain": {"list": {"variable": "hydra.python.syntax.Statement"}},
-                                                                                                            "parameter": "stmts"}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "argument": {
+                                                                                                                  "lambda": {
+                                                                                                                    "body": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {"either": {"@right": {"variable": "x"}}},
+                                                                                                                            "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                        "type": {"variable": "hydra.python.syntax.Statement"}}},
+                                                                                                                    "domain": {"variable": "hydra.python.syntax.Statement"},
+                                                                                                                    "parameter": "x"}},
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {
+                                                                                                                              "either": {
+                                                                                                                                "@left": {
+                                                                                                                                  "inject": {
+                                                                                                                                    "field": {
+                                                                                                                                      "name": "other",
+                                                                                                                                      "term": {
+                                                                                                                                        "wrap": {
+                                                                                                                                          "body": {"literal": {"string": "encodeTermMultiline returned no statements"}},
+                                                                                                                                          "typeName": "hydra.errors.OtherError"}}},
+                                                                                                                                    "typeName": "hydra.errors.Error"}}}},
+                                                                                                                            "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                        "type": {"variable": "hydra.python.syntax.Statement"}}},
+                                                                                                                    "function": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {"variable": "hydra.lib.maybes.maybe"},
+                                                                                                                            "type": {
+                                                                                                                              "either": {
+                                                                                                                                "left": {"variable": "hydra.errors.Error"},
+                                                                                                                                "right": {"variable": "hydra.python.syntax.Statement"}}}}},
+                                                                                                                        "type": {"variable": "hydra.python.syntax.Statement"}}}}}}}}},
+                                                                                                        "domain": {"list": {"variable": "hydra.python.syntax.Statement"}},
+                                                                                                        "parameter": "stmts"}},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "term1"},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "env"},
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"variable": "cx"},
+                                                                                                                    "function": {"variable": "hydra.python.coder.encodeTermMultiline"}}}}}}},
                                                                                                         "function": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {
                                                                                                               "typeApplication": {
                                                                                                                 "body": {
                                                                                                                   "typeApplication": {
-                                                                                                                    "body": {"variable": "hydra.lib.eithers.map"},
-                                                                                                                    "type": {"list": {"variable": "hydra.python.syntax.Statement"}}}},
-                                                                                                                "type": {"variable": "hydra.python.syntax.Statement"}}},
-                                                                                                            "type": {"variable": "hydra.errors.Error"}}}}}}},
+                                                                                                                    "body": {"variable": "hydra.lib.eithers.bind"},
+                                                                                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                "type": {"list": {"variable": "hydra.python.syntax.Statement"}}}},
+                                                                                                            "type": {"variable": "hydra.python.syntax.Statement"}}}}}}},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {
@@ -16278,11 +16404,23 @@
                                                         "name": "arg",
                                                         "term": {
                                                           "application": {
-                                                            "argument": {"variable": "args"},
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "args"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                                                    "type": {"variable": "hydra.core.Term"}}}}},
                                                             "function": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.lists.head"},
-                                                                "type": {"variable": "hydra.core.Term"}}}}},
+                                                              "application": {
+                                                                "argument": {
+                                                                  "inject": {
+                                                                    "field": {"name": "unit", "term": {"unit": {}}},
+                                                                    "typeName": "hydra.core.Term"}},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                                    "type": {"variable": "hydra.core.Term"}}}}}}},
                                                         "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                     "body": {
                                                       "application": {
@@ -16887,11 +17025,23 @@
                                                                                         "name": "arg",
                                                                                         "term": {
                                                                                           "application": {
-                                                                                            "argument": {"variable": "args2"},
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "args2"},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                                                                                    "type": {"variable": "hydra.core.Term"}}}}},
                                                                                             "function": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {"variable": "hydra.lib.lists.head"},
-                                                                                                "type": {"variable": "hydra.core.Term"}}}}},
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "inject": {
+                                                                                                    "field": {"name": "unit", "term": {"unit": {}}},
+                                                                                                    "typeName": "hydra.core.Term"}},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                                                                    "type": {"variable": "hydra.core.Term"}}}}}}},
                                                                                         "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                                     "body": {
                                                                                       "application": {
@@ -25045,11 +25195,23 @@
                                         "name": "arg",
                                         "term": {
                                           "application": {
-                                            "argument": {"variable": "args"},
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "args"},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                                    "type": {"variable": "hydra.core.Term"}}}}},
                                             "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.lists.head"},
-                                                "type": {"variable": "hydra.core.Term"}}}}},
+                                              "application": {
+                                                "argument": {
+                                                  "inject": {
+                                                    "field": {"name": "unit", "term": {"unit": {}}},
+                                                    "typeName": "hydra.core.Term"}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                    "type": {"variable": "hydra.core.Term"}}}}}}},
                                         "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -33631,49 +33793,169 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "dummyExpr",
+                            "term": {
                               "application": {
-                                "argument": {"variable": "args"},
-                                "function": {
+                                "argument": {
+                                  "wrap": {
+                                    "body": {"literal": {"string": ""}},
+                                    "typeName": "hydra.python.syntax.Name"}},
+                                "function": {"variable": "hydra.python.utils.pyNameToPyExpression"}}},
+                            "type": {
+                              "type": {"variable": "hydra.python.syntax.Expression"},
+                              "variables": []}},
+                          {
+                            "name": "argAt",
+                            "term": {
+                              "lambda": {
+                                "body": {
                                   "application": {
                                     "argument": {
                                       "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "args"},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.lists.tail"},
-                                                "type": {"variable": "hydra.python.syntax.Expression"}}}}},
+                                        "argument": {"variable": "args"},
                                         "function": {
                                           "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "args"},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"literal": {"integer": {"int32": 0}}},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.lists.at"},
-                                                            "type": {"variable": "hydra.python.syntax.Expression"}}}}}}},
-                                                "function": {"variable": "hydra.python.coder.wrapInNullaryLambda"}}},
+                                            "argument": {"variable": "i"},
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"variable": "hydra.lib.lists.cons"},
+                                                "body": {"variable": "hydra.lib.lists.maybeAt"},
                                                 "type": {"variable": "hydra.python.syntax.Expression"}}}}}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "dummyExpr"},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                            "type": {"variable": "hydra.python.syntax.Expression"}}}}}}},
+                                "domain": {"literal": {"integer": {"int32": {}}}},
+                                "parameter": "i"}},
+                            "type": {
+                              "type": {
+                                "function": {
+                                  "codomain": {"variable": "hydra.python.syntax.Expression"},
+                                  "domain": {"literal": {"integer": {"int32": {}}}}}},
+                              "variables": []}}],
+                        "body": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "args"},
                                     "function": {
                                       "application": {
                                         "argument": {
                                           "application": {
                                             "argument": {
                                               "application": {
+                                                "argument": {"variable": "args"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"literal": {"integer": {"int32": 1}}},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.lists.drop"},
+                                                        "type": {"variable": "hydra.python.syntax.Expression"}}}}}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"literal": {"integer": {"int32": 0}}},
+                                                        "function": {"variable": "argAt"}}},
+                                                    "function": {"variable": "hydra.python.coder.wrapInNullaryLambda"}}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.lists.cons"},
+                                                    "type": {"variable": "hydra.python.syntax.Expression"}}}}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"literal": {"integer": {"int32": 1}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "args"},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.lib.lists.length"},
+                                                                "type": {"variable": "hydra.python.syntax.Expression"}}}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.equality.gte"},
+                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "hydra.lib.maybes.fromMaybe"}},
+                                                                "typeName": "hydra.core.Name"}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "name"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.equality.equal"},
+                                                                    "type": {"variable": "hydra.core.Name"}}}}}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "wrap": {
+                                                                    "body": {"literal": {"string": "hydra.lib.maybes.maybe"}},
+                                                                    "typeName": "hydra.core.Name"}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "name"},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.lib.equality.equal"},
+                                                                        "type": {"variable": "hydra.core.Name"}}}}}}},
+                                                            "function": {"variable": "hydra.lib.logic.or"}}}}},
+                                                    "function": {"variable": "hydra.lib.logic.and"}}}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                "type": {"list": {"variable": "hydra.python.syntax.Expression"}}}}}}}}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "list": [
+                                        {
+                                          "application": {
+                                            "argument": {"literal": {"integer": {"int32": 0}}},
+                                            "function": {"variable": "argAt"}}},
+                                        {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
                                                 "argument": {"literal": {"integer": {"int32": 1}}},
+                                                "function": {"variable": "argAt"}}},
+                                            "function": {"variable": "hydra.python.coder.wrapInNullaryLambda"}}},
+                                        {
+                                          "application": {
+                                            "argument": {"literal": {"integer": {"int32": 2}}},
+                                            "function": {"variable": "argAt"}}}]},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"literal": {"integer": {"int32": 3}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {
@@ -33685,41 +33967,23 @@
                                                             "type": {"variable": "hydra.python.syntax.Expression"}}}}},
                                                     "function": {
                                                       "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.equality.gte"},
+                                                        "body": {"variable": "hydra.lib.equality.equal"},
                                                         "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                             "function": {
                                               "application": {
                                                 "argument": {
                                                   "application": {
                                                     "argument": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "wrap": {
-                                                            "body": {"literal": {"string": "hydra.lib.maybes.fromMaybe"}},
-                                                            "typeName": "hydra.core.Name"}},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {"variable": "name"},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.equality.equal"},
-                                                                "type": {"variable": "hydra.core.Name"}}}}}}},
+                                                      "wrap": {
+                                                        "body": {"literal": {"string": "hydra.lib.maybes.cases"}},
+                                                        "typeName": "hydra.core.Name"}},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "wrap": {
-                                                                "body": {"literal": {"string": "hydra.lib.maybes.maybe"}},
-                                                                "typeName": "hydra.core.Name"}},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"variable": "name"},
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {"variable": "hydra.lib.equality.equal"},
-                                                                    "type": {"variable": "hydra.core.Name"}}}}}}},
-                                                        "function": {"variable": "hydra.lib.logic.or"}}}}},
+                                                        "argument": {"variable": "name"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.equality.equal"},
+                                                            "type": {"variable": "hydra.core.Name"}}}}}}},
                                                 "function": {"variable": "hydra.lib.logic.and"}}}}},
                                         "function": {
                                           "typeApplication": {
@@ -33731,37 +33995,22 @@
                                   "list": [
                                     {
                                       "application": {
-                                        "argument": {"variable": "args"},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"literal": {"integer": {"int32": 0}}},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.lists.at"},
-                                                "type": {"variable": "hydra.python.syntax.Expression"}}}}}}},
+                                        "argument": {"literal": {"integer": {"int32": 0}}},
+                                        "function": {"variable": "argAt"}}},
                                     {
                                       "application": {
                                         "argument": {
                                           "application": {
-                                            "argument": {"variable": "args"},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"literal": {"integer": {"int32": 1}}},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.lists.at"},
-                                                    "type": {"variable": "hydra.python.syntax.Expression"}}}}}}},
+                                            "argument": {"literal": {"integer": {"int32": 1}}},
+                                            "function": {"variable": "argAt"}}},
                                         "function": {"variable": "hydra.python.coder.wrapInNullaryLambda"}}},
                                     {
                                       "application": {
-                                        "argument": {"variable": "args"},
-                                        "function": {
+                                        "argument": {
                                           "application": {
                                             "argument": {"literal": {"integer": {"int32": 2}}},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.lists.at"},
-                                                "type": {"variable": "hydra.python.syntax.Expression"}}}}}}}]},
+                                            "function": {"variable": "argAt"}}},
+                                        "function": {"variable": "hydra.python.coder.wrapInNullaryLambda"}}}]},
                                 "function": {
                                   "application": {
                                     "argument": {
@@ -33788,7 +34037,7 @@
                                               "application": {
                                                 "argument": {
                                                   "wrap": {
-                                                    "body": {"literal": {"string": "hydra.lib.maybes.cases"}},
+                                                    "body": {"literal": {"string": "hydra.lib.logic.ifElse"}},
                                                     "typeName": "hydra.core.Name"}},
                                                 "function": {
                                                   "application": {
@@ -33801,87 +34050,7 @@
                                     "function": {
                                       "typeApplication": {
                                         "body": {"variable": "hydra.lib.logic.ifElse"},
-                                        "type": {"list": {"variable": "hydra.python.syntax.Expression"}}}}}}}}}},
-                        "function": {
-                          "application": {
-                            "argument": {
-                              "list": [
-                                {
-                                  "application": {
-                                    "argument": {"variable": "args"},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"literal": {"integer": {"int32": 0}}},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.lists.at"},
-                                            "type": {"variable": "hydra.python.syntax.Expression"}}}}}}},
-                                {
-                                  "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {"variable": "args"},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"literal": {"integer": {"int32": 1}}},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.lists.at"},
-                                                "type": {"variable": "hydra.python.syntax.Expression"}}}}}}},
-                                    "function": {"variable": "hydra.python.coder.wrapInNullaryLambda"}}},
-                                {
-                                  "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {"variable": "args"},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"literal": {"integer": {"int32": 2}}},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.lists.at"},
-                                                "type": {"variable": "hydra.python.syntax.Expression"}}}}}}},
-                                    "function": {"variable": "hydra.python.coder.wrapInNullaryLambda"}}}]},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {"literal": {"integer": {"int32": 3}}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "args"},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.lists.length"},
-                                                    "type": {"variable": "hydra.python.syntax.Expression"}}}}},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.equality.equal"},
-                                                "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {
-                                              "wrap": {
-                                                "body": {"literal": {"string": "hydra.lib.logic.ifElse"}},
-                                                "typeName": "hydra.core.Name"}},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"variable": "name"},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.equality.equal"},
-                                                    "type": {"variable": "hydra.core.Name"}}}}}}},
-                                        "function": {"variable": "hydra.lib.logic.and"}}}}},
-                                "function": {
-                                  "typeApplication": {
-                                    "body": {"variable": "hydra.lib.logic.ifElse"},
-                                    "type": {"list": {"variable": "hydra.python.syntax.Expression"}}}}}}}}}},
+                                        "type": {"list": {"variable": "hydra.python.syntax.Expression"}}}}}}}}}}}},
                     "domain": {"list": {"variable": "hydra.python.syntax.Expression"}},
                     "parameter": "args"}},
                 "domain": {"variable": "hydra.core.Name"},

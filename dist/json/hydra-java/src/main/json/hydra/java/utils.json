@@ -9,40 +9,84 @@
               "let": {
                 "bindings": [
                   {
-                    "name": "first",
+                    "name": "dummyMult",
                     "term": {
                       "inject": {
                         "field": {
                           "name": "unary",
                           "term": {
-                            "application": {
-                              "argument": {"variable": "exprs"},
-                              "function": {
-                                "typeApplication": {
-                                  "body": {"variable": "hydra.lib.lists.head"},
-                                  "type": {"variable": "hydra.java.syntax.MultiplicativeExpression"}}}}}},
-                        "typeName": "hydra.java.syntax.AdditiveExpression"}},
+                            "inject": {
+                              "field": {
+                                "name": "other",
+                                "term": {
+                                  "inject": {
+                                    "field": {
+                                      "name": "postfix",
+                                      "term": {
+                                        "inject": {
+                                          "field": {
+                                            "name": "primary",
+                                            "term": {
+                                              "inject": {
+                                                "field": {
+                                                  "name": "noNewArray",
+                                                  "term": {
+                                                    "inject": {
+                                                      "field": {
+                                                        "name": "literal",
+                                                        "term": {
+                                                          "inject": {
+                                                            "field": {
+                                                              "name": "integer",
+                                                              "term": {
+                                                                "wrap": {
+                                                                  "body": {"literal": {"integer": {"bigint": "0"}}},
+                                                                  "typeName": "hydra.java.syntax.IntegerLiteral"}}},
+                                                            "typeName": "hydra.java.syntax.Literal"}}},
+                                                      "typeName": "hydra.java.syntax.PrimaryNoNewArrayExpression"}}},
+                                                "typeName": "hydra.java.syntax.Primary"}}},
+                                          "typeName": "hydra.java.syntax.PostfixExpression"}}},
+                                    "typeName": "hydra.java.syntax.UnaryExpressionNotPlusMinus"}}},
+                              "typeName": "hydra.java.syntax.UnaryExpression"}}},
+                        "typeName": "hydra.java.syntax.MultiplicativeExpression"}},
                     "type": {
-                      "type": {"variable": "hydra.java.syntax.AdditiveExpression"},
-                      "variables": []}},
-                  {
-                    "name": "rest",
-                    "term": {
-                      "application": {
-                        "argument": {"variable": "exprs"},
-                        "function": {
-                          "typeApplication": {
-                            "body": {"variable": "hydra.lib.lists.tail"},
-                            "type": {"variable": "hydra.java.syntax.MultiplicativeExpression"}}}}},
-                    "type": {
-                      "type": {"list": {"variable": "hydra.java.syntax.MultiplicativeExpression"}},
+                      "type": {"variable": "hydra.java.syntax.MultiplicativeExpression"},
                       "variables": []}}],
                 "body": {
                   "application": {
-                    "argument": {"variable": "rest"},
+                    "argument": {
+                      "application": {
+                        "argument": {"variable": "exprs"},
+                        "function": {
+                          "application": {
+                            "argument": {"literal": {"integer": {"int32": 1}}},
+                            "function": {
+                              "typeApplication": {
+                                "body": {"variable": "hydra.lib.lists.drop"},
+                                "type": {"variable": "hydra.java.syntax.MultiplicativeExpression"}}}}}}},
                     "function": {
                       "application": {
-                        "argument": {"variable": "first"},
+                        "argument": {
+                          "inject": {
+                            "field": {
+                              "name": "unary",
+                              "term": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {"variable": "exprs"},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                          "type": {"variable": "hydra.java.syntax.MultiplicativeExpression"}}}}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "dummyMult"},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                          "type": {"variable": "hydra.java.syntax.MultiplicativeExpression"}}}}}}}},
+                            "typeName": "hydra.java.syntax.AdditiveExpression"}},
                         "function": {
                           "application": {
                             "argument": {
@@ -1131,11 +1175,20 @@
                   "application": {
                     "argument": {
                       "application": {
-                        "argument": {"variable": "s"},
+                        "argument": {
+                          "application": {
+                            "argument": {"variable": "s"},
+                            "function": {
+                              "application": {
+                                "argument": {"literal": {"integer": {"int32": 0}}},
+                                "function": {"variable": "hydra.lib.strings.maybeCharAt"}}}}},
                         "function": {
                           "application": {
                             "argument": {"literal": {"integer": {"int32": 0}}},
-                            "function": {"variable": "hydra.lib.strings.charAt"}}}}},
+                            "function": {
+                              "typeApplication": {
+                                "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                     "function": {
                       "typeApplication": {
                         "body": {"variable": "hydra.lib.equality.equal"},
@@ -2536,330 +2589,285 @@
                                                                               "variables": []}}],
                                                                         "body": {
                                                                           "application": {
-                                                                            "argument": {"variable": "fallback"},
-                                                                            "function": {
+                                                                            "argument": {
                                                                               "application": {
                                                                                 "argument": {
-                                                                                  "let": {
-                                                                                    "bindings": [
-                                                                                      {
-                                                                                        "name": "iors",
-                                                                                        "term": {
-                                                                                          "application": {
-                                                                                            "argument": {
-                                                                                              "application": {
-                                                                                                "argument": {"variable": "cands"},
-                                                                                                "function": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {"variable": "hydra.lib.lists.head"},
-                                                                                                    "type": {"variable": "hydra.java.syntax.ConditionalAndExpression"}}}}},
-                                                                                            "function": {"unwrap": "hydra.java.syntax.ConditionalAndExpression"}}},
-                                                                                        "type": {
-                                                                                          "type": {"list": {"variable": "hydra.java.syntax.InclusiveOrExpression"}},
-                                                                                          "variables": []}}],
+                                                                                  "lambda": {
                                                                                     "body": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "fallback"},
-                                                                                        "function": {
+                                                                                      "let": {
+                                                                                        "bindings": [
+                                                                                          {
+                                                                                            "name": "iors",
+                                                                                            "term": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "candHead"},
+                                                                                                "function": {"unwrap": "hydra.java.syntax.ConditionalAndExpression"}}},
+                                                                                            "type": {
+                                                                                              "type": {"list": {"variable": "hydra.java.syntax.InclusiveOrExpression"}},
+                                                                                              "variables": []}}],
+                                                                                        "body": {
                                                                                           "application": {
                                                                                             "argument": {
-                                                                                              "let": {
-                                                                                                "bindings": [
-                                                                                                  {
-                                                                                                    "name": "xors",
-                                                                                                    "term": {
-                                                                                                      "application": {
-                                                                                                        "argument": {
-                                                                                                          "application": {
-                                                                                                            "argument": {"variable": "iors"},
-                                                                                                            "function": {
-                                                                                                              "typeApplication": {
-                                                                                                                "body": {"variable": "hydra.lib.lists.head"},
-                                                                                                                "type": {"variable": "hydra.java.syntax.InclusiveOrExpression"}}}}},
-                                                                                                        "function": {"unwrap": "hydra.java.syntax.InclusiveOrExpression"}}},
-                                                                                                    "type": {
-                                                                                                      "type": {"list": {"variable": "hydra.java.syntax.ExclusiveOrExpression"}},
-                                                                                                      "variables": []}}],
+                                                                                              "lambda": {
                                                                                                 "body": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"variable": "fallback"},
-                                                                                                    "function": {
+                                                                                                  "let": {
+                                                                                                    "bindings": [
+                                                                                                      {
+                                                                                                        "name": "xors",
+                                                                                                        "term": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "iorHead"},
+                                                                                                            "function": {"unwrap": "hydra.java.syntax.InclusiveOrExpression"}}},
+                                                                                                        "type": {
+                                                                                                          "type": {"list": {"variable": "hydra.java.syntax.ExclusiveOrExpression"}},
+                                                                                                          "variables": []}}],
+                                                                                                    "body": {
                                                                                                       "application": {
                                                                                                         "argument": {
-                                                                                                          "let": {
-                                                                                                            "bindings": [
-                                                                                                              {
-                                                                                                                "name": "ands",
-                                                                                                                "term": {
-                                                                                                                  "application": {
-                                                                                                                    "argument": {
-                                                                                                                      "application": {
-                                                                                                                        "argument": {"variable": "xors"},
-                                                                                                                        "function": {
-                                                                                                                          "typeApplication": {
-                                                                                                                            "body": {"variable": "hydra.lib.lists.head"},
-                                                                                                                            "type": {"variable": "hydra.java.syntax.ExclusiveOrExpression"}}}}},
-                                                                                                                    "function": {"unwrap": "hydra.java.syntax.ExclusiveOrExpression"}}},
-                                                                                                                "type": {
-                                                                                                                  "type": {"list": {"variable": "hydra.java.syntax.AndExpression"}},
-                                                                                                                  "variables": []}}],
+                                                                                                          "lambda": {
                                                                                                             "body": {
-                                                                                                              "application": {
-                                                                                                                "argument": {"variable": "fallback"},
-                                                                                                                "function": {
+                                                                                                              "let": {
+                                                                                                                "bindings": [
+                                                                                                                  {
+                                                                                                                    "name": "ands",
+                                                                                                                    "term": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {"variable": "xorHead"},
+                                                                                                                        "function": {"unwrap": "hydra.java.syntax.ExclusiveOrExpression"}}},
+                                                                                                                    "type": {
+                                                                                                                      "type": {"list": {"variable": "hydra.java.syntax.AndExpression"}},
+                                                                                                                      "variables": []}}],
+                                                                                                                "body": {
                                                                                                                   "application": {
                                                                                                                     "argument": {
-                                                                                                                      "let": {
-                                                                                                                        "bindings": [
-                                                                                                                          {
-                                                                                                                            "name": "eqs",
-                                                                                                                            "term": {
-                                                                                                                              "application": {
-                                                                                                                                "argument": {
-                                                                                                                                  "application": {
-                                                                                                                                    "argument": {"variable": "ands"},
-                                                                                                                                    "function": {
-                                                                                                                                      "typeApplication": {
-                                                                                                                                        "body": {"variable": "hydra.lib.lists.head"},
-                                                                                                                                        "type": {"variable": "hydra.java.syntax.AndExpression"}}}}},
-                                                                                                                                "function": {"unwrap": "hydra.java.syntax.AndExpression"}}},
-                                                                                                                            "type": {
-                                                                                                                              "type": {"list": {"variable": "hydra.java.syntax.EqualityExpression"}},
-                                                                                                                              "variables": []}}],
+                                                                                                                      "lambda": {
                                                                                                                         "body": {
-                                                                                                                          "application": {
-                                                                                                                            "argument": {"variable": "fallback"},
-                                                                                                                            "function": {
+                                                                                                                          "let": {
+                                                                                                                            "bindings": [
+                                                                                                                              {
+                                                                                                                                "name": "eqs",
+                                                                                                                                "term": {
+                                                                                                                                  "application": {
+                                                                                                                                    "argument": {"variable": "andHead"},
+                                                                                                                                    "function": {"unwrap": "hydra.java.syntax.AndExpression"}}},
+                                                                                                                                "type": {
+                                                                                                                                  "type": {"list": {"variable": "hydra.java.syntax.EqualityExpression"}},
+                                                                                                                                  "variables": []}}],
+                                                                                                                            "body": {
                                                                                                                               "application": {
                                                                                                                                 "argument": {
+                                                                                                                                  "lambda": {
+                                                                                                                                    "body": {
+                                                                                                                                      "maybe": {
+                                                                                                                                        "application": {
+                                                                                                                                          "argument": {"variable": "eqHead"},
+                                                                                                                                          "function": {
+                                                                                                                                            "cases": {
+                                                                                                                                              "cases": [
+                                                                                                                                                {
+                                                                                                                                                  "name": "unary",
+                                                                                                                                                  "term": {
+                                                                                                                                                    "lambda": {
+                                                                                                                                                      "body": {
+                                                                                                                                                        "application": {
+                                                                                                                                                          "argument": {"variable": "rel"},
+                                                                                                                                                          "function": {
+                                                                                                                                                            "cases": {
+                                                                                                                                                              "cases": [
+                                                                                                                                                                {
+                                                                                                                                                                  "name": "simple",
+                                                                                                                                                                  "term": {
+                                                                                                                                                                    "lambda": {
+                                                                                                                                                                      "body": {
+                                                                                                                                                                        "application": {
+                                                                                                                                                                          "argument": {"variable": "shift"},
+                                                                                                                                                                          "function": {
+                                                                                                                                                                            "cases": {
+                                                                                                                                                                              "cases": [
+                                                                                                                                                                                {
+                                                                                                                                                                                  "name": "unary",
+                                                                                                                                                                                  "term": {
+                                                                                                                                                                                    "lambda": {
+                                                                                                                                                                                      "body": {
+                                                                                                                                                                                        "application": {
+                                                                                                                                                                                          "argument": {"variable": "add"},
+                                                                                                                                                                                          "function": {
+                                                                                                                                                                                            "cases": {
+                                                                                                                                                                                              "cases": [
+                                                                                                                                                                                                {
+                                                                                                                                                                                                  "name": "unary",
+                                                                                                                                                                                                  "term": {
+                                                                                                                                                                                                    "lambda": {
+                                                                                                                                                                                                      "body": {
+                                                                                                                                                                                                        "application": {
+                                                                                                                                                                                                          "argument": {"variable": "mul"},
+                                                                                                                                                                                                          "function": {
+                                                                                                                                                                                                            "cases": {
+                                                                                                                                                                                                              "cases": [
+                                                                                                                                                                                                                {
+                                                                                                                                                                                                                  "name": "unary",
+                                                                                                                                                                                                                  "term": {
+                                                                                                                                                                                                                    "lambda": {
+                                                                                                                                                                                                                      "body": {
+                                                                                                                                                                                                                        "application": {
+                                                                                                                                                                                                                          "argument": {"variable": "unary"},
+                                                                                                                                                                                                                          "function": {
+                                                                                                                                                                                                                            "cases": {
+                                                                                                                                                                                                                              "cases": [
+                                                                                                                                                                                                                                {
+                                                                                                                                                                                                                                  "name": "other",
+                                                                                                                                                                                                                                  "term": {
+                                                                                                                                                                                                                                    "lambda": {
+                                                                                                                                                                                                                                      "body": {
+                                                                                                                                                                                                                                        "application": {
+                                                                                                                                                                                                                                          "argument": {"variable": "npm"},
+                                                                                                                                                                                                                                          "function": {
+                                                                                                                                                                                                                                            "cases": {
+                                                                                                                                                                                                                                              "cases": [
+                                                                                                                                                                                                                                                {
+                                                                                                                                                                                                                                                  "name": "postfix",
+                                                                                                                                                                                                                                                  "term": {
+                                                                                                                                                                                                                                                    "lambda": {
+                                                                                                                                                                                                                                                      "body": {
+                                                                                                                                                                                                                                                        "application": {
+                                                                                                                                                                                                                                                          "argument": {"variable": "pf"},
+                                                                                                                                                                                                                                                          "function": {
+                                                                                                                                                                                                                                                            "cases": {
+                                                                                                                                                                                                                                                              "cases": [
+                                                                                                                                                                                                                                                                {
+                                                                                                                                                                                                                                                                  "name": "primary",
+                                                                                                                                                                                                                                                                  "term": {
+                                                                                                                                                                                                                                                                    "lambda": {
+                                                                                                                                                                                                                                                                      "body": {"variable": "p"},
+                                                                                                                                                                                                                                                                      "domain": {"variable": "hydra.java.syntax.Primary"},
+                                                                                                                                                                                                                                                                      "parameter": "p"}}}],
+                                                                                                                                                                                                                                                              "default": {"variable": "fallback"},
+                                                                                                                                                                                                                                                              "typeName": "hydra.java.syntax.PostfixExpression"}}}},
+                                                                                                                                                                                                                                                      "domain": {"variable": "hydra.java.syntax.PostfixExpression"},
+                                                                                                                                                                                                                                                      "parameter": "pf"}}}],
+                                                                                                                                                                                                                                              "default": {"variable": "fallback"},
+                                                                                                                                                                                                                                              "typeName": "hydra.java.syntax.UnaryExpressionNotPlusMinus"}}}},
+                                                                                                                                                                                                                                      "domain": {"variable": "hydra.java.syntax.UnaryExpressionNotPlusMinus"},
+                                                                                                                                                                                                                                      "parameter": "npm"}}}],
+                                                                                                                                                                                                                              "default": {"variable": "fallback"},
+                                                                                                                                                                                                                              "typeName": "hydra.java.syntax.UnaryExpression"}}}},
+                                                                                                                                                                                                                      "domain": {"variable": "hydra.java.syntax.UnaryExpression"},
+                                                                                                                                                                                                                      "parameter": "unary"}}}],
+                                                                                                                                                                                                              "default": {"variable": "fallback"},
+                                                                                                                                                                                                              "typeName": "hydra.java.syntax.MultiplicativeExpression"}}}},
+                                                                                                                                                                                                      "domain": {"variable": "hydra.java.syntax.MultiplicativeExpression"},
+                                                                                                                                                                                                      "parameter": "mul"}}}],
+                                                                                                                                                                                              "default": {"variable": "fallback"},
+                                                                                                                                                                                              "typeName": "hydra.java.syntax.AdditiveExpression"}}}},
+                                                                                                                                                                                      "domain": {"variable": "hydra.java.syntax.AdditiveExpression"},
+                                                                                                                                                                                      "parameter": "add"}}}],
+                                                                                                                                                                              "default": {"variable": "fallback"},
+                                                                                                                                                                              "typeName": "hydra.java.syntax.ShiftExpression"}}}},
+                                                                                                                                                                      "domain": {"variable": "hydra.java.syntax.ShiftExpression"},
+                                                                                                                                                                      "parameter": "shift"}}}],
+                                                                                                                                                              "default": {"variable": "fallback"},
+                                                                                                                                                              "typeName": "hydra.java.syntax.RelationalExpression"}}}},
+                                                                                                                                                      "domain": {"variable": "hydra.java.syntax.RelationalExpression"},
+                                                                                                                                                      "parameter": "rel"}}}],
+                                                                                                                                              "default": {"variable": "fallback"},
+                                                                                                                                              "typeName": "hydra.java.syntax.EqualityExpression"}}}}},
+                                                                                                                                    "domain": {"variable": "hydra.java.syntax.EqualityExpression"},
+                                                                                                                                    "parameter": "eqHead"}},
+                                                                                                                                "function": {
                                                                                                                                   "application": {
                                                                                                                                     "argument": {
                                                                                                                                       "application": {
                                                                                                                                         "argument": {"variable": "eqs"},
                                                                                                                                         "function": {
                                                                                                                                           "typeApplication": {
-                                                                                                                                            "body": {"variable": "hydra.lib.lists.head"},
+                                                                                                                                            "body": {"variable": "hydra.lib.lists.maybeHead"},
                                                                                                                                             "type": {"variable": "hydra.java.syntax.EqualityExpression"}}}}},
                                                                                                                                     "function": {
-                                                                                                                                      "cases": {
-                                                                                                                                        "cases": [
-                                                                                                                                          {
-                                                                                                                                            "name": "unary",
-                                                                                                                                            "term": {
-                                                                                                                                              "lambda": {
-                                                                                                                                                "body": {
-                                                                                                                                                  "application": {
-                                                                                                                                                    "argument": {"variable": "rel"},
-                                                                                                                                                    "function": {
-                                                                                                                                                      "cases": {
-                                                                                                                                                        "cases": [
-                                                                                                                                                          {
-                                                                                                                                                            "name": "simple",
-                                                                                                                                                            "term": {
-                                                                                                                                                              "lambda": {
-                                                                                                                                                                "body": {
-                                                                                                                                                                  "application": {
-                                                                                                                                                                    "argument": {"variable": "shift"},
-                                                                                                                                                                    "function": {
-                                                                                                                                                                      "cases": {
-                                                                                                                                                                        "cases": [
-                                                                                                                                                                          {
-                                                                                                                                                                            "name": "unary",
-                                                                                                                                                                            "term": {
-                                                                                                                                                                              "lambda": {
-                                                                                                                                                                                "body": {
-                                                                                                                                                                                  "application": {
-                                                                                                                                                                                    "argument": {"variable": "add"},
-                                                                                                                                                                                    "function": {
-                                                                                                                                                                                      "cases": {
-                                                                                                                                                                                        "cases": [
-                                                                                                                                                                                          {
-                                                                                                                                                                                            "name": "unary",
-                                                                                                                                                                                            "term": {
-                                                                                                                                                                                              "lambda": {
-                                                                                                                                                                                                "body": {
-                                                                                                                                                                                                  "application": {
-                                                                                                                                                                                                    "argument": {"variable": "mul"},
-                                                                                                                                                                                                    "function": {
-                                                                                                                                                                                                      "cases": {
-                                                                                                                                                                                                        "cases": [
-                                                                                                                                                                                                          {
-                                                                                                                                                                                                            "name": "unary",
-                                                                                                                                                                                                            "term": {
-                                                                                                                                                                                                              "lambda": {
-                                                                                                                                                                                                                "body": {
-                                                                                                                                                                                                                  "application": {
-                                                                                                                                                                                                                    "argument": {"variable": "unary"},
-                                                                                                                                                                                                                    "function": {
-                                                                                                                                                                                                                      "cases": {
-                                                                                                                                                                                                                        "cases": [
-                                                                                                                                                                                                                          {
-                                                                                                                                                                                                                            "name": "other",
-                                                                                                                                                                                                                            "term": {
-                                                                                                                                                                                                                              "lambda": {
-                                                                                                                                                                                                                                "body": {
-                                                                                                                                                                                                                                  "application": {
-                                                                                                                                                                                                                                    "argument": {"variable": "npm"},
-                                                                                                                                                                                                                                    "function": {
-                                                                                                                                                                                                                                      "cases": {
-                                                                                                                                                                                                                                        "cases": [
-                                                                                                                                                                                                                                          {
-                                                                                                                                                                                                                                            "name": "postfix",
-                                                                                                                                                                                                                                            "term": {
-                                                                                                                                                                                                                                              "lambda": {
-                                                                                                                                                                                                                                                "body": {
-                                                                                                                                                                                                                                                  "application": {
-                                                                                                                                                                                                                                                    "argument": {"variable": "pf"},
-                                                                                                                                                                                                                                                    "function": {
-                                                                                                                                                                                                                                                      "cases": {
-                                                                                                                                                                                                                                                        "cases": [
-                                                                                                                                                                                                                                                          {
-                                                                                                                                                                                                                                                            "name": "primary",
-                                                                                                                                                                                                                                                            "term": {
-                                                                                                                                                                                                                                                              "lambda": {
-                                                                                                                                                                                                                                                                "body": {"variable": "p"},
-                                                                                                                                                                                                                                                                "domain": {"variable": "hydra.java.syntax.Primary"},
-                                                                                                                                                                                                                                                                "parameter": "p"}}}],
-                                                                                                                                                                                                                                                        "default": {"variable": "fallback"},
-                                                                                                                                                                                                                                                        "typeName": "hydra.java.syntax.PostfixExpression"}}}},
-                                                                                                                                                                                                                                                "domain": {"variable": "hydra.java.syntax.PostfixExpression"},
-                                                                                                                                                                                                                                                "parameter": "pf"}}}],
-                                                                                                                                                                                                                                        "default": {"variable": "fallback"},
-                                                                                                                                                                                                                                        "typeName": "hydra.java.syntax.UnaryExpressionNotPlusMinus"}}}},
-                                                                                                                                                                                                                                "domain": {"variable": "hydra.java.syntax.UnaryExpressionNotPlusMinus"},
-                                                                                                                                                                                                                                "parameter": "npm"}}}],
-                                                                                                                                                                                                                        "default": {"variable": "fallback"},
-                                                                                                                                                                                                                        "typeName": "hydra.java.syntax.UnaryExpression"}}}},
-                                                                                                                                                                                                                "domain": {"variable": "hydra.java.syntax.UnaryExpression"},
-                                                                                                                                                                                                                "parameter": "unary"}}}],
-                                                                                                                                                                                                        "default": {"variable": "fallback"},
-                                                                                                                                                                                                        "typeName": "hydra.java.syntax.MultiplicativeExpression"}}}},
-                                                                                                                                                                                                "domain": {"variable": "hydra.java.syntax.MultiplicativeExpression"},
-                                                                                                                                                                                                "parameter": "mul"}}}],
-                                                                                                                                                                                        "default": {"variable": "fallback"},
-                                                                                                                                                                                        "typeName": "hydra.java.syntax.AdditiveExpression"}}}},
-                                                                                                                                                                                "domain": {"variable": "hydra.java.syntax.AdditiveExpression"},
-                                                                                                                                                                                "parameter": "add"}}}],
-                                                                                                                                                                        "default": {"variable": "fallback"},
-                                                                                                                                                                        "typeName": "hydra.java.syntax.ShiftExpression"}}}},
-                                                                                                                                                                "domain": {"variable": "hydra.java.syntax.ShiftExpression"},
-                                                                                                                                                                "parameter": "shift"}}}],
-                                                                                                                                                        "default": {"variable": "fallback"},
-                                                                                                                                                        "typeName": "hydra.java.syntax.RelationalExpression"}}}},
-                                                                                                                                                "domain": {"variable": "hydra.java.syntax.RelationalExpression"},
-                                                                                                                                                "parameter": "rel"}}}],
-                                                                                                                                        "default": {"variable": "fallback"},
-                                                                                                                                        "typeName": "hydra.java.syntax.EqualityExpression"}}}},
-                                                                                                                                "function": {
-                                                                                                                                  "application": {
-                                                                                                                                    "argument": {
-                                                                                                                                      "application": {
-                                                                                                                                        "argument": {"literal": {"integer": {"int32": 1}}},
-                                                                                                                                        "function": {
-                                                                                                                                          "application": {
-                                                                                                                                            "argument": {
-                                                                                                                                              "application": {
-                                                                                                                                                "argument": {"variable": "eqs"},
-                                                                                                                                                "function": {
-                                                                                                                                                  "typeApplication": {
-                                                                                                                                                    "body": {"variable": "hydra.lib.lists.length"},
-                                                                                                                                                    "type": {"variable": "hydra.java.syntax.EqualityExpression"}}}}},
-                                                                                                                                            "function": {
-                                                                                                                                              "typeApplication": {
-                                                                                                                                                "body": {"variable": "hydra.lib.equality.equal"},
-                                                                                                                                                "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                                                                                                    "function": {
                                                                                                                                       "typeApplication": {
-                                                                                                                                        "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                                                                                        "type": {"variable": "hydra.java.syntax.Primary"}}}}}}}}}}},
+                                                                                                                                        "body": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {"variable": "hydra.lib.maybes.bind"},
+                                                                                                                                            "type": {"variable": "hydra.java.syntax.EqualityExpression"}}},
+                                                                                                                                        "type": {"variable": "hydra.java.syntax.Primary"}}}}}}}}},
+                                                                                                                        "domain": {"variable": "hydra.java.syntax.AndExpression"},
+                                                                                                                        "parameter": "andHead"}},
                                                                                                                     "function": {
                                                                                                                       "application": {
                                                                                                                         "argument": {
                                                                                                                           "application": {
-                                                                                                                            "argument": {"literal": {"integer": {"int32": 1}}},
+                                                                                                                            "argument": {"variable": "ands"},
                                                                                                                             "function": {
-                                                                                                                              "application": {
-                                                                                                                                "argument": {
-                                                                                                                                  "application": {
-                                                                                                                                    "argument": {"variable": "ands"},
-                                                                                                                                    "function": {
-                                                                                                                                      "typeApplication": {
-                                                                                                                                        "body": {"variable": "hydra.lib.lists.length"},
-                                                                                                                                        "type": {"variable": "hydra.java.syntax.AndExpression"}}}}},
-                                                                                                                                "function": {
-                                                                                                                                  "typeApplication": {
-                                                                                                                                    "body": {"variable": "hydra.lib.equality.equal"},
-                                                                                                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                                                                                                                "type": {"variable": "hydra.java.syntax.AndExpression"}}}}},
                                                                                                                         "function": {
                                                                                                                           "typeApplication": {
-                                                                                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                                                                            "type": {"variable": "hydra.java.syntax.Primary"}}}}}}}}}}},
+                                                                                                                            "body": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {"variable": "hydra.lib.maybes.bind"},
+                                                                                                                                "type": {"variable": "hydra.java.syntax.AndExpression"}}},
+                                                                                                                            "type": {"variable": "hydra.java.syntax.Primary"}}}}}}}}},
+                                                                                                            "domain": {"variable": "hydra.java.syntax.ExclusiveOrExpression"},
+                                                                                                            "parameter": "xorHead"}},
                                                                                                         "function": {
                                                                                                           "application": {
                                                                                                             "argument": {
                                                                                                               "application": {
-                                                                                                                "argument": {"literal": {"integer": {"int32": 1}}},
+                                                                                                                "argument": {"variable": "xors"},
                                                                                                                 "function": {
-                                                                                                                  "application": {
-                                                                                                                    "argument": {
-                                                                                                                      "application": {
-                                                                                                                        "argument": {"variable": "xors"},
-                                                                                                                        "function": {
-                                                                                                                          "typeApplication": {
-                                                                                                                            "body": {"variable": "hydra.lib.lists.length"},
-                                                                                                                            "type": {"variable": "hydra.java.syntax.ExclusiveOrExpression"}}}}},
-                                                                                                                    "function": {
-                                                                                                                      "typeApplication": {
-                                                                                                                        "body": {"variable": "hydra.lib.equality.equal"},
-                                                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                                                                                                    "type": {"variable": "hydra.java.syntax.ExclusiveOrExpression"}}}}},
                                                                                                             "function": {
                                                                                                               "typeApplication": {
-                                                                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                                                                "type": {"variable": "hydra.java.syntax.Primary"}}}}}}}}}}},
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {"variable": "hydra.lib.maybes.bind"},
+                                                                                                                    "type": {"variable": "hydra.java.syntax.ExclusiveOrExpression"}}},
+                                                                                                                "type": {"variable": "hydra.java.syntax.Primary"}}}}}}}}},
+                                                                                                "domain": {"variable": "hydra.java.syntax.InclusiveOrExpression"},
+                                                                                                "parameter": "iorHead"}},
                                                                                             "function": {
                                                                                               "application": {
                                                                                                 "argument": {
                                                                                                   "application": {
-                                                                                                    "argument": {"literal": {"integer": {"int32": 1}}},
+                                                                                                    "argument": {"variable": "iors"},
                                                                                                     "function": {
-                                                                                                      "application": {
-                                                                                                        "argument": {
-                                                                                                          "application": {
-                                                                                                            "argument": {"variable": "iors"},
-                                                                                                            "function": {
-                                                                                                              "typeApplication": {
-                                                                                                                "body": {"variable": "hydra.lib.lists.length"},
-                                                                                                                "type": {"variable": "hydra.java.syntax.InclusiveOrExpression"}}}}},
-                                                                                                        "function": {
-                                                                                                          "typeApplication": {
-                                                                                                            "body": {"variable": "hydra.lib.equality.equal"},
-                                                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                                                                                        "type": {"variable": "hydra.java.syntax.InclusiveOrExpression"}}}}},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                                                    "type": {"variable": "hydra.java.syntax.Primary"}}}}}}}}}}},
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"variable": "hydra.lib.maybes.bind"},
+                                                                                                        "type": {"variable": "hydra.java.syntax.InclusiveOrExpression"}}},
+                                                                                                    "type": {"variable": "hydra.java.syntax.Primary"}}}}}}}}},
+                                                                                    "domain": {"variable": "hydra.java.syntax.ConditionalAndExpression"},
+                                                                                    "parameter": "candHead"}},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {
                                                                                       "application": {
-                                                                                        "argument": {"literal": {"integer": {"int32": 1}}},
+                                                                                        "argument": {"variable": "cands"},
                                                                                         "function": {
-                                                                                          "application": {
-                                                                                            "argument": {
-                                                                                              "application": {
-                                                                                                "argument": {"variable": "cands"},
-                                                                                                "function": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {"variable": "hydra.lib.lists.length"},
-                                                                                                    "type": {"variable": "hydra.java.syntax.ConditionalAndExpression"}}}}},
-                                                                                            "function": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {"variable": "hydra.lib.equality.equal"},
-                                                                                                "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                          "typeApplication": {
+                                                                                            "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                                                                            "type": {"variable": "hydra.java.syntax.ConditionalAndExpression"}}}}},
                                                                                     "function": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                                        "type": {"variable": "hydra.java.syntax.Primary"}}}}}}}}}}},
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"variable": "hydra.lib.maybes.bind"},
+                                                                                            "type": {"variable": "hydra.java.syntax.ConditionalAndExpression"}}},
+                                                                                        "type": {"variable": "hydra.java.syntax.Primary"}}}}}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "fallback"},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                                                    "type": {"variable": "hydra.java.syntax.Primary"}}}}}}}}},
                                                                     "domain": {"variable": "hydra.java.syntax.ConditionalOrExpression"},
                                                                     "parameter": "cor"}}}],
                                                             "default": {"variable": "fallback"},
@@ -7817,9 +7825,12 @@
                         "argument": {"variable": "s"},
                         "function": {"variable": "hydra.lib.strings.toList"}}},
                     "function": {
-                      "typeApplication": {
-                        "body": {"variable": "hydra.lib.lists.tail"},
-                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                      "application": {
+                        "argument": {"literal": {"integer": {"int32": 1}}},
+                        "function": {
+                          "typeApplication": {
+                            "body": {"variable": "hydra.lib.lists.drop"},
+                            "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                 "function": {"variable": "hydra.lib.strings.fromList"}}},
             "domain": {"literal": {"string": {}}},
             "parameter": "s"}},

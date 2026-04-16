@@ -364,7 +364,7 @@ def encode_projection(namespaces: hydra.packaging.Namespaces[hydra.haskell.synta
 def encode_unwrap(namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.ModuleName], name: hydra.core.Name) -> Either[T0, hydra.haskell.syntax.Expression]:
     r"""Encode an unwrap term as a Haskell expression."""
 
-    return Right(cast(hydra.haskell.syntax.Expression, hydra.haskell.syntax.ExpressionVariable(hydra.haskell.utils.element_reference(namespaces, hydra.names.qname(hydra.lib.maybes.from_just(hydra.names.namespace_of(name)), hydra.haskell.utils.newtype_accessor_name(name))))))
+    return Right(cast(hydra.haskell.syntax.Expression, hydra.haskell.syntax.ExpressionVariable(hydra.haskell.utils.element_reference(namespaces, hydra.names.qname(hydra.lib.maybes.from_maybe((lambda : hydra.packaging.Namespace("")), hydra.names.namespace_of(name)), hydra.haskell.utils.newtype_accessor_name(name))))))
 
 def encode_case_expression(depth: int, namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.ModuleName], stmt: hydra.core.CaseStatement, scrutinee: hydra.haskell.syntax.Expression, cx: T0, g: hydra.graph.Graph) -> Either[hydra.errors.Error, hydra.haskell.syntax.Expression]:
     r"""Encode a Hydra case statement as a Haskell case expression with a given scrutinee."""
@@ -648,7 +648,7 @@ def encode_type_with_class_assertions(namespaces: hydra.packaging.Namespaces[hyd
         def to_pair(c: T4) -> tuple[T2, T4]:
             return (name(), c)
         return hydra.lib.lists.map((lambda x1: to_pair(x1)), hydra.lib.sets.to_list(cls_set()))
-    return hydra.lib.eithers.bind(adapt_type_to_haskell_and_encode(namespaces, typ, cx, g), (lambda htyp: hydra.lib.logic.if_else(hydra.lib.lists.null(assert_pairs()), (lambda : Right(htyp)), (lambda : (encoded := hydra.lib.lists.map((lambda x1: encode_assertion(x1)), assert_pairs()), hassert := hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(encoded), 1), (lambda : hydra.lib.lists.head(encoded)), (lambda : cast(hydra.haskell.syntax.Assertion, hydra.haskell.syntax.AssertionTuple(encoded)))), Right(cast(hydra.haskell.syntax.Type, hydra.haskell.syntax.TypeCtx(hydra.haskell.syntax.ContextType(hassert, htyp)))))[2]))))
+    return hydra.lib.eithers.bind(adapt_type_to_haskell_and_encode(namespaces, typ, cx, g), (lambda htyp: hydra.lib.logic.if_else(hydra.lib.lists.null(assert_pairs()), (lambda : Right(htyp)), (lambda : (encoded := hydra.lib.lists.map((lambda x1: encode_assertion(x1)), assert_pairs()), hassert := hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(encoded), 1), (lambda : hydra.lib.maybes.from_maybe((lambda : cast(hydra.haskell.syntax.Assertion, hydra.haskell.syntax.AssertionTuple(encoded))), hydra.lib.lists.maybe_head(encoded))), (lambda : cast(hydra.haskell.syntax.Assertion, hydra.haskell.syntax.AssertionTuple(encoded)))), Right(cast(hydra.haskell.syntax.Type, hydra.haskell.syntax.TypeCtx(hydra.haskell.syntax.ContextType(hassert, htyp)))))[2]))))
 
 def type_scheme_constraints_to_class_map(maybe_constraints: Maybe[FrozenDict[T0, hydra.core.TypeVariableMetadata]]) -> FrozenDict[T0, frozenset[hydra.classes.TypeClass]]:
     r"""Convert type scheme constraints to a map of type variables to typeclasses."""
@@ -824,7 +824,7 @@ def to_type_declarations_from(namespaces: hydra.packaging.Namespaces[hydra.haske
     def hname() -> hydra.haskell.syntax.Name:
         return hydra.haskell.utils.simple_name(lname())
     def decl_head(name: hydra.haskell.syntax.Name, vars_: frozenlist[hydra.core.Name]) -> hydra.haskell.syntax.DeclarationHead:
-        return hydra.lib.logic.if_else(hydra.lib.lists.null(vars_), (lambda : cast(hydra.haskell.syntax.DeclarationHead, hydra.haskell.syntax.DeclarationHeadSimple(name))), (lambda : (h := hydra.lib.lists.head(vars_), rest := hydra.lib.lists.tail(vars_), hvar := hydra.haskell.syntax.Variable(hydra.haskell.utils.simple_name(h.value)), cast(hydra.haskell.syntax.DeclarationHead, hydra.haskell.syntax.DeclarationHeadApplication(hydra.haskell.syntax.ApplicationDeclarationHead(decl_head(name, rest), hvar))))[3]))
+        return hydra.lib.maybes.from_maybe((lambda : cast(hydra.haskell.syntax.DeclarationHead, hydra.haskell.syntax.DeclarationHeadSimple(name))), hydra.lib.maybes.map((lambda p: (h := hydra.lib.pairs.first(p), rest := hydra.lib.pairs.second(p), hvar := hydra.haskell.syntax.Variable(hydra.haskell.utils.simple_name(h.value)), cast(hydra.haskell.syntax.DeclarationHead, hydra.haskell.syntax.DeclarationHeadApplication(hydra.haskell.syntax.ApplicationDeclarationHead(decl_head(name, rest), hvar))))[3]), hydra.lib.lists.uncons(vars_)))
     def newtype_cons(tname: hydra.core.Name, typ_: hydra.core.Type) -> Either[hydra.errors.Error, hydra.haskell.syntax.ConstructorWithComments]:
         @lru_cache(1)
         def hname0() -> hydra.haskell.syntax.Name:

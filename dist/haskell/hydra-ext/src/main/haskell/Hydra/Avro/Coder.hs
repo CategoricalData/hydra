@@ -305,14 +305,14 @@ avroHydraAdapter cx schema env0 =
                               _ -> Eithers.map (\t -> Core.TermMaybe (Just t)) (Coders.coderEncode (Coders.adapterCoder ad) cx1 v)),
                             Coders.coderDecode = (\cx1 -> \t -> case t of
                               Core.TermMaybe v1 -> Maybes.maybe (Right Model.ValueNull) (\term_ -> Coders.coderDecode (Coders.adapterCoder ad) cx1 term_) v1)}}, env1)))
-          in (Logic.ifElse (Equality.gt (Lists.length nonNulls) 1) (err cx "general-purpose unions are not yet supported") (Logic.ifElse (Lists.null nonNulls) (err cx "cannot generate the empty type") (Logic.ifElse hasNull (forOptional (Lists.head nonNulls)) (Eithers.bind (avroHydraAdapter cx (Lists.head nonNulls) env0) (\adEnv ->
+          in (Logic.ifElse (Equality.gt (Lists.length nonNulls) 1) (err cx "general-purpose unions are not yet supported") (Maybes.maybe (err cx "cannot generate the empty type") (\nonNullHead -> Logic.ifElse hasNull (forOptional nonNullHead) (Eithers.bind (avroHydraAdapter cx nonNullHead env0) (\adEnv ->
             let ad = Pairs.first adEnv
                 env1 = Pairs.second adEnv
             in (Right (Coders.Adapter {
               Coders.adapterIsLossy = (Coders.adapterIsLossy ad),
               Coders.adapterSource = schema,
               Coders.adapterTarget = (Coders.adapterTarget ad),
-              Coders.adapterCoder = (Coders.adapterCoder ad)}, env1)))))))
+              Coders.adapterCoder = (Coders.adapterCoder ad)}, env1))))) (Lists.maybeHead nonNulls)))
 
 -- | Convert an Avro qualified name to a Hydra name
 avroNameToHydraName :: Environment.AvroQualifiedName -> Core.Name
@@ -387,7 +387,7 @@ findAvroPrimaryKeyField :: t0 -> Environment.AvroQualifiedName -> [Schema.Field]
 findAvroPrimaryKeyField cx qname avroFields =
 
       let keys = Maybes.cat (Lists.map (\f -> primaryKeyE cx f) avroFields)
-      in (Logic.ifElse (Lists.null keys) (Right Nothing) (Logic.ifElse (Equality.equal (Lists.length keys) 1) (Right (Just (Lists.head keys))) (err cx (Strings.cat2 "multiple primary key fields for " (showQname qname)))))
+      in (Logic.ifElse (Lists.null keys) (Right Nothing) (Logic.ifElse (Equality.equal (Lists.length keys) 1) (Right (Lists.maybeHead keys)) (err cx (Strings.cat2 "multiple primary key fields for " (showQname qname)))))
 
 -- | Extract a foreign key annotation from a field, if present
 foreignKeyE :: t0 -> Schema.Field -> Either Errors.Error (Maybe Environment.AvroForeignKey)
@@ -429,11 +429,11 @@ parseAvroName :: Maybe String -> String -> Environment.AvroQualifiedName
 parseAvroName mns name_ =
 
       let parts = Strings.splitOn "." name_
-          local = Lists.last parts
+          local = Maybes.fromMaybe name_ (Lists.maybeLast parts)
       in (Logic.ifElse (Equality.equal (Lists.length parts) 1) (Environment.AvroQualifiedName {
         Environment.avroQualifiedNameNamespace = mns,
         Environment.avroQualifiedNameName = local}) (Environment.AvroQualifiedName {
-        Environment.avroQualifiedNameNamespace = (Just (Strings.intercalate "." (Lists.init parts))),
+        Environment.avroQualifiedNameNamespace = (Maybes.map (\ps -> Strings.intercalate "." ps) (Lists.maybeInit parts)),
         Environment.avroQualifiedNameName = local}))
 
 -- | Create a name constructor from a pattern string

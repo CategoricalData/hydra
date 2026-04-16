@@ -15,7 +15,6 @@
           hydra_lib_math_ceiling
           hydra_lib_math_cos
           hydra_lib_math_cosh
-          hydra_lib_math_div
           hydra_lib_math_e
           hydra_lib_math_even
           hydra_lib_math_exp
@@ -30,7 +29,6 @@
           hydra_lib_math_maybe_rem
           hydra_lib_math_maybe_succ
           hydra_lib_math_min
-          hydra_lib_math_mod
           hydra_lib_math_mul
           hydra_lib_math_mul_float64
           hydra_lib_math_negate
@@ -38,9 +36,7 @@
           hydra_lib_math_odd
           hydra_lib_math_pi
           hydra_lib_math_pow
-          hydra_lib_math_pred
           hydra_lib_math_range
-          hydra_lib_math_rem
           hydra_lib_math_round
           hydra_lib_math_round_bigfloat
           hydra_lib_math_round_float32
@@ -51,7 +47,6 @@
           hydra_lib_math_sqrt
           hydra_lib_math_sub
           hydra_lib_math_sub_float64
-          hydra_lib_math_succ
           hydra_lib_math_tan
           hydra_lib_math_tanh
           hydra_lib_math_truncate)
@@ -157,12 +152,6 @@
     (define hydra_lib_math_cosh
       (lambda (x) (cosh x)))
 
-    ;; div :: Int -> Int -> Int  (floor division)
-    (define hydra_lib_math_div
-      (lambda (a)
-        (lambda (b)
-          (floor-quotient a b))))
-
     ;; e :: Double
     (define hydra_lib_math_e (exp 1))
 
@@ -250,12 +239,6 @@
         (lambda (b)
           (min a b))))
 
-    ;; mod :: Int -> Int -> Int  (floor mod)
-    (define hydra_lib_math_mod
-      (lambda (a)
-        (lambda (b)
-          (floor-remainder a b))))
-
     ;; mul :: Int -> Int -> Int
     (define hydra_lib_math_mul
       (lambda (a)
@@ -303,10 +286,6 @@
                       result
                       +nan.0))))))))
 
-    ;; pred :: Int -> Int
-    (define hydra_lib_math_pred
-      (lambda (n) (- n 1)))
-
     ;; range :: Int -> Int -> [Int]  (inclusive both ends)
     (define hydra_lib_math_range
       (lambda (start)
@@ -315,12 +294,6 @@
             (if (> i end)
                 (reverse acc)
                 (loop (+ i 1) (cons i acc)))))))
-
-    ;; rem :: Int -> Int -> Int  (truncating remainder)
-    (define hydra_lib_math_rem
-      (lambda (a)
-        (lambda (b)
-          (truncate-remainder a b))))
 
     ;; round :: Double -> Double
     ;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
@@ -382,10 +355,6 @@
       (lambda (a)
         (lambda (b)
           (- (* 1.0 a) (* 1.0 b)))))
-
-    ;; succ :: Int -> Int
-    (define hydra_lib_math_succ
-      (lambda (n) (+ n 1)))
 
     ;; tan :: Double -> Double
     (define hydra_lib_math_tan

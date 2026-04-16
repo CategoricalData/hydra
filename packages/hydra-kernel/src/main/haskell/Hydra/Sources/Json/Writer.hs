@@ -96,6 +96,7 @@ module_ = Module ns definitions
     ns = Namespace "hydra.json.writer"
     definitions = [
       toDefinition colonOp,
+      toDefinition hexByte,
       toDefinition jsonString,
       toDefinition keyValueToExpr,
       toDefinition printJson,
@@ -123,15 +124,26 @@ tabCode = int32 9         -- '\t'
 hexDigits :: TTerm String
 hexDigits = string "0123456789abcdef"
 
+-- | Encode a byte value (0..255) as a two-character lowercase hex string.
+-- For out-of-range inputs (unreachable for a real byte), substitutes "?" for
+-- each invalid nibble so output remains a valid 2-character string.
+hexByte :: TTermDefinition (Int -> String)
+hexByte = jsonSerdeDefinition "hexByte" $
+  doc "Encode a byte (0..255) as a two-character lowercase hex string. Non-byte inputs yield placeholder '?' characters." $
+  "c" ~>
+  "nibble" <~ ("i" ~> Maybes.fromMaybe (string "?") (Maybes.map
+    ("ch" ~> Strings.fromList (Lists.pure $ var "ch"))
+    (Strings.maybeCharAt (var "i") hexDigits))) $
+  "hi" <~ (var "nibble" @@ Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "c") (int32 16))) $
+  "lo" <~ (var "nibble" @@ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "c") (int32 16))) $
+  var "hi" ++ var "lo"
+
 jsonString :: TTermDefinition (String -> String)
 jsonString = jsonSerdeDefinition "jsonString" $
   doc "Escape and quote a string for JSON output" $
   "s" ~>
-  -- hexEscape: encode a control character as \\u00XX
-  "hexEscape" <~ ("c" ~>
-    "hi" <~ Strings.fromList (Lists.pure (Strings.charAt (Math.div (var "c") (int32 16)) hexDigits)) $
-    "lo" <~ Strings.fromList (Lists.pure (Strings.charAt (Math.mod (var "c") (int32 16)) hexDigits)) $
-    string "\\u00" ++ var "hi" ++ var "lo") $
+  -- hexEscape: encode a byte as \\u00XX using the total hexByte helper.
+  "hexEscape" <~ ("c" ~> string "\\u00" ++ (hexByte @@ var "c")) $
   -- escape function takes a codepoint (Int) and returns a String
   "escape" <~ ("c" ~>
     Logic.ifElse (Equality.equal (var "c") quoteCode)

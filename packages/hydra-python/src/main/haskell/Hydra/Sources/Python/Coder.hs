@@ -569,8 +569,8 @@ encodeApplicationInner :: TTermDefinition (Context -> PyHelpers.PythonEnvironmen
 encodeApplicationInner = def "encodeApplicationInner" $
   doc "Inner helper for encodeApplication" $
   "cx" ~> "env" ~> "fun" ~> "hargs" ~> "rargs" ~>
-    "firstArg" <~ (Lists.head $ var "hargs") $
-    "restArgs" <~ (Lists.tail $ var "hargs") $
+    "firstArg" <~ (Maybes.fromMaybe (PyUtils.pyNameToPyExpression @@ (PyDsl.name $ string "")) (Lists.maybeHead $ var "hargs")) $
+    "restArgs" <~ (Lists.drop (int32 1) $ var "hargs") $
     "withRest" <~ ("e" ~>
       Logic.ifElse (Lists.null $ var "restArgs")
         (var "e")
@@ -702,7 +702,11 @@ encodeBindingAs = def "encodeBindingAs" $
           ("mcs" <~ (extractCaseElimination @@ var "term1") $
             Maybes.maybe
               -- Default case: not a case elimination, encode term normally and take first statement
-              (Eithers.map ("stmts" ~> Lists.head (var "stmts")) (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "term1"))
+              (Eithers.bind (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "term1")
+                ("stmts" ~> Maybes.maybe
+                  (left $ Error.errorOther $ Error.otherError $ string "encodeTermMultiline returned no statements")
+                  (unaryFunction right)
+                  (Lists.maybeHead (var "stmts"))))
               -- Case elimination function - encode as function with match statement
           ("cs" ~>
             "tname" <~ (Core.caseStatementTypeName $ var "cs") $
@@ -744,7 +748,11 @@ encodeBindingAs = def "encodeBindingAs" $
           -- No lambda params, fall back to case elimination check
           ("mcs" <~ (extractCaseElimination @@ var "term1") $
             Maybes.maybe
-              (Eithers.map ("stmts" ~> Lists.head (var "stmts")) (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "term1"))
+              (Eithers.bind (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "term1")
+                ("stmts" ~> Maybes.maybe
+                  (left $ Error.errorOther $ Error.otherError $ string "encodeTermMultiline returned no statements")
+                  (unaryFunction right)
+                  (Lists.maybeHead (var "stmts"))))
               ("cs" ~>
                 "tname" <~ (Core.caseStatementTypeName $ var "cs") $
                 "dflt" <~ (Core.caseStatementDefault $ var "cs") $
@@ -793,8 +801,8 @@ encodeBindingAs = def "encodeBindingAs" $
             "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
             -- Separate captured variables (all but last) from the match parameter (last).
             -- The last lambda parameter is the case expression's own parameter.
-            "capturedVarNames" <~ (Lists.init $ var "lambdaParams") $
-            "matchLambdaParam" <~ (Lists.last $ var "lambdaParams") $
+            "capturedVarNames" <~ (Maybes.fromMaybe (list ([] :: [TTerm Name])) (Lists.maybeInit $ var "lambdaParams")) $
+            "matchLambdaParam" <~ (Maybes.fromMaybe (wrap _Name $ string "") (Lists.maybeLast $ var "lambdaParams")) $
             -- Create parameters for captured variables only
             "capturedParams" <~ (Lists.map
               ("n" ~> Phantoms.record Py._ParamNoDefault [
@@ -1674,7 +1682,7 @@ encodeTermMultiline = def "encodeTermMultiline" $
     -- Check if exactly one argument for potential case statement
     Logic.ifElse (Equality.equal (Lists.length $ var "args") (int32 1))
       -- Try to handle case statement specially
-      ("arg" <~ (Lists.head $ var "args") $
+      ("arg" <~ (Maybes.fromMaybe Core.termUnit (Lists.maybeHead $ var "args")) $
         cases _Term (Strip.deannotateAndDetypeTerm @@ var "body") (Just $ var "dfltLogic") [
           _Term_cases>>: "cs" ~>
             "tname" <~ (Core.caseStatementTypeName $ var "cs") $
@@ -1731,7 +1739,7 @@ encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
         "body2" <~ (Pairs.second $ var "gathered2") $
         Logic.ifElse (Equality.equal (Lists.length $ var "args2") (int32 1))
           -- Single argument: try to match as case statement
-          ("arg" <~ (Lists.head $ var "args2") $
+          ("arg" <~ (Maybes.fromMaybe Core.termUnit (Lists.maybeHead $ var "args2")) $
             cases _Term (Strip.deannotateAndDetypeTerm @@ var "body2") (Just $
               -- Default: not a case statement, encode as return
               "expr" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
@@ -2556,7 +2564,7 @@ isCaseStatementApplication = def "isCaseStatementApplication" $
     -- Check for exactly one argument
     Logic.ifElse (Logic.not $ Equality.equal (Lists.length $ var "args") (int32 1))
       nothing
-      ("arg" <~ (Lists.head $ var "args") $
+      ("arg" <~ (Maybes.fromMaybe Core.termUnit (Lists.maybeHead $ var "args")) $
         cases _Term (Strip.deannotateAndDetypeTerm @@ var "body") (Just nothing) [
           _Term_cases>>: "cs" ~>
             just $ Phantoms.tuple4
@@ -4141,25 +4149,27 @@ wrapInNullaryLambda = def "wrapInNullaryLambda" $
 wrapLazyArguments :: TTermDefinition (Name -> [Py.Expression] -> [Py.Expression])
 wrapLazyArguments = def "wrapLazyArguments" $
   doc "Wrap specific arguments in nullary lambdas for primitives that require lazy evaluation" $
-  "name" ~> "args" ~>
+  "name" ~> "args" ~> lets [
+    "dummyExpr">: PyUtils.pyNameToPyExpression @@ (PyDsl.name $ string ""),
+    "argAt">: "i" ~> Maybes.fromMaybe (var "dummyExpr") (Lists.maybeAt (var "i") (var "args"))] $
     Logic.ifElse
       (Logic.and
         (Equality.equal (var "name") (Core.name $ string "hydra.lib.logic.ifElse"))
         (Equality.equal (Lists.length (var "args")) (int32 3)))
       -- For if_else, wrap arguments 2 and 3 (the then/else branches)
       (list [
-        Lists.at (int32 0) (var "args"),
-        wrapInNullaryLambda @@ (Lists.at (int32 1) (var "args")),
-        wrapInNullaryLambda @@ (Lists.at (int32 2) (var "args"))])
+        var "argAt" @@ int32 0,
+        wrapInNullaryLambda @@ (var "argAt" @@ int32 1),
+        wrapInNullaryLambda @@ (var "argAt" @@ int32 2)])
       (Logic.ifElse
         (Logic.and
           (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.cases"))
           (Equality.equal (Lists.length (var "args")) (int32 3)))
         -- For cases, wrap argument 2 (the Nothing branch) for lazy evaluation
         (list [
-          Lists.at (int32 0) (var "args"),
-          wrapInNullaryLambda @@ (Lists.at (int32 1) (var "args")),
-          Lists.at (int32 2) (var "args")])
+          var "argAt" @@ int32 0,
+          wrapInNullaryLambda @@ (var "argAt" @@ int32 1),
+          var "argAt" @@ int32 2])
         (Logic.ifElse
           (Logic.and
             (Logic.or
@@ -4167,6 +4177,6 @@ wrapLazyArguments = def "wrapLazyArguments" $
               (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.fromMaybe")))
             (Equality.gte (Lists.length (var "args")) (int32 1)))
           -- For maybe/fromMaybe, wrap argument 1 (the default value)
-          (Lists.cons (wrapInNullaryLambda @@ (Lists.at (int32 0) (var "args")))
-                      (Lists.tail (var "args")))
+          (Lists.cons (wrapInNullaryLambda @@ (var "argAt" @@ int32 0))
+                      (Lists.drop (int32 1) (var "args")))
           (var "args")))

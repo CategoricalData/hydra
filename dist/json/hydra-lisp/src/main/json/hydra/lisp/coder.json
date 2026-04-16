@@ -1581,14 +1581,14 @@
                                                                                           "lambda": {
                                                                                             "body": {
                                                                                               "application": {
-                                                                                                "argument": {"variable": "sorted"},
-                                                                                                "function": {
+                                                                                                "argument": {
                                                                                                   "application": {
-                                                                                                    "argument": {
-                                                                                                      "lambda": {
-                                                                                                        "body": {
-                                                                                                          "application": {
-                                                                                                            "argument": {
+                                                                                                    "argument": {"variable": "sorted"},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "lambda": {
+                                                                                                            "body": {
                                                                                                               "application": {
                                                                                                                 "argument": {"variable": "nameToBinding"},
                                                                                                                 "function": {
@@ -1601,28 +1601,19 @@
                                                                                                                             "body": {"variable": "hydra.lib.maps.lookup"},
                                                                                                                             "type": {"variable": "hydra.core.Name"}}},
                                                                                                                         "type": {"variable": "hydra.core.Binding"}}}}}}},
-                                                                                                            "function": {
-                                                                                                              "application": {
-                                                                                                                "argument": {
-                                                                                                                  "application": {
-                                                                                                                    "argument": {"variable": "bindings"},
-                                                                                                                    "function": {
-                                                                                                                      "typeApplication": {
-                                                                                                                        "body": {"variable": "hydra.lib.lists.head"},
-                                                                                                                        "type": {"variable": "hydra.core.Binding"}}}}},
-                                                                                                                "function": {
-                                                                                                                  "typeApplication": {
-                                                                                                                    "body": {"variable": "hydra.lib.maybes.fromMaybe"},
-                                                                                                                    "type": {"variable": "hydra.core.Binding"}}}}}}},
-                                                                                                        "domain": {"variable": "hydra.core.Name"},
-                                                                                                        "parameter": "name"}},
-                                                                                                    "function": {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {
+                                                                                                            "domain": {"variable": "hydra.core.Name"},
+                                                                                                            "parameter": "name"}},
+                                                                                                        "function": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"variable": "hydra.lib.lists.map"},
-                                                                                                            "type": {"variable": "hydra.core.Name"}}},
-                                                                                                        "type": {"variable": "hydra.core.Binding"}}}}}}},
+                                                                                                            "body": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"variable": "hydra.lib.lists.map"},
+                                                                                                                "type": {"variable": "hydra.core.Name"}}},
+                                                                                                            "type": {"maybe": {"variable": "hydra.core.Binding"}}}}}}}},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"variable": "hydra.lib.maybes.cat"},
+                                                                                                    "type": {"variable": "hydra.core.Binding"}}}}},
                                                                                             "domain": {"list": {"variable": "hydra.core.Name"}},
                                                                                             "parameter": "sorted"}},
                                                                                         "function": {
@@ -1858,17 +1849,20 @@
                                                                                                                               "application": {
                                                                                                                                 "argument": {
                                                                                                                                   "application": {
-                                                                                                                                    "argument": {
+                                                                                                                                    "argument": {"literal": {"integer": {"int32": 1}}},
+                                                                                                                                    "function": {
                                                                                                                                       "application": {
-                                                                                                                                        "argument": {"variable": "bindings"},
+                                                                                                                                        "argument": {
+                                                                                                                                          "application": {
+                                                                                                                                            "argument": {"variable": "bindings"},
+                                                                                                                                            "function": {
+                                                                                                                                              "typeApplication": {
+                                                                                                                                                "body": {"variable": "hydra.lib.lists.length"},
+                                                                                                                                                "type": {"variable": "hydra.core.Binding"}}}}},
                                                                                                                                         "function": {
                                                                                                                                           "typeApplication": {
-                                                                                                                                            "body": {"variable": "hydra.lib.lists.tail"},
-                                                                                                                                            "type": {"variable": "hydra.core.Binding"}}}}},
-                                                                                                                                    "function": {
-                                                                                                                                      "typeApplication": {
-                                                                                                                                        "body": {"variable": "hydra.lib.lists.null"},
-                                                                                                                                        "type": {"variable": "hydra.core.Binding"}}}}},
+                                                                                                                                            "body": {"variable": "hydra.lib.equality.lte"},
+                                                                                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                                                                                                 "function": {
                                                                                                                                   "typeApplication": {
                                                                                                                                     "body": {"variable": "hydra.lib.logic.ifElse"},

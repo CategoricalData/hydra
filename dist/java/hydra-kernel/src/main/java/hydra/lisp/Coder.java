@@ -299,13 +299,11 @@ public interface Coder {
           bindings)));
         hydra.util.Lazy<java.util.List<hydra.core.Binding>> sortedBindings = new hydra.util.Lazy<>(() -> hydra.lib.eithers.Either.apply(
           (java.util.function.Function<java.util.List<java.util.List<hydra.core.Name>>, java.util.List<hydra.core.Binding>>) (ignored -> bindings),
-          (java.util.function.Function<java.util.List<hydra.core.Name>, java.util.List<hydra.core.Binding>>) (sorted -> hydra.lib.lists.Map.apply(
-            (java.util.function.Function<hydra.core.Name, hydra.core.Binding>) (name -> hydra.lib.maybes.FromMaybe.applyLazy(
-              () -> hydra.lib.lists.Head.apply(bindings),
-              hydra.lib.maps.Lookup.apply(
-                name,
-                nameToBinding.get()))),
-            sorted)),
+          (java.util.function.Function<java.util.List<hydra.core.Name>, java.util.List<hydra.core.Binding>>) (sorted -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+            (java.util.function.Function<hydra.core.Name, hydra.util.Maybe<hydra.core.Binding>>) (name -> hydra.lib.maps.Lookup.apply(
+              name,
+              nameToBinding.get())),
+            sorted))),
           sortResult.get()));
         return hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.MapList.apply(
@@ -422,7 +420,9 @@ public interface Coder {
               isRecursive.get(),
               () -> new hydra.lisp.syntax.LetKind.Recursive(),
               () -> hydra.lib.logic.IfElse.lazy(
-                hydra.lib.lists.Null.apply(hydra.lib.lists.Tail.apply(bindings)),
+                hydra.lib.equality.Lte.apply(
+                  hydra.lib.lists.Length.apply(bindings),
+                  1),
                 () -> new hydra.lisp.syntax.LetKind.Parallel(),
                 () -> new hydra.lisp.syntax.LetKind.Sequential())));
             hydra.util.Lazy<java.util.List<hydra.lisp.syntax.LetBinding>> lispBindings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
