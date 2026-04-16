@@ -1443,6 +1443,9 @@ def extend_meta_for_type(top_level: bool, is_term_annot: bool, typ: hydra.core.T
                 return meta_with_subtypes()
     def _hoist_meta_with_subtypes_body_2(v1):
         match v1:
+            case hydra.core.LiteralTypeDecimal():
+                return set_meta_uses_decimal(meta_with_subtypes(), True)
+
             case hydra.core.LiteralTypeFloat(value=ft):
                 return _hoist_meta_with_subtypes_body_1(ft)
 
@@ -1535,6 +1538,9 @@ def extend_meta_for_term(top_level: bool, meta0: hydra.python.environment.Python
                     return meta
         def _hoist_step_2(meta, v1):
             match v1:
+                case hydra.core.LiteralDecimal():
+                    return set_meta_uses_decimal(meta, True)
+
                 case hydra.core.LiteralFloat(value=fv):
                     return _hoist_step_1(meta, fv)
 

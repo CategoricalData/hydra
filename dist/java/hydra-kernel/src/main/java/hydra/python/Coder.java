@@ -3588,6 +3588,13 @@ public interface Coder {
           }
 
           @Override
+          public hydra.python.environment.PythonModuleMetadata visit(hydra.core.Literal.Decimal ignored) {
+            return hydra.python.Coder.setMetaUsesDecimal(
+              meta,
+              true);
+          }
+
+          @Override
           public hydra.python.environment.PythonModuleMetadata visit(hydra.core.Literal.Float_ fv) {
             return (fv).value.accept(new hydra.core.FloatValue.PartialVisitor<>() {
               @Override
@@ -3719,6 +3726,13 @@ public interface Coder {
           @Override
           public hydra.python.environment.PythonModuleMetadata otherwise(hydra.core.LiteralType instance) {
             return metaWithSubtypes.get();
+          }
+
+          @Override
+          public hydra.python.environment.PythonModuleMetadata visit(hydra.core.LiteralType.Decimal ignored) {
+            return hydra.python.Coder.setMetaUsesDecimal(
+              metaWithSubtypes.get(),
+              true);
           }
 
           @Override

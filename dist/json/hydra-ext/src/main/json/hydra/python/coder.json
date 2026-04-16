@@ -23050,6 +23050,19 @@
                                                               "cases": {
                                                                 "cases": [
                                                                   {
+                                                                    "name": "decimal",
+                                                                    "term": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "argument": {"literal": {"boolean": true}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "meta"},
+                                                                                "function": {"variable": "hydra.python.coder.setMetaUsesDecimal"}}}}},
+                                                                        "domain": {"literal": {"decimal": {}}},
+                                                                        "parameter": "_"}}},
+                                                                  {
                                                                     "name": "float",
                                                                     "term": {
                                                                       "lambda": {
@@ -23472,6 +23485,19 @@
                                                                 "function": {
                                                                   "cases": {
                                                                     "cases": [
+                                                                      {
+                                                                        "name": "decimal",
+                                                                        "term": {
+                                                                          "lambda": {
+                                                                            "body": {
+                                                                              "application": {
+                                                                                "argument": {"literal": {"boolean": true}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "metaWithSubtypes"},
+                                                                                    "function": {"variable": "hydra.python.coder.setMetaUsesDecimal"}}}}},
+                                                                            "domain": {"unit": {}},
+                                                                            "parameter": "_"}}},
                                                                       {
                                                                         "name": "float",
                                                                         "term": {

@@ -3,6 +3,7 @@
 r"""Term encoders for hydra.json.model."""
 
 from __future__ import annotations
+from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import FrozenDict, frozenlist
 from typing import cast

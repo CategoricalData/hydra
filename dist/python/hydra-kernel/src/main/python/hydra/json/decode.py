@@ -4,6 +4,7 @@ r"""JSON decoding for Hydra terms. Converts JSON Values to Terms using Either fo
 
 from __future__ import annotations
 from collections.abc import Callable
+from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Just, Left, Maybe, Nothing, Right, frozenlist
 from typing import cast

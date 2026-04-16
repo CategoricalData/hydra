@@ -3,6 +3,7 @@
 r"""A JSON syntax model. See the BNF at https://www.json.org."""
 
 from __future__ import annotations
+from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import FrozenDict, Node, frozenlist
 from typing import TypeAlias, cast
