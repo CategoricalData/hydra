@@ -74,6 +74,7 @@ import           Prelude hiding ((++))
 import qualified Data.Int                                  as I
 import qualified Data.List                                 as L
 import qualified Data.Map                                  as M
+import qualified Data.Scientific                           as Sci
 import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
@@ -216,7 +217,7 @@ expectArrayE = define "expectArrayE" $
     cases JM._Value (var "value") Nothing [
       JM._Value_array>>: lambda "v" $ Phantoms.right (var "v")]
 
-expectNumberE :: TTermDefinition (Context -> JM.Value -> Result Double)
+expectNumberE :: TTermDefinition (Context -> JM.Value -> Result Sci.Scientific)
 expectNumberE = define "expectNumberE" $
   doc "Extract a JSON number or return an error" $
   lambda "cx" $ lambda "value" $
@@ -253,7 +254,7 @@ requireArrayE = define "requireArrayE" $
     Eithers.bind (requireE @@ var "cx" @@ var "fname" @@ var "m")
       (lambda "v" $ expectArrayE @@ var "cx" @@ var "v")
 
-requireNumberE :: TTermDefinition (Context -> String -> M.Map String JM.Value -> Result Double)
+requireNumberE :: TTermDefinition (Context -> String -> M.Map String JM.Value -> Result Sci.Scientific)
 requireNumberE = define "requireNumberE" $
   doc "Look up a required number attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
@@ -479,7 +480,7 @@ encodeFixedE = define "encodeFixed" $
   lambda "f" $
     list [
       pair (string "type") (inject JM._Value JM._Value_string (string "fixed")),
-      pair (string "size") (inject JM._Value JM._Value_number (Literals.bigintToBigfloat (Literals.int32ToBigint (project Avro._Fixed Avro._Fixed_size @@ var "f"))))]
+      pair (string "size") (inject JM._Value JM._Value_number (Literals.bigintToDecimal (Literals.int32ToBigint (project Avro._Fixed Avro._Fixed_size @@ var "f"))))]
 
 encodeRecordE :: TTermDefinition (Avro.Record -> [(String, JM.Value)])
 encodeRecordE = define "encodeRecord" $
@@ -621,7 +622,7 @@ decodeFixed = define "decodeFixed" $
   lambda "cx" $ lambda "m" $
     Eithers.bind (requireNumberE @@ var "cx" @@ avro_size @@ var "m")
       (lambda "n" $
-        lets ["size">: Literals.bigintToInt32 (Literals.bigfloatToBigint (var "n"))] $
+        lets ["size">: Literals.bigintToInt32 (Literals.decimalToBigint (var "n"))] $
         Phantoms.right $ inject Avro._NamedType Avro._NamedType_fixed $
           record Avro._Fixed [
             Avro._Fixed_size>>: var "size"])
