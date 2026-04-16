@@ -20,6 +20,7 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Build the Coq dependent-function term `forall (_ : dom), cod` used as the arrow type
 coqArrow :: Syntax.Term -> Syntax.Term -> Syntax.Term

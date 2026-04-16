@@ -76,7 +76,7 @@ runDemo jsonDir outDir = do
   -- Step 3: Load kernel modules from JSON and encode as RDF
   putStrLn "Step 3: Loading kernel modules from JSON and encoding as RDF..."
   dataStart <- getCPUTime
-  kernelNamespaces <- readManifestField jsonDir "kernelModules"
+  kernelNamespaces <- readManifestField jsonDir "mainModules"
   -- Load the first type-defining modules (those whose types we encoded as shapes)
   let typeNs = take 15 kernelNamespaces
   loadedModules <- loadModulesFromJson jsonDir kernelModules typeNs
