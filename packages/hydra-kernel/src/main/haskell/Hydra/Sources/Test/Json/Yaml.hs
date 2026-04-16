@@ -38,7 +38,7 @@ ns = Namespace "hydra.test.json.yaml"
 module_ :: Module
 module_ = Module ns definitions
     [Namespace "hydra.json.writer", Namespace "hydra.json.yaml.encode", Namespace "hydra.json.yaml.decode"]
-    kernelTypesNamespaces
+    (Namespace "hydra.yaml.model" : kernelTypesNamespaces)
     (Just "Round-trip test cases for the JSON<->YAML bridge, focused on decimal precision")
   where
     definitions = [
