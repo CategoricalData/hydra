@@ -417,7 +417,11 @@ encodeLetAsNative = def "encodeLetAsNative" $
             (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b"))))
       (boolean False)
       (var "bindings")) $
-    "isRecursive" <~ (var "hasSelfRef") $
+    "isClojure2" <~ (cases L._Dialect (var "dialect") (Just $ boolean False)
+      [L._Dialect_clojure>>: constant $ boolean True]) $
+    "isRecursive" <~ (Logic.ifElse (var "isClojure2")
+      (var "hasCrossRefs")
+      (var "hasSelfRef")) $
     "letKind" <~ (Logic.ifElse (var "isRecursive")
       (inject L._LetKind L._LetKind_recursive unit)
       (Logic.ifElse (Lists.null (Lists.tail (var "bindings")))
