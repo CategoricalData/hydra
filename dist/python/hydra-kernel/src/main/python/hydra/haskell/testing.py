@@ -46,7 +46,7 @@ def add_namespaces_to_namespaces(ns0: hydra.packaging.Namespaces[hydra.haskell.s
     def new_namespaces() -> frozenset[hydra.packaging.Namespace]:
         return hydra.lib.sets.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda x1: hydra.names.namespace_of(x1)), hydra.lib.sets.to_list(names))))
     def to_module_name(namespace: hydra.packaging.Namespace) -> hydra.haskell.syntax.ModuleName:
-        return hydra.haskell.syntax.ModuleName(hydra.formatting.capitalize(hydra.lib.lists.last(hydra.lib.strings.split_on(".", namespace.value))))
+        return hydra.haskell.syntax.ModuleName(hydra.formatting.capitalize(hydra.lib.maybes.from_maybe((lambda : namespace.value), hydra.lib.lists.maybe_last(hydra.lib.strings.split_on(".", namespace.value)))))
     @lru_cache(1)
     def new_mappings() -> FrozenDict[hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName]:
         return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda ns_: (ns_, to_module_name(ns_))), hydra.lib.sets.to_list(new_namespaces())))
@@ -97,7 +97,7 @@ def find_haskell_imports(namespaces: hydra.packaging.Namespaces[hydra.haskell.sy
         return namespaces.mapping
     @lru_cache(1)
     def filtered() -> FrozenDict[hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName]:
-        return hydra.lib.maps.filter_with_key((lambda ns_, _v: hydra.lib.logic.not_(hydra.lib.equality.equal(hydra.lib.lists.head(hydra.lib.strings.split_on("hydra.test.", ns_.value)), ""))), mapping_())
+        return hydra.lib.maps.filter_with_key((lambda ns_, _v: hydra.lib.logic.not_(hydra.lib.equality.equal(hydra.lib.maybes.from_maybe((lambda : ""), hydra.lib.lists.maybe_head(hydra.lib.strings.split_on("hydra.test.", ns_.value))), ""))), mapping_())
     return hydra.lib.lists.map((lambda entry: hydra.lib.strings.cat(("import qualified ", hydra.lib.strings.intercalate(".", hydra.lib.lists.map(hydra.formatting.capitalize, hydra.lib.strings.split_on(".", hydra.lib.pairs.first(entry).value))), " as ", hydra.lib.pairs.second(entry).value))), hydra.lib.maps.to_list(filtered()))
 
 def namespace_to_module_name(ns_: hydra.packaging.Namespace) -> str:

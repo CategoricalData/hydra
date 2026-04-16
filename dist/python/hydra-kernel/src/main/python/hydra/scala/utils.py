@@ -57,7 +57,7 @@ def scala_escape_name(s: str) -> str:
         return hydra.lib.logic.if_else(hydra.lib.equality.equal(sanitized2(), "toString"), (lambda : "toString_"), (lambda : sanitized2()))
     @lru_cache(1)
     def needs_backticks() -> bool:
-        return hydra.lib.logic.or_(hydra.lib.sets.member(sanitized3(), scala_reserved_words), hydra.lib.logic.and_(hydra.lib.equality.gt(hydra.lib.strings.length(sanitized3()), 0), hydra.lib.equality.equal(hydra.lib.strings.char_at(hydra.lib.math.sub(hydra.lib.strings.length(sanitized3()), 1), sanitized3()), 95)))
+        return hydra.lib.logic.or_(hydra.lib.sets.member(sanitized3(), scala_reserved_words), hydra.lib.logic.and_(hydra.lib.equality.gt(hydra.lib.strings.length(sanitized3()), 0), hydra.lib.equality.equal(hydra.lib.maybes.from_maybe((lambda : 0), hydra.lib.strings.maybe_char_at(hydra.lib.math.sub(hydra.lib.strings.length(sanitized3()), 1), sanitized3())), 95)))
     return hydra.lib.logic.if_else(needs_backticks(), (lambda : hydra.lib.strings.cat(("`", sanitized3(), "`"))), (lambda : sanitized3()))
 
 def scala_type_name(qualify: bool, name: hydra.core.Name) -> str:
@@ -168,7 +168,7 @@ def sprim(name: hydra.core.Name) -> hydra.scala.syntax.Data:
         return hydra.names.qualify_name(name)
     @lru_cache(1)
     def prefix() -> str:
-        return hydra.lib.maybes.from_just(qname().namespace).value
+        return hydra.lib.maybes.from_maybe((lambda : hydra.packaging.Namespace("")), qname().namespace).value
     @lru_cache(1)
     def local() -> str:
         return scala_escape_name(qname().local)

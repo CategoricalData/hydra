@@ -6273,65 +6273,108 @@
                               "application": {
                                 "argument": {"variable": "es"},
                                 "function": {
-                                  "application": {
-                                    "argument": {"variable": "hydra.python.serde.encodeStarNamedExpression"},
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.lists.map"},
-                                            "type": {"variable": "hydra.python.syntax.StarNamedExpression"}}},
-                                        "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                    "type": {"variable": "hydra.python.syntax.StarNamedExpression"}}}}},
                             "function": {
                               "application": {
-                                "argument": {"literal": {"boolean": false}},
-                                "function": {"variable": "hydra.serialization.parenList"}}}}},
+                                "argument": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "es"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "hydra.python.serde.encodeStarNamedExpression"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.lists.map"},
+                                                            "type": {"variable": "hydra.python.syntax.StarNamedExpression"}}},
+                                                        "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"literal": {"boolean": false}},
+                                                "function": {"variable": "hydra.serialization.parenList"}}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "list": [
+                                                        {
+                                                          "application": {
+                                                            "argument": {"variable": "firstEs"},
+                                                            "function": {"variable": "hydra.python.serde.encodeStarNamedExpression"}}},
+                                                        {
+                                                          "application": {
+                                                            "argument": {"literal": {"string": ","}},
+                                                            "function": {"variable": "hydra.serialization.cst"}}}]},
+                                                    "function": {"variable": "hydra.serialization.noSep"}}},
+                                                "function": {"variable": "hydra.serialization.parens"}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"literal": {"integer": {"int32": 1}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "es"},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.lib.lists.length"},
+                                                                "type": {"variable": "hydra.python.syntax.StarNamedExpression"}}}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.equality.equal"},
+                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                    "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
+                                    "domain": {"variable": "hydra.python.syntax.StarNamedExpression"},
+                                    "parameter": "firstEs"}},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.lib.maybes.map"},
+                                        "type": {"variable": "hydra.python.syntax.StarNamedExpression"}}},
+                                    "type": {"variable": "hydra.ast.Expr"}}}}}}},
                         "function": {
                           "application": {
                             "argument": {
                               "application": {
                                 "argument": {
                                   "application": {
-                                    "argument": {
-                                      "list": [
-                                        {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "es"},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.lists.head"},
-                                                    "type": {"variable": "hydra.python.syntax.StarNamedExpression"}}}}},
-                                            "function": {"variable": "hydra.python.serde.encodeStarNamedExpression"}}},
-                                        {
-                                          "application": {
-                                            "argument": {"literal": {"string": ","}},
-                                            "function": {"variable": "hydra.serialization.cst"}}}]},
-                                    "function": {"variable": "hydra.serialization.noSep"}}},
-                                "function": {"variable": "hydra.serialization.parens"}}},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {"literal": {"integer": {"int32": 1}}},
+                                    "argument": {"variable": "es"},
                                     "function": {
                                       "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "es"},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.lists.length"},
-                                                "type": {"variable": "hydra.python.syntax.StarNamedExpression"}}}}},
+                                        "argument": {"variable": "hydra.python.serde.encodeStarNamedExpression"},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"variable": "hydra.lib.equality.equal"},
-                                            "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.lists.map"},
+                                                "type": {"variable": "hydra.python.syntax.StarNamedExpression"}}},
+                                            "type": {"variable": "hydra.ast.Expr"}}}}}}},
                                 "function": {
-                                  "typeApplication": {
-                                    "body": {"variable": "hydra.lib.logic.ifElse"},
-                                    "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}},
+                                  "application": {
+                                    "argument": {"literal": {"boolean": false}},
+                                    "function": {"variable": "hydra.serialization.parenList"}}}}},
+                            "function": {
+                              "typeApplication": {
+                                "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
                 "domain": {"variable": "hydra.python.syntax.Tuple"},
                 "parameter": "t"}}}},
         "type": {

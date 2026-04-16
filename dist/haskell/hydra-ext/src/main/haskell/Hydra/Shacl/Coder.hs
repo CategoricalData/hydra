@@ -101,11 +101,11 @@ encodeList subj terms cx0 g =
     Logic.ifElse (Lists.null terms) (Right ([
       Syntax.Description {
         Syntax.descriptionSubject = (Syntax.NodeIri (Syntax.Iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")),
-        Syntax.descriptionGraph = (Syntax.Graph Sets.empty)}], cx0)) (
+        Syntax.descriptionGraph = (Syntax.Graph Sets.empty)}], cx0)) (Maybes.maybe (Right ([], cx0)) (\p ->
       let pair1 = Utils.nextBlankNode cx0
           node1 = Pairs.first pair1
           cx1 = Pairs.second pair1
-      in (Eithers.bind (encodeTerm node1 (Lists.head terms) cx1 g) (\_r1 ->
+      in (Eithers.bind (encodeTerm node1 (Pairs.first p) cx1 g) (\_r1 ->
         let fdescs = Pairs.first _r1
             cx2 = Pairs.second _r1
             firstTriples = Lists.concat2 (Utils.triplesOf fdescs) (Utils.forObjects subj (Utils.rdfIri "first") (Utils.subjectsOf fdescs))
@@ -119,7 +119,7 @@ encodeList subj terms cx0 g =
           in ([
             Syntax.Description {
               Syntax.descriptionSubject = (Utils.resourceToNode subj),
-              Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat2 firstTriples restTriples)))}], cx4)) (encodeList next (Lists.tail terms) cx3 g)))))
+              Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat2 firstTriples restTriples)))}], cx4)) (encodeList next (Pairs.second p) cx3 g))))) (Lists.uncons terms))
 
 -- | Encode a LiteralType as SHACL CommonProperties with an XSD datatype constraint
 encodeLiteralType :: Core.LiteralType -> Model.CommonProperties
@@ -167,7 +167,7 @@ encodeTerm subject term cx g =
       Core.TermWrap v0 -> Eithers.map (\_dr ->
         let descs = Pairs.first _dr
             cx1 = Pairs.second _dr
-        in (Lists.cons (withType (Core.wrappedTermTypeName v0) (Lists.head descs)) (Lists.tail descs), cx1)) (encodeTerm subject (Core.wrappedTermBody v0) cx g)
+        in (Maybes.fromMaybe descs (Maybes.map (\p -> Lists.cons (withType (Core.wrappedTermTypeName v0) (Pairs.first p)) (Pairs.second p)) (Lists.uncons descs)), cx1)) (encodeTerm subject (Core.wrappedTermBody v0) cx g)
       Core.TermMaybe v0 -> Maybes.maybe (Right ([], cx)) (\_inner -> encodeTerm subject _inner cx g) v0
       Core.TermRecord v0 ->
         let rname = Core.recordTypeName v0
@@ -222,7 +222,7 @@ err cx msg = Left (Errors.ErrorOther (Errors.OtherError msg))
 -- | Fold over a list, accumulating results and threading context through each step
 foldAccumResult :: (t0 -> t1 -> Either t2 (t3, t0)) -> t0 -> [t1] -> Either t2 ([t3], t0)
 foldAccumResult f cx xs =
-    Logic.ifElse (Lists.null xs) (Right ([], cx)) (Eithers.bind (f cx (Lists.head xs)) (\_r -> Eithers.map (\_rest -> (Lists.cons (Pairs.first _r) (Pairs.first _rest), (Pairs.second _rest))) (foldAccumResult f (Pairs.second _r) (Lists.tail xs))))
+    Maybes.maybe (Right ([], cx)) (\p -> Eithers.bind (f cx (Pairs.first p)) (\_r -> Eithers.map (\_rest -> (Lists.cons (Pairs.first _r) (Pairs.first _rest), (Pairs.second _rest))) (foldAccumResult f (Pairs.second _r) (Pairs.second p)))) (Lists.uncons xs)
 
 -- | Construct a SHACL node shape from a list of common constraints
 node :: [Model.CommonConstraint] -> Model.Shape

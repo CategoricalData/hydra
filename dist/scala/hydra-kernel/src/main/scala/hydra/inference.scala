@@ -10,6 +10,9 @@ import hydra.graph.*
 
 import hydra.typing.*
 
+def atOrFail[T0](i: Int)(desc: scala.Predef.String)(xs: Seq[T0]): Either[hydra.errors.Error, T0] =
+  hydra.lib.maybes.maybe[Either[hydra.errors.Error, T0], T0](Left(hydra.errors.Error.other(hydra.lib.strings.cat2("atOrFail: ")(desc))))((x: T0) => Right(x))(hydra.lib.lists.maybeAt[T0](i)(xs))
+
 def bindConstraints[T0](flowCx: T0)(cx: hydra.graph.Graph)(constraints: Seq[hydra.typing.TypeConstraint]): Either[hydra.errors.Error,
    hydra.typing.TypeSubst] =
   hydra.lib.eithers.bind[hydra.errors.Error, hydra.typing.TypeSubst, hydra.typing.TypeSubst](hydra.lib.eithers.bimap[hydra.errors.UnificationError,
@@ -128,6 +131,9 @@ def generalize(cx: hydra.graph.Graph)(typ: hydra.core.Type): hydra.core.TypeSche
      hydra.core.TypeVariableMetadata]]](hydra.lib.maps.`null`[hydra.core.Name, hydra.core.TypeVariableMetadata](relevantConstraints))(None)(Some(relevantConstraints))
   hydra.core.TypeScheme(vars, typ, constraintsMaybe)
 }
+
+def headOrFail[T0](desc: scala.Predef.String)(xs: Seq[T0]): Either[hydra.errors.Error, T0] =
+  hydra.lib.maybes.maybe[Either[hydra.errors.Error, T0], T0](Left(hydra.errors.Error.other(hydra.lib.strings.cat2("headOrFail: ")(desc))))((x: T0) => Right(x))(hydra.lib.lists.maybeHead[T0](xs))
 
 def inferGraphTypes(fcx0: hydra.context.Context)(bindings0: Seq[hydra.core.Binding])(g0: hydra.graph.Graph): Either[hydra.errors.Error,
    Tuple2[Tuple2[hydra.graph.Graph, Seq[hydra.core.Binding]], hydra.context.Context]] =
@@ -288,25 +294,21 @@ def inferTypeOf(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(term: hydra.c
          hydra.core.TypeScheme], hydra.context.Context]](hydra.extract.core.let(cx)(finalized))((letResult: hydra.core.Let) =>
       {
       lazy val bindings: Seq[hydra.core.Binding] = (letResult.bindings)
-      {
-        def wrongCount[T0]: Either[hydra.errors.Error, T0] =
-          Left(hydra.errors.Error.other(hydra.lib.strings.cat(Seq("Expected a single binding with a type scheme, but got: ",
-             hydra.lib.literals.showInt32(hydra.lib.lists.length[hydra.core.Binding](bindings)),
-             " bindings"))))
-        hydra.lib.logic.ifElse[Either[hydra.errors.Error, Tuple2[Tuple2[hydra.core.Term,
-           hydra.core.TypeScheme], hydra.context.Context]]](hydra.lib.equality.equal[Int](1)(hydra.lib.lists.length[hydra.core.Binding](bindings)))(hydra.lib.maybes.maybe[Either[hydra.errors.Error,
-           Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context]],
-           hydra.core.Binding](wrongCount)((binding: hydra.core.Binding) =>
-          {
-          lazy val term1: hydra.core.Term = (binding.term)
-          {
-            lazy val mts: Option[hydra.core.TypeScheme] = (binding.`type`)
-            hydra.lib.maybes.maybe[Either[hydra.errors.Error, Tuple2[Tuple2[hydra.core.Term,
-               hydra.core.TypeScheme], hydra.context.Context]], hydra.core.TypeScheme](Left(hydra.errors.Error.other("Expected a type scheme")))((ts: hydra.core.TypeScheme) => Right(Tuple2(Tuple2(term1,
-               ts), fcx2)))(mts)
-          }
-        })(hydra.lib.lists.maybeHead[hydra.core.Binding](bindings)))(wrongCount)
-      }
+      hydra.lib.logic.ifElse[Either[hydra.errors.Error, Tuple2[Tuple2[hydra.core.Term,
+         hydra.core.TypeScheme], hydra.context.Context]]](hydra.lib.equality.equal[Int](1)(hydra.lib.lists.length[hydra.core.Binding](bindings)))(hydra.lib.eithers.bind[hydra.errors.Error,
+         hydra.core.Binding, Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
+         hydra.context.Context]](hydra.inference.headOrFail("inferTypeOf: single binding expected")(bindings))((binding: hydra.core.Binding) =>
+        {
+        lazy val term1: hydra.core.Term = (binding.term)
+        {
+          lazy val mts: Option[hydra.core.TypeScheme] = (binding.`type`)
+          hydra.lib.maybes.maybe[Either[hydra.errors.Error, Tuple2[Tuple2[hydra.core.Term,
+             hydra.core.TypeScheme], hydra.context.Context]], hydra.core.TypeScheme](Left(hydra.errors.Error.other("Expected a type scheme")))((ts: hydra.core.TypeScheme) => Right(Tuple2(Tuple2(term1,
+             ts), fcx2)))(mts)
+        }
+      }))(Left(hydra.errors.Error.other(hydra.lib.strings.cat(Seq("Expected a single binding with a type scheme, but got: ",
+         hydra.lib.literals.showInt32(hydra.lib.lists.length[hydra.core.Binding](bindings)),
+         " bindings")))))
     }))
   })
 }
@@ -1251,48 +1253,19 @@ def inferTypeOfPair(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(p: Tuple2
                Tuple2[hydra.typing.TypeSubst, Map[hydra.core.Name, hydra.core.TypeVariableMetadata]]](hydra.lib.pairs.second[Seq[hydra.core.Term],
                Tuple2[Seq[hydra.core.Type], Tuple2[hydra.typing.TypeSubst, Map[hydra.core.Name,
                hydra.core.TypeVariableMetadata]]]](results)))
-            {
-              def arityErr[T0]: Either[hydra.errors.Error, T0] =
-                Left(hydra.errors.Error.other("inferTypeOfPair: expected 2 inferred terms/types"))
-              hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.typing.InferenceResult],
-                 Tuple2[hydra.core.Term, Seq[hydra.core.Term]]](arityErr)((termsUc: Tuple2[hydra.core.Term,
-                 Seq[hydra.core.Term]]) =>
-                {
-                lazy val ifst: hydra.core.Term = hydra.lib.pairs.first[hydra.core.Term, Seq[hydra.core.Term]](termsUc)
-                hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.typing.InferenceResult],
-                   Tuple2[hydra.core.Term, Seq[hydra.core.Term]]](arityErr)((termsUc2: Tuple2[hydra.core.Term,
-                   Seq[hydra.core.Term]]) =>
-                  {
-                  lazy val isnd: hydra.core.Term = hydra.lib.pairs.first[hydra.core.Term,
-                     Seq[hydra.core.Term]](termsUc2)
-                  hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.typing.InferenceResult],
-                     Tuple2[hydra.core.Type, Seq[hydra.core.Type]]](arityErr)((typesUc: Tuple2[hydra.core.Type,
-                     Seq[hydra.core.Type]]) =>
-                    {
-                    lazy val tyFst: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type,
-                       Seq[hydra.core.Type]](typesUc)
-                    hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.typing.InferenceResult],
-                       Tuple2[hydra.core.Type, Seq[hydra.core.Type]]](arityErr)((typesUc2: Tuple2[hydra.core.Type,
-                       Seq[hydra.core.Type]]) =>
-                      {
-                      lazy val tySnd: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type,
-                         Seq[hydra.core.Type]](typesUc2)
-                      {
-                        lazy val pairTerm: hydra.core.Term = hydra.core.Term.pair(Tuple2(ifst, isnd))
-                        {
-                          lazy val termWithTypes: hydra.core.Term = hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(pairTerm,
-                             tyFst)), tySnd))
-                          Right(hydra.inference.yieldWithConstraints(fcx2)(termWithTypes)(hydra.core.Type.pair(hydra.core.PairType(tyFst,
-                             tySnd)))(isubst)(pairElemConstraints))
-                        }
-                      }
-                    })(hydra.lib.lists.uncons[hydra.core.Type](hydra.lib.pairs.second[hydra.core.Type,
-                       Seq[hydra.core.Type]](typesUc)))
-                  })(hydra.lib.lists.uncons[hydra.core.Type](itypes))
-                })(hydra.lib.lists.uncons[hydra.core.Term](hydra.lib.pairs.second[hydra.core.Term,
-                   Seq[hydra.core.Term]](termsUc)))
-              })(hydra.lib.lists.uncons[hydra.core.Term](iterms))
-            }
+            hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.typing.InferenceResult](hydra.inference.atOrFail(0)("inferTypeOfPair ifst")(iterms))((ifst: hydra.core.Term) =>
+              hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.typing.InferenceResult](hydra.inference.atOrFail(1)("inferTypeOfPair isnd")(iterms))((isnd: hydra.core.Term) =>
+              hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, hydra.typing.InferenceResult](hydra.inference.atOrFail(0)("inferTypeOfPair tyFst")(itypes))((tyFst: hydra.core.Type) =>
+              hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, hydra.typing.InferenceResult](hydra.inference.atOrFail(1)("inferTypeOfPair tySnd")(itypes))((tySnd: hydra.core.Type) =>
+              {
+              lazy val pairTerm: hydra.core.Term = hydra.core.Term.pair(Tuple2(ifst, isnd))
+              {
+                lazy val termWithTypes: hydra.core.Term = hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(pairTerm,
+                   tyFst)), tySnd))
+                Right(hydra.inference.yieldWithConstraints(fcx2)(termWithTypes)(hydra.core.Type.pair(hydra.core.PairType(tyFst,
+                   tySnd)))(isubst)(pairElemConstraints))
+              }
+            }))))
           }
         }
       }

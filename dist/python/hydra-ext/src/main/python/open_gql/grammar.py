@@ -4457,7 +4457,7 @@ class TemporalType(metaclass=_TemporalTypeMeta):
 class TemporalInstantTypeDatetimeType(Node["DatetimeType"]):
     ...
 
-class TemporalInstantTypeLocaldatetimeType(Node["LocaldatetimeType"]):
+class TemporalInstantTypeLocalDatetimeTypeChoice(Node["LocalDatetimeTypeChoice"]):
     ...
 
 class TemporalInstantTypeDateType(Node["DateType"]):
@@ -4466,7 +4466,7 @@ class TemporalInstantTypeDateType(Node["DateType"]):
 class TemporalInstantTypeTimeType(Node["TimeType"]):
     ...
 
-class TemporalInstantTypeLocaltimeType(Node["LocaltimeType"]):
+class TemporalInstantTypeLocalTimeTypeChoice(Node["LocalTimeTypeChoice"]):
     ...
 
 class _TemporalInstantTypeMeta(type):
@@ -4474,14 +4474,14 @@ class _TemporalInstantTypeMeta(type):
         return object
 
 class TemporalInstantType(metaclass=_TemporalInstantTypeMeta):
-    r"""TemporalInstantTypeDatetimeType | TemporalInstantTypeLocaldatetimeType | TemporalInstantTypeDateType | TemporalInstantTypeTimeType | TemporalInstantTypeLocaltimeType"""
+    r"""TemporalInstantTypeDatetimeType | TemporalInstantTypeLocalDatetimeTypeChoice | TemporalInstantTypeDateType | TemporalInstantTypeTimeType | TemporalInstantTypeLocalTimeTypeChoice"""
 
     TYPE_ = hydra.core.Name("openGql.grammar.TemporalInstantType")
     DATETIME_TYPE = hydra.core.Name("datetimeType")
-    LOCALDATETIME_TYPE = hydra.core.Name("localdatetimeType")
+    LOCAL_DATETIME_TYPE_CHOICE = hydra.core.Name("localDatetimeTypeChoice")
     DATE_TYPE = hydra.core.Name("dateType")
     TIME_TYPE = hydra.core.Name("timeType")
-    LOCALTIME_TYPE = hydra.core.Name("localtimeType")
+    LOCAL_TIME_TYPE_CHOICE = hydra.core.Name("localTimeTypeChoice")
 
 class DatetimeTypeZonedDatetime(Node["ZonedDatetimeType"]):
     ...
@@ -4514,20 +4514,20 @@ class TimestampWithTimeZoneType:
     TYPE_ = hydra.core.Name("openGql.grammar.TimestampWithTimeZoneType")
     NOT_NULL = hydra.core.Name("notNull")
 
-class LocaldatetimeTypeLocalDatetime(Node["LocalDatetimeType"]):
+class LocalDatetimeTypeChoiceLocalDatetime(Node["LocalDatetimeType"]):
     ...
 
-class LocaldatetimeTypeTimestampWithoutTimeZone(Node["TimestampWithoutTimeZoneType"]):
+class LocalDatetimeTypeChoiceTimestampWithoutTimeZone(Node["TimestampWithoutTimeZoneType"]):
     ...
 
-class _LocaldatetimeTypeMeta(type):
+class _LocalDatetimeTypeChoiceMeta(type):
     def __getitem__(cls, item):
         return object
 
-class LocaldatetimeType(metaclass=_LocaldatetimeTypeMeta):
-    r"""LocaldatetimeTypeLocalDatetime | LocaldatetimeTypeTimestampWithoutTimeZone"""
+class LocalDatetimeTypeChoice(metaclass=_LocalDatetimeTypeChoiceMeta):
+    r"""LocalDatetimeTypeChoiceLocalDatetime | LocalDatetimeTypeChoiceTimestampWithoutTimeZone"""
 
-    TYPE_ = hydra.core.Name("openGql.grammar.LocaldatetimeType")
+    TYPE_ = hydra.core.Name("openGql.grammar.LocalDatetimeTypeChoice")
     LOCAL_DATETIME = hydra.core.Name("localDatetime")
     TIMESTAMP_WITHOUT_TIME_ZONE = hydra.core.Name("timestampWithoutTimeZone")
 
@@ -4583,20 +4583,20 @@ class TimeWithTimeZoneType:
     TYPE_ = hydra.core.Name("openGql.grammar.TimeWithTimeZoneType")
     NOT_NULL = hydra.core.Name("notNull")
 
-class LocaltimeTypeLocalTime(Node["LocalTimeType"]):
+class LocalTimeTypeChoiceLocalTime(Node["LocalTimeType"]):
     ...
 
-class LocaltimeTypeTimeWithoutTimeZone(Node["TimeWithoutTimeZoneType"]):
+class LocalTimeTypeChoiceTimeWithoutTimeZone(Node["TimeWithoutTimeZoneType"]):
     ...
 
-class _LocaltimeTypeMeta(type):
+class _LocalTimeTypeChoiceMeta(type):
     def __getitem__(cls, item):
         return object
 
-class LocaltimeType(metaclass=_LocaltimeTypeMeta):
-    r"""LocaltimeTypeLocalTime | LocaltimeTypeTimeWithoutTimeZone"""
+class LocalTimeTypeChoice(metaclass=_LocalTimeTypeChoiceMeta):
+    r"""LocalTimeTypeChoiceLocalTime | LocalTimeTypeChoiceTimeWithoutTimeZone"""
 
-    TYPE_ = hydra.core.Name("openGql.grammar.LocaltimeType")
+    TYPE_ = hydra.core.Name("openGql.grammar.LocalTimeTypeChoice")
     LOCAL_TIME = hydra.core.Name("localTime")
     TIME_WITHOUT_TIME_ZONE = hydra.core.Name("timeWithoutTimeZone")
 

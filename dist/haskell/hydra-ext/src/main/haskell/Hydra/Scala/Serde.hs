@@ -162,11 +162,12 @@ writeDefn def =
             pats = Syntax.defn_ValPats v0
             typ = Syntax.defn_ValDecltpe v0
             rhs = Syntax.defn_ValRhs v0
-            firstPat = Lists.head pats
-            patName =
-                    case firstPat of
-                      Syntax.PatVar v1 -> Syntax.pat_VarName v1
-            nameStr = Syntax.unPredefString (Syntax.data_NameValue patName)
+            nameStr =
+                    Maybes.fromMaybe "" (Maybes.map (\firstPat ->
+                      let patName =
+                              case firstPat of
+                                Syntax.PatVar v1 -> Syntax.pat_VarName v1
+                      in (Syntax.unPredefString (Syntax.data_NameValue patName))) (Lists.maybeHead pats))
             nameAndType =
                     Maybes.maybe (Serialization.cst nameStr) (\t -> Serialization.spaceSep [
                       Serialization.cst (Strings.cat2 nameStr ":"),
@@ -254,12 +255,12 @@ writeImporter imp =
                   case ref of
                     Syntax.Data_RefName v0 -> Syntax.unPredefString (Syntax.data_NameValue v0)
           forImportees =
-                  Logic.ifElse (Lists.null importees) (Serialization.cst "") (Logic.ifElse (Equality.equal (Lists.length importees) 1) (Serialization.noSep [
+                  Logic.ifElse (Lists.null importees) (Serialization.cst "") (Logic.ifElse (Equality.equal (Lists.length importees) 1) (Maybes.fromMaybe (Serialization.cst "") (Maybes.map (\firstImp -> Serialization.noSep [
                     Serialization.cst ".",
-                    case (Lists.head importees) of
+                    case firstImp of
                       Syntax.ImporteeWildcard -> Serialization.cst "*"
                       Syntax.ImporteeName v0 -> Serialization.cst (case (Syntax.importee_NameName v0) of
-                        Syntax.NameValue v1 -> v1)]) (Serialization.noSep [
+                        Syntax.NameValue v1 -> v1)]) (Lists.maybeHead importees))) (Serialization.noSep [
                     Serialization.cst ".",
                     (Serialization.curlyBracesList Nothing Serialization.inlineStyle (Lists.map (\it -> case it of
                       Syntax.ImporteeWildcard -> Serialization.cst "*"
@@ -390,8 +391,8 @@ writeType typ =
           (Serialization.bracketList Serialization.inlineStyle (Lists.map writeType args))])
       Syntax.TypeFunctionType v0 -> case v0 of
         Syntax.Type_FunctionTypeFunction v1 ->
-          let dom = Lists.head (Syntax.type_FunctionParams v1)
-              cod = Syntax.type_FunctionRes v1
+          let cod = Syntax.type_FunctionRes v1
+              dom = Maybes.fromMaybe cod (Lists.maybeHead (Syntax.type_FunctionParams v1))
           in (Serialization.ifx functionArrowOp (writeType dom) (writeType cod))
       Syntax.TypeLambda v0 ->
         let params = Syntax.type_LambdaTparams v0

@@ -78,8 +78,6 @@ lists = hydra.packaging.Namespace("hydra.lib.lists")
 
 lists_apply = hydra.core.Name("hydra.lib.lists.apply")
 
-lists_at = hydra.core.Name("hydra.lib.lists.at")
-
 lists_bind = hydra.core.Name("hydra.lib.lists.bind")
 
 lists_concat = hydra.core.Name("hydra.lib.lists.concat")
@@ -104,15 +102,9 @@ lists_foldr = hydra.core.Name("hydra.lib.lists.foldr")
 
 lists_group = hydra.core.Name("hydra.lib.lists.group")
 
-lists_head = hydra.core.Name("hydra.lib.lists.head")
-
-lists_init = hydra.core.Name("hydra.lib.lists.init")
-
 lists_intercalate = hydra.core.Name("hydra.lib.lists.intercalate")
 
 lists_intersperse = hydra.core.Name("hydra.lib.lists.intersperse")
-
-lists_last = hydra.core.Name("hydra.lib.lists.last")
 
 lists_length = hydra.core.Name("hydra.lib.lists.length")
 
@@ -140,8 +132,6 @@ lists_replicate = hydra.core.Name("hydra.lib.lists.replicate")
 
 lists_reverse = hydra.core.Name("hydra.lib.lists.reverse")
 
-lists_safe_head = hydra.core.Name("hydra.lib.lists.safeHead")
-
 lists_singleton = hydra.core.Name("hydra.lib.lists.singleton")
 
 lists_sort = hydra.core.Name("hydra.lib.lists.sort")
@@ -149,8 +139,6 @@ lists_sort = hydra.core.Name("hydra.lib.lists.sort")
 lists_sort_on = hydra.core.Name("hydra.lib.lists.sortOn")
 
 lists_span = hydra.core.Name("hydra.lib.lists.span")
-
-lists_tail = hydra.core.Name("hydra.lib.lists.tail")
 
 lists_take = hydra.core.Name("hydra.lib.lists.take")
 
@@ -366,8 +354,6 @@ math_cos = hydra.core.Name("hydra.lib.math.cos")
 
 math_cosh = hydra.core.Name("hydra.lib.math.cosh")
 
-math_div = hydra.core.Name("hydra.lib.math.div")
-
 math_e = hydra.core.Name("hydra.lib.math.e")
 
 math_even = hydra.core.Name("hydra.lib.math.even")
@@ -394,8 +380,6 @@ math_maybe_succ = hydra.core.Name("hydra.lib.math.maybeSucc")
 
 math_min = hydra.core.Name("hydra.lib.math.min")
 
-math_mod = hydra.core.Name("hydra.lib.math.mod")
-
 math_mul = hydra.core.Name("hydra.lib.math.mul")
 
 math_mul_float64 = hydra.core.Name("hydra.lib.math.mulFloat64")
@@ -410,11 +394,7 @@ math_pi = hydra.core.Name("hydra.lib.math.pi")
 
 math_pow = hydra.core.Name("hydra.lib.math.pow")
 
-math_pred = hydra.core.Name("hydra.lib.math.pred")
-
 math_range = hydra.core.Name("hydra.lib.math.range")
-
-math_rem = hydra.core.Name("hydra.lib.math.rem")
 
 math_round = hydra.core.Name("hydra.lib.math.round")
 
@@ -436,8 +416,6 @@ math_sub = hydra.core.Name("hydra.lib.math.sub")
 
 math_sub_float64 = hydra.core.Name("hydra.lib.math.subFloat64")
 
-math_succ = hydra.core.Name("hydra.lib.math.succ")
-
 math_tan = hydra.core.Name("hydra.lib.math.tan")
 
 math_tanh = hydra.core.Name("hydra.lib.math.tanh")
@@ -455,8 +433,6 @@ maybes_cases = hydra.core.Name("hydra.lib.maybes.cases")
 maybes_cat = hydra.core.Name("hydra.lib.maybes.cat")
 
 maybes_compose = hydra.core.Name("hydra.lib.maybes.compose")
-
-maybes_from_just = hydra.core.Name("hydra.lib.maybes.fromJust")
 
 maybes_from_maybe = hydra.core.Name("hydra.lib.maybes.fromMaybe")
 
@@ -531,8 +507,6 @@ strings = hydra.packaging.Namespace("hydra.lib.strings")
 strings_cat = hydra.core.Name("hydra.lib.strings.cat")
 
 strings_cat2 = hydra.core.Name("hydra.lib.strings.cat2")
-
-strings_char_at = hydra.core.Name("hydra.lib.strings.charAt")
 
 strings_from_list = hydra.core.Name("hydra.lib.strings.fromList")
 

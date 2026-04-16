@@ -367,7 +367,7 @@ getAnnotations m =
     Maps.fromList (Maybes.cat (Lists.map (\entry ->
       let k = Pairs.first entry
           v = Pairs.second entry
-      in (Logic.ifElse (Equality.equal (Strings.charAt 0 k) 64) (Maybes.pure (Strings.fromList (Lists.drop 1 (Strings.toList k)), v)) Nothing)) (Maps.toList m)))
+      in (Logic.ifElse (Equality.equal (Maybes.fromMaybe 0 (Strings.maybeCharAt 0 k)) 64) (Maybes.pure (Strings.fromList (Lists.drop 1 (Strings.toList k)), v)) Nothing)) (Maps.toList m)))
 
 -- | Look up an optional array attribute in a JSON object map
 optArrayE :: Ord t1 => (t0 -> t1 -> M.Map t1 Model.Value -> Either t2 (Maybe [Model.Value]))

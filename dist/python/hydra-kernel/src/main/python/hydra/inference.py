@@ -44,6 +44,11 @@ T2 = TypeVar("T2")
 T3 = TypeVar("T3")
 T4 = TypeVar("T4")
 
+def at_or_fail(i: int, desc: str, xs: frozenlist[T0]) -> Either[hydra.errors.Error, T0]:
+    r"""Return the element at the given index, or Left(Other) with the given description if out of range."""
+
+    return hydra.lib.maybes.maybe((lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2("atOrFail: ", desc)))))), (lambda x: Right(x)), hydra.lib.lists.maybe_at(i, xs))
+
 def bind_constraints(flow_cx: T0, cx: hydra.graph.Graph, constraints: frozenlist[hydra.typing.TypeConstraint]) -> Either[hydra.errors.Error, hydra.typing.TypeSubst]:
     r"""Unify type constraints and check the substitution."""
 
@@ -434,7 +439,7 @@ def infer_type_of_optional(fcx: hydra.context.Context, cx: hydra.graph.Graph, m:
 def infer_type_of_pair(fcx: hydra.context.Context, cx: hydra.graph.Graph, p: tuple[hydra.core.Term, hydra.core.Term]) -> Either[hydra.errors.Error, hydra.typing.InferenceResult]:
     r"""Infer the type of a pair (Either version)."""
 
-    return hydra.lib.eithers.bind(infer_many(fcx, cx, ((hydra.lib.pairs.first(p), "pair first element"), (hydra.lib.pairs.second(p), "pair second element"))), (lambda rp: (results := hydra.lib.pairs.first(rp), fcx2 := hydra.lib.pairs.second(rp), iterms := hydra.lib.pairs.first(results), itypes := hydra.lib.pairs.first(hydra.lib.pairs.second(results)), isubst := hydra.lib.pairs.first(hydra.lib.pairs.second(hydra.lib.pairs.second(results))), pair_elem_constraints := hydra.lib.pairs.second(hydra.lib.pairs.second(hydra.lib.pairs.second(results))), arity_err := Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("inferTypeOfPair: expected 2 inferred terms/types")))), hydra.lib.maybes.maybe((lambda : arity_err), (lambda terms_uc: (ifst := hydra.lib.pairs.first(terms_uc), hydra.lib.maybes.maybe((lambda : arity_err), (lambda terms_uc2: (isnd := hydra.lib.pairs.first(terms_uc2), hydra.lib.maybes.maybe((lambda : arity_err), (lambda types_uc: (ty_fst := hydra.lib.pairs.first(types_uc), hydra.lib.maybes.maybe((lambda : arity_err), (lambda types_uc2: (ty_snd := hydra.lib.pairs.first(types_uc2), pair_term := cast(hydra.core.Term, hydra.core.TermPair((ifst, isnd))), term_with_types := cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(pair_term, ty_fst))), ty_snd))), Right(yield_with_constraints(fcx2, term_with_types, cast(hydra.core.Type, hydra.core.TypePair(hydra.core.PairType(ty_fst, ty_snd))), isubst, pair_elem_constraints)))[3]), hydra.lib.lists.uncons(hydra.lib.pairs.second(types_uc))))[1]), hydra.lib.lists.uncons(itypes)))[1]), hydra.lib.lists.uncons(hydra.lib.pairs.second(terms_uc))))[1]), hydra.lib.lists.uncons(iterms)))[7]))
+    return hydra.lib.eithers.bind(infer_many(fcx, cx, ((hydra.lib.pairs.first(p), "pair first element"), (hydra.lib.pairs.second(p), "pair second element"))), (lambda rp: (results := hydra.lib.pairs.first(rp), fcx2 := hydra.lib.pairs.second(rp), iterms := hydra.lib.pairs.first(results), itypes := hydra.lib.pairs.first(hydra.lib.pairs.second(results)), isubst := hydra.lib.pairs.first(hydra.lib.pairs.second(hydra.lib.pairs.second(results))), pair_elem_constraints := hydra.lib.pairs.second(hydra.lib.pairs.second(hydra.lib.pairs.second(results))), hydra.lib.eithers.bind(at_or_fail(0, "inferTypeOfPair ifst", iterms), (lambda ifst: hydra.lib.eithers.bind(at_or_fail(1, "inferTypeOfPair isnd", iterms), (lambda isnd: hydra.lib.eithers.bind(at_or_fail(0, "inferTypeOfPair tyFst", itypes), (lambda ty_fst: hydra.lib.eithers.bind(at_or_fail(1, "inferTypeOfPair tySnd", itypes), (lambda ty_snd: (pair_term := cast(hydra.core.Term, hydra.core.TermPair((ifst, isnd))), term_with_types := cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(pair_term, ty_fst))), ty_snd))), Right(yield_with_constraints(fcx2, term_with_types, cast(hydra.core.Type, hydra.core.TypePair(hydra.core.PairType(ty_fst, ty_snd))), isubst, pair_elem_constraints)))[2])))))))))[6]))
 
 def infer_type_of_record(fcx: hydra.context.Context, cx: hydra.graph.Graph, record: hydra.core.Record) -> Either[hydra.errors.Error, hydra.typing.InferenceResult]:
     r"""Infer the type of a record (Either version)."""
@@ -554,6 +559,11 @@ def for_inferred_term(fcx: hydra.context.Context, cx: hydra.graph.Graph, term: h
 
     return hydra.lib.eithers.bind(infer_type_of_term(fcx, cx, term, desc), (lambda rp: Right((f(rp), rp.context))))
 
+def head_or_fail(desc: str, xs: frozenlist[T0]) -> Either[hydra.errors.Error, T0]:
+    r"""Return the first element of a list, or Left(Other) with the given description if the list is empty."""
+
+    return hydra.lib.maybes.maybe((lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2("headOrFail: ", desc)))))), (lambda x: Right(x)), hydra.lib.lists.maybe_head(xs))
+
 def infer_graph_types(fcx0: hydra.context.Context, bindings0: frozenlist[hydra.core.Binding], g0: hydra.graph.Graph):
     r"""Infer types for all elements in a graph, using the provided ordered bindings. Returns both the inferred graph and the ordered inferred bindings."""
 
@@ -585,7 +595,7 @@ def infer_type_of(fcx: hydra.context.Context, cx: hydra.graph.Graph, term: hydra
     @lru_cache(1)
     def let_term() -> hydra.core.Term:
         return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let((hydra.core.Binding(hydra.core.Name("ignoredVariableName"), term, Nothing()),), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("ignoredBody")))))))
-    return hydra.lib.eithers.bind(infer_type_of_term(fcx, cx, let_term(), "infer type of term"), (lambda result: (fcx2 := result.context, hydra.lib.eithers.bind(finalize_inferred_term(fcx2, cx, result.term), (lambda finalized: hydra.lib.eithers.bind(hydra.extract.core.let(cx, finalized), (lambda let_result: (bindings := let_result.bindings, wrong_count := Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat(("Expected a single binding with a type scheme, but got: ", hydra.lib.literals.show_int32(hydra.lib.lists.length(bindings)), " bindings")))))), hydra.lib.logic.if_else(hydra.lib.equality.equal(1, hydra.lib.lists.length(bindings)), (lambda : hydra.lib.maybes.maybe((lambda : wrong_count), (lambda binding: (term1 := binding.term, mts := binding.type, hydra.lib.maybes.maybe((lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("Expected a type scheme"))))), (lambda ts: Right(((term1, ts), fcx2))), mts))[2]), hydra.lib.lists.maybe_head(bindings))), (lambda : wrong_count)))[2])))))[1]))
+    return hydra.lib.eithers.bind(infer_type_of_term(fcx, cx, let_term(), "infer type of term"), (lambda result: (fcx2 := result.context, hydra.lib.eithers.bind(finalize_inferred_term(fcx2, cx, result.term), (lambda finalized: hydra.lib.eithers.bind(hydra.extract.core.let(cx, finalized), (lambda let_result: (bindings := let_result.bindings, hydra.lib.logic.if_else(hydra.lib.equality.equal(1, hydra.lib.lists.length(bindings)), (lambda : hydra.lib.eithers.bind(head_or_fail("inferTypeOf: single binding expected", bindings), (lambda binding: (term1 := binding.term, mts := binding.type, hydra.lib.maybes.maybe((lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("Expected a type scheme"))))), (lambda ts: Right(((term1, ts), fcx2))), mts))[2]))), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat(("Expected a single binding with a type scheme, but got: ", hydra.lib.literals.show_int32(hydra.lib.lists.length(bindings)), " bindings")))))))))[1])))))[1]))
 
 def infer_type_of_primitive(fcx: hydra.context.Context, cx: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.errors.Error, hydra.typing.InferenceResult]:
     r"""Infer the type of a primitive function (Either version)."""

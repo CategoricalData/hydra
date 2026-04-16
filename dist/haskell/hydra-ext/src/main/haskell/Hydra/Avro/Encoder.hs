@@ -383,7 +383,7 @@ localName name_ =
 
       let s = Core.unName name_
           parts = Strings.splitOn "." s
-      in (Lists.last parts)
+      in (Maybes.fromMaybe s (Lists.maybeLast parts))
 
 -- | Extract the namespace from a qualified name, if any
 nameNamespace :: Core.Name -> Maybe String
@@ -391,7 +391,7 @@ nameNamespace name_ =
 
       let s = Core.unName name_
           parts = Strings.splitOn "." s
-      in (Logic.ifElse (Equality.equal (Lists.length parts) 1) Nothing (Just (Strings.intercalate "." (Lists.init parts))))
+      in (Logic.ifElse (Equality.equal (Lists.length parts) 1) Nothing (Maybes.map (\ps -> Strings.intercalate "." ps) (Lists.maybeInit parts)))
 
 -- | Build a named type adapter (shared between record and union-as-record)
 namedTypeAdapter :: t0 -> Core.Type -> Maybe Core.Name -> M.Map Core.Name Core.Term -> [Core.FieldType] -> Environment.EncodeEnvironment -> ([Schema.Field] -> Schema.NamedType) -> (t0 -> Core.Name -> [(Core.Name, (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value))] -> ((Context.Context -> Core.Term -> Either Errors.Error Model.Value), (Context.Context -> Model.Value -> Either Errors.Error Core.Term))) -> Either Errors.Error (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value, Environment.EncodeEnvironment)
@@ -544,9 +544,9 @@ unionAsRecordAdapter cx typ mName annotations fieldTypes env0 =
                       Coders.coderDecode = (\cx1 -> \j -> case j of
                         Model.ValueObject v0 ->
                           let findActive =
-                                  \remaining -> Logic.ifElse (Lists.null remaining) (err cx1 "no non-null field in union record") (
-                                    let head_ = Lists.head remaining
-                                        rest_ = Lists.tail remaining
+                                  \remaining -> Maybes.maybe (err cx1 "no non-null field in union record") (\p ->
+                                    let head_ = Pairs.first p
+                                        rest_ = Pairs.second p
                                         fname = Pairs.first head_
                                         ad = Pairs.second head_
                                         mjv = Maps.lookup (localName fname) v0
@@ -556,7 +556,7 @@ unionAsRecordAdapter cx typ mName annotations fieldTypes env0 =
                                         Core.injectionTypeName = typeName,
                                         Core.injectionField = Core.Field {
                                           Core.fieldName = fname,
-                                          Core.fieldTerm = t}})) (Coders.coderDecode (Coders.adapterCoder ad) cx1 jv)) mjv))
+                                          Core.fieldTerm = t}})) (Coders.coderDecode (Coders.adapterCoder ad) cx1 jv)) mjv)) (Lists.uncons remaining)
                           in (findActive fieldAdapters)
                         _ -> err cx1 "expected JSON object for union-as-record")}}
           env2 =

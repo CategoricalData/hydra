@@ -74,8 +74,6 @@
 
 (defvar hydra_lib_names_lists_apply "hydra.lib.lists.apply")
 
-(defvar hydra_lib_names_lists_at "hydra.lib.lists.at")
-
 (defvar hydra_lib_names_lists_bind "hydra.lib.lists.bind")
 
 (defvar hydra_lib_names_lists_concat "hydra.lib.lists.concat")
@@ -100,15 +98,9 @@
 
 (defvar hydra_lib_names_lists_group "hydra.lib.lists.group")
 
-(defvar hydra_lib_names_lists_head "hydra.lib.lists.head")
-
-(defvar hydra_lib_names_lists_init "hydra.lib.lists.init")
-
 (defvar hydra_lib_names_lists_intercalate "hydra.lib.lists.intercalate")
 
 (defvar hydra_lib_names_lists_intersperse "hydra.lib.lists.intersperse")
-
-(defvar hydra_lib_names_lists_last "hydra.lib.lists.last")
 
 (defvar hydra_lib_names_lists_length "hydra.lib.lists.length")
 
@@ -136,8 +128,6 @@
 
 (defvar hydra_lib_names_lists_reverse "hydra.lib.lists.reverse")
 
-(defvar hydra_lib_names_lists_safe_head "hydra.lib.lists.safeHead")
-
 (defvar hydra_lib_names_lists_singleton "hydra.lib.lists.singleton")
 
 (defvar hydra_lib_names_lists_sort "hydra.lib.lists.sort")
@@ -145,8 +135,6 @@
 (defvar hydra_lib_names_lists_sort_on "hydra.lib.lists.sortOn")
 
 (defvar hydra_lib_names_lists_span "hydra.lib.lists.span")
-
-(defvar hydra_lib_names_lists_tail "hydra.lib.lists.tail")
 
 (defvar hydra_lib_names_lists_take "hydra.lib.lists.take")
 
@@ -362,8 +350,6 @@
 
 (defvar hydra_lib_names_math_cosh "hydra.lib.math.cosh")
 
-(defvar hydra_lib_names_math_div "hydra.lib.math.div")
-
 (defvar hydra_lib_names_math_e "hydra.lib.math.e")
 
 (defvar hydra_lib_names_math_even "hydra.lib.math.even")
@@ -390,8 +376,6 @@
 
 (defvar hydra_lib_names_math_min "hydra.lib.math.min")
 
-(defvar hydra_lib_names_math_mod "hydra.lib.math.mod")
-
 (defvar hydra_lib_names_math_mul "hydra.lib.math.mul")
 
 (defvar hydra_lib_names_math_mul_float64 "hydra.lib.math.mulFloat64")
@@ -406,11 +390,7 @@
 
 (defvar hydra_lib_names_math_pow "hydra.lib.math.pow")
 
-(defvar hydra_lib_names_math_pred "hydra.lib.math.pred")
-
 (defvar hydra_lib_names_math_range "hydra.lib.math.range")
-
-(defvar hydra_lib_names_math_rem "hydra.lib.math.rem")
 
 (defvar hydra_lib_names_math_round "hydra.lib.math.round")
 
@@ -432,8 +412,6 @@
 
 (defvar hydra_lib_names_math_sub_float64 "hydra.lib.math.subFloat64")
 
-(defvar hydra_lib_names_math_succ "hydra.lib.math.succ")
-
 (defvar hydra_lib_names_math_tan "hydra.lib.math.tan")
 
 (defvar hydra_lib_names_math_tanh "hydra.lib.math.tanh")
@@ -451,8 +429,6 @@
 (defvar hydra_lib_names_maybes_cat "hydra.lib.maybes.cat")
 
 (defvar hydra_lib_names_maybes_compose "hydra.lib.maybes.compose")
-
-(defvar hydra_lib_names_maybes_from_just "hydra.lib.maybes.fromJust")
 
 (defvar hydra_lib_names_maybes_from_maybe "hydra.lib.maybes.fromMaybe")
 
@@ -527,8 +503,6 @@
 (defvar hydra_lib_names_strings_cat "hydra.lib.strings.cat")
 
 (defvar hydra_lib_names_strings_cat2 "hydra.lib.strings.cat2")
-
-(defvar hydra_lib_names_strings_char_at "hydra.lib.strings.charAt")
 
 (defvar hydra_lib_names_strings_from_list "hydra.lib.strings.fromList")
 

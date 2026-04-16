@@ -74,8 +74,6 @@ lazy val lists: hydra.packaging.Namespace = "hydra.lib.lists"
 
 lazy val listsApply: hydra.core.Name = "hydra.lib.lists.apply"
 
-lazy val listsAt: hydra.core.Name = "hydra.lib.lists.at"
-
 lazy val listsBind: hydra.core.Name = "hydra.lib.lists.bind"
 
 lazy val listsConcat: hydra.core.Name = "hydra.lib.lists.concat"
@@ -100,15 +98,9 @@ lazy val listsFoldr: hydra.core.Name = "hydra.lib.lists.foldr"
 
 lazy val listsGroup: hydra.core.Name = "hydra.lib.lists.group"
 
-lazy val listsHead: hydra.core.Name = "hydra.lib.lists.head"
-
-lazy val listsInit: hydra.core.Name = "hydra.lib.lists.init"
-
 lazy val listsIntercalate: hydra.core.Name = "hydra.lib.lists.intercalate"
 
 lazy val listsIntersperse: hydra.core.Name = "hydra.lib.lists.intersperse"
-
-lazy val listsLast: hydra.core.Name = "hydra.lib.lists.last"
 
 lazy val listsLength: hydra.core.Name = "hydra.lib.lists.length"
 
@@ -136,8 +128,6 @@ lazy val listsReplicate: hydra.core.Name = "hydra.lib.lists.replicate"
 
 lazy val listsReverse: hydra.core.Name = "hydra.lib.lists.reverse"
 
-lazy val listsSafeHead: hydra.core.Name = "hydra.lib.lists.safeHead"
-
 lazy val listsSingleton: hydra.core.Name = "hydra.lib.lists.singleton"
 
 lazy val listsSort: hydra.core.Name = "hydra.lib.lists.sort"
@@ -145,8 +135,6 @@ lazy val listsSort: hydra.core.Name = "hydra.lib.lists.sort"
 lazy val listsSortOn: hydra.core.Name = "hydra.lib.lists.sortOn"
 
 lazy val listsSpan: hydra.core.Name = "hydra.lib.lists.span"
-
-lazy val listsTail: hydra.core.Name = "hydra.lib.lists.tail"
 
 lazy val listsTake: hydra.core.Name = "hydra.lib.lists.take"
 
@@ -362,8 +350,6 @@ lazy val mathCos: hydra.core.Name = "hydra.lib.math.cos"
 
 lazy val mathCosh: hydra.core.Name = "hydra.lib.math.cosh"
 
-lazy val mathDiv: hydra.core.Name = "hydra.lib.math.div"
-
 lazy val mathE: hydra.core.Name = "hydra.lib.math.e"
 
 lazy val mathEven: hydra.core.Name = "hydra.lib.math.even"
@@ -390,8 +376,6 @@ lazy val mathMaybeSucc: hydra.core.Name = "hydra.lib.math.maybeSucc"
 
 lazy val mathMin: hydra.core.Name = "hydra.lib.math.min"
 
-lazy val mathMod: hydra.core.Name = "hydra.lib.math.mod"
-
 lazy val mathMul: hydra.core.Name = "hydra.lib.math.mul"
 
 lazy val mathMulFloat64: hydra.core.Name = "hydra.lib.math.mulFloat64"
@@ -406,11 +390,7 @@ lazy val mathPi: hydra.core.Name = "hydra.lib.math.pi"
 
 lazy val mathPow: hydra.core.Name = "hydra.lib.math.pow"
 
-lazy val mathPred: hydra.core.Name = "hydra.lib.math.pred"
-
 lazy val mathRange: hydra.core.Name = "hydra.lib.math.range"
-
-lazy val mathRem: hydra.core.Name = "hydra.lib.math.rem"
 
 lazy val mathRound: hydra.core.Name = "hydra.lib.math.round"
 
@@ -432,8 +412,6 @@ lazy val mathSub: hydra.core.Name = "hydra.lib.math.sub"
 
 lazy val mathSubFloat64: hydra.core.Name = "hydra.lib.math.subFloat64"
 
-lazy val mathSucc: hydra.core.Name = "hydra.lib.math.succ"
-
 lazy val mathTan: hydra.core.Name = "hydra.lib.math.tan"
 
 lazy val mathTanh: hydra.core.Name = "hydra.lib.math.tanh"
@@ -451,8 +429,6 @@ lazy val maybesCases: hydra.core.Name = "hydra.lib.maybes.cases"
 lazy val maybesCat: hydra.core.Name = "hydra.lib.maybes.cat"
 
 lazy val maybesCompose: hydra.core.Name = "hydra.lib.maybes.compose"
-
-lazy val maybesFromJust: hydra.core.Name = "hydra.lib.maybes.fromJust"
 
 lazy val maybesFromMaybe: hydra.core.Name = "hydra.lib.maybes.fromMaybe"
 
@@ -527,8 +503,6 @@ lazy val strings: hydra.packaging.Namespace = "hydra.lib.strings"
 lazy val stringsCat: hydra.core.Name = "hydra.lib.strings.cat"
 
 lazy val stringsCat2: hydra.core.Name = "hydra.lib.strings.cat2"
-
-lazy val stringsCharAt: hydra.core.Name = "hydra.lib.strings.charAt"
 
 lazy val stringsFromList: hydra.core.Name = "hydra.lib.strings.fromList"
 

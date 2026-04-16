@@ -238,9 +238,17 @@ def simpleValueBinding(hname: hydra.haskell.syntax.Name)(rhs: hydra.haskell.synt
 
 def toTypeApplication(types: Seq[hydra.haskell.syntax.Type]): hydra.haskell.syntax.Type =
   {
+  lazy val dummyType: hydra.haskell.syntax.Type = hydra.haskell.syntax.Type.variable(hydra.haskell.syntax.Name.normal(hydra.haskell.syntax.QualifiedName(Seq(),
+     "")))
   def app(l: Seq[hydra.haskell.syntax.Type]): hydra.haskell.syntax.Type =
-    hydra.lib.logic.ifElse[hydra.haskell.syntax.Type](hydra.lib.equality.gt[Int](hydra.lib.lists.length[hydra.haskell.syntax.Type](l))(1))(hydra.haskell.syntax.Type.application(hydra.haskell.syntax.ApplicationType(app(hydra.lib.lists.tail[hydra.haskell.syntax.Type](l)),
-       hydra.lib.lists.head[hydra.haskell.syntax.Type](l))))(hydra.lib.lists.head[hydra.haskell.syntax.Type](l))
+    hydra.lib.maybes.fromMaybe[hydra.haskell.syntax.Type](dummyType)(hydra.lib.maybes.map[Tuple2[hydra.haskell.syntax.Type,
+       Seq[hydra.haskell.syntax.Type]], hydra.haskell.syntax.Type]((p: Tuple2[hydra.haskell.syntax.Type,
+       Seq[hydra.haskell.syntax.Type]]) =>
+    hydra.lib.logic.ifElse[hydra.haskell.syntax.Type](hydra.lib.lists.`null`[hydra.haskell.syntax.Type](hydra.lib.pairs.second[hydra.haskell.syntax.Type,
+       Seq[hydra.haskell.syntax.Type]](p)))(hydra.lib.pairs.first[hydra.haskell.syntax.Type,
+       Seq[hydra.haskell.syntax.Type]](p))(hydra.haskell.syntax.Type.application(hydra.haskell.syntax.ApplicationType(app(hydra.lib.pairs.second[hydra.haskell.syntax.Type,
+       Seq[hydra.haskell.syntax.Type]](p)), hydra.lib.pairs.first[hydra.haskell.syntax.Type,
+       Seq[hydra.haskell.syntax.Type]](p)))))(hydra.lib.lists.uncons[hydra.haskell.syntax.Type](l)))
   app(hydra.lib.lists.reverse[hydra.haskell.syntax.Type](types))
 }
 
@@ -248,7 +256,7 @@ def typeNameForRecord(sname: hydra.core.Name): scala.Predef.String =
   {
   lazy val snameStr: scala.Predef.String = sname
   lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(snameStr)
-  hydra.lib.lists.last[scala.Predef.String](parts)
+  hydra.lib.maybes.fromMaybe[scala.Predef.String](snameStr)(hydra.lib.lists.maybeLast[scala.Predef.String](parts))
 }
 
 def unionFieldReference(boundNames: scala.collection.immutable.Set[hydra.core.Name])(namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.ModuleName])(sname: hydra.core.Name)(fname: hydra.core.Name): hydra.haskell.syntax.Name =

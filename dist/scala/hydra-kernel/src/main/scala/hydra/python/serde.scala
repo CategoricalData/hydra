@@ -657,9 +657,12 @@ def encodeTerm(t: hydra.python.syntax.Term): hydra.ast.Expr = hydra.python.serde
 def encodeTuple(t: hydra.python.syntax.Tuple): hydra.ast.Expr =
   {
   lazy val es: Seq[hydra.python.syntax.StarNamedExpression] = t
-  hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.python.syntax.StarNamedExpression](es))(1))(hydra.serialization.parens(hydra.serialization.noSep(Seq(hydra.python.serde.encodeStarNamedExpression(hydra.lib.lists.head[hydra.python.syntax.StarNamedExpression](es)),
-     hydra.serialization.cst(",")))))(hydra.serialization.parenList(false)(hydra.lib.lists.map[hydra.python.syntax.StarNamedExpression,
-     hydra.ast.Expr](hydra.python.serde.encodeStarNamedExpression)(es)))
+  hydra.lib.maybes.fromMaybe[hydra.ast.Expr](hydra.serialization.parenList(false)(hydra.lib.lists.map[hydra.python.syntax.StarNamedExpression,
+     hydra.ast.Expr](hydra.python.serde.encodeStarNamedExpression)(es)))(hydra.lib.maybes.map[hydra.python.syntax.StarNamedExpression,
+     hydra.ast.Expr]((firstEs: hydra.python.syntax.StarNamedExpression) =>
+    hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.python.syntax.StarNamedExpression](es))(1))(hydra.serialization.parens(hydra.serialization.noSep(Seq(hydra.python.serde.encodeStarNamedExpression(firstEs),
+       hydra.serialization.cst(",")))))(hydra.serialization.parenList(false)(hydra.lib.lists.map[hydra.python.syntax.StarNamedExpression,
+       hydra.ast.Expr](hydra.python.serde.encodeStarNamedExpression)(es))))(hydra.lib.lists.maybeHead[hydra.python.syntax.StarNamedExpression](es)))
 }
 
 def encodeTypeAlias(ta: hydra.python.syntax.TypeAlias): hydra.ast.Expr =
