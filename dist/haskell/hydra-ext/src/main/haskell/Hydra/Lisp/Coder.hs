@@ -124,14 +124,14 @@ encodeLetAsNative dialect cx g bindings body =
                 Syntax.DialectClojure -> True
                 _ -> False
       in (Eithers.bind (encodeTerm dialect cx g body) (\bodyExpr ->
-        let allNames = Sets.fromList (Lists.map (\b -> Core.bindingName b) bindings)
-            adjList =
-                    Lists.map (\b -> (Core.bindingName b, (Sets.toList (Sets.intersection allNames (Variables.freeVariablesInTerm (Core.bindingTerm b)))))) bindings
-            sortResult = Sorting.topologicalSort adjList
-            nameToBinding = Maps.fromList (Lists.map (\b -> (Core.bindingName b, b)) bindings)
-            hasCycle = Eithers.either (\_ -> True) (\_ -> False) sortResult
-            sortedBindings =
-                    Eithers.either (\_ -> bindings) (\sorted -> Maybes.cat (Lists.map (\name -> Maps.lookup name nameToBinding) sorted)) sortResult
+        let sortedBindings =
+                Logic.ifElse True (
+                  let allNames = Sets.fromList (Lists.map (\b -> Core.bindingName b) bindings)
+                      adjList =
+                              Lists.map (\b -> (Core.bindingName b, (Sets.toList (Sets.intersection allNames (Variables.freeVariablesInTerm (Core.bindingTerm b)))))) bindings
+                      sortResult = Sorting.topologicalSort adjList
+                      nameToBinding = Maps.fromList (Lists.map (\b -> (Core.bindingName b, b)) bindings)
+                  in (Eithers.either (\_ -> bindings) (\sorted -> Maybes.cat (Lists.map (\name -> Maps.lookup name nameToBinding) sorted)) sortResult)) bindings
         in (Eithers.bind (Eithers.mapList (\b ->
           let bname =
                   Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.bindingName b)))
@@ -163,11 +163,7 @@ encodeLetAsNative dialect cx g bindings body =
                       Lists.foldl (\acc -> \b -> Logic.or acc (Logic.not (Sets.null (Sets.intersection allBindingNames (Variables.freeVariablesInTerm (Core.bindingTerm b)))))) False bindings
               hasSelfRef =
                       Lists.foldl (\acc -> \b -> Logic.or acc (Sets.member (Core.bindingName b) (Variables.freeVariablesInTerm (Core.bindingTerm b)))) False bindings
-              isClojure2 =
-                      case dialect of
-                        Syntax.DialectClojure -> True
-                        _ -> False
-              isRecursive = Logic.ifElse isClojure2 hasCycle hasSelfRef
+              isRecursive = hasSelfRef
               letKind =
                       Logic.ifElse isRecursive Syntax.LetKindRecursive (Logic.ifElse (Equality.lte (Lists.length bindings) 1) Syntax.LetKindParallel Syntax.LetKindSequential)
               lispBindings =

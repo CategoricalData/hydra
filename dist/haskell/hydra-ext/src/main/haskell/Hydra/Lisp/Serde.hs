@@ -481,32 +481,14 @@ letExpressionToExpr d letExpr =
                     Syntax.LetBindingDestructuring _ -> (Serialization.cst "<destructuring>", (Serialization.cst "<destructuring>"))) bindings
       in case d of
         Syntax.DialectClojure -> case kind of
-          Syntax.LetKindRecursive ->
-            let letfnBindings =
-                    Lists.map (\b -> case b of
-                      Syntax.LetBindingSimple v2 ->
-                        let sbName = symbolToExpr (Syntax.simpleBindingName v2)
-                            sbVal = Syntax.simpleBindingValue v2
-                        in case sbVal of
-                          Syntax.ExpressionLambda v3 ->
-                            let params = Lists.map symbolToExpr (Syntax.lambdaParams v3)
-                                lamBody = Lists.map (expressionToExpr d) (Syntax.lambdaBody v3)
-                            in (Serialization.parens (Serialization.spaceSep (Lists.concat [
-                              [
-                                sbName],
-                              [
-                                Serialization.brackets Serialization.squareBrackets Serialization.inlineStyle (Serialization.spaceSep params)],
-                              lamBody])))
-                          _ -> Serialization.parens (Serialization.spaceSep [
-                            sbName,
-                            (expressionToExpr d sbVal)])
-                      Syntax.LetBindingDestructuring _ -> Serialization.cst "<destructuring>") bindings
-            in (Serialization.parens (Serialization.spaceSep (Lists.concat [
-              [
-                Serialization.cst "letfn"],
-              [
-                Serialization.brackets Serialization.squareBrackets Serialization.inlineStyle (Serialization.spaceSep letfnBindings)],
-              body])))
+          Syntax.LetKindRecursive -> Serialization.parens (Serialization.spaceSep (Lists.concat [
+            [
+              Serialization.cst "let"],
+            [
+              Serialization.brackets Serialization.squareBrackets Serialization.inlineStyle (Serialization.spaceSep (Lists.concat (Lists.map (\p -> [
+                Pairs.first p,
+                (Pairs.second p)]) bindingPairs)))],
+            body]))
           Syntax.LetKindParallel -> Serialization.parens (Serialization.spaceSep (Lists.concat [
             [
               Serialization.cst "let"],
