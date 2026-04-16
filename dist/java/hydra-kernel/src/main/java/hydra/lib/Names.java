@@ -334,6 +334,10 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.literals.bigintToBigfloat");
   }
 
+  static hydra.core.Name literalsBigintToDecimal() {
+    return new hydra.core.Name("hydra.lib.literals.bigintToDecimal");
+  }
+
   static hydra.core.Name literalsBigintToInt16() {
     return new hydra.core.Name("hydra.lib.literals.bigintToInt16");
   }
@@ -374,12 +378,32 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.literals.binaryToString");
   }
 
+  static hydra.core.Name literalsDecimalToBigint() {
+    return new hydra.core.Name("hydra.lib.literals.decimalToBigint");
+  }
+
+  static hydra.core.Name literalsDecimalToFloat32() {
+    return new hydra.core.Name("hydra.lib.literals.decimalToFloat32");
+  }
+
+  static hydra.core.Name literalsDecimalToFloat64() {
+    return new hydra.core.Name("hydra.lib.literals.decimalToFloat64");
+  }
+
   static hydra.core.Name literalsFloat32ToBigfloat() {
     return new hydra.core.Name("hydra.lib.literals.float32ToBigfloat");
   }
 
+  static hydra.core.Name literalsFloat32ToDecimal() {
+    return new hydra.core.Name("hydra.lib.literals.float32ToDecimal");
+  }
+
   static hydra.core.Name literalsFloat64ToBigfloat() {
     return new hydra.core.Name("hydra.lib.literals.float64ToBigfloat");
+  }
+
+  static hydra.core.Name literalsFloat64ToDecimal() {
+    return new hydra.core.Name("hydra.lib.literals.float64ToDecimal");
   }
 
   static hydra.core.Name literalsInt16ToBigint() {
@@ -408,6 +432,10 @@ public interface Names {
 
   static hydra.core.Name literalsReadBoolean() {
     return new hydra.core.Name("hydra.lib.literals.readBoolean");
+  }
+
+  static hydra.core.Name literalsReadDecimal() {
+    return new hydra.core.Name("hydra.lib.literals.readDecimal");
   }
 
   static hydra.core.Name literalsReadFloat32() {
@@ -464,6 +492,10 @@ public interface Names {
 
   static hydra.core.Name literalsShowBoolean() {
     return new hydra.core.Name("hydra.lib.literals.showBoolean");
+  }
+
+  static hydra.core.Name literalsShowDecimal() {
+    return new hydra.core.Name("hydra.lib.literals.showDecimal");
   }
 
   static hydra.core.Name literalsShowFloat32() {

@@ -22,6 +22,7 @@ import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Show.Errors as ShowErrors
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.Map as M
@@ -101,6 +102,19 @@ cases name graph term0 =
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "case statement",
         Errors.unexpectedShapeErrorActual = (ShowCore.term term)}))))
+
+-- | Extract an arbitrary-precision decimal value from a term
+decimal :: Graph.Graph -> Core.Term -> Either Errors.Error Sci.Scientific
+decimal graph t = Eithers.bind (literal graph t) (\l -> decimalLiteral l)
+
+-- | Extract a decimal literal from a Literal value
+decimalLiteral :: Core.Literal -> Either Errors.Error Sci.Scientific
+decimalLiteral v =
+    case v of
+      Core.LiteralDecimal v0 -> Right v0
+      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+        Errors.unexpectedShapeErrorExpected = "decimal",
+        Errors.unexpectedShapeErrorActual = (ShowCore.literal v)})))
 
 -- | Decode an Either value using the provided left and right decoders
 decodeEither :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> (Graph.Graph -> Core.Term -> Either Errors.DecodingError t1) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Either t0 t1)

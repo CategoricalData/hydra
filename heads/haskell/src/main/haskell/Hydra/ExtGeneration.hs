@@ -39,7 +39,8 @@ import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Names as Names
 import qualified Hydra.Util as Util
 import Hydra.Scala.Coder (moduleToScala)
-import Hydra.Coq.Generate (moduleToCoq, globalFieldMapping, globalConstructorCounts, globalAmbiguousNames, globalSanitizedAccessors)
+import Hydra.Coq.GenerateDriver (moduleToCoq)
+import Hydra.Coq.Generate (globalFieldMapping, globalConstructorCounts, globalAmbiguousNames, globalSanitizedAccessors)
 import Hydra.Coq.Language (coqLanguage)
 
 import qualified Hydra.Json.Model as Json

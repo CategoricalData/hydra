@@ -40,9 +40,9 @@
 
 (cl-defstruct hydra_core_let bindings body)
 
-(defvar hydra_core_literal-variants (list :binary :boolean :float :integer :string))
+(defvar hydra_core_literal-variants (list :binary :boolean :decimal :float :integer :string))
 
-(defvar hydra_core_literal_type-variants (list :binary :boolean :float :integer :string))
+(defvar hydra_core_literal_type-variants (list :binary :boolean :decimal :float :integer :string))
 
 (cl-defstruct hydra_core_map_type keys values)
 

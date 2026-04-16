@@ -19,6 +19,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 -- | Encode a float value to JSON. Float64/Bigfloat use native numbers; Float32 uses string. NaN/Inf always encoded as strings.
@@ -53,6 +54,7 @@ encodeLiteral lit =
     case lit of
       Core.LiteralBinary v0 -> Right (Model.ValueString (Literals.binaryToString v0))
       Core.LiteralBoolean v0 -> Right (Model.ValueBoolean v0)
+      Core.LiteralDecimal v0 -> Right (Model.ValueNumber (Literals.float64ToBigfloat (Literals.decimalToFloat64 v0)))
       Core.LiteralFloat v0 -> encodeFloat v0
       Core.LiteralInteger v0 -> encodeInteger v0
       Core.LiteralString v0 -> Right (Model.ValueString v0)

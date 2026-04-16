@@ -49,6 +49,7 @@ def instantiateTemplate[T0](cx: T0)(minimal: Boolean)(schema: Map[hydra.core.Nam
     lt match
     case hydra.core.LiteralType.binary => hydra.core.Literal.string("")
     case hydra.core.LiteralType.boolean => hydra.core.Literal.boolean(false)
+    case hydra.core.LiteralType.decimal => hydra.core.Literal.decimal(BigDecimal("0.0"))
     case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => hydra.core.Literal.integer(forInteger(v_LiteralType_integer_it))
     case hydra.core.LiteralType.float(v_LiteralType_float_ft) => hydra.core.Literal.float(forFloat(v_LiteralType_float_ft))
     case hydra.core.LiteralType.string => hydra.core.Literal.string("")

@@ -34,6 +34,7 @@ import qualified Hydra.Strip as Strip
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 
 -- | Add namespaces from a set of names to existing namespaces

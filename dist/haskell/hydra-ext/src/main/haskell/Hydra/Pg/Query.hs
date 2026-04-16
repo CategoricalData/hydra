@@ -7,6 +7,7 @@ module Hydra.Pg.Query where
 import qualified Hydra.Core as Core
 import qualified Hydra.Pg.Model as Model
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 data AggregationQuery =
   AggregationQueryCount

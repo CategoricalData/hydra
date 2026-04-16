@@ -3460,6 +3460,16 @@ public interface Coder {
       }
 
       @Override
+      public hydra.java.syntax.Expression visit(hydra.core.Literal.Decimal v) {
+        return hydra.java.Utils.javaConstructorCall(
+          hydra.java.Utils.javaConstructorName(
+            new hydra.java.syntax.Identifier("java.math.BigDecimal"),
+            (hydra.util.Maybe<hydra.java.syntax.TypeArgumentsOrDiamond>) (hydra.util.Maybe.<hydra.java.syntax.TypeArgumentsOrDiamond>nothing())),
+          java.util.Arrays.asList(hydra.java.Coder.encodeLiteral(new hydra.core.Literal.String_(hydra.lib.literals.ShowDecimal.apply((v).value)))),
+          (hydra.util.Maybe<hydra.java.syntax.ClassBody>) (hydra.util.Maybe.<hydra.java.syntax.ClassBody>nothing()));
+      }
+
+      @Override
       public hydra.java.syntax.Expression visit(hydra.core.Literal.Float_ f) {
         return hydra.java.Coder.encodeLiteral_encodeFloat((f).value);
       }
@@ -3489,6 +3499,16 @@ public interface Coder {
           "Boolean",
           cx,
           g);
+      }
+
+      @Override
+      public hydra.util.Either<T2, hydra.java.syntax.Type> visit(hydra.core.LiteralType.Decimal ignored) {
+        return hydra.util.Either.<T2, hydra.java.syntax.Type>right(hydra.java.Utils.javaRefType(
+          (java.util.List<hydra.java.syntax.ReferenceType>) (java.util.Collections.<hydra.java.syntax.ReferenceType>emptyList()),
+          hydra.util.Maybe.just(hydra.java.Names.javaPackageName(java.util.Arrays.asList(
+            "java",
+            "math"))),
+          "BigDecimal"));
       }
 
       @Override
@@ -6712,6 +6732,11 @@ public interface Coder {
           @Override
           public Boolean otherwise(hydra.core.LiteralType instance) {
             return false;
+          }
+
+          @Override
+          public Boolean visit(hydra.core.LiteralType.Decimal ignored) {
+            return true;
           }
 
           @Override

@@ -24,6 +24,11 @@ def bigint_to_bigfloat(x: TTerm) -> TTerm:
     return primitive1(x)
 
 
+def bigint_to_decimal(x: TTerm) -> TTerm:
+    """Convert an int to a decimal (arbitrary-precision exact decimal)."""
+    return primitive1(x)
+
+
 def bigint_to_int8(x: TTerm) -> TTerm:
     """Convert an int to int8."""
     return primitive1(x)
@@ -69,13 +74,38 @@ def binary_to_string(s: TTerm) -> TTerm:
     return primitive1(s)
 
 
+def decimal_to_bigint(x: TTerm) -> TTerm:
+    """Convert a decimal to an int by truncating the fractional part."""
+    return primitive1(x)
+
+
+def decimal_to_float32(x: TTerm) -> TTerm:
+    """Convert a decimal to a float32."""
+    return primitive1(x)
+
+
+def decimal_to_float64(x: TTerm) -> TTerm:
+    """Convert a decimal to a float64."""
+    return primitive1(x)
+
+
 def float32_to_bigfloat(x: TTerm) -> TTerm:
     """Convert a float to a Decimal."""
     return primitive1(x)
 
 
+def float32_to_decimal(x: TTerm) -> TTerm:
+    """Convert a float32 to a decimal."""
+    return primitive1(x)
+
+
 def float64_to_bigfloat(x: TTerm) -> TTerm:
     """Convert a float to a Decimal."""
+    return primitive1(x)
+
+
+def float64_to_decimal(x: TTerm) -> TTerm:
+    """Convert a float64 to a decimal."""
     return primitive1(x)
 
 
@@ -106,6 +136,11 @@ def read_bigfloat(s: TTerm) -> TTerm:
 
 def read_boolean(s: TTerm) -> TTerm:
     """Parse a string to a boolean."""
+    return primitive1(s)
+
+
+def read_decimal(s: TTerm) -> TTerm:
+    """Parse a string to a decimal (arbitrary-precision exact decimal)."""
     return primitive1(s)
 
 
@@ -147,6 +182,11 @@ def show_bigint(x: TTerm) -> TTerm:
 def show_boolean(b: TTerm) -> TTerm:
     """Convert a boolean to string."""
     return primitive1(b)
+
+
+def show_decimal(x: TTerm) -> TTerm:
+    """Convert a decimal (arbitrary-precision exact decimal) to its string representation."""
+    return primitive1(x)
 
 
 def show_float32(x: TTerm) -> TTerm:

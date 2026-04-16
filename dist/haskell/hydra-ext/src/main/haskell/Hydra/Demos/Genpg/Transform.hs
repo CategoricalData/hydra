@@ -28,6 +28,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Tabular as Tabular
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
 

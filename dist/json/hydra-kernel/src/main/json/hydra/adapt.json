@@ -2062,6 +2062,54 @@
                                     "domain": {"literal": {"boolean": {}}},
                                     "parameter": "b"}}},
                               {
+                                "name": "decimal",
+                                "term": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {"variable": "lt"},
+                                        "function": {
+                                          "cases": {
+                                            "cases": [
+                                              {
+                                                "name": "float",
+                                                "term": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "inject": {
+                                                        "field": {
+                                                          "name": "float",
+                                                          "term": {
+                                                            "inject": {
+                                                              "field": {
+                                                                "name": "float64",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "d"},
+                                                                    "function": {"variable": "hydra.lib.literals.decimalToFloat64"}}}},
+                                                              "typeName": "hydra.core.FloatValue"}}},
+                                                        "typeName": "hydra.core.Literal"}},
+                                                    "domain": {"variable": "hydra.core.FloatType"},
+                                                    "parameter": "_"}}},
+                                              {
+                                                "name": "string",
+                                                "term": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "inject": {
+                                                        "field": {
+                                                          "name": "string",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {"variable": "d"},
+                                                              "function": {"variable": "hydra.lib.literals.showDecimal"}}}},
+                                                        "typeName": "hydra.core.Literal"}},
+                                                    "domain": {"unit": {}},
+                                                    "parameter": "_"}}}],
+                                            "typeName": "hydra.core.LiteralType"}}}},
+                                    "domain": {"literal": {"decimal": {}}},
+                                    "parameter": "d"}}},
+                              {
                                 "name": "float",
                                 "term": {
                                   "lambda": {
@@ -2215,6 +2263,22 @@
                                                                 "body": {"variable": "hydra.lib.maybes.map"},
                                                                 "type": {"variable": "hydra.core.IntegerType"}}},
                                                             "type": {"variable": "hydra.core.LiteralType"}}}}}}},
+                                                "domain": {"unit": {}},
+                                                "parameter": "_"}}},
+                                          {
+                                            "name": "decimal",
+                                            "term": {
+                                              "lambda": {
+                                                "body": {
+                                                  "maybe": {
+                                                    "inject": {
+                                                      "field": {
+                                                        "name": "float",
+                                                        "term": {
+                                                          "inject": {
+                                                            "field": {"name": "float64", "term": {"unit": {}}},
+                                                            "typeName": "hydra.core.FloatType"}}},
+                                                      "typeName": "hydra.core.LiteralType"}}},
                                                 "domain": {"unit": {}},
                                                 "parameter": "_"}}},
                                           {
@@ -6532,6 +6596,89 @@
                                                               "list": [
                                                                 {
                                                                   "literal": {"string": "replace binary strings with character strings"}}]},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.lib.sets.fromList"},
+                                                                "type": {"literal": {"string": {}}}}}}}}},
+                                                    "type": {
+                                                      "function": {
+                                                        "codomain": {"variable": "hydra.core.Literal"},
+                                                        "domain": {"variable": "hydra.core.Literal"}}}}},
+                                                "type": {"set": {"literal": {"string": {}}}}}}}},
+                                        "type": {"variable": "hydra.core.LiteralType"}}},
+                                    "type": {
+                                      "pair": {
+                                        "first": {
+                                          "function": {
+                                            "codomain": {"variable": "hydra.core.Literal"},
+                                            "domain": {"variable": "hydra.core.Literal"}}},
+                                        "second": {"set": {"literal": {"string": {}}}}}}}},
+                                "domain": {"unit": {}},
+                                "parameter": "_"}}},
+                          {
+                            "name": "decimal",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "pair": {
+                                            "@first": {
+                                              "inject": {
+                                                "field": {
+                                                  "name": "float",
+                                                  "term": {
+                                                    "inject": {
+                                                      "field": {"name": "float64", "term": {"unit": {}}},
+                                                      "typeName": "hydra.core.FloatType"}}},
+                                                "typeName": "hydra.core.LiteralType"}},
+                                            "@second": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "pair": {
+                                                        "@first": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "application": {
+                                                                "argument": {"variable": "v"},
+                                                                "function": {
+                                                                  "cases": {
+                                                                    "cases": [
+                                                                      {
+                                                                        "name": "decimal",
+                                                                        "term": {
+                                                                          "lambda": {
+                                                                            "body": {
+                                                                              "inject": {
+                                                                                "field": {
+                                                                                  "name": "float",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "field": {
+                                                                                        "name": "float64",
+                                                                                        "term": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "d"},
+                                                                                            "function": {"variable": "hydra.lib.literals.decimalToFloat64"}}}},
+                                                                                      "typeName": "hydra.core.FloatValue"}}},
+                                                                                "typeName": "hydra.core.Literal"}},
+                                                                            "domain": {"literal": {"decimal": {}}},
+                                                                            "parameter": "d"}}}],
+                                                                    "default": {"variable": "v"},
+                                                                    "typeName": "hydra.core.Literal"}}}},
+                                                            "domain": {"variable": "hydra.core.Literal"},
+                                                            "parameter": "v"}},
+                                                        "@second": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "list": [
+                                                                {
+                                                                  "literal": {
+                                                                    "string": "replace arbitrary-precision decimal numbers with 64-bit floating-point numbers (doubles)"}}]},
                                                             "function": {
                                                               "typeApplication": {
                                                                 "body": {"variable": "hydra.lib.sets.fromList"},

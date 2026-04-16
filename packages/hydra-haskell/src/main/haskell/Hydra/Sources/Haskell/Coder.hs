@@ -251,6 +251,9 @@ constructModule = haskellCoderDefinition "constructModule" $
         list [
           pair (pair (string "Prelude") nothing) (list $ string <$> [
             "Enum", "Ordering", "decodeFloat", "encodeFloat", "fail", "map", "pure", "sum"])],
+        -- Data.Scientific is always imported (modules that don't use it produce an unused-import warning)
+        list [
+          pair (pair (string "Data.Scientific") (just $ string "Sci")) (list ([] :: [TTerm String]))],
         -- Conditional standard imports based on metadata
         var "condImport"
           @@ (project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesByteString @@ var "meta")
@@ -264,8 +267,10 @@ constructModule = haskellCoderDefinition "constructModule" $
         var "condImport"
           @@ (project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesSet @@ var "meta")
           @@ pair (pair (string "Data.Set") (just $ string "S")) (list ([] :: [TTerm String])),
-        -- Conditionally add Hydra.Lib.Literals import if binary literals are present
-        Logic.ifElse (Analysis.moduleContainsBinaryLiterals @@ var "mod")
+        -- Conditionally add Hydra.Lib.Literals import if binary or decimal literals are present
+        Logic.ifElse (Logic.or
+            (Analysis.moduleContainsBinaryLiterals @@ var "mod")
+            (Analysis.moduleContainsDecimalLiterals @@ var "mod"))
           (list [pair (pair (string "Hydra.Lib.Literals") (just $ string "Literals")) (list ([] :: [TTerm String]))])
           (list ([] :: [TTerm ((String, Maybe String), [String])]))]] $
     "declLists" <<~ Eithers.mapList (var "createDeclarations") (var "defs") $ lets [
@@ -384,6 +389,11 @@ encodeLiteral = haskellCoderDefinition "encodeLiteral" $
               $ Literals.binaryToString $ var "bs")),
       _Literal_boolean>>: "b" ~>
         right $ HaskellUtils.hsvar @@ Logic.ifElse (var "b") (string "True") (string "False"),
+      _Literal_decimal>>: "d" ~>
+        right $ HaskellUtils.hsapp
+          @@ (HaskellUtils.hsvar @@ string "Literals.stringToDecimal")
+          @@ (HaskellUtils.hslit @@ (inject H._Literal H._Literal_string
+              $ Literals.showDecimal $ var "d")),
       _Literal_float>>: "fv" ~>
         cases _FloatValue (var "fv") Nothing [
           _FloatValue_float32>>: "f" ~>
@@ -603,6 +613,8 @@ encodeType = haskellCoderDefinition "encodeType" $
           right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "B.ByteString",
         _LiteralType_boolean>>: constant $
           right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Bool",
+        _LiteralType_decimal>>: constant $
+          right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Sci.Scientific",
         _LiteralType_float>>: "ft" ~>
           cases _FloatType (var "ft") Nothing [
             _FloatType_float32>>: constant $

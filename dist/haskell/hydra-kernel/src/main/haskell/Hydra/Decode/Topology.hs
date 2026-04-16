@@ -11,6 +11,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Topology as Topology
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 graph :: Graph.Graph -> Core.Term -> Either Errors.DecodingError (M.Map Int [Int])

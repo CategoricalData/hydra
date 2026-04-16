@@ -11,6 +11,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Parsing as Parsing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Try the first parser; if it fails without consuming input, try the second
 alt :: Parsing.Parser t0 -> Parsing.Parser t0 -> Parsing.Parser t0

@@ -15,6 +15,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 definition :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.Definition
 definition cx raw =

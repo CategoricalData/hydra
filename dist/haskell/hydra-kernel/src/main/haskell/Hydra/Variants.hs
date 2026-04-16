@@ -6,6 +6,7 @@ module Hydra.Variants where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | The identifier of an elimination constructor (legacy)
 data EliminationVariant =
@@ -38,6 +39,7 @@ _FunctionVariant_lambda = Core.Name "lambda"
 data LiteralVariant =
   LiteralVariantBinary  |
   LiteralVariantBoolean  |
+  LiteralVariantDecimal  |
   LiteralVariantFloat  |
   LiteralVariantInteger  |
   LiteralVariantString
@@ -48,6 +50,8 @@ _LiteralVariant = Core.Name "hydra.variants.LiteralVariant"
 _LiteralVariant_binary = Core.Name "binary"
 
 _LiteralVariant_boolean = Core.Name "boolean"
+
+_LiteralVariant_decimal = Core.Name "decimal"
 
 _LiteralVariant_float = Core.Name "float"
 

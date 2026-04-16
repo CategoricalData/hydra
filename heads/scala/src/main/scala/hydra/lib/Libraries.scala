@@ -90,6 +90,10 @@ object Libraries:
     case Term.literal(Literal.float(FloatValue.bigfloat(n))) => n
     case _ => throw new RuntimeException(s"expected bigfloat, got $t")
 
+  private def exDecimal(t: Term): BigDecimal = t match
+    case Term.literal(Literal.decimal(n)) => n
+    case _ => throw new RuntimeException(s"expected decimal, got $t")
+
   private def exString(t: Term): String = t match
     case Term.literal(Literal.string(s)) => s
     case _ => throw new RuntimeException(s"expected string, got $t")
@@ -146,6 +150,7 @@ object Libraries:
   private def mkFloat32(n: Float): Term = Term.literal(Literal.float(FloatValue.float32(n)))
   private def mkFloat64(n: Double): Term = Term.literal(Literal.float(FloatValue.float64(n)))
   private def mkBigfloat(n: BigDecimal): Term = Term.literal(Literal.float(FloatValue.bigfloat(n)))
+  private def mkDecimal(n: BigDecimal): Term = Term.literal(Literal.decimal(n))
   private def mkString(s: String): Term = Term.literal(Literal.string(s))
   private def mkBool(b: Boolean): Term = Term.literal(Literal.boolean(b))
   private def mkBinary(b: String): Term = Term.literal(Literal.binary(b))
@@ -227,6 +232,7 @@ object Libraries:
   private val tFloat32: Type = Type.literal(LiteralType.float(FloatType.float32))
   private val tFloat64: Type = Type.literal(LiteralType.float(FloatType.float64))
   private val tBigfloat: Type = Type.literal(LiteralType.float(FloatType.bigfloat))
+  private val tDecimal: Type = Type.literal(LiteralType.decimal)
   private val tUnit: Type = Type.unit
   private val tComparison: Type = Type.variable("hydra.util.Comparison")
 
@@ -1113,6 +1119,8 @@ object Libraries:
         impl1(a => mkFloat64(literals.bigfloatToFloat64(exBigfloat(a))))),
       s"$ns.bigintToBigfloat" -> mkPrimImpl(s"$ns.bigintToBigfloat", tMono(tFun(tBigint, tBigfloat)),
         impl1(a => mkBigfloat(literals.bigintToBigfloat(exBigint(a))))),
+      s"$ns.bigintToDecimal" -> mkPrimImpl(s"$ns.bigintToDecimal", tMono(tFun(tBigint, tDecimal)),
+        impl1(a => mkDecimal(literals.bigintToDecimal(exBigint(a))))),
       s"$ns.bigintToInt8" -> mkPrimImpl(s"$ns.bigintToInt8", tMono(tFun(tBigint, tInt8)),
         impl1(a => mkInt8(literals.bigintToInt8(exBigint(a))))),
       s"$ns.bigintToInt16" -> mkPrimImpl(s"$ns.bigintToInt16", tMono(tFun(tBigint, tInt16)),
@@ -1133,10 +1141,20 @@ object Libraries:
         impl1(a => mkList(literals.binaryToBytes(exBinary(a)).map(mkInt32)))),
       s"$ns.binaryToString" -> mkPrimImpl(s"$ns.binaryToString", tMono(tFun(tBinary, tString)),
         impl1(a => mkString(literals.binaryToString(exBinary(a))))),
+      s"$ns.decimalToBigint" -> mkPrimImpl(s"$ns.decimalToBigint", tMono(tFun(tDecimal, tBigint)),
+        impl1(a => mkBigint(literals.decimalToBigint(exDecimal(a))))),
+      s"$ns.decimalToFloat32" -> mkPrimImpl(s"$ns.decimalToFloat32", tMono(tFun(tDecimal, tFloat32)),
+        impl1(a => mkFloat32(literals.decimalToFloat32(exDecimal(a))))),
+      s"$ns.decimalToFloat64" -> mkPrimImpl(s"$ns.decimalToFloat64", tMono(tFun(tDecimal, tFloat64)),
+        impl1(a => mkFloat64(literals.decimalToFloat64(exDecimal(a))))),
       s"$ns.float32ToBigfloat" -> mkPrimImpl(s"$ns.float32ToBigfloat", tMono(tFun(tFloat32, tBigfloat)),
         impl1(a => mkBigfloat(literals.float32ToBigfloat(exFloat32(a))))),
+      s"$ns.float32ToDecimal" -> mkPrimImpl(s"$ns.float32ToDecimal", tMono(tFun(tFloat32, tDecimal)),
+        impl1(a => mkDecimal(literals.float32ToDecimal(exFloat32(a))))),
       s"$ns.float64ToBigfloat" -> mkPrimImpl(s"$ns.float64ToBigfloat", tMono(tFun(tFloat64, tBigfloat)),
         impl1(a => mkBigfloat(literals.float64ToBigfloat(exFloat64(a))))),
+      s"$ns.float64ToDecimal" -> mkPrimImpl(s"$ns.float64ToDecimal", tMono(tFun(tFloat64, tDecimal)),
+        impl1(a => mkDecimal(literals.float64ToDecimal(exFloat64(a))))),
       s"$ns.int8ToBigint" -> mkPrimImpl(s"$ns.int8ToBigint", tMono(tFun(tInt8, tBigint)),
         impl1(a => mkBigint(literals.int8ToBigint(exInt8(a))))),
       s"$ns.int16ToBigint" -> mkPrimImpl(s"$ns.int16ToBigint", tMono(tFun(tInt16, tBigint)),
@@ -1152,6 +1170,8 @@ object Libraries:
         impl1(s => mkMaybe(literals.readBigint(exString(s)).map(mkBigint)))),
       s"$ns.readBoolean" -> mkPrimImpl(s"$ns.readBoolean", tMono(tFun(tString, tOpt(tBool))),
         impl1(s => mkMaybe(literals.readBoolean(exString(s)).map(mkBool)))),
+      s"$ns.readDecimal" -> mkPrimImpl(s"$ns.readDecimal", tMono(tFun(tString, tOpt(tDecimal))),
+        impl1(s => mkMaybe(literals.readDecimal(exString(s)).map(mkDecimal)))),
       s"$ns.readFloat32" -> mkPrimImpl(s"$ns.readFloat32", tMono(tFun(tString, tOpt(tFloat32))),
         impl1(s => mkMaybe(literals.readFloat32(exString(s)).map(mkFloat32)))),
       s"$ns.readFloat64" -> mkPrimImpl(s"$ns.readFloat64", tMono(tFun(tString, tOpt(tFloat64))),
@@ -1181,6 +1201,8 @@ object Libraries:
         impl1(a => mkString(literals.showBigint(exBigint(a))))),
       s"$ns.showBoolean" -> mkPrimImpl(s"$ns.showBoolean", tMono(tFun(tBool, tString)),
         impl1(a => mkString(literals.showBoolean(exBool(a))))),
+      s"$ns.showDecimal" -> mkPrimImpl(s"$ns.showDecimal", tMono(tFun(tDecimal, tString)),
+        impl1(a => mkString(literals.showDecimal(exDecimal(a))))),
       s"$ns.showFloat32" -> mkPrimImpl(s"$ns.showFloat32", tMono(tFun(tFloat32, tString)),
         impl1(a => mkString(literals.showFloat32(exFloat32(a))))),
       s"$ns.showFloat64" -> mkPrimImpl(s"$ns.showFloat64", tMono(tFun(tFloat64, tString)),

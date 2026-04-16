@@ -7,6 +7,7 @@ module Hydra.Literals where
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Literals as Literals
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Convert a bigfloat to a floating-point value of a given type (note: lossy)
 bigfloatToFloatValue :: Core.FloatType -> Double -> Core.FloatValue

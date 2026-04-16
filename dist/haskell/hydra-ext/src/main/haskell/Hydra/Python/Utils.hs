@@ -19,6 +19,7 @@ import qualified Hydra.Python.Serde as Serde
 import qualified Hydra.Python.Syntax as Syntax
 import qualified Hydra.Serialization as Serialization
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Annotate an expression with an optional comment using Annotated[]
 annotatedExpression :: Maybe String -> Syntax.Expression -> Syntax.Expression

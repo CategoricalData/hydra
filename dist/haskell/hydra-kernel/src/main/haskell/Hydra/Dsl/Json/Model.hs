@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 valueArray :: Phantoms.TTerm [Model.Value] -> Phantoms.TTerm Model.Value

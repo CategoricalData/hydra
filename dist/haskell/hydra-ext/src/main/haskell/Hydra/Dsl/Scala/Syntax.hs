@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Scala.Syntax as Syntax
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Int as I
 
 case_ :: Phantoms.TTerm Syntax.Pat -> Phantoms.TTerm (Maybe Syntax.Data) -> Phantoms.TTerm Syntax.Data -> Phantoms.TTerm Syntax.Case

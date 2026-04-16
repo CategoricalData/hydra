@@ -11,6 +11,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Extend a graph by descending into a lambda body
 extendGraphForLambda :: Graph.Graph -> Core.Lambda -> Graph.Graph

@@ -6,6 +6,7 @@ module Hydra.Pg.Graphson.Syntax where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Int as I
 import qualified Data.Map as M
 

@@ -208,6 +208,78 @@ literalsBigfloatToBigint = subgroup "bigfloatToBigint" [
   where
     test name x result = primCase name _literals_bigfloatToBigint [bigfloat x] (bigint result)
 
+-- Decimal conversions
+
+literalsBigintToDecimal :: TTerm TestGroup
+literalsBigintToDecimal = subgroup "bigintToDecimal" [
+  test "positive" 42 42,
+  test "negative" (-42) (-42),
+  test "zero" 0 0]
+  where
+    test name x result = primCase name _literals_bigintToDecimal [bigint x] (decimal result)
+
+literalsDecimalToBigint :: TTerm TestGroup
+literalsDecimalToBigint = subgroup "decimalToBigint" [
+  test "positive whole" 42 42,
+  test "negative whole" (-42) (-42),
+  test "zero" 0 0,
+  test "round down" 42.3 42,
+  test "round up" 42.7 43]
+  where
+    test name x result = primCase name _literals_decimalToBigint [decimal x] (bigint result)
+
+literalsDecimalToFloat32 :: TTerm TestGroup
+literalsDecimalToFloat32 = subgroup "decimalToFloat32" [
+  test "zero" 0 0.0,
+  test "positive whole" 2 2.0,
+  test "negative whole" (-2) (-2.0)]
+  where
+    test name x result = primCase name _literals_decimalToFloat32 [decimal x] (float32 result)
+
+literalsDecimalToFloat64 :: TTerm TestGroup
+literalsDecimalToFloat64 = subgroup "decimalToFloat64" [
+  test "zero" 0 0.0,
+  test "positive whole" 2 2.0,
+  test "negative whole" (-2) (-2.0)]
+  where
+    test name x result = primCase name _literals_decimalToFloat64 [decimal x] (float64 result)
+
+literalsFloat32ToDecimal :: TTerm TestGroup
+literalsFloat32ToDecimal = subgroup "float32ToDecimal" [
+  test "zero" 0.0 0,
+  test "positive whole" 2.0 2,
+  test "negative whole" (-2.0) (-2)]
+  where
+    test name x result = primCase name _literals_float32ToDecimal [float32 x] (decimal result)
+
+literalsFloat64ToDecimal :: TTerm TestGroup
+literalsFloat64ToDecimal = subgroup "float64ToDecimal" [
+  test "zero" 0.0 0,
+  test "positive whole" 2.0 2,
+  test "negative whole" (-2.0) (-2)]
+  where
+    test name x result = primCase name _literals_float64ToDecimal [float64 x] (decimal result)
+
+literalsShowDecimal :: TTerm TestGroup
+literalsShowDecimal = subgroup "showDecimal" [
+  test "zero" 0 "0.0",
+  test "positive whole" 42 "42.0",
+  test "negative whole" (-42) "-42.0",
+  test "positive fraction" 3.14 "3.14",
+  test "negative fraction" (-2.5) "-2.5"]
+  where
+    test name x result = primCase name _literals_showDecimal [decimal x] (string result)
+
+literalsReadDecimal :: TTerm TestGroup
+literalsReadDecimal = subgroup "readDecimal" [
+  testJust "positive" "3.14" 3.14,
+  testJust "zero" "0" 0,
+  testJust "negative" "-42" (-42),
+  testNothing "invalid" "abc"]
+  where
+    testJust name x result = primCase name _literals_readDecimal [string x] (Core.termMaybe $ just (decimal result))
+    testNothing name x = primCase name _literals_readDecimal [string x] (Core.termMaybe nothing)
+
 -- Show functions
 
 literalsShowInt32 :: TTerm TestGroup
@@ -523,6 +595,15 @@ allTests = definitionInModule module_ "allTests" $
       literalsBigfloatToFloat64,
       literalsBigintToBigfloat,
       literalsBigfloatToBigint,
+      -- Decimal conversions
+      literalsBigintToDecimal,
+      literalsDecimalToBigint,
+      literalsDecimalToFloat32,
+      literalsDecimalToFloat64,
+      literalsFloat32ToDecimal,
+      literalsFloat64ToDecimal,
+      literalsShowDecimal,
+      literalsReadDecimal,
       -- Show functions
       literalsShowInt8,
       literalsShowInt16,

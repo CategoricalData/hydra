@@ -3305,6 +3305,204 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.analysis.moduleContainsDecimalLiterals",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "Check whether a module contains any decimal literal values"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "checkTerm",
+                        "term": {
+                          "lambda": {
+                            "body": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "term"},
+                                        "function": {
+                                          "cases": {
+                                            "cases": [
+                                              {
+                                                "name": "literal",
+                                                "term": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "application": {
+                                                        "argument": {"variable": "lit"},
+                                                        "function": {
+                                                          "cases": {
+                                                            "cases": [
+                                                              {
+                                                                "name": "decimal",
+                                                                "term": {
+                                                                  "lambda": {
+                                                                    "body": {"literal": {"boolean": true}},
+                                                                    "domain": {"literal": {"decimal": {}}},
+                                                                    "parameter": "_"}}}],
+                                                            "default": {"literal": {"boolean": false}},
+                                                            "typeName": "hydra.core.Literal"}}}},
+                                                    "domain": {"variable": "hydra.core.Literal"},
+                                                    "parameter": "lit"}}}],
+                                            "default": {"literal": {"boolean": false}},
+                                            "typeName": "hydra.core.Term"}}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "found"},
+                                        "function": {"variable": "hydra.lib.logic.or"}}}}},
+                                "domain": {"variable": "hydra.core.Term"},
+                                "parameter": "term"}},
+                            "domain": {"literal": {"boolean": {}}},
+                            "parameter": "found"}},
+                        "type": {
+                          "type": {
+                            "function": {
+                              "codomain": {
+                                "function": {
+                                  "codomain": {"literal": {"boolean": {}}},
+                                  "domain": {"variable": "hydra.core.Term"}}},
+                              "domain": {"literal": {"boolean": {}}}}},
+                          "variables": []}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "termContainsDecimal",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"variable": "term"},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"literal": {"boolean": false}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "checkTerm"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "inject": {
+                                                    "field": {"name": "pre", "term": {"unit": {}}},
+                                                    "typeName": "hydra.coders.TraversalOrder"}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.rewriting.foldOverTerm"},
+                                                    "type": {"literal": {"boolean": {}}}}}}}}}}}}},
+                                "domain": {"variable": "hydra.core.Term"},
+                                "parameter": "term"}},
+                            "type": {
+                              "type": {
+                                "function": {
+                                  "codomain": {"literal": {"boolean": {}}},
+                                  "domain": {"variable": "hydra.core.Term"}}},
+                              "variables": []}}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "defTerms",
+                                "term": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "mod"},
+                                            "function": {
+                                              "project": {"field": "definitions", "typeName": "hydra.packaging.Module"}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "lambda": {
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {"variable": "d"},
+                                                    "function": {
+                                                      "cases": {
+                                                        "cases": [
+                                                          {
+                                                            "name": "term",
+                                                            "term": {
+                                                              "lambda": {
+                                                                "body": {
+                                                                  "maybe": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "td"},
+                                                                      "function": {
+                                                                        "project": {"field": "term", "typeName": "hydra.packaging.TermDefinition"}}}}},
+                                                                "domain": {"variable": "hydra.packaging.TermDefinition"},
+                                                                "parameter": "td"}}}],
+                                                        "default": {
+                                                          "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}},
+                                                        "typeName": "hydra.packaging.Definition"}}}},
+                                                "domain": {"variable": "hydra.packaging.Definition"},
+                                                "parameter": "d"}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.lists.map"},
+                                                    "type": {"variable": "hydra.packaging.Definition"}}},
+                                                "type": {"maybe": {"variable": "hydra.core.Term"}}}}}}}},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.lib.maybes.cat"},
+                                        "type": {"variable": "hydra.core.Term"}}}}},
+                                "type": {"type": {"list": {"variable": "hydra.core.Term"}}, "variables": []}}],
+                            "body": {
+                              "application": {
+                                "argument": {"variable": "defTerms"},
+                                "function": {
+                                  "application": {
+                                    "argument": {"literal": {"boolean": false}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "lambda": {
+                                            "body": {
+                                              "lambda": {
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "t"},
+                                                        "function": {"variable": "termContainsDecimal"}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"variable": "acc"},
+                                                        "function": {"variable": "hydra.lib.logic.or"}}}}},
+                                                "domain": {"variable": "hydra.core.Term"},
+                                                "parameter": "t"}},
+                                            "domain": {"literal": {"boolean": {}}},
+                                            "parameter": "acc"}},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.lists.foldl"},
+                                                "type": {"literal": {"boolean": {}}}}},
+                                            "type": {"variable": "hydra.core.Term"}}}}}}}}}}}}}}},
+                "domain": {"variable": "hydra.packaging.Module"},
+                "parameter": "mod"}}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"literal": {"boolean": {}}},
+              "domain": {"variable": "hydra.packaging.Module"}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.analysis.moduleDependencyNamespaces",
         "term": {
           "typeLambda": {

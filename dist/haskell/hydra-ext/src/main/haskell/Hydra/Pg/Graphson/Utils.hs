@@ -18,6 +18,7 @@ import qualified Hydra.Pg.Graphson.Syntax as Syntax
 import qualified Hydra.Pg.Model as PgModel
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Convert a list of property graph elements to a list of vertices with their adjacent edges
 elementsToVerticesWithAdjacentEdges :: Ord t0 => ([PgModel.Element t0] -> [PgModel.VertexWithAdjacentEdges t0])

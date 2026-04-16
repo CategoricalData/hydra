@@ -26,6 +26,8 @@ def literalVariant(v1: hydra.variants.LiteralVariant): hydra.core.Term =
      hydra.core.Field("binary", hydra.core.Term.unit)))
   case hydra.variants.LiteralVariant.boolean => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.LiteralVariant",
      hydra.core.Field("boolean", hydra.core.Term.unit)))
+  case hydra.variants.LiteralVariant.decimal => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.LiteralVariant",
+     hydra.core.Field("decimal", hydra.core.Term.unit)))
   case hydra.variants.LiteralVariant.float => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.LiteralVariant",
      hydra.core.Field("float", hydra.core.Term.unit)))
   case hydra.variants.LiteralVariant.integer => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.LiteralVariant",

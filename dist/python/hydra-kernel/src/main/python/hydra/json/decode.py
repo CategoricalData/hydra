@@ -150,6 +150,13 @@ def decode_literal(lt: hydra.core.LiteralType, value: hydra.json.model.Value):
 
             case _:
                 return Left("expected boolean")
+    def _hoist_hydra_json_decode_decode_literal_2(v1):
+        match v1:
+            case hydra.json.model.ValueNumber(value=n):
+                return Right(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralDecimal(hydra.lib.literals.float64_to_decimal(hydra.lib.literals.bigfloat_to_float64(n)))))))
+
+            case _:
+                return Left("expected number for decimal")
     match lt:
         case hydra.core.LiteralTypeBinary():
             @lru_cache(1)
@@ -159,6 +166,9 @@ def decode_literal(lt: hydra.core.LiteralType, value: hydra.json.model.Value):
 
         case hydra.core.LiteralTypeBoolean():
             return _hoist_hydra_json_decode_decode_literal_1(value)
+
+        case hydra.core.LiteralTypeDecimal():
+            return _hoist_hydra_json_decode_decode_literal_2(value)
 
         case hydra.core.LiteralTypeFloat(value=ft):
             return decode_float(ft, value)

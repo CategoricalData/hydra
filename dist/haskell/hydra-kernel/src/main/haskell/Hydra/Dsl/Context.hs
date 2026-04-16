@@ -8,6 +8,7 @@ import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
 context :: Phantoms.TTerm [String] -> Phantoms.TTerm [String] -> Phantoms.TTerm (M.Map Core.Name Core.Term) -> Phantoms.TTerm Context.Context

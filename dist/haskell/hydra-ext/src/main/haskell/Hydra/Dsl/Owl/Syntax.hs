@@ -10,6 +10,7 @@ import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Rdf.Syntax as RdfSyntax
 import qualified Hydra.Xml.Schema as Schema
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 annotation :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.AnnotationProperty -> Phantoms.TTerm OwlSyntax.AnnotationValue -> Phantoms.TTerm OwlSyntax.Annotation
 annotation annotations property value =

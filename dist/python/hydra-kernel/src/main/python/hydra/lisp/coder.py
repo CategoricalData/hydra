@@ -135,6 +135,9 @@ def encode_literal(lit: hydra.core.Literal):
         case hydra.core.LiteralBoolean(value=b):
             return cast(hydra.lisp.syntax.Expression, hydra.lisp.syntax.ExpressionLiteral(cast(hydra.lisp.syntax.Literal, hydra.lisp.syntax.LiteralBoolean(b))))
 
+        case hydra.core.LiteralDecimal(value=d):
+            return cast(hydra.lisp.syntax.Expression, hydra.lisp.syntax.ExpressionLiteral(cast(hydra.lisp.syntax.Literal, hydra.lisp.syntax.LiteralFloat(hydra.lisp.syntax.FloatLiteral(hydra.lib.literals.float64_to_bigfloat(hydra.lib.literals.decimal_to_float64(d)), Nothing())))))
+
         case hydra.core.LiteralString(value=s):
             return cast(hydra.lisp.syntax.Expression, hydra.lisp.syntax.ExpressionLiteral(cast(hydra.lisp.syntax.Literal, hydra.lisp.syntax.LiteralString(s))))
 
@@ -407,6 +410,9 @@ def encode_type(cx: T0, g: T1, t: hydra.core.Type):
 
             case hydra.core.LiteralTypeBoolean():
                 return cast(hydra.lisp.syntax.TypeSpecifier, hydra.lisp.syntax.TypeSpecifierNamed(hydra.lisp.syntax.Symbol("Boolean")))
+
+            case hydra.core.LiteralTypeDecimal():
+                return cast(hydra.lisp.syntax.TypeSpecifier, hydra.lisp.syntax.TypeSpecifierNamed(hydra.lisp.syntax.Symbol("Decimal")))
 
             case hydra.core.LiteralTypeFloat():
                 return cast(hydra.lisp.syntax.TypeSpecifier, hydra.lisp.syntax.TypeSpecifierNamed(hydra.lisp.syntax.Symbol("Float")))

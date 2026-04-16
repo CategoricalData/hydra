@@ -14,6 +14,7 @@ enum FunctionVariant :
 enum LiteralVariant :
    case binary extends LiteralVariant
    case boolean extends LiteralVariant
+   case decimal extends LiteralVariant
    case float extends LiteralVariant
    case integer extends LiteralVariant
    case string extends LiteralVariant

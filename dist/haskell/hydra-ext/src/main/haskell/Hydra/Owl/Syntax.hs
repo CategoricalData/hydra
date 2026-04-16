@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Rdf.Syntax as Syntax
 import qualified Hydra.Xml.Schema as Schema
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 data Ontology =
   Ontology {

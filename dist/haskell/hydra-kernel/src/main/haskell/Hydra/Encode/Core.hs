@@ -12,6 +12,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 annotatedTerm :: Core.AnnotatedTerm -> Core.Term
 annotatedTerm x =
@@ -339,6 +340,11 @@ literal x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "boolean"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralBoolean v0))}})
+      Core.LiteralDecimal v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "decimal"),
+          Core.fieldTerm = (Core.TermLiteral (Core.LiteralDecimal v0))}})
       Core.LiteralFloat v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
         Core.injectionField = Core.Field {
@@ -367,6 +373,11 @@ literalType x =
         Core.injectionTypeName = (Core.Name "hydra.core.LiteralType"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "boolean"),
+          Core.fieldTerm = Core.TermUnit}})
+      Core.LiteralTypeDecimal -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.core.LiteralType"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "decimal"),
           Core.fieldTerm = Core.TermUnit}})
       Core.LiteralTypeFloat v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.LiteralType"),

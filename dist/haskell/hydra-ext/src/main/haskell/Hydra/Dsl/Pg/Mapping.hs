@@ -10,6 +10,7 @@ import qualified Hydra.Pg.Mapping as Mapping
 import qualified Hydra.Pg.Model as Model
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 annotationSchema :: Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm Mapping.AnnotationSchema
 annotationSchema vertexLabel edgeLabel vertexId edgeId propertyKey propertyValue outVertex outVertexLabel inVertex inVertexLabel outEdge outEdgeLabel inEdge inEdgeLabel ignore =
