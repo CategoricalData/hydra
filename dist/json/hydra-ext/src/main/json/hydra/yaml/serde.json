@@ -227,6 +227,16 @@
                                 "domain": {"literal": {"boolean": {}}},
                                 "parameter": "b"}}},
                           {
+                            "name": "decimal",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"variable": "d"},
+                                    "function": {"variable": "hydra.lib.literals.showDecimal"}}},
+                                "domain": {"literal": {"decimal": {}}},
+                                "parameter": "d"}}},
+                          {
                             "name": "float",
                             "term": {
                               "lambda": {

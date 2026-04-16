@@ -271,25 +271,16 @@
                                           "application": {
                                             "argument": {
                                               "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "application": {
-                                                            "argument": {"variable": "d"},
-                                                            "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}},
-                                                        "function": {"variable": "hydra.lib.math.truncate"}}},
-                                                    "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}},
-                                                "function": {"variable": "hydra.lib.literals.bigfloatToBigint"}}},
+                                                "argument": {"variable": "d"},
+                                                "function": {"variable": "hydra.lib.literals.decimalToBigint"}}},
                                             "function": {"variable": "hydra.lib.literals.bigintToInt32"}}},
-                                        "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                        "domain": {"literal": {"decimal": {}}},
                                         "parameter": "d"}},
                                     "type": {
                                       "type": {
                                         "function": {
                                           "codomain": {"literal": {"integer": {"int32": {}}}},
-                                          "domain": {"literal": {"float": {"bigfloat": {}}}}}},
+                                          "domain": {"literal": {"decimal": {}}}}},
                                       "variables": []}},
                                   {
                                     "name": "doubleToLong",
@@ -299,25 +290,16 @@
                                           "application": {
                                             "argument": {
                                               "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "application": {
-                                                            "argument": {"variable": "d"},
-                                                            "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}},
-                                                        "function": {"variable": "hydra.lib.math.truncate"}}},
-                                                    "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}},
-                                                "function": {"variable": "hydra.lib.literals.bigfloatToBigint"}}},
+                                                "argument": {"variable": "d"},
+                                                "function": {"variable": "hydra.lib.literals.decimalToBigint"}}},
                                             "function": {"variable": "hydra.lib.literals.bigintToInt64"}}},
-                                        "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                        "domain": {"literal": {"decimal": {}}},
                                         "parameter": "d"}},
                                     "type": {
                                       "type": {
                                         "function": {
                                           "codomain": {"literal": {"integer": {"int64": {}}}},
-                                          "domain": {"literal": {"float": {"bigfloat": {}}}}}},
+                                          "domain": {"literal": {"decimal": {}}}}},
                                       "variables": []}}],
                                 "body": {
                                   "application": {
@@ -4166,7 +4148,7 @@
                                                                                                     "application": {
                                                                                                       "argument": {"variable": "i"},
                                                                                                       "function": {"variable": "hydra.lib.literals.int32ToBigint"}}},
-                                                                                                  "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
+                                                                                                  "function": {"variable": "hydra.lib.literals.bigintToDecimal"}}}},
                                                                                             "typeName": "hydra.json.model.Value"}},
                                                                                         "domain": {"literal": {"integer": {"int32": {}}}},
                                                                                         "parameter": "i"}},
@@ -4227,7 +4209,7 @@
                                                                                                                 "typeName": "hydra.core.Term"}}}},
                                                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                                                     "type": {"variable": "hydra.core.Term"}}},
-                                                                                                "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                                                                                "domain": {"literal": {"decimal": {}}},
                                                                                                 "parameter": "d"}}}],
                                                                                         "typeName": "hydra.json.model.Value"}}}},
                                                                                 "domain": {"variable": "hydra.json.model.Value"},
@@ -4373,7 +4355,7 @@
                                                                                                     "application": {
                                                                                                       "argument": {"variable": "i"},
                                                                                                       "function": {"variable": "hydra.lib.literals.int64ToBigint"}}},
-                                                                                                  "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
+                                                                                                  "function": {"variable": "hydra.lib.literals.bigintToDecimal"}}}},
                                                                                             "typeName": "hydra.json.model.Value"}},
                                                                                         "domain": {"literal": {"integer": {"int64": {}}}},
                                                                                         "parameter": "i"}},
@@ -4434,7 +4416,7 @@
                                                                                                                 "typeName": "hydra.core.Term"}}}},
                                                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                                                     "type": {"variable": "hydra.core.Term"}}},
-                                                                                                "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                                                                                "domain": {"literal": {"decimal": {}}},
                                                                                                 "parameter": "d"}}}],
                                                                                         "typeName": "hydra.json.model.Value"}}}},
                                                                                 "domain": {"variable": "hydra.json.model.Value"},
@@ -4577,7 +4559,7 @@
                                                                                               "term": {
                                                                                                 "application": {
                                                                                                   "argument": {"variable": "f"},
-                                                                                                  "function": {"variable": "hydra.lib.literals.float32ToBigfloat"}}}},
+                                                                                                  "function": {"variable": "hydra.lib.literals.float32ToDecimal"}}}},
                                                                                             "typeName": "hydra.json.model.Value"}},
                                                                                         "domain": {"literal": {"float": {"float32": {}}}},
                                                                                         "parameter": "f"}},
@@ -4632,13 +4614,13 @@
                                                                                                                               "term": {
                                                                                                                                 "application": {
                                                                                                                                   "argument": {"variable": "d"},
-                                                                                                                                  "function": {"variable": "hydra.lib.literals.bigfloatToFloat32"}}}},
+                                                                                                                                  "function": {"variable": "hydra.lib.literals.decimalToFloat32"}}}},
                                                                                                                             "typeName": "hydra.core.FloatValue"}}},
                                                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}},
                                                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                                                     "type": {"variable": "hydra.core.Term"}}},
-                                                                                                "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                                                                                "domain": {"literal": {"decimal": {}}},
                                                                                                 "parameter": "d"}}}],
                                                                                         "typeName": "hydra.json.model.Value"}}}},
                                                                                 "domain": {"variable": "hydra.json.model.Value"},
@@ -4781,7 +4763,7 @@
                                                                                               "term": {
                                                                                                 "application": {
                                                                                                   "argument": {"variable": "d"},
-                                                                                                  "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}}},
+                                                                                                  "function": {"variable": "hydra.lib.literals.float64ToDecimal"}}}},
                                                                                             "typeName": "hydra.json.model.Value"}},
                                                                                         "domain": {"literal": {"float": {"float64": {}}}},
                                                                                         "parameter": "d"}},
@@ -4836,13 +4818,13 @@
                                                                                                                               "term": {
                                                                                                                                 "application": {
                                                                                                                                   "argument": {"variable": "d"},
-                                                                                                                                  "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}}},
+                                                                                                                                  "function": {"variable": "hydra.lib.literals.decimalToFloat64"}}}},
                                                                                                                             "typeName": "hydra.core.FloatValue"}}},
                                                                                                                       "typeName": "hydra.core.Literal"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}}},
                                                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                                                     "type": {"variable": "hydra.core.Term"}}},
-                                                                                                "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                                                                                "domain": {"literal": {"decimal": {}}},
                                                                                                 "parameter": "d"}}}],
                                                                                         "typeName": "hydra.json.model.Value"}}}},
                                                                                 "domain": {"variable": "hydra.json.model.Value"},
@@ -9298,15 +9280,10 @@
                                       "name": "literal",
                                       "term": {
                                         "inject": {
-                                          "field": {
-                                            "name": "float",
-                                            "term": {
-                                              "inject": {
-                                                "field": {"name": "bigfloat", "term": {"variable": "d"}},
-                                                "typeName": "hydra.core.FloatValue"}}},
+                                          "field": {"name": "decimal", "term": {"variable": "d"}},
                                           "typeName": "hydra.core.Literal"}}},
                                     "typeName": "hydra.core.Term"}},
-                                "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                "domain": {"literal": {"decimal": {}}},
                                 "parameter": "d"}}},
                           {
                             "name": "object",
@@ -10937,10 +10914,10 @@
                                                     "@right": {
                                                       "application": {
                                                         "argument": {"variable": "d"},
-                                                        "function": {"variable": "hydra.lib.literals.showBigfloat"}}}}},
+                                                        "function": {"variable": "hydra.lib.literals.showDecimal"}}}}},
                                                 "type": {"variable": "hydra.errors.Error"}}},
                                             "type": {"literal": {"string": {}}}}},
-                                        "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                        "domain": {"literal": {"decimal": {}}},
                                         "parameter": "d"}}}],
                                 "default": {
                                   "application": {
