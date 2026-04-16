@@ -101,7 +101,9 @@ public interface Utils {
       hydra.lib.equality.Equal.apply(
         hydra.lib.lists.Length.apply(inversions),
         1),
-      () -> hydra.python.Utils.decodePyInversionToPyPrimary(hydra.lib.lists.Head.apply(inversions)),
+      () -> hydra.lib.maybes.Bind.apply(
+        hydra.lib.lists.MaybeHead.apply(inversions),
+        (java.util.function.Function<hydra.python.syntax.Inversion, hydra.util.Maybe<hydra.python.syntax.Primary>>) (i -> hydra.python.Utils.decodePyInversionToPyPrimary(i))),
       () -> (hydra.util.Maybe<hydra.python.syntax.Primary>) (hydra.util.Maybe.<hydra.python.syntax.Primary>nothing()));
   }
 
@@ -119,7 +121,9 @@ public interface Utils {
           hydra.lib.equality.Equal.apply(
             hydra.lib.lists.Length.apply(conjunctions),
             1),
-          () -> hydra.python.Utils.decodePyConjunctionToPyPrimary(hydra.lib.lists.Head.apply(conjunctions)),
+          () -> hydra.lib.maybes.Bind.apply(
+            hydra.lib.lists.MaybeHead.apply(conjunctions),
+            (java.util.function.Function<hydra.python.syntax.Conjunction, hydra.util.Maybe<hydra.python.syntax.Primary>>) (c2 -> hydra.python.Utils.decodePyConjunctionToPyPrimary(c2))),
           () -> (hydra.util.Maybe<hydra.python.syntax.Primary>) (hydra.util.Maybe.<hydra.python.syntax.Primary>nothing()));
       }
     });
@@ -225,10 +229,13 @@ public interface Utils {
 
   static hydra.python.syntax.Expression orExpression(java.util.List<hydra.python.syntax.Primary> prims) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.Maybe<hydra.python.syntax.BitwiseOr>, java.util.function.Function<java.util.List<hydra.python.syntax.Primary>, hydra.python.syntax.BitwiseOr>>> build = new java.util.concurrent.atomic.AtomicReference<>();
-    build.set((java.util.function.Function<hydra.util.Maybe<hydra.python.syntax.BitwiseOr>, java.util.function.Function<java.util.List<hydra.python.syntax.Primary>, hydra.python.syntax.BitwiseOr>>) (prev -> (java.util.function.Function<java.util.List<hydra.python.syntax.Primary>, hydra.python.syntax.BitwiseOr>) (ps -> hydra.lib.logic.IfElse.lazy(
-      hydra.lib.lists.Null.apply(hydra.lib.lists.Tail.apply(ps)),
-      () -> new hydra.python.syntax.BitwiseOr(prev, hydra.python.Utils.pyPrimaryToPyBitwiseXor(hydra.lib.lists.Head.apply(ps))),
-      () -> build.get().apply(hydra.util.Maybe.just(new hydra.python.syntax.BitwiseOr(prev, hydra.python.Utils.pyPrimaryToPyBitwiseXor(hydra.lib.lists.Head.apply(ps))))).apply(hydra.lib.lists.Tail.apply(ps))))));
+    build.set((java.util.function.Function<hydra.util.Maybe<hydra.python.syntax.BitwiseOr>, java.util.function.Function<java.util.List<hydra.python.syntax.Primary>, hydra.python.syntax.BitwiseOr>>) (prev -> (java.util.function.Function<java.util.List<hydra.python.syntax.Primary>, hydra.python.syntax.BitwiseOr>) (ps -> hydra.lib.maybes.Maybe.applyLazy(
+      () -> new hydra.python.syntax.BitwiseOr(prev, hydra.python.Utils.pyPrimaryToPyBitwiseXor(new hydra.python.syntax.Primary.Simple(new hydra.python.syntax.Atom.Ellipsis()))),
+      (java.util.function.Function<hydra.util.Pair<hydra.python.syntax.Primary, java.util.List<hydra.python.syntax.Primary>>, hydra.python.syntax.BitwiseOr>) (p -> hydra.lib.logic.IfElse.lazy(
+        hydra.lib.lists.Null.apply(hydra.lib.pairs.Second.apply(p)),
+        () -> new hydra.python.syntax.BitwiseOr(prev, hydra.python.Utils.pyPrimaryToPyBitwiseXor(hydra.lib.pairs.First.apply(p))),
+        () -> build.get().apply(hydra.util.Maybe.just(new hydra.python.syntax.BitwiseOr(prev, hydra.python.Utils.pyPrimaryToPyBitwiseXor(hydra.lib.pairs.First.apply(p))))).apply(hydra.lib.pairs.Second.apply(p)))),
+      hydra.lib.lists.Uncons.apply(ps)))));
     return hydra.python.Utils.pyBitwiseOrToPyExpression(build.get().apply((hydra.util.Maybe<hydra.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.python.syntax.BitwiseOr>nothing())).apply(prims));
   }
 
@@ -239,12 +246,16 @@ public interface Utils {
   }
 
   static hydra.python.syntax.Primary primaryWithExpressionSlices(hydra.python.syntax.Primary prim, java.util.List<hydra.python.syntax.Expression> exprs) {
-    return hydra.python.Utils.primaryWithSlices(
-      prim,
-      hydra.python.Utils.pyExpressionToPySlice(hydra.lib.lists.Head.apply(exprs)),
-      hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.python.syntax.Expression, hydra.python.syntax.SliceOrStarredExpression>) (e -> new hydra.python.syntax.SliceOrStarredExpression.Slice(hydra.python.Utils.pyExpressionToPySlice(e))),
-        hydra.lib.lists.Tail.apply(exprs)));
+    return hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> prim,
+      hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<hydra.util.Pair<hydra.python.syntax.Expression, java.util.List<hydra.python.syntax.Expression>>, hydra.python.syntax.Primary>) (p -> hydra.python.Utils.primaryWithSlices(
+          prim,
+          hydra.python.Utils.pyExpressionToPySlice(hydra.lib.pairs.First.apply(p)),
+          hydra.lib.lists.Map.apply(
+            (java.util.function.Function<hydra.python.syntax.Expression, hydra.python.syntax.SliceOrStarredExpression>) (e -> new hydra.python.syntax.SliceOrStarredExpression.Slice(hydra.python.Utils.pyExpressionToPySlice(e))),
+            hydra.lib.pairs.Second.apply(p)))),
+        hydra.lib.lists.Uncons.apply(exprs)));
   }
 
   static hydra.python.syntax.Primary primaryWithRhs(hydra.python.syntax.Primary prim, hydra.python.syntax.PrimaryRhs rhs) {

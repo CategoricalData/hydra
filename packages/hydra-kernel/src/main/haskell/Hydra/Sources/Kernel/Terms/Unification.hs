@@ -194,10 +194,10 @@ unifyTypeConstraints = define "unifyTypeConstraints" $
                 (var "cx"))
               (var "bind" @@ var "name2" @@ var "sleft"))
             (var "bind" @@ var "name" @@ var "sright"))]]) $
-  Logic.ifElse
-    (Lists.null (var "constraints"))
+  Maybes.maybe
     (right (asTerm Substitution.idTypeSubst))
-    (var "withConstraint" @@ (Lists.head (var "constraints")) @@ (Lists.tail (var "constraints")))
+    ("uc" ~> var "withConstraint" @@ (Pairs.first $ var "uc") @@ (Pairs.second $ var "uc"))
+    (Lists.uncons $ var "constraints")
 
 unifyTypeLists :: TTermDefinition (Context -> M.Map Name TypeScheme -> [Type] -> [Type] -> String -> Either UnificationError TypeSubst)
 unifyTypeLists = define "unifyTypeLists" $

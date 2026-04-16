@@ -26,8 +26,11 @@ decodeFloat :: Core.FloatType -> Model.Value -> Either String Core.Term
 decodeFloat ft value =
     case ft of
       Core.FloatTypeBigfloat -> case value of
-        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat v1)))
-        _ -> Left "expected number for bigfloat"
+        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat (Literals.float64ToBigfloat (Literals.decimalToFloat64 v1)))))
+        Model.ValueString v1 -> Maybes.maybe (Left (Strings.cat [
+          "invalid bigfloat sentinel: ",
+          v1])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat (Literals.float64ToBigfloat v))))) (parseSpecialFloat v1)
+        _ -> Left "expected number or special float string for bigfloat"
       Core.FloatTypeFloat32 ->
         let strResult = expectString value
         in (Eithers.either (\err -> Left err) (\s ->
@@ -36,7 +39,7 @@ decodeFloat ft value =
             "invalid float32: ",
             s])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 v)))) parsed)) strResult)
       Core.FloatTypeFloat64 -> case value of
-        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.bigfloatToFloat64 v1))))
+        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.decimalToFloat64 v1))))
         Model.ValueString v1 -> Maybes.maybe (Left (Strings.cat [
           "invalid float64 sentinel: ",
           v1])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 v)))) (parseSpecialFloat v1)
@@ -76,19 +79,19 @@ decodeInteger it value =
             s])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint64 v)))) parsed)) strResult)
       Core.IntegerTypeInt8 ->
         let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt8 (Literals.bigintToInt8 (Literals.bigfloatToBigint n))))) numResult)
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt8 (Literals.bigintToInt8 (Literals.decimalToBigint n))))) numResult)
       Core.IntegerTypeInt16 ->
         let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt16 (Literals.bigintToInt16 (Literals.bigfloatToBigint n))))) numResult)
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt16 (Literals.bigintToInt16 (Literals.decimalToBigint n))))) numResult)
       Core.IntegerTypeInt32 ->
         let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Literals.bigintToInt32 (Literals.bigfloatToBigint n))))) numResult)
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Literals.bigintToInt32 (Literals.decimalToBigint n))))) numResult)
       Core.IntegerTypeUint8 ->
         let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint8 (Literals.bigintToUint8 (Literals.bigfloatToBigint n))))) numResult)
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint8 (Literals.bigintToUint8 (Literals.decimalToBigint n))))) numResult)
       Core.IntegerTypeUint16 ->
         let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint16 (Literals.bigintToUint16 (Literals.bigfloatToBigint n))))) numResult)
+        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint16 (Literals.bigintToUint16 (Literals.decimalToBigint n))))) numResult)
 
 -- | Decode a JSON value to a literal term
 decodeLiteral :: Core.LiteralType -> Model.Value -> Either String Core.Term
@@ -101,7 +104,7 @@ decodeLiteral lt value =
         Model.ValueBoolean v1 -> Right (Core.TermLiteral (Core.LiteralBoolean v1))
         _ -> Left "expected boolean"
       Core.LiteralTypeDecimal -> case value of
-        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralDecimal (Literals.float64ToDecimal (Literals.bigfloatToFloat64 v1))))
+        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralDecimal v1))
         _ -> Left "expected number for decimal"
       Core.LiteralTypeFloat v0 -> decodeFloat v0 value
       Core.LiteralTypeInteger v0 -> decodeInteger v0 value
@@ -117,7 +120,7 @@ expectArray value =
       _ -> Left "expected array"
 
 -- | Extract a number from a JSON value
-expectNumber :: Model.Value -> Either String Double
+expectNumber :: Model.Value -> Either String Sci.Scientific
 expectNumber value =
     case value of
       Model.ValueNumber v0 -> Right v0
@@ -163,7 +166,8 @@ fromJson types tname typ value =
                         Core.TypeMaybe _ -> True
                         _ -> False
           in (Logic.ifElse isNestedMaybe (
-            let decodeJust = \arr -> Eithers.map (\v -> Core.TermMaybe (Just v)) (fromJson types tname v0 (Lists.head arr))
+            let decodeJust =
+                    \arr -> Maybes.maybe (Left "expected single-element array for Just") (\firstVal -> Eithers.map (\v -> Core.TermMaybe (Just v)) (fromJson types tname v0 firstVal)) (Lists.maybeHead arr)
                 decodeMaybeArray =
                         \arr ->
                           let len = Lists.length arr
@@ -202,13 +206,12 @@ fromJson types tname typ value =
                       Core.injectionField = Core.Field {
                         Core.fieldName = (Core.Name key),
                         Core.fieldTerm = v}})) decoded)
-              tryField =
-                      \key -> \val -> \ft -> Logic.ifElse (Equality.equal (Core.unName (Core.fieldTypeName ft)) key) (Just (decodeVariant key val (Core.fieldTypeType ft))) Nothing
               findAndDecode =
-                      \key -> \val -> \fts -> Logic.ifElse (Lists.null fts) (Left (Strings.cat [
+                      \key -> \val -> \fts -> Maybes.maybe (Left (Strings.cat [
                         "unknown variant: ",
-                        key])) (Maybes.maybe (findAndDecode key val (Lists.tail fts)) (\r -> r) (tryField key val (Lists.head fts)))
-              decodeSingleKey = \obj -> findAndDecode (Lists.head (Maps.keys obj)) (Maps.lookup (Lists.head (Maps.keys obj)) obj) v0
+                        key])) (\ft -> decodeVariant key val (Core.fieldTypeType ft)) (Lists.find (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) key) fts)
+              decodeSingleKey =
+                      \obj -> Maybes.maybe (Left "expected single-key object for union") (\k -> findAndDecode k (Maps.lookup k obj) v0) (Lists.maybeHead (Maps.keys obj))
               processUnion =
                       \obj -> Logic.ifElse (Equality.equal (Lists.length (Maps.keys obj)) 1) (decodeSingleKey obj) (Left "expected single-key object for union")
               objResult = expectObject value
@@ -270,7 +273,7 @@ fromJson types tname typ value =
           "unsupported type for JSON decoding: ",
           (ShowCore.type_ typ)])
 
--- | Parse a special float sentinel string to a float64. Returns Nothing for unrecognized strings.
+-- | Parse an IEEE sentinel string (NaN, Infinity, -Infinity, -0.0) to a float64. Returns Nothing for unrecognized strings.
 parseSpecialFloat :: String -> Maybe Double
 parseSpecialFloat s =
     Logic.ifElse (Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))) (Literals.readFloat64 s) Nothing

@@ -25,7 +25,7 @@
                         "argument": {"variable": "errors"},
                         "function": {
                           "typeApplication": {
-                            "body": {"variable": "hydra.lib.lists.safeHead"},
+                            "body": {"variable": "hydra.lib.lists.maybeHead"},
                             "type": {"variable": "t0"}}}}}}},
                 "domain": {"list": {"maybe": {"variable": "t0"}}},
                 "parameter": "checks"}},

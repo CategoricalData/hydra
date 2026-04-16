@@ -10,6 +10,7 @@ import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Testing as Testing
@@ -23,8 +24,8 @@ buildJavaTestModule testModule testGroup testBody =
 
       let ns_ = Packaging.moduleNamespace testModule
           parts = Strings.splitOn "." (Packaging.unNamespace ns_)
-          packageName = Strings.intercalate "." (Lists.init parts)
-          className_ = Strings.cat2 (Formatting.capitalize (Lists.last parts)) "Test"
+          packageName = Strings.intercalate "." (Maybes.fromMaybe [] (Lists.maybeInit parts))
+          className_ = Strings.cat2 (Formatting.capitalize (Maybes.fromMaybe "" (Lists.maybeLast parts))) "Test"
           groupName_ = Testing.testGroupName testGroup
           standardImports =
                   [
@@ -130,8 +131,8 @@ generateTestFileWithJavaCodec testModule testGroup =
       let testModuleContent = buildJavaTestModule testModule testGroup testBody
           ns_ = Packaging.moduleNamespace testModule
           parts = Strings.splitOn "." (Packaging.unNamespace ns_)
-          dirParts = Lists.drop 1 (Lists.init parts)
-          className_ = Strings.cat2 (Formatting.capitalize (Lists.last parts)) "Test"
+          dirParts = Lists.drop 1 (Maybes.fromMaybe [] (Lists.maybeInit parts))
+          className_ = Strings.cat2 (Formatting.capitalize (Maybes.fromMaybe "" (Lists.maybeLast parts))) "Test"
           fileName = Strings.cat2 className_ ".java"
           filePath =
                   Strings.cat [

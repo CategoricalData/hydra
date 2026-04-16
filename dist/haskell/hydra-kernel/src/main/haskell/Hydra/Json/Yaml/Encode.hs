@@ -23,7 +23,7 @@ jsonToYaml value =
       JsonModel.ValueArray v0 -> YamlModel.NodeSequence (Lists.map (\v -> jsonToYaml v) v0)
       JsonModel.ValueBoolean v0 -> YamlModel.NodeScalar (YamlModel.ScalarBool v0)
       JsonModel.ValueNull -> YamlModel.NodeScalar YamlModel.ScalarNull
-      JsonModel.ValueNumber v0 -> YamlModel.NodeScalar (YamlModel.ScalarFloat v0)
+      JsonModel.ValueNumber v0 -> YamlModel.NodeScalar (YamlModel.ScalarDecimal v0)
       JsonModel.ValueObject v0 -> YamlModel.NodeMapping (Maps.fromList (Lists.map (\kv -> (YamlModel.NodeScalar (YamlModel.ScalarStr (Pairs.first kv)), (jsonToYaml (Pairs.second kv)))) (Maps.toList v0)))
       JsonModel.ValueString v0 -> YamlModel.NodeScalar (YamlModel.ScalarStr v0)
 

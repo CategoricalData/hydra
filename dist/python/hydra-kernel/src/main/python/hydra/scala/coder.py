@@ -468,7 +468,7 @@ def encode_case(cx: T0, g: hydra.graph.Graph, ftypes: FrozenDict[hydra.core.Name
         return hydra.lib.maybes.maybe((lambda : _hoist_is_unit_1(hydra.strip.deannotate_and_detype_term(fterm))), (lambda dom: _hoist_is_unit_2(hydra.strip.deannotate_type(dom))), hydra.lib.maps.lookup(fname, ftypes))
     @lru_cache(1)
     def short_type_name() -> str:
-        return hydra.lib.lists.last(hydra.lib.strings.split_on(".", hydra.lib.maybes.maybe((lambda : "x"), (lambda n: n.value), sn)))
+        return hydra.lib.maybes.from_maybe((lambda : "x"), hydra.lib.lists.maybe_last(hydra.lib.strings.split_on(".", hydra.lib.maybes.maybe((lambda : "x"), (lambda n: n.value), sn))))
     @lru_cache(1)
     def lam_param_suffix() -> str:
         match hydra.strip.deannotate_and_detype_term(fterm):
@@ -800,7 +800,7 @@ def encode_term(cx: T0, g: hydra.graph.Graph, term0: hydra.core.Term):
                 return hydra.lib.lists.length(parts())
             @lru_cache(1)
             def escaped() -> str:
-                return hydra.lib.logic.if_else(hydra.lib.equality.lte(num_parts(), 1), (lambda : hydra.scala.utils.scala_escape_name(full_name)), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(num_parts(), 2), (lambda : hydra.lib.strings.cat2(hydra.lib.lists.head(parts()), hydra.lib.strings.cat2(".", hydra.scala.utils.scala_escape_name(local_name())))), (lambda : hydra.lib.strings.intercalate(".", hydra.lib.lists.concat2(hydra.lib.lists.take(hydra.lib.math.sub(num_parts(), 1), parts()), (hydra.scala.utils.scala_escape_name(local_name()),)))))))
+                return hydra.lib.logic.if_else(hydra.lib.equality.lte(num_parts(), 1), (lambda : hydra.scala.utils.scala_escape_name(full_name)), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(num_parts(), 2), (lambda : hydra.lib.strings.cat2(hydra.lib.maybes.from_maybe((lambda : full_name), hydra.lib.lists.maybe_head(parts())), hydra.lib.strings.cat2(".", hydra.scala.utils.scala_escape_name(local_name())))), (lambda : hydra.lib.strings.intercalate(".", hydra.lib.lists.concat2(hydra.lib.lists.take(hydra.lib.math.sub(num_parts(), 1), parts()), (hydra.scala.utils.scala_escape_name(local_name()),)))))))
             return Right(hydra.scala.utils.sname(escaped()))
 
         case hydra.core.TermAnnotated(value=at):

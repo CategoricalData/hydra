@@ -96,7 +96,7 @@ define = definitionInNamespace ns
 module_ :: Module
 module_ = Module ns definitions
     [JsonEncode.ns, YamlModel.ns]
-    KernelTypes.kernelTypesNamespaces $
+    (YamlModel.ns : KernelTypes.kernelTypesNamespaces) $
     Just "JSON-to-YAML encoding. Converts JSON Values to YAML Nodes (always succeeds), and Hydra Terms to YAML Nodes via JSON."
   where
     definitions = [
@@ -120,7 +120,7 @@ jsonToYaml = define "jsonToYaml" $
       Yaml.nodeScalar Yaml.scalarNull,
 
     _Value_number>>: "n" ~>
-      Yaml.nodeScalar $ Yaml.scalarFloat $ var "n",
+      Yaml.nodeScalar $ Yaml.scalarDecimal $ var "n",
 
     _Value_object>>: "obj" ~>
       Yaml.nodeMapping $ Maps.fromList $

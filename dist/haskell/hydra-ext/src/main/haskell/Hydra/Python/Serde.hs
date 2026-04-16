@@ -897,9 +897,9 @@ encodeTuple :: Syntax.Tuple -> Ast.Expr
 encodeTuple t =
 
       let es = Syntax.unTuple t
-      in (Logic.ifElse (Equality.equal (Lists.length es) 1) (Serialization.parens (Serialization.noSep [
-        encodeStarNamedExpression (Lists.head es),
-        (Serialization.cst ",")])) (Serialization.parenList False (Lists.map encodeStarNamedExpression es)))
+      in (Maybes.fromMaybe (Serialization.parenList False (Lists.map encodeStarNamedExpression es)) (Maybes.map (\firstEs -> Logic.ifElse (Equality.equal (Lists.length es) 1) (Serialization.parens (Serialization.noSep [
+        encodeStarNamedExpression firstEs,
+        (Serialization.cst ",")])) (Serialization.parenList False (Lists.map encodeStarNamedExpression es))) (Lists.maybeHead es)))
 
 -- | Serialize a type alias
 encodeTypeAlias :: Syntax.TypeAlias -> Ast.Expr

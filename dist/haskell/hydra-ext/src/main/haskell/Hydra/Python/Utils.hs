@@ -86,7 +86,7 @@ decodePyConjunctionToPyPrimary :: Syntax.Conjunction -> Maybe Syntax.Primary
 decodePyConjunctionToPyPrimary c =
 
       let inversions = Syntax.unConjunction c
-      in (Logic.ifElse (Equality.equal (Lists.length inversions) 1) (decodePyInversionToPyPrimary (Lists.head inversions)) Nothing)
+      in (Logic.ifElse (Equality.equal (Lists.length inversions) 1) (Maybes.bind (Lists.maybeHead inversions) (\i -> decodePyInversionToPyPrimary i)) Nothing)
 
 -- | Decode an Expression to a Primary if possible
 decodePyExpressionToPyPrimary :: Syntax.Expression -> Maybe Syntax.Primary
@@ -94,7 +94,7 @@ decodePyExpressionToPyPrimary e =
     case e of
       Syntax.ExpressionSimple v0 ->
         let conjunctions = Syntax.unDisjunction v0
-        in (Logic.ifElse (Equality.equal (Lists.length conjunctions) 1) (decodePyConjunctionToPyPrimary (Lists.head conjunctions)) Nothing)
+        in (Logic.ifElse (Equality.equal (Lists.length conjunctions) 1) (Maybes.bind (Lists.maybeHead conjunctions) (\c2 -> decodePyConjunctionToPyPrimary c2)) Nothing)
       _ -> Nothing
 
 -- | Decode an Inversion to a Primary if possible
@@ -190,11 +190,13 @@ orExpression :: [Syntax.Primary] -> Syntax.Expression
 orExpression prims =
 
       let build =
-              \prev -> \ps -> Logic.ifElse (Lists.null (Lists.tail ps)) (Syntax.BitwiseOr {
+              \prev -> \ps -> Maybes.maybe (Syntax.BitwiseOr {
                 Syntax.bitwiseOrLhs = prev,
-                Syntax.bitwiseOrRhs = (pyPrimaryToPyBitwiseXor (Lists.head ps))}) (build (Just (Syntax.BitwiseOr {
+                Syntax.bitwiseOrRhs = (pyPrimaryToPyBitwiseXor (Syntax.PrimarySimple Syntax.AtomEllipsis))}) (\p -> Logic.ifElse (Lists.null (Pairs.second p)) (Syntax.BitwiseOr {
                 Syntax.bitwiseOrLhs = prev,
-                Syntax.bitwiseOrRhs = (pyPrimaryToPyBitwiseXor (Lists.head ps))})) (Lists.tail ps))
+                Syntax.bitwiseOrRhs = (pyPrimaryToPyBitwiseXor (Pairs.first p))}) (build (Just (Syntax.BitwiseOr {
+                Syntax.bitwiseOrLhs = prev,
+                Syntax.bitwiseOrRhs = (pyPrimaryToPyBitwiseXor (Pairs.first p))})) (Pairs.second p))) (Lists.uncons ps)
       in (pyBitwiseOrToPyExpression (build Nothing prims))
 
 -- | Create a primary with parameters (subscript)
@@ -204,7 +206,7 @@ primaryAndParams prim params = pyPrimaryToPyExpression (primaryWithExpressionSli
 -- | Create a Primary with expression slices
 primaryWithExpressionSlices :: Syntax.Primary -> [Syntax.Expression] -> Syntax.Primary
 primaryWithExpressionSlices prim exprs =
-    primaryWithSlices prim (pyExpressionToPySlice (Lists.head exprs)) (Lists.map (\e -> Syntax.SliceOrStarredExpressionSlice (pyExpressionToPySlice e)) (Lists.tail exprs))
+    Maybes.fromMaybe prim (Maybes.map (\p -> primaryWithSlices prim (pyExpressionToPySlice (Pairs.first p)) (Lists.map (\e -> Syntax.SliceOrStarredExpressionSlice (pyExpressionToPySlice e)) (Pairs.second p))) (Lists.uncons exprs))
 
 -- | Combine a Primary with a PrimaryRhs
 primaryWithRhs :: Syntax.Primary -> Syntax.PrimaryRhs -> Syntax.Primary

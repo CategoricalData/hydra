@@ -2,13 +2,10 @@ package hydra.dsl.prims;
 
 import hydra.core.Term;
 import hydra.lib.math.Add;
-import hydra.lib.math.Div;
 import hydra.lib.math.Max;
 import hydra.lib.math.Min;
-import hydra.lib.math.Mod;
 import hydra.lib.math.Mul;
 import hydra.lib.math.Negate;
-import hydra.lib.math.Rem;
 import hydra.lib.math.Sub;
 
 /**
@@ -22,15 +19,6 @@ public interface Math {
      */
     static Term add() {
         return new Add().term();
-    }
-
-    /**
-     * Returns a term representing the div primitive operation.
-     *
-     * @return a term for dividing two numeric values
-     */
-    static Term div() {
-        return new Div().term();
     }
 
     /**
@@ -52,15 +40,6 @@ public interface Math {
     }
 
     /**
-     * Returns a term representing the mod primitive operation.
-     *
-     * @return a term for computing the modulus of two values
-     */
-    static Term mod() {
-        return new Mod().term();
-    }
-
-    /**
      * Returns a term representing the mul primitive operation.
      *
      * @return a term for multiplying two numeric values
@@ -76,15 +55,6 @@ public interface Math {
      */
     static Term neg() {
         return new Negate().term();
-    }
-
-    /**
-     * Returns a term representing the rem primitive operation.
-     *
-     * @return a term for computing the remainder of two values
-     */
-    static Term rem() {
-        return new Rem().term();
     }
 
     /**

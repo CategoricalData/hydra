@@ -214,22 +214,29 @@ public interface Decoding {
   }
 
   static hydra.core.Name decodeBindingName(hydra.core.Name n) {
-    return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(hydra.lib.lists.Tail.apply(hydra.lib.strings.SplitOn.apply(
-        ".",
-        (n).value)))),
-      () -> new hydra.core.Name(hydra.lib.strings.Intercalate.apply(
-        ".",
-        hydra.lib.lists.Concat2.apply(
-          java.util.Arrays.asList(
-            "hydra",
-            "decode"),
-          hydra.lib.lists.Concat2.apply(
-            hydra.lib.lists.Tail.apply(hydra.lib.lists.Init.apply(hydra.lib.strings.SplitOn.apply(
-              ".",
-              (n).value))),
-            java.util.Arrays.asList(hydra.Formatting.decapitalize(hydra.Names.localNameOf(n))))))),
-      () -> new hydra.core.Name(hydra.Formatting.decapitalize(hydra.Names.localNameOf(n))));
+    String localPart = hydra.Formatting.decapitalize(hydra.Names.localNameOf(n));
+    hydra.core.Name localResult = new hydra.core.Name(localPart);
+    java.util.List<String> parts = hydra.lib.strings.SplitOn.apply(
+      ".",
+      (n).value);
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> localResult,
+      (java.util.function.Function<java.util.List<String>, hydra.core.Name>) (nsParts -> hydra.lib.maybes.Maybe.applyLazy(
+        () -> localResult,
+        (java.util.function.Function<hydra.util.Pair<String, java.util.List<String>>, hydra.core.Name>) (nsUc -> {
+          hydra.util.Lazy<java.util.List<String>> tail = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(nsUc));
+          return new hydra.core.Name(hydra.lib.strings.Intercalate.apply(
+            ".",
+            hydra.lib.lists.Concat2.apply(
+              java.util.Arrays.asList(
+                "hydra",
+                "decode"),
+              hydra.lib.lists.Concat2.apply(
+                tail.get(),
+                java.util.Arrays.asList(localPart)))));
+        }),
+        hydra.lib.lists.Uncons.apply(nsParts))),
+      hydra.lib.lists.MaybeInit.apply(parts));
   }
 
   static hydra.core.Term decodeEitherType(hydra.core.EitherType et) {
@@ -487,13 +494,18 @@ public interface Decoding {
   }
 
   static hydra.packaging.Namespace decodeNamespace(hydra.packaging.Namespace ns) {
-    return new hydra.packaging.Namespace(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
-      "hydra.decode.",
-      hydra.lib.strings.Intercalate.apply(
-        ".",
-        hydra.lib.lists.Tail.apply(hydra.lib.strings.SplitOn.apply(
+    hydra.packaging.Namespace fallback = new hydra.packaging.Namespace((ns).value);
+    java.util.List<String> parts = hydra.lib.strings.SplitOn.apply(
+      ".",
+      (ns).value);
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> fallback,
+      (java.util.function.Function<hydra.util.Pair<String, java.util.List<String>>, hydra.packaging.Namespace>) (uc -> new hydra.packaging.Namespace(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
+        "hydra.decode.",
+        hydra.lib.strings.Intercalate.apply(
           ".",
-          (ns).value))))));
+          hydra.lib.pairs.Second.apply(uc)))))),
+      hydra.lib.lists.Uncons.apply(parts));
   }
 
   static hydra.core.Term decodePairType(hydra.core.PairType pt) {

@@ -34,10 +34,8 @@ value cx raw =
                       (Core.Name "null", (\input -> Eithers.map (\t -> Model.ValueNull) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "number", (\input -> Eithers.map (\t -> Model.ValueNumber t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
                         Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralFloat v2 -> case v2 of
-                            Core.FloatValueBigfloat v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected bigfloat value")
-                          _ -> Left (Errors.DecodingError "expected bigfloat literal")
+                          Core.LiteralDecimal v2 -> Right v2
+                          _ -> Left (Errors.DecodingError "expected decimal literal")
                         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
                       (Core.Name "object", (\input -> Eithers.map (\t -> Model.ValueObject t) (ExtractCore.decodeMap (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
                         Core.TermLiteral v1 -> case v1 of

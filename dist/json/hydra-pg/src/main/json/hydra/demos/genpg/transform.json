@@ -4073,139 +4073,189 @@
                                     "function": {
                                       "application": {
                                         "argument": {
-                                          "let": {
-                                            "bindings": [
-                                              {
-                                                "name": "headerRow",
-                                                "term": {
-                                                  "application": {
-                                                    "argument": {"variable": "rows"},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.head"},
-                                                        "type": {"list": {"maybe": {"literal": {"string": {}}}}}}}}},
-                                                "type": {
-                                                  "type": {"list": {"maybe": {"literal": {"string": {}}}}},
-                                                  "variables": []}}],
-                                            "body": {
-                                              "let": {
-                                                "bindings": [
-                                                  {
-                                                    "name": "dataRows",
-                                                    "term": {
-                                                      "application": {
-                                                        "argument": {"variable": "rows"},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.lists.tail"},
-                                                            "type": {"list": {"maybe": {"literal": {"string": {}}}}}}}}},
-                                                    "type": {
-                                                      "type": {"list": {"list": {"maybe": {"literal": {"string": {}}}}}},
-                                                      "variables": []}}],
-                                                "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "rows"},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.lists.uncons"},
+                                                    "type": {"list": {"maybe": {"literal": {"string": {}}}}}}}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "let": {
+                                                        "bindings": [
+                                                          {
+                                                            "name": "headerRow",
+                                                            "term": {
+                                                              "application": {
+                                                                "argument": {"variable": "p"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.lib.pairs.first"},
+                                                                        "type": {"list": {"maybe": {"literal": {"string": {}}}}}}},
+                                                                    "type": {"list": {"list": {"maybe": {"literal": {"string": {}}}}}}}}}},
+                                                            "type": {
+                                                              "type": {"list": {"maybe": {"literal": {"string": {}}}}},
+                                                              "variables": []}},
+                                                          {
+                                                            "name": "dataRows",
+                                                            "term": {
+                                                              "application": {
+                                                                "argument": {"variable": "p"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.lib.pairs.second"},
+                                                                        "type": {"list": {"maybe": {"literal": {"string": {}}}}}}},
+                                                                    "type": {"list": {"list": {"maybe": {"literal": {"string": {}}}}}}}}}},
+                                                            "type": {
+                                                              "type": {"list": {"list": {"maybe": {"literal": {"string": {}}}}}},
+                                                              "variables": []}}],
+                                                        "body": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "either": {
+                                                                        "@right": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "record": {
+                                                                                "fields": [
+                                                                                  {
+                                                                                    "name": "header",
+                                                                                    "term": {
+                                                                                      "maybe": {
+                                                                                        "wrap": {
+                                                                                          "body": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "headerRow"},
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"variable": "hydra.lib.maybes.cat"},
+                                                                                                  "type": {"literal": {"string": {}}}}}}},
+                                                                                          "typeName": "hydra.tabular.HeaderRow"}}}},
+                                                                                  {
+                                                                                    "name": "data",
+                                                                                    "term": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "dataRows"},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "lambda": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "wrap": {"body": {"variable": "r"}, "typeName": "hydra.tabular.DataRow"}},
+                                                                                                    "type": {"literal": {"string": {}}}}},
+                                                                                                "domain": {"list": {"maybe": {"literal": {"string": {}}}}},
+                                                                                                "parameter": "r"}},
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"variable": "hydra.lib.lists.map"},
+                                                                                                    "type": {"list": {"maybe": {"literal": {"string": {}}}}}}},
+                                                                                                "type": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"literal": {"string": {}}},
+                                                                                                    "function": {"variable": "hydra.tabular.DataRow"}}}}}}}}}}],
+                                                                                "typeName": "hydra.tabular.Table"}},
+                                                                            "type": {"literal": {"string": {}}}}}}},
+                                                                    "type": {"literal": {"string": {}}}}},
+                                                                "type": {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"string": {}}},
+                                                                    "function": {"variable": "hydra.tabular.Table"}}}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "either": {"@left": {"literal": {"string": "null header column(s)"}}}},
+                                                                        "type": {"literal": {"string": {}}}}},
+                                                                    "type": {
+                                                                      "application": {
+                                                                        "argument": {"literal": {"string": {}}},
+                                                                        "function": {"variable": "hydra.tabular.Table"}}}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "headerRow"},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "lambda": {
+                                                                                "body": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "m"},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"variable": "hydra.lib.maybes.isNothing"},
+                                                                                        "type": {"literal": {"string": {}}}}}}},
+                                                                                "domain": {"maybe": {"literal": {"string": {}}}},
+                                                                                "parameter": "m"}},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {"variable": "hydra.demos.genpg.transform.listAny"},
+                                                                                "type": {"maybe": {"literal": {"string": {}}}}}}}}}},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                        "type": {
+                                                                          "either": {
+                                                                            "left": {"literal": {"string": {}}},
+                                                                            "right": {
+                                                                              "application": {
+                                                                                "argument": {"literal": {"string": {}}},
+                                                                                "function": {"variable": "hydra.tabular.Table"}}}}}}}}}}}}}}},
+                                                    "domain": {
+                                                      "pair": {
+                                                        "first": {"list": {"maybe": {"literal": {"string": {}}}}},
+                                                        "second": {"list": {"list": {"maybe": {"literal": {"string": {}}}}}}}},
+                                                    "parameter": "p"}},
+                                                "function": {
                                                   "application": {
                                                     "argument": {
                                                       "typeApplication": {
                                                         "body": {
                                                           "typeApplication": {
                                                             "body": {
-                                                              "either": {
-                                                                "@right": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "record": {
-                                                                        "fields": [
-                                                                          {
-                                                                            "name": "header",
-                                                                            "term": {
-                                                                              "maybe": {
-                                                                                "wrap": {
-                                                                                  "body": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "headerRow"},
-                                                                                      "function": {
-                                                                                        "typeApplication": {
-                                                                                          "body": {"variable": "hydra.lib.maybes.cat"},
-                                                                                          "type": {"literal": {"string": {}}}}}}},
-                                                                                  "typeName": "hydra.tabular.HeaderRow"}}}},
-                                                                          {
-                                                                            "name": "data",
-                                                                            "term": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "dataRows"},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "lambda": {
-                                                                                        "body": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {
-                                                                                              "wrap": {"body": {"variable": "r"}, "typeName": "hydra.tabular.DataRow"}},
-                                                                                            "type": {"literal": {"string": {}}}}},
-                                                                                        "domain": {"list": {"maybe": {"literal": {"string": {}}}}},
-                                                                                        "parameter": "r"}},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"variable": "hydra.lib.lists.map"},
-                                                                                            "type": {"list": {"maybe": {"literal": {"string": {}}}}}}},
-                                                                                        "type": {
-                                                                                          "application": {
-                                                                                            "argument": {"literal": {"string": {}}},
-                                                                                            "function": {"variable": "hydra.tabular.DataRow"}}}}}}}}}}],
-                                                                        "typeName": "hydra.tabular.Table"}},
-                                                                    "type": {"literal": {"string": {}}}}}}},
+                                                              "either": {"@left": {"literal": {"string": "empty rows: cannot parse header"}}}},
                                                             "type": {"literal": {"string": {}}}}},
                                                         "type": {
                                                           "application": {
                                                             "argument": {"literal": {"string": {}}},
                                                             "function": {"variable": "hydra.tabular.Table"}}}}},
                                                     "function": {
-                                                      "application": {
-                                                        "argument": {
+                                                      "typeApplication": {
+                                                        "body": {
                                                           "typeApplication": {
-                                                            "body": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "either": {"@left": {"literal": {"string": "null header column(s)"}}}},
-                                                                "type": {"literal": {"string": {}}}}},
+                                                            "body": {"variable": "hydra.lib.maybes.maybe"},
                                                             "type": {
-                                                              "application": {
-                                                                "argument": {"literal": {"string": {}}},
-                                                                "function": {"variable": "hydra.tabular.Table"}}}}},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "headerRow"},
-                                                                "function": {
+                                                              "either": {
+                                                                "left": {"literal": {"string": {}}},
+                                                                "right": {
                                                                   "application": {
-                                                                    "argument": {
-                                                                      "lambda": {
-                                                                        "body": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "m"},
-                                                                            "function": {
-                                                                              "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.maybes.isNothing"},
-                                                                                "type": {"literal": {"string": {}}}}}}},
-                                                                        "domain": {"maybe": {"literal": {"string": {}}}},
-                                                                        "parameter": "m"}},
-                                                                    "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {"variable": "hydra.demos.genpg.transform.listAny"},
-                                                                        "type": {"maybe": {"literal": {"string": {}}}}}}}}}},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                "type": {
-                                                                  "either": {
-                                                                    "left": {"literal": {"string": {}}},
-                                                                    "right": {
-                                                                      "application": {
-                                                                        "argument": {"literal": {"string": {}}},
-                                                                        "function": {"variable": "hydra.tabular.Table"}}}}}}}}}}}}}}}}},
+                                                                    "argument": {"literal": {"string": {}}},
+                                                                    "function": {"variable": "hydra.tabular.Table"}}}}}}},
+                                                        "type": {
+                                                          "pair": {
+                                                            "first": {"list": {"maybe": {"literal": {"string": {}}}}},
+                                                            "second": {"list": {"list": {"maybe": {"literal": {"string": {}}}}}}}}}}}}}}}},
                                         "function": {
                                           "application": {
                                             "argument": {"variable": "hasHeader"},
@@ -4518,26 +4568,53 @@
                                             "function": {
                                               "application": {
                                                 "argument": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "either": {
-                                                            "@right": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "tables"},
-                                                                    "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {"variable": "hydra.lib.sets.toList"},
-                                                                        "type": {"literal": {"string": {}}}}}}},
-                                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "tables"},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.lib.sets.toList"},
+                                                                "type": {"literal": {"string": {}}}}}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                                            "type": {"literal": {"string": {}}}}}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
                                                                   "typeApplication": {
-                                                                    "body": {"variable": "hydra.lib.lists.head"},
-                                                                    "type": {"literal": {"string": {}}}}}}}}},
-                                                        "type": {"literal": {"string": {}}}}},
-                                                    "type": {"literal": {"string": {}}}}},
+                                                                    "body": {"either": {"@right": {"variable": "x"}}},
+                                                                    "type": {"literal": {"string": {}}}}},
+                                                                "type": {"literal": {"string": {}}}}},
+                                                            "domain": {"literal": {"string": {}}},
+                                                            "parameter": "x"}},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "either": {"@left": {"literal": {"string": "unreachable: empty tables set"}}}},
+                                                                    "type": {"literal": {"string": {}}}}},
+                                                                "type": {"literal": {"string": {}}}}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.maybes.maybe"},
+                                                                    "type": {
+                                                                      "either": {
+                                                                        "left": {"literal": {"string": {}}},
+                                                                        "right": {"literal": {"string": {}}}}}}},
+                                                                "type": {"literal": {"string": {}}}}}}}}}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {
@@ -4690,26 +4767,53 @@
                                     "function": {
                                       "application": {
                                         "argument": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "either": {
-                                                    "@right": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "application": {
-                                                            "argument": {"variable": "tables"},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.sets.toList"},
-                                                                "type": {"literal": {"string": {}}}}}}},
-                                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "tables"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.sets.toList"},
+                                                        "type": {"literal": {"string": {}}}}}}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                                    "type": {"literal": {"string": {}}}}}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
                                                           "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.lists.head"},
-                                                            "type": {"literal": {"string": {}}}}}}}}},
-                                                "type": {"literal": {"string": {}}}}},
-                                            "type": {"literal": {"string": {}}}}},
+                                                            "body": {"either": {"@right": {"variable": "x"}}},
+                                                            "type": {"literal": {"string": {}}}}},
+                                                        "type": {"literal": {"string": {}}}}},
+                                                    "domain": {"literal": {"string": {}}},
+                                                    "parameter": "x"}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "either": {"@left": {"literal": {"string": "unreachable: empty tables set"}}}},
+                                                            "type": {"literal": {"string": {}}}}},
+                                                        "type": {"literal": {"string": {}}}}},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.maybes.maybe"},
+                                                            "type": {
+                                                              "either": {
+                                                                "left": {"literal": {"string": {}}},
+                                                                "right": {"literal": {"string": {}}}}}}},
+                                                        "type": {"literal": {"string": {}}}}}}}}}}},
                                         "function": {
                                           "application": {
                                             "argument": {

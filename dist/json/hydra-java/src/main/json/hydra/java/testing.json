@@ -45,11 +45,21 @@
                                   "application": {
                                     "argument": {
                                       "application": {
-                                        "argument": {"variable": "parts"},
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "parts"},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.lists.maybeInit"},
+                                                "type": {"literal": {"string": {}}}}}}},
                                         "function": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.lists.init"},
-                                            "type": {"literal": {"string": {}}}}}}},
+                                          "application": {
+                                            "argument": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                "type": {"list": {"literal": {"string": {}}}}}}}}}},
                                     "function": {
                                       "application": {
                                         "argument": {"literal": {"string": "."}},
@@ -66,11 +76,20 @@
                                           "application": {
                                             "argument": {
                                               "application": {
-                                                "argument": {"variable": "parts"},
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "parts"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.lists.maybeLast"},
+                                                        "type": {"literal": {"string": {}}}}}}},
                                                 "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.lists.last"},
-                                                    "type": {"literal": {"string": {}}}}}}},
+                                                  "application": {
+                                                    "argument": {"literal": {"string": ""}},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                        "type": {"literal": {"string": {}}}}}}}}},
                                             "function": {"variable": "hydra.formatting.capitalize"}}},
                                         "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                 "type": {"type": {"literal": {"string": {}}}, "variables": []}},
@@ -912,11 +931,21 @@
                                               "application": {
                                                 "argument": {
                                                   "application": {
-                                                    "argument": {"variable": "parts"},
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "parts"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.lists.maybeInit"},
+                                                            "type": {"literal": {"string": {}}}}}}},
                                                     "function": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.init"},
-                                                        "type": {"literal": {"string": {}}}}}}},
+                                                      "application": {
+                                                        "argument": {
+                                                          "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                            "type": {"list": {"literal": {"string": {}}}}}}}}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {"literal": {"integer": {"int32": 1}}},
@@ -936,11 +965,20 @@
                                                       "application": {
                                                         "argument": {
                                                           "application": {
-                                                            "argument": {"variable": "parts"},
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "parts"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.lists.maybeLast"},
+                                                                    "type": {"literal": {"string": {}}}}}}},
                                                             "function": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.lists.last"},
-                                                                "type": {"literal": {"string": {}}}}}}},
+                                                              "application": {
+                                                                "argument": {"literal": {"string": ""}},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                                    "type": {"literal": {"string": {}}}}}}}}},
                                                         "function": {"variable": "hydra.formatting.capitalize"}}},
                                                     "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                             "type": {"type": {"literal": {"string": {}}}, "variables": []}},

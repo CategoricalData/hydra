@@ -2601,11 +2601,20 @@
                                                                       "application": {
                                                                         "argument": {
                                                                           "application": {
-                                                                            "argument": {"variable": "raw"},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "raw"},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {"literal": {"integer": {"int32": 0}}},
+                                                                                    "function": {"variable": "hydra.lib.strings.maybeCharAt"}}}}},
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {"literal": {"integer": {"int32": 0}}},
-                                                                                "function": {"variable": "hydra.lib.strings.charAt"}}}}},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                                         "function": {
                                                                           "typeApplication": {
                                                                             "body": {"variable": "hydra.lib.equality.equal"},

@@ -11,7 +11,6 @@ import hydra.annotations
 import hydra.constants
 import hydra.core
 import hydra.formatting
-import hydra.lib.equality
 import hydra.lib.lists
 import hydra.lib.literals
 import hydra.lib.logic
@@ -32,7 +31,7 @@ def qualify_name(name: hydra.core.Name) -> hydra.packaging.QualifiedName:
     @lru_cache(1)
     def parts() -> frozenlist[str]:
         return hydra.lib.lists.reverse(hydra.lib.strings.split_on(".", name.value))
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(1, hydra.lib.lists.length(parts())), (lambda : hydra.packaging.QualifiedName(Nothing(), name.value)), (lambda : hydra.packaging.QualifiedName(Just(hydra.packaging.Namespace(hydra.lib.strings.intercalate(".", hydra.lib.lists.reverse(hydra.lib.lists.tail(parts()))))), hydra.lib.lists.head(parts()))))
+    return hydra.lib.maybes.maybe((lambda : hydra.packaging.QualifiedName(Nothing(), name.value)), (lambda uc: (local_name := hydra.lib.pairs.first(uc), rest_reversed := hydra.lib.pairs.second(uc), hydra.lib.logic.if_else(hydra.lib.lists.null(rest_reversed), (lambda : hydra.packaging.QualifiedName(Nothing(), name.value)), (lambda : hydra.packaging.QualifiedName(Just(hydra.packaging.Namespace(hydra.lib.strings.intercalate(".", hydra.lib.lists.reverse(rest_reversed)))), local_name))))[2]), hydra.lib.lists.uncons(parts()))
 
 def compact_name(namespaces: FrozenDict[hydra.packaging.Namespace, str], name: hydra.core.Name) -> str:
     r"""Given a mapping of namespaces to prefixes, convert a name to a compact string representation."""

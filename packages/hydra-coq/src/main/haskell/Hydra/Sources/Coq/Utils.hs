@@ -97,7 +97,7 @@ extractQualifiedNamespace = define "extractQualifiedNamespace" $
   lambda "s" $ lets [
     "parts">: Strings.splitOn (string ".") (var "s")] $
     Logic.ifElse (Equality.gte (Lists.length (var "parts")) (int32 2))
-      (Strings.intercalate (string ".") (Lists.init (var "parts")))
+      (Strings.intercalate (string ".") (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts"))))
       (var "s")
 
 -- | Extract the leading forall-bound parameter names from a type, returning
@@ -119,17 +119,20 @@ isTypeVarLike = define "isTypeVarLike" $
   doc "Return True if the string is of the form `t<digits>` with at least one digit" $
   lambda "s" $ lets [
     "chars">: Strings.toList (var "s")] $
-    Logic.ifElse (Logic.or (Lists.null (var "chars"))
-                           (Logic.not (Equality.equal (Lists.head (var "chars")) (int32 116))))
-      (boolean False)
-      (lets ["rest">: Lists.tail (var "chars")] $
-        Logic.and (Logic.not (Lists.null (var "rest")))
-                  (Lists.foldl
-                    (lambdas ["acc", "c"] $ Logic.and (var "acc")
-                      (Logic.and (Equality.gte (var "c") (int32 48))
-                                 (Equality.lte (var "c") (int32 57))))
-                    (boolean True)
-                    (var "rest")))
+    Maybes.fromMaybe (boolean False) (Maybes.map
+      (lambda "p" $ lets [
+        "firstCh">: Pairs.first (var "p"),
+        "rest">: Pairs.second (var "p")] $
+        Logic.ifElse (Logic.not (Equality.equal (var "firstCh") (int32 116)))
+          (boolean False)
+          (Logic.and (Logic.not (Lists.null (var "rest")))
+                    (Lists.foldl
+                      (lambdas ["acc", "c"] $ Logic.and (var "acc")
+                        (Logic.and (Equality.gte (var "c") (int32 48))
+                                   (Equality.lte (var "c") (int32 57))))
+                      (boolean True)
+                      (var "rest"))))
+      (Lists.uncons (var "chars")))
 
 -- | Take the last dot-separated segment of a qualified Hydra name and sanitise
 -- it against Coq's stripped-reserved-words list.
@@ -138,9 +141,7 @@ localName = define "localName" $
   doc "Return the last dot-separated segment of a qualified Hydra name, sanitised via `sanitize`" $
   lambda "s" $ lets [
     "parts">: Strings.splitOn (string ".") (var "s"),
-    "raw">: Logic.ifElse (Lists.null (var "parts"))
-      (var "s")
-      (Lists.last (var "parts"))] $
+    "raw">: Maybes.fromMaybe (var "s") (Lists.maybeLast (var "parts"))] $
     sanitize @@ var "raw"
 
 -- | Sanitise a name that appears in a stripped-local reference position: if it
@@ -176,7 +177,7 @@ qualifiedFromName = define "qualifiedFromName" $
     "parts">: Strings.splitOn (string ".") (var "raw")] $
     Logic.ifElse (Logic.and
         (Equality.gte (Lists.length (var "parts")) (int32 2))
-        (Equality.equal (Lists.head (var "parts")) (string "hydra")))
+        (Equality.equal (Maybes.fromMaybe (string "") (Lists.maybeHead (var "parts"))) (string "hydra")))
       (Sets.singleton (var "raw"))
       (Sets.empty :: TTerm (S.Set String))
 
@@ -536,9 +537,7 @@ localNameRaw = define "localNameRaw" $
   doc "Return the last dot-separated segment of a qualified Hydra name, unsanitized" $
   lambda "s" $ lets [
     "parts">: Strings.splitOn (string ".") (var "s")] $
-    Logic.ifElse (Lists.null (var "parts"))
-      (var "s")
-      (Lists.last (var "parts"))
+    Maybes.fromMaybe (var "s") (Lists.maybeLast (var "parts"))
 
 -- | Build a map from (qualifiedTypeName, bareFieldName) to a prefixed field
 -- name like `typeName_fieldName`. Used to disambiguate Coq record accessor
@@ -1046,13 +1045,14 @@ encodeMutualLetGroup = define "encodeMutualLetGroup" $
     (var "grp") $
   -- Build a nested pair from the stripped binding terms
   "mkPair" <~ ("ts" ~>
-    Logic.ifElse (Lists.null (var "ts"))
-      (Core.termVariable $ wrap _Name (string "tt"))
-      (Logic.ifElse (Equality.equal (Lists.length (var "ts")) (int32 1))
-        (Lists.head (var "ts"))
-        (Core.termPair $ pair
-          (Lists.head (var "ts"))
-          (var "mkPair" @@ (Lists.tail (var "ts")))))) $
+    Maybes.fromMaybe (Core.termVariable $ wrap _Name (string "tt")) (Maybes.map
+      (lambda "p" $
+        Logic.ifElse (Equality.equal (Lists.length (var "ts")) (int32 1))
+          (Pairs.first (var "p"))
+          (Core.termPair $ pair
+            (Pairs.first (var "p"))
+            (var "mkPair" @@ (Pairs.second (var "p")))))
+      (Lists.uncons (var "ts")))) $
   "pairExpr" <~ (var "mkPair" @@
     Lists.map ("b" ~> Core.bindingTerm $ var "b") (var "strippedBindings")) $
   "fixBody" <~ (rebuildLets @@ var "innerProjBindings" @@ var "pairExpr") $
@@ -1127,11 +1127,12 @@ sortTypeDefsSCC = define "sortTypeDefsSCC" $
       Logic.ifElse (Equality.gte (Lists.length $ var "grp") (int32 2))
         (pair (boolean True) (var "grp"))
         -- Singleton: cyclic iff it references itself.
-        (lets [
-          "d">: Lists.head (var "grp"),
-          "name">: Pairs.first $ var "d",
-          "deps">: typeRefs @@ var "localNames" @@ (Pairs.second $ var "d")] $
-          pair (Sets.member (var "name") (var "deps")) (var "grp")))
+        (Maybes.fromMaybe (pair (boolean False) (var "grp")) (Maybes.map
+          (lambda "d" $ lets [
+            "name">: Pairs.first $ var "d",
+            "deps">: typeRefs @@ var "localNames" @@ (Pairs.second $ var "d")] $
+            pair (Sets.member (var "name") (var "deps")) (var "grp"))
+          (Lists.maybeHead (var "grp")))))
       (var "comps")
 
 -- | Sort a list of (name, Term) pairs into SCC groups, flagging each group
@@ -1150,11 +1151,12 @@ sortTermDefsSCC = define "sortTermDefsSCC" $
     Lists.map (lambda "grp" $
       Logic.ifElse (Equality.gte (Lists.length $ var "grp") (int32 2))
         (pair (boolean True) (var "grp"))
-        (lets [
-          "d">: Lists.head (var "grp"),
-          "name">: Pairs.first $ var "d",
-          "deps">: termRefs @@ var "localNames" @@ (Pairs.second $ var "d")] $
-          pair (Sets.member (var "name") (var "deps")) (var "grp")))
+        (Maybes.fromMaybe (pair (boolean False) (var "grp")) (Maybes.map
+          (lambda "d" $ lets [
+            "name">: Pairs.first $ var "d",
+            "deps">: termRefs @@ var "localNames" @@ (Pairs.second $ var "d")] $
+            pair (Sets.member (var "name") (var "deps")) (var "grp"))
+          (Lists.maybeHead (var "grp")))))
       (var "comps")
 
 

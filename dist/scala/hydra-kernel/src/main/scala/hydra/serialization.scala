@@ -47,7 +47,7 @@ def customIndentBlock(idt: scala.Predef.String)(els: Seq[hydra.ast.Expr]): hydra
   lazy val idtOp: hydra.ast.Op = hydra.ast.Op(hydra.serialization.sym(""), hydra.ast.Padding(hydra.ast.Ws.space,
      hydra.ast.Ws.breakAndIndent(idt)), 0, hydra.ast.Associativity.none)
   hydra.lib.maybes.maybe[hydra.ast.Expr, hydra.ast.Expr](hydra.serialization.cst(""))((head: hydra.ast.Expr) =>
-    hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.ast.Expr](els))(1))(head)(hydra.serialization.ifx(idtOp)(head)(hydra.serialization.newlineSep(hydra.lib.lists.drop[hydra.ast.Expr](1)(els)))))(hydra.lib.lists.safeHead[hydra.ast.Expr](els))
+    hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.ast.Expr](els))(1))(head)(hydra.serialization.ifx(idtOp)(head)(hydra.serialization.newlineSep(hydra.lib.lists.drop[hydra.ast.Expr](1)(els)))))(hydra.lib.lists.maybeHead[hydra.ast.Expr](els))
 }
 
 def dotSep(v1: Seq[hydra.ast.Expr]): hydra.ast.Expr =
@@ -172,7 +172,7 @@ def orSep(style: hydra.ast.BlockStyle)(l: Seq[hydra.ast.Expr]): hydra.ast.Expr =
   hydra.lib.maybes.maybe[hydra.ast.Expr, hydra.ast.Expr](hydra.serialization.cst(""))((h: hydra.ast.Expr) =>
     hydra.lib.lists.foldl[hydra.ast.Expr, hydra.ast.Expr]((acc: hydra.ast.Expr) =>
     (el: hydra.ast.Expr) =>
-    hydra.serialization.ifx(hydra.serialization.orOp(newlines))(acc)(el))(h)(hydra.lib.lists.drop[hydra.ast.Expr](1)(l)))(hydra.lib.lists.safeHead[hydra.ast.Expr](l))
+    hydra.serialization.ifx(hydra.serialization.orOp(newlines))(acc)(el))(h)(hydra.lib.lists.drop[hydra.ast.Expr](1)(l)))(hydra.lib.lists.maybeHead[hydra.ast.Expr](l))
 }
 
 def parenList(newlines: Boolean)(els: Seq[hydra.ast.Expr]): hydra.ast.Expr =
@@ -300,9 +300,14 @@ def printExpr(e: hydra.ast.Expr): scala.Predef.String =
             lazy val ilns: Seq[scala.Predef.String] = style match
               case hydra.ast.IndentStyle.allLines(v_IndentStyle_allLines_idt2) => hydra.lib.lists.map[scala.Predef.String,
                  scala.Predef.String]((line: scala.Predef.String) => hydra.lib.strings.cat2(v_IndentStyle_allLines_idt2)(line))(lns)
-              case hydra.ast.IndentStyle.subsequentLines(v_IndentStyle_subsequentLines_idt2) => hydra.lib.logic.ifElse[Seq[scala.Predef.String]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[scala.Predef.String](lns))(1))(lns)(hydra.lib.lists.cons[scala.Predef.String](hydra.lib.lists.head[scala.Predef.String](lns))(hydra.lib.lists.map[scala.Predef.String,
-                 scala.Predef.String]((line: scala.Predef.String) =>
-                hydra.lib.strings.cat2(v_IndentStyle_subsequentLines_idt2)(line))(hydra.lib.lists.tail[scala.Predef.String](lns))))
+              case hydra.ast.IndentStyle.subsequentLines(v_IndentStyle_subsequentLines_idt2) => hydra.lib.logic.ifElse[Seq[scala.Predef.String]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[scala.Predef.String](lns))(1))(lns)(hydra.lib.maybes.fromMaybe[Seq[scala.Predef.String]](lns)(hydra.lib.maybes.map[Tuple2[scala.Predef.String,
+                 Seq[scala.Predef.String]], Seq[scala.Predef.String]]((uc: Tuple2[scala.Predef.String,
+                 Seq[scala.Predef.String]]) =>
+                hydra.lib.lists.cons[scala.Predef.String](hydra.lib.pairs.first[scala.Predef.String,
+                   Seq[scala.Predef.String]](uc))(hydra.lib.lists.map[scala.Predef.String,
+                   scala.Predef.String]((line: scala.Predef.String) =>
+                hydra.lib.strings.cat2(v_IndentStyle_subsequentLines_idt2)(line))(hydra.lib.pairs.second[scala.Predef.String,
+                   Seq[scala.Predef.String]](uc))))(hydra.lib.lists.uncons[scala.Predef.String](lns))))
             hydra.lib.strings.intercalate("\n")(ilns)
           }
         }
@@ -406,7 +411,7 @@ def semicolonSep(v1: Seq[hydra.ast.Expr]): hydra.ast.Expr = hydra.serialization.
 
 def sep(op: hydra.ast.Op)(els: Seq[hydra.ast.Expr]): hydra.ast.Expr =
   hydra.lib.maybes.maybe[hydra.ast.Expr, hydra.ast.Expr](hydra.serialization.cst(""))((h: hydra.ast.Expr) =>
-  hydra.lib.lists.foldl[hydra.ast.Expr, hydra.ast.Expr]((acc: hydra.ast.Expr) => (el: hydra.ast.Expr) => hydra.serialization.ifx(op)(acc)(el))(h)(hydra.lib.lists.drop[hydra.ast.Expr](1)(els)))(hydra.lib.lists.safeHead[hydra.ast.Expr](els))
+  hydra.lib.lists.foldl[hydra.ast.Expr, hydra.ast.Expr]((acc: hydra.ast.Expr) => (el: hydra.ast.Expr) => hydra.serialization.ifx(op)(acc)(el))(h)(hydra.lib.lists.drop[hydra.ast.Expr](1)(els)))(hydra.lib.lists.maybeHead[hydra.ast.Expr](els))
 
 def spaceSep(v1: Seq[hydra.ast.Expr]): hydra.ast.Expr =
   hydra.serialization.sep(hydra.ast.Op(hydra.serialization.sym(""), hydra.ast.Padding(hydra.ast.Ws.space,
@@ -415,7 +420,7 @@ def spaceSep(v1: Seq[hydra.ast.Expr]): hydra.ast.Expr =
 lazy val squareBrackets: hydra.ast.Brackets = hydra.ast.Brackets("[", "]")
 
 def structuralSep(op: hydra.ast.Op)(els: Seq[hydra.ast.Expr]): hydra.ast.Expr =
-  hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.lists.`null`[hydra.ast.Expr](els))(hydra.serialization.cst(""))(hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.ast.Expr](els))(1))(hydra.lib.lists.head[hydra.ast.Expr](els))(hydra.ast.Expr.seq(hydra.ast.SeqExpr(op,
+  hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.lists.`null`[hydra.ast.Expr](els))(hydra.serialization.cst(""))(hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.ast.Expr](els))(1))(hydra.lib.maybes.fromMaybe[hydra.ast.Expr](hydra.serialization.cst(""))(hydra.lib.lists.maybeHead[hydra.ast.Expr](els)))(hydra.ast.Expr.seq(hydra.ast.SeqExpr(op,
      els))))
 
 def structuralSpaceSep(v1: Seq[hydra.ast.Expr]): hydra.ast.Expr =
@@ -440,7 +445,7 @@ def symbolSep(symb: scala.Predef.String)(style: hydra.ast.BlockStyle)(l: Seq[hyd
      break), 0, hydra.ast.Associativity.none)
   hydra.lib.maybes.maybe[hydra.ast.Expr, hydra.ast.Expr](hydra.serialization.cst(""))((h: hydra.ast.Expr) =>
     hydra.lib.lists.foldl[hydra.ast.Expr, hydra.ast.Expr]((acc: hydra.ast.Expr) =>
-    (el: hydra.ast.Expr) => hydra.serialization.ifx(commaOp)(acc)(el))(h)(hydra.lib.lists.drop[hydra.ast.Expr](1)(l)))(hydra.lib.lists.safeHead[hydra.ast.Expr](l))
+    (el: hydra.ast.Expr) => hydra.serialization.ifx(commaOp)(acc)(el))(h)(hydra.lib.lists.drop[hydra.ast.Expr](1)(l)))(hydra.lib.lists.maybeHead[hydra.ast.Expr](l))
 }
 
 def tabIndent(e: hydra.ast.Expr): hydra.ast.Expr =

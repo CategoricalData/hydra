@@ -4912,13 +4912,13 @@
                 "name": "datetimeType",
                 "type": {"variable": "openGql.grammar.DatetimeType"}},
               {
-                "name": "localdatetimeType",
-                "type": {"variable": "openGql.grammar.LocaldatetimeType"}},
+                "name": "localDatetimeTypeChoice",
+                "type": {"variable": "openGql.grammar.LocalDatetimeTypeChoice"}},
               {"name": "dateType", "type": {"variable": "openGql.grammar.DateType"}},
               {"name": "timeType", "type": {"variable": "openGql.grammar.TimeType"}},
               {
-                "name": "localtimeType",
-                "type": {"variable": "openGql.grammar.LocaltimeType"}}]},
+                "name": "localTimeTypeChoice",
+                "type": {"variable": "openGql.grammar.LocalTimeTypeChoice"}}]},
           "variables": []}}},
     {
       "type": {
@@ -4949,7 +4949,7 @@
           "variables": []}}},
     {
       "type": {
-        "name": "openGql.grammar.LocaldatetimeType",
+        "name": "openGql.grammar.LocalDatetimeTypeChoice",
         "type": {
           "type": {
             "union": [
@@ -5010,7 +5010,7 @@
           "variables": []}}},
     {
       "type": {
-        "name": "openGql.grammar.LocaltimeType",
+        "name": "openGql.grammar.LocalTimeTypeChoice",
         "type": {
           "type": {
             "union": [

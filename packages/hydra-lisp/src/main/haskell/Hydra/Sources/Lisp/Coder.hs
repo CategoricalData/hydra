@@ -351,10 +351,8 @@ encodeLetAsNative = def "encodeLetAsNative" $
         -- If sort succeeds, reorder. If cyclic, keep original order.
         Eithers.either_ (constant (var "bindings"))
           (lambda "sorted" $
-            Lists.map (lambda "name" $
-              Maybes.fromMaybe (Lists.head (var "bindings"))
-                (Maps.lookup (var "name") (var "nameToBinding")))
-              (var "sorted"))
+            Maybes.cat (Lists.map (lambda "name" $ Maps.lookup (var "name") (var "nameToBinding"))
+              (var "sorted")))
           (var "sortResult"))
       (var "bindings")) $
     -- Encode each binding, eta-expanding self-referential non-lambda bindings
@@ -420,7 +418,7 @@ encodeLetAsNative = def "encodeLetAsNative" $
     "isRecursive" <~ (var "hasSelfRef") $
     "letKind" <~ (Logic.ifElse (var "isRecursive")
       (inject L._LetKind L._LetKind_recursive unit)
-      (Logic.ifElse (Lists.null (Lists.tail (var "bindings")))
+      (Logic.ifElse (Equality.lte (Lists.length (var "bindings")) (int32 1))
         (inject L._LetKind L._LetKind_parallel unit)
         (inject L._LetKind L._LetKind_sequential unit))) $
     "lispBindings" <~ (Lists.map

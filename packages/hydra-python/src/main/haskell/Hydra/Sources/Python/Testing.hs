@@ -217,8 +217,8 @@ generateTestFileWithPythonCodec = define "generateTestFileWithPythonCodec" $
         "testModuleContent">: buildPythonTestModule @@ var "testModule" @@ var "testGroup" @@ var "testBody",
         "ns_">: Packaging.moduleNamespace (var "testModule"),
         "parts">: Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns_"),
-        "dirParts">: Lists.init (var "parts"),
-        "fileName">: Strings.cat (list [string "test_", Lists.last (var "parts"), string ".py"]),
+        "dirParts">: Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts")),
+        "fileName">: Strings.cat (list [string "test_", Maybes.fromMaybe (string "") (Lists.maybeLast (var "parts")), string ".py"]),
         "filePath">: Strings.cat (list [Strings.intercalate (string "/") (var "dirParts"), string "/", var "fileName"])] $
         Phantoms.pair (var "filePath") (var "testModuleContent"))
       (generatePythonTestGroupHierarchy @@ list ([] :: [TTerm String]) @@ var "testGroup")

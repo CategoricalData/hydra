@@ -301,7 +301,7 @@ literalToExpr lit =
           showFloat =
                   \showFn -> \v ->
                     let raw = showFn v
-                    in (Logic.ifElse (Equality.equal raw "NaN") "(0/0)" (Logic.ifElse (Equality.equal raw "Infinity") "(1/0)" (Logic.ifElse (Equality.equal raw "-Infinity") "(-(1/0))" (parensIfNeg (Equality.equal (Strings.charAt 0 raw) 45) raw))))
+                    in (Logic.ifElse (Equality.equal raw "NaN") "(0/0)" (Logic.ifElse (Equality.equal raw "Infinity") "(1/0)" (Logic.ifElse (Equality.equal raw "-Infinity") "(-(1/0))" (parensIfNeg (Equality.equal (Maybes.fromMaybe 0 (Strings.maybeCharAt 0 raw)) 45) raw))))
       in (Serialization.cst (case lit of
         Syntax.LiteralChar v0 -> Literals.showString (Literals.showUint16 v0)
         Syntax.LiteralDouble v0 -> showFloat (\v -> Literals.showFloat64 v) v0

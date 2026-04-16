@@ -27,7 +27,7 @@ public interface Model {
 
       @Override
       public hydra.core.Term visit(hydra.json.model.Value.Number_ y) {
-        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.json.model.Value"), new hydra.core.Field(new hydra.core.Name("number"), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Bigfloat((y).value))))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.json.model.Value"), new hydra.core.Field(new hydra.core.Name("number"), new hydra.core.Term.Literal(new hydra.core.Literal.Decimal((y).value)))));
       }
 
       @Override

@@ -15,6 +15,7 @@ import hydra.lib.literals
 import hydra.lib.logic
 import hydra.lib.math
 import hydra.lib.maybes
+import hydra.lib.pairs
 import hydra.lib.strings
 import hydra.util
 
@@ -42,7 +43,7 @@ def symbol_sep(symb: str, style: hydra.ast.BlockStyle, l: frozenlist[hydra.ast.E
     @lru_cache(1)
     def comma_op() -> hydra.ast.Op:
         return hydra.ast.Op(sym(symb), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone()), break_()), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)
-    return hydra.lib.maybes.maybe((lambda : cst("")), (lambda h: hydra.lib.lists.foldl((lambda acc, el: ifx(comma_op(), acc, el)), h, hydra.lib.lists.drop(1, l))), hydra.lib.lists.safe_head(l))
+    return hydra.lib.maybes.maybe((lambda : cst("")), (lambda h: hydra.lib.lists.foldl((lambda acc, el: ifx(comma_op(), acc, el)), h, hydra.lib.lists.drop(1, l))), hydra.lib.lists.maybe_head(l))
 
 def comma_sep(v1: hydra.ast.BlockStyle, v2: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return symbol_sep(",", v1, v2)
@@ -200,7 +201,7 @@ def custom_indent(idt: str, s: str) -> str:
     return hydra.lib.strings.cat(hydra.lib.lists.intersperse("\n", hydra.lib.lists.map((lambda line: hydra.lib.strings.cat2(idt, line)), hydra.lib.strings.lines(s))))
 
 def sep(op: hydra.ast.Op, els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
-    return hydra.lib.maybes.maybe((lambda : cst("")), (lambda h: hydra.lib.lists.foldl((lambda acc, el: ifx(op, acc, el)), h, hydra.lib.lists.drop(1, els))), hydra.lib.lists.safe_head(els))
+    return hydra.lib.maybes.maybe((lambda : cst("")), (lambda h: hydra.lib.lists.foldl((lambda acc, el: ifx(op, acc, el)), h, hydra.lib.lists.drop(1, els))), hydra.lib.lists.maybe_head(els))
 
 def newline_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return sep(hydra.ast.Op(sym(""), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone()), cast(hydra.ast.Ws, hydra.ast.WsBreak())), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE), v1)
@@ -209,7 +210,7 @@ def custom_indent_block(idt: str, els: frozenlist[hydra.ast.Expr]) -> hydra.ast.
     @lru_cache(1)
     def idt_op() -> hydra.ast.Op:
         return hydra.ast.Op(sym(""), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsSpace()), cast(hydra.ast.Ws, hydra.ast.WsBreakAndIndent(idt))), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)
-    return hydra.lib.maybes.maybe((lambda : cst("")), (lambda head: hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(els), 1), (lambda : head), (lambda : ifx(idt_op(), head, newline_sep(hydra.lib.lists.drop(1, els)))))), hydra.lib.lists.safe_head(els))
+    return hydra.lib.maybes.maybe((lambda : cst("")), (lambda head: hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(els), 1), (lambda : head), (lambda : ifx(idt_op(), head, newline_sep(hydra.lib.lists.drop(1, els)))))), hydra.lib.lists.maybe_head(els))
 
 def dot_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return sep(hydra.ast.Op(sym("."), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone()), cast(hydra.ast.Ws, hydra.ast.WsNone())), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE), v1)
@@ -258,7 +259,7 @@ def or_op(newlines: bool) -> hydra.ast.Op:
 
 def or_sep(style: hydra.ast.BlockStyle, l: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     newlines = style.newline_before_content
-    return hydra.lib.maybes.maybe((lambda : cst("")), (lambda h: hydra.lib.lists.foldl((lambda acc, el: ifx(or_op(newlines), acc, el)), h, hydra.lib.lists.drop(1, l))), hydra.lib.lists.safe_head(l))
+    return hydra.lib.maybes.maybe((lambda : cst("")), (lambda h: hydra.lib.lists.foldl((lambda acc, el: ifx(or_op(newlines), acc, el)), h, hydra.lib.lists.drop(1, l))), hydra.lib.lists.maybe_head(l))
 
 parentheses = hydra.ast.Brackets(hydra.ast.Symbol("("), hydra.ast.Symbol(")"))
 
@@ -425,7 +426,7 @@ def print_expr(e: hydra.ast.Expr) -> str:
                             return hydra.lib.lists.map((lambda line: hydra.lib.strings.cat2(idt2, line)), lns())
 
                         case hydra.ast.IndentStyleSubsequentLines(value=idt2):
-                            return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(lns()), 1), (lambda : lns()), (lambda : hydra.lib.lists.cons(hydra.lib.lists.head(lns()), hydra.lib.lists.map((lambda line: hydra.lib.strings.cat2(idt2, line)), hydra.lib.lists.tail(lns())))))
+                            return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(lns()), 1), (lambda : lns()), (lambda : hydra.lib.maybes.from_maybe((lambda : lns()), hydra.lib.maybes.map((lambda uc: hydra.lib.lists.cons(hydra.lib.pairs.first(uc), hydra.lib.lists.map((lambda line: hydra.lib.strings.cat2(idt2, line)), hydra.lib.pairs.second(uc)))), hydra.lib.lists.uncons(lns())))))
 
                         case _:
                             raise AssertionError("Unreachable: all variants handled")
@@ -495,7 +496,7 @@ def semicolon_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
 def structural_sep(op: hydra.ast.Op, els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     r"""Like sep, but produces a SeqExpr instead of an OpExpr chain. SeqExpr is treated as structural layout and is not subject to parenthesization."""
 
-    return hydra.lib.logic.if_else(hydra.lib.lists.null(els), (lambda : cst("")), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(els), 1), (lambda : hydra.lib.lists.head(els)), (lambda : cast(hydra.ast.Expr, hydra.ast.ExprSeq(hydra.ast.SeqExpr(op, els)))))))
+    return hydra.lib.logic.if_else(hydra.lib.lists.null(els), (lambda : cst("")), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(els), 1), (lambda : hydra.lib.maybes.from_maybe((lambda : cst("")), hydra.lib.lists.maybe_head(els))), (lambda : cast(hydra.ast.Expr, hydra.ast.ExprSeq(hydra.ast.SeqExpr(op, els)))))))
 
 def structural_space_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     r"""Like spaceSep, but produces a SeqExpr. Use for structural layout that should not trigger parenthesization of children."""

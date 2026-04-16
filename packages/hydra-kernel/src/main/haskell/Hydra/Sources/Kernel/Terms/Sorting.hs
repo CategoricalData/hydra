@@ -88,11 +88,11 @@ module_ = Module ns definitions
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-adjacencyListsToGraph :: TTermDefinition ([(key, [key])] -> (Topo.Graph, Topo.Vertex -> key))
+adjacencyListsToGraph :: TTermDefinition ([(key, [key])] -> (Topo.Graph, Topo.Vertex -> Maybe key))
 adjacencyListsToGraph = define "adjacencyListsToGraph" $
   doc ("Given a list of adjacency lists represented as (key, [key]) pairs,"
     <> " construct a graph along with a function mapping each vertex (an Int)"
-    <> " back to its original key.") $
+    <> " back to its original key (Nothing for unknown vertices).") $
   "edges0" ~>
   "sortedEdges" <~ Lists.sortOn (unaryFunction Pairs.first) (var "edges0") $
   "indexedEdges" <~ Lists.zip (Math.range (int32 0) (Lists.length (var "sortedEdges"))) (var "sortedEdges") $
@@ -117,7 +117,7 @@ adjacencyListsToGraph = define "adjacencyListsToGraph" $
       "neighbors" <~ Pairs.second (var "kNeighbors") $
       pair (var "v") (Maybes.mapMaybe ("k" ~> Maps.lookup (var "k") (var "keyToVertex")) (var "neighbors")))
     (var "indexedEdges")) $
-  "vertexToKey" <~ ("v" ~> Maybes.fromJust (Maps.lookup (var "v") (var "vertexMap"))) $
+  "vertexToKey" <~ ("v" ~> Maps.lookup (var "v") (var "vertexMap")) $
   pair (var "graph") (var "vertexToKey")
 
 adjacencyListToMap :: TTermDefinition ([(a, [b])] -> M.Map a [b])
@@ -168,14 +168,20 @@ popStackUntil = define "popStackUntil" $
   doc "Pop vertices off the stack until the given vertex is reached, collecting the current strongly connected component" $
   "v" ~> "st0" ~>
   "go" <~ ("acc" ~> "st" ~>
-    "x" <~ Lists.head (Topology.tarjanStateStack (var "st")) $
-    "xs" <~ Lists.tail (Topology.tarjanStateStack (var "st")) $
-    "newSt" <~ Topology.tarjanStateWithStack (var "st") (var "xs") $
-    "newSt2" <~ Topology.tarjanStateWithOnStack (var "newSt") (Sets.delete (var "x") (Topology.tarjanStateOnStack (var "st"))) $
-    "acc'" <~ Lists.cons (var "x") (var "acc") $
-    Logic.ifElse (Equality.equal (var "x") (var "v"))
-      (pair (Lists.reverse (var "acc'")) (var "newSt2"))
-      (var "go" @@ var "acc'" @@ var "newSt2")) $
+    -- Empty stack: return whatever we've collected (unreachable when Tarjan's
+    -- state invariants hold, since v is always on the stack when this is called).
+    Maybes.maybe
+      (pair (Lists.reverse (var "acc")) (var "st"))
+      ("uc" ~>
+        "x" <~ Pairs.first (var "uc") $
+        "xs" <~ Pairs.second (var "uc") $
+        "newSt" <~ Topology.tarjanStateWithStack (var "st") (var "xs") $
+        "newSt2" <~ Topology.tarjanStateWithOnStack (var "newSt") (Sets.delete (var "x") (Topology.tarjanStateOnStack (var "st"))) $
+        "acc'" <~ Lists.cons (var "x") (var "acc") $
+        Logic.ifElse (Equality.equal (var "x") (var "v"))
+          (pair (Lists.reverse (var "acc'")) (var "newSt2"))
+          (var "go" @@ var "acc'" @@ var "newSt2"))
+      (Lists.uncons $ Topology.tarjanStateStack (var "st"))) $
   var "go" @@ list ([] :: [TTerm Topo.Vertex]) @@ var "st0"
 
 propagateTags :: TTermDefinition ([(a, [a])] -> [(a, [t])] -> [(a, S.Set t)])
@@ -260,7 +266,8 @@ topologicalSort = define "topologicalSort" $
     <> " Yields a list of nontrivial strongly connected components if the graph has cycles, otherwise a simple list.") $
   "pairs" ~>
   "sccs" <~ topologicalSortComponents @@ var "pairs" $
-  "isCycle" <~ ("scc" ~> Logic.not $ Lists.null $ Lists.tail $ var "scc") $
+  -- A component is a cycle iff it has more than one element.
+  "isCycle" <~ ("scc" ~> Equality.gt (Lists.length $ var "scc") (int32 1)) $
   "withCycles" <~ Lists.filter (var "isCycle") (var "sccs") $
   Logic.ifElse (Lists.null $ var "withCycles")
     (right $ Lists.concat $ var "sccs")
@@ -273,7 +280,9 @@ topologicalSortComponents = define "topologicalSortComponents" $
   "pairs" ~>
   "graphResult" <~ adjacencyListsToGraph @@ var "pairs" $
   "g" <~ Pairs.first (var "graphResult") $
-  Lists.map ("comp" ~> Lists.map (Pairs.second $ var "graphResult") (var "comp")) $
+  -- vertexToKey returns Maybe key; filter out Nothing (unreachable for
+  -- vertices produced by stronglyConnectedComponents of the same graph).
+  Lists.map ("comp" ~> Maybes.mapMaybe (Pairs.second $ var "graphResult") (var "comp")) $
     stronglyConnectedComponents @@ var "g"
 
 topologicalSortNodes :: TTermDefinition ((x -> a) -> (x -> [a]) -> [x] -> [[x]])

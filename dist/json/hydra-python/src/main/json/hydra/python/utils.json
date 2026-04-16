@@ -643,13 +643,29 @@
                             "argument": {
                               "application": {
                                 "argument": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {"variable": "i"},
+                                        "function": {"variable": "hydra.python.utils.decodePyInversionToPyPrimary"}}},
+                                    "domain": {"variable": "hydra.python.syntax.Inversion"},
+                                    "parameter": "i"}},
+                                "function": {
                                   "application": {
-                                    "argument": {"variable": "inversions"},
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "inversions"},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                            "type": {"variable": "hydra.python.syntax.Inversion"}}}}},
                                     "function": {
                                       "typeApplication": {
-                                        "body": {"variable": "hydra.lib.lists.head"},
-                                        "type": {"variable": "hydra.python.syntax.Inversion"}}}}},
-                                "function": {"variable": "hydra.python.utils.decodePyInversionToPyPrimary"}}},
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.lib.maybes.bind"},
+                                            "type": {"variable": "hydra.python.syntax.Inversion"}}},
+                                        "type": {"variable": "hydra.python.syntax.Primary"}}}}}}},
                             "function": {
                               "application": {
                                 "argument": {
@@ -725,13 +741,29 @@
                                             "argument": {
                                               "application": {
                                                 "argument": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "application": {
+                                                        "argument": {"variable": "c2"},
+                                                        "function": {"variable": "hydra.python.utils.decodePyConjunctionToPyPrimary"}}},
+                                                    "domain": {"variable": "hydra.python.syntax.Conjunction"},
+                                                    "parameter": "c2"}},
+                                                "function": {
                                                   "application": {
-                                                    "argument": {"variable": "conjunctions"},
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "conjunctions"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                                            "type": {"variable": "hydra.python.syntax.Conjunction"}}}}},
                                                     "function": {
                                                       "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.head"},
-                                                        "type": {"variable": "hydra.python.syntax.Conjunction"}}}}},
-                                                "function": {"variable": "hydra.python.utils.decodePyConjunctionToPyPrimary"}}},
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.maybes.bind"},
+                                                            "type": {"variable": "hydra.python.syntax.Conjunction"}}},
+                                                        "type": {"variable": "hydra.python.syntax.Primary"}}}}}}},
                                             "function": {
                                               "application": {
                                                 "argument": {
@@ -1561,72 +1593,133 @@
                                   "application": {
                                     "argument": {
                                       "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "ps"},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.lists.tail"},
-                                                "type": {"variable": "hydra.python.syntax.Primary"}}}}},
+                                        "argument": {"variable": "ps"},
                                         "function": {
-                                          "application": {
-                                            "argument": {
-                                              "maybe": {
-                                                "record": {
-                                                  "fields": [
-                                                    {"name": "lhs", "term": {"variable": "prev"}},
-                                                    {
-                                                      "name": "rhs",
-                                                      "term": {
-                                                        "application": {
-                                                          "argument": {
-                                                            "application": {
-                                                              "argument": {"variable": "ps"},
-                                                              "function": {
-                                                                "typeApplication": {
-                                                                  "body": {"variable": "hydra.lib.lists.head"},
-                                                                  "type": {"variable": "hydra.python.syntax.Primary"}}}}},
-                                                          "function": {"variable": "hydra.python.utils.pyPrimaryToPyBitwiseXor"}}}}],
-                                                  "typeName": "hydra.python.syntax.BitwiseOr"}}},
-                                            "function": {"variable": "build"}}}}},
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.lib.lists.uncons"},
+                                            "type": {"variable": "hydra.python.syntax.Primary"}}}}},
                                     "function": {
                                       "application": {
                                         "argument": {
-                                          "record": {
-                                            "fields": [
-                                              {"name": "lhs", "term": {"variable": "prev"}},
-                                              {
-                                                "name": "rhs",
-                                                "term": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "ps"},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.lists.head"},
-                                                            "type": {"variable": "hydra.python.syntax.Primary"}}}}},
-                                                    "function": {"variable": "hydra.python.utils.pyPrimaryToPyBitwiseXor"}}}}],
-                                            "typeName": "hydra.python.syntax.BitwiseOr"}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {
+                                          "lambda": {
+                                            "body": {
                                               "application": {
                                                 "argument": {
                                                   "application": {
-                                                    "argument": {"variable": "ps"},
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "p"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.lib.pairs.second"},
+                                                                "type": {"variable": "hydra.python.syntax.Primary"}}},
+                                                            "type": {"list": {"variable": "hydra.python.syntax.Primary"}}}}}},
                                                     "function": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.tail"},
-                                                        "type": {"variable": "hydra.python.syntax.Primary"}}}}},
+                                                      "application": {
+                                                        "argument": {
+                                                          "maybe": {
+                                                            "record": {
+                                                              "fields": [
+                                                                {"name": "lhs", "term": {"variable": "prev"}},
+                                                                {
+                                                                  "name": "rhs",
+                                                                  "term": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "p"},
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.lib.pairs.first"},
+                                                                                  "type": {"variable": "hydra.python.syntax.Primary"}}},
+                                                                              "type": {"list": {"variable": "hydra.python.syntax.Primary"}}}}}},
+                                                                      "function": {"variable": "hydra.python.utils.pyPrimaryToPyBitwiseXor"}}}}],
+                                                              "typeName": "hydra.python.syntax.BitwiseOr"}}},
+                                                        "function": {"variable": "build"}}}}},
                                                 "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.lists.null"},
-                                                    "type": {"variable": "hydra.python.syntax.Primary"}}}}},
+                                                  "application": {
+                                                    "argument": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {"name": "lhs", "term": {"variable": "prev"}},
+                                                          {
+                                                            "name": "rhs",
+                                                            "term": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "p"},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {"variable": "hydra.lib.pairs.first"},
+                                                                            "type": {"variable": "hydra.python.syntax.Primary"}}},
+                                                                        "type": {"list": {"variable": "hydra.python.syntax.Primary"}}}}}},
+                                                                "function": {"variable": "hydra.python.utils.pyPrimaryToPyBitwiseXor"}}}}],
+                                                        "typeName": "hydra.python.syntax.BitwiseOr"}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "p"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.lib.pairs.second"},
+                                                                        "type": {"variable": "hydra.python.syntax.Primary"}}},
+                                                                    "type": {"list": {"variable": "hydra.python.syntax.Primary"}}}}}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.lib.lists.null"},
+                                                                "type": {"variable": "hydra.python.syntax.Primary"}}}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                            "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}}}}}}},
+                                            "domain": {
+                                              "pair": {
+                                                "first": {"variable": "hydra.python.syntax.Primary"},
+                                                "second": {"list": {"variable": "hydra.python.syntax.Primary"}}}},
+                                            "parameter": "p"}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "record": {
+                                                "fields": [
+                                                  {"name": "lhs", "term": {"variable": "prev"}},
+                                                  {
+                                                    "name": "rhs",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "inject": {
+                                                            "field": {
+                                                              "name": "simple",
+                                                              "term": {
+                                                                "inject": {
+                                                                  "field": {"name": "ellipsis", "term": {"unit": {}}},
+                                                                  "typeName": "hydra.python.syntax.Atom"}}},
+                                                            "typeName": "hydra.python.syntax.Primary"}},
+                                                        "function": {"variable": "hydra.python.utils.pyPrimaryToPyBitwiseXor"}}}}],
+                                                "typeName": "hydra.python.syntax.BitwiseOr"}},
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}}}}}}},
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.maybes.maybe"},
+                                                    "type": {"variable": "hydra.python.syntax.BitwiseOr"}}},
+                                                "type": {
+                                                  "pair": {
+                                                    "first": {"variable": "hydra.python.syntax.Primary"},
+                                                    "second": {"list": {"variable": "hydra.python.syntax.Primary"}}}}}}}}}}}},
                                 "domain": {"list": {"variable": "hydra.python.syntax.Primary"}},
                                 "parameter": "ps"}},
                             "domain": {"maybe": {"variable": "hydra.python.syntax.BitwiseOr"}},
@@ -1720,46 +1813,89 @@
                                 "argument": {"variable": "exprs"},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"variable": "hydra.lib.lists.tail"},
+                                    "body": {"variable": "hydra.lib.lists.uncons"},
                                     "type": {"variable": "hydra.python.syntax.Expression"}}}}},
                             "function": {
                               "application": {
                                 "argument": {
                                   "lambda": {
                                     "body": {
-                                      "inject": {
-                                        "field": {
-                                          "name": "slice",
-                                          "term": {
-                                            "application": {
-                                              "argument": {"variable": "e"},
-                                              "function": {"variable": "hydra.python.utils.pyExpressionToPySlice"}}}},
-                                        "typeName": "hydra.python.syntax.SliceOrStarredExpression"}},
-                                    "domain": {"variable": "hydra.python.syntax.Expression"},
-                                    "parameter": "e"}},
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "p"},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.pairs.second"},
+                                                        "type": {"variable": "hydra.python.syntax.Expression"}}},
+                                                    "type": {"list": {"variable": "hydra.python.syntax.Expression"}}}}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "inject": {
+                                                        "field": {
+                                                          "name": "slice",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {"variable": "e"},
+                                                              "function": {"variable": "hydra.python.utils.pyExpressionToPySlice"}}}},
+                                                        "typeName": "hydra.python.syntax.SliceOrStarredExpression"}},
+                                                    "domain": {"variable": "hydra.python.syntax.Expression"},
+                                                    "parameter": "e"}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.lists.map"},
+                                                        "type": {"variable": "hydra.python.syntax.Expression"}}},
+                                                    "type": {"variable": "hydra.python.syntax.SliceOrStarredExpression"}}}}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "p"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.pairs.first"},
+                                                            "type": {"variable": "hydra.python.syntax.Expression"}}},
+                                                        "type": {"list": {"variable": "hydra.python.syntax.Expression"}}}}}},
+                                                "function": {"variable": "hydra.python.utils.pyExpressionToPySlice"}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "prim"},
+                                                "function": {"variable": "hydra.python.utils.primaryWithSlices"}}}}}}},
+                                    "domain": {
+                                      "pair": {
+                                        "first": {"variable": "hydra.python.syntax.Expression"},
+                                        "second": {"list": {"variable": "hydra.python.syntax.Expression"}}}},
+                                    "parameter": "p"}},
                                 "function": {
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"variable": "hydra.lib.lists.map"},
-                                        "type": {"variable": "hydra.python.syntax.Expression"}}},
-                                    "type": {"variable": "hydra.python.syntax.SliceOrStarredExpression"}}}}}}},
+                                        "body": {"variable": "hydra.lib.maybes.map"},
+                                        "type": {
+                                          "pair": {
+                                            "first": {"variable": "hydra.python.syntax.Expression"},
+                                            "second": {"list": {"variable": "hydra.python.syntax.Expression"}}}}}},
+                                    "type": {"variable": "hydra.python.syntax.Primary"}}}}}}},
                         "function": {
                           "application": {
-                            "argument": {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {"variable": "exprs"},
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {"variable": "hydra.lib.lists.head"},
-                                        "type": {"variable": "hydra.python.syntax.Expression"}}}}},
-                                "function": {"variable": "hydra.python.utils.pyExpressionToPySlice"}}},
+                            "argument": {"variable": "prim"},
                             "function": {
-                              "application": {
-                                "argument": {"variable": "prim"},
-                                "function": {"variable": "hydra.python.utils.primaryWithSlices"}}}}}}},
+                              "typeApplication": {
+                                "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                "type": {"variable": "hydra.python.syntax.Primary"}}}}}}},
                     "domain": {"list": {"variable": "hydra.python.syntax.Expression"}},
                     "parameter": "exprs"}},
                 "domain": {"variable": "hydra.python.syntax.Primary"},

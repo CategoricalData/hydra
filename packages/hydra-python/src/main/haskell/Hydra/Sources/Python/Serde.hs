@@ -572,11 +572,16 @@ encodeTuple = def "encodeTuple" $
   doc "Serialize a Python tuple" $
   lambda "t" $ lets [
     "es">: unwrap Py._Tuple @@ var "t"] $
-    Logic.ifElse (Equality.equal (Lists.length (var "es")) (int32 1))
-      (Serialization.parens @@ (Serialization.noSep @@ list [
-        encodeStarNamedExpression @@ Lists.head (var "es"),
-        Serialization.cst @@ string ","]))
+    Maybes.fromMaybe
       (Serialization.parenList @@ false @@ Lists.map encodeStarNamedExpression (var "es"))
+      (Maybes.map
+        (lambda "firstEs" $
+          Logic.ifElse (Equality.equal (Lists.length (var "es")) (int32 1))
+            (Serialization.parens @@ (Serialization.noSep @@ list [
+              encodeStarNamedExpression @@ var "firstEs",
+              Serialization.cst @@ string ","]))
+            (Serialization.parenList @@ false @@ Lists.map encodeStarNamedExpression (var "es")))
+        (Lists.maybeHead (var "es")))
 
 encodeGroup :: TTermDefinition (Py.Group -> Expr)
 encodeGroup = def "encodeGroup" $

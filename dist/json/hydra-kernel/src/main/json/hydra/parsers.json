@@ -1357,7 +1357,7 @@
                                         "argument": {"variable": "codes"},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"variable": "hydra.lib.lists.safeHead"},
+                                            "body": {"variable": "hydra.lib.lists.maybeHead"},
                                             "type": {"literal": {"integer": {"int32": {}}}}}}}},
                                     "function": {
                                       "application": {

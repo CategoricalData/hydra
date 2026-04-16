@@ -359,11 +359,14 @@ primaryWithExpressionSlices :: TTermDefinition (Py.Primary -> [Py.Expression] ->
 primaryWithExpressionSlices = def "primaryWithExpressionSlices" $
   doc "Create a Primary with expression slices" $
   lambdas ["prim", "exprs"] $
-    primaryWithSlices @@ var "prim"
-      @@ (pyExpressionToPySlice @@ (Lists.head $ var "exprs"))
-      @@ (Lists.map
-            (lambda "e" $ PyDsl.sliceOrStarredExpressionSlice $ pyExpressionToPySlice @@ var "e")
-            (Lists.tail $ var "exprs"))
+    Maybes.fromMaybe (var "prim") (Maybes.map
+      (lambda "p" $
+        primaryWithSlices @@ var "prim"
+          @@ (pyExpressionToPySlice @@ Pairs.first (var "p"))
+          @@ (Lists.map
+                (lambda "e" $ PyDsl.sliceOrStarredExpressionSlice $ pyExpressionToPySlice @@ var "e")
+                (Pairs.second (var "p"))))
+      (Lists.uncons $ var "exprs"))
 
 -- | Create a function call expression
 functionCall :: TTermDefinition (Py.Primary -> [Py.Expression] -> Py.Expression)
@@ -618,7 +621,7 @@ decodePyConjunctionToPyPrimary = def "decodePyConjunctionToPyPrimary" $
   lambda "c" $ lets [
     "inversions">: PyDsl.unConjunction $ var "c"] $
     Logic.ifElse (Equality.equal (Lists.length $ var "inversions") (int32 1))
-      (decodePyInversionToPyPrimary @@ (Lists.head $ var "inversions"))
+      (Maybes.bind (Lists.maybeHead $ var "inversions") (lambda "i" $ decodePyInversionToPyPrimary @@ var "i"))
       nothing
 
 -- | Decode an Expression to a Primary if possible
@@ -630,7 +633,7 @@ decodePyExpressionToPyPrimary = def "decodePyExpressionToPyPrimary" $
       Py._Expression_simple>>: lambda "disj" $ lets [
         "conjunctions">: PyDsl.unDisjunction $ var "disj"] $
         Logic.ifElse (Equality.equal (Lists.length $ var "conjunctions") (int32 1))
-          (decodePyConjunctionToPyPrimary @@ (Lists.head $ var "conjunctions"))
+          (Maybes.bind (Lists.maybeHead $ var "conjunctions") (lambda "c2" $ decodePyConjunctionToPyPrimary @@ var "c2"))
           nothing]
     @@ var "e")
 
@@ -707,11 +710,16 @@ orExpression = def "orExpression" $
   doc "Build an or-expression from multiple primaries" $
   "prims" ~>
     "build" <~ ("prev" ~> "ps" ~>
-      Logic.ifElse (Lists.null $ Lists.tail $ var "ps")
-        (PyDsl.bitwiseOr (var "prev") (pyPrimaryToPyBitwiseXor @@ (Lists.head $ var "ps")))
-        (var "build"
-          @@ (just $ PyDsl.bitwiseOr (var "prev") (pyPrimaryToPyBitwiseXor @@ (Lists.head $ var "ps")))
-          @@ (Lists.tail $ var "ps"))) $
+      Maybes.maybe
+        -- Unreachable fallback: callers ensure 'ps' is non-empty on entry.
+        (PyDsl.bitwiseOr (var "prev") (pyPrimaryToPyBitwiseXor @@ (PyDsl.primarySimple $ PyDsl.atomEllipsis)))
+        (lambda "p" $
+          Logic.ifElse (Lists.null $ Pairs.second (var "p"))
+            (PyDsl.bitwiseOr (var "prev") (pyPrimaryToPyBitwiseXor @@ Pairs.first (var "p")))
+            (var "build"
+              @@ (just $ PyDsl.bitwiseOr (var "prev") (pyPrimaryToPyBitwiseXor @@ Pairs.first (var "p")))
+              @@ Pairs.second (var "p")))
+        (Lists.uncons $ var "ps")) $
     pyBitwiseOrToPyExpression @@ (var "build" @@ nothing @@ var "prims")
 
 -- | Generate a type alias statement using Python 3.10-compatible syntax

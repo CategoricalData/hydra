@@ -160,9 +160,13 @@ public interface Maps {
           (java.util.function.Function<String, String>) (s -> hydra.lib.literals.ShowString.apply(s)),
           hydra.lib.maps.Filter.apply(
             (java.util.function.Function<String, Boolean>) (v -> hydra.lib.equality.Equal.apply(
-              hydra.lib.chars.ToLower.apply(hydra.lib.strings.CharAt.apply(
-                0,
-                v)),
+              hydra.lib.maybes.FromMaybe.applyLazy(
+                () -> 0,
+                hydra.lib.maybes.Map.apply(
+                  (java.util.function.Function<Integer, Integer>) (c -> hydra.lib.chars.ToLower.apply(c)),
+                  hydra.lib.strings.MaybeCharAt.apply(
+                    0,
+                    v))),
               97)),
             new java.util.TreeMap(java.util.Map.ofEntries(
               java.util.Map.entry(
@@ -188,9 +192,13 @@ public interface Maps {
           (java.util.function.Function<String, String>) (s -> hydra.lib.literals.ShowString.apply(s)),
           hydra.lib.maps.Filter.apply(
             (java.util.function.Function<String, Boolean>) (v -> hydra.lib.equality.Equal.apply(
-              hydra.lib.chars.ToLower.apply(hydra.lib.strings.CharAt.apply(
-                0,
-                v)),
+              hydra.lib.maybes.FromMaybe.applyLazy(
+                () -> 0,
+                hydra.lib.maybes.Map.apply(
+                  (java.util.function.Function<Integer, Integer>) (c -> hydra.lib.chars.ToLower.apply(c)),
+                  hydra.lib.strings.MaybeCharAt.apply(
+                    0,
+                    v))),
               97)),
             new java.util.TreeMap(java.util.Map.ofEntries(
               java.util.Map.entry(
@@ -207,9 +215,13 @@ public interface Maps {
           (java.util.function.Function<String, String>) (s -> hydra.lib.literals.ShowString.apply(s)),
           hydra.lib.maps.Filter.apply(
             (java.util.function.Function<String, Boolean>) (v -> hydra.lib.equality.Equal.apply(
-              hydra.lib.chars.ToLower.apply(hydra.lib.strings.CharAt.apply(
-                0,
-                v)),
+              hydra.lib.maybes.FromMaybe.applyLazy(
+                () -> 0,
+                hydra.lib.maybes.Map.apply(
+                  (java.util.function.Function<Integer, Integer>) (c -> hydra.lib.chars.ToLower.apply(c)),
+                  hydra.lib.strings.MaybeCharAt.apply(
+                    0,
+                    v))),
               97)),
             (java.util.Map<Integer, String>) ((java.util.Map<Integer, String>) (java.util.Collections.<Integer, String>emptyMap())))), hydra.show.Core.map(
           (java.util.function.Function<Integer, String>) (n -> hydra.lib.literals.ShowInt32.apply(n)),

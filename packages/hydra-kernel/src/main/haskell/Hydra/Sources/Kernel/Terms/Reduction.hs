@@ -575,11 +575,15 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
     "extraVariables" <~ ("n" ~> Lists.map ("i" ~> Core.name $ Strings.cat2 (string "v") (Literals.showInt32 $ var "i")) $
       Math.range (int32 1) (var "n")) $
     "pad" <~ ("vars" ~> "body" ~>
-      Logic.ifElse (Lists.null $ var "vars")
+      Maybes.maybe
         (var "body")
-        (Core.termLambda $ Core.lambda (Lists.head $ var "vars") nothing $ var "pad"
-          @@ Lists.tail (var "vars")
-          @@ (Core.termApplication $ Core.application (var "body") $ Core.termVariable $ Lists.head $ var "vars"))) $
+        ("uc" ~>
+          "v0" <~ Pairs.first (var "uc") $
+          "vrest" <~ Pairs.second (var "uc") $
+          Core.termLambda $ Core.lambda (var "v0") nothing $ var "pad"
+            @@ var "vrest"
+            @@ (Core.termApplication $ Core.application (var "body") $ Core.termVariable $ var "v0"))
+        (Lists.uncons $ var "vars")) $
     "padn" <~ ("n" ~> "body" ~> var "pad" @@ (var "extraVariables" @@ var "n") @@ var "body") $
 
     "unwind" <~ ("term" ~> Lists.foldl
@@ -706,64 +710,83 @@ reduceTerm = define "reduceTerm" $
       (right $ var "arg")
       (var "reduce" @@ false @@ var "arg")) $
   "applyToArguments" <~ ("fun" ~> "args" ~>
-    Logic.ifElse (Lists.null $ var "args")
+    Maybes.maybe
       (var "fun")
-      (var "applyToArguments" @@
-        (Core.termApplication $ Core.application (var "fun") (Lists.head $ var "args")) @@
-        (Lists.tail $ var "args"))) $
+      ("uc" ~>
+        var "applyToArguments" @@
+          (Core.termApplication $ Core.application (var "fun") (Pairs.first $ var "uc")) @@
+          (Pairs.second $ var "uc"))
+      (Lists.uncons $ var "args")) $
   "mapErrorToString" <~ ("e" ~>
     Error.errorOther $ Error.otherError (ShowError.error_ @@ var "e")) $
   "applyProjection" <~ ("proj" ~> "reducedArg" ~>
     "fields" <<~ ExtractCore.record @@ (Core.projectionTypeName $ var "proj") @@ var "graph" @@ (Strip.deannotateTerm @@ var "reducedArg") $
-    "matchingFields" <~ Lists.filter
+    "matching" <~ (Lists.find
       ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.projectionField $ var "proj"))
-      (var "fields") $
-    Logic.ifElse
-      (Lists.null $ var "matchingFields")
+      (var "fields")) $
+    Maybes.maybe
       (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.projectionField $ var "proj")) (var "cx"))
-      (right $ Core.fieldTerm $ Lists.head $ var "matchingFields")) $
+      ("mf" ~> right $ Core.fieldTerm $ var "mf")
+      (var "matching")) $
   "applyCases" <~ ("cs" ~> "reducedArg" ~>
     "field" <<~ ExtractCore.injection @@ (Core.caseStatementTypeName $ var "cs") @@ var "graph" @@ var "reducedArg" $
-    "matchingFields" <~ Lists.filter
+    "matching" <~ (Lists.find
       ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.fieldName $ var "field"))
-      (Core.caseStatementCases $ var "cs") $
-    Logic.ifElse (Lists.null $ var "matchingFields")
+      (Core.caseStatementCases $ var "cs")) $
+    Maybes.maybe
       (Maybes.maybe
         (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.fieldName $ var "field")) (var "cx"))
         (unaryFunction right)
         (Core.caseStatementDefault $ var "cs"))
-      (right $ Core.termApplication $ Core.application
-        (Core.fieldTerm $ Lists.head $ var "matchingFields")
-        (Core.fieldTerm $ var "field"))) $
+      ("mf" ~> right $ Core.termApplication $ Core.application
+        (Core.fieldTerm $ var "mf")
+        (Core.fieldTerm $ var "field"))
+      (var "matching")) $
   "applyIfNullary" <~ ("eager" ~> "original" ~> "args" ~>
     "stripped" <~ Strip.deannotateTerm @@ var "original" $
     "forProjection" <~ ("proj" ~> "args" ~>
-      "arg" <~ Lists.head (var "args") $
-      "remainingArgs" <~ Lists.tail (var "args") $
-      "reducedArg" <<~ var "reduceArg" @@ var "eager" @@ (Strip.deannotateTerm @@ var "arg") $
-      "reducedResult" <<~ Eithers.bind (var "applyProjection" @@ var "proj" @@ var "reducedArg") (var "reduce" @@ var "eager") $
-      var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
+      Maybes.maybe
+        (right $ var "original")
+        ("uc" ~>
+          "arg" <~ Pairs.first (var "uc") $
+          "remainingArgs" <~ Pairs.second (var "uc") $
+          "reducedArg" <<~ var "reduceArg" @@ var "eager" @@ (Strip.deannotateTerm @@ var "arg") $
+          "reducedResult" <<~ Eithers.bind (var "applyProjection" @@ var "proj" @@ var "reducedArg") (var "reduce" @@ var "eager") $
+          var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs")
+        (Lists.uncons $ var "args")) $
     "forCases" <~ ("cs" ~> "args" ~>
-      "arg" <~ Lists.head (var "args") $
-      "remainingArgs" <~ Lists.tail (var "args") $
-      "reducedArg" <<~ var "reduceArg" @@ var "eager" @@ (Strip.deannotateTerm @@ var "arg") $
-      "reducedResult" <<~ Eithers.bind (var "applyCases" @@ var "cs" @@ var "reducedArg") (var "reduce" @@ var "eager") $
-      var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
+      Maybes.maybe
+        (right $ var "original")
+        ("uc" ~>
+          "arg" <~ Pairs.first (var "uc") $
+          "remainingArgs" <~ Pairs.second (var "uc") $
+          "reducedArg" <<~ var "reduceArg" @@ var "eager" @@ (Strip.deannotateTerm @@ var "arg") $
+          "reducedResult" <<~ Eithers.bind (var "applyCases" @@ var "cs" @@ var "reducedArg") (var "reduce" @@ var "eager") $
+          var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs")
+        (Lists.uncons $ var "args")) $
     "forUnwrap" <~ ("name" ~> "args" ~>
-      "arg" <~ Lists.head (var "args") $
-      "remainingArgs" <~ Lists.tail (var "args") $
-      "reducedArg" <<~ var "reduceArg" @@ var "eager" @@ (Strip.deannotateTerm @@ var "arg") $
-      "reducedResult" <<~ Eithers.bind (ExtractCore.wrap @@ var "name" @@ var "graph" @@ var "reducedArg") (var "reduce" @@ var "eager") $
-      var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
+      Maybes.maybe
+        (right $ var "original")
+        ("uc" ~>
+          "arg" <~ Pairs.first (var "uc") $
+          "remainingArgs" <~ Pairs.second (var "uc") $
+          "reducedArg" <<~ var "reduceArg" @@ var "eager" @@ (Strip.deannotateTerm @@ var "arg") $
+          "reducedResult" <<~ Eithers.bind (ExtractCore.wrap @@ var "name" @@ var "graph" @@ var "reducedArg") (var "reduce" @@ var "eager") $
+          var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs")
+        (Lists.uncons $ var "args")) $
     "forLambda" <~ ("l" ~> "args" ~>
       "param" <~ Core.lambdaParameter (var "l") $
       "body" <~ Core.lambdaBody (var "l") $
-      "arg" <~ Lists.head (var "args") $
-      "remainingArgs" <~ Lists.tail (var "args") $
-      "reducedArg" <<~ var "reduce" @@ var "eager" @@ (Strip.deannotateTerm @@ var "arg") $
-      "reducedResult" <<~ var "reduce" @@ var "eager"
-        @@ (Variables.replaceFreeTermVariable @@ var "param" @@ var "reducedArg" @@ var "body") $
-      var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
+      Maybes.maybe
+        (right $ var "original")
+        ("uc" ~>
+          "arg" <~ Pairs.first (var "uc") $
+          "remainingArgs" <~ Pairs.second (var "uc") $
+          "reducedArg" <<~ var "reduce" @@ var "eager" @@ (Strip.deannotateTerm @@ var "arg") $
+          "reducedResult" <<~ var "reduce" @@ var "eager"
+            @@ (Variables.replaceFreeTermVariable @@ var "param" @@ var "reducedArg" @@ var "body") $
+          var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs")
+        (Lists.uncons $ var "args")) $
     "forPrimitive" <~ ("prim" ~> "arity" ~> "args" ~>
       "argList" <~ Lists.take (var "arity") (var "args") $
       "remainingArgs" <~ Lists.drop (var "arity") (var "args") $

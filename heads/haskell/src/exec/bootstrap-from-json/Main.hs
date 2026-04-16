@@ -31,7 +31,7 @@ module Main where
 
 import Hydra.Kernel
 import Hydra.Generation
-import Hydra.PackageRouting (groupByPackage, packagePrefixes)
+import Hydra.PackageRouting (groupByPackage, namespaceToPackage, packagePrefixes)
 import Hydra.Sources.All (kernelModules)
 import Hydra.ExtGeneration (moduleToLispDialect, wrapLongLinesInScalaTree)
 import Hydra.Haskell.Coder (moduleToHaskell)
@@ -97,6 +97,7 @@ data Options = Options
   , optPackageSplit       :: Bool
   , optSynthesizeSources  :: Bool
   , optDistJsonRoot       :: Maybe FilePath
+  , optPackage            :: Maybe String  -- Layer 1: narrow generation to one package
   }
 
 defaultOptions :: Options
@@ -113,6 +114,7 @@ defaultOptions = Options
   , optPackageSplit       = False
   , optSynthesizeSources  = False
   , optDistJsonRoot       = Nothing
+  , optPackage            = Nothing
   }
 
 -- | Map a legacy --json-dir value (e.g. "../../dist/json/hydra-kernel/src/main/json")
@@ -146,6 +148,7 @@ parseArgs = go defaultOptions
     go opts ("--dist-json-root" : d : rest) = go (opts { optDistJsonRoot = Just d }) rest
     go opts ("--json-dir" : d : rest) = go (opts { optDistJsonRoot = Just (legacyJsonDirToRoot d) }) rest  -- legacy alias; strips trailing "<pkg>/src/main/json" if present
     go opts ("--ext-json-dir" : _ : rest) = go opts rest  -- legacy flag, ignored under per-package split
+    go opts ("--package" : p : rest) = go (opts { optPackage = Just p }) rest
     go _ (arg : _) = Left $ "Unknown argument: " ++ arg
 
 usage :: String
@@ -173,6 +176,9 @@ usage = unlines
   , "                           needs to load, in dependency order."
   , "  --json-dir <dir>         Legacy alias for --dist-json-root."
   , "  --ext-json-dir <dir>     Legacy flag; ignored under per-package layout."
+  , "  --package <pkg>          Narrow generation to modules owned by <pkg>."
+  , "                           The full universe is still loaded so cross-"
+  , "                           package type references resolve."
   ]
 
 main :: IO ()
@@ -404,9 +410,24 @@ main = do
       return (extMods', allMainMods ++ extMods')
     else return (allMainMods, allMainMods)
 
+  -- Layer 1 per-package scoping: if --package <pkg> is set, narrow
+  -- modsToGenerate to modules owned by that package (per namespaceToPackage).
+  -- The universe (allModsFinal) is unchanged, so type references across
+  -- packages still resolve. Applies AFTER all other filters.
+  modsToGenerateScoped <- case optPackage opts of
+    Nothing  -> return modsToGenerate
+    Just pkg -> do
+      let owned = Prelude.filter
+            (\m -> namespaceToPackage (moduleNamespace m) == pkg)
+            modsToGenerate
+      putStrLn $ "Scoping to package " ++ pkg ++ ": "
+        ++ show (length owned) ++ " of " ++ show (length modsToGenerate) ++ " modules"
+      putStrLn ""
+      return owned
+
   -- Prepend synthesized source modules to modsToGenerate (deduping by namespace
   -- to keep ordering stable). They go into the same universe as the main modules.
-  let modsToGenerate' = modsToGenerate ++ synthesizedSourceMods
+  let modsToGenerate' = modsToGenerateScoped ++ synthesizedSourceMods
   let allModsFinal'   = allModsFinal ++ synthesizedSourceMods
 
   -- Generate main modules
@@ -459,11 +480,26 @@ main = do
     then do
       putStrLn "Loading test modules from JSON..."
       testNamespaces <- readManifestField kernelJsonDir "testModules"
-      testMods <- loadModulesFromJson testJsonDir kernelModules testNamespaces
-      putStrLn $ "  Loaded " ++ show (length testMods) ++ " test modules"
+      testModsAll <- loadModulesFromJson testJsonDir kernelModules testNamespaces
+      putStrLn $ "  Loaded " ++ show (length testModsAll) ++ " test modules"
+
+      -- Layer 1 per-package scoping for tests: if --package <pkg> is set,
+      -- narrow testMods to modules owned by that package. The universe is
+      -- unchanged so cross-package refs still resolve.
+      let testMods = case optPackage opts of
+            Nothing  -> testModsAll
+            Just pkg ->
+              Prelude.filter
+                (\m -> namespaceToPackage (moduleNamespace m) == pkg)
+                testModsAll
+      case optPackage opts of
+        Just pkg | length testMods /= length testModsAll ->
+          putStrLn $ "  Scoping to package " ++ pkg ++ ": "
+            ++ show (length testMods) ++ " of " ++ show (length testModsAll) ++ " test modules"
+        _ -> return ()
       putStrLn ""
 
-      let allUniverse = allMods ++ testMods
+      let allUniverse = allMods ++ testModsAll
 
       -- When --kernel-only is active, non-kernel modules are excluded from allMainMods.
       -- But test modules may depend on non-kernel modules (e.g. hydra.test.serialization

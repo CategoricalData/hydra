@@ -14,11 +14,6 @@ import qualified Data.List as L
 apply :: [a -> b] -> [a] -> [b]
 apply = (<*>)
 
--- | Get the element at a specified index in a list.
--- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
-at :: Int -> [a] -> a
-at i l = l !! i
-
 -- | Apply a function that returns lists to each element and flatten results.
 bind :: [a] -> (a -> [b]) -> [b]
 bind = (>>=)
@@ -67,16 +62,6 @@ foldr = L.foldr
 group :: Eq a => [a] -> [[a]]
 group = L.group
 
--- | Get the first element of a list.
--- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
-head :: [a] -> a
-head = L.head
-
--- | Return all elements except the last one.
--- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
-init :: [a] -> [a]
-init = L.init
-
 -- | Intercalate a list of lists with a separator list between each.
 intercalate :: [a] -> [[a]] -> [a]
 intercalate = L.intercalate
@@ -84,11 +69,6 @@ intercalate = L.intercalate
 -- | Intersperse a value between elements of a list.
 intersperse :: a -> [a] -> [a]
 intersperse = L.intersperse
-
--- | Get the last element of a list.
--- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
-last :: [a] -> a
-last = L.last
 
 -- | Get the length of a list.
 length :: [a] -> Int
@@ -148,11 +128,6 @@ replicate = L.replicate
 reverse :: [a] -> [a]
 reverse = L.reverse
 
--- | Get the first element of a list, returning Nothing if the list is empty.
--- Deprecated: use maybeHead instead.
-safeHead :: [a] -> Maybe a
-safeHead = maybeHead
-
 -- | Create a single-element list.
 singleton :: a -> [a]
 singleton e = [e]
@@ -169,11 +144,6 @@ sortOn = L.sortOn
 span :: (a -> Bool) -> [a] -> ([a], [a])
 span = L.span
 
--- | Get all elements of a list except the first.
--- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
-tail :: [a] -> [a]
-tail = L.tail
-
 -- | Take the first n elements from a list.
 take :: Int -> [a] -> [a]
 take = L.take
@@ -181,6 +151,11 @@ take = L.take
 -- | Transpose a list of lists.
 transpose :: [[a]] -> [[a]]
 transpose = L.transpose
+
+-- | Decompose a list into its head and tail, returning Nothing if the list is empty.
+uncons :: [a] -> Maybe (a, [a])
+uncons [] = Nothing
+uncons (x:xs) = Just (x, xs)
 
 -- | Zip two lists into pairs.
 zip :: [a] -> [b] -> [(a, b)]
