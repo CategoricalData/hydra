@@ -8,6 +8,7 @@ import qualified Hydra.Coq.Environment as Environment
 import qualified Hydra.Core as Core
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
 
