@@ -5,8 +5,10 @@ set -euo pipefail
 #
 # Under the per-package JSON layout (feature_290_packaging), JSON export for
 # every package is performed by sync-haskell.sh's unified update-json-main
-# call. This script only regenerates the Haskell dist tree for hydra-ext
-# (and the second-order decode/encode DSL source modules it depends on).
+# call. This script regenerates the Haskell dist tree for hydra-ext (and the
+# second-order decode/encode DSL source modules it depends on), and emits
+# the WebAssembly text format (WAT) files for the Hydra kernel under
+# dist/wasm/. See feature_325_wasm-plan.md.
 #
 # This must be run AFTER sync-haskell.sh and BEFORE sync-java.sh or sync-python.sh,
 # since those scripts depend on hydra-ext's generated Haskell code being up to date.
@@ -37,6 +39,7 @@ for arg in "$@"; do
             echo "  2. Generate ext encoder/decoder source modules"
             echo "  3. Generate Haskell ext modules"
             echo "  4. Rebuild (to pick up new Haskell files)"
+            echo "  5. Generate WebAssembly text format (WAT) files"
             exit 0
             ;;
         *)
@@ -50,13 +53,14 @@ cd "$HYDRA_EXT_DIR"
 banner2 "Synchronizing Hydra-Ext"
 echo ""
 
-TOTAL_STEPS=4
+TOTAL_STEPS=5
 
 step 1 $TOTAL_STEPS "Building executables"
 echo ""
 stack build \
     hydra:exe:update-ext-sources \
     hydra:exe:update-haskell-ext-main \
+    hydra:exe:update-wasm \
     hydra:exe:bootstrap-from-json
 
 step 2 $TOTAL_STEPS "Generating ext encoder/decoder source modules"
@@ -78,5 +82,9 @@ find ../../dist/haskell/hydra-ext/src/main/haskell -name "*.hs" -empty -delete 2
 step 4 $TOTAL_STEPS "Rebuilding"
 echo ""
 stack build
+
+step 5 $TOTAL_STEPS "Generating WebAssembly text format (WAT) files"
+echo ""
+stack exec update-wasm -- $RTS_FLAGS
 
 banner2_done "Hydra-Ext sync complete!"
