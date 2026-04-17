@@ -15,6 +15,7 @@ import qualified Hydra.Json.Writer as JsonWriter
 import Hydra.Sources.Libraries
 import qualified Hydra.Context as Context
 import qualified Hydra.Decoding as Decoding
+import qualified Hydra.Digest as Digest
 import qualified Hydra.Dsls as Dsls
 import qualified Hydra.Encoding as Encoding
 import qualified Hydra.Errors as Error
@@ -175,12 +176,25 @@ writeModuleJson schemaMap basePath mod = do
 -- If doInfer is True, type inference is performed on the modules first.
 -- The universe modules are used for type inference context (may include more modules
 -- than those being written). If not inferring, the universe is ignored.
+--
+-- When doInfer is True, this honors a content-hash cache at
+-- <digestPath basePath>: if every universe module's DSL source hash matches
+-- the stored digest and every target module's JSON file already exists,
+-- inference and writes are skipped entirely. Otherwise the full path runs
+-- and the digest is overwritten on success. The cache is all-or-nothing
+-- (per the 2026-04-16 inferModulesGiven redesign).
 writeModulesJson :: Bool -> FilePath -> [Module] -> [Module] -> IO ()
 writeModulesJson doInfer basePath universeMods mods = do
-  mods' <- if doInfer then inferModulesIO universeMods mods else return mods
-  let graph = modulesToGraph universeMods universeMods
-      schemaMap = buildSchemaMap graph
-  mapM_ (writeModuleJson schemaMap basePath) mods'
+  hit <- if doInfer then tryCacheHit basePath universeMods mods else return Nothing
+  case hit of
+    Just _ ->
+      putStrLn $ "  Cache hit (" ++ show (length universeMods) ++ " modules clean); skipping inference and writes."
+    Nothing -> do
+      mods' <- if doInfer then inferModulesIO universeMods mods else return mods
+      let graph = modulesToGraph universeMods universeMods
+          schemaMap = buildSchemaMap graph
+      mapM_ (writeModuleJson schemaMap basePath) mods'
+      CM.when doInfer $ refreshDigest basePath universeMods
 
 -- | Write multiple modules to JSON files, routing each module to the
 -- dist/json/<package>/src/main/json/ directory of its owning package.
@@ -189,16 +203,82 @@ writeModulesJson doInfer basePath universeMods mods = do
 -- subdirectories based on 'namespaceToPackage'. Inference and schema-map
 -- construction happen once over the full universe, so each per-module write
 -- is as cheap as the single-directory version.
+--
+-- The content-hash cache lives at <distJsonRoot>/digest.main.json, scoped
+-- to this "main-universe" regeneration. See 'writeModulesJson' for the
+-- caching semantics.
 writeModulesJsonPackageSplit :: Bool -> FilePath -> [Module] -> [Module] -> IO ()
 writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
-  mods' <- if doInfer then inferModulesIO universeMods mods else return mods
-  let graph = modulesToGraph universeMods universeMods
-      schemaMap = buildSchemaMap graph
-      groups = groupByPackage mods'
-  CM.forM_ groups $ \(pkg, pkgMods) -> do
-    let pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
-    putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules -> " ++ pkgDir
-    mapM_ (writeModuleJson schemaMap pkgDir) pkgMods
+  hit <- if doInfer then tryCacheHitSplit distJsonRoot universeMods mods else return Nothing
+  case hit of
+    Just _ ->
+      putStrLn $ "  Cache hit (" ++ show (length universeMods) ++ " modules clean); skipping inference and writes."
+    Nothing -> do
+      mods' <- if doInfer then inferModulesIO universeMods mods else return mods
+      let graph = modulesToGraph universeMods universeMods
+          schemaMap = buildSchemaMap graph
+          groups = groupByPackage mods'
+      CM.forM_ groups $ \(pkg, pkgMods) -> do
+        let pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
+        putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules -> " ++ pkgDir
+        mapM_ (writeModuleJson schemaMap pkgDir) pkgMods
+      CM.when doInfer $ refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
+
+-- | Digest file for 'writeModulesJsonPackageSplit'. Single well-known
+-- location shared across all packages the universe touches.
+packageSplitDigestAnchor :: FilePath -> FilePath
+packageSplitDigestAnchor distJsonRoot = distJsonRoot FP.</> "digest.main.json"
+
+-- | If every universe module's DSL source hash matches the stored digest,
+-- and every target module's JSON file already exists, return the current
+-- digest (indicating a cache hit, so the caller can skip the slow path).
+-- Otherwise return Nothing.
+tryCacheHit :: FilePath -> [Module] -> [Module] -> IO (Maybe Digest.DigestMap)
+tryCacheHit basePath universeMods targetMods = do
+  let digestFile = Digest.digestPath basePath
+      targetPaths = [basePath FP.</> CodeGeneration.namespaceToPath (moduleNamespace m) ++ ".json" | m <- targetMods]
+  checkCacheHit digestFile universeMods targetPaths
+
+tryCacheHitSplit :: FilePath -> [Module] -> [Module] -> IO (Maybe Digest.DigestMap)
+tryCacheHitSplit distJsonRoot universeMods targetMods = do
+  let digestFile = packageSplitDigestAnchor distJsonRoot
+      targetPaths = [ distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
+                                    FP.</> CodeGeneration.namespaceToPath (moduleNamespace m) ++ ".json"
+                    | (pkg, pkgMods) <- groupByPackage targetMods, m <- pkgMods]
+  checkCacheHit digestFile universeMods targetPaths
+
+-- | Shared logic: compare current source-file hashes against the stored
+-- digest and check that every target JSON file exists on disk.
+--
+-- Only modules whose DSL source was discoverable contribute hashes; derived
+-- modules without a `ns = Namespace "..."` source file (e.g. kernel
+-- decode/encode modules generated from 'Hydra.Sources.Kernel.Terms.*') are
+-- transparently handled because their generator's source IS in the map, so
+-- any change upstream invalidates the cache.
+checkCacheHit :: FilePath -> [Module] -> [FilePath] -> IO (Maybe Digest.DigestMap)
+checkCacheHit digestFile universeMods targetPaths = do
+  nsFiles <- Digest.discoverNamespaceFiles
+  currentDigest <- Digest.hashUniverse nsFiles universeMods
+  if M.null currentDigest
+    then return Nothing  -- nothing to verify against; always recompute
+    else do
+      stored <- Digest.readDigest digestFile
+      if stored /= currentDigest
+        then return Nothing
+        else do
+          existFlags <- mapM SD.doesFileExist targetPaths
+          if and existFlags then return (Just currentDigest) else return Nothing
+
+-- | After a successful slow-path run, overwrite the digest with fresh hashes.
+refreshDigest :: FilePath -> [Module] -> IO ()
+refreshDigest basePath universeMods = refreshDigestAt (Digest.digestPath basePath) universeMods
+
+refreshDigestAt :: FilePath -> [Module] -> IO ()
+refreshDigestAt digestFile universeMods = do
+  nsFiles <- Digest.discoverNamespaceFiles
+  current <- Digest.hashUniverse nsFiles universeMods
+  Digest.writeDigest digestFile current
+  putStrLn $ "  Digest refreshed: " ++ digestFile ++ " (" ++ show (M.size current) ++ " entries)"
 
 -- | Write DSL modules to JSON files.
 writeDslJson :: FilePath -> [Module] -> [Module] -> IO ()
