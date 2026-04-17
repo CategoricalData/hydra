@@ -242,7 +242,11 @@ encodeTerm env tm =
         encodeTerm env el,
         acc]) (coqTermQualid "nil") v0
       Core.TermLiteral v0 -> encodeLiteral v0
-      Core.TermMap _ -> coqTermQualid "nil"
+      Core.TermMap v0 -> Lists.foldr (\kv -> \acc -> coqTermApp (coqTermQualid "cons") [
+        coqTermApp (coqTermQualid "pair") [
+          encodeTerm env (Pairs.first kv),
+          (encodeTerm env (Pairs.second kv))],
+        acc]) (coqTermQualid "nil") (Maps.toList v0)
       Core.TermMaybe v0 -> Maybes.maybe (coqTermQualid "None") (\v -> coqTermApp (coqTermQualid "Some") [
         encodeTerm env v]) v0
       Core.TermPair v0 -> coqTermApp (coqTermQualid "pair") [
@@ -253,7 +257,9 @@ encodeTerm env tm =
         let rname = Core.recordTypeName v0
             rfields = Core.recordFields v0
         in (Logic.ifElse (Lists.null rfields) (coqTermQualid "tt") (coqTermApp (coqTermQualid (resolveQualifiedName env (Strings.cat2 "Build_" (Core.unName rname)))) (Lists.map (\f -> encodeTerm env (Core.fieldTerm f)) rfields)))
-      Core.TermSet _ -> coqTermQualid "nil"
+      Core.TermSet v0 -> Lists.foldr (\el -> \acc -> coqTermApp (coqTermQualid "cons") [
+        encodeTerm env el,
+        acc]) (coqTermQualid "nil") (Sets.toList v0)
       Core.TermTypeApplication v0 ->
         let body = Core.typeApplicationTermBody v0
             tyArg = Core.typeApplicationTermType v0
