@@ -131,8 +131,11 @@ public class Bootstrap {
         System.out.println("  Time: " + formatTime(stepTime));
         System.out.println();
 
+        // Both hydra-kernel and hydra-haskell are part of the bootstrap baseline:
+        // hydra-haskell provides the runtime AST modules that the generated DSL
+        // source modules import, so it must pass --kernel-only filtering.
         Set<String> kernelNsSet = new HashSet<>();
-        for (Module m : kernelMods) kernelNsSet.add(m.namespace.value);
+        for (Module m : baselineMods) kernelNsSet.add(m.namespace.value);
 
         // Step 2: Optionally load coder packages.
         List<Module> coderMods = new ArrayList<>();

@@ -164,8 +164,10 @@ def main():
     print(f"  Time: {_format_time(step_time)}", flush=True)
     print(flush=True)
 
-    # Namespaces owned by the kernel package (used for --kernel-only filtering).
-    kernel_ns_set = {m.namespace.value for m in kernel_mods}
+    # Namespaces in the bootstrap baseline (used for --kernel-only filtering).
+    # Both hydra-kernel and hydra-haskell are baseline: hydra-haskell provides
+    # the runtime AST modules that the generated DSL source modules import.
+    kernel_ns_set = {m.namespace.value for m in baseline_mods}
 
     # Step 2: Optionally load coder packages.
     coder_mods = []
