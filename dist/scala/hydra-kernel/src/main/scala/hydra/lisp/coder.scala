@@ -122,73 +122,72 @@ def encodeLetAsNative[T0, T1, T2](dialect: hydra.lisp.syntax.Dialect)(cx: T0)(g:
     lazy val allNames: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.lists.map[hydra.core.Binding,
        hydra.core.Name]((b: hydra.core.Binding) => (b.name))(bindings))
     {
-      lazy val sccs: Seq[Seq[hydra.core.Name]] = hydra.lib.logic.ifElse[Seq[Seq[hydra.core.Name]]](supportsLetrec)(hydra.lib.lists.map[hydra.core.Binding,
-         Seq[hydra.core.Name]]((b: hydra.core.Binding) => Seq(b.name))(bindings))({
-        lazy val adjList: Seq[Tuple2[hydra.core.Name, Seq[hydra.core.Name]]] = hydra.lib.lists.map[hydra.core.Binding,
-           Tuple2[hydra.core.Name, Seq[hydra.core.Name]]]((b: hydra.core.Binding) =>
-          Tuple2(b.name, hydra.lib.sets.toList[hydra.core.Name](hydra.lib.sets.intersection[hydra.core.Name](allNames)(hydra.variables.freeVariablesInTerm(b.term)))))(bindings)
-        hydra.sorting.topologicalSortComponents(adjList)
-      })
+      lazy val adjList: Seq[Tuple2[hydra.core.Name, Seq[hydra.core.Name]]] = hydra.lib.lists.map[hydra.core.Binding,
+         Tuple2[hydra.core.Name, Seq[hydra.core.Name]]]((b: hydra.core.Binding) =>
+        Tuple2(b.name, hydra.lib.sets.toList[hydra.core.Name](hydra.lib.sets.intersection[hydra.core.Name](allNames)(hydra.variables.freeVariablesInTerm(b.term)))))(bindings)
       {
-        lazy val nameToBinding: Map[hydra.core.Name, hydra.core.Binding] = hydra.lib.maps.fromList[hydra.core.Name,
-           hydra.core.Binding](hydra.lib.lists.map[hydra.core.Binding, Tuple2[hydra.core.Name,
-           hydra.core.Binding]]((b: hydra.core.Binding) => Tuple2(b.name, b))(bindings))
+        lazy val sccs: Seq[Seq[hydra.core.Name]] = hydra.sorting.topologicalSortComponents(adjList)
         {
-          lazy val sortedBindings: Seq[hydra.core.Binding] = hydra.lib.maybes.cat[hydra.core.Binding](hydra.lib.lists.map[hydra.core.Name,
-             Option[hydra.core.Binding]]((name: hydra.core.Name) =>
-            hydra.lib.maps.lookup[hydra.core.Name, hydra.core.Binding](name)(nameToBinding))(hydra.lib.lists.concat[hydra.core.Name](sccs)))
+          lazy val nameToBinding: Map[hydra.core.Name, hydra.core.Binding] = hydra.lib.maps.fromList[hydra.core.Name,
+             hydra.core.Binding](hydra.lib.lists.map[hydra.core.Binding, Tuple2[hydra.core.Name,
+             hydra.core.Binding]]((b: hydra.core.Binding) => Tuple2(b.name, b))(bindings))
           {
-            lazy val hasCycle: Boolean = hydra.lib.lists.foldl[Boolean, Seq[hydra.core.Name]]((acc: Boolean) =>
-              (scc: Seq[hydra.core.Name]) =>
-              hydra.lib.logic.or(acc)(hydra.lib.equality.gt[Int](hydra.lib.lists.length[hydra.core.Name](scc))(1)))(false)(sccs)
-            hydra.lib.eithers.bind[T2, Seq[Tuple2[scala.Predef.String, hydra.lisp.syntax.Expression]],
-               hydra.lisp.syntax.Expression](hydra.lib.eithers.mapList[hydra.core.Binding,
-               Tuple2[scala.Predef.String, hydra.lisp.syntax.Expression], T2]((b: hydra.core.Binding) =>
-              {
-              lazy val bname: scala.Predef.String = hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake(hydra.formatting.sanitizeWithUnderscores(hydra.lisp.language.lispReservedWords)(b.name))
-              {
-                lazy val isSelfRef: Boolean = hydra.lib.sets.member[hydra.core.Name](b.name)(hydra.variables.freeVariablesInTerm(b.term))
+            lazy val sortedBindings: Seq[hydra.core.Binding] = hydra.lib.maybes.cat[hydra.core.Binding](hydra.lib.lists.map[hydra.core.Name,
+               Option[hydra.core.Binding]]((name: hydra.core.Name) =>
+              hydra.lib.maps.lookup[hydra.core.Name, hydra.core.Binding](name)(nameToBinding))(hydra.lib.lists.concat[hydra.core.Name](sccs)))
+            {
+              lazy val hasCycle: Boolean = hydra.lib.lists.foldl[Boolean, Seq[hydra.core.Name]]((acc: Boolean) =>
+                (scc: Seq[hydra.core.Name]) =>
+                hydra.lib.logic.or(acc)(hydra.lib.equality.gt[Int](hydra.lib.lists.length[hydra.core.Name](scc))(1)))(false)(sccs)
+              hydra.lib.eithers.bind[T2, Seq[Tuple2[scala.Predef.String, hydra.lisp.syntax.Expression]],
+                 hydra.lisp.syntax.Expression](hydra.lib.eithers.mapList[hydra.core.Binding,
+                 Tuple2[scala.Predef.String, hydra.lisp.syntax.Expression], T2]((b: hydra.core.Binding) =>
                 {
-                  lazy val isLambda: Boolean = hydra.strip.deannotateTerm(b.term) match
-                    case hydra.core.Term.lambda(v_Term_lambda__) => true
-                    case _ => false
-                  hydra.lib.eithers.bind[T2, hydra.lisp.syntax.Expression, Tuple2[scala.Predef.String,
-                     hydra.lisp.syntax.Expression]](hydra.lisp.coder.encodeTerm(dialect)(cx)(g)(b.term))((bval: hydra.lisp.syntax.Expression) =>
-                    {
-                    lazy val isClojure: Boolean = hydra.lib.logic.not(supportsLetrec)
-                    {
-                      lazy val wrappedVal: hydra.lisp.syntax.Expression = hydra.lib.logic.ifElse[hydra.lisp.syntax.Expression](isClojure)(hydra.lib.logic.ifElse[hydra.lisp.syntax.Expression](isSelfRef)(hydra.lib.logic.ifElse[hydra.lisp.syntax.Expression](isLambda)(bval match
-                        case hydra.lisp.syntax.Expression.lambda(v_Expression_lambda_lam) => hydra.lisp.syntax.Expression.lambda(hydra.lisp.syntax.Lambda(Some(bname),
-                           (v_Expression_lambda_lam.params), (v_Expression_lambda_lam.restParam),
-                           (v_Expression_lambda_lam.body)))
-                        case _ => bval)(hydra.lisp.coder.lispNamedLambdaExpr(bname)(Seq("_arg"))(hydra.lisp.coder.lispApp(bval)(Seq(hydra.lisp.coder.lispVar("_arg"))))))(bval))(hydra.lib.logic.ifElse[hydra.lisp.syntax.Expression](hydra.lib.logic.and(isSelfRef)(hydra.lib.logic.not(isLambda)))(hydra.lisp.coder.lispLambdaExpr(Seq("_arg"))(hydra.lisp.coder.lispApp(bval)(Seq(hydra.lisp.coder.lispVar("_arg")))))(bval))
-                      Right(Tuple2(bname, wrappedVal))
-                    }
-                  })
-                }
-              }
-            })(sortedBindings))((encodedBindings: Seq[Tuple2[scala.Predef.String, hydra.lisp.syntax.Expression]]) =>
-              {
-              lazy val hasSelfRef: Boolean = hydra.lib.lists.foldl[Boolean, hydra.core.Binding]((acc: Boolean) =>
-                (b: hydra.core.Binding) =>
-                hydra.lib.logic.or(acc)(hydra.lib.sets.member[hydra.core.Name](b.name)(hydra.variables.freeVariablesInTerm(b.term))))(false)(bindings)
-              {
-                lazy val isRecursive: Boolean = hydra.lib.logic.ifElse[Boolean](supportsLetrec)(hasSelfRef)(hasCycle)
+                lazy val bname: scala.Predef.String = hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake(hydra.formatting.sanitizeWithUnderscores(hydra.lisp.language.lispReservedWords)(b.name))
                 {
-                  lazy val letKind: hydra.lisp.syntax.LetKind = hydra.lib.logic.ifElse[hydra.lisp.syntax.LetKind](isRecursive)(hydra.lisp.syntax.LetKind.recursive)(hydra.lib.logic.ifElse[hydra.lisp.syntax.LetKind](hydra.lib.equality.lte[Int](hydra.lib.lists.length[hydra.core.Binding](bindings))(1))(hydra.lisp.syntax.LetKind.parallel)(hydra.lisp.syntax.LetKind.sequential))
+                  lazy val isSelfRef: Boolean = hydra.lib.sets.member[hydra.core.Name](b.name)(hydra.variables.freeVariablesInTerm(b.term))
                   {
-                    lazy val lispBindings: Seq[hydra.lisp.syntax.LetBinding] = hydra.lib.lists.map[Tuple2[scala.Predef.String,
-                       hydra.lisp.syntax.Expression], hydra.lisp.syntax.LetBinding]((eb: Tuple2[scala.Predef.String,
-                       hydra.lisp.syntax.Expression]) =>
-                      hydra.lisp.syntax.LetBinding.simple(hydra.lisp.syntax.SimpleBinding(hydra.lib.pairs.first[scala.Predef.String,
-                         hydra.lisp.syntax.Expression](eb), hydra.lib.pairs.second[scala.Predef.String,
-                         hydra.lisp.syntax.Expression](eb))))(encodedBindings)
-                    Right(hydra.lisp.syntax.Expression.let(hydra.lisp.syntax.LetExpression(letKind,
-                       lispBindings, Seq(bodyExpr))))
+                    lazy val isLambda: Boolean = hydra.strip.deannotateTerm(b.term) match
+                      case hydra.core.Term.lambda(v_Term_lambda__) => true
+                      case _ => false
+                    hydra.lib.eithers.bind[T2, hydra.lisp.syntax.Expression, Tuple2[scala.Predef.String,
+                       hydra.lisp.syntax.Expression]](hydra.lisp.coder.encodeTerm(dialect)(cx)(g)(b.term))((bval: hydra.lisp.syntax.Expression) =>
+                      {
+                      lazy val isClojure: Boolean = hydra.lib.logic.not(supportsLetrec)
+                      {
+                        lazy val wrappedVal: hydra.lisp.syntax.Expression = hydra.lib.logic.ifElse[hydra.lisp.syntax.Expression](isClojure)(hydra.lib.logic.ifElse[hydra.lisp.syntax.Expression](isSelfRef)(hydra.lib.logic.ifElse[hydra.lisp.syntax.Expression](isLambda)(bval match
+                          case hydra.lisp.syntax.Expression.lambda(v_Expression_lambda_lam) => hydra.lisp.syntax.Expression.lambda(hydra.lisp.syntax.Lambda(Some(bname),
+                             (v_Expression_lambda_lam.params), (v_Expression_lambda_lam.restParam),
+                             (v_Expression_lambda_lam.body)))
+                          case _ => bval)(hydra.lisp.coder.lispNamedLambdaExpr(bname)(Seq("_arg"))(hydra.lisp.coder.lispApp(bval)(Seq(hydra.lisp.coder.lispVar("_arg"))))))(bval))(hydra.lib.logic.ifElse[hydra.lisp.syntax.Expression](hydra.lib.logic.and(isSelfRef)(hydra.lib.logic.not(isLambda)))(hydra.lisp.coder.lispLambdaExpr(Seq("_arg"))(hydra.lisp.coder.lispApp(bval)(Seq(hydra.lisp.coder.lispVar("_arg")))))(bval))
+                        Right(Tuple2(bname, wrappedVal))
+                      }
+                    })
                   }
                 }
-              }
-            })
+              })(sortedBindings))((encodedBindings: Seq[Tuple2[scala.Predef.String, hydra.lisp.syntax.Expression]]) =>
+                {
+                lazy val hasSelfRef: Boolean = hydra.lib.lists.foldl[Boolean, hydra.core.Binding]((acc: Boolean) =>
+                  (b: hydra.core.Binding) =>
+                  hydra.lib.logic.or(acc)(hydra.lib.sets.member[hydra.core.Name](b.name)(hydra.variables.freeVariablesInTerm(b.term))))(false)(bindings)
+                {
+                  lazy val isRecursive: Boolean = hydra.lib.logic.or(hasSelfRef)(hasCycle)
+                  {
+                    lazy val letKind: hydra.lisp.syntax.LetKind = hydra.lib.logic.ifElse[hydra.lisp.syntax.LetKind](isRecursive)(hydra.lisp.syntax.LetKind.recursive)(hydra.lib.logic.ifElse[hydra.lisp.syntax.LetKind](hydra.lib.equality.lte[Int](hydra.lib.lists.length[hydra.core.Binding](bindings))(1))(hydra.lisp.syntax.LetKind.parallel)(hydra.lisp.syntax.LetKind.sequential))
+                    {
+                      lazy val lispBindings: Seq[hydra.lisp.syntax.LetBinding] = hydra.lib.lists.map[Tuple2[scala.Predef.String,
+                         hydra.lisp.syntax.Expression], hydra.lisp.syntax.LetBinding]((eb: Tuple2[scala.Predef.String,
+                         hydra.lisp.syntax.Expression]) =>
+                        hydra.lisp.syntax.LetBinding.simple(hydra.lisp.syntax.SimpleBinding(hydra.lib.pairs.first[scala.Predef.String,
+                           hydra.lisp.syntax.Expression](eb), hydra.lib.pairs.second[scala.Predef.String,
+                           hydra.lisp.syntax.Expression](eb))))(encodedBindings)
+                      Right(hydra.lisp.syntax.Expression.let(hydra.lisp.syntax.LetExpression(letKind,
+                         lispBindings, Seq(bodyExpr))))
+                    }
+                  }
+                }
+              })
+            }
           }
         }
       }

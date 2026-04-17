@@ -287,20 +287,12 @@ public interface Coder {
         hydra.util.Lazy<java.util.Set<hydra.core.Name>> allNames = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
           (java.util.function.Function<hydra.core.Binding, hydra.core.Name>) (b -> (b).name),
           bindings)));
-        Boolean supportsLetrec = hydra.lisp.Coder.dialectSupportsLetrec(dialect);
-        hydra.util.Lazy<java.util.List<java.util.List<hydra.core.Name>>> sccs = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
-          supportsLetrec,
-          () -> hydra.lib.lists.Map.apply(
-            (java.util.function.Function<hydra.core.Binding, java.util.List<hydra.core.Name>>) (b -> java.util.Arrays.asList((b).name)),
-            bindings),
-          () -> ((java.util.function.Supplier<java.util.List<java.util.List<hydra.core.Name>>>) (() -> {
-            hydra.util.Lazy<java.util.List<hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>>> adjList = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-              (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>>) (b -> (hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>((b).name, hydra.lib.sets.ToList.apply(hydra.lib.sets.Intersection.apply(
-                allNames.get(),
-                hydra.Variables.freeVariablesInTerm((b).term))))))),
-              bindings));
-            return hydra.Sorting.topologicalSortComponents(adjList.get());
-          })).get()));
+        hydra.util.Lazy<java.util.List<hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>>> adjList = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+          (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>>) (b -> (hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>((b).name, hydra.lib.sets.ToList.apply(hydra.lib.sets.Intersection.apply(
+            allNames.get(),
+            hydra.Variables.freeVariablesInTerm((b).term))))))),
+          bindings));
+        hydra.util.Lazy<java.util.List<java.util.List<hydra.core.Name>>> sccs = new hydra.util.Lazy<>(() -> hydra.Sorting.topologicalSortComponents(adjList.get()));
         hydra.util.Lazy<Boolean> hasCycle = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
           (java.util.function.Function<Boolean, java.util.function.Function<java.util.List<hydra.core.Name>, Boolean>>) (acc -> (java.util.function.Function<java.util.List<hydra.core.Name>, Boolean>) (scc -> hydra.lib.logic.Or.apply(
             acc,
@@ -317,6 +309,7 @@ public interface Coder {
             name,
             nameToBinding.get())),
           hydra.lib.lists.Concat.apply(sccs.get()))));
+        Boolean supportsLetrec = hydra.lisp.Coder.dialectSupportsLetrec(dialect);
         return hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.MapList.apply(
             (java.util.function.Function<hydra.core.Binding, hydra.util.Either<T2, hydra.util.Pair<String, hydra.lisp.syntax.Expression>>>) (b -> {
@@ -392,12 +385,11 @@ public interface Coder {
                   hydra.Variables.freeVariablesInTerm((b).term))))),
               false,
               bindings));
-            hydra.util.Lazy<Boolean> isRecursive = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
-              supportsLetrec,
-              () -> hasSelfRef.get(),
-              () -> hasCycle.get()));
+            Boolean isRecursive = hydra.lib.logic.Or.apply(
+              hasSelfRef.get(),
+              hasCycle.get());
             hydra.util.Lazy<hydra.lisp.syntax.LetKind> letKind = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
-              isRecursive.get(),
+              isRecursive,
               () -> new hydra.lisp.syntax.LetKind.Recursive(),
               () -> hydra.lib.logic.IfElse.lazy(
                 hydra.lib.equality.Lte.apply(
