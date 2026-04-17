@@ -131,9 +131,6 @@
           (cons (qname ns "apply")      (prim2 (qname ns "apply")
                                                  hydra_lib_lists_apply
                                                  #f (tc-list (fun a b)) (tc-list a) (tc-list b)))
-          (cons (qname ns "at")         (prim2 (qname ns "at")
-                                                 hydra_lib_lists_at
-                                                 #f (tc-int32) (tc-list a) a))
           (cons (qname ns "bind")       (prim2 (qname ns "bind")
                                                  hydra_lib_lists_bind
                                                  #f (tc-list a) (fun a (tc-list b)) (tc-list b)))
@@ -176,15 +173,12 @@
                                                          init) xs))))
                                                  #f (fun a (fun b b)) b (tc-list a) b))
           (cons (qname ns "group")      (prim1 (qname ns "group")      hydra_lib_lists_group      #f (tc-list a) (tc-list (tc-list a)) eq-a))
-          (cons (qname ns "head")       (prim1 (qname ns "head")       hydra_lib_lists_head       #f (tc-list a) a))
-          (cons (qname ns "init")       (prim1 (qname ns "init")       hydra_lib_lists_init       #f (tc-list a) (tc-list a)))
           (cons (qname ns "intercalate") (prim2 (qname ns "intercalate")
                                                   hydra_lib_lists_intercalate
                                                   #f (tc-list a) (tc-list (tc-list a)) (tc-list a)))
           (cons (qname ns "intersperse") (prim2 (qname ns "intersperse")
                                                   hydra_lib_lists_intersperse
                                                   #f a (tc-list a) (tc-list a)))
-          (cons (qname ns "last")       (prim1 (qname ns "last")       hydra_lib_lists_last       #f (tc-list a) a))
           (cons (qname ns "length")     (prim1 (qname ns "length")     hydra_lib_lists_length     #f (tc-list a) (tc-int32)))
           (cons (qname ns "map")        (prim2 (qname ns "map")
                                                  hydra_lib_lists_map
@@ -204,7 +198,6 @@
                                                  hydra_lib_lists_replicate
                                                  #f (tc-int32) a (tc-list a)))
           (cons (qname ns "reverse")    (prim1 (qname ns "reverse")    hydra_lib_lists_reverse    #f (tc-list a) (tc-list a)))
-          (cons (qname ns "safeHead")   (prim1 (qname ns "safeHead")   hydra_lib_lists_safe_head  #f (tc-list a) (tc-optional a)))
           (cons (qname ns "singleton")  (prim1 (qname ns "singleton")  hydra_lib_lists_singleton  #f a (tc-list a)))
           (cons (qname ns "sort")       (prim1 (qname ns "sort")       hydra_lib_lists_sort       #f (tc-list a) (tc-list a) ord-a))
           (cons (qname ns "sortOn")     (prim2 (qname ns "sortOn")
@@ -213,11 +206,11 @@
           (cons (qname ns "span")       (prim2 (qname ns "span")
                                                  hydra_lib_lists_span
                                                  #f (fun a (tc-boolean)) (tc-list a) (tc-pair (tc-list a) (tc-list a))))
-          (cons (qname ns "tail")       (prim1 (qname ns "tail")       hydra_lib_lists_tail       #f (tc-list a) (tc-list a)))
           (cons (qname ns "take")       (prim2 (qname ns "take")
                                                  hydra_lib_lists_take
                                                  #f (tc-int32) (tc-list a) (tc-list a)))
           (cons (qname ns "transpose")  (prim1 (qname ns "transpose")  hydra_lib_lists_transpose  #f (tc-list (tc-list a)) (tc-list (tc-list a))))
+          (cons (qname ns "uncons")     (prim1 (qname ns "uncons")     hydra_lib_lists_uncons     #f (tc-list a) (tc-optional (tc-pair a (tc-list a)))))
           (cons (qname ns "zip")        (prim2 (qname ns "zip")
                                                  hydra_lib_lists_zip
                                                  #f (tc-list a) (tc-list b) (tc-list (tc-pair a b))))
@@ -329,18 +322,13 @@
           (list
             (cons (qname ns "abs")    (prim1 (qname ns "abs")    hydra_lib_math_abs    #f i32 i32))
             (cons (qname ns "add")    (prim2 (qname ns "add")    hydra_lib_math_add    #f i32 i32 i32))
-            (cons (qname ns "div")    (prim2 (qname ns "div")    hydra_lib_math_div    #f i32 i32 i32))
             (cons (qname ns "even")   (prim1 (qname ns "even")   hydra_lib_math_even   #f i32 b))
-            (cons (qname ns "mod")    (prim2 (qname ns "mod")    hydra_lib_math_mod    #f i32 i32 i32))
             (cons (qname ns "mul")    (prim2 (qname ns "mul")    hydra_lib_math_mul    #f i32 i32 i32))
             (cons (qname ns "negate") (prim1 (qname ns "negate") hydra_lib_math_negate #f i32 i32))
             (cons (qname ns "odd")    (prim1 (qname ns "odd")    hydra_lib_math_odd    #f i32 b))
-            (cons (qname ns "pred")   (prim1 (qname ns "pred")   hydra_lib_math_pred   #f i32 i32))
             (cons (qname ns "range")  (prim2 (qname ns "range")  hydra_lib_math_range  #f i32 i32 (tc-list i32)))
-            (cons (qname ns "rem")    (prim2 (qname ns "rem")    hydra_lib_math_rem    #f i32 i32 i32))
             (cons (qname ns "signum") (prim1 (qname ns "signum") hydra_lib_math_signum #f i32 i32))
             (cons (qname ns "sub")    (prim2 (qname ns "sub")    hydra_lib_math_sub    #f i32 i32 i32))
-            (cons (qname ns "succ")   (prim1 (qname ns "succ")   hydra_lib_math_succ   #f i32 i32))
             (cons (qname ns "max")    (prim2 (qname ns "max")    hydra_lib_math_max    #f i32 i32 i32))
             (cons (qname ns "maybeDiv")  (prim2 (qname ns "maybeDiv")  hydra_lib_math_maybe_div  #f i32 i32 (tc-optional i32)))
             (cons (qname ns "maybeMod")  (prim2 (qname ns "maybeMod")  hydra_lib_math_maybe_mod  #f i32 i32 (tc-optional i32)))
@@ -404,7 +392,6 @@
           (cons (qname ns "compose")  (prim3 (qname ns "compose")
                                               hydra_lib_maybes_compose
                                               #f (fun a (tc-optional b)) (fun b (tc-optional c)) a (tc-optional c)))
-          (cons (qname ns "fromJust") (prim1 (qname ns "fromJust") hydra_lib_maybes_from_just #f (tc-optional a) a))
           (cons (qname ns "fromMaybe") (prim2 (qname ns "fromMaybe")
                                                hydra_lib_maybes_from_maybe
                                                #f a (tc-optional a) a))
@@ -494,9 +481,6 @@
           (cons (qname ns "cat2")        (prim2 (qname ns "cat2")
                                                   hydra_lib_strings_cat2
                                                   #f s s s))
-          (cons (qname ns "charAt")      (prim2 (qname ns "charAt")
-                                                  hydra_lib_strings_char_at
-                                                  #f i s i))
           (cons (qname ns "fromList")    (prim1 (qname ns "fromList")    hydra_lib_strings_from_list    #f (tc-list i) s))
           (cons (qname ns "intercalate") (prim2 (qname ns "intercalate")
                                                   hydra_lib_strings_intercalate

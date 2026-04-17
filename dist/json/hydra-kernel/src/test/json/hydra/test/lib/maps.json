@@ -1298,12 +1298,37 @@
                                                                                     "application": {
                                                                                       "argument": {
                                                                                         "application": {
-                                                                                          "argument": {"variable": "v"},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "v"},
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "argument": {"literal": {"integer": {"int32": 0}}},
+                                                                                                  "function": {"variable": "hydra.lib.strings.maybeCharAt"}}}}},
                                                                                           "function": {
                                                                                             "application": {
-                                                                                              "argument": {"literal": {"integer": {"int32": 0}}},
-                                                                                              "function": {"variable": "hydra.lib.strings.charAt"}}}}},
-                                                                                      "function": {"variable": "hydra.lib.chars.toLower"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "body": {
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"variable": "hydra.lib.chars.toLower"}}},
+                                                                                                  "domain": {"literal": {"integer": {"int32": {}}}},
+                                                                                                  "parameter": "c"}},
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"variable": "hydra.lib.maybes.map"},
+                                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                                  "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {"literal": {"integer": {"int32": 0}}},
+                                                                                          "function": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                                                              "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                                                   "function": {
                                                                                     "typeApplication": {
                                                                                       "body": {"variable": "hydra.lib.equality.equal"},
@@ -1454,12 +1479,37 @@
                                                                                     "application": {
                                                                                       "argument": {
                                                                                         "application": {
-                                                                                          "argument": {"variable": "v"},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "v"},
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "argument": {"literal": {"integer": {"int32": 0}}},
+                                                                                                  "function": {"variable": "hydra.lib.strings.maybeCharAt"}}}}},
                                                                                           "function": {
                                                                                             "application": {
-                                                                                              "argument": {"literal": {"integer": {"int32": 0}}},
-                                                                                              "function": {"variable": "hydra.lib.strings.charAt"}}}}},
-                                                                                      "function": {"variable": "hydra.lib.chars.toLower"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "body": {
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"variable": "hydra.lib.chars.toLower"}}},
+                                                                                                  "domain": {"literal": {"integer": {"int32": {}}}},
+                                                                                                  "parameter": "c"}},
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"variable": "hydra.lib.maybes.map"},
+                                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                                  "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {"literal": {"integer": {"int32": 0}}},
+                                                                                          "function": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                                                              "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                                                   "function": {
                                                                                     "typeApplication": {
                                                                                       "body": {"variable": "hydra.lib.equality.equal"},
@@ -1604,12 +1654,37 @@
                                                                                     "application": {
                                                                                       "argument": {
                                                                                         "application": {
-                                                                                          "argument": {"variable": "v"},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "v"},
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "argument": {"literal": {"integer": {"int32": 0}}},
+                                                                                                  "function": {"variable": "hydra.lib.strings.maybeCharAt"}}}}},
                                                                                           "function": {
                                                                                             "application": {
-                                                                                              "argument": {"literal": {"integer": {"int32": 0}}},
-                                                                                              "function": {"variable": "hydra.lib.strings.charAt"}}}}},
-                                                                                      "function": {"variable": "hydra.lib.chars.toLower"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "body": {
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"variable": "hydra.lib.chars.toLower"}}},
+                                                                                                  "domain": {"literal": {"integer": {"int32": {}}}},
+                                                                                                  "parameter": "c"}},
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"variable": "hydra.lib.maybes.map"},
+                                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                                  "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {"literal": {"integer": {"int32": 0}}},
+                                                                                          "function": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                                                              "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                                                   "function": {
                                                                                     "typeApplication": {
                                                                                       "body": {"variable": "hydra.lib.equality.equal"},

@@ -45,9 +45,6 @@ import Hydra.Coq.GenerateDriver (moduleToCoq)
 import Hydra.Coq.Generate (globalFieldMapping, globalConstructorCounts, globalAmbiguousNames, globalSanitizedAccessors)
 import Hydra.Coq.Language (coqLanguage)
 
-import qualified Hydra.Json.Model as Json
-import qualified Hydra.Json.Writer as JsonWriter
-
 import Control.Monad (when)
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -60,23 +57,6 @@ import qualified System.IO as SIO
 data JsonSchemaOptions = JsonSchemaOptions {
   jsonSchemaOptionsShortNames :: Bool
 }
-
--- | Write a manifest.json listing ext module namespaces.
--- This mirrors writeManifestJson in Hydra.Generation but for hydra-ext module lists.
-writeExtManifestJson :: FilePath -> IO ()
-writeExtManifestJson basePath = do
-    let jsonVal = Json.ValueObject $ M.fromList [
-            ("hydraBootstrapCoderModules", namespacesJson hydraBootstrapCoderModules),
-            ("hydraExtDemoModules", namespacesJson hydraExtDemoModules),
-            ("hydraExtEssentialModules", namespacesJson hydraExtEssentialModules),
-            ("hydraExtJavaModules", namespacesJson hydraExtJavaModules),  -- legacy alias
-            ("hydraExtModules", namespacesJson hydraExtJsonModules)]
-        jsonStr = JsonWriter.printJson jsonVal
-        filePath = basePath FP.</> "manifest.json"
-    writeFile filePath (jsonStr ++ "\n")
-    putStrLn $ "Wrote manifest: " ++ filePath
-  where
-    namespacesJson mods = Json.ValueArray $ fmap (Json.ValueString . unNamespace . moduleNamespace) mods
 
 -- | Generate C++ source files from modules.
 -- First argument: output directory

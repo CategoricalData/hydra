@@ -27,7 +27,7 @@ public interface Encode {
 
       @Override
       public hydra.yaml.model.Node visit(hydra.json.model.Value.Number_ n) {
-        return new hydra.yaml.model.Node.Scalar(new hydra.yaml.model.Scalar.Float_((n).value));
+        return new hydra.yaml.model.Node.Scalar(new hydra.yaml.model.Scalar.Decimal((n).value));
       }
 
       @Override

@@ -373,7 +373,7 @@ arrowFunctionExpressionToExpr = define "arrowFunctionExpressionToExpr" $
       (list [Serialization.cst @@ string "async"])
       (list ([] :: [TTerm Expr])),
     "paramsExpr">: Logic.ifElse (Equality.equal (Lists.length $ var "params") (int32 1))
-      (patternToExpr @@ (Lists.head $ var "params"))
+      (Maybes.fromMaybe (Serialization.cst @@ string "") (Maybes.map patternToExpr (Lists.maybeHead $ var "params")))
       (Serialization.parenList @@ false @@ (Lists.map (patternToExpr) (var "params"))),
     "bodyExpr">: cases JS._ArrowFunctionBody (var "body") Nothing [
       JS._ArrowFunctionBody_expression>>: lambda "e" $ expressionToExpr @@ var "e",

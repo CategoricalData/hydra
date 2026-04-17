@@ -2167,7 +2167,7 @@
                                                                                                     "name": "variable",
                                                                                                     "term": {
                                                                                                       "wrap": {
-                                                                                                        "body": {"literal": {"string": "hydra.lib.math.div"}},
+                                                                                                        "body": {"literal": {"string": "hydra.lib.math.maybeDiv"}},
                                                                                                         "typeName": "hydra.core.Name"}}},
                                                                                                   "typeName": "hydra.core.Term"}}},
                                                                                             {
@@ -2250,16 +2250,22 @@
                                                               "argument": {
                                                                 "inject": {
                                                                   "field": {
-                                                                    "name": "literal",
+                                                                    "name": "maybe",
                                                                     "term": {
-                                                                      "inject": {
-                                                                        "field": {
-                                                                          "name": "integer",
-                                                                          "term": {
-                                                                            "inject": {
-                                                                              "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 5}}}},
-                                                                              "typeName": "hydra.core.IntegerValue"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                      "maybe": {
+                                                                        "inject": {
+                                                                          "field": {
+                                                                            "name": "literal",
+                                                                            "term": {
+                                                                              "inject": {
+                                                                                "field": {
+                                                                                  "name": "integer",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 5}}}},
+                                                                                      "typeName": "hydra.core.IntegerValue"}}},
+                                                                                "typeName": "hydra.core.Literal"}}},
+                                                                          "typeName": "hydra.core.Term"}}}},
                                                                   "typeName": "hydra.core.Term"}},
                                                               "function": {"variable": "hydra.show.core.term"}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -2316,7 +2322,7 @@
                                                                                                     "name": "variable",
                                                                                                     "term": {
                                                                                                       "wrap": {
-                                                                                                        "body": {"literal": {"string": "hydra.lib.math.mod"}},
+                                                                                                        "body": {"literal": {"string": "hydra.lib.math.maybeMod"}},
                                                                                                         "typeName": "hydra.core.Name"}}},
                                                                                                   "typeName": "hydra.core.Term"}}},
                                                                                             {
@@ -2399,16 +2405,22 @@
                                                               "argument": {
                                                                 "inject": {
                                                                   "field": {
-                                                                    "name": "literal",
+                                                                    "name": "maybe",
                                                                     "term": {
-                                                                      "inject": {
-                                                                        "field": {
-                                                                          "name": "integer",
-                                                                          "term": {
-                                                                            "inject": {
-                                                                              "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 2}}}},
-                                                                              "typeName": "hydra.core.IntegerValue"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                      "maybe": {
+                                                                        "inject": {
+                                                                          "field": {
+                                                                            "name": "literal",
+                                                                            "term": {
+                                                                              "inject": {
+                                                                                "field": {
+                                                                                  "name": "integer",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 2}}}},
+                                                                                      "typeName": "hydra.core.IntegerValue"}}},
+                                                                                "typeName": "hydra.core.Literal"}}},
+                                                                          "typeName": "hydra.core.Term"}}}},
                                                                   "typeName": "hydra.core.Term"}},
                                                               "function": {"variable": "hydra.show.core.term"}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -3278,7 +3290,7 @@
                                         "fields": [
                                           {
                                             "name": "name",
-                                            "term": {"literal": {"string": "head of integer list"}}},
+                                            "term": {"literal": {"string": "maybeHead of integer list"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -3309,7 +3321,7 @@
                                                                                       "name": "variable",
                                                                                       "term": {
                                                                                         "wrap": {
-                                                                                          "body": {"literal": {"string": "hydra.lib.lists.head"}},
+                                                                                          "body": {"literal": {"string": "hydra.lib.lists.maybeHead"}},
                                                                                           "typeName": "hydra.core.Name"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
@@ -3409,16 +3421,22 @@
                                                               "argument": {
                                                                 "inject": {
                                                                   "field": {
-                                                                    "name": "literal",
+                                                                    "name": "maybe",
                                                                     "term": {
-                                                                      "inject": {
-                                                                        "field": {
-                                                                          "name": "integer",
-                                                                          "term": {
-                                                                            "inject": {
-                                                                              "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 10}}}},
-                                                                              "typeName": "hydra.core.IntegerValue"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                      "maybe": {
+                                                                        "inject": {
+                                                                          "field": {
+                                                                            "name": "literal",
+                                                                            "term": {
+                                                                              "inject": {
+                                                                                "field": {
+                                                                                  "name": "integer",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 10}}}},
+                                                                                      "typeName": "hydra.core.IntegerValue"}}},
+                                                                                "typeName": "hydra.core.Literal"}}},
+                                                                          "typeName": "hydra.core.Term"}}}},
                                                                   "typeName": "hydra.core.Term"}},
                                                               "function": {"variable": "hydra.show.core.term"}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -3437,7 +3455,7 @@
                                         "fields": [
                                           {
                                             "name": "name",
-                                            "term": {"literal": {"string": "head of string list"}}},
+                                            "term": {"literal": {"string": "maybeHead of string list"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -3468,7 +3486,7 @@
                                                                                       "name": "variable",
                                                                                       "term": {
                                                                                         "wrap": {
-                                                                                          "body": {"literal": {"string": "hydra.lib.lists.head"}},
+                                                                                          "body": {"literal": {"string": "hydra.lib.lists.maybeHead"}},
                                                                                           "typeName": "hydra.core.Name"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
@@ -3544,11 +3562,17 @@
                                                               "argument": {
                                                                 "inject": {
                                                                   "field": {
-                                                                    "name": "literal",
+                                                                    "name": "maybe",
                                                                     "term": {
-                                                                      "inject": {
-                                                                        "field": {"name": "string", "term": {"literal": {"string": "first"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                      "maybe": {
+                                                                        "inject": {
+                                                                          "field": {
+                                                                            "name": "literal",
+                                                                            "term": {
+                                                                              "inject": {
+                                                                                "field": {"name": "string", "term": {"literal": {"string": "first"}}},
+                                                                                "typeName": "hydra.core.Literal"}}},
+                                                                          "typeName": "hydra.core.Term"}}}},
                                                                   "typeName": "hydra.core.Term"}},
                                                               "function": {"variable": "hydra.show.core.term"}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -3567,7 +3591,7 @@
                                         "fields": [
                                           {
                                             "name": "name",
-                                            "term": {"literal": {"string": "last of integer list"}}},
+                                            "term": {"literal": {"string": "maybeLast of integer list"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -3598,7 +3622,7 @@
                                                                                       "name": "variable",
                                                                                       "term": {
                                                                                         "wrap": {
-                                                                                          "body": {"literal": {"string": "hydra.lib.lists.last"}},
+                                                                                          "body": {"literal": {"string": "hydra.lib.lists.maybeLast"}},
                                                                                           "typeName": "hydra.core.Name"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
@@ -3698,16 +3722,22 @@
                                                               "argument": {
                                                                 "inject": {
                                                                   "field": {
-                                                                    "name": "literal",
+                                                                    "name": "maybe",
                                                                     "term": {
-                                                                      "inject": {
-                                                                        "field": {
-                                                                          "name": "integer",
-                                                                          "term": {
-                                                                            "inject": {
-                                                                              "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 30}}}},
-                                                                              "typeName": "hydra.core.IntegerValue"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                      "maybe": {
+                                                                        "inject": {
+                                                                          "field": {
+                                                                            "name": "literal",
+                                                                            "term": {
+                                                                              "inject": {
+                                                                                "field": {
+                                                                                  "name": "integer",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 30}}}},
+                                                                                      "typeName": "hydra.core.IntegerValue"}}},
+                                                                                "typeName": "hydra.core.Literal"}}},
+                                                                          "typeName": "hydra.core.Term"}}}},
                                                                   "typeName": "hydra.core.Term"}},
                                                               "function": {"variable": "hydra.show.core.term"}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},

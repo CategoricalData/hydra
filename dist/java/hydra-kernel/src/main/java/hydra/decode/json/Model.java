@@ -77,22 +77,12 @@ public interface Model {
                     return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
                       @Override
                       public hydra.util.Either<hydra.errors.DecodingError, java.math.BigDecimal> otherwise(hydra.core.Literal instance) {
-                        return hydra.util.Either.<hydra.errors.DecodingError, java.math.BigDecimal>left(new hydra.errors.DecodingError("expected bigfloat literal"));
+                        return hydra.util.Either.<hydra.errors.DecodingError, java.math.BigDecimal>left(new hydra.errors.DecodingError("expected decimal literal"));
                       }
 
                       @Override
-                      public hydra.util.Either<hydra.errors.DecodingError, java.math.BigDecimal> visit(hydra.core.Literal.Float_ v1) {
-                        return (v1).value.accept(new hydra.core.FloatValue.PartialVisitor<>() {
-                          @Override
-                          public hydra.util.Either<hydra.errors.DecodingError, java.math.BigDecimal> otherwise(hydra.core.FloatValue instance) {
-                            return hydra.util.Either.<hydra.errors.DecodingError, java.math.BigDecimal>left(new hydra.errors.DecodingError("expected bigfloat value"));
-                          }
-
-                          @Override
-                          public hydra.util.Either<hydra.errors.DecodingError, java.math.BigDecimal> visit(hydra.core.FloatValue.Bigfloat f) {
-                            return hydra.util.Either.<hydra.errors.DecodingError, java.math.BigDecimal>right((f).value);
-                          }
-                        });
+                      public hydra.util.Either<hydra.errors.DecodingError, java.math.BigDecimal> visit(hydra.core.Literal.Decimal d) {
+                        return hydra.util.Either.<hydra.errors.DecodingError, java.math.BigDecimal>right((d).value);
                       }
                     });
                   }

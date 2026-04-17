@@ -4559,23 +4559,23 @@ _TemporalType_durationType = Core.Name "durationType"
 
 data TemporalInstantType =
   TemporalInstantTypeDatetimeType DatetimeType |
-  TemporalInstantTypeLocaldatetimeType LocaldatetimeType |
+  TemporalInstantTypeLocalDatetimeTypeChoice LocalDatetimeTypeChoice |
   TemporalInstantTypeDateType DateType |
   TemporalInstantTypeTimeType TimeType |
-  TemporalInstantTypeLocaltimeType LocaltimeType
+  TemporalInstantTypeLocalTimeTypeChoice LocalTimeTypeChoice
   deriving (Eq, Ord, Read, Show)
 
 _TemporalInstantType = Core.Name "openGql.grammar.TemporalInstantType"
 
 _TemporalInstantType_datetimeType = Core.Name "datetimeType"
 
-_TemporalInstantType_localdatetimeType = Core.Name "localdatetimeType"
+_TemporalInstantType_localDatetimeTypeChoice = Core.Name "localDatetimeTypeChoice"
 
 _TemporalInstantType_dateType = Core.Name "dateType"
 
 _TemporalInstantType_timeType = Core.Name "timeType"
 
-_TemporalInstantType_localtimeType = Core.Name "localtimeType"
+_TemporalInstantType_localTimeTypeChoice = Core.Name "localTimeTypeChoice"
 
 data DatetimeType =
   DatetimeTypeZonedDatetime ZonedDatetimeType |
@@ -4606,16 +4606,16 @@ _TimestampWithTimeZoneType = Core.Name "openGql.grammar.TimestampWithTimeZoneTyp
 
 _TimestampWithTimeZoneType_notNull = Core.Name "notNull"
 
-data LocaldatetimeType =
-  LocaldatetimeTypeLocalDatetime LocalDatetimeType |
-  LocaldatetimeTypeTimestampWithoutTimeZone TimestampWithoutTimeZoneType
+data LocalDatetimeTypeChoice =
+  LocalDatetimeTypeChoiceLocalDatetime LocalDatetimeType |
+  LocalDatetimeTypeChoiceTimestampWithoutTimeZone TimestampWithoutTimeZoneType
   deriving (Eq, Ord, Read, Show)
 
-_LocaldatetimeType = Core.Name "openGql.grammar.LocaldatetimeType"
+_LocalDatetimeTypeChoice = Core.Name "openGql.grammar.LocalDatetimeTypeChoice"
 
-_LocaldatetimeType_localDatetime = Core.Name "localDatetime"
+_LocalDatetimeTypeChoice_localDatetime = Core.Name "localDatetime"
 
-_LocaldatetimeType_timestampWithoutTimeZone = Core.Name "timestampWithoutTimeZone"
+_LocalDatetimeTypeChoice_timestampWithoutTimeZone = Core.Name "timestampWithoutTimeZone"
 
 data LocalDatetimeType =
   LocalDatetimeType {
@@ -4673,16 +4673,16 @@ _TimeWithTimeZoneType = Core.Name "openGql.grammar.TimeWithTimeZoneType"
 
 _TimeWithTimeZoneType_notNull = Core.Name "notNull"
 
-data LocaltimeType =
-  LocaltimeTypeLocalTime LocalTimeType |
-  LocaltimeTypeTimeWithoutTimeZone TimeWithoutTimeZoneType
+data LocalTimeTypeChoice =
+  LocalTimeTypeChoiceLocalTime LocalTimeType |
+  LocalTimeTypeChoiceTimeWithoutTimeZone TimeWithoutTimeZoneType
   deriving (Eq, Ord, Read, Show)
 
-_LocaltimeType = Core.Name "openGql.grammar.LocaltimeType"
+_LocalTimeTypeChoice = Core.Name "openGql.grammar.LocalTimeTypeChoice"
 
-_LocaltimeType_localTime = Core.Name "localTime"
+_LocalTimeTypeChoice_localTime = Core.Name "localTime"
 
-_LocaltimeType_timeWithoutTimeZone = Core.Name "timeWithoutTimeZone"
+_LocalTimeTypeChoice_timeWithoutTimeZone = Core.Name "timeWithoutTimeZone"
 
 data LocalTimeType =
   LocalTimeType {

@@ -89,49 +89,52 @@ public interface Coder {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(terms),
       () -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>>right((hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>) ((hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>) (new hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>(java.util.Arrays.asList(new hydra.rdf.syntax.Description(new hydra.rdf.syntax.Node.Iri(new hydra.rdf.syntax.Iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")), new hydra.rdf.syntax.Graph((java.util.Set<hydra.rdf.syntax.Triple>) (hydra.lib.sets.Empty.<hydra.rdf.syntax.Triple>apply())))), cx0)))),
-      () -> ((java.util.function.Supplier<hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>>>) (() -> {
-        hydra.util.Pair<hydra.rdf.syntax.Resource, hydra.context.Context> pair1 = hydra.rdf.Utils.nextBlankNode(cx0);
-        hydra.util.Lazy<hydra.context.Context> cx1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair1));
-        hydra.util.Lazy<hydra.rdf.syntax.Resource> node1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair1));
-        return hydra.lib.eithers.Bind.apply(
-          hydra.shacl.Coder.encodeTerm(
-            node1.get(),
-            hydra.lib.lists.Head.apply(terms),
-            cx1.get(),
-            g),
-          (java.util.function.Function<hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>, hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>>>) (_r1 -> {
-            hydra.util.Lazy<hydra.context.Context> cx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(_r1));
-            hydra.util.Pair<hydra.rdf.syntax.Resource, hydra.context.Context> pair2 = hydra.rdf.Utils.nextBlankNode(cx2.get());
-            hydra.util.Lazy<hydra.context.Context> cx3 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair2));
-            hydra.util.Lazy<java.util.List<hydra.rdf.syntax.Description>> fdescs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(_r1));
-            hydra.util.Lazy<java.util.List<hydra.rdf.syntax.Triple>> firstTriples = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
-              hydra.rdf.Utils.triplesOf(fdescs.get()),
-              hydra.rdf.Utils.forObjects(
-                subj,
-                hydra.rdf.Utils.rdfIri("first"),
-                hydra.rdf.Utils.subjectsOf(fdescs.get()))));
-            hydra.util.Lazy<hydra.rdf.syntax.Resource> next = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair2));
-            return hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>, hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>>) (_r2 -> {
-                hydra.util.Lazy<hydra.context.Context> cx4 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(_r2));
-                hydra.util.Lazy<java.util.List<hydra.rdf.syntax.Description>> rdescs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(_r2));
-                hydra.util.Lazy<java.util.List<hydra.rdf.syntax.Triple>> restTriples = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
-                  hydra.rdf.Utils.triplesOf(rdescs.get()),
-                  hydra.rdf.Utils.forObjects(
-                    subj,
-                    hydra.rdf.Utils.rdfIri("rest"),
-                    hydra.rdf.Utils.subjectsOf(rdescs.get()))));
-                return (hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>) ((hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>) (new hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>(java.util.Arrays.asList(new hydra.rdf.syntax.Description(hydra.rdf.Utils.resourceToNode(subj), new hydra.rdf.syntax.Graph(hydra.lib.sets.FromList.apply(hydra.lib.lists.Concat2.apply(
-                  firstTriples.get(),
-                  restTriples.get()))))), cx4.get())));
-              }),
-              hydra.shacl.Coder.encodeList(
-                next.get(),
-                hydra.lib.lists.Tail.apply(terms),
-                cx3.get(),
-                g));
-          }));
-      })).get());
+      () -> hydra.lib.maybes.Maybe.applyLazy(
+        () -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>>right((hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>) ((hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>) (new hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>((java.util.List<hydra.rdf.syntax.Description>) (java.util.Collections.<hydra.rdf.syntax.Description>emptyList()), cx0)))),
+        (java.util.function.Function<hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Term>>, hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>>>) (p -> {
+          hydra.util.Pair<hydra.rdf.syntax.Resource, hydra.context.Context> pair1 = hydra.rdf.Utils.nextBlankNode(cx0);
+          hydra.util.Lazy<hydra.context.Context> cx1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair1));
+          hydra.util.Lazy<hydra.rdf.syntax.Resource> node1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair1));
+          return hydra.lib.eithers.Bind.apply(
+            hydra.shacl.Coder.encodeTerm(
+              node1.get(),
+              hydra.lib.pairs.First.apply(p),
+              cx1.get(),
+              g),
+            (java.util.function.Function<hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>, hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>>>) (_r1 -> {
+              hydra.util.Lazy<hydra.context.Context> cx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(_r1));
+              hydra.util.Pair<hydra.rdf.syntax.Resource, hydra.context.Context> pair2 = hydra.rdf.Utils.nextBlankNode(cx2.get());
+              hydra.util.Lazy<hydra.context.Context> cx3 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair2));
+              hydra.util.Lazy<java.util.List<hydra.rdf.syntax.Description>> fdescs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(_r1));
+              hydra.util.Lazy<java.util.List<hydra.rdf.syntax.Triple>> firstTriples = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+                hydra.rdf.Utils.triplesOf(fdescs.get()),
+                hydra.rdf.Utils.forObjects(
+                  subj,
+                  hydra.rdf.Utils.rdfIri("first"),
+                  hydra.rdf.Utils.subjectsOf(fdescs.get()))));
+              hydra.util.Lazy<hydra.rdf.syntax.Resource> next = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair2));
+              return hydra.lib.eithers.Map.apply(
+                (java.util.function.Function<hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>, hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>>) (_r2 -> {
+                  hydra.util.Lazy<hydra.context.Context> cx4 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(_r2));
+                  hydra.util.Lazy<java.util.List<hydra.rdf.syntax.Description>> rdescs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(_r2));
+                  hydra.util.Lazy<java.util.List<hydra.rdf.syntax.Triple>> restTriples = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+                    hydra.rdf.Utils.triplesOf(rdescs.get()),
+                    hydra.rdf.Utils.forObjects(
+                      subj,
+                      hydra.rdf.Utils.rdfIri("rest"),
+                      hydra.rdf.Utils.subjectsOf(rdescs.get()))));
+                  return (hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>) ((hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>) (new hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>(java.util.Arrays.asList(new hydra.rdf.syntax.Description(hydra.rdf.Utils.resourceToNode(subj), new hydra.rdf.syntax.Graph(hydra.lib.sets.FromList.apply(hydra.lib.lists.Concat2.apply(
+                    firstTriples.get(),
+                    restTriples.get()))))), cx4.get())));
+                }),
+                hydra.shacl.Coder.encodeList(
+                  next.get(),
+                  hydra.lib.pairs.Second.apply(p),
+                  cx3.get(),
+                  g));
+            }));
+        }),
+        hydra.lib.lists.Uncons.apply(terms)));
   }
 
   static hydra.shacl.model.CommonProperties encodeLiteralType(hydra.core.LiteralType lt) {
@@ -293,11 +296,15 @@ public interface Coder {
           (java.util.function.Function<hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>, hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>>) (_dr -> {
             hydra.util.Lazy<hydra.context.Context> cx1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(_dr));
             hydra.util.Lazy<java.util.List<hydra.rdf.syntax.Description>> descs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(_dr));
-            return (hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>) ((hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>) (new hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>(hydra.lib.lists.Cons.apply(
-              hydra.shacl.Coder.withType(
-                (wt).value.typeName,
-                hydra.lib.lists.Head.apply(descs.get())),
-              hydra.lib.lists.Tail.apply(descs.get())), cx1.get())));
+            return (hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>) ((hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>) (new hydra.util.Pair<java.util.List<hydra.rdf.syntax.Description>, hydra.context.Context>(hydra.lib.maybes.FromMaybe.applyLazy(
+              () -> descs.get(),
+              hydra.lib.maybes.Map.apply(
+                (java.util.function.Function<hydra.util.Pair<hydra.rdf.syntax.Description, java.util.List<hydra.rdf.syntax.Description>>, java.util.List<hydra.rdf.syntax.Description>>) (p -> hydra.lib.lists.Cons.apply(
+                  hydra.shacl.Coder.withType(
+                    (wt).value.typeName,
+                    hydra.lib.pairs.First.apply(p)),
+                  hydra.lib.pairs.Second.apply(p))),
+                hydra.lib.lists.Uncons.apply(descs.get()))), cx1.get())));
           }),
           hydra.shacl.Coder.encodeTerm(
             subject,
@@ -476,11 +483,10 @@ public interface Coder {
   }
 
   static <T0, T1, T2, T3> hydra.util.Either<T2, hydra.util.Pair<java.util.List<T3>, T0>> foldAccumResult(java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Either<T2, hydra.util.Pair<T3, T0>>>> f, T0 cx, java.util.List<T1> xs) {
-    return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.lists.Null.apply(xs),
+    return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.util.Either.<T2, hydra.util.Pair<java.util.List<T3>, T0>>right((hydra.util.Pair<java.util.List<T3>, T0>) ((hydra.util.Pair<java.util.List<T3>, T0>) (new hydra.util.Pair<java.util.List<T3>, T0>((java.util.List<T3>) (java.util.Collections.<T3>emptyList()), cx)))),
-      () -> hydra.lib.eithers.Bind.apply(
-        (f).apply(cx).apply(hydra.lib.lists.Head.apply(xs)),
+      (java.util.function.Function<hydra.util.Pair<T1, java.util.List<T1>>, hydra.util.Either<T2, hydra.util.Pair<java.util.List<T3>, T0>>>) (p -> hydra.lib.eithers.Bind.apply(
+        (f).apply(cx).apply(hydra.lib.pairs.First.apply(p)),
         (java.util.function.Function<hydra.util.Pair<T3, T0>, hydra.util.Either<T2, hydra.util.Pair<java.util.List<T3>, T0>>>) (_r -> hydra.lib.eithers.Map.apply(
           (java.util.function.Function<hydra.util.Pair<java.util.List<T3>, T0>, hydra.util.Pair<java.util.List<T3>, T0>>) (_rest -> (hydra.util.Pair<java.util.List<T3>, T0>) ((hydra.util.Pair<java.util.List<T3>, T0>) (new hydra.util.Pair<java.util.List<T3>, T0>(hydra.lib.lists.Cons.apply(
             hydra.lib.pairs.First.apply(_r),
@@ -488,7 +494,8 @@ public interface Coder {
           hydra.shacl.Coder.<T0, T1, T2, T3>foldAccumResult(
             f,
             hydra.lib.pairs.Second.apply(_r),
-            hydra.lib.lists.Tail.apply(xs))))));
+            hydra.lib.pairs.Second.apply(p)))))),
+      hydra.lib.lists.Uncons.apply(xs));
   }
 
   static hydra.shacl.model.Shape node(java.util.List<hydra.shacl.model.CommonConstraint> constraints) {

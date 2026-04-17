@@ -576,7 +576,7 @@ def hoistSubterms(shouldHoist: (Tuple2[Seq[hydra.paths.SubtermStep], hydra.core.
     lazy val bodyPathPrefix: Seq[hydra.paths.SubtermStep] = hydra.lib.lists.concat2[hydra.paths.SubtermStep](path)(Seq(hydra.paths.SubtermStep.letBody))
     lazy val firstBindingName: scala.Predef.String = hydra.lib.maybes.maybe[scala.Predef.String,
        hydra.core.Binding]("body")((b: hydra.core.Binding) =>
-      hydra.lib.strings.intercalate("_")(hydra.lib.strings.splitOn(".")(b.name)))(hydra.lib.lists.safeHead[hydra.core.Binding](bindings))
+      hydra.lib.strings.intercalate("_")(hydra.lib.strings.splitOn(".")(b.name)))(hydra.lib.lists.maybeHead[hydra.core.Binding](bindings))
     lazy val bodyPrefix: scala.Predef.String = hydra.lib.strings.cat2(firstBindingName)("_body")
     lazy val bodyResult: Tuple2[Int, hydra.core.Term] = processImmediateSubterm(cx)(1)(bodyPrefix)(bodyPathPrefix)(body)
     lazy val newBody: hydra.core.Term = hydra.lib.pairs.second[Int, hydra.core.Term](bodyResult)
@@ -624,16 +624,29 @@ def isUnionEliminationApplication(term: hydra.core.Term): Boolean =
 def normalizePathForHoisting(path: Seq[hydra.paths.SubtermStep]): Seq[hydra.paths.SubtermStep] =
   {
   def go(remaining: Seq[hydra.paths.SubtermStep]): Seq[hydra.paths.SubtermStep] =
-    hydra.lib.logic.ifElse[Seq[hydra.paths.SubtermStep]](hydra.lib.logic.or(hydra.lib.lists.`null`[hydra.paths.SubtermStep](remaining))(hydra.lib.lists.`null`[hydra.paths.SubtermStep](hydra.lib.lists.tail[hydra.paths.SubtermStep](remaining))))(remaining)({
-    lazy val first: hydra.paths.SubtermStep = hydra.lib.lists.head[hydra.paths.SubtermStep](remaining)
+    hydra.lib.maybes.maybe[Seq[hydra.paths.SubtermStep], Tuple2[hydra.paths.SubtermStep,
+       Seq[hydra.paths.SubtermStep]]](remaining)((uc1: Tuple2[hydra.paths.SubtermStep,
+       Seq[hydra.paths.SubtermStep]]) =>
     {
-      lazy val second: hydra.paths.SubtermStep = hydra.lib.lists.head[hydra.paths.SubtermStep](hydra.lib.lists.tail[hydra.paths.SubtermStep](remaining))
-      {
-        lazy val rest: Seq[hydra.paths.SubtermStep] = hydra.lib.lists.tail[hydra.paths.SubtermStep](hydra.lib.lists.tail[hydra.paths.SubtermStep](remaining))
-        hydra.lib.logic.ifElse[Seq[hydra.paths.SubtermStep]](hydra.lib.logic.and(hydra.hoisting.isApplicationFunction(first))(hydra.hoisting.isLambdaBody(second)))(hydra.lib.lists.cons[hydra.paths.SubtermStep](hydra.paths.SubtermStep.letBody)(go(rest)))(hydra.lib.lists.cons[hydra.paths.SubtermStep](first)(go(hydra.lib.lists.tail[hydra.paths.SubtermStep](remaining))))
-      }
+    lazy val first: hydra.paths.SubtermStep = hydra.lib.pairs.first[hydra.paths.SubtermStep,
+       Seq[hydra.paths.SubtermStep]](uc1)
+    {
+      lazy val afterFirst: Seq[hydra.paths.SubtermStep] = hydra.lib.pairs.second[hydra.paths.SubtermStep,
+         Seq[hydra.paths.SubtermStep]](uc1)
+      hydra.lib.maybes.maybe[Seq[hydra.paths.SubtermStep], Tuple2[hydra.paths.SubtermStep,
+         Seq[hydra.paths.SubtermStep]]](remaining)((uc2: Tuple2[hydra.paths.SubtermStep,
+         Seq[hydra.paths.SubtermStep]]) =>
+        {
+        lazy val second: hydra.paths.SubtermStep = hydra.lib.pairs.first[hydra.paths.SubtermStep,
+           Seq[hydra.paths.SubtermStep]](uc2)
+        {
+          lazy val rest: Seq[hydra.paths.SubtermStep] = hydra.lib.pairs.second[hydra.paths.SubtermStep,
+             Seq[hydra.paths.SubtermStep]](uc2)
+          hydra.lib.logic.ifElse[Seq[hydra.paths.SubtermStep]](hydra.lib.logic.and(hydra.hoisting.isApplicationFunction(first))(hydra.hoisting.isLambdaBody(second)))(hydra.lib.lists.cons[hydra.paths.SubtermStep](hydra.paths.SubtermStep.letBody)(go(rest)))(hydra.lib.lists.cons[hydra.paths.SubtermStep](first)(go(afterFirst)))
+        }
+      })(hydra.lib.lists.uncons[hydra.paths.SubtermStep](afterFirst))
     }
-  })
+  })(hydra.lib.lists.uncons[hydra.paths.SubtermStep](remaining))
   go(path)
 }
 

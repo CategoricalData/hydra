@@ -33,10 +33,8 @@ def value(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.Deco
          hydra.core.Term, Either[hydra.errors.DecodingError, BigDecimal]]((err: hydra.errors.DecodingError) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
-        case hydra.core.Literal.float(v_Literal_float_v1) => v_Literal_float_v1 match
-          case hydra.core.FloatValue.bigfloat(v_FloatValue_bigfloat_f) => Right(v_FloatValue_bigfloat_f)
-          case _ => Left("expected bigfloat value")
-        case _ => Left("expected bigfloat literal")
+        case hydra.core.Literal.decimal(v_Literal_decimal_d) => Right(v_Literal_decimal_d)
+        case _ => Left("expected decimal literal")
       case _ => Left("expected literal"))(hydra.extract.core.stripWithDecodingError(cx)(input)))),
          Tuple2("object", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Map[scala.Predef.String, hydra.json.model.Value], hydra.json.model.Value,

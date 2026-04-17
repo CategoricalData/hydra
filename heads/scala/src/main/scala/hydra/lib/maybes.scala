@@ -8,7 +8,6 @@ object maybes:
     case Some(a) => ifSome(a)
   def cat[A](xs: Seq[Option[A]]): Seq[A] = xs.flatten
   def compose[A, B, C](f: A => Option[B])(g: B => Option[C])(a: A): Option[C] = f(a).flatMap(g)
-  def fromJust[A](ma: Option[A]): A = ma.get
   def fromMaybe[A](d: => A)(ma: Option[A]): A = ma.getOrElse(d)
   def isJust[A](ma: Option[A]): Boolean = ma.isDefined
   def isNothing[A](ma: Option[A]): Boolean = ma.isEmpty

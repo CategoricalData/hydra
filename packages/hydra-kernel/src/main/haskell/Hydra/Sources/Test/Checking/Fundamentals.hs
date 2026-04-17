@@ -226,13 +226,13 @@ applicationsWithComplexArgumentsTests = define "applicationsWithComplexArguments
         "age">: int32 25])
     T.string,
   checkTest "application with list argument" []
-    (lets ["head">: lambda "xs" $ primitive _lists_head @@ var "xs"] $
-      var "head" @@ list [string "first", string "second"])
+    (lets ["maybeHead">: lambda "xs" $ primitive _lists_maybeHead @@ var "xs"] $
+      var "maybeHead" @@ list [string "first", string "second"])
     (letsTyped [
-      ("head", tylam "t0" $ lambdaTyped "xs" (T.list (T.var "t0")) $ tyapp (primitive _lists_head) (T.var "t0") @@ var "xs",
-        T.poly ["t0"] $ T.function (T.list (T.var "t0")) (T.var "t0"))] $
-      tyapp (var "head") T.string @@ list [string "first", string "second"])
-    T.string]
+      ("maybeHead", tylam "t0" $ lambdaTyped "xs" (T.list (T.var "t0")) $ tyapp (primitive _lists_maybeHead) (T.var "t0") @@ var "xs",
+        T.poly ["t0"] $ T.function (T.list (T.var "t0")) (T.optional (T.var "t0")))] $
+      tyapp (var "maybeHead") T.string @@ list [string "first", string "second"])
+    (T.optional T.string)]
 
 ------ Lambdas ------
 
@@ -653,10 +653,10 @@ nullaryPrimitivesTests = define "nullaryPrimitivesTests" $
 unaryPrimitivesTests :: TTermDefinition TestGroup
 unaryPrimitivesTests = define "unaryPrimitivesTests" $
   subgroup "Unary primitives" [
-  checkTest "lists head" []
-    (primitive _lists_head)
-    (tylam "t0" $ tyapp (primitive _lists_head) (T.var "t0"))
-    (T.forAll "t0" $ T.function (T.list $ T.var "t0") (T.var "t0")),
+  checkTest "lists maybeHead" []
+    (primitive _lists_maybeHead)
+    (tylam "t0" $ tyapp (primitive _lists_maybeHead) (T.var "t0"))
+    (T.forAll "t0" $ T.function (T.list $ T.var "t0") (T.optional $ T.var "t0")),
   noChange "math neg"
     (primitive _math_negate)
     (T.function T.int32 T.int32),

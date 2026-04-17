@@ -4263,7 +4263,7 @@
                                                                             "name": "name",
                                                                             "term": {
                                                                               "wrap": {
-                                                                                "body": {"literal": {"string": "head"}},
+                                                                                "body": {"literal": {"string": "maybeHead"}},
                                                                                 "typeName": "hydra.core.Name"}}},
                                                                           {
                                                                             "name": "term",
@@ -4299,7 +4299,7 @@
                                                                                                               "name": "variable",
                                                                                                               "term": {
                                                                                                                 "wrap": {
-                                                                                                                  "body": {"literal": {"string": "hydra.lib.lists.head"}},
+                                                                                                                  "body": {"literal": {"string": "hydra.lib.lists.maybeHead"}},
                                                                                                                   "typeName": "hydra.core.Name"}}},
                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                       {
@@ -4339,7 +4339,7 @@
                                                                                     "name": "variable",
                                                                                     "term": {
                                                                                       "wrap": {
-                                                                                        "body": {"literal": {"string": "head"}},
+                                                                                        "body": {"literal": {"string": "maybeHead"}},
                                                                                         "typeName": "hydra.core.Name"}}},
                                                                                   "typeName": "hydra.core.Term"}}},
                                                                             {
@@ -4450,11 +4450,16 @@
                                               "argument": {
                                                 "inject": {
                                                   "field": {
-                                                    "name": "literal",
+                                                    "name": "maybe",
                                                     "term": {
                                                       "inject": {
-                                                        "field": {"name": "string", "term": {"unit": {}}},
-                                                        "typeName": "hydra.core.LiteralType"}}},
+                                                        "field": {
+                                                          "name": "literal",
+                                                          "term": {
+                                                            "inject": {
+                                                              "field": {"name": "string", "term": {"unit": {}}},
+                                                              "typeName": "hydra.core.LiteralType"}}},
+                                                        "typeName": "hydra.core.Type"}}},
                                                   "typeName": "hydra.core.Type"}},
                                               "function": {"variable": "hydra.show.core.type"}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -17361,7 +17366,7 @@
                     {
                       "record": {
                         "fields": [
-                          {"name": "name", "term": {"literal": {"string": "lists head"}}},
+                          {"name": "name", "term": {"literal": {"string": "lists maybeHead"}}},
                           {
                             "name": "case",
                             "term": {
@@ -17383,7 +17388,7 @@
                                                         "name": "variable",
                                                         "term": {
                                                           "wrap": {
-                                                            "body": {"literal": {"string": "hydra.lib.lists.head"}},
+                                                            "body": {"literal": {"string": "hydra.lib.lists.maybeHead"}},
                                                             "typeName": "hydra.core.Name"}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "function": {
@@ -17499,9 +17504,14 @@
                                                                           "term": {
                                                                             "inject": {
                                                                               "field": {
-                                                                                "name": "variable",
+                                                                                "name": "maybe",
                                                                                 "term": {
-                                                                                  "wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}}},
+                                                                                  "inject": {
+                                                                                    "field": {
+                                                                                      "name": "variable",
+                                                                                      "term": {
+                                                                                        "wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}}},
+                                                                                    "typeName": "hydra.core.Type"}}},
                                                                               "typeName": "hydra.core.Type"}}}],
                                                                       "typeName": "hydra.core.FunctionType"}}},
                                                                 "typeName": "hydra.core.Type"}}}],

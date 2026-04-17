@@ -249,7 +249,7 @@ satisfy = define "satisfy" $
        Logic.ifElse (var "pred" @@ var "c")
          (Parsing.parseResultSuccess (Parsing.parseSuccess (var "c") (var "rest")))
          (Parsing.parseResultFailure (Parsing.parseError (string "character did not satisfy predicate") (var "input"))))
-      (Lists.safeHead $ var "codes")) $
+      (Lists.maybeHead $ var "codes")) $
   Parsing.parser (var "parse")
 
 -- | Parse zero or more occurrences separated by a separator

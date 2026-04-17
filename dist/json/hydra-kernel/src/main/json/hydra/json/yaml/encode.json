@@ -90,10 +90,10 @@
                                       "name": "scalar",
                                       "term": {
                                         "inject": {
-                                          "field": {"name": "float", "term": {"variable": "n"}},
+                                          "field": {"name": "decimal", "term": {"variable": "n"}},
                                           "typeName": "hydra.yaml.model.Scalar"}}},
                                     "typeName": "hydra.yaml.model.Node"}},
-                                "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                "domain": {"literal": {"decimal": {}}},
                                 "parameter": "n"}}},
                           {
                             "name": "object",
@@ -306,6 +306,7 @@
   "namespace": "hydra.json.yaml.encode",
   "termDependencies": ["hydra.json.encode", "hydra.yaml.model"],
   "typeDependencies": [
+    "hydra.yaml.model",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",

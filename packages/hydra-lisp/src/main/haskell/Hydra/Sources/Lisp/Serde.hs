@@ -579,16 +579,15 @@ letExpressionToExpr = define "letExpressionToExpr" $
           (Serialization.cst @@ string "<destructuring>")])
       (var "bindings")] $
     cases L._Dialect (var "d") Nothing [
-      -- Clojure: (let [name val ...] body...) or (letfn [(name [params] body)] body...) for recursive
+      -- Clojure: (let [name val ...] body...) or (letfn [(name [params] body) ...] body...) for recursive
       L._Dialect_clojure>>: constant $
         cases L._LetKind (var "kind") Nothing [
-          -- Recursive: split into lambda bindings (letfn) and value bindings (let).
-          -- Lambda bindings → (letfn [(name [params] body) ...] ...)
-          -- Value bindings → (let [name val ...] ...)
-          -- Recursive: use regular let (coder reorders bindings for Clojure).
-          -- Named fn handles self-reference in function bindings.
+          -- Recursive: emit letfn (Clojure's mutually recursive form for fn bindings).
+          -- The coder marks let recursive only when an SCC cycle exists, and in
+          -- the cycles produced by the kernel all bindings are lambdas, so letfn
+          -- is well-formed. Non-lambda bindings would need thunking, not handled here.
           L._LetKind_recursive>>: constant $
-            clojureLet (var "bindingPairs") (var "body"),
+            clojureLetfn (var "d") (var "bindings") (var "body"),
           -- Non-recursive: (let [name val ...] body...)
           L._LetKind_parallel>>: constant $ clojureLet (var "bindingPairs") (var "body"),
           L._LetKind_sequential>>: constant $ clojureLet (var "bindingPairs") (var "body")],
@@ -604,6 +603,34 @@ letExpressionToExpr = define "letExpressionToExpr" $
         list [Serialization.cst @@ string "let"],
         list [sqBrackets (Lists.concat (Lists.map (lambda "p" $
           list [Pairs.first (var "p"), Pairs.second (var "p")]) bindingPairs))],
+        body]))
+    -- (letfn [(name [params] body) (name2 [params2] body2) ...] body)
+    -- Each binding's value must be an Expression_lambda; otherwise it cannot
+    -- legally appear inside letfn and we fall back to the underlying lambda
+    -- serialization, producing invalid Clojure that will fail loudly at load.
+    clojureLetfn :: TTerm L.Dialect -> TTerm [L.LetBinding] -> TTerm [Expr] -> TTerm Expr
+    clojureLetfn d bindings body = lets [
+      "fnSpecs">: Lists.map (lambda "b" $
+        cases L._LetBinding (var "b") Nothing [
+          L._LetBinding_simple>>: lambda "sb" $ lets [
+            "name">: symbolToExpr @@ (project L._SimpleBinding L._SimpleBinding_name @@ var "sb"),
+            "val">: project L._SimpleBinding L._SimpleBinding_value @@ var "sb"] $
+            cases L._Expression (var "val") (Just $
+              Serialization.parens @@ (Serialization.spaceSep @@ list [
+                var "name", expressionToExpr @@ d @@ var "val"])) [
+              L._Expression_lambda>>: lambda "lam" $ lets [
+                "params">: Lists.map symbolToExpr (project L._Lambda L._Lambda_params @@ var "lam"),
+                "lbody">: Lists.map (expressionToExpr @@ d) (project L._Lambda L._Lambda_body @@ var "lam")] $
+                Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat (list [
+                  list [var "name"],
+                  list [sqBrackets (var "params")],
+                  var "lbody"]))],
+          L._LetBinding_destructuring>>: constant $
+            Serialization.cst @@ string "<destructuring>"])
+        bindings] $
+      Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat (list [
+        list [Serialization.cst @@ string "letfn"],
+        list [sqBrackets (var "fnSpecs")],
         body]))
     letOther :: TTerm L.LetKind -> TTerm [(Expr, Expr)] -> TTerm [Expr] -> TTerm Expr
     letOther kind bindingPairs body = lets [

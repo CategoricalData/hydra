@@ -276,7 +276,7 @@ encodeApplication = def "encodeApplication" $
     [_Term_variable>>: lambda "name" $
        "rawName" <~ Core.unName (var "name") $
        "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ var "rawName") $
-       Logic.ifElse (Lists.null (Lists.tail (Strings.splitOn (string ".") (var "rawName"))))
+       Logic.ifElse (Lists.null (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeTail (Strings.splitOn (string ".") (var "rawName")))))
          -- Local variable head: the local holds a function value (closure / funcref).
          -- No real call possible without closures; drop args and return a placeholder.
          (right (Lists.concat (list [
@@ -311,21 +311,21 @@ encodeApplication = def "encodeApplication" $
      -- side effect. Projection takes only one "real" arg, so extra args would be a
      -- type error at the Hydra level anyway.
      _Term_project>>: lambda "proj" $
-       Logic.ifElse (Lists.null (var "args"))
+       Maybes.cases (Lists.maybeHead (var "args"))
          -- No args: treat as a bare projection function value. Push placeholder.
          (right (list [inject W._Instruction W._Instruction_const $
            inject W._ConstValue W._ConstValue_i32 (int32 0)]))
-         ("firstArg" <~ Lists.head (var "args") $
+         (lambda "firstArg" $
           "firstArgInstrs" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@ var "firstArg") $
           encodeProjection @@ var "cx" @@ var "g" @@ var "fieldOffsets" @@ var "proj" @@ var "firstArgInstrs"),
      -- Case statement applied to args: the first arg is the union value being dispatched
      -- on. Encode just that first arg as the scrutinee, same pattern as _Term_project.
      _Term_cases>>: lambda "cs" $
-       Logic.ifElse (Lists.null (var "args"))
+       Maybes.cases (Lists.maybeHead (var "args"))
          -- No args: treat as a bare cases function value. Push placeholder.
          (right (list [inject W._Instruction W._Instruction_const $
            inject W._ConstValue W._ConstValue_i32 (int32 0)]))
-         ("firstArg" <~ Lists.head (var "args") $
+         (lambda "firstArg" $
           "firstArgInstrs" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@ var "firstArg") $
           encodeCases @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@ var "cs" @@ var "firstArgInstrs"),
      -- Lambda applied to args: drop args, encode the body.
@@ -815,7 +815,7 @@ encodeTerm = def "encodeTerm" $
        -- Qualified names are cross-module function *references* (not calls): we push
        -- an i32 placeholder representing the function index. Actual calls are emitted
        -- from encodeApplication when the function is in head position.
-       Logic.ifElse (Lists.null (Lists.tail (Strings.splitOn (string ".") (var "rawName"))))
+       Logic.ifElse (Lists.null (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeTail (Strings.splitOn (string ".") (var "rawName")))))
          (right (list [inject W._Instruction W._Instruction_localGet (var "lname")]))
          (right (list [inject W._Instruction W._Instruction_const $
            inject W._ConstValue W._ConstValue_i32 (int32 0)])),
@@ -933,9 +933,7 @@ encodeCases = def "encodeCases" $
     -- prologue + br_table, outer blocks wrap each arm body.
     "armLabels" <~ Lists.map (unaryFunction Pairs.first) (var "arms") $
     "endLabel" <~ (Strings.cat2 (string "end_") (var "tname")) $
-    "defaultLabel" <~ Logic.ifElse (Lists.null (var "armLabels"))
-      (var "endLabel")
-      (Lists.last (var "armLabels")) $
+    "defaultLabel" <~ Maybes.fromMaybe (var "endLabel") (Lists.maybeLast (var "armLabels")) $
     "innerDispatch" <~ Lists.concat2
       (var "prologue")
       (list [inject W._Instruction W._Instruction_brTable $
@@ -1188,9 +1186,9 @@ encodeTermDefinition = def "encodeTermDefinition" $
     -- Encode body: for bare eliminations (detected by extractLambdaParams producing synthetic
     -- param "arg_0"), pass local.get of the first Hydra param as the scrutinee.
     "dBody" <~ (Strip.deannotateTerm @@ var "innerBody") $
-    "scrutineeInstrs" <~ Logic.ifElse (Lists.null (var "paramNameStrs"))
+    "scrutineeInstrs" <~ Maybes.cases (Lists.maybeHead (var "paramNameStrs"))
       (list ([] :: [TTerm W.Instruction]))
-      (list [inject W._Instruction W._Instruction_localGet (Lists.head (var "paramNameStrs"))]) $
+      (lambda "p0" $ list [inject W._Instruction W._Instruction_localGet (var "p0")]) $
     "rawBodyInstrs" <<~ (cases _Term (var "dBody") (Just $
         encodeTerm @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@ var "innerBody")
       [_Term_project>>: lambda "proj" $
@@ -1369,7 +1367,7 @@ buildStringOffsets = def "buildStringOffsets" $
       (var "strs")) $
     "rawEnd" <~ Pairs.second (var "final") $
     -- Round up to the next 16-byte boundary so the bump pointer starts aligned.
-    "aligned" <~ Math.mul (Math.div (Math.add (var "rawEnd") (int32 15)) (int32 16)) (int32 16) $
+    "aligned" <~ Math.mul (Maybes.fromMaybe (int32 0) (Math.maybeDiv (Math.add (var "rawEnd") (int32 15)) (int32 16))) (int32 16) $
     pair (Pairs.first (var "final")) (var "aligned")
 
 -- | Emit a single byte as a two-character lowercase hex escape prefixed with backslash,
@@ -1379,7 +1377,7 @@ buildStringOffsets = def "buildStringOffsets" $
 hexEscapeString :: TTermDefinition (Int -> String)
 hexEscapeString = def "hexEscapeString" $
   lambda "b" $
-    "byte" <~ (Math.mod (var "b") (int32 256)) $
+    "byte" <~ (Maybes.fromMaybe (int32 0) (Math.maybeMod (var "b") (int32 256))) $
     "digitToHex" <~ (lambda "d" $
       Logic.ifElse (Equality.lt (var "d") (int32 10))
         -- '0' = 48
@@ -1388,8 +1386,8 @@ hexEscapeString = def "hexEscapeString" $
         (Strings.fromList (list [Math.add (var "d") (int32 87)]))) $
     Strings.cat (list [
       string "\\",
-      var "digitToHex" @@ (Math.div (var "byte") (int32 16)),
-      var "digitToHex" @@ (Math.mod (var "byte") (int32 16))])
+      var "digitToHex" @@ (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "byte") (int32 16))),
+      var "digitToHex" @@ (Maybes.fromMaybe (int32 0) (Math.maybeMod (var "byte") (int32 16)))])
 
 -- | Build the (data ...) module field for a string-offset map. The data segment contains,
 -- for each string s with offset off, a 4-byte little-endian length prefix followed by the
@@ -1410,10 +1408,10 @@ stringDataSegment = def "stringDataSegment" $
       "s" <~ Pairs.first (var "entry") $
       "len" <~ Strings.length (var "s") $
       "lenBytes" <~ list [
-        Math.mod (var "len") (int32 256),
-        Math.mod (Math.div (var "len") (int32 256)) (int32 256),
-        Math.mod (Math.div (var "len") (int32 65536)) (int32 256),
-        Math.mod (Math.div (var "len") (int32 16777216)) (int32 256)] $
+        Maybes.fromMaybe (int32 0) (Math.maybeMod (var "len") (int32 256)),
+        Maybes.fromMaybe (int32 0) (Math.maybeMod (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "len") (int32 256))) (int32 256)),
+        Maybes.fromMaybe (int32 0) (Math.maybeMod (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "len") (int32 65536))) (int32 256)),
+        Maybes.fromMaybe (int32 0) (Math.maybeMod (Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "len") (int32 16777216))) (int32 256))] $
       "contentBytes" <~ Strings.toList (var "s") $
       "allBytes" <~ Lists.concat2 (var "lenBytes") (var "contentBytes") $
         Strings.cat (Lists.map (lambda "b" $ hexEscapeString @@ var "b") (var "allBytes"))) $
@@ -1543,7 +1541,7 @@ moduleToWasm = def "moduleToWasm" $
     "importFields" <~ Lists.map
       (lambda "fname" $
         "parts" <~ (Strings.splitOn (string ".") (var "fname")) $
-        "modName" <~ Strings.intercalate (string ".") (Lists.reverse (Lists.tail (Lists.reverse (var "parts")))) $
+        "modName" <~ Strings.intercalate (string ".") (Lists.reverse (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeTail (Lists.reverse (var "parts"))))) $
         "sig" <~ Maybes.fromMaybe (var "defaultSig") (Maps.lookup (var "fname") (var "funcSigs")) $
         "sigParams" <~ Pairs.first (var "sig") $
         "sigResults" <~ Pairs.second (var "sig") $

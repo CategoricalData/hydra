@@ -43,7 +43,7 @@ checkAll :: TTermDefinition ([Y.Maybe a] -> Y.Maybe a)
 checkAll = validationDefinition "checkAll" $
   "checks" ~> lets [
     "errors">: Maybes.cat $ var "checks"]
-    $ Lists.safeHead $ var "errors"
+    $ Lists.maybeHead $ var "errors"
 
 validateVertex :: TTermDefinition (
      (t -> v -> Maybe InvalidValueError)

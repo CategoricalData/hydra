@@ -97,12 +97,13 @@
    "hydra.test.lib.maps" "hydra.test.lib.math" "hydra.test.lib.maybes"
    "hydra.test.lib.pairs" "hydra.test.lib.regex" "hydra.test.lib.sets" "hydra.test.lib.strings"
    "hydra.test.annotations" "hydra.test.reduction" "hydra.test.rewriting"
-   "hydra.test.formatting" "hydra.test.serialization" "hydra.test.sorting"
+   "hydra.test.formatting" "hydra.test.generation" "hydra.test.serialization" "hydra.test.sorting"
    "hydra.test.substitution" "hydra.test.eta_expansion"
    "hydra.test.checking.all" "hydra.test.hoisting.all"
    "hydra.test.inference.all" "hydra.test.unification"
    "hydra.test.json.coder" "hydra.test.json.parser"
    "hydra.test.json.roundtrip" "hydra.test.json.writer"
+   "hydra.test.json.yaml"
    "hydra.test.validate.all" "hydra.test.validate.core"
    "hydra.test.testSuite" "hydra.test.test_suite"])
 
@@ -170,12 +171,13 @@
    "hydra.test.lib.maps" "hydra.test.lib.math" "hydra.test.lib.maybes"
    "hydra.test.lib.pairs" "hydra.test.lib.regex" "hydra.test.lib.sets" "hydra.test.lib.strings"
    "hydra.test.annotations" "hydra.test.reduction" "hydra.test.rewriting"
-   "hydra.test.formatting" "hydra.test.serialization" "hydra.test.sorting"
+   "hydra.test.formatting" "hydra.test.generation" "hydra.test.serialization" "hydra.test.sorting"
    "hydra.test.substitution" "hydra.test.eta_expansion"
    "hydra.test.checking.all" "hydra.test.hoisting.all"
    "hydra.test.inference.all" "hydra.test.unification"
    "hydra.test.json.coder" "hydra.test.json.parser"
    "hydra.test.json.roundtrip" "hydra.test.json.writer"
+   "hydra.test.json.yaml"
    "hydra.test.validate.all" "hydra.test.validate.core"
    "hydra.test.testSuite" "hydra.test.test_suite"])
 

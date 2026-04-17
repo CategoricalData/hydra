@@ -46,7 +46,7 @@ def scalaEscapeName(s: scala.Predef.String): scala.Predef.String =
     hydra.lib.logic.ifElse[Int](hydra.lib.equality.equal[Int](c)(39))(95)(c))(hydra.lib.strings.toList(s)))
   lazy val sanitized2: scala.Predef.String = hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](sanitized)("_"))("_x")(sanitized)
   lazy val sanitized3: scala.Predef.String = hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](sanitized2)("toString"))("toString_")(sanitized2)
-  lazy val needsBackticks: Boolean = hydra.lib.logic.or(hydra.lib.sets.member[scala.Predef.String](sanitized3)(hydra.scala.utils.scalaReservedWords))(hydra.lib.logic.and(hydra.lib.equality.gt[Int](hydra.lib.strings.length(sanitized3))(0))(hydra.lib.equality.equal[Int](hydra.lib.strings.charAt(hydra.lib.math.sub(hydra.lib.strings.length(sanitized3))(1))(sanitized3))(95)))
+  lazy val needsBackticks: Boolean = hydra.lib.logic.or(hydra.lib.sets.member[scala.Predef.String](sanitized3)(hydra.scala.utils.scalaReservedWords))(hydra.lib.logic.and(hydra.lib.equality.gt[Int](hydra.lib.strings.length(sanitized3))(0))(hydra.lib.equality.equal[Int](hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.strings.maybeCharAt(hydra.lib.math.sub(hydra.lib.strings.length(sanitized3))(1))(sanitized3)))(95)))
   hydra.lib.logic.ifElse[scala.Predef.String](needsBackticks)(hydra.lib.strings.cat(Seq("`",
      sanitized3, "`")))(sanitized3)
 }
@@ -66,7 +66,7 @@ def sname(s: scala.Predef.String): hydra.scala.syntax.Data =
 def sprim(name: hydra.core.Name): hydra.scala.syntax.Data =
   {
   lazy val qname: hydra.packaging.QualifiedName = hydra.names.qualifyName(name)
-  lazy val prefix: scala.Predef.String = hydra.lib.maybes.fromJust[hydra.packaging.Namespace](qname.namespace)
+  lazy val prefix: scala.Predef.String = hydra.lib.maybes.fromMaybe[hydra.packaging.Namespace]("")(qname.namespace)
   lazy val local: scala.Predef.String = hydra.scala.utils.scalaEscapeName(qname.local)
   hydra.scala.utils.sname(hydra.lib.strings.cat2(hydra.lib.strings.cat2(prefix)("."))(local))
 }

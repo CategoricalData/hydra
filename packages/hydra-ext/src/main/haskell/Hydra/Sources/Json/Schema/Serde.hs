@@ -322,7 +322,7 @@ encodeInteger :: TTermDefinition (Int -> J.Value)
 encodeInteger = define "encodeInteger" $
   doc "Encode an integer as a JSON number value" $
   lambda "n" $
-    Json.valueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint (var "n")))
+    Json.valueNumber (Literals.bigintToDecimal (Literals.int32ToBigint (var "n")))
 
 encodeItems :: TTermDefinition (JS.Items -> (String, J.Value))
 encodeItems = define "encodeItems" $
@@ -457,9 +457,9 @@ encodeStringRestriction = define "encodeStringRestriction" $
   lambda "r" $
     cases JS._StringRestriction (var "r") Nothing [
       JS._StringRestriction_maxLength>>: lambda "n" $
-        pair key_maxLength_ (Json.valueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint (var "n")))),
+        pair key_maxLength_ (Json.valueNumber (Literals.bigintToDecimal (Literals.int32ToBigint (var "n")))),
       JS._StringRestriction_minLength>>: lambda "n" $
-        pair key_minLength_ (Json.valueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint (var "n")))),
+        pair key_minLength_ (Json.valueNumber (Literals.bigintToDecimal (Literals.int32ToBigint (var "n")))),
       JS._StringRestriction_pattern>>: lambda "re" $
         pair key_pattern (Json.valueString (unwrap JS._RegularExpression @@ var "re"))]
 

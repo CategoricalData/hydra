@@ -276,7 +276,7 @@ jsonNumber = define "jsonNumber" $
              Maybes.maybe (string "") (unaryFunction Equality.identity) (var "fracPart") ++
              Maybes.maybe (string "") (unaryFunction Equality.identity) (var "expPart")) $
           Parsers.pure @@
-            (Json.valueNumber (Maybes.maybe (bigfloat 0.0) (unaryFunction Equality.identity) (Literals.readBigfloat (var "numStr"))))))))
+            (Json.valueNumber (Maybes.maybe (decimal 0) (unaryFunction Equality.identity) (Literals.readDecimal (var "numStr"))))))))
 
 -- | Parse a JSON escape character
 jsonEscapeChar :: TTermDefinition (Parser Int)

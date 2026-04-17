@@ -24,7 +24,7 @@
 (def hydra_lib_literals_bigint_to_uint64 (fn [x] (long x)))
 
 ;; Decimal conversions
-(def hydra_lib_literals_decimal_to_bigint (fn [x] (long (.setScale (bigdec x) 0 java.math.RoundingMode/HALF_EVEN))))
+(def hydra_lib_literals_decimal_to_bigint (fn [x] (.toBigInteger (.setScale (bigdec x) 0 java.math.RoundingMode/HALF_EVEN))))
 (def hydra_lib_literals_decimal_to_float32 (fn [x] (float (.doubleValue (bigdec x)))))
 (def hydra_lib_literals_decimal_to_float64 (fn [x] (double (.doubleValue (bigdec x)))))
 
@@ -215,7 +215,8 @@
               e (- precision scale 1)
               sign (if (neg? (.signum bd)) "-" "")
               plain (.toString (.abs (.unscaledValue bd)))]
-          (if (or (>= e 7) (< e -3))
+          ;; Haskell Scientific uses plain form iff -1 <= e <= 6; otherwise scientific.
+          (if (or (>= e 7) (< e -1))
             (let [mantissa (if (= (count plain) 1)
                              (str plain ".0")
                              (str (subs plain 0 1) "." (subs plain 1)))]

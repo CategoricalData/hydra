@@ -188,7 +188,7 @@ def pruneLet(l: hydra.core.Let): hydra.core.Let =
   lazy val rootName: hydra.core.Name = "[[[root]]]"
   def adj(n: hydra.core.Name): scala.collection.immutable.Set[hydra.core.Name] =
     hydra.lib.sets.intersection[hydra.core.Name](hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.maps.keys[hydra.core.Name,
-       hydra.core.Term](bindingMap)))(hydra.variables.freeVariablesInTerm(hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.equality.equal[hydra.core.Name](n)(rootName))(l.body)(hydra.lib.maybes.fromJust[hydra.core.Term](hydra.lib.maps.lookup[hydra.core.Name,
+       hydra.core.Term](bindingMap)))(hydra.variables.freeVariablesInTerm(hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.equality.equal[hydra.core.Name](n)(rootName))(l.body)(hydra.lib.maybes.fromMaybe[hydra.core.Term](hydra.core.Term.unit)(hydra.lib.maps.lookup[hydra.core.Name,
        hydra.core.Term](n)(bindingMap)))))
   lazy val reachable: scala.collection.immutable.Set[hydra.core.Name] = hydra.sorting.findReachableNodes(adj)(rootName)
   lazy val prunedBindings: Seq[hydra.core.Binding] = hydra.lib.lists.filter[hydra.core.Binding]((b: hydra.core.Binding) => hydra.lib.sets.member[hydra.core.Name](b.name)(reachable))(l.bindings)

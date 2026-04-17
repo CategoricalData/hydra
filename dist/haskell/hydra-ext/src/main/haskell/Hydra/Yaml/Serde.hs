@@ -10,6 +10,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Yaml.Model as Model
@@ -31,7 +32,7 @@ hasLeadingTrailingSpace :: String -> Bool
 hasLeadingTrailingSpace s =
 
       let chars = Strings.toList s
-      in (Logic.ifElse (Lists.null chars) False (Logic.or (Chars.isSpace (Lists.head chars)) (Chars.isSpace (Lists.last chars))))
+      in (Logic.or (Maybes.fromMaybe False (Maybes.map (\c -> Chars.isSpace c) (Lists.maybeHead chars))) (Maybes.fromMaybe False (Maybes.map (\c -> Chars.isSpace c) (Lists.maybeLast chars))))
 
 -- | Serialize a YAML node to a string
 hydraYamlToString :: Model.Node -> String
@@ -54,7 +55,7 @@ isDecimalString chars =
           before = Pairs.first parts
           afterWithDot = Pairs.second parts
       in (Logic.ifElse (Lists.null before) False (Logic.ifElse (Lists.null afterWithDot) False (
-        let after = Lists.tail afterWithDot
+        let after = Lists.drop 1 afterWithDot
         in (Logic.ifElse (Lists.null after) False (
           let isDigitFn = \c -> Logic.and (Equality.gte c 48) (Equality.lte c 57)
           in (Logic.and (Lists.null (Lists.filter (\c -> Logic.not (isDigitFn c)) before)) (Lists.null (Lists.filter (\c -> Logic.not (isDigitFn c)) after))))))))
@@ -64,12 +65,13 @@ looksLikeNumber :: String -> Bool
 looksLikeNumber s =
 
       let chars = Strings.toList s
-      in (Logic.ifElse (Lists.null chars) False (
-        let rest = Logic.ifElse (Equality.equal (Lists.head chars) 45) (Lists.tail chars) chars
-        in (Logic.ifElse (Lists.null rest) False (
-          let isDigitFn = \c -> Logic.and (Equality.gte c 48) (Equality.lte c 57)
-              allDigits = Lists.null (Lists.filter (\c -> Logic.not (isDigitFn c)) rest)
-          in (Logic.ifElse allDigits True (isDecimalString rest))))))
+      in (Maybes.fromMaybe False (Maybes.map (\p ->
+        let firstCh = Pairs.first p
+            tailCh = Pairs.second p
+            rest = Logic.ifElse (Equality.equal firstCh 45) tailCh chars
+            isDigitFn = \c -> Logic.and (Equality.gte c 48) (Equality.lte c 57)
+            allDigits = Logic.and (Logic.not (Lists.null rest)) (Lists.null (Lists.filter (\c -> Logic.not (isDigitFn c)) rest))
+        in (Logic.ifElse allDigits True (isDecimalString rest))) (Lists.uncons chars)))
 
 -- | Check if a string needs quoting in YAML
 needsQuoting :: String -> Bool
@@ -163,6 +165,7 @@ writeScalar :: Model.Scalar -> String
 writeScalar s =
     case s of
       Model.ScalarBool v0 -> Logic.ifElse v0 "true" "false"
+      Model.ScalarDecimal v0 -> Literals.showDecimal v0
       Model.ScalarFloat v0 -> Literals.showBigfloat v0
       Model.ScalarInt v0 -> Literals.showBigint v0
       Model.ScalarNull -> "null"
@@ -179,14 +182,15 @@ writeSequenceItem node =
       Model.NodeSequence v0 -> Logic.ifElse (Lists.null v0) "- []\n" (Strings.cat2 "-\n" (indentString (writeNode node)))
       Model.NodeMapping v0 -> Logic.ifElse (Equality.equal (Maps.size v0) 0) "- {}\n" (
         let entries = Maps.toList v0
-            firstEntry = Lists.head entries
-            restEntries = Lists.tail entries
-            firstStr = writeMappingEntryInline firstEntry
-            restStr = Strings.cat (Lists.map (\e -> writeMappingEntry e) restEntries)
-        in (Strings.cat [
-          "- ",
-          firstStr,
-          (indentString restStr)]))
+        in (Maybes.fromMaybe "" (Maybes.map (\p ->
+          let firstEntry = Pairs.first p
+              restEntries = Pairs.second p
+              firstStr = writeMappingEntryInline firstEntry
+              restStr = Strings.cat (Lists.map (\e -> writeMappingEntry e) restEntries)
+          in (Strings.cat [
+            "- ",
+            firstStr,
+            (indentString restStr)])) (Lists.uncons entries))))
 
 -- | Write a string value, quoting if necessary
 writeString :: String -> String
