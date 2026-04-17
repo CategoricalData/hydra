@@ -497,17 +497,25 @@ inferModules = define "inferModules" $
 
 -- | Incrementally infer types for target modules, using the universe as a seeded inference context.
 -- Type schemes already present on universe term bindings (e.g. loaded from a prior inference run)
--- are used as a read-only lookup for references from the targets, and only the target modules'
--- term bindings are re-inferred. When universe and targets are equal, this is equivalent to
--- inferModules, but when targets is a strict subset of the universe it avoids re-inferring
--- definitions whose types are already known.
+-- are installed in the graph's boundTypes via modulesToGraph, providing a typed context for the
+-- inference pass. All universe bindings (not just targets) are fed to inferGraphTypes so that the
+-- let-inference machinery (Phase 6/7 of inferTypeOfLetNormalized) produces consistent TypeApplication
+-- wrappers for cross-module references. Only the target modules' bindings are extracted from the
+-- result via refreshModule.
+--
+-- Note: the current implementation re-infers all universe bindings, so there is no per-binding
+-- speedup over inferModules. The intended optimization path is for the calling layer to skip
+-- inference entirely when the universe hasn't changed (the "all clean" fast path in the digest
+-- cache) and to call this function only when some modules are stale. A future version may avoid
+-- re-inferring clean bindings whose pre-attached schemes are known-correct, but that requires
+-- changes to inferGraphTypes' Phase 6 term-substitution mechanism.
 inferModulesGiven :: TTermDefinition (Context -> Graph -> [Module] -> [Module] -> Prelude.Either Error [Module])
 inferModulesGiven = define "inferModulesGiven" $
-  doc "Incrementally infer types for target modules, using the universe as a seeded inference context" $
+  doc "Infer types for target modules in the context of a typed universe" $
   "cx" ~> "bsGraph" ~> "universeMods" ~> "targetMods" ~>
   "g0" <~ modulesToGraph @@ var "bsGraph" @@ var "universeMods" @@ var "universeMods" $
-  "targetBindings" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m")) (var "targetMods")) $
-  "inferResultWithCx" <<~ Inference.inferGraphTypes @@ var "cx" @@ var "targetBindings" @@ var "g0" $
+  "dataElements" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m")) (var "universeMods")) $
+  "inferResultWithCx" <<~ Inference.inferGraphTypes @@ var "cx" @@ var "dataElements" @@ var "g0" $
   "inferResult" <~ Pairs.first (var "inferResultWithCx") $
   "inferredElements" <~ Pairs.second (var "inferResult") $
   right $ Lists.map (refreshModule @@ var "inferredElements") (var "targetMods")

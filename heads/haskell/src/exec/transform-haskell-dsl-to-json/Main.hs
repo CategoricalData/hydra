@@ -28,8 +28,10 @@ import Hydra.PackageRouting (defaultDistJsonRoot, namespaceToPackage)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules,
   kernelModules, haskellModules, jsonModules, otherModules,
-  hydraJavaModules, hydraPythonModules, hydraScalaModules, hydraLispModules,
+  hydraCoqModules, hydraJavaModules, hydraJavaScriptModules,
+  hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraRdfModules, hydraWasmModules,
+  hydraExtPackageModules,
   hydraExtDecodingModules, hydraExtEncodingModules)
 import Hydra.Sources.Eval.Lib.All (evalLibModules)
 import Hydra.Sources.Test.All (testModules)
@@ -59,23 +61,23 @@ dedupByNamespace = go S.empty
 -- | All main-side modules across all packages, deduped. Used as the type-
 -- resolution universe regardless of which package is being written.
 --
--- Mirrors update-json-main's universe exactly, so per-package output from
--- this tool matches what the monolithic exec would produce. The long-tail
--- ext packages (hydra-coq, hydra-javascript, hydra-ext) are deliberately
--- excluded: they are generated as Haskell only via sync-ext.sh, not via
--- the JSON pipeline.
+-- Every package's DSL sources are included here so that per-package JSON
+-- output can route modules to their owning package via namespaceToPackage.
 fullMainUniverse :: [Kernel.Module]
 fullMainUniverse = dedupByNamespace $ L.concat
   [ mainModules
   , evalLibModules
   , dslSourceModules
+  , hydraCoqModules
   , hydraJavaModules
+  , hydraJavaScriptModules
   , hydraPythonModules
   , hydraScalaModules
   , hydraLispModules
   , hydraPgModules
   , hydraRdfModules
   , hydraWasmModules
+  , hydraExtPackageModules
   , hydraExtDecodingModules
   , hydraExtEncodingModules
   , [GenPGTransform.module_]
@@ -118,10 +120,9 @@ usage = unlines
   , "  --package <pkg>          Package to transform (required). One of:"
   , "                           hydra-kernel, hydra-haskell, hydra-java,"
   , "                           hydra-python, hydra-scala, hydra-lisp,"
-  , "                           hydra-pg, hydra-rdf, hydra-wasm."
-  , "                           (Long-tail ext packages -- hydra-coq,"
-  , "                           hydra-javascript, hydra-ext -- are Haskell-only"
-  , "                           today; they have no JSON pipeline.)"
+  , "                           hydra-coq, hydra-javascript,"
+  , "                           hydra-pg, hydra-rdf, hydra-ext,"
+  , "                           hydra-wasm."
   , "  --source-set <main|test> Source set to transform (default: main)."
   , "                           'test' is only non-empty for hydra-kernel today."
   , "  --dist-json-root <dir>   Output root (default: ../../dist/json)."
