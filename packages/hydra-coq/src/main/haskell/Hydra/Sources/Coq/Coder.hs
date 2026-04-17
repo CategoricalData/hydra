@@ -22,9 +22,10 @@ import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
-import qualified Hydra.Sources.Other.Coq                   as CoqSyntax
+import qualified Hydra.Sources.Coq.Syntax                  as CoqSyntax
 import qualified Hydra.Sources.Coq.Environment             as CoqEnvironmentSource
 import qualified Hydra.Sources.Coq.Language                as CoqLanguage
+import qualified Hydra.Sources.Coq.Utils                   as CoqUtils
 import           Prelude hiding ((++))
 import qualified Data.Int                                  as I
 import qualified Data.List                                 as DL
@@ -61,9 +62,11 @@ module_ = Module ns definitions
       toDefinition coqName,
       toDefinition coqQualid,
       toDefinition coqTermApp,
+      toDefinition coqTermCast,
       toDefinition coqTermQualid,
       toDefinition coqTypeTerm,
       toDefinition encodeAxiomDefinitionPair,
+      toDefinition encodeFloatLiteral,
       toDefinition encodeLambdaTerm,
       toDefinition encodeLiteral,
       toDefinition encodeLiteralType,
@@ -148,6 +151,25 @@ coqTermApp = define "coqTermApp" $
                         inject C._Term0 C._Term0_parens (var "a"))
                     (var "args")])
 
+-- | Wrap a term in a Coq type annotation: `(t : T)`. Used to force type
+-- inference for empty containers like `None`, `nil`, and empty maps/sets,
+-- whose element type cannot otherwise be inferred from context.
+coqTermCast :: TTermDefinition (C.Term -> C.Type -> C.Term)
+coqTermCast = define "coqTermCast" $
+  doc "Build a Coq Term expressing `(t : T)` with the normal cast operator" $
+  lambdas ["t", "ty"] $
+    inject C._Term C._Term_term100 $
+      inject C._Term100 C._Term100_cast $
+        record C._TypeCast [
+          C._TypeCast_term>>:
+            inject C._Term10 C._Term10_oneTerm $
+              inject C._OneTerm C._OneTerm_term1 $
+                inject C._Term1 C._Term1_term0 $
+                  inject C._Term0 C._Term0_parens (var "t"),
+          C._TypeCast_type>>: var "ty",
+          C._TypeCast_operator>>:
+            inject C._TypeCastOperator C._TypeCastOperator_normal unit]
+
 -- | Build a Coq atomic term from a qualified name (unapplied).
 coqTermQualid :: TTermDefinition (String -> C.Term)
 coqTermQualid = define "coqTermQualid" $
@@ -191,6 +213,7 @@ encodeLiteralType = define "encodeLiteralType" $
   doc "Map a Hydra LiteralType to its Coq stdlib counterpart" $
   lambda "lt" $ cases _LiteralType (var "lt") Nothing [
     _LiteralType_boolean>>: constant (coqTermQualid @@ string "bool"),
+    _LiteralType_decimal>>: constant (coqTermQualid @@ string "Q"),
     _LiteralType_float>>: constant (coqTermQualid @@ string "Q"),
     _LiteralType_integer>>: "it" ~> cases _IntegerType (var "it") Nothing [
       _IntegerType_bigint>>: constant (coqTermQualid @@ string "Z"),
@@ -284,6 +307,23 @@ encodeAxiomDefinitionPair = define "encodeAxiomDefinitionPair" $
             C._AxiomDeclaration_name>>: coqIdent @@ Pairs.first (var "nt"),
             C._AxiomDeclaration_type>>: coqTypeTerm @@ (encodeType @@ var "env" @@ Pairs.second (var "nt"))]]
 
+-- | Translate a float string (produced by `showBigfloat`) to a Coq Term.
+-- Ordinary values become parenthesised `Q`-scope literals. IEEE 754 special
+-- values (`Infinity`, `-Infinity`, `NaN`) have no representation in Coq's
+-- exact rationals, so they are emitted as references to the corresponding
+-- `hydra_posInf`/`hydra_negInf`/`hydra_nan` axioms from `hydra.lib.base`.
+encodeFloatLiteral :: TTermDefinition (String -> C.Term)
+encodeFloatLiteral = define "encodeFloatLiteral" $
+  doc "Map a Haskell-`show`n Double/Scientific to a Coq term, routing NaN/Inf to base-lib axioms" $
+  lambda "s" $
+    Logic.ifElse (Equality.equal (var "s") (string "Infinity"))
+      (coqTermQualid @@ string "hydra_posInf") $
+    Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
+      (coqTermQualid @@ string "hydra_negInf") $
+    Logic.ifElse (Equality.equal (var "s") (string "NaN"))
+      (coqTermQualid @@ string "hydra_nan")
+      (coqTermQualid @@ Strings.cat (list [string "(", var "s", string ")"]))
+
 -- | Encode a single Hydra Lambda term into a Coq `fun` term.
 encodeLambdaTerm :: TTermDefinition (CE.CoqEnvironment -> Lambda -> C.Term)
 encodeLambdaTerm = define "encodeLambdaTerm" $
@@ -310,13 +350,12 @@ encodeLiteral = define "encodeLiteral" $
   lambda "lit" $ cases _Literal (var "lit") Nothing [
     _Literal_boolean>>: "b" ~>
       Logic.ifElse (var "b") (coqTermQualid @@ string "true") (coqTermQualid @@ string "false"),
+    _Literal_decimal>>: "d" ~> coqTermQualid @@ Strings.cat (list [
+      string "(", Literals.showDecimal (var "d"), string ")"]),
     _Literal_float>>: "fv" ~> cases _FloatValue (var "fv") Nothing [
-      _FloatValue_bigfloat>>: "v" ~> coqTermQualid @@ Strings.cat (list [
-        string "(", Literals.showBigfloat (var "v"), string ")"]),
-      _FloatValue_float32>>: "v" ~> coqTermQualid @@ Strings.cat (list [
-        string "(", Literals.showBigfloat (Literals.float32ToBigfloat $ var "v"), string ")"]),
-      _FloatValue_float64>>: "v" ~> coqTermQualid @@ Strings.cat (list [
-        string "(", Literals.showBigfloat (Literals.float64ToBigfloat $ var "v"), string ")"])],
+      _FloatValue_bigfloat>>: "v" ~> encodeFloatLiteral @@ Literals.showBigfloat (var "v"),
+      _FloatValue_float32>>: "v" ~> encodeFloatLiteral @@ Literals.showBigfloat (Literals.float32ToBigfloat $ var "v"),
+      _FloatValue_float64>>: "v" ~> encodeFloatLiteral @@ Literals.showBigfloat (Literals.float64ToBigfloat $ var "v")],
     _Literal_integer>>: "iv" ~> cases _IntegerValue (var "iv") Nothing [
       _IntegerValue_bigint>>: "v" ~> coqTermQualid @@ Strings.cat (list [
         string "(", Literals.showBigint (var "v"), string ")%Z"]),
@@ -458,7 +497,77 @@ encodeTerm = define "encodeTerm" $
             (lambda "f" $ encodeTerm @@ var "env" @@ (Core.fieldTerm $ var "f"))
             (var "rfields")),
     _Term_set>>: constant (coqTermQualid @@ string "nil"),
-    _Term_typeApplication>>: "ta" ~> encodeTerm @@ var "env" @@ (Core.typeApplicationTermBody $ var "ta"),
+    _Term_typeApplication>>: "ta" ~> lets [
+      "body">: Core.typeApplicationTermBody $ var "ta",
+      "tyArg">: Core.typeApplicationTermType $ var "ta",
+      "encoded">: encodeTerm @@ var "env" @@ var "body",
+      -- A ground (free-variable-free) type argument can safely be emitted as
+      -- a Coq type annotation `(t : T)`. A type that mentions a Hydra type
+      -- variable cannot, because such variables come from outer `TypeLambda`
+      -- binders that Hydra erases in Coq — the variable would be free.
+      "isGround">: Sets.null (CoqUtils.collectFreeTypeVarsInType @@ var "tyArg")] $
+      -- An empty container (None, [], empty map, empty set) cannot have its
+      -- element type inferred by Coq from the surrounding context. Emit an
+      -- explicit `(None : option T)` / `(nil : list T)` cast using the type
+      -- argument from the enclosing TypeApplication, but only when the type
+      -- is ground. Non-empty bodies are left untouched.
+      Logic.ifElse (Logic.not $ var "isGround") (var "encoded") $
+      -- `_Term_maybe Nothing` and `_Term_either (inl|inr)` need type
+      -- annotations: Coq cannot infer the "other" type parameter of `option`
+      -- / `sum` from context when these appear as record fields or function
+      -- arguments. Empty lists/maps/sets are NOT annotated here because the
+      -- TypeApplication's `type` field does not always match the Coq-side
+      -- expected type (e.g. Hydra's `Map Name Term` vs Coq's
+      -- `list (Name * Term)`), so a blind cast would produce the wrong type.
+      cases _Term (var "body")
+        (Just (var "encoded")) [
+        _Term_maybe>>: "mt" ~> Maybes.maybe
+          (coqTermCast @@ (coqTermQualid @@ string "None")
+            @@ (coqTypeTerm @@ (coqTermApp @@ (coqTermQualid @@ string "option")
+              @@ list [encodeType @@ var "env" @@ var "tyArg"])))
+          (constant $ var "encoded")
+          (var "mt"),
+        -- Empty list: annotate with `list <tyArg>` when the element type is
+        -- compound (either, pair, map). This handles `lefts nil` / `rights nil`
+        -- (tyArg = sum) and similar. Simple tyArgs like `Name` are skipped
+        -- because Hydra sometimes passes a wrong single-type element (e.g.
+        -- `Name` for an annotation field whose Coq type is `list (Name * Term)`).
+        _Term_list>>: "xs" ~> Logic.ifElse
+          (Logic.and (Lists.null $ var "xs")
+            (cases _Type (var "tyArg") (Just (boolean False)) [
+              _Type_either>>: constant (boolean True),
+              _Type_pair>>: constant (boolean True),
+              _Type_map>>: constant (boolean True)]))
+          (coqTermCast @@ (coqTermQualid @@ string "nil")
+            @@ (coqTypeTerm @@ (coqTermApp @@ (coqTermQualid @@ string "list")
+              @@ list [encodeType @@ var "env" @@ var "tyArg"])))
+          (var "encoded"),
+        -- For `_Term_either`, Hydra wraps in TWO nested TypeApplications
+        -- (one per type parameter): `TypeApp (TypeApp (Either x) L) R`.
+        -- We receive the outer one here. If `tyArg` is already a full
+        -- `_Type_either`, use it directly. Otherwise, fall through.
+        _Term_either>>: "e" ~>
+          cases _Type (var "tyArg")
+            (Just (var "encoded")) [
+            _Type_either>>: "et" ~> lets [
+              "sumTy">: coqTypeTerm @@ (coqTermApp @@ (coqTermQualid @@ string "sum") @@ list [
+                encodeType @@ var "env" @@ (Core.eitherTypeLeft $ var "et"),
+                encodeType @@ var "env" @@ (Core.eitherTypeRight $ var "et")])] $
+              coqTermCast @@ var "encoded" @@ var "sumTy"],
+        -- Nested TypeApplication: body is another TypeApplication.
+        -- Peel one layer and recurse. This handles `TypeApp (TypeApp (Either x) L) R`
+        -- where the inner body is `_Term_either`.
+        _Term_typeApplication>>: "innerTa" ~> lets [
+          "innerBody">: Core.typeApplicationTermBody $ var "innerTa",
+          "innerTyArg">: Core.typeApplicationTermType $ var "innerTa",
+          "innerEncoded">: encodeTerm @@ var "env" @@ var "innerBody"] $
+          cases _Term (var "innerBody")
+            (Just (var "encoded")) [
+            _Term_either>>: "innerE" ~> lets [
+              "sumTy">: coqTypeTerm @@ (coqTermApp @@ (coqTermQualid @@ string "sum") @@ list [
+                encodeType @@ var "env" @@ var "innerTyArg",
+                encodeType @@ var "env" @@ var "tyArg"])] $
+              coqTermCast @@ var "innerEncoded" @@ var "sumTy"]],
     _Term_typeLambda>>: "tl" ~> encodeTerm @@ var "env" @@ (Core.typeLambdaBody $ var "tl"),
     _Term_unit>>: constant (coqTermQualid @@ string "tt"),
     _Term_unwrap>>: "n" ~> encodeWrapElim @@ var "n",
@@ -766,6 +875,12 @@ resolveQualifiedName = define "resolveQualifiedName" $
     "head1">: Maybes.fromMaybe (var "s") (Lists.maybeHead (var "parts")),
     "currentNs">: project CE._CoqEnvironment CE._CoqEnvironment_currentNamespace @@ var "env",
     "ambig">: project CE._CoqEnvironment CE._CoqEnvironment_ambiguousNames @@ var "env"] $
+    -- Coq.<name> : synthetic marker (from `typeToTerm`) for a Coq-builtin
+    -- type constructor referenced in a term position. Emit the tail segment
+    -- raw, bypassing sanitizeVar — otherwise `Coq.list` would collide with a
+    -- user-level lambda parameter named `list` and get escaped to `list_`.
+    Logic.ifElse (Equality.equal (var "head1") (string "Coq"))
+      (Maybes.fromMaybe (var "s") (Lists.maybeLast (var "parts"))) $
     -- Build_hydra.<ns>.<x> : strip to Build_<sanitized local>.
     Logic.ifElse (Equality.equal (var "head1") (string "Build_hydra"))
       (Strings.cat2 (string "Build_") (sanitizeStripped @@ (Maybes.fromMaybe (var "s") (Lists.maybeLast (var "parts"))))) $
