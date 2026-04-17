@@ -4864,7 +4864,7 @@
                 "@key": "description",
                 "@value": {
                   "literal": {
-                    "string": "Incrementally infer types for target modules, using the universe as a seeded inference context"}}}],
+                    "string": "Infer types for target modules in the context of a typed universe"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -4893,12 +4893,12 @@
                                   "let": {
                                     "bindings": [
                                       {
-                                        "name": "targetBindings",
+                                        "name": "dataElements",
                                         "term": {
                                           "application": {
                                             "argument": {
                                               "application": {
-                                                "argument": {"variable": "targetMods"},
+                                                "argument": {"variable": "universeMods"},
                                                 "function": {
                                                   "application": {
                                                     "argument": {
@@ -5071,7 +5071,7 @@
                                                 "argument": {"variable": "g0"},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {"variable": "targetBindings"},
+                                                    "argument": {"variable": "dataElements"},
                                                     "function": {
                                                       "application": {
                                                         "argument": {"variable": "cx"},

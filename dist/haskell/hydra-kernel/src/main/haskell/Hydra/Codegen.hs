@@ -292,19 +292,19 @@ inferModules cx bsGraph universeMods targetMods =
             inferredElements = Pairs.second inferResult
         in (Right (Lists.map (refreshModule inferredElements) targetMods))))
 
--- | Incrementally infer types for target modules, using the universe as a seeded inference context
+-- | Infer types for target modules in the context of a typed universe
 inferModulesGiven :: Context.Context -> Graph.Graph -> [Packaging.Module] -> [Packaging.Module] -> Either Errors.Error [Packaging.Module]
 inferModulesGiven cx bsGraph universeMods targetMods =
 
       let g0 = modulesToGraph bsGraph universeMods universeMods
-          targetBindings =
+          dataElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                       Core.bindingName = (Packaging.termDefinitionName v0),
                       Core.bindingTerm = (Packaging.termDefinitionTerm v0),
                       Core.bindingType = (Packaging.termDefinitionType v0)})
-                    _ -> Nothing) (Packaging.moduleDefinitions m))) targetMods)
-      in (Eithers.bind (Inference.inferGraphTypes cx targetBindings g0) (\inferResultWithCx ->
+                    _ -> Nothing) (Packaging.moduleDefinitions m))) universeMods)
+      in (Eithers.bind (Inference.inferGraphTypes cx dataElements g0) (\inferResultWithCx ->
         let inferResult = Pairs.first inferResultWithCx
             inferredElements = Pairs.second inferResult
         in (Right (Lists.map (refreshModule inferredElements) targetMods))))
