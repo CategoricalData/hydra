@@ -49,9 +49,12 @@ import qualified Hydra.Sources.Test.TestSuite as TestSuite
 import Control.Exception (catch, IOException)
 import Control.Monad (when, forM)
 import qualified Control.Monad as CM
+import qualified Data.Char as C
 import Data.List (isPrefixOf)
+import qualified Data.List.Split as LS
 import Data.Time.Clock (getCurrentTime, diffUTCTime, UTCTime)
 import System.Directory (listDirectory, doesFileExist)
+import qualified System.Directory as SD
 import System.Environment (getArgs)
 import System.Exit (exitFailure)
 import System.IO (hSetBuffering, BufferMode(NoBuffering), stdout)
@@ -89,6 +92,7 @@ data Options = Options
   , optOutput             :: Maybe FilePath
   , optIncludeCoders      :: Bool
   , optIncludeDsls        :: Bool
+  , optIncludeExt         :: Bool
   , optIncludeTests       :: Bool
   , optIncludeGenTests    :: Bool  -- deprecated; ignored
   , optKernelOnly         :: Bool
@@ -106,6 +110,7 @@ defaultOptions = Options
   , optOutput             = Nothing
   , optIncludeCoders      = False
   , optIncludeDsls        = False
+  , optIncludeExt         = False
   , optIncludeTests       = False
   , optIncludeGenTests    = False
   , optKernelOnly         = False
@@ -137,6 +142,7 @@ parseArgs = go defaultOptions
     go opts ("--output" : o : rest) = go (opts { optOutput = Just o }) rest
     go opts ("--include-coders" : rest) = go (opts { optIncludeCoders = True }) rest
     go opts ("--include-dsls" : rest) = go (opts { optIncludeDsls = True }) rest
+    go opts ("--include-ext" : rest) = go (opts { optIncludeExt = True }) rest
     go opts ("--include-tests" : rest) = go (opts { optIncludeTests = True }) rest
     go opts ("--include-gentests" : rest) = go (opts { optIncludeGenTests = True }) rest
     go opts ("--kernel-only" : rest) = go (opts { optKernelOnly = True }) rest
@@ -159,6 +165,8 @@ usage = unlines
   , "  --output <dir>           Output base directory"
   , "  --include-coders         Also load coder packages (hydra-java/python/scala/lisp)"
   , "  --include-dsls           Also load DSL wrapper modules"
+  , "  --include-ext            Also load long-tail ext packages (hydra-coq,"
+  , "                           hydra-javascript, hydra-ext)"
   , "  --include-tests          Also generate kernel test modules"
   , "  --include-gentests       (deprecated, ignored)"
   , "  --kernel-only            Only generate kernel modules (exclude coder packages)"
@@ -239,8 +247,10 @@ main = do
   -- Dependency order: baseline packages (hydra-kernel + hydra-haskell) are
   -- loaded individually in Step 1. Coder packages are loaded with
   -- --include-coders. Ext demo packages are loaded with --ext-only.
+  -- Long-tail ext packages are loaded with --include-ext.
   let coderPackages   = ["hydra-java", "hydra-python", "hydra-scala", "hydra-lisp"]
   let extDemoPackages = ["hydra-pg", "hydra-rdf"]
+  let extPackages     = ["hydra-coq", "hydra-javascript", "hydra-ext"]
 
   let targetCap = case target of
         "haskell"     -> "Haskell"
@@ -261,6 +271,7 @@ main = do
   putStrLn $ "  Output:            " ++ outBase
   putStrLn $ "  Include coders:    " ++ show (optIncludeCoders opts)
   putStrLn $ "  Include DSLs:      " ++ show (optIncludeDsls opts)
+  putStrLn $ "  Include ext:       " ++ show (optIncludeExt opts)
   putStrLn $ "  Include tests:     " ++ show (optIncludeTests opts)
   putStrLn $ "  Include gen tests: " ++ show (optIncludeGenTests opts)
   putStrLn ""
@@ -332,6 +343,7 @@ main = do
       let dslPackages =
             ["hydra-kernel", "hydra-haskell"]
               ++ (if optIncludeCoders opts then coderPackages else [])
+              ++ (if optIncludeExt opts then extPackages else [])
               ++ (if optExtOnly opts then extDemoPackages else [])
       mods <- fmap concat $ CM.forM dslPackages loadPackageDsl
       loadEnd3 <- getCurrentTime
@@ -341,8 +353,31 @@ main = do
       return mods
     else return []
 
+  -- Step 2c: Optionally load long-tail ext packages (hydra-coq,
+  -- hydra-javascript, hydra-ext) plus their type-resolution dependencies
+  -- (hydra-pg, hydra-rdf). Ext modules reference pg decode/encode
+  -- meta-sources and pg model types, so those must be in the universe.
+  -- Already-loaded namespaces (via --include-coders) are skipped.
+  extMods <- if optIncludeExt opts
+    then do
+      putStrLn "Step 2c: Loading ext package modules from JSON..."
+      loadStart4 <- getCurrentTime
+      let extAndDepPackages = extPackages ++ extDemoPackages
+      allExtMods <- fmap concat $ CM.forM extAndDepPackages loadPackageMain
+      -- Dedup against coder and baseline mods by namespace.
+      let coderNsSet = fmap (unNamespace . moduleNamespace) (baselineMods ++ coderMods)
+          mods = Prelude.filter
+            (\m -> unNamespace (moduleNamespace m) `notElem` coderNsSet)
+            allExtMods
+      loadEnd4 <- getCurrentTime
+      putStrLn $ "  Loaded " ++ show (length mods) ++ " ext modules."
+      putStrLn $ "  Time: " ++ formatTime (elapsed loadEnd4 loadStart4)
+      putStrLn ""
+      return mods
+    else return []
+
   -- Apply filters
-  let allMods = baselineMods ++ coderMods ++ dslMods
+  let allMods = baselineMods ++ coderMods ++ extMods ++ dslMods
   let kernelNsStrings = fmap unNamespace allKernelNamespaces
   let filtered1 = if optKernelOnly opts
         then Prelude.filter (\m -> unNamespace (moduleNamespace m) `elem` kernelNsStrings) allMods
@@ -449,17 +484,102 @@ main = do
         Nothing -> Nothing
 
   -- Dispatch to the appropriate coder + language bindings.
+  -- Expand a set of target modules to the transitive closure over their
+  -- declared term and type dependencies, within the loaded universe.
+  -- generateSourceFiles's internal schemaMods walk needs this expansion to
+  -- resolve cross-module references when generating a subset of the
+  -- universe; the DSL-direct path gets it for free by generating the full
+  -- ext bag.
+  let expandForSchemaContext :: [Module] -> [Module]
+      expandForSchemaContext mods =
+        let nsMap = Prelude.foldr
+              (\m acc -> (unNamespace (moduleNamespace m), m) : acc)
+              []
+              allModsFinal'
+            lookupMod nsv = lookup nsv nsMap
+            stepDeps m =
+              (fmap unNamespace (moduleTermDependencies m))
+              ++ (fmap unNamespace (moduleTypeDependencies m))
+            closeNs :: [String] -> [String] -> [String]
+            closeNs visited [] = visited
+            closeNs visited (n : rest)
+              | n `elem` visited = closeNs visited rest
+              | otherwise = case lookupMod n of
+                  Nothing -> closeNs (n : visited) rest
+                  Just m  -> closeNs (n : visited) (stepDeps m ++ rest)
+            seed = fmap (unNamespace . moduleNamespace) mods
+            closed = closeNs [] seed
+        in Prelude.filter
+             (\m -> unNamespace (moduleNamespace m) `elem` closed)
+             allModsFinal'
+
+  -- Helper to filter the generated output down to just the originally-
+  -- requested modules, given the expanded set passed to generateSources.
+  -- Called when we needed the expansion for schema context but only want
+  -- files for the original scope on disk.
+  let pruneExtraFiles :: FilePath -> [Module] -> [Module] -> IO ()
+      pruneExtraFiles dir wanted expanded = do
+        let wantedNs = fmap (unNamespace . moduleNamespace) wanted
+            extra = Prelude.filter
+              (\m -> unNamespace (moduleNamespace m) `notElem` wantedNs)
+              expanded
+            suffix = case target of
+              "haskell" -> "hs"
+              "java" -> "java"
+              "python" -> "py"
+              "scala" -> "scala"
+              "clojure" -> "clj"
+              "scheme" -> "scm"
+              "common-lisp" -> "lisp"
+              "emacs-lisp" -> "el"
+              _ -> ""
+        CM.forM_ extra $ \m -> do
+          -- Files are laid out per target-language convention under dir.
+          -- For Haskell: Hydra/Xxx/Yyy.hs from namespace hydra.xxx.yyy.
+          -- The namespace-to-path is handled by the coder; we just unlink
+          -- everything that shouldn't be present.
+          let nsStr = unNamespace (moduleNamespace m)
+              parts = LS.splitOn "." nsStr
+              -- Haskell-style path: first letter of each part uppercased.
+              capitalize (c:cs) = C.toUpper c : cs
+              capitalize []     = []
+              relPath = case target of
+                "haskell" -> FP.joinPath (fmap capitalize parts) ++ "." ++ suffix
+                _         -> FP.joinPath parts ++ "." ++ suffix
+              fullPath = dir FP.</> relPath
+          exists <- SD.doesFileExist fullPath
+          CM.when exists $ SD.removeFile fullPath
+
   let genForDir :: FilePath -> [Module] -> IO Int
-      genForDir dir mods = case target of
-        "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False dir allModsFinal' mods
-        "java"    -> generateSources moduleToJava    javaLanguage    False True False True   dir allModsFinal' mods
-        "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   dir allModsFinal' mods
-        "scala"   -> generateSources moduleToScala   scalaLanguage   False True False False  dir allModsFinal' mods
-        _ | Just gen <- lispGenerator ->
-              generateSources gen lispLanguage True False False False dir allModsFinal' mods
-        _ -> do
-          putStrLn $ "Unknown target: " ++ target
-          exitFailure
+      genForDir dir mods =
+        let expanded = expandForSchemaContext mods
+            gen ms = case target of
+              "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False dir allModsFinal' ms
+              "java"    -> generateSources moduleToJava    javaLanguage    False True False True   dir allModsFinal' ms
+              "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   dir allModsFinal' ms
+              "scala"   -> generateSources moduleToScala   scalaLanguage   False True False False  dir allModsFinal' ms
+              _ | Just g <- lispGenerator ->
+                    generateSources g lispLanguage True False False False dir allModsFinal' ms
+              _ -> do
+                putStrLn $ "Unknown target: " ++ target
+                exitFailure
+        in do
+          _ <- gen expanded
+          -- If expansion added modules beyond the requested set, remove
+          -- their output files from this dir; they belong to other
+          -- packages and were only generated to satisfy schema context.
+          pruneExtraFiles dir mods expanded
+          -- Count actual files remaining under dir.
+          countFiles dir ("." ++ case target of
+            "haskell" -> "hs"
+            "java" -> "java"
+            "python" -> "py"
+            "scala" -> "scala"
+            "clojure" -> "clj"
+            "scheme" -> "scm"
+            "common-lisp" -> "lisp"
+            "emacs-lisp" -> "el"
+            _ -> "")
 
   mainFileCount <- if optPackageSplit opts
     then do
