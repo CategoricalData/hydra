@@ -255,8 +255,4 @@
     "hydra.decode.pg.model",
     "hydra.encode.pg.mapping",
     "hydra.encode.pg.model",
-    "hydra.demos.genpg.transform",
-    "hydra.decode.pg.mapping",
-    "hydra.decode.pg.model",
-    "hydra.encode.pg.mapping",
-    "hydra.encode.pg.model"]}
+    "hydra.demos.genpg.transform"]}
