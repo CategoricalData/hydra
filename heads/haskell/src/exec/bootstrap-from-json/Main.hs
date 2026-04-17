@@ -89,6 +89,7 @@ data Options = Options
   , optOutput             :: Maybe FilePath
   , optIncludeCoders      :: Bool
   , optIncludeDsls        :: Bool
+  , optIncludeExt         :: Bool
   , optIncludeTests       :: Bool
   , optIncludeGenTests    :: Bool  -- deprecated; ignored
   , optKernelOnly         :: Bool
@@ -106,6 +107,7 @@ defaultOptions = Options
   , optOutput             = Nothing
   , optIncludeCoders      = False
   , optIncludeDsls        = False
+  , optIncludeExt         = False
   , optIncludeTests       = False
   , optIncludeGenTests    = False
   , optKernelOnly         = False
@@ -137,6 +139,7 @@ parseArgs = go defaultOptions
     go opts ("--output" : o : rest) = go (opts { optOutput = Just o }) rest
     go opts ("--include-coders" : rest) = go (opts { optIncludeCoders = True }) rest
     go opts ("--include-dsls" : rest) = go (opts { optIncludeDsls = True }) rest
+    go opts ("--include-ext" : rest) = go (opts { optIncludeExt = True }) rest
     go opts ("--include-tests" : rest) = go (opts { optIncludeTests = True }) rest
     go opts ("--include-gentests" : rest) = go (opts { optIncludeGenTests = True }) rest
     go opts ("--kernel-only" : rest) = go (opts { optKernelOnly = True }) rest
@@ -159,6 +162,8 @@ usage = unlines
   , "  --output <dir>           Output base directory"
   , "  --include-coders         Also load coder packages (hydra-java/python/scala/lisp)"
   , "  --include-dsls           Also load DSL wrapper modules"
+  , "  --include-ext            Also load long-tail ext packages (hydra-coq,"
+  , "                           hydra-javascript, hydra-ext)"
   , "  --include-tests          Also generate kernel test modules"
   , "  --include-gentests       (deprecated, ignored)"
   , "  --kernel-only            Only generate kernel modules (exclude coder packages)"
@@ -239,8 +244,10 @@ main = do
   -- Dependency order: baseline packages (hydra-kernel + hydra-haskell) are
   -- loaded individually in Step 1. Coder packages are loaded with
   -- --include-coders. Ext demo packages are loaded with --ext-only.
+  -- Long-tail ext packages are loaded with --include-ext.
   let coderPackages   = ["hydra-java", "hydra-python", "hydra-scala", "hydra-lisp"]
   let extDemoPackages = ["hydra-pg", "hydra-rdf"]
+  let extPackages     = ["hydra-coq", "hydra-javascript", "hydra-ext"]
 
   let targetCap = case target of
         "haskell"     -> "Haskell"
@@ -261,6 +268,7 @@ main = do
   putStrLn $ "  Output:            " ++ outBase
   putStrLn $ "  Include coders:    " ++ show (optIncludeCoders opts)
   putStrLn $ "  Include DSLs:      " ++ show (optIncludeDsls opts)
+  putStrLn $ "  Include ext:       " ++ show (optIncludeExt opts)
   putStrLn $ "  Include tests:     " ++ show (optIncludeTests opts)
   putStrLn $ "  Include gen tests: " ++ show (optIncludeGenTests opts)
   putStrLn ""
@@ -332,6 +340,7 @@ main = do
       let dslPackages =
             ["hydra-kernel", "hydra-haskell"]
               ++ (if optIncludeCoders opts then coderPackages else [])
+              ++ (if optIncludeExt opts then extPackages else [])
               ++ (if optExtOnly opts then extDemoPackages else [])
       mods <- fmap concat $ CM.forM dslPackages loadPackageDsl
       loadEnd3 <- getCurrentTime
@@ -341,8 +350,31 @@ main = do
       return mods
     else return []
 
+  -- Step 2c: Optionally load long-tail ext packages (hydra-coq,
+  -- hydra-javascript, hydra-ext) plus their type-resolution dependencies
+  -- (hydra-pg, hydra-rdf). Ext modules reference pg decode/encode
+  -- meta-sources and pg model types, so those must be in the universe.
+  -- Already-loaded namespaces (via --include-coders) are skipped.
+  extMods <- if optIncludeExt opts
+    then do
+      putStrLn "Step 2c: Loading ext package modules from JSON..."
+      loadStart4 <- getCurrentTime
+      let extAndDepPackages = extPackages ++ extDemoPackages
+      allExtMods <- fmap concat $ CM.forM extAndDepPackages loadPackageMain
+      -- Dedup against coder and baseline mods by namespace.
+      let coderNsSet = fmap (unNamespace . moduleNamespace) (baselineMods ++ coderMods)
+          mods = Prelude.filter
+            (\m -> unNamespace (moduleNamespace m) `notElem` coderNsSet)
+            allExtMods
+      loadEnd4 <- getCurrentTime
+      putStrLn $ "  Loaded " ++ show (length mods) ++ " ext modules."
+      putStrLn $ "  Time: " ++ formatTime (elapsed loadEnd4 loadStart4)
+      putStrLn ""
+      return mods
+    else return []
+
   -- Apply filters
-  let allMods = baselineMods ++ coderMods ++ dslMods
+  let allMods = baselineMods ++ coderMods ++ extMods ++ dslMods
   let kernelNsStrings = fmap unNamespace allKernelNamespaces
   let filtered1 = if optKernelOnly opts
         then Prelude.filter (\m -> unNamespace (moduleNamespace m) `elem` kernelNsStrings) allMods

@@ -22,8 +22,10 @@ import Hydra.Generation (writeModulesJsonPackageSplit, writeDslJsonPackageSplit)
 import Hydra.PackageRouting (defaultDistJsonRoot)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules, kernelModules, haskellModules, jsonModules, otherModules,
-  hydraJavaModules, hydraPythonModules, hydraScalaModules, hydraLispModules,
+  hydraCoqModules, hydraJavaModules, hydraJavaScriptModules,
+  hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraRdfModules, hydraWasmModules,
+  hydraExtPackageModules,
   hydraExtDecodingModules, hydraExtEncodingModules)
 import Hydra.Sources.Eval.Lib.All (evalLibModules)
 
@@ -55,13 +57,16 @@ main = do
         [ mainModules
         , evalLibModules
         , dslSourceModules
+        , hydraCoqModules
         , hydraJavaModules
+        , hydraJavaScriptModules
         , hydraPythonModules
         , hydraScalaModules
         , hydraLispModules
         , hydraPgModules
         , hydraRdfModules
         , hydraWasmModules
+        , hydraExtPackageModules
         , hydraExtDecodingModules
         , hydraExtEncodingModules
         , [GenPGTransform.module_]
