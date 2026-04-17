@@ -1070,12 +1070,12 @@ Key features:
 
 Recent fix for Issue #206:
 ```haskell
--- Python/Coder.hs (TermUnion case, now in DSL form)
-_Term_union>>: "inj" ~>
+-- Python/Coder.hs (Term inject case, in DSL form)
+_Term_inject>>: "inj" ~>
   "tname" <~ Core.injectionTypeName (var "inj") $
   "field" <~ Core.injectionField (var "inj") $
-  "rt" <<~ (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
-  Logic.ifElse (Schemas.isEnumRowType @@ var "rt")
+  "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+  Logic.ifElse (Predicates.isEnumRowType @@ var "rt")
     (projectFromExpression (pyNameToPyExpression (encodeNameQualified @@ var "env" @@ var "tname"))
       (encodeEnumValue @@ var "env" @@ Core.fieldName (var "field")))
     -- Omit argument for unit-valued variants (resolves #206)
