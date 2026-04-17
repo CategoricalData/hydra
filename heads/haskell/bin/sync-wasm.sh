@@ -7,7 +7,8 @@ set -euo pipefail
 #   1. Build the Haskell head
 #   2. Export hydra-wasm DSL modules to JSON
 #      (dist/json/hydra-wasm/src/main/json/)
-#   3. Generate WAT files to dist/wasm/
+#   3. Write per-package JSON manifests (refreshes hydra-wasm's manifest.json)
+#   4. Generate WAT files to dist/wasm/
 #
 # This avoids the heavyweight update-haskell-ext-main step and produces
 # fresh WAT output in a few minutes rather than ~17 CPU-min. The Haskell
@@ -45,19 +46,24 @@ cd "$HYDRA_HASKELL_DIR"
 banner2 "Synchronizing Hydra-Wasm"
 echo ""
 
-TOTAL_STEPS=3
+TOTAL_STEPS=4
 
 step 1 $TOTAL_STEPS "Building executables"
 echo ""
 stack build \
     hydra:exe:transform-haskell-dsl-to-json \
+    hydra:exe:update-json-manifest \
     hydra:exe:update-wasm
 
 step 2 $TOTAL_STEPS "Exporting hydra-wasm DSL modules to JSON"
 echo ""
 stack exec transform-haskell-dsl-to-json -- --package hydra-wasm --source-set main $RTS_FLAGS
 
-step 3 $TOTAL_STEPS "Generating WebAssembly text format (WAT) files"
+step 3 $TOTAL_STEPS "Writing per-package JSON manifests"
+echo ""
+stack exec update-json-manifest -- $RTS_FLAGS
+
+step 4 $TOTAL_STEPS "Generating WebAssembly text format (WAT) files"
 echo ""
 stack exec update-wasm -- $RTS_FLAGS
 
