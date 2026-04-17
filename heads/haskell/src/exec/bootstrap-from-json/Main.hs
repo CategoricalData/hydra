@@ -49,9 +49,12 @@ import qualified Hydra.Sources.Test.TestSuite as TestSuite
 import Control.Exception (catch, IOException)
 import Control.Monad (when, forM)
 import qualified Control.Monad as CM
+import qualified Data.Char as C
 import Data.List (isPrefixOf)
+import qualified Data.List.Split as LS
 import Data.Time.Clock (getCurrentTime, diffUTCTime, UTCTime)
 import System.Directory (listDirectory, doesFileExist)
+import qualified System.Directory as SD
 import System.Environment (getArgs)
 import System.Exit (exitFailure)
 import System.IO (hSetBuffering, BufferMode(NoBuffering), stdout)
@@ -481,17 +484,102 @@ main = do
         Nothing -> Nothing
 
   -- Dispatch to the appropriate coder + language bindings.
+  -- Expand a set of target modules to the transitive closure over their
+  -- declared term and type dependencies, within the loaded universe.
+  -- generateSourceFiles's internal schemaMods walk needs this expansion to
+  -- resolve cross-module references when generating a subset of the
+  -- universe; the DSL-direct path gets it for free by generating the full
+  -- ext bag.
+  let expandForSchemaContext :: [Module] -> [Module]
+      expandForSchemaContext mods =
+        let nsMap = Prelude.foldr
+              (\m acc -> (unNamespace (moduleNamespace m), m) : acc)
+              []
+              allModsFinal'
+            lookupMod nsv = lookup nsv nsMap
+            stepDeps m =
+              (fmap unNamespace (moduleTermDependencies m))
+              ++ (fmap unNamespace (moduleTypeDependencies m))
+            closeNs :: [String] -> [String] -> [String]
+            closeNs visited [] = visited
+            closeNs visited (n : rest)
+              | n `elem` visited = closeNs visited rest
+              | otherwise = case lookupMod n of
+                  Nothing -> closeNs (n : visited) rest
+                  Just m  -> closeNs (n : visited) (stepDeps m ++ rest)
+            seed = fmap (unNamespace . moduleNamespace) mods
+            closed = closeNs [] seed
+        in Prelude.filter
+             (\m -> unNamespace (moduleNamespace m) `elem` closed)
+             allModsFinal'
+
+  -- Helper to filter the generated output down to just the originally-
+  -- requested modules, given the expanded set passed to generateSources.
+  -- Called when we needed the expansion for schema context but only want
+  -- files for the original scope on disk.
+  let pruneExtraFiles :: FilePath -> [Module] -> [Module] -> IO ()
+      pruneExtraFiles dir wanted expanded = do
+        let wantedNs = fmap (unNamespace . moduleNamespace) wanted
+            extra = Prelude.filter
+              (\m -> unNamespace (moduleNamespace m) `notElem` wantedNs)
+              expanded
+            suffix = case target of
+              "haskell" -> "hs"
+              "java" -> "java"
+              "python" -> "py"
+              "scala" -> "scala"
+              "clojure" -> "clj"
+              "scheme" -> "scm"
+              "common-lisp" -> "lisp"
+              "emacs-lisp" -> "el"
+              _ -> ""
+        CM.forM_ extra $ \m -> do
+          -- Files are laid out per target-language convention under dir.
+          -- For Haskell: Hydra/Xxx/Yyy.hs from namespace hydra.xxx.yyy.
+          -- The namespace-to-path is handled by the coder; we just unlink
+          -- everything that shouldn't be present.
+          let nsStr = unNamespace (moduleNamespace m)
+              parts = LS.splitOn "." nsStr
+              -- Haskell-style path: first letter of each part uppercased.
+              capitalize (c:cs) = C.toUpper c : cs
+              capitalize []     = []
+              relPath = case target of
+                "haskell" -> FP.joinPath (fmap capitalize parts) ++ "." ++ suffix
+                _         -> FP.joinPath parts ++ "." ++ suffix
+              fullPath = dir FP.</> relPath
+          exists <- SD.doesFileExist fullPath
+          CM.when exists $ SD.removeFile fullPath
+
   let genForDir :: FilePath -> [Module] -> IO Int
-      genForDir dir mods = case target of
-        "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False dir allModsFinal' mods
-        "java"    -> generateSources moduleToJava    javaLanguage    False True False True   dir allModsFinal' mods
-        "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   dir allModsFinal' mods
-        "scala"   -> generateSources moduleToScala   scalaLanguage   False True False False  dir allModsFinal' mods
-        _ | Just gen <- lispGenerator ->
-              generateSources gen lispLanguage True False False False dir allModsFinal' mods
-        _ -> do
-          putStrLn $ "Unknown target: " ++ target
-          exitFailure
+      genForDir dir mods =
+        let expanded = expandForSchemaContext mods
+            gen ms = case target of
+              "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False dir allModsFinal' ms
+              "java"    -> generateSources moduleToJava    javaLanguage    False True False True   dir allModsFinal' ms
+              "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   dir allModsFinal' ms
+              "scala"   -> generateSources moduleToScala   scalaLanguage   False True False False  dir allModsFinal' ms
+              _ | Just g <- lispGenerator ->
+                    generateSources g lispLanguage True False False False dir allModsFinal' ms
+              _ -> do
+                putStrLn $ "Unknown target: " ++ target
+                exitFailure
+        in do
+          _ <- gen expanded
+          -- If expansion added modules beyond the requested set, remove
+          -- their output files from this dir; they belong to other
+          -- packages and were only generated to satisfy schema context.
+          pruneExtraFiles dir mods expanded
+          -- Count actual files remaining under dir.
+          countFiles dir ("." ++ case target of
+            "haskell" -> "hs"
+            "java" -> "java"
+            "python" -> "py"
+            "scala" -> "scala"
+            "clojure" -> "clj"
+            "scheme" -> "scm"
+            "common-lisp" -> "lisp"
+            "emacs-lisp" -> "el"
+            _ -> "")
 
   mainFileCount <- if optPackageSplit opts
     then do
