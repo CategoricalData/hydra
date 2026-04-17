@@ -72,6 +72,20 @@ public interface Coder {
     });
   }
 
+  static Boolean dialectSupportsLetrec(hydra.lisp.syntax.Dialect d) {
+    return (d).accept(new hydra.lisp.syntax.Dialect.PartialVisitor<>() {
+      @Override
+      public Boolean otherwise(hydra.lisp.syntax.Dialect instance) {
+        return true;
+      }
+
+      @Override
+      public Boolean visit(hydra.lisp.syntax.Dialect.Clojure ignored) {
+        return false;
+      }
+    });
+  }
+
   static <T0, T1, T2> hydra.util.Either<T2, hydra.lisp.syntax.Expression> encodeApplication(hydra.lisp.syntax.Dialect dialect, T0 cx, T1 g, hydra.core.Term rawFun, hydra.core.Term rawArg) {
     hydra.core.Term dFun = hydra.Strip.deannotateTerm(rawFun);
     java.util.function.Function<hydra.core.Term, hydra.util.Either<T2, hydra.lisp.syntax.Expression>> enc = (java.util.function.Function<hydra.core.Term, hydra.util.Either<T2, hydra.lisp.syntax.Expression>>) (v1 -> hydra.lisp.Coder.<T0, T1, T2>encodeApplication_enc(
@@ -263,17 +277,6 @@ public interface Coder {
   }
 
   static <T0, T1, T2> hydra.util.Either<T2, hydra.lisp.syntax.Expression> encodeLetAsNative(hydra.lisp.syntax.Dialect dialect, T0 cx, T1 g, java.util.List<hydra.core.Binding> bindings, hydra.core.Term body) {
-    Boolean isClojureTop = (dialect).accept(new hydra.lisp.syntax.Dialect.PartialVisitor<>() {
-      @Override
-      public Boolean otherwise(hydra.lisp.syntax.Dialect instance) {
-        return false;
-      }
-
-      @Override
-      public Boolean visit(hydra.lisp.syntax.Dialect.Clojure ignored) {
-        return true;
-      }
-    });
     return hydra.lib.eithers.Bind.apply(
       hydra.lisp.Coder.<T0, T1, T2>encodeTerm(
         dialect,
@@ -281,31 +284,39 @@ public interface Coder {
         g,
         body),
       (java.util.function.Function<hydra.lisp.syntax.Expression, hydra.util.Either<T2, hydra.lisp.syntax.Expression>>) (bodyExpr -> {
-        hydra.util.Lazy<java.util.List<hydra.core.Binding>> sortedBindings = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
-          true,
-          () -> ((java.util.function.Supplier<java.util.List<hydra.core.Binding>>) (() -> {
-            hydra.util.Lazy<java.util.Set<hydra.core.Name>> allNames = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
-              (java.util.function.Function<hydra.core.Binding, hydra.core.Name>) (b -> (b).name),
-              bindings)));
+        hydra.util.Lazy<java.util.Set<hydra.core.Name>> allNames = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
+          (java.util.function.Function<hydra.core.Binding, hydra.core.Name>) (b -> (b).name),
+          bindings)));
+        Boolean supportsLetrec = hydra.lisp.Coder.dialectSupportsLetrec(dialect);
+        hydra.util.Lazy<java.util.List<java.util.List<hydra.core.Name>>> sccs = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
+          supportsLetrec,
+          () -> hydra.lib.lists.Map.apply(
+            (java.util.function.Function<hydra.core.Binding, java.util.List<hydra.core.Name>>) (b -> java.util.Arrays.asList((b).name)),
+            bindings),
+          () -> ((java.util.function.Supplier<java.util.List<java.util.List<hydra.core.Name>>>) (() -> {
             hydra.util.Lazy<java.util.List<hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>>> adjList = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
               (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>>) (b -> (hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>((b).name, hydra.lib.sets.ToList.apply(hydra.lib.sets.Intersection.apply(
                 allNames.get(),
                 hydra.Variables.freeVariablesInTerm((b).term))))))),
               bindings));
-            hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Binding>> nameToBinding = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-              (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.core.Name, hydra.core.Binding>>) (b -> (hydra.util.Pair<hydra.core.Name, hydra.core.Binding>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Binding>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Binding>((b).name, b)))),
-              bindings)));
-            hydra.util.Lazy<hydra.util.Either<java.util.List<java.util.List<hydra.core.Name>>, java.util.List<hydra.core.Name>>> sortResult = new hydra.util.Lazy<>(() -> hydra.Sorting.topologicalSort(adjList.get()));
-            return hydra.lib.eithers.Either.apply(
-              (java.util.function.Function<java.util.List<java.util.List<hydra.core.Name>>, java.util.List<hydra.core.Binding>>) (ignored -> bindings),
-              (java.util.function.Function<java.util.List<hydra.core.Name>, java.util.List<hydra.core.Binding>>) (sorted -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
-                (java.util.function.Function<hydra.core.Name, hydra.util.Maybe<hydra.core.Binding>>) (name -> hydra.lib.maps.Lookup.apply(
-                  name,
-                  nameToBinding.get())),
-                sorted))),
-              sortResult.get());
-          })).get(),
-          () -> bindings));
+            return hydra.Sorting.topologicalSortComponents(adjList.get());
+          })).get()));
+        hydra.util.Lazy<Boolean> hasCycle = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+          (java.util.function.Function<Boolean, java.util.function.Function<java.util.List<hydra.core.Name>, Boolean>>) (acc -> (java.util.function.Function<java.util.List<hydra.core.Name>, Boolean>) (scc -> hydra.lib.logic.Or.apply(
+            acc,
+            hydra.lib.equality.Gt.apply(
+              hydra.lib.lists.Length.apply(scc),
+              1)))),
+          false,
+          sccs.get()));
+        hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Binding>> nameToBinding = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
+          (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.core.Name, hydra.core.Binding>>) (b -> (hydra.util.Pair<hydra.core.Name, hydra.core.Binding>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Binding>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Binding>((b).name, b)))),
+          bindings)));
+        hydra.util.Lazy<java.util.List<hydra.core.Binding>> sortedBindings = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+          (java.util.function.Function<hydra.core.Name, hydra.util.Maybe<hydra.core.Binding>>) (name -> hydra.lib.maps.Lookup.apply(
+            name,
+            nameToBinding.get())),
+          hydra.lib.lists.Concat.apply(sccs.get()))));
         return hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.MapList.apply(
             (java.util.function.Function<hydra.core.Binding, hydra.util.Either<T2, hydra.util.Pair<String, hydra.lisp.syntax.Expression>>>) (b -> {
@@ -333,17 +344,7 @@ public interface Coder {
                   g,
                   (b).term),
                 (java.util.function.Function<hydra.lisp.syntax.Expression, hydra.util.Either<T2, hydra.util.Pair<String, hydra.lisp.syntax.Expression>>>) (bval -> {
-                  Boolean isClojure = (dialect).accept(new hydra.lisp.syntax.Dialect.PartialVisitor<>() {
-                    @Override
-                    public Boolean otherwise(hydra.lisp.syntax.Dialect instance) {
-                      return false;
-                    }
-
-                    @Override
-                    public Boolean visit(hydra.lisp.syntax.Dialect.Clojure ignored) {
-                      return true;
-                    }
-                  });
+                  Boolean isClojure = hydra.lib.logic.Not.apply(supportsLetrec);
                   hydra.util.Lazy<hydra.lisp.syntax.Expression> wrappedVal = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
                     isClojure,
                     () -> hydra.lib.logic.IfElse.lazy(
@@ -383,17 +384,6 @@ public interface Coder {
             }),
             sortedBindings.get()),
           (java.util.function.Function<java.util.List<hydra.util.Pair<String, hydra.lisp.syntax.Expression>>, hydra.util.Either<T2, hydra.lisp.syntax.Expression>>) (encodedBindings -> {
-            hydra.util.Lazy<java.util.Set<hydra.core.Name>> allBindingNames = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
-              (java.util.function.Function<hydra.core.Binding, hydra.core.Name>) (b -> (b).name),
-              bindings)));
-            hydra.util.Lazy<Boolean> hasCrossRefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-              (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Binding, Boolean>>) (acc -> (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.logic.Or.apply(
-                acc,
-                hydra.lib.logic.Not.apply(hydra.lib.sets.Null.apply(hydra.lib.sets.Intersection.apply(
-                  allBindingNames.get(),
-                  hydra.Variables.freeVariablesInTerm((b).term))))))),
-              false,
-              bindings));
             hydra.util.Lazy<Boolean> hasSelfRef = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
               (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Binding, Boolean>>) (acc -> (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.logic.Or.apply(
                 acc,
@@ -402,9 +392,12 @@ public interface Coder {
                   hydra.Variables.freeVariablesInTerm((b).term))))),
               false,
               bindings));
-            Boolean isRecursive = hasSelfRef.get();
+            hydra.util.Lazy<Boolean> isRecursive = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
+              supportsLetrec,
+              () -> hasSelfRef.get(),
+              () -> hasCycle.get()));
             hydra.util.Lazy<hydra.lisp.syntax.LetKind> letKind = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
-              isRecursive,
+              isRecursive.get(),
               () -> new hydra.lisp.syntax.LetKind.Recursive(),
               () -> hydra.lib.logic.IfElse.lazy(
                 hydra.lib.equality.Lte.apply(

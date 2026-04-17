@@ -127,12 +127,9 @@ encodeLetAsNative dialect cx g bindings body =
     Eithers.bind (encodeTerm dialect cx g body) (\bodyExpr ->
       let supportsLetrec = dialectSupportsLetrec dialect
           allNames = Sets.fromList (Lists.map (\b -> Core.bindingName b) bindings)
-          sccs =
-                  Logic.ifElse supportsLetrec (Lists.map (\b -> [
-                    Core.bindingName b]) bindings) (
-                    let adjList =
-                            Lists.map (\b -> (Core.bindingName b, (Sets.toList (Sets.intersection allNames (Variables.freeVariablesInTerm (Core.bindingTerm b)))))) bindings
-                    in (Sorting.topologicalSortComponents adjList))
+          adjList =
+                  Lists.map (\b -> (Core.bindingName b, (Sets.toList (Sets.intersection allNames (Variables.freeVariablesInTerm (Core.bindingTerm b)))))) bindings
+          sccs = Sorting.topologicalSortComponents adjList
           nameToBinding = Maps.fromList (Lists.map (\b -> (Core.bindingName b, b)) bindings)
           sortedBindings = Maybes.cat (Lists.map (\name -> Maps.lookup name nameToBinding) (Lists.concat sccs))
           hasCycle = Lists.foldl (\acc -> \scc -> Logic.or acc (Equality.gt (Lists.length scc) 1)) False sccs
@@ -161,7 +158,7 @@ encodeLetAsNative dialect cx g bindings body =
           in (Right (bname, wrappedVal))))) sortedBindings) (\encodedBindings ->
         let hasSelfRef =
                 Lists.foldl (\acc -> \b -> Logic.or acc (Sets.member (Core.bindingName b) (Variables.freeVariablesInTerm (Core.bindingTerm b)))) False bindings
-            isRecursive = Logic.ifElse supportsLetrec hasSelfRef hasCycle
+            isRecursive = Logic.or hasSelfRef hasCycle
             letKind =
                     Logic.ifElse isRecursive Syntax.LetKindRecursive (Logic.ifElse (Equality.lte (Lists.length bindings) 1) Syntax.LetKindParallel Syntax.LetKindSequential)
             lispBindings =
