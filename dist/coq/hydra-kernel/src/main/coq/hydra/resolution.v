@@ -72,7 +72,7 @@ Definition requireRecordType (t0 : Type) : forall (_ : t0) , forall (_ : hydra.g
 | _ => None
 end) (t) in (((((requireRowType) (cx)) ("record type"%string)) (toRecord)) (graph_)) (name).
 Arguments requireRecordType {t0}.
-Definition requireSchemaType : forall (_ : Context_) , forall (_ : (list) ((prod) (Name) (TypeScheme))) , forall (_ : Name) , (sum) (Error) ((prod) (TypeScheme) (Context_)) := fun (cx : Context_) => fun (types : (list) ((prod) (Name) (TypeScheme))) => fun (tname : Name) => (((maybes.maybe) ((inl) ((Error_Resolution) ((ResolutionError_NoSuchBinding) ((Build_NoSuchBindingError) (tname)))))) (fun (ts : TypeScheme) => (inr) (((instantiateTypeScheme) (cx)) ((deannotateTypeSchemeRecursive) (ts))))) (((maps.lookup) (tname)) (types)).
+Definition requireSchemaType : forall (_ : Context_) , forall (_ : (list) ((prod) (Name) (TypeScheme))) , forall (_ : Name) , (sum) (Error) ((prod) (TypeScheme) (Context_)) := fun (cx : Context_) => fun (types : (list) ((prod) (Name) (TypeScheme))) => fun (tname : Name) => (((maybes.maybe) (((inl) ((Error_Resolution) ((ResolutionError_NoSuchBinding) ((Build_NoSuchBindingError) (tname))))) : (sum) (Error) ((prod) (TypeScheme) (Context_)))) (fun (ts : TypeScheme) => ((inr) (((instantiateTypeScheme) (cx)) ((deannotateTypeSchemeRecursive) (ts)))) : (sum) (Error) ((prod) (TypeScheme) (Context_)))) (((maps.lookup) (tname)) (types)).
 Definition requireUnionType (t0 : Type) : forall (_ : t0) , forall (_ : hydra.graph.Graph) , forall (_ : Name) , (sum) (Error) ((list) (FieldType)) := fun (cx : t0) => fun (graph_ : hydra.graph.Graph) => fun (name : Name) => let toUnion := fun (t : Type_) => (fun x_ => match x_ with
 | Type__Union v_ => (fun (rt : (list) (FieldType)) => (Some) (rt)) (v_)
 | _ => None

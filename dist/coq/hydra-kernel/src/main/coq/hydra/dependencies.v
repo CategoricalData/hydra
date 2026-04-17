@@ -33,8 +33,8 @@ Definition inlineType_bundle :=
   hydra_fix (fun (bundle_ : forall (_ : (list) ((prod) (Name) (Type_))) , forall (_ : Type_) , (sum) (Error) (Type_)) =>
     let inlineType := bundle_ in
     fun (schema : (list) ((prod) (Name) (Type_))) => fun (typ : Type_) => let f := fun recurse => fun typ2 => let afterRecurse := fun (tr : Type_) => (fun x_ => match x_ with
-| Type__Variable v_ => (fun (v : Name) => (((maybes.maybe) ((inl) ((Error_Other) (((strings.cat2) ("No such type in schema: "%string)) ((fun w_ => w_) (v)))))) ((inlineType) (schema))) (((maps.lookup) (v)) (schema))) (v_)
-| _ => (inr) (tr)
+| Type__Variable v_ => (fun (v : Name) => (((maybes.maybe) (((inl) ((Error_Other) (((strings.cat2) ("No such type in schema: "%string)) ((fun w_ => w_) (v))))) : (sum) (Error) (Type_))) ((inlineType) (schema))) (((maps.lookup) (v)) (schema))) (v_)
+| _ => ((inr) (tr)) : (sum) (Error) (Type_)
 end) (tr) in ((eithers.bind) ((recurse) (typ2))) (fun (tr : Type_) => (afterRecurse) (tr)) in ((rewriteTypeM) (f)) (typ)).
 
 Definition inlineType : forall (_ : (list) ((prod) (Name) (Type_))) , forall (_ : Type_) , (sum) (Error) (Type_) :=
