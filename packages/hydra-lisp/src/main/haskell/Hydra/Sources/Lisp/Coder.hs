@@ -341,25 +341,19 @@ encodeLetAsNative :: TTermDefinition (L.Dialect -> Context -> Graph -> [Binding]
 encodeLetAsNative = def "encodeLetAsNative" $
   "dialect" ~> "cx" ~> "g" ~> lambda "bindings" $ lambda "body" $
     "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "body") $
-    -- Dialects with native letrec (Common Lisp, Scheme, Emacs Lisp) use the
-    -- original binding order; the host-side letrec handles forward references.
-    -- Clojure has only sequential let, so we topologically sort bindings into
-    -- strongly-connected components: each non-cyclic singleton stays in
-    -- dependency order, and any cycle (SCC of size > 1) triggers letfn emission.
+    -- Topologically sort bindings into strongly-connected components. Singleton
+    -- SCCs flow through in dependency order (so non-cyclic forward references
+    -- become valid sequential bindings), and any cycle (SCC of size > 1) marks
+    -- the let as recursive: Clojure emits letfn, the other dialects emit letrec
+    -- (which the loader transforms into the dialect's native rec form).
     "supportsLetrec" <~ (dialectSupportsLetrec @@ var "dialect") $
     "allNames" <~ Sets.fromList (Lists.map (lambda "b" $ Core.bindingName (var "b")) (var "bindings")) $
-    "sccs" <~ (Logic.ifElse (var "supportsLetrec")
-      -- For dialects with native letrec, treat each binding as its own singleton SCC
-      -- in the original order. No cycles are detected this way.
-      (Lists.map (lambda "b" $ list [Core.bindingName (var "b")]) (var "bindings"))
-      -- For Clojure, compute strongly-connected components in dependency order.
-      (lets [
-        "adjList">: Lists.map (lambda "b" $
-          pair (Core.bindingName (var "b"))
-            (Sets.toList (Sets.intersection (var "allNames")
-              (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b")))))
-          (var "bindings")] $
-        Sorting.topologicalSortComponents @@ var "adjList")) $
+    "adjList" <~ Lists.map (lambda "b" $
+      pair (Core.bindingName (var "b"))
+        (Sets.toList (Sets.intersection (var "allNames")
+          (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b")))))
+      (var "bindings") $
+    "sccs" <~ (Sorting.topologicalSortComponents @@ var "adjList") $
     "nameToBinding" <~ Maps.fromList
       (Lists.map (lambda "b" $ pair (Core.bindingName (var "b")) (var "b")) (var "bindings")) $
     "sortedBindings" <~ Maybes.cat (Lists.map (lambda "name" $ Maps.lookup (var "name") (var "nameToBinding"))
@@ -409,10 +403,9 @@ encodeLetAsNative = def "encodeLetAsNative" $
             (var "bval"))) $
           right (pair (var "bname") (var "wrappedVal")))
       (var "sortedBindings")) $
-    -- For Clojure: use recursive kind only when an SCC cycle exists; the
-    -- serializer translates this into letfn (which expects lambda bindings).
-    -- For other dialects: recursive only when there's a self-reference, so the
-    -- existing letrec emission still applies.
+    -- A self-referential singleton SCC has size 1 (with a self-loop) and is
+    -- not caught by hasCycle, so detect self-references separately. The let
+    -- is recursive whenever any binding self-references or any SCC is a cycle.
     "hasSelfRef" <~ (Lists.foldl
       (lambda "acc" $ lambda "b" $
         Logic.or (var "acc")
@@ -420,9 +413,7 @@ encodeLetAsNative = def "encodeLetAsNative" $
             (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b"))))
       (boolean False)
       (var "bindings")) $
-    "isRecursive" <~ (Logic.ifElse (var "supportsLetrec")
-      (var "hasSelfRef")
-      (var "hasCycle")) $
+    "isRecursive" <~ (Logic.or (var "hasSelfRef") (var "hasCycle")) $
     "letKind" <~ (Logic.ifElse (var "isRecursive")
       (inject L._LetKind L._LetKind_recursive unit)
       (Logic.ifElse (Equality.lte (Lists.length (var "bindings")) (int32 1))
