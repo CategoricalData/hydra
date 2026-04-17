@@ -292,8 +292,10 @@ main = do
             loadModulesFromJson pkgDir kernelModules dslNs
 
   -- Step 1: Load baseline main modules (hydra-kernel + hydra-haskell).
-  -- We load hydra-kernel separately first so we can track the kernel
-  -- namespace set (used for --kernel-only filtering and test-deps routing).
+  -- Both packages are part of the bootstrap baseline: hydra-haskell provides
+  -- the runtime AST modules (Hydra.Haskell.Syntax, Environment, Coder, Serde,
+  -- ...) that the generated DSL source modules import, so it must pass
+  -- --kernel-only filtering as part of the kernel namespace set.
   putStrLn "Step 1: Loading baseline main modules from JSON..."
   loadStart <- getCurrentTime
   kernelBaselineMods <- loadPackageMain "hydra-kernel"
@@ -304,7 +306,7 @@ main = do
   putStrLn $ "  Time: " ++ formatTime (elapsed loadEnd loadStart)
   putStrLn ""
 
-  let allKernelNamespaces = fmap moduleNamespace kernelBaselineMods
+  let allKernelNamespaces = fmap moduleNamespace baselineMods
 
   -- Step 2: Optionally load coder-package main modules.
   coderMods <- if optIncludeCoders opts
