@@ -41,12 +41,12 @@ Definition expressionLength : forall (_ : Expr) , Z :=
   expressionLength_bundle.
 Definition doubleSpace : string := "  "%string.
 Definition halfBlockStyle : BlockStyle := (Build_BlockStyle) ((Some) (doubleSpace)) (true) (false).
-Definition inlineStyle : BlockStyle := (Build_BlockStyle) (None) (false) (false).
-Definition bracesListAdaptive : forall (_ : (list) (Expr)) , Expr := fun (els : (list) (Expr)) => let inlineList := (((curlyBracesList) (None)) (inlineStyle)) (els) in (((logic.ifElse) (((equality.gt) ((expressionLength) (inlineList))) ((70)%Z))) ((((curlyBracesList) (None)) (halfBlockStyle)) (els))) (inlineList).
+Definition inlineStyle : BlockStyle := (Build_BlockStyle) ((None) : (option) (string)) (false) (false).
+Definition bracesListAdaptive : forall (_ : (list) (Expr)) , Expr := fun (els : (list) (Expr)) => let inlineList := (((curlyBracesList) ((None) : (option) (string))) (inlineStyle)) (els) in (((logic.ifElse) (((equality.gt) ((expressionLength) (inlineList))) ((70)%Z))) ((((curlyBracesList) ((None) : (option) (string))) (halfBlockStyle)) (els))) (inlineList).
 Definition squareBrackets : Brackets := (Build_Brackets) ("["%string) ("]"%string).
 Definition bracketList : forall (_ : BlockStyle) , forall (_ : (list) (Expr)) , Expr := fun (style : BlockStyle) => fun (els : (list) (Expr)) => (((logic.ifElse) ((lists.null) (els))) ((cst) ("[]"%string))) ((((brackets) (squareBrackets)) (style)) (((commaSep) (style)) (els))).
 Definition bracketListAdaptive : forall (_ : (list) (Expr)) , Expr := fun (els : (list) (Expr)) => let inlineList := ((bracketList) (inlineStyle)) (els) in (((logic.ifElse) (((equality.gt) ((expressionLength) (inlineList))) ((70)%Z))) (((bracketList) (halfBlockStyle)) (els))) (inlineList).
-Definition curlyBlock : forall (_ : BlockStyle) , forall (_ : Expr) , Expr := fun (style : BlockStyle) => fun (e : Expr) => (((curlyBracesList) (None)) (style)) ((cons) (e) (nil)).
+Definition curlyBlock : forall (_ : BlockStyle) , forall (_ : Expr) , Expr := fun (style : BlockStyle) => fun (e : Expr) => (((curlyBracesList) ((None) : (option) (string))) (style)) ((cons) (e) (nil)).
 Definition customIndent : forall (_ : string) , forall (_ : string) , string := fun (idt : string) => fun (s : string) => (strings.cat) (((lists.intersperse) ("
 "%string)) (((lists.map) (fun (line : string) => ((strings.cat2) (idt)) (line))) ((strings.lines) (s)))).
 Definition sep : forall (_ : Op) , forall (_ : (list) (Expr)) , Expr := fun (op : Op) => fun (els : (list) (Expr)) => (((maybes.maybe) ((cst) (""%string))) (fun (h : Expr) => (((lists.foldl) (fun (acc : Expr) => fun (el : Expr) => (((ifx) (op)) (acc)) (el))) (h)) (((lists.drop) ((1)%Z)) (els)))) ((lists.safeHead) (els)).

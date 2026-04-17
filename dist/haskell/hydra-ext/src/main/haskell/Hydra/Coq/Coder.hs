@@ -7,6 +7,7 @@ module Hydra.Coq.Coder where
 import qualified Hydra.Coq.Environment as Environment
 import qualified Hydra.Coq.Language as Language
 import qualified Hydra.Coq.Syntax as Syntax
+import qualified Hydra.Coq.Utils as Utils
 import qualified Hydra.Core as Core
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Lib.Eithers as Eithers
@@ -52,6 +53,14 @@ coqTermApp f args =
       Syntax.normalApplicationLhs = (Syntax.Term1Term0 (Syntax.Term0Parens f)),
       Syntax.normalApplicationRhs = (Lists.map (\a -> Syntax.ArgTerm (Syntax.Term1Term0 (Syntax.Term0Parens a))) args)})))))
 
+-- | Build a Coq Term expressing `(t : T)` with the normal cast operator
+coqTermCast :: Syntax.Term -> Syntax.Type -> Syntax.Term
+coqTermCast t ty =
+    Syntax.TermTerm100 (Syntax.Term100Cast (Syntax.TypeCast {
+      Syntax.typeCastTerm = (Syntax.Term10OneTerm (Syntax.OneTermTerm1 (Syntax.Term1Term0 (Syntax.Term0Parens t)))),
+      Syntax.typeCastType = ty,
+      Syntax.typeCastOperator = Syntax.TypeCastOperatorNormal}))
+
 -- | Build a Coq Term that references a (possibly qualified) identifier
 coqTermQualid :: String -> Syntax.Term
 coqTermQualid s =
@@ -70,6 +79,14 @@ encodeAxiomDefinitionPair env nt =
       Syntax.sentenceContent = (Syntax.SentenceContentAxiom (Syntax.AxiomDeclaration {
         Syntax.axiomDeclarationName = (coqIdent (Pairs.first nt)),
         Syntax.axiomDeclarationType = (coqTypeTerm (encodeType env (Pairs.second nt)))}))}
+
+-- | Map a Haskell-`show`n Double/Scientific to a Coq term, routing NaN/Inf to base-lib axioms
+encodeFloatLiteral :: String -> Syntax.Term
+encodeFloatLiteral s =
+    Logic.ifElse (Equality.equal s "Infinity") (coqTermQualid "hydra_posInf") (Logic.ifElse (Equality.equal s "-Infinity") (coqTermQualid "hydra_negInf") (Logic.ifElse (Equality.equal s "NaN") (coqTermQualid "hydra_nan") (coqTermQualid (Strings.cat [
+      "(",
+      s,
+      ")"]))))
 
 -- | Encode a Lambda into a Coq `fun` expression, sanitising the parameter name
 encodeLambdaTerm :: Environment.CoqEnvironment -> Core.Lambda -> Syntax.Term
@@ -96,18 +113,9 @@ encodeLiteral lit =
         (Literals.showDecimal v0),
         ")"])
       Core.LiteralFloat v0 -> case v0 of
-        Core.FloatValueBigfloat v1 -> coqTermQualid (Strings.cat [
-          "(",
-          (Literals.showBigfloat v1),
-          ")"])
-        Core.FloatValueFloat32 v1 -> coqTermQualid (Strings.cat [
-          "(",
-          (Literals.showBigfloat (Literals.float32ToBigfloat v1)),
-          ")"])
-        Core.FloatValueFloat64 v1 -> coqTermQualid (Strings.cat [
-          "(",
-          (Literals.showBigfloat (Literals.float64ToBigfloat v1)),
-          ")"])
+        Core.FloatValueBigfloat v1 -> encodeFloatLiteral (Literals.showBigfloat v1)
+        Core.FloatValueFloat32 v1 -> encodeFloatLiteral (Literals.showBigfloat (Literals.float32ToBigfloat v1))
+        Core.FloatValueFloat64 v1 -> encodeFloatLiteral (Literals.showBigfloat (Literals.float64ToBigfloat v1))
       Core.LiteralInteger v0 -> case v0 of
         Core.IntegerValueBigint v1 -> coqTermQualid (Strings.cat [
           "(",
@@ -246,7 +254,15 @@ encodeTerm env tm =
             rfields = Core.recordFields v0
         in (Logic.ifElse (Lists.null rfields) (coqTermQualid "tt") (coqTermApp (coqTermQualid (resolveQualifiedName env (Strings.cat2 "Build_" (Core.unName rname)))) (Lists.map (\f -> encodeTerm env (Core.fieldTerm f)) rfields)))
       Core.TermSet _ -> coqTermQualid "nil"
-      Core.TermTypeApplication v0 -> encodeTerm env (Core.typeApplicationTermBody v0)
+      Core.TermTypeApplication v0 ->
+        let body = Core.typeApplicationTermBody v0
+            tyArg = Core.typeApplicationTermType v0
+            encoded = encodeTerm env body
+            isGround = Sets.null (Utils.collectFreeTypeVarsInType tyArg)
+        in (Logic.ifElse (Logic.not isGround) encoded (case body of
+          Core.TermMaybe v1 -> Maybes.maybe (coqTermCast (coqTermQualid "None") (coqTypeTerm (coqTermApp (coqTermQualid "option") [
+            encodeType env tyArg]))) (\_ -> encoded) v1
+          _ -> encoded))
       Core.TermTypeLambda v0 -> encodeTerm env (Core.typeLambdaBody v0)
       Core.TermUnit -> coqTermQualid "tt"
       Core.TermUnwrap v0 -> encodeWrapElim v0

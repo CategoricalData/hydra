@@ -85,7 +85,7 @@ end) (strippedTerm)) (v_)
 end) ((deannotateType) (innerT))) (v_)
 | _ => false
 end) ((deannotateType) (ftype)) in let encodeFieldWithType := fun (ft : FieldType) => fun (f : Field) => let fname := (fun w_ => w_) ((fun r_ => (field_name) (r_)) (f)) in let fterm := (fun r_ => (field_term) (r_)) (f) in let ftype := (fun r_ => (fieldType_type) (r_)) (ft) in (((logic.ifElse) ((isSimpleMaybe) (ftype))) ((fun x_ => match x_ with
-| Term_Maybe v_ => (fun (opt : (option) (Term)) => (((maybes.maybe) ((inr) (None))) (fun (v : Term) => let innerType := (fun x_ => match x_ with
+| Term_Maybe v_ => (fun (opt : (option) (Term)) => (((maybes.maybe) ((inr) ((None) : (option) ((prod) (string) (Value))))) (fun (v : Term) => let innerType := (fun x_ => match x_ with
 | Type__Maybe v_ => (fun (it : Type_) => it) (v_)
 | _ => ftype
 end) ((deannotateType) (ftype)) in let encoded := ((((toJson) (types)) (tname)) (innerType)) (v) in ((eithers.map) (fun (ev : Value) => (Some) ((pair) (fname) (ev)))) (encoded))) (opt)) (v_)
