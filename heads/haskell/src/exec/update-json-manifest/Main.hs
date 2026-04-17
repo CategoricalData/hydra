@@ -12,7 +12,7 @@ import Hydra.PackageRouting (defaultDistJsonRoot)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules, kernelModules, haskellModules, jsonModules, otherModules,
   hydraJavaModules, hydraPythonModules, hydraScalaModules, hydraLispModules,
-  hydraPgModules, hydraRdfModules,
+  hydraPgModules, hydraRdfModules, hydraWasmModules,
   hydraExtDecodingModules, hydraExtEncodingModules)
 import Hydra.Sources.Eval.Lib.All (evalLibModules)
 import Hydra.Sources.Test.All (testModules)
@@ -51,6 +51,7 @@ main = do
         , hydraLispModules
         , hydraPgModules
         , hydraRdfModules
+        , hydraWasmModules
         , hydraExtDecodingModules
         , hydraExtEncodingModules
         , [GenPGTransform.module_]
