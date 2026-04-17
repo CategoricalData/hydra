@@ -106,8 +106,8 @@
                                       "typeApplication": {
                                         "body": {"either": {"@right": {"variable": "d"}}},
                                         "type": {"literal": {"string": {}}}}},
-                                    "type": {"literal": {"float": {"bigfloat": {}}}}}},
-                                "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                    "type": {"literal": {"decimal": {}}}}},
+                                "domain": {"literal": {"decimal": {}}},
                                 "parameter": "d"}}}],
                         "default": {
                           "typeApplication": {
@@ -141,7 +141,7 @@
                                                     "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                             "function": {"variable": "hydra.lib.strings.cat2"}}}}}}},
                                 "type": {"literal": {"string": {}}}}},
-                            "type": {"literal": {"float": {"bigfloat": {}}}}}},
+                            "type": {"literal": {"decimal": {}}}}},
                         "typeName": "hydra.json.model.Value"}}}},
                 "domain": {"variable": "hydra.json.model.Value"},
                 "parameter": "value"}}}},
@@ -151,7 +151,7 @@
               "codomain": {
                 "either": {
                   "left": {"literal": {"string": {}}},
-                  "right": {"literal": {"float": {"bigfloat": {}}}}}},
+                  "right": {"literal": {"decimal": {}}}}},
               "domain": {"variable": "hydra.json.model.Value"}}},
           "variables": []}}},
     {
@@ -787,7 +787,7 @@
                                             "body": {"variable": "hydra.lib.eithers.bind"},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"variable": "hydra.json.model.Value"}}},
-                                    "type": {"literal": {"float": {"bigfloat": {}}}}}}}}}},
+                                    "type": {"literal": {"decimal": {}}}}}}}}},
                         "domain": {
                           "map": {
                             "keys": {"variable": "t0"},
@@ -805,7 +805,7 @@
                   "codomain": {
                     "either": {
                       "left": {"literal": {"string": {}}},
-                      "right": {"literal": {"float": {"bigfloat": {}}}}}},
+                      "right": {"literal": {"decimal": {}}}}},
                   "domain": {
                     "map": {
                       "keys": {"variable": "t0"},

@@ -31,7 +31,7 @@ def json_to_yaml(value: hydra.json.model.Value) -> hydra.yaml.model.Node_:
             return cast(hydra.yaml.model.Node_, hydra.yaml.model.NodeScalar(cast(hydra.yaml.model.Scalar, hydra.yaml.model.ScalarNull())))
 
         case hydra.json.model.ValueNumber(value=n):
-            return cast(hydra.yaml.model.Node_, hydra.yaml.model.NodeScalar(cast(hydra.yaml.model.Scalar, hydra.yaml.model.ScalarFloat(n))))
+            return cast(hydra.yaml.model.Node_, hydra.yaml.model.NodeScalar(cast(hydra.yaml.model.Scalar, hydra.yaml.model.ScalarDecimal(n))))
 
         case hydra.json.model.ValueObject(value=obj):
             return cast(hydra.yaml.model.Node_, hydra.yaml.model.NodeMapping(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda kv: (cast(hydra.yaml.model.Node_, hydra.yaml.model.NodeScalar(cast(hydra.yaml.model.Scalar, hydra.yaml.model.ScalarStr(hydra.lib.pairs.first(kv))))), json_to_yaml(hydra.lib.pairs.second(kv)))), hydra.lib.maps.to_list(obj)))))

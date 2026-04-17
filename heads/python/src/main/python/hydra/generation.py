@@ -7,6 +7,7 @@ This is the Python equivalent of Haskell's Hydra.Generation module.
 import json
 import os
 import sys
+from decimal import Decimal
 from functools import lru_cache
 
 # The generated JSON decoder uses recursive variant matching which can
@@ -93,7 +94,7 @@ def _python_to_hydra_json(obj):
     elif isinstance(obj, bool):
         return JsonModel.ValueBoolean(obj)
     elif isinstance(obj, (int, float)):
-        return JsonModel.ValueNumber(float(obj))
+        return JsonModel.ValueNumber(Decimal(str(obj)))
     elif isinstance(obj, str):
         return JsonModel.ValueString(obj)
     elif isinstance(obj, list):

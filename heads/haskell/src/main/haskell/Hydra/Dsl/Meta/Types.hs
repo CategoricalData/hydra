@@ -80,6 +80,11 @@ float64 = typeLiteral $ literalTypeFloat $ float FloatTypeFloat64
 bigfloat :: TTerm Type
 bigfloat = typeLiteral $ literalTypeFloat $ float FloatTypeBigfloat
 
+-- | Create a term-encoded arbitrary-precision decimal type
+-- Example: decimal
+decimal :: TTerm Type
+decimal = typeLiteral literalTypeDecimal
+
 -- | Create a term-encoded either type
 -- Example: either_ string int32
 either_ :: TTerm Type -> TTerm Type -> TTerm Type

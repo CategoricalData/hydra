@@ -14,6 +14,7 @@ import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
+import qualified Hydra.Lib.Literals as Literals
 
 -- | Round-trip test cases for JSON encoding and decoding
 allTests :: Testing.TestGroup
@@ -172,6 +173,60 @@ allTests =
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeString) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeString) (Core.TermLiteral (Core.LiteralString "hello world")))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralString "hello world")))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}]},
+        Testing.TestGroup {
+          Testing.testGroupName = "decimal precision",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = [
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "decimal zero",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "0.0"))))),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "0.0"))))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "decimal whole",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "42.0"))))),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "42.0"))))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "decimal negative whole",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "-17.0"))))),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "-17.0"))))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "decimal fraction",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "3.14"))))),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "3.14"))))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "decimal negative fraction",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "-2.5"))))),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "-2.5"))))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "decimal tiny exponent",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "1.0e-20"))))),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "1.0e-20"))))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "decimal huge exponent",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeDecimal) (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "1.0e20"))))),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralDecimal (Literals.stringToDecimal "1.0e20"))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {

@@ -63,7 +63,7 @@ def literal_to_expr(lit: hydra.haskell.syntax.Literal):
         @lru_cache(1)
         def raw() -> str:
             return show_fn(v)
-        return hydra.lib.logic.if_else(hydra.lib.equality.equal(raw(), "NaN"), (lambda : "(0/0)"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(raw(), "Infinity"), (lambda : "(1/0)"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(raw(), "-Infinity"), (lambda : "(-(1/0))"), (lambda : parens_if_neg(hydra.lib.equality.equal(hydra.lib.strings.char_at(0, raw()), 45), raw())))))))
+        return hydra.lib.logic.if_else(hydra.lib.equality.equal(raw(), "NaN"), (lambda : "(0/0)"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(raw(), "Infinity"), (lambda : "(1/0)"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(raw(), "-Infinity"), (lambda : "(-(1/0))"), (lambda : parens_if_neg(hydra.lib.equality.equal(hydra.lib.maybes.from_maybe((lambda : 0), hydra.lib.strings.maybe_char_at(0, raw())), 45), raw())))))))
     def _hoist_show_float_body_1(v1):
         match v1:
             case hydra.haskell.syntax.LiteralChar(value=c):

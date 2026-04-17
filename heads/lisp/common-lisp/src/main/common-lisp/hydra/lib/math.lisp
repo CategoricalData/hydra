@@ -112,12 +112,6 @@
 (defvar hydra_lib_math_cosh
   (lambda (x) (cosh (float x 1.0d0))))
 
-;; div :: Int -> Int -> Int  (floor division)
-(defvar hydra_lib_math_div
-  (lambda (a)
-    (lambda (b)
-      (floor a b))))
-
 ;; e :: Double
 (defvar hydra_lib_math_e (exp 1.0d0))
 
@@ -209,12 +203,6 @@
     (lambda (b)
       (min a b))))
 
-;; mod :: Int -> Int -> Int  (floor mod)
-(defvar hydra_lib_math_mod
-  (lambda (a)
-    (lambda (b)
-      (mod a b))))
-
 ;; mul :: Int -> Int -> Int
 (defvar hydra_lib_math_mul
   (lambda (a)
@@ -258,21 +246,11 @@
                (if (complexp r) +hydra-nan+ r))
              (arithmetic-error () +hydra-nan+))))))))
 
-;; pred :: Int -> Int
-(defvar hydra_lib_math_pred
-  (lambda (n) (1- n)))
-
 ;; range :: Int -> Int -> [Int]  (inclusive both ends)
 (defvar hydra_lib_math_range
   (lambda (start)
     (lambda (end)
       (loop for i from start to end collect i))))
-
-;; rem :: Int -> Int -> Int  (truncating remainder)
-(defvar hydra_lib_math_rem
-  (lambda (a)
-    (lambda (b)
-      (rem a b))))
 
 ;; round :: Double -> Double
 ;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
@@ -316,9 +294,6 @@
     (lambda (b)
       (- (float a 1.0d0) (float b 1.0d0)))))
 
-;; succ :: Int -> Int
-(defvar hydra_lib_math_succ
-  (lambda (n) (1+ n)))
 
 ;; tan :: Double -> Double
 (defvar hydra_lib_math_tan

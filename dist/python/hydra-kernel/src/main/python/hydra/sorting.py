@@ -5,7 +5,7 @@ r"""Utilities for sorting. This module includes an implementation of Tarjan's al
 from __future__ import annotations
 from collections.abc import Callable
 from functools import lru_cache
-from hydra.dsl.python import Either, FrozenDict, Left, Right, frozenlist
+from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Right, frozenlist
 from typing import TypeVar, cast
 import hydra.constants
 import hydra.core
@@ -28,8 +28,8 @@ def adjacency_list_to_map(pairs: frozenlist[tuple[T0, frozenlist[T1]]]) -> Froze
 
     return hydra.lib.lists.foldl((lambda mp, p: (k := hydra.lib.pairs.first(p), vs := hydra.lib.pairs.second(p), existing := hydra.lib.maybes.maybe((lambda : ()), (lambda x1: hydra.lib.equality.identity(x1)), hydra.lib.maps.lookup(k, mp)), hydra.lib.maps.insert(k, hydra.lib.lists.concat2(existing, vs), mp))[3]), hydra.lib.maps.empty(), pairs)
 
-def adjacency_lists_to_graph(edges0: frozenlist[tuple[T0, frozenlist[T0]]]) -> tuple[FrozenDict[int, frozenlist[int]], Callable[[int], T0]]:
-    r"""Given a list of adjacency lists represented as (key, [key]) pairs, construct a graph along with a function mapping each vertex (an Int) back to its original key."""
+def adjacency_lists_to_graph(edges0: frozenlist[tuple[T0, frozenlist[T0]]]) -> tuple[FrozenDict[int, frozenlist[int]], Callable[[int], Maybe[T0]]]:
+    r"""Given a list of adjacency lists represented as (key, [key]) pairs, construct a graph along with a function mapping each vertex (an Int) back to its original key (Nothing for unknown vertices)."""
 
     @lru_cache(1)
     def sorted_edges() -> frozenlist[tuple[T0, frozenlist[T0]]]:
@@ -46,8 +46,8 @@ def adjacency_lists_to_graph(edges0: frozenlist[tuple[T0, frozenlist[T0]]]) -> t
     @lru_cache(1)
     def graph() -> FrozenDict[int, frozenlist[int]]:
         return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda vk_neighbors: (v := hydra.lib.pairs.first(vk_neighbors), k_neighbors := hydra.lib.pairs.second(vk_neighbors), neighbors := hydra.lib.pairs.second(k_neighbors), (v, hydra.lib.maybes.map_maybe((lambda k: hydra.lib.maps.lookup(k, key_to_vertex())), neighbors)))[3]), indexed_edges()))
-    def vertex_to_key(v: int) -> T0:
-        return hydra.lib.maybes.from_just(hydra.lib.maps.lookup(v, vertex_map()))
+    def vertex_to_key(v: int) -> Maybe[T0]:
+        return hydra.lib.maps.lookup(v, vertex_map())
     return (graph(), (lambda x1: vertex_to_key(x1)))
 
 def create_ordering_isomorphism(source_ord: frozenlist[T0], target_ord: frozenlist[T0]) -> hydra.topology.OrderingIsomorphism[T1]:
@@ -83,20 +83,7 @@ def pop_stack_until(v: int, st0: hydra.topology.TarjanState) -> tuple[frozenlist
     r"""Pop vertices off the stack until the given vertex is reached, collecting the current strongly connected component."""
 
     def go(acc: frozenlist[int], st: hydra.topology.TarjanState) -> tuple[frozenlist[int], hydra.topology.TarjanState]:
-        @lru_cache(1)
-        def x() -> int:
-            return hydra.lib.lists.head(st.stack)
-        @lru_cache(1)
-        def xs() -> frozenlist[int]:
-            return hydra.lib.lists.tail(st.stack)
-        new_st = hydra.topology.TarjanState(st.counter, st.indices, st.low_links, xs(), st.on_stack, st.sccs)
-        @lru_cache(1)
-        def new_st2() -> hydra.topology.TarjanState:
-            return hydra.topology.TarjanState(new_st.counter, new_st.indices, new_st.low_links, new_st.stack, hydra.lib.sets.delete(x(), st.on_stack), new_st.sccs)
-        @lru_cache(1)
-        def acc_() -> frozenlist[int]:
-            return hydra.lib.lists.cons(x(), acc)
-        return hydra.lib.logic.if_else(hydra.lib.equality.equal(x(), v), (lambda : (hydra.lib.lists.reverse(acc_()), new_st2())), (lambda : go(acc_(), new_st2())))
+        return hydra.lib.maybes.maybe((lambda : (hydra.lib.lists.reverse(acc), st)), (lambda uc: (x := hydra.lib.pairs.first(uc), xs := hydra.lib.pairs.second(uc), new_st := hydra.topology.TarjanState(st.counter, st.indices, st.low_links, xs, st.on_stack, st.sccs), new_st2 := hydra.topology.TarjanState(new_st.counter, new_st.indices, new_st.low_links, new_st.stack, hydra.lib.sets.delete(x, st.on_stack), new_st.sccs), acc_ := hydra.lib.lists.cons(x, acc), hydra.lib.logic.if_else(hydra.lib.equality.equal(x, v), (lambda : (hydra.lib.lists.reverse(acc_), new_st2)), (lambda : go(acc_, new_st2))))[5]), hydra.lib.lists.uncons(st.stack))
     return go((), st0)
 
 def propagate_tags(edges: frozenlist[tuple[T0, frozenlist[T0]]], node_tags: frozenlist[tuple[T0, frozenlist[T1]]]) -> frozenlist[tuple[T0, frozenset[T1]]]:
@@ -164,12 +151,12 @@ def topological_sort_components(pairs: frozenlist[tuple[T0, frozenlist[T0]]]) ->
     r"""Find the strongly connected components (including cycles and isolated vertices) of a graph, in (reverse) topological order, i.e. dependencies before dependents."""
 
     @lru_cache(1)
-    def graph_result() -> tuple[FrozenDict[int, frozenlist[int]], Callable[[int], T0]]:
+    def graph_result() -> tuple[FrozenDict[int, frozenlist[int]], Callable[[int], Maybe[T0]]]:
         return adjacency_lists_to_graph(pairs)
     @lru_cache(1)
     def g() -> FrozenDict[int, frozenlist[int]]:
         return hydra.lib.pairs.first(graph_result())
-    return hydra.lib.lists.map((lambda comp: hydra.lib.lists.map(hydra.lib.pairs.second(graph_result()), comp)), strongly_connected_components(g()))
+    return hydra.lib.lists.map((lambda comp: hydra.lib.maybes.map_maybe(hydra.lib.pairs.second(graph_result()), comp)), strongly_connected_components(g()))
 
 def topological_sort(pairs: frozenlist[tuple[T0, frozenlist[T0]]]) -> Either[frozenlist[frozenlist[T0]], frozenlist[T0]]:
     r"""Sort a directed acyclic graph (DAG) based on an adjacency list. Yields a list of nontrivial strongly connected components if the graph has cycles, otherwise a simple list."""
@@ -178,7 +165,7 @@ def topological_sort(pairs: frozenlist[tuple[T0, frozenlist[T0]]]) -> Either[fro
     def sccs() -> frozenlist[frozenlist[T0]]:
         return topological_sort_components(pairs)
     def is_cycle(scc: frozenlist[T1]) -> bool:
-        return hydra.lib.logic.not_(hydra.lib.lists.null(hydra.lib.lists.tail(scc)))
+        return hydra.lib.equality.gt(hydra.lib.lists.length(scc), 1)
     @lru_cache(1)
     def with_cycles() -> frozenlist[frozenlist[T0]]:
         return hydra.lib.lists.filter((lambda x1: is_cycle(x1)), sccs())

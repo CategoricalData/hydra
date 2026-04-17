@@ -51,7 +51,7 @@ lazy val jsonNumber: hydra.parsing.Parser[hydra.json.model.Value] = hydra.json.p
      scala.Predef.String]("")(hydra.lib.equality.identity[scala.Predef.String])(fracPart)))(hydra.lib.maybes.maybe[scala.Predef.String,
      scala.Predef.String]("")(hydra.lib.equality.identity[scala.Predef.String])(expPart))
   hydra.parsers.pure(hydra.json.model.Value.number(hydra.lib.maybes.maybe[BigDecimal,
-     BigDecimal](BigDecimal(0.0))(hydra.lib.equality.identity[BigDecimal])(hydra.lib.literals.readBigfloat(numStr))))
+     BigDecimal](BigDecimal("0.0"))(hydra.lib.equality.identity[BigDecimal])(hydra.lib.literals.readDecimal(numStr))))
 }))))
 
 lazy val jsonObject: hydra.parsing.Parser[hydra.json.model.Value] = hydra.parsers.map((`arg_`: Seq[Tuple2[scala.Predef.String,

@@ -236,7 +236,13 @@ mapsFilter = subgroup "filter" [
   test "empty map" [] []]
   where
     test name m result = evalPair name showIntStringMap
-      (Maps.filter (Phantoms.lambda "v" $ Equality.equal (Chars.toLower (Strings.charAt (Phantoms.int32 0) (Phantoms.var "v"))) (Phantoms.int32 97)) (pMap m))
+      (Maps.filter
+        (Phantoms.lambda "v" $ Equality.equal
+          (Maybes.fromMaybe (Phantoms.int32 0)
+            (Maybes.map (Phantoms.lambda "c" $ Chars.toLower (Phantoms.var "c"))
+              (Strings.maybeCharAt (Phantoms.int32 0) (Phantoms.var "v"))))
+          (Phantoms.int32 97))
+        (pMap m))
       (pMap result)
 
 mapsFilterWithKey :: TTerm TestGroup

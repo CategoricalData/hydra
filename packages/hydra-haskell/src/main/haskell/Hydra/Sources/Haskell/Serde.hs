@@ -465,7 +465,7 @@ literalToExpr = haskellSerdeDefinition "literalToExpr" $
     Logic.ifElse (Equality.equal (var "raw") (string "-Infinity"))
       (string "(-(1/0))") $
     var "parensIfNeg"
-      @@ Equality.equal (Strings.charAt (int32 0) (var "raw")) (int32 45)
+      @@ Equality.equal (Maybes.fromMaybe (int32 0) (Strings.maybeCharAt (int32 0) (var "raw"))) (int32 45)
       @@ var "raw") $
   Serialization.cst @@
     cases H._Literal (var "lit") Nothing [

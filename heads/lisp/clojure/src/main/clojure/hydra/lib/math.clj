@@ -79,11 +79,6 @@
   "Return the hyperbolic cosine of x."
   (fn [x] (Math/cosh x)))
 
-;; div :: Int -> Int -> Int  (floor division)
-(def hydra_lib_math_div
-  "Divide two integers using integer division."
-  (fn [a] (fn [b] (Math/floorDiv (long a) (long b)))))
-
 ;; e :: Double
 (def hydra_lib_math_e
   "Euler's number (e = 2.71828...)."
@@ -171,11 +166,6 @@
   "Return the minimum of two values."
   (fn [a] (fn [b] (min a b))))
 
-;; mod :: Int -> Int -> Int  (floor mod)
-(def hydra_lib_math_mod
-  "Mathematical modulo."
-  (fn [a] (fn [b] (Math/floorMod (long a) (long b)))))
-
 ;; mul :: Int -> Int -> Int
 (def hydra_lib_math_mul
   "Multiply two numbers."
@@ -211,21 +201,11 @@
   "Return x raised to the power y."
   (fn [base] (fn [exp_] (Math/pow base exp_))))
 
-;; pred :: Int -> Int
-(def hydra_lib_math_pred
-  "Return the predecessor (x - 1)."
-  (fn [n] (dec n)))
-
 ;; range :: Int -> Int -> [Int]  (inclusive both ends)
 (def hydra_lib_math_range
   "Generate a range of values from start to end (inclusive)."
   (fn [start_] (fn [end_]
     (range start_ (inc end_)))))
-
-;; rem :: Int -> Int -> Int  (truncating remainder)
-(def hydra_lib_math_rem
-  "Integer remainder."
-  (fn [a] (fn [b] (rem a b))))
 
 ;; round :: Double -> Double (Haskell-style round half to even)
 ;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
@@ -298,10 +278,6 @@
   "Subtract two Float64 numbers."
   (fn [a] (fn [b] (- (double a) (double b)))))
 
-;; succ :: Int -> Int
-(def hydra_lib_math_succ
-  "Return the successor (x + 1)."
-  (fn [n] (inc n)))
 
 ;; tan :: Double -> Double
 (def hydra_lib_math_tan

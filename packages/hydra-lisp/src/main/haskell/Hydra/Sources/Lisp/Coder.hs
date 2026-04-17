@@ -69,6 +69,7 @@ module_ = Module ns definitions
       toDefinition dialectCar,
       toDefinition dialectConstructorPrefix,
       toDefinition dialectEqual,
+      toDefinition dialectSupportsLetrec,
       toDefinition encodeApplication,
       toDefinition encodeFieldDef,
       toDefinition encodeLambdaTerm,
@@ -136,6 +137,14 @@ dialectEqual = def "dialectEqual" $
     L._Dialect_clojure>>: constant $ string "=",
     L._Dialect_commonLisp>>: constant $ string "equal",
     L._Dialect_emacsLisp>>: constant $ string "equal"]
+
+-- | Whether a dialect provides a native letrec (mutually recursive let).
+-- Clojure has only sequential let, requiring the coder to topologically sort
+-- bindings and emit letfn for cyclic groups.
+dialectSupportsLetrec :: TTermDefinition (L.Dialect -> Bool)
+dialectSupportsLetrec = def "dialectSupportsLetrec" $
+  lambda "d" $ cases L._Dialect (var "d") (Just $ boolean True) [
+    L._Dialect_clojure>>: constant $ boolean False]
 
 -- | Encode a function application, detecting ifElse and other lazy primitives.
 -- Transforms (((hydra.lib.logic.ifElse C) T) E) into native (if C T E).
@@ -331,32 +340,29 @@ encodeLetAsLambdaApp = def "encodeLetAsLambdaApp" $
 encodeLetAsNative :: TTermDefinition (L.Dialect -> Context -> Graph -> [Binding] -> Term -> Either Error L.Expression)
 encodeLetAsNative = def "encodeLetAsNative" $
   "dialect" ~> "cx" ~> "g" ~> lambda "bindings" $ lambda "body" $
-    "isClojureTop" <~ (cases L._Dialect (var "dialect") (Just $ boolean False)
-      [L._Dialect_clojure>>: constant $ boolean True]) $
     "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "body") $
-    -- Topologically sort bindings so dependencies come before dependents.
-    -- Build adjacency list: each binding depends on other bindings it references.
+    -- Topologically sort bindings into strongly-connected components. Singleton
+    -- SCCs flow through in dependency order (so non-cyclic forward references
+    -- become valid sequential bindings), and any cycle (SCC of size > 1) marks
+    -- the let as recursive: Clojure emits letfn, the other dialects emit letrec
+    -- (which the loader transforms into the dialect's native rec form).
+    "supportsLetrec" <~ (dialectSupportsLetrec @@ var "dialect") $
     "allNames" <~ Sets.fromList (Lists.map (lambda "b" $ Core.bindingName (var "b")) (var "bindings")) $
     "adjList" <~ Lists.map (lambda "b" $
       pair (Core.bindingName (var "b"))
         (Sets.toList (Sets.intersection (var "allNames")
           (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b")))))
       (var "bindings") $
-    "sortResult" <~ (Sorting.topologicalSort @@ var "adjList") $
-    "nameToBinding" <~ Maps.fromList (Lists.map (lambda "b" $ pair (Core.bindingName (var "b")) (var "b")) (var "bindings")) $
-    -- A cycle exists iff topologicalSort returned Left.
-    -- If sort succeeds, reorder; if cyclic, keep original order.
-    "hasCycle" <~ (Eithers.either_
-      (constant (boolean True))
-      (constant (boolean False))
-      (var "sortResult")) $
-    "sortedBindings" <~ (Eithers.either_ (constant (var "bindings"))
-      (lambda "sorted" $
-        Lists.map (lambda "name" $
-          Maybes.fromMaybe (Lists.head (var "bindings"))
-            (Maps.lookup (var "name") (var "nameToBinding")))
-          (var "sorted"))
-      (var "sortResult")) $
+    "sccs" <~ (Sorting.topologicalSortComponents @@ var "adjList") $
+    "nameToBinding" <~ Maps.fromList
+      (Lists.map (lambda "b" $ pair (Core.bindingName (var "b")) (var "b")) (var "bindings")) $
+    "sortedBindings" <~ Maybes.cat (Lists.map (lambda "name" $ Maps.lookup (var "name") (var "nameToBinding"))
+      (Lists.concat (var "sccs"))) $
+    -- A cycle is any SCC of size greater than one.
+    "hasCycle" <~ (Lists.foldl (lambda "acc" $ lambda "scc" $
+      Logic.or (var "acc") (Equality.gt (Lists.length (var "scc")) (int32 1)))
+      (boolean False)
+      (var "sccs")) $
     -- Encode each binding, eta-expanding self-referential non-lambda bindings
     -- so that letrec doesn't evaluate the self-reference during initialization.
     -- E.g., `recurse = f(fsub(recurse))` becomes `recurse = (lambda (_arg) ((f (fsub recurse)) _arg))`
@@ -372,8 +378,7 @@ encodeLetAsNative = def "encodeLetAsNative" $
         -- Handle self-referential bindings:
         -- For Clojure: use named fn for self-reference (both lambda and eta-expanded)
         -- For others: use letrec (eta-expand non-lambda self-refs for letrec compat)
-        "isClojure" <~ (cases L._Dialect (var "dialect") (Just $ boolean False)
-          [L._Dialect_clojure>>: constant $ boolean True]) $
+        "isClojure" <~ (Logic.not (var "supportsLetrec")) $
         "wrappedVal" <~ (Logic.ifElse (var "isClojure")
           -- Clojure path: use named fn for all self-referential bindings
           (Logic.ifElse (var "isSelfRef")
@@ -398,18 +403,9 @@ encodeLetAsNative = def "encodeLetAsNative" $
             (var "bval"))) $
           right (pair (var "bname") (var "wrappedVal")))
       (var "sortedBindings")) $
-    -- Determine let kind: check if any binding references itself or another binding in the group
-    "allBindingNames" <~ Sets.fromList (Lists.map (lambda "b" $ Core.bindingName (var "b")) (var "bindings")) $
-    "hasCrossRefs" <~ (Lists.foldl
-      (lambda "acc" $ lambda "b" $
-        Logic.or (var "acc")
-          (Logic.not (Sets.null (Sets.intersection (var "allBindingNames")
-            (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b"))))))
-      (boolean False)
-      (var "bindings")) $
-    -- For Clojure: use recursive kind if there are any cross-binding references
-    -- (Clojure's let is sequential and can't handle forward references)
-    -- For others: only use recursive kind if there's self-reference
+    -- A self-referential singleton SCC has size 1 (with a self-loop) and is
+    -- not caught by hasCycle, so detect self-references separately. The let
+    -- is recursive whenever any binding self-references or any SCC is a cycle.
     "hasSelfRef" <~ (Lists.foldl
       (lambda "acc" $ lambda "b" $
         Logic.or (var "acc")
@@ -417,16 +413,10 @@ encodeLetAsNative = def "encodeLetAsNative" $
             (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b"))))
       (boolean False)
       (var "bindings")) $
-    "isClojure2" <~ (cases L._Dialect (var "dialect") (Just $ boolean False)
-      [L._Dialect_clojure>>: constant $ boolean True]) $
-    -- For Clojure: recursive kind (letfn) only when there's an actual cycle;
-    -- otherwise the topological sort gives a valid ordering for plain let.
-    "isRecursive" <~ (Logic.ifElse (var "isClojure2")
-      (var "hasCycle")
-      (var "hasSelfRef")) $
+    "isRecursive" <~ (Logic.or (var "hasSelfRef") (var "hasCycle")) $
     "letKind" <~ (Logic.ifElse (var "isRecursive")
       (inject L._LetKind L._LetKind_recursive unit)
-      (Logic.ifElse (Lists.null (Lists.tail (var "bindings")))
+      (Logic.ifElse (Equality.lte (Lists.length (var "bindings")) (int32 1))
         (inject L._LetKind L._LetKind_parallel unit)
         (inject L._LetKind L._LetKind_sequential unit))) $
     "lispBindings" <~ (Lists.map

@@ -582,8 +582,10 @@ letExpressionToExpr = define "letExpressionToExpr" $
       -- Clojure: (let [name val ...] body...) or (letfn [(name [params] body) ...] body...) for recursive
       L._Dialect_clojure>>: constant $
         cases L._LetKind (var "kind") Nothing [
-          -- Recursive (mutual recursion): emit letfn for lambda bindings.
-          -- letfn syntax: (letfn [(name [params] body) ...] body...)
+          -- Recursive: emit letfn (Clojure's mutually recursive form for fn bindings).
+          -- The coder marks let recursive only when an SCC cycle exists, and in
+          -- the cycles produced by the kernel all bindings are lambdas, so letfn
+          -- is well-formed. Non-lambda bindings would need thunking, not handled here.
           L._LetKind_recursive>>: constant $
             clojureLetfn (var "d") (var "bindings") (var "body"),
           -- Non-recursive: (let [name val ...] body...)
@@ -602,30 +604,33 @@ letExpressionToExpr = define "letExpressionToExpr" $
         list [sqBrackets (Lists.concat (Lists.map (lambda "p" $
           list [Pairs.first (var "p"), Pairs.second (var "p")]) bindingPairs))],
         body]))
+    -- (letfn [(name [params] body) (name2 [params2] body2) ...] body)
+    -- Each binding's value must be an Expression_lambda; otherwise it cannot
+    -- legally appear inside letfn and we fall back to the underlying lambda
+    -- serialization, producing invalid Clojure that will fail loudly at load.
     clojureLetfn :: TTerm L.Dialect -> TTerm [L.LetBinding] -> TTerm [Expr] -> TTerm Expr
-    clojureLetfn d bindings body =
-      "letfnBindings" <~ Lists.map (lambda "b" $
+    clojureLetfn d bindings body = lets [
+      "fnSpecs">: Lists.map (lambda "b" $
         cases L._LetBinding (var "b") Nothing [
-          L._LetBinding_simple>>: lambda "sb" $
-            "sbName" <~ (symbolToExpr @@ (project L._SimpleBinding L._SimpleBinding_name @@ var "sb")) $
-            "sbVal" <~ (project L._SimpleBinding L._SimpleBinding_value @@ var "sb") $
-            cases L._Expression (var "sbVal") (Just $
-              Serialization.parens @@ (Serialization.spaceSep @@ list [var "sbName",
-                expressionToExpr @@ d @@ var "sbVal"])) [
-              L._Expression_lambda>>: lambda "lam" $
-                "params" <~ Lists.map symbolToExpr
-                  (project L._Lambda L._Lambda_params @@ var "lam") $
-                "lamBody" <~ Lists.map (expressionToExpr @@ d)
-                  (project L._Lambda L._Lambda_body @@ var "lam") $
+          L._LetBinding_simple>>: lambda "sb" $ lets [
+            "name">: symbolToExpr @@ (project L._SimpleBinding L._SimpleBinding_name @@ var "sb"),
+            "val">: project L._SimpleBinding L._SimpleBinding_value @@ var "sb"] $
+            cases L._Expression (var "val") (Just $
+              Serialization.parens @@ (Serialization.spaceSep @@ list [
+                var "name", expressionToExpr @@ d @@ var "val"])) [
+              L._Expression_lambda>>: lambda "lam" $ lets [
+                "params">: Lists.map symbolToExpr (project L._Lambda L._Lambda_params @@ var "lam"),
+                "lbody">: Lists.map (expressionToExpr @@ d) (project L._Lambda L._Lambda_body @@ var "lam")] $
                 Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat (list [
-                  list [var "sbName"],
+                  list [var "name"],
                   list [sqBrackets (var "params")],
-                  var "lamBody"]))],
+                  var "lbody"]))],
           L._LetBinding_destructuring>>: constant $
-            Serialization.cst @@ string "<destructuring>"]) bindings $
+            Serialization.cst @@ string "<destructuring>"])
+        bindings] $
       Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat (list [
         list [Serialization.cst @@ string "letfn"],
-        list [sqBrackets (var "letfnBindings")],
+        list [sqBrackets (var "fnSpecs")],
         body]))
     letOther :: TTerm L.LetKind -> TTerm [(Expr, Expr)] -> TTerm [Expr] -> TTerm Expr
     letOther kind bindingPairs body = lets [

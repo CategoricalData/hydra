@@ -125,7 +125,11 @@ def unifyTypeConstraints[T0, T1](cx: T0)(schemaTypes: Map[hydra.core.Name, T1])(
         case _ => tryBinding(v_Type_variable_name)(sright)
       case _ => dflt
   }
-  hydra.lib.logic.ifElse[Either[hydra.errors.UnificationError, hydra.typing.TypeSubst]](hydra.lib.lists.`null`[hydra.typing.TypeConstraint](constraints))(Right(hydra.substitution.idTypeSubst))(withConstraint(hydra.lib.lists.head[hydra.typing.TypeConstraint](constraints))(hydra.lib.lists.tail[hydra.typing.TypeConstraint](constraints)))
+  hydra.lib.maybes.maybe[Either[hydra.errors.UnificationError, hydra.typing.TypeSubst],
+     Tuple2[hydra.typing.TypeConstraint, Seq[hydra.typing.TypeConstraint]]](Right(hydra.substitution.idTypeSubst))((uc: Tuple2[hydra.typing.TypeConstraint,
+     Seq[hydra.typing.TypeConstraint]]) =>
+    withConstraint(hydra.lib.pairs.first[hydra.typing.TypeConstraint, Seq[hydra.typing.TypeConstraint]](uc))(hydra.lib.pairs.second[hydra.typing.TypeConstraint,
+       Seq[hydra.typing.TypeConstraint]](uc)))(hydra.lib.lists.uncons[hydra.typing.TypeConstraint](constraints))
 }
 
 def unifyTypeLists[T0, T1](cx: T0)(schemaTypes: Map[hydra.core.Name, T1])(l: Seq[hydra.core.Type])(r: Seq[hydra.core.Type])(comment: scala.Predef.String): Either[hydra.errors.UnificationError,

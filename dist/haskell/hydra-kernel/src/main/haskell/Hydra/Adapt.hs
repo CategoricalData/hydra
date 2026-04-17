@@ -225,9 +225,8 @@ adaptTerm constraints litmap cx graph term0 =
                           _ -> Right (Just term)
                     forUnsupported =
                             \term ->
-                              let forNonNull =
-                                      \alts -> Eithers.bind (tryTerm (Lists.head alts)) (\mterm -> Maybes.maybe (tryAlts (Lists.tail alts)) (\t -> Right (Just t)) mterm)
-                                  tryAlts = \alts -> Logic.ifElse (Lists.null alts) (Right Nothing) (forNonNull alts)
+                              let tryAlts =
+                                      \alts -> Maybes.maybe (Right Nothing) (\uc -> Eithers.bind (tryTerm (Pairs.first uc)) (\mterm -> Maybes.maybe (tryAlts (Pairs.second uc)) (\t -> Right (Just t)) mterm)) (Lists.uncons alts)
                               in (Eithers.bind (termAlternatives cx graph term) (\alts0 -> tryAlts alts0))
                     tryTerm =
                             \term ->
@@ -257,14 +256,16 @@ adaptType constraints litmap type0 =
               \typ -> case typ of
                 Core.TypeLiteral v0 -> Logic.ifElse (literalTypeSupported constraints v0) (Just typ) (Maybes.maybe (Just (Core.TypeLiteral Core.LiteralTypeString)) (\lt2 -> Just (Core.TypeLiteral lt2)) (Maps.lookup v0 litmap))
                 _ -> Just typ
+          forUnsupported =
+                  \typ ->
+                    let tryAlts =
+                            \alts -> Maybes.bind (Lists.uncons alts) (\uc -> Maybes.maybe (tryAlts (Pairs.second uc)) (\t -> Just t) (tryType (Pairs.first uc)))
+                        alts0 = typeAlternatives typ
+                    in (tryAlts alts0)
           tryType =
                   \typ ->
                     let supportedVariant = Sets.member (Reflect.typeVariant typ) (Coders.languageConstraintsTypeVariants constraints)
-                    in (Logic.ifElse supportedVariant (forSupported typ) (
-                      let tryAlts =
-                              \alts -> Logic.ifElse (Lists.null alts) Nothing (Maybes.maybe (tryAlts (Lists.tail alts)) (\t -> Just t) (tryType (Lists.head alts)))
-                          alts0 = typeAlternatives typ
-                      in (tryAlts alts0)))
+                    in (Logic.ifElse supportedVariant (forSupported typ) (forUnsupported typ))
           rewrite =
                   \recurse -> \typ -> Eithers.bind (recurse typ) (\type1 -> Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "no alternatives for type: " (ShowCore.type_ typ))))) (\type2 -> Right type2) (tryType type1))
       in (Rewriting.rewriteTypeM rewrite type0)
@@ -581,7 +582,7 @@ schemaGraphToDefinitions constraints graph nameLists cx =
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeType = (Pairs.second pair),
                     Core.typeSchemeConstraints = Nothing}}
-        in (Right (tmap1, (Lists.map (\names -> Lists.map toDef (Lists.map (\n -> (n, (Maybes.fromJust (Maps.lookup n tmap1)))) names)) nameLists))))))
+        in (Right (tmap1, (Lists.map (\names -> Lists.map toDef (Maybes.mapMaybe (\n -> Maybes.map (\t -> (n, t)) (Maps.lookup n tmap1)) names)) nameLists))))))
 
 -- | Given a target language and a source type, produce an adapter which rewrites the type and its terms according to the language's constraints. The encode direction adapts terms; the decode direction is identity.
 simpleLanguageAdapter :: Coders.Language -> t0 -> Graph.Graph -> Core.Type -> Either Errors.Error (Coders.Adapter Core.Type Core.Type Core.Term Core.Term)

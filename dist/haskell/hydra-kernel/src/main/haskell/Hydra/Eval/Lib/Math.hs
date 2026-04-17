@@ -16,9 +16,13 @@ even cx g x =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.equal")),
         Core.applicationArgument = (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.mod")),
-            Core.applicationArgument = x})),
-          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))})),
+            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.fromMaybe")),
+            Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
+          Core.applicationArgument = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.maybeMod")),
+              Core.applicationArgument = x})),
+            Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))}))})),
       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))
 
 -- | Interpreter-friendly odd.
@@ -29,21 +33,3 @@ odd cx g x =
       Core.applicationArgument = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.even")),
         Core.applicationArgument = x}))}))
-
--- | Interpreter-friendly predecessor.
-pred :: t0 -> t1 -> Core.Term -> Either t2 Core.Term
-pred cx g x =
-    Right (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.sub")),
-        Core.applicationArgument = x})),
-      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))
-
--- | Interpreter-friendly successor.
-succ :: t0 -> t1 -> Core.Term -> Either t2 Core.Term
-succ cx g x =
-    Right (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.add")),
-        Core.applicationArgument = x})),
-      Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))

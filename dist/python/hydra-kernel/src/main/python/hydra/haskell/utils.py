@@ -111,7 +111,7 @@ def type_name_for_record(sname: hydra.core.Name) -> str:
     @lru_cache(1)
     def parts() -> frozenlist[str]:
         return hydra.lib.strings.split_on(".", sname_str)
-    return hydra.lib.lists.last(parts())
+    return hydra.lib.maybes.from_maybe((lambda : sname_str), hydra.lib.lists.maybe_last(parts()))
 
 def record_field_reference(namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.ModuleName], sname: hydra.core.Name, fname: hydra.core.Name) -> hydra.haskell.syntax.Name:
     r"""Generate a Haskell name for a record field accessor."""
@@ -151,8 +151,11 @@ def simple_value_binding(hname: hydra.haskell.syntax.Name, rhs: hydra.haskell.sy
 def to_type_application(types: frozenlist[hydra.haskell.syntax.Type]) -> hydra.haskell.syntax.Type:
     r"""Convert a list of types into a nested type application."""
 
+    @lru_cache(1)
+    def dummy_type() -> hydra.haskell.syntax.Type:
+        return cast(hydra.haskell.syntax.Type, hydra.haskell.syntax.TypeVariable(cast(hydra.haskell.syntax.Name, hydra.haskell.syntax.NameNormal(hydra.haskell.syntax.QualifiedName((), hydra.haskell.syntax.NamePart(""))))))
     def app(l: frozenlist[hydra.haskell.syntax.Type]) -> hydra.haskell.syntax.Type:
-        return hydra.lib.logic.if_else(hydra.lib.equality.gt(hydra.lib.lists.length(l), 1), (lambda : cast(hydra.haskell.syntax.Type, hydra.haskell.syntax.TypeApplication(hydra.haskell.syntax.ApplicationType(app(hydra.lib.lists.tail(l)), hydra.lib.lists.head(l))))), (lambda : hydra.lib.lists.head(l)))
+        return hydra.lib.maybes.from_maybe((lambda : dummy_type()), hydra.lib.maybes.map((lambda p: hydra.lib.logic.if_else(hydra.lib.lists.null(hydra.lib.pairs.second(p)), (lambda : hydra.lib.pairs.first(p)), (lambda : cast(hydra.haskell.syntax.Type, hydra.haskell.syntax.TypeApplication(hydra.haskell.syntax.ApplicationType(app(hydra.lib.pairs.second(p)), hydra.lib.pairs.first(p))))))), hydra.lib.lists.uncons(l)))
     return app(hydra.lib.lists.reverse(types))
 
 def union_field_reference(bound_names: frozenset[hydra.core.Name], namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.ModuleName], sname: hydra.core.Name, fname: hydra.core.Name) -> hydra.haskell.syntax.Name:

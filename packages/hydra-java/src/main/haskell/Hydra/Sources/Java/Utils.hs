@@ -252,36 +252,35 @@ javaExpressionToJavaPrimary = def "javaExpressionToJavaPrimary" $
             cases Java._ConditionalExpression (var "ce") (Just $ var "fallback") [
               Java._ConditionalExpression_simple>>: "cor" ~>
                 "cands" <~ unwrap Java._ConditionalOrExpression @@ var "cor" $
-                Logic.ifElse (Equality.equal (Lists.length $ var "cands") (int32 1))
-                  ("iors" <~ unwrap Java._ConditionalAndExpression @@ (Lists.head $ var "cands") $
-                  Logic.ifElse (Equality.equal (Lists.length $ var "iors") (int32 1))
-                    ("xors" <~ unwrap Java._InclusiveOrExpression @@ (Lists.head $ var "iors") $
-                    Logic.ifElse (Equality.equal (Lists.length $ var "xors") (int32 1))
-                      ("ands" <~ unwrap Java._ExclusiveOrExpression @@ (Lists.head $ var "xors") $
-                      Logic.ifElse (Equality.equal (Lists.length $ var "ands") (int32 1))
-                        ("eqs" <~ unwrap Java._AndExpression @@ (Lists.head $ var "ands") $
-                        Logic.ifElse (Equality.equal (Lists.length $ var "eqs") (int32 1))
-                        (cases Java._EqualityExpression (Lists.head $ var "eqs") (Just $ var "fallback") [
-                          Java._EqualityExpression_unary>>: "rel" ~>
-                            cases Java._RelationalExpression (var "rel") (Just $ var "fallback") [
-                              Java._RelationalExpression_simple>>: "shift" ~>
-                                cases Java._ShiftExpression (var "shift") (Just $ var "fallback") [
-                                  Java._ShiftExpression_unary>>: "add" ~>
-                                    cases Java._AdditiveExpression (var "add") (Just $ var "fallback") [
-                                      Java._AdditiveExpression_unary>>: "mul" ~>
-                                        cases Java._MultiplicativeExpression (var "mul") (Just $ var "fallback") [
-                                          Java._MultiplicativeExpression_unary>>: "unary" ~>
-                                            cases Java._UnaryExpression (var "unary") (Just $ var "fallback") [
-                                              Java._UnaryExpression_other>>: "npm" ~>
-                                                cases Java._UnaryExpressionNotPlusMinus (var "npm") (Just $ var "fallback") [
-                                                  Java._UnaryExpressionNotPlusMinus_postfix>>: "pf" ~>
-                                                    cases Java._PostfixExpression (var "pf") (Just $ var "fallback") [
-                                                      Java._PostfixExpression_primary>>: "p" ~> var "p"]]]]]]]])
-                        (var "fallback"))
-                        (var "fallback"))
-                      (var "fallback"))
-                    (var "fallback"))
-                  (var "fallback")]]]
+                -- Walk down the operator precedence chain, requiring each level
+                -- to have a single element and unwrapping through to a bare Primary.
+                -- We keep the expression intact (original form) if any step fails.
+                Maybes.fromMaybe (var "fallback") $
+                  Maybes.bind (Lists.maybeHead $ var "cands") $ lambda "candHead" $
+                  "iors" <~ unwrap Java._ConditionalAndExpression @@ var "candHead" $
+                  Maybes.bind (Lists.maybeHead $ var "iors") $ lambda "iorHead" $
+                  "xors" <~ unwrap Java._InclusiveOrExpression @@ var "iorHead" $
+                  Maybes.bind (Lists.maybeHead $ var "xors") $ lambda "xorHead" $
+                  "ands" <~ unwrap Java._ExclusiveOrExpression @@ var "xorHead" $
+                  Maybes.bind (Lists.maybeHead $ var "ands") $ lambda "andHead" $
+                  "eqs" <~ unwrap Java._AndExpression @@ var "andHead" $
+                  Maybes.bind (Lists.maybeHead $ var "eqs") $ lambda "eqHead" $
+                  just $ cases Java._EqualityExpression (var "eqHead") (Just $ var "fallback") [
+                    Java._EqualityExpression_unary>>: "rel" ~>
+                      cases Java._RelationalExpression (var "rel") (Just $ var "fallback") [
+                        Java._RelationalExpression_simple>>: "shift" ~>
+                          cases Java._ShiftExpression (var "shift") (Just $ var "fallback") [
+                            Java._ShiftExpression_unary>>: "add" ~>
+                              cases Java._AdditiveExpression (var "add") (Just $ var "fallback") [
+                                Java._AdditiveExpression_unary>>: "mul" ~>
+                                  cases Java._MultiplicativeExpression (var "mul") (Just $ var "fallback") [
+                                    Java._MultiplicativeExpression_unary>>: "unary" ~>
+                                      cases Java._UnaryExpression (var "unary") (Just $ var "fallback") [
+                                        Java._UnaryExpression_other>>: "npm" ~>
+                                          cases Java._UnaryExpressionNotPlusMinus (var "npm") (Just $ var "fallback") [
+                                            Java._UnaryExpressionNotPlusMinus_postfix>>: "pf" ~>
+                                              cases Java._PostfixExpression (var "pf") (Just $ var "fallback") [
+                                                Java._PostfixExpression_primary>>: "p" ~> var "p"]]]]]]]]]]]
 
 javaPrimaryToJavaUnaryExpression :: TTermDefinition (Java.Primary -> Java.UnaryExpression)
 javaPrimaryToJavaUnaryExpression = def "javaPrimaryToJavaUnaryExpression" $
@@ -718,11 +717,11 @@ sanitizeJavaName = def "sanitizeJavaName" $
 
 isEscaped :: TTermDefinition (String -> Bool)
 isEscaped = def "isEscaped" $
-  lambda "s" $ Equality.equal (Strings.charAt (int32 0) (var "s")) (int32 36)
+  lambda "s" $ Equality.equal (Maybes.fromMaybe (int32 0) (Strings.maybeCharAt (int32 0) (var "s"))) (int32 36)
 
 unescape :: TTermDefinition (String -> String)
 unescape = def "unescape" $
-  lambda "s" $ Strings.fromList (Lists.tail (Strings.toList (var "s")))
+  lambda "s" $ Strings.fromList (Lists.drop (int32 1) (Strings.toList (var "s")))
 
 
 javaPackageDeclaration :: TTermDefinition (Namespace -> Java.PackageDeclaration)
@@ -816,13 +815,12 @@ javaThrowIllegalStateException = def "javaThrowIllegalStateException" $
 addExpressions :: TTermDefinition ([Java.MultiplicativeExpression] -> Java.AdditiveExpression)
 addExpressions = def "addExpressions" $
   lambda "exprs" $ lets [
-    "first">: JavaDsl.additiveExpressionUnary (Lists.head (var "exprs")),
-    "rest">: Lists.tail (var "exprs")] $
+    "dummyMult">: JavaDsl.literalToMultiplicativeExpression (JavaDsl.literalInteger (JavaDsl.integerLiteral (bigint 0)))] $
     Lists.foldl
       (lambda "ae" $ lambda "me" $
         JavaDsl.additiveExpressionPlus (JavaDsl.additiveExpressionBinary (var "ae") (var "me")))
-      (var "first")
-      (var "rest")
+      (JavaDsl.additiveExpressionUnary (Maybes.fromMaybe (var "dummyMult") (Lists.maybeHead (var "exprs"))))
+      (Lists.drop (int32 1) (var "exprs"))
 
 
 -- | Compute the qualified Java name (TypeIdentifier, ClassTypeQualifier) for a Hydra name.

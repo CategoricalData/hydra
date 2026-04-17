@@ -59,8 +59,20 @@ def decodeBinding[T0](cx: T0)(graph: hydra.graph.Graph)(b: hydra.core.Binding): 
      Some(hydra.decoding.decoderTypeSchemeNamed(b.name)(typ)))))
 
 def decodeBindingName(n: hydra.core.Name): hydra.core.Name =
-  hydra.lib.logic.ifElse[hydra.core.Name](hydra.lib.logic.not(hydra.lib.lists.`null`[scala.Predef.String](hydra.lib.lists.tail[scala.Predef.String](hydra.lib.strings.splitOn(".")(n)))))(hydra.lib.strings.intercalate(".")(hydra.lib.lists.concat2[scala.Predef.String](Seq("hydra",
-     "decode"))(hydra.lib.lists.concat2[scala.Predef.String](hydra.lib.lists.tail[scala.Predef.String](hydra.lib.lists.init[scala.Predef.String](hydra.lib.strings.splitOn(".")(n))))(Seq(hydra.formatting.decapitalize(hydra.names.localNameOf(n)))))))(hydra.formatting.decapitalize(hydra.names.localNameOf(n)))
+  {
+  lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(n)
+  lazy val localPart: scala.Predef.String = hydra.formatting.decapitalize(hydra.names.localNameOf(n))
+  lazy val localResult: hydra.core.Name = localPart
+  hydra.lib.maybes.maybe[hydra.core.Name, Seq[scala.Predef.String]](localResult)((nsParts: Seq[scala.Predef.String]) =>
+    hydra.lib.maybes.maybe[hydra.core.Name, Tuple2[scala.Predef.String, Seq[scala.Predef.String]]](localResult)((nsUc: Tuple2[scala.Predef.String,
+       Seq[scala.Predef.String]]) =>
+    {
+    lazy val tail: Seq[scala.Predef.String] = hydra.lib.pairs.second[scala.Predef.String,
+       Seq[scala.Predef.String]](nsUc)
+    hydra.lib.strings.intercalate(".")(hydra.lib.lists.concat2[scala.Predef.String](Seq("hydra",
+       "decode"))(hydra.lib.lists.concat2[scala.Predef.String](tail)(Seq(localPart))))
+  })(hydra.lib.lists.uncons[scala.Predef.String](nsParts)))(hydra.lib.lists.maybeInit[scala.Predef.String](parts))
+}
 
 def decodeEitherType(et: hydra.core.EitherType): hydra.core.Term =
   {
@@ -413,7 +425,14 @@ def decodeModule(cx: hydra.context.Context)(graph: hydra.graph.Graph)(mod: hydra
 })))
 
 def decodeNamespace(ns: hydra.packaging.Namespace): hydra.packaging.Namespace =
-  hydra.lib.strings.cat(Seq("hydra.decode.", hydra.lib.strings.intercalate(".")(hydra.lib.lists.tail[scala.Predef.String](hydra.lib.strings.splitOn(".")(ns)))))
+  {
+  lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(ns)
+  lazy val fallback: hydra.packaging.Namespace = ns
+  hydra.lib.maybes.maybe[hydra.packaging.Namespace, Tuple2[scala.Predef.String, Seq[scala.Predef.String]]](fallback)((uc: Tuple2[scala.Predef.String,
+     Seq[scala.Predef.String]]) =>
+    hydra.lib.strings.cat(Seq("hydra.decode.", hydra.lib.strings.intercalate(".")(hydra.lib.pairs.second[scala.Predef.String,
+       Seq[scala.Predef.String]](uc)))))(hydra.lib.lists.uncons[scala.Predef.String](parts))
+}
 
 def decodePairType(pt: hydra.core.PairType): hydra.core.Term =
   {

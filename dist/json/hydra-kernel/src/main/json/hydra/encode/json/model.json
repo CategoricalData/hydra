@@ -204,20 +204,15 @@
                                                         "name": "literal",
                                                         "term": {
                                                           "inject": {
-                                                            "field": {
-                                                              "name": "float",
-                                                              "term": {
-                                                                "inject": {
-                                                                  "field": {"name": "bigfloat", "term": {"variable": "x"}},
-                                                                  "typeName": "hydra.core.FloatValue"}}},
+                                                            "field": {"name": "decimal", "term": {"variable": "x"}},
                                                             "typeName": "hydra.core.Literal"}}},
                                                       "typeName": "hydra.core.Term"}},
-                                                  "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                                  "domain": {"literal": {"decimal": {}}},
                                                   "parameter": "x"}}}}}],
                                       "typeName": "hydra.core.Field"}}}],
                               "typeName": "hydra.core.Injection"}}},
                         "typeName": "hydra.core.Term"}},
-                    "domain": {"literal": {"float": {"bigfloat": {}}}},
+                    "domain": {"literal": {"decimal": {}}},
                     "parameter": "y"}}},
               {
                 "name": "object",

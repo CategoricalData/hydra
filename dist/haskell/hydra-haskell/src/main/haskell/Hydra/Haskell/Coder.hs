@@ -468,7 +468,8 @@ encodeTypeWithClassAssertions namespaces explicitClasses typ cx g =
                     in (Lists.map toPair (Sets.toList clsSet))
       in (Eithers.bind (adaptTypeToHaskellAndEncode namespaces typ cx g) (\htyp -> Logic.ifElse (Lists.null assertPairs) (Right htyp) (
         let encoded = Lists.map encodeAssertion assertPairs
-            hassert = Logic.ifElse (Equality.equal (Lists.length encoded) 1) (Lists.head encoded) (Syntax.AssertionTuple encoded)
+            hassert =
+                    Logic.ifElse (Equality.equal (Lists.length encoded) 1) (Maybes.fromMaybe (Syntax.AssertionTuple encoded) (Lists.maybeHead encoded)) (Syntax.AssertionTuple encoded)
         in (Right (Syntax.TypeCtx (Syntax.ContextType {
           Syntax.contextTypeCtx = hassert,
           Syntax.contextTypeType = htyp}))))))
@@ -476,7 +477,7 @@ encodeTypeWithClassAssertions namespaces explicitClasses typ cx g =
 -- | Encode an unwrap term as a Haskell expression
 encodeUnwrap :: Packaging.Namespaces Syntax.ModuleName -> Core.Name -> Either t0 Syntax.Expression
 encodeUnwrap namespaces name =
-    Right (Syntax.ExpressionVariable (Utils.elementReference namespaces (Names.qname (Maybes.fromJust (Names.namespaceOf name)) (Utils.newtypeAccessorName name))))
+    Right (Syntax.ExpressionVariable (Utils.elementReference namespaces (Names.qname (Maybes.fromMaybe (Packaging.Namespace "") (Names.namespaceOf name)) (Utils.newtypeAccessorName name))))
 
 -- | Extend metadata by analyzing a term for standard import usage (bottom-up step function)
 extendMetaForTerm :: Environment.HaskellModuleMetadata -> Core.Term -> Environment.HaskellModuleMetadata
@@ -694,13 +695,13 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
       let lname = Names.localNameOf elementName
           hname = Utils.simpleName lname
           declHead =
-                  \name -> \vars_ -> Logic.ifElse (Lists.null vars_) (Syntax.DeclarationHeadSimple name) (
-                    let h = Lists.head vars_
-                        rest = Lists.tail vars_
+                  \name -> \vars_ -> Maybes.fromMaybe (Syntax.DeclarationHeadSimple name) (Maybes.map (\p ->
+                    let h = Pairs.first p
+                        rest = Pairs.second p
                         hvar = Syntax.Variable (Utils.simpleName (Core.unName h))
                     in (Syntax.DeclarationHeadApplication (Syntax.ApplicationDeclarationHead {
                       Syntax.applicationDeclarationHeadFunction = (declHead name rest),
-                      Syntax.applicationDeclarationHeadOperand = hvar})))
+                      Syntax.applicationDeclarationHeadOperand = hvar}))) (Lists.uncons vars_))
           newtypeCons =
                   \tname -> \typ_ ->
                     let hname0 = Utils.simpleName (Utils.newtypeAccessorName tname)

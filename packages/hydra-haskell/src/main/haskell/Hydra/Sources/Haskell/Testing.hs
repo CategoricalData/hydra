@@ -79,7 +79,7 @@ addNamespacesToNamespaces = define "addNamespacesToNamespaces" $
   lambda "ns0" $ lambda "names" $ lets [
     "newNamespaces">: Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList (var "names")))),
     "toModuleName">: lambda "namespace" $
-      wrap H._ModuleName (Formatting.capitalize @@ Lists.last (Strings.splitOn (string ".") (unwrap _Namespace @@ var "namespace"))),
+      wrap H._ModuleName (Formatting.capitalize @@ (Maybes.fromMaybe (unwrap _Namespace @@ var "namespace") (Lists.maybeLast (Strings.splitOn (string ".") (unwrap _Namespace @@ var "namespace"))))),
     "newMappings">: Maps.fromList (Lists.map (lambda "ns_" $ pair (var "ns_") (var "toModuleName" @@ var "ns_")) (Sets.toList (var "newNamespaces")))] $
     record _Namespaces [
       _Namespaces_focus>>: project _Namespaces _Namespaces_focus @@ var "ns0",
@@ -205,7 +205,7 @@ findHaskellImports = define "findHaskellImports" $
     "filtered">: Maps.filterWithKey
       (lambda "ns_" $ lambda "_v" $
         Logic.not (Equality.equal
-          (Lists.head (Strings.splitOn (string "hydra.test.") (unwrap _Namespace @@ var "ns_")))
+          (Maybes.fromMaybe (string "") (Lists.maybeHead (Strings.splitOn (string "hydra.test.") (unwrap _Namespace @@ var "ns_"))))
           (string "")))
       (var "mapping_")] $
     Lists.map

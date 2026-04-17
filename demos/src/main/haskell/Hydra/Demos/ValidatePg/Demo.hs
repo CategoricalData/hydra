@@ -192,7 +192,7 @@ aesonToHydra v = case v of
   A.Object km -> Json.ValueObject $ M.fromList [(AK.toString k, aesonToHydra v') | (k, v') <- AKM.toList km]
   A.Array a   -> Json.ValueArray [aesonToHydra x | x <- V.toList a]
   A.String t  -> Json.ValueString (T.unpack t)
-  A.Number s  -> Json.ValueNumber (SC.toRealFloat s)
+  A.Number s  -> Json.ValueNumber s
   A.Bool b    -> Json.ValueBoolean b
   A.Null      -> Json.ValueNull
 
@@ -348,7 +348,7 @@ expectBoolean (Json.ValueBoolean b) = b
 expectBoolean _ = error "Expected JSON boolean"
 
 expectNumber :: Json.Value -> Double
-expectNumber (Json.ValueNumber n) = n
+expectNumber (Json.ValueNumber n) = SC.toRealFloat n
 expectNumber _ = error "Expected JSON number"
 
 requireField :: M.Map String Json.Value -> String -> Json.Value

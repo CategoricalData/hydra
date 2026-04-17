@@ -719,11 +719,21 @@
                                             "name": "dirParts",
                                             "term": {
                                               "application": {
-                                                "argument": {"variable": "parts"},
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "parts"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.lists.maybeInit"},
+                                                        "type": {"literal": {"string": {}}}}}}},
                                                 "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.lists.init"},
-                                                    "type": {"literal": {"string": {}}}}}}},
+                                                  "application": {
+                                                    "argument": {
+                                                      "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                        "type": {"list": {"literal": {"string": {}}}}}}}}}},
                                             "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
                                           {
                                             "name": "fileName",
@@ -734,11 +744,20 @@
                                                     {"literal": {"string": "test_"}},
                                                     {
                                                       "application": {
-                                                        "argument": {"variable": "parts"},
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "parts"},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.lib.lists.maybeLast"},
+                                                                "type": {"literal": {"string": {}}}}}}},
                                                         "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.lists.last"},
-                                                            "type": {"literal": {"string": {}}}}}}},
+                                                          "application": {
+                                                            "argument": {"literal": {"string": ""}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                                "type": {"literal": {"string": {}}}}}}}}},
                                                     {"literal": {"string": ".py"}}]},
                                                 "function": {"variable": "hydra.lib.strings.cat"}}},
                                             "type": {"type": {"literal": {"string": {}}}, "variables": []}},

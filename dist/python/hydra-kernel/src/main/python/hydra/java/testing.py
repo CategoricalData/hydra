@@ -14,6 +14,7 @@ import hydra.lib.eithers
 import hydra.lib.equality
 import hydra.lib.lists
 import hydra.lib.logic
+import hydra.lib.maybes
 import hydra.lib.strings
 import hydra.packaging
 import hydra.testing
@@ -31,10 +32,10 @@ def build_java_test_module(test_module: hydra.packaging.Module, test_group: hydr
         return hydra.lib.strings.split_on(".", ns_.value)
     @lru_cache(1)
     def package_name() -> str:
-        return hydra.lib.strings.intercalate(".", hydra.lib.lists.init(parts()))
+        return hydra.lib.strings.intercalate(".", hydra.lib.maybes.from_maybe((lambda : ()), hydra.lib.lists.maybe_init(parts())))
     @lru_cache(1)
     def class_name_() -> str:
-        return hydra.lib.strings.cat2(hydra.formatting.capitalize(hydra.lib.lists.last(parts())), "Test")
+        return hydra.lib.strings.cat2(hydra.formatting.capitalize(hydra.lib.maybes.from_maybe((lambda : ""), hydra.lib.lists.maybe_last(parts()))), "Test")
     group_name_ = test_group.name
     standard_imports = ("import org.junit.jupiter.api.Test;", "import static org.junit.jupiter.api.Assertions.*;", "import java.util.*;", "import hydra.util.*;")
     @lru_cache(1)
@@ -89,7 +90,7 @@ def generate_java_test_group_hierarchy(group_path: frozenlist[str], test_group: 
 def generate_test_file_with_java_codec(test_module: hydra.packaging.Module, test_group: hydra.testing.TestGroup) -> Either[T0, tuple[str, str]]:
     r"""Generate a complete test file for Java."""
 
-    return hydra.lib.eithers.map((lambda test_body: (test_module_content := build_java_test_module(test_module, test_group, test_body), ns_ := test_module.namespace, parts := hydra.lib.strings.split_on(".", ns_.value), dir_parts := hydra.lib.lists.drop(1, hydra.lib.lists.init(parts)), class_name_ := hydra.lib.strings.cat2(hydra.formatting.capitalize(hydra.lib.lists.last(parts)), "Test"), file_name := hydra.lib.strings.cat2(class_name_, ".java"), file_path := hydra.lib.strings.cat((hydra.lib.strings.intercalate("/", dir_parts), "/", file_name)), (file_path, test_module_content))[7]), generate_java_test_group_hierarchy((), test_group))
+    return hydra.lib.eithers.map((lambda test_body: (test_module_content := build_java_test_module(test_module, test_group, test_body), ns_ := test_module.namespace, parts := hydra.lib.strings.split_on(".", ns_.value), dir_parts := hydra.lib.lists.drop(1, hydra.lib.maybes.from_maybe((lambda : ()), hydra.lib.lists.maybe_init(parts))), class_name_ := hydra.lib.strings.cat2(hydra.formatting.capitalize(hydra.lib.maybes.from_maybe((lambda : ""), hydra.lib.lists.maybe_last(parts))), "Test"), file_name := hydra.lib.strings.cat2(class_name_, ".java"), file_path := hydra.lib.strings.cat((hydra.lib.strings.intercalate("/", dir_parts), "/", file_name)), (file_path, test_module_content))[7]), generate_java_test_group_hierarchy((), test_group))
 
 def generate_java_test_file(test_module: hydra.packaging.Module, test_group: hydra.testing.TestGroup, _g: T0) -> Either[T1, tuple[str, str]]:
     r"""Generate a Java test file for a test group."""

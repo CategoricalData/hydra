@@ -633,21 +633,26 @@ normalizePathForHoisting = define "normalizePathForHoisting" $
   "path" ~>
   -- Helper: process pairs of adjacent accessors
   "go" <~ ("remaining" ~>
-    -- If less than 2 elements, return as-is
-    Logic.ifElse (Logic.or (Lists.null $ var "remaining")
-                           (Lists.null $ Lists.tail $ var "remaining"))
+    Maybes.maybe
       (var "remaining")
-      -- Check if first two elements are applicationFunction followed by lambdaBody
-      ("first" <~ Lists.head (var "remaining") $
-       "second" <~ Lists.head (Lists.tail $ var "remaining") $
-       "rest" <~ Lists.tail (Lists.tail $ var "remaining") $
-       Logic.ifElse (Logic.and (isApplicationFunction @@ var "first")
-                               (isLambdaBody @@ var "second"))
-         -- Replace with letBody and continue
-         (Lists.cons (inject _SubtermStep _SubtermStep_letBody unit)
-                     (var "go" @@ var "rest"))
-         -- Keep first element and continue
-         (Lists.cons (var "first") (var "go" @@ Lists.tail (var "remaining"))))) $
+      ("uc1" ~>
+        "first" <~ Pairs.first (var "uc1") $
+        "afterFirst" <~ Pairs.second (var "uc1") $
+        Maybes.maybe
+          -- Only one element: return as-is (no pair to inspect)
+          (var "remaining")
+          ("uc2" ~>
+            "second" <~ Pairs.first (var "uc2") $
+            "rest" <~ Pairs.second (var "uc2") $
+            Logic.ifElse (Logic.and (isApplicationFunction @@ var "first")
+                                    (isLambdaBody @@ var "second"))
+              -- Replace with letBody and continue
+              (Lists.cons (inject _SubtermStep _SubtermStep_letBody unit)
+                          (var "go" @@ var "rest"))
+              -- Keep first element and continue
+              (Lists.cons (var "first") (var "go" @@ var "afterFirst")))
+          (Lists.uncons $ var "afterFirst"))
+      (Lists.uncons $ var "remaining")) $
   var "go" @@ var "path"
 
 -- | Check if an accessor is applicationFunction
@@ -847,7 +852,7 @@ hoistSubterms = define "hoistSubterms" $
     -- Build the pathPrefix for the body: outer path + letBody accessor
     "bodyPathPrefix" <~ Lists.concat2 (var "path") (list [inject _SubtermStep _SubtermStep_letBody unit]) $
     -- Use the first binding's name to disambiguate the body prefix across nesting levels
-    "firstBindingName" <~ Maybes.maybe (string "body") (lambda "b" $ Strings.intercalate (string "_") (Strings.splitOn (string ".") (Core.unName (Core.bindingName (var "b"))))) (Lists.safeHead (var "bindings")) $
+    "firstBindingName" <~ Maybes.maybe (string "body") (lambda "b" $ Strings.intercalate (string "_") (Strings.splitOn (string ".") (Core.unName (Core.bindingName (var "b"))))) (Lists.maybeHead (var "bindings")) $
     "bodyPrefix" <~ Strings.cat2 (var "firstBindingName") (string "_body") $
     "bodyResult" <~ var "processImmediateSubterm" @@ var "cx" @@ int32 1 @@ var "bodyPrefix" @@ var "bodyPathPrefix" @@ var "body" $
     "newBody" <~ Pairs.second (var "bodyResult") $

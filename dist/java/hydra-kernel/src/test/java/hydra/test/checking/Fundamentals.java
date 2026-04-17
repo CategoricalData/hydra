@@ -79,9 +79,9 @@ public interface Fundamentals {
         hydra.Inference.inferTypeOf(
           hydra.test.TestGraph.testContext(),
           hydra.test.TestGraph.testGraph(),
-          new hydra.core.Term.Let(new hydra.core.Let(java.util.Arrays.asList(new hydra.core.Binding(new hydra.core.Name("head"), new hydra.core.Term.Lambda(new hydra.core.Lambda(new hydra.core.Name("xs"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.lists.head")), new hydra.core.Term.Variable(new hydra.core.Name("xs")))))), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("head")), new hydra.core.Term.List(java.util.Arrays.asList(
+          new hydra.core.Term.Let(new hydra.core.Let(java.util.Arrays.asList(new hydra.core.Binding(new hydra.core.Name("maybeHead"), new hydra.core.Term.Lambda(new hydra.core.Lambda(new hydra.core.Name("xs"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.lists.maybeHead")), new hydra.core.Term.Variable(new hydra.core.Name("xs")))))), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("maybeHead")), new hydra.core.Term.List(java.util.Arrays.asList(
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("first")),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("second")))))))))), hydra.show.Core.type(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList()))));
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("second")))))))))), hydra.show.Core.type(new hydra.core.Type.Maybe(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList()))));
   }
 
   static hydra.testing.TestGroup binaryPrimitivesTests() {
@@ -897,13 +897,13 @@ public interface Fundamentals {
 
   static hydra.testing.TestGroup unaryPrimitivesTests() {
     return new hydra.testing.TestGroup("Unary primitives", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
-      new hydra.testing.TestCaseWithMetadata("lists head", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+      new hydra.testing.TestCaseWithMetadata("lists maybeHead", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
         (java.util.function.Function<hydra.errors.Error_, String>) (e -> "<<inference error>>"),
         (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Scoping.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),
         hydra.Inference.inferTypeOf(
           hydra.test.TestGraph.testContext(),
           hydra.test.TestGraph.testGraph(),
-          new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.lists.head")))), hydra.show.Core.type(new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("t0"), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("t0"))), new hydra.core.Type.Variable(new hydra.core.Name("t0"))))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
+          new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.lists.maybeHead")))), hydra.show.Core.type(new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("t0"), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("t0"))), new hydra.core.Type.Maybe(new hydra.core.Type.Variable(new hydra.core.Name("t0")))))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
       new hydra.testing.TestCaseWithMetadata("math neg", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
         (java.util.function.Function<hydra.errors.Error_, String>) (e -> "<<inference error>>"),
         (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.type(hydra.Scoping.typeSchemeToFType(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result))))),

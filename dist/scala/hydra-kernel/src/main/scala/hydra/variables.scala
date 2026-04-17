@@ -140,10 +140,14 @@ def normalizeTypeVariablesInTerm(term: hydra.core.Term): hydra.core.Term =
           lazy val body0: hydra.core.Term = (v_Term_let_lt.body)
           {
             def step(acc: Seq[hydra.core.Binding])(bs: Seq[hydra.core.Binding]): Seq[hydra.core.Binding] =
-              hydra.lib.logic.ifElse[Seq[hydra.core.Binding]](hydra.lib.lists.`null`[hydra.core.Binding](bs))(hydra.lib.lists.reverse[hydra.core.Binding](acc))({
-              lazy val b: hydra.core.Binding = hydra.lib.lists.head[hydra.core.Binding](bs)
+              hydra.lib.maybes.maybe[Seq[hydra.core.Binding], Tuple2[hydra.core.Binding,
+                 Seq[hydra.core.Binding]]](hydra.lib.lists.reverse[hydra.core.Binding](acc))((uc: Tuple2[hydra.core.Binding,
+                 Seq[hydra.core.Binding]]) =>
               {
-                lazy val tl: Seq[hydra.core.Binding] = hydra.lib.lists.tail[hydra.core.Binding](bs)
+              lazy val b: hydra.core.Binding = hydra.lib.pairs.first[hydra.core.Binding, Seq[hydra.core.Binding]](uc)
+              {
+                lazy val tl: Seq[hydra.core.Binding] = hydra.lib.pairs.second[hydra.core.Binding,
+                   Seq[hydra.core.Binding]](uc)
                 {
                   lazy val noType: Seq[hydra.core.Binding] = {
                     lazy val newVal: hydra.core.Term = rewriteWithSubst(Tuple2(Tuple2(subst, boundVars), next))(b.term)
@@ -197,7 +201,7 @@ def normalizeTypeVariablesInTerm(term: hydra.core.Term): hydra.core.Term =
                   }
                 }
               }
-            })
+            })(hydra.lib.lists.uncons[hydra.core.Binding](bs))
             {
               lazy val bindings1: Seq[hydra.core.Binding] = step(Seq())(bindings0)
               hydra.core.Term.let(hydra.core.Let(bindings1, rewriteWithSubst(Tuple2(Tuple2(subst,

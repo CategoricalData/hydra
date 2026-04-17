@@ -62,10 +62,6 @@ cos = primitive1 _math_cos
 cosh :: TTerm Double -> TTerm Double
 cosh = primitive1 _math_cosh
 
--- | Divide two integers using integer division.
-div :: Integral a => TTerm a -> TTerm a -> TTerm a
-div = primitive2 _math_div
-
 -- | Euler's number (e = 2.71828).
 e :: TTerm Double
 e = primitive _math_e
@@ -108,10 +104,6 @@ min = primitive2 _math_min
 maybeMod :: TTerm Int -> TTerm Int -> TTerm (Maybe Int)
 maybeMod = primitive2 _math_maybeMod
 
--- | Mathematical modulo.
-mod :: Integral a => TTerm a -> TTerm a -> TTerm a
-mod = primitive2 _math_mod
-
 -- | Multiply two numbers.
 mul :: Num a => TTerm a -> TTerm a -> TTerm a
 mul = primitive2 _math_mul
@@ -144,10 +136,6 @@ pow = primitive2 _math_pow
 maybePred :: TTerm Int -> TTerm (Maybe Int)
 maybePred = primitive1 _math_maybePred
 
--- | Return the predecessor (x - 1).
-pred :: Enum a => TTerm a -> TTerm a
-pred = primitive1 _math_pred
-
 -- | Generate a range of values from start to end (inclusive).
 range :: Enum a => TTerm a -> TTerm a -> TTerm [a]
 range start end = primitive2 _math_range start end
@@ -155,10 +143,6 @@ range start end = primitive2 _math_range start end
 -- | Integer remainder, returning Nothing on division by zero.
 maybeRem :: TTerm Int -> TTerm Int -> TTerm (Maybe Int)
 maybeRem = primitive2 _math_maybeRem
-
--- | Integer remainder.
-rem :: Integral a => TTerm a -> TTerm a -> TTerm a
-rem = primitive2 _math_rem
 
 -- | Return x rounded to the nearest integer, as a float64.
 -- DIVERGENCE FROM HASKELL: returns Double rather than Integer so that NaN and
@@ -205,10 +189,6 @@ subFloat64 = primitive2 _math_subFloat64
 -- | Return the successor (x + 1), returning Nothing on maxBound.
 maybeSucc :: TTerm Int -> TTerm (Maybe Int)
 maybeSucc = primitive1 _math_maybeSucc
-
--- | Return the successor (x + 1).
-succ :: Enum a => TTerm a -> TTerm a
-succ = primitive1 _math_succ
 
 -- | Return the tangent of x radians.
 tan :: TTerm Double -> TTerm Double

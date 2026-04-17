@@ -164,7 +164,7 @@
                               "term": {
                                 "application": {
                                   "argument": {"variable": "d"},
-                                  "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}}},
+                                  "function": {"variable": "hydra.lib.literals.float64ToDecimal"}}}},
                             "typeName": "hydra.json.model.Value"}},
                         "domain": {"literal": {"float": {"float64": {}}}},
                         "parameter": "d"}}},
@@ -521,7 +521,7 @@
                               "term": {
                                 "application": {
                                   "argument": {"variable": "f"},
-                                  "function": {"variable": "hydra.lib.literals.float32ToBigfloat"}}}},
+                                  "function": {"variable": "hydra.lib.literals.float32ToDecimal"}}}},
                             "typeName": "hydra.json.model.Value"}},
                         "domain": {"literal": {"float": {"float32": {}}}},
                         "parameter": "f"}}},
@@ -858,7 +858,7 @@
                                   "term": {
                                     "application": {
                                       "argument": {"variable": "i"},
-                                      "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
+                                      "function": {"variable": "hydra.lib.literals.bigintToDecimal"}}}},
                                 "typeName": "hydra.json.model.Value"}},
                             "function": {
                               "application": {
@@ -908,7 +908,7 @@
                                         "application": {
                                           "argument": {"variable": "b"},
                                           "function": {"variable": "hydra.lib.literals.uint8ToBigint"}}},
-                                      "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
+                                      "function": {"variable": "hydra.lib.literals.bigintToDecimal"}}}},
                                 "typeName": "hydra.json.model.Value"}},
                             "function": {
                               "application": {
@@ -1070,7 +1070,7 @@
                                         "application": {
                                           "argument": {"variable": "i"},
                                           "function": {"variable": "hydra.lib.literals.int32ToBigint"}}},
-                                      "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
+                                      "function": {"variable": "hydra.lib.literals.bigintToDecimal"}}}},
                                 "typeName": "hydra.json.model.Value"}},
                             "function": {
                               "application": {
@@ -1124,7 +1124,7 @@
                                         "application": {
                                           "argument": {"variable": "l"},
                                           "function": {"variable": "hydra.lib.literals.int64ToBigint"}}},
-                                      "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
+                                      "function": {"variable": "hydra.lib.literals.bigintToDecimal"}}}},
                                 "typeName": "hydra.json.model.Value"}},
                             "function": {
                               "application": {
@@ -1228,7 +1228,7 @@
                                         "application": {
                                           "argument": {"variable": "i"},
                                           "function": {"variable": "hydra.lib.literals.int16ToBigint"}}},
-                                      "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
+                                      "function": {"variable": "hydra.lib.literals.bigintToDecimal"}}}},
                                 "typeName": "hydra.json.model.Value"}},
                             "function": {
                               "application": {

@@ -31,7 +31,8 @@ buildGraph :: [Core.Binding] -> M.Map Core.Name (Maybe Core.Term) -> M.Map Core.
 buildGraph elements environment primitives =
 
       let elementTerms = Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) elements)
-          letTerms = Maps.map (\mt -> Maybes.fromJust mt) (Maps.filter (\mt -> Maybes.isJust mt) environment)
+          letTerms =
+                  Maps.fromList (Maybes.mapMaybe (\kv -> Maybes.map (\t -> (Pairs.first kv, t)) (Pairs.second kv)) (Maps.toList environment))
           mergedTerms = Maps.union elementTerms letTerms
           filteredTerms = Maps.filterWithKey (\k -> \_v -> Logic.not (Maps.member k primitives)) mergedTerms
           elementTypes =
