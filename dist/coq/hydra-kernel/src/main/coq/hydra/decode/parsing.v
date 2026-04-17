@@ -6,21 +6,21 @@ Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdl
 (* Module dependencies *)
 Require Import hydra.core hydra.errors hydra.extract.core hydra.graph hydra.lib.eithers hydra.lib.maps hydra.lib.maybes hydra.lib.strings hydra.parsing.
 
-Definition parseError : forall (_ : hydra.graph.Graph) , forall (_ : Term) , (sum) (DecodingError) (ParseError) := fun (cx : hydra.graph.Graph) => fun (raw : Term) => (((eithers.either) (fun (err : DecodingError) => (inl) (err))) (fun (stripped : Term) => (fun x_ => match x_ with
-| Term_Record v_ => (fun (record : Record_) => let fieldMap := (toFieldMap) (record) in ((eithers.bind) (((((requireField) ("message"%string)) (fun (cx2 : hydra.graph.Graph) => fun (raw2 : Term) => (((eithers.either) (fun (err : DecodingError) => (inl) (err))) (fun (stripped2 : Term) => (fun x_ => match x_ with
+Definition parseError : forall (_ : hydra.graph.Graph) , forall (_ : Term) , (sum) (DecodingError) (ParseError) := fun (cx : hydra.graph.Graph) => fun (raw : Term) => (((eithers.either) (fun (err : DecodingError) => ((inl) (err)) : (sum) (DecodingError) (ParseError))) (fun (stripped : Term) => (fun x_ => match x_ with
+| Term_Record v_ => (fun (record : Record_) => let fieldMap := (toFieldMap) (record) in ((eithers.bind) (((((requireField) ("message"%string)) (fun (cx2 : hydra.graph.Graph) => fun (raw2 : Term) => (((eithers.either) (fun (err : DecodingError) => ((inl) (err)) : (sum) (DecodingError) (string))) (fun (stripped2 : Term) => (fun x_ => match x_ with
 | Term_Literal v_ => (fun (v : Literal) => (fun x_ => match x_ with
-| Literal_String v_ => (fun (s : string) => (inr) (s)) (v_)
-| _ => (inl) ("expected string literal"%string)
+| Literal_String v_ => (fun (s : string) => ((inr) (s)) : (sum) (DecodingError) (string)) (v_)
+| _ => ((inl) ("expected string literal"%string)) : (sum) (DecodingError) (string)
 end) (v)) (v_)
-| _ => (inl) ("expected literal"%string)
-end) (stripped2))) (((stripWithDecodingError) (cx2)) (raw2)))) (fieldMap)) (cx))) (fun (field_message : string) => ((eithers.bind) (((((requireField) ("remainder"%string)) (fun (cx2 : hydra.graph.Graph) => fun (raw2 : Term) => (((eithers.either) (fun (err : DecodingError) => (inl) (err))) (fun (stripped2 : Term) => (fun x_ => match x_ with
+| _ => ((inl) ("expected literal"%string)) : (sum) (DecodingError) (string)
+end) (stripped2))) (((stripWithDecodingError) (cx2)) (raw2)))) (fieldMap)) (cx))) (fun (field_message : string) => ((eithers.bind) (((((requireField) ("remainder"%string)) (fun (cx2 : hydra.graph.Graph) => fun (raw2 : Term) => (((eithers.either) (fun (err : DecodingError) => ((inl) (err)) : (sum) (DecodingError) (string))) (fun (stripped2 : Term) => (fun x_ => match x_ with
 | Term_Literal v_ => (fun (v : Literal) => (fun x_ => match x_ with
-| Literal_String v_ => (fun (s : string) => (inr) (s)) (v_)
-| _ => (inl) ("expected string literal"%string)
+| Literal_String v_ => (fun (s : string) => ((inr) (s)) : (sum) (DecodingError) (string)) (v_)
+| _ => ((inl) ("expected string literal"%string)) : (sum) (DecodingError) (string)
 end) (v)) (v_)
-| _ => (inl) ("expected literal"%string)
-end) (stripped2))) (((stripWithDecodingError) (cx2)) (raw2)))) (fieldMap)) (cx))) (fun (field_remainder : string) => (inr) ((Build_ParseError) (field_message) (field_remainder))))) (v_)
-| _ => (inl) ("expected record"%string)
+| _ => ((inl) ("expected literal"%string)) : (sum) (DecodingError) (string)
+end) (stripped2))) (((stripWithDecodingError) (cx2)) (raw2)))) (fieldMap)) (cx))) (fun (field_remainder : string) => ((inr) ((Build_ParseError) (field_message) (field_remainder))) : (sum) (DecodingError) (ParseError)))) (v_)
+| _ => ((inl) ("expected record"%string)) : (sum) (DecodingError) (ParseError)
 end) (stripped))) (((stripWithDecodingError) (cx)) (raw)).
 Definition parseSuccess (t0 : Type) : forall (_ : forall (_ : hydra.graph.Graph) , forall (_ : Term) , (sum) (DecodingError) (t0)) , forall (_ : hydra.graph.Graph) , forall (_ : Term) , (sum) (DecodingError) ((ParseSuccess) (t0)) := fun (a : forall (_ : hydra.graph.Graph) , forall (_ : Term) , (sum) (DecodingError) (t0)) => fun (cx : hydra.graph.Graph) => fun (raw : Term) => (((eithers.either) (fun (err : DecodingError) => (inl) (err))) (fun (stripped : Term) => (fun x_ => match x_ with
 | Term_Record v_ => (fun (record : Record_) => let fieldMap := (toFieldMap) (record) in ((eithers.bind) (((((requireField) ("value"%string)) (a)) (fieldMap)) (cx))) (fun (field_value : t0) => ((eithers.bind) (((((requireField) ("remainder"%string)) (fun (cx2 : hydra.graph.Graph) => fun (raw2 : Term) => (((eithers.either) (fun (err : DecodingError) => (inl) (err))) (fun (stripped2 : Term) => (fun x_ => match x_ with

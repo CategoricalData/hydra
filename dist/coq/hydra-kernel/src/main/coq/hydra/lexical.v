@@ -21,7 +21,7 @@ end) (t)) in ((maybes.bind) (((maps.lookup) (name)) (types))) (fun (ts : TypeSch
 Definition dereferenceSchemaType : forall (_ : Name) , forall (_ : (list) ((prod) (Name) (TypeScheme))) , (option) (TypeScheme) :=
   dereferenceSchemaType_bundle.
 Definition lookupBinding : forall (_ : hydra.graph.Graph) , forall (_ : Name) , (option) (Binding) := fun (graph_ : hydra.graph.Graph) => fun (name : Name) => ((maybes.map) (fun (term_ : Term) => (Build_Binding) (name) (term_) (((maps.lookup) (name)) ((fun r_ => (graph_boundTypes) (r_)) (graph_))))) (((maps.lookup) (name)) ((fun r_ => (graph_boundTerms) (r_)) (graph_))).
-Definition dereferenceVariable : forall (_ : hydra.graph.Graph) , forall (_ : Name) , (sum) (Error) (Binding) := fun (graph_ : hydra.graph.Graph) => fun (name : Name) => (((maybes.maybe) ((inl) ((Error_Resolution) ((ResolutionError_NoSuchBinding) ((Build_NoSuchBindingError) (name)))))) (fun (right_ : Binding) => (inr) (right_))) (((lookupBinding) (graph_)) (name)).
+Definition dereferenceVariable : forall (_ : hydra.graph.Graph) , forall (_ : Name) , (sum) (Error) (Binding) := fun (graph_ : hydra.graph.Graph) => fun (name : Name) => (((maybes.maybe) (((inl) ((Error_Resolution) ((ResolutionError_NoSuchBinding) ((Build_NoSuchBindingError) (name))))) : (sum) (Error) (Binding))) (fun (right_ : Binding) => ((inr) (right_)) : (sum) (Error) (Binding))) (((lookupBinding) (graph_)) (name)).
 Definition elementsToGraph : forall (_ : hydra.graph.Graph) , forall (_ : (list) ((prod) (Name) (TypeScheme))) , forall (_ : (list) (Binding)) , hydra.graph.Graph := fun (parent : hydra.graph.Graph) => fun (schemaTypes : (list) ((prod) (Name) (TypeScheme))) => fun (elements : (list) (Binding)) => let prims := (fun r_ => (graph_primitives) (r_)) (parent) in let g := (((buildGraph) (elements)) (maps.empty)) (prims) in (Build_Graph) ((fun r_ => (graph_boundTerms) (r_)) (g)) ((fun r_ => (graph_boundTypes) (r_)) (g)) ((fun r_ => (graph_classConstraints) (r_)) (g)) ((fun r_ => (graph_lambdaVariables) (r_)) (g)) ((fun r_ => (graph_metadata) (r_)) (g)) ((fun r_ => (graph_primitives) (r_)) (g)) (schemaTypes) ((fun r_ => (graph_typeVariables) (r_)) (g)).
 Definition emptyContext : Context_ := (Build_Context_) (nil) (nil) (maps.empty).
 Definition emptyGraph : hydra.graph.Graph := (Build_Graph) (maps.empty) (maps.empty) (maps.empty) (sets.empty) (maps.empty) (maps.empty) (maps.empty) (sets.empty).
@@ -43,7 +43,7 @@ Definition graphToBindings : forall (_ : hydra.graph.Graph) , (list) (Binding) :
 Definition graphWithPrimitives : forall (_ : (list) (Primitive)) , forall (_ : (list) (Primitive)) , hydra.graph.Graph := fun (builtIn : (list) (Primitive)) => fun (userProvided : (list) (Primitive)) => let toMap := fun (ps : (list) (Primitive)) => (maps.fromList) (((lists.map) (fun (p : Primitive) => (pair) ((fun r_ => (primitive_name) (r_)) (p)) (p))) (ps)) in let prims := ((maps.union) ((toMap) (userProvided))) ((toMap) (builtIn)) in (((buildGraph) (nil)) (maps.empty)) (prims).
 Definition lookupPrimitive : forall (_ : hydra.graph.Graph) , forall (_ : Name) , (option) (Primitive) := fun (graph_ : hydra.graph.Graph) => fun (name : Name) => ((maps.lookup) (name)) ((fun r_ => (graph_primitives) (r_)) (graph_)).
 Definition lookupTerm : forall (_ : hydra.graph.Graph) , forall (_ : Name) , (option) (Term) := fun (graph_ : hydra.graph.Graph) => fun (name : Name) => ((maps.lookup) (name)) ((fun r_ => (graph_boundTerms) (r_)) (graph_)).
-Definition requireBinding : forall (_ : hydra.graph.Graph) , forall (_ : Name) , (sum) (Error) (Binding) := fun (graph_ : hydra.graph.Graph) => fun (name : Name) => let showAll := false in let ellipsis := fun (strings : (list) (string)) => (((logic.ifElse) (((logic.and) (((equality.gt) ((lists.length) (strings))) ((3)%Z))) ((logic.not) (showAll)))) (((lists.concat2) (((lists.take) ((3)%Z)) (strings))) ((cons) ("..."%string) (nil)))) (strings) in let errMsg := ((strings.cat2) (((strings.cat2) (((strings.cat2) (((strings.cat2) ("no such element: "%string)) ((fun w_ => w_) (name)))) (". Available elements: {"%string))) (((strings.intercalate) (", "%string)) ((ellipsis) (((lists.map) (fun w_ => w_)) ((maps.keys) ((fun r_ => (graph_boundTerms) (r_)) (graph_)))))))) ("}"%string) in (((maybes.maybe) ((inl) ((Error_Resolution) ((ResolutionError_Other) (errMsg))))) (fun (x : Binding) => (inr) (x))) (((lookupBinding) (graph_)) (name)).
+Definition requireBinding : forall (_ : hydra.graph.Graph) , forall (_ : Name) , (sum) (Error) (Binding) := fun (graph_ : hydra.graph.Graph) => fun (name : Name) => let showAll := false in let ellipsis := fun (strings : (list) (string)) => (((logic.ifElse) (((logic.and) (((equality.gt) ((lists.length) (strings))) ((3)%Z))) ((logic.not) (showAll)))) (((lists.concat2) (((lists.take) ((3)%Z)) (strings))) ((cons) ("..."%string) (nil)))) (strings) in let errMsg := ((strings.cat2) (((strings.cat2) (((strings.cat2) (((strings.cat2) ("no such element: "%string)) ((fun w_ => w_) (name)))) (". Available elements: {"%string))) (((strings.intercalate) (", "%string)) ((ellipsis) (((lists.map) (fun w_ => w_)) ((maps.keys) ((fun r_ => (graph_boundTerms) (r_)) (graph_)))))))) ("}"%string) in (((maybes.maybe) (((inl) ((Error_Resolution) ((ResolutionError_Other) (errMsg)))) : (sum) (Error) (Binding))) (fun (x : Binding) => ((inr) (x)) : (sum) (Error) (Binding))) (((lookupBinding) (graph_)) (name)).
 Definition matchUnion_bundle (t0 : Type) :=
   hydra_fix (fun (bundle_ : forall (_ : hydra.graph.Graph) , forall (_ : Name) , forall (_ : (list) ((prod) (Name) (forall (_ : Term) , (sum) (Error) (t0)))) , forall (_ : Term) , (sum) (Error) (t0)) =>
     let matchUnion := bundle_ in
@@ -66,8 +66,8 @@ Definition matchRecord (t0 : Type) (t1 : Type) : forall (_ : t0) , forall (_ : f
 | _ => (inl) ((Error_Resolution) ((ResolutionError_UnexpectedShape) ((Build_UnexpectedShapeError) ("record"%string) ((hydra.show.core.term) (term_)))))
 end) (stripped).
 Arguments matchRecord {t0} {t1}.
-Definition requirePrimitive : forall (_ : hydra.graph.Graph) , forall (_ : Name) , (sum) (Error) (Primitive) := fun (graph_ : hydra.graph.Graph) => fun (name : Name) => (((maybes.maybe) ((inl) ((Error_Resolution) ((ResolutionError_NoSuchPrimitive) ((Build_NoSuchPrimitiveError) (name)))))) (fun (x : Primitive) => (inr) (x))) (((lookupPrimitive) (graph_)) (name)).
-Definition requirePrimitiveType : forall (_ : hydra.graph.Graph) , forall (_ : Name) , (sum) (Error) (TypeScheme) := fun (tx : hydra.graph.Graph) => fun (name : Name) => let mts := ((maybes.map) (fun (_p : Primitive) => (fun r_ => (primitive_type) (r_)) (_p))) (((maps.lookup) (name)) ((fun r_ => (graph_primitives) (r_)) (tx))) in (((maybes.maybe) ((inl) ((Error_Resolution) ((ResolutionError_NoSuchPrimitive) ((Build_NoSuchPrimitiveError) (name)))))) (fun (ts : TypeScheme) => (inr) (ts))) (mts).
+Definition requirePrimitive : forall (_ : hydra.graph.Graph) , forall (_ : Name) , (sum) (Error) (Primitive) := fun (graph_ : hydra.graph.Graph) => fun (name : Name) => (((maybes.maybe) (((inl) ((Error_Resolution) ((ResolutionError_NoSuchPrimitive) ((Build_NoSuchPrimitiveError) (name))))) : (sum) (Error) (Primitive))) (fun (x : Primitive) => ((inr) (x)) : (sum) (Error) (Primitive))) (((lookupPrimitive) (graph_)) (name)).
+Definition requirePrimitiveType : forall (_ : hydra.graph.Graph) , forall (_ : Name) , (sum) (Error) (TypeScheme) := fun (tx : hydra.graph.Graph) => fun (name : Name) => let mts := ((maybes.map) (fun (_p : Primitive) => (fun r_ => (primitive_type) (r_)) (_p))) (((maps.lookup) (name)) ((fun r_ => (graph_primitives) (r_)) (tx))) in (((maybes.maybe) (((inl) ((Error_Resolution) ((ResolutionError_NoSuchPrimitive) ((Build_NoSuchPrimitiveError) (name))))) : (sum) (Error) (TypeScheme))) (fun (ts : TypeScheme) => ((inr) (ts)) : (sum) (Error) (TypeScheme))) (mts).
 Definition resolveTerm_bundle :=
   hydra_fix (fun (bundle_ : forall (_ : hydra.graph.Graph) , forall (_ : Name) , (option) (Term)) =>
     let resolveTerm := bundle_ in
@@ -78,13 +78,13 @@ end) (stripped) in (((maybes.maybe) ((None) : (option) (Term))) (recurse)) (((lo
 
 Definition resolveTerm : forall (_ : hydra.graph.Graph) , forall (_ : Name) , (option) (Term) :=
   resolveTerm_bundle.
-Definition requireTerm : forall (_ : hydra.graph.Graph) , forall (_ : Name) , (sum) (Error) (Term) := fun (graph_ : hydra.graph.Graph) => fun (name : Name) => (((maybes.maybe) ((inl) ((Error_Resolution) ((ResolutionError_NoSuchBinding) ((Build_NoSuchBindingError) (name)))))) (fun (x : Term) => (inr) (x))) (((resolveTerm) (graph_)) (name)).
+Definition requireTerm : forall (_ : hydra.graph.Graph) , forall (_ : Name) , (sum) (Error) (Term) := fun (graph_ : hydra.graph.Graph) => fun (name : Name) => (((maybes.maybe) (((inl) ((Error_Resolution) ((ResolutionError_NoSuchBinding) ((Build_NoSuchBindingError) (name))))) : (sum) (Error) (Term))) (fun (x : Term) => ((inr) (x)) : (sum) (Error) (Term))) (((resolveTerm) (graph_)) (name)).
 Definition stripAndDereferenceTerm_bundle :=
   hydra_fix (fun (bundle_ : forall (_ : hydra.graph.Graph) , forall (_ : Term) , (sum) (Error) (Term)) =>
     let stripAndDereferenceTerm := bundle_ in
     fun (graph_ : hydra.graph.Graph) => fun (term_ : Term) => let stripped := (deannotateAndDetypeTerm) (term_) in (fun x_ => match x_ with
 | Term_Variable v_ => (fun (v : Name) => ((eithers.bind) (((requireTerm) (graph_)) (v))) (fun (t : Term) => ((stripAndDereferenceTerm) (graph_)) (t))) (v_)
-| _ => (inr) (stripped)
+| _ => ((inr) (stripped)) : (sum) (Error) (Term)
 end) (stripped)).
 
 Definition stripAndDereferenceTerm : forall (_ : hydra.graph.Graph) , forall (_ : Term) , (sum) (Error) (Term) :=
@@ -93,8 +93,8 @@ Definition stripAndDereferenceTermEither_bundle :=
   hydra_fix (fun (bundle_ : forall (_ : hydra.graph.Graph) , forall (_ : Term) , (sum) (Error) (Term)) =>
     let stripAndDereferenceTermEither := bundle_ in
     fun (graph_ : hydra.graph.Graph) => fun (term_ : Term) => let stripped := (deannotateAndDetypeTerm) (term_) in (fun x_ => match x_ with
-| Term_Variable v_ => (fun (v : Name) => (((eithers.either) (fun (left_ : Error) => (inl) (left_))) (fun (binding : Binding) => ((stripAndDereferenceTermEither) (graph_)) ((fun r_ => (binding_term) (r_)) (binding)))) (((dereferenceVariable) (graph_)) (v))) (v_)
-| _ => (inr) (stripped)
+| Term_Variable v_ => (fun (v : Name) => (((eithers.either) (fun (left_ : Error) => ((inl) (left_)) : (sum) (Error) (Term))) (fun (binding : Binding) => ((stripAndDereferenceTermEither) (graph_)) ((fun r_ => (binding_term) (r_)) (binding)))) (((dereferenceVariable) (graph_)) (v))) (v_)
+| _ => ((inr) (stripped)) : (sum) (Error) (Term)
 end) (stripped)).
 
 Definition stripAndDereferenceTermEither : forall (_ : hydra.graph.Graph) , forall (_ : Term) , (sum) (Error) (Term) :=

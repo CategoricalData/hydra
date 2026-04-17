@@ -512,15 +512,13 @@ encodeTerm = define "encodeTerm" $
       -- argument from the enclosing TypeApplication, but only when the type
       -- is ground. Non-empty bodies are left untouched.
       Logic.ifElse (Logic.not $ var "isGround") (var "encoded") $
-      -- Only `_Term_maybe Nothing` needs a type annotation: Coq cannot infer
-      -- the element type of a bare `None` in a position like a record field
-      -- with an application type. Empty lists/maps/sets already unify against
-      -- their destination type via Coq's standard inference because they
-      -- always land in a position with a declared `list T` type (record
-      -- fields, function arguments, etc.). Emitting a cast for those risks
-      -- using the wrong element type — the TypeApplication's `type` field
-      -- doesn't always match the Coq-side expected type (e.g. Hydra's
-      -- `Map Name Term` vs Coq's `list (Name * Term)`).
+      -- `_Term_maybe Nothing` and `_Term_either (inl|inr)` need type
+      -- annotations: Coq cannot infer the "other" type parameter of `option`
+      -- / `sum` from context when these appear as record fields or function
+      -- arguments. Empty lists/maps/sets are NOT annotated here because the
+      -- TypeApplication's `type` field does not always match the Coq-side
+      -- expected type (e.g. Hydra's `Map Name Term` vs Coq's
+      -- `list (Name * Term)`), so a blind cast would produce the wrong type.
       cases _Term (var "body")
         (Just (var "encoded")) [
         _Term_maybe>>: "mt" ~> Maybes.maybe
@@ -528,7 +526,48 @@ encodeTerm = define "encodeTerm" $
             @@ (coqTypeTerm @@ (coqTermApp @@ (coqTermQualid @@ string "option")
               @@ list [encodeType @@ var "env" @@ var "tyArg"])))
           (constant $ var "encoded")
-          (var "mt")],
+          (var "mt"),
+        -- Empty list: annotate with `list <tyArg>` when the element type is
+        -- compound (either, pair, map). This handles `lefts nil` / `rights nil`
+        -- (tyArg = sum) and similar. Simple tyArgs like `Name` are skipped
+        -- because Hydra sometimes passes a wrong single-type element (e.g.
+        -- `Name` for an annotation field whose Coq type is `list (Name * Term)`).
+        _Term_list>>: "xs" ~> Logic.ifElse
+          (Logic.and (Lists.null $ var "xs")
+            (cases _Type (var "tyArg") (Just (boolean False)) [
+              _Type_either>>: constant (boolean True),
+              _Type_pair>>: constant (boolean True),
+              _Type_map>>: constant (boolean True)]))
+          (coqTermCast @@ (coqTermQualid @@ string "nil")
+            @@ (coqTypeTerm @@ (coqTermApp @@ (coqTermQualid @@ string "list")
+              @@ list [encodeType @@ var "env" @@ var "tyArg"])))
+          (var "encoded"),
+        -- For `_Term_either`, Hydra wraps in TWO nested TypeApplications
+        -- (one per type parameter): `TypeApp (TypeApp (Either x) L) R`.
+        -- We receive the outer one here. If `tyArg` is already a full
+        -- `_Type_either`, use it directly. Otherwise, fall through.
+        _Term_either>>: "e" ~>
+          cases _Type (var "tyArg")
+            (Just (var "encoded")) [
+            _Type_either>>: "et" ~> lets [
+              "sumTy">: coqTypeTerm @@ (coqTermApp @@ (coqTermQualid @@ string "sum") @@ list [
+                encodeType @@ var "env" @@ (Core.eitherTypeLeft $ var "et"),
+                encodeType @@ var "env" @@ (Core.eitherTypeRight $ var "et")])] $
+              coqTermCast @@ var "encoded" @@ var "sumTy"],
+        -- Nested TypeApplication: body is another TypeApplication.
+        -- Peel one layer and recurse. This handles `TypeApp (TypeApp (Either x) L) R`
+        -- where the inner body is `_Term_either`.
+        _Term_typeApplication>>: "innerTa" ~> lets [
+          "innerBody">: Core.typeApplicationTermBody $ var "innerTa",
+          "innerTyArg">: Core.typeApplicationTermType $ var "innerTa",
+          "innerEncoded">: encodeTerm @@ var "env" @@ var "innerBody"] $
+          cases _Term (var "innerBody")
+            (Just (var "encoded")) [
+            _Term_either>>: "innerE" ~> lets [
+              "sumTy">: coqTypeTerm @@ (coqTermApp @@ (coqTermQualid @@ string "sum") @@ list [
+                encodeType @@ var "env" @@ var "innerTyArg",
+                encodeType @@ var "env" @@ var "tyArg"])] $
+              coqTermCast @@ var "innerEncoded" @@ var "sumTy"]],
     _Term_typeLambda>>: "tl" ~> encodeTerm @@ var "env" @@ (Core.typeLambdaBody $ var "tl"),
     _Term_unit>>: constant (coqTermQualid @@ string "tt"),
     _Term_unwrap>>: "n" ~> encodeWrapElim @@ var "n",

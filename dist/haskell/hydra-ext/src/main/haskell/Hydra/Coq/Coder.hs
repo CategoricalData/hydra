@@ -262,6 +262,32 @@ encodeTerm env tm =
         in (Logic.ifElse (Logic.not isGround) encoded (case body of
           Core.TermMaybe v1 -> Maybes.maybe (coqTermCast (coqTermQualid "None") (coqTypeTerm (coqTermApp (coqTermQualid "option") [
             encodeType env tyArg]))) (\_ -> encoded) v1
+          Core.TermList v1 -> Logic.ifElse (Logic.and (Lists.null v1) (case tyArg of
+            Core.TypeEither _ -> True
+            Core.TypePair _ -> True
+            Core.TypeMap _ -> True
+            _ -> False)) (coqTermCast (coqTermQualid "nil") (coqTypeTerm (coqTermApp (coqTermQualid "list") [
+            encodeType env tyArg]))) encoded
+          Core.TermEither _ -> case tyArg of
+            Core.TypeEither v2 ->
+              let sumTy =
+                      coqTypeTerm (coqTermApp (coqTermQualid "sum") [
+                        encodeType env (Core.eitherTypeLeft v2),
+                        (encodeType env (Core.eitherTypeRight v2))])
+              in (coqTermCast encoded sumTy)
+            _ -> encoded
+          Core.TermTypeApplication v1 ->
+            let innerBody = Core.typeApplicationTermBody v1
+                innerTyArg = Core.typeApplicationTermType v1
+                innerEncoded = encodeTerm env innerBody
+            in case innerBody of
+              Core.TermEither _ ->
+                let sumTy =
+                        coqTypeTerm (coqTermApp (coqTermQualid "sum") [
+                          encodeType env innerTyArg,
+                          (encodeType env tyArg)])
+                in (coqTermCast innerEncoded sumTy)
+              _ -> encoded
           _ -> encoded))
       Core.TermTypeLambda v0 -> encodeTerm env (Core.typeLambdaBody v0)
       Core.TermUnit -> coqTermQualid "tt"
