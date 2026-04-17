@@ -379,22 +379,22 @@ def infer_modules(cx: hydra.context.Context, bs_graph: hydra.graph.Graph, univer
     return hydra.lib.eithers.bind(hydra.inference.infer_graph_types(cx, data_elements(), g0()), (lambda infer_result_with_cx: (infer_result := hydra.lib.pairs.first(infer_result_with_cx), inferred_elements := hydra.lib.pairs.second(infer_result), Right(hydra.lib.lists.map((lambda v1: refresh_module(inferred_elements, v1)), target_mods)))[2]))
 
 def infer_modules_given(cx: hydra.context.Context, bs_graph: hydra.graph.Graph, universe_mods: frozenlist[hydra.packaging.Module], target_mods: frozenlist[hydra.packaging.Module]) -> Either[hydra.errors.Error, frozenlist[hydra.packaging.Module]]:
-    r"""Incrementally infer types for target modules, using the universe as a seeded inference context."""
+    r"""Infer types for target modules in the context of a typed universe."""
 
     @lru_cache(1)
     def g0() -> hydra.graph.Graph:
         return modules_to_graph(bs_graph, universe_mods, universe_mods)
     @lru_cache(1)
-    def target_bindings():
-        def _hoist_target_bindings_1(v1):
+    def data_elements():
+        def _hoist_data_elements_1(v1):
             match v1:
                 case hydra.packaging.DefinitionTerm(value=td):
                     return Just(hydra.core.Binding(td.name, td.term, td.type))
 
                 case _:
                     return Nothing()
-        return hydra.lib.lists.concat(hydra.lib.lists.map((lambda m: hydra.lib.maybes.cat(hydra.lib.lists.map((lambda d: _hoist_target_bindings_1(d)), m.definitions))), target_mods))
-    return hydra.lib.eithers.bind(hydra.inference.infer_graph_types(cx, target_bindings(), g0()), (lambda infer_result_with_cx: (infer_result := hydra.lib.pairs.first(infer_result_with_cx), inferred_elements := hydra.lib.pairs.second(infer_result), Right(hydra.lib.lists.map((lambda v1: refresh_module(inferred_elements, v1)), target_mods)))[2]))
+        return hydra.lib.lists.concat(hydra.lib.lists.map((lambda m: hydra.lib.maybes.cat(hydra.lib.lists.map((lambda d: _hoist_data_elements_1(d)), m.definitions))), universe_mods))
+    return hydra.lib.eithers.bind(hydra.inference.infer_graph_types(cx, data_elements(), g0()), (lambda infer_result_with_cx: (infer_result := hydra.lib.pairs.first(infer_result_with_cx), inferred_elements := hydra.lib.pairs.second(infer_result), Right(hydra.lib.lists.map((lambda v1: refresh_module(inferred_elements, v1)), target_mods)))[2]))
 
 def module_to_json(schema_map: FrozenDict[hydra.core.Name, hydra.core.Type], m: hydra.packaging.Module) -> Either[hydra.errors.Error, str]:
     r"""Convert a Module to a JSON string."""
