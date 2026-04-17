@@ -14,9 +14,12 @@ def buildGraph(elements: Seq[hydra.core.Binding])(environment: Map[hydra.core.Na
   lazy val elementTerms: Map[hydra.core.Name, hydra.core.Term] = hydra.lib.maps.fromList[hydra.core.Name,
      hydra.core.Term](hydra.lib.lists.map[hydra.core.Binding, Tuple2[hydra.core.Name,
      hydra.core.Term]]((b: hydra.core.Binding) => Tuple2(b.name, (b.term)))(elements))
-  lazy val letTerms: Map[hydra.core.Name, hydra.core.Term] = hydra.lib.maps.map[Option[hydra.core.Term],
-     hydra.core.Term, hydra.core.Name]((mt: Option[hydra.core.Term]) => hydra.lib.maybes.fromJust[hydra.core.Term](mt))(hydra.lib.maps.filter[Option[hydra.core.Term],
-     hydra.core.Name]((mt: Option[hydra.core.Term]) => hydra.lib.maybes.isJust[hydra.core.Term](mt))(environment))
+  lazy val letTerms: Map[hydra.core.Name, hydra.core.Term] = hydra.lib.maps.fromList[hydra.core.Name,
+     hydra.core.Term](hydra.lib.maybes.mapMaybe[Tuple2[hydra.core.Name, Option[hydra.core.Term]],
+     Tuple2[hydra.core.Name, hydra.core.Term]]((kv: Tuple2[hydra.core.Name, Option[hydra.core.Term]]) =>
+    hydra.lib.maybes.map[hydra.core.Term, Tuple2[hydra.core.Name, hydra.core.Term]]((t: hydra.core.Term) =>
+    Tuple2(hydra.lib.pairs.first[hydra.core.Name, Option[hydra.core.Term]](kv), t))(hydra.lib.pairs.second[hydra.core.Name,
+       Option[hydra.core.Term]](kv)))(hydra.lib.maps.toList[hydra.core.Name, Option[hydra.core.Term]](environment)))
   lazy val mergedTerms: Map[hydra.core.Name, hydra.core.Term] = hydra.lib.maps.union[hydra.core.Name,
      hydra.core.Term](elementTerms)(letTerms)
   lazy val filteredTerms: Map[hydra.core.Name, hydra.core.Term] = hydra.lib.maps.filterWithKey[hydra.core.Name,

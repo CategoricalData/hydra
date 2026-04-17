@@ -20,7 +20,7 @@ checkAll :: [Maybe t0] -> Maybe t0
 checkAll checks =
 
       let errors = Maybes.cat checks
-      in (Lists.safeHead errors)
+      in (Lists.maybeHead errors)
 
 validateEdge :: (t0 -> t1 -> Maybe Pg.InvalidValueError) -> Maybe (t1 -> Maybe Model.VertexLabel) -> Model.EdgeType t0 -> Model.Edge t1 -> Maybe Pg.InvalidEdgeError
 validateEdge checkValue labelForVertexId typ el =

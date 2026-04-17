@@ -552,20 +552,20 @@ public interface Coder {
         hydra.lib.equality.Equal.apply(
           hydra.lib.lists.Length.apply(names),
           1),
-        () -> ((java.util.function.Supplier<java.util.List<hydra.core.Name>>) (() -> {
-          hydra.util.Lazy<hydra.core.Name> singleName = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(names));
-          return hydra.lib.maybes.Cases.applyLazy(
+        () -> hydra.lib.maybes.Maybe.applyLazy(
+          () -> (java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()),
+          (java.util.function.Function<hydra.core.Name, java.util.List<hydra.core.Name>>) (singleName -> hydra.lib.maybes.Cases.applyLazy(
             hydra.lib.maps.Lookup.apply(
-              singleName.get(),
+              singleName,
               allDeps.get()),
             () -> (java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()),
             (java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.List<hydra.core.Name>>) (deps -> hydra.lib.logic.IfElse.lazy(
               hydra.lib.sets.Member.apply(
-                singleName.get(),
+                singleName,
                 deps),
-              () -> java.util.Arrays.asList(singleName.get()),
-              () -> (java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()))));
-        })).get(),
+              () -> java.util.Arrays.asList(singleName),
+              () -> (java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()))))),
+          hydra.lib.lists.MaybeHead.apply(names)),
         () -> names)),
       sorted.get()))));
     hydra.util.Lazy<java.util.Set<hydra.core.Name>> thunkedVars = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
@@ -1592,27 +1592,37 @@ public interface Coder {
   }
 
   static <T0> java.util.List<hydra.java.syntax.BlockStatement> compareToBody(T0 aliases, String otherVar, java.util.List<hydra.core.FieldType> fields) {
-    return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.lists.Null.apply(fields),
-      () -> java.util.Arrays.asList(new hydra.java.syntax.BlockStatement.Statement(hydra.java.Utils.javaReturnStatement(hydra.util.Maybe.just(hydra.java.Utils.javaIntExpression(new java.math.BigInteger("0")))))),
-      () -> hydra.lib.logic.IfElse.lazy(
-        hydra.lib.equality.Equal.apply(
-          hydra.lib.lists.Length.apply(fields),
-          1),
-        () -> java.util.Arrays.asList(new hydra.java.syntax.BlockStatement.Statement(hydra.java.Utils.javaReturnStatement(hydra.util.Maybe.just(hydra.java.Coder.compareFieldExpr(
-          otherVar,
-          hydra.lib.lists.Head.apply(fields)))))),
-        () -> hydra.lib.lists.Concat2.apply(
-          java.util.Arrays.asList(hydra.java.Coder.<T0>cmpDeclStatement(aliases)),
-          hydra.lib.lists.Concat2.apply(
-            hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-              (java.util.function.Function<hydra.core.FieldType, java.util.List<hydra.java.syntax.BlockStatement>>) (f -> hydra.java.Coder.compareAndReturnStmts(
-                otherVar,
-                f)),
-              hydra.lib.lists.Init.apply(fields))),
-            java.util.Arrays.asList(new hydra.java.syntax.BlockStatement.Statement(hydra.java.Utils.javaReturnStatement(hydra.util.Maybe.just(hydra.java.Coder.compareFieldExpr(
+    java.util.List<hydra.java.syntax.BlockStatement> zeroStmts = java.util.Arrays.asList(new hydra.java.syntax.BlockStatement.Statement(hydra.java.Utils.javaReturnStatement(hydra.util.Maybe.just(hydra.java.Utils.javaIntExpression(new java.math.BigInteger("0"))))));
+    return hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> zeroStmts,
+      hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<hydra.util.Pair<hydra.core.FieldType, java.util.List<hydra.core.FieldType>>, java.util.List<hydra.java.syntax.BlockStatement>>) (p -> {
+          hydra.util.Lazy<hydra.core.FieldType> firstField = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(p));
+          hydra.util.Lazy<java.util.List<hydra.core.FieldType>> restFields = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(p));
+          return hydra.lib.logic.IfElse.lazy(
+            hydra.lib.lists.Null.apply(restFields.get()),
+            () -> java.util.Arrays.asList(new hydra.java.syntax.BlockStatement.Statement(hydra.java.Utils.javaReturnStatement(hydra.util.Maybe.just(hydra.java.Coder.compareFieldExpr(
               otherVar,
-              hydra.lib.lists.Last.apply(fields))))))))));
+              firstField.get()))))),
+            () -> hydra.lib.lists.Concat2.apply(
+              java.util.Arrays.asList(hydra.java.Coder.<T0>cmpDeclStatement(aliases)),
+              hydra.lib.lists.Concat2.apply(
+                hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
+                  (java.util.function.Function<hydra.core.FieldType, java.util.List<hydra.java.syntax.BlockStatement>>) (f -> hydra.java.Coder.compareAndReturnStmts(
+                    otherVar,
+                    f)),
+                  hydra.lib.lists.Cons.apply(
+                    firstField.get(),
+                    hydra.lib.maybes.FromMaybe.applyLazy(
+                      () -> (java.util.List<hydra.core.FieldType>) (java.util.Collections.<hydra.core.FieldType>emptyList()),
+                      hydra.lib.lists.MaybeInit.apply(restFields.get()))))),
+                java.util.Arrays.asList(new hydra.java.syntax.BlockStatement.Statement(hydra.java.Utils.javaReturnStatement(hydra.util.Maybe.just(hydra.java.Coder.compareFieldExpr(
+                  otherVar,
+                  hydra.lib.maybes.FromMaybe.applyLazy(
+                    () -> firstField.get(),
+                    hydra.lib.lists.MaybeLast.apply(restFields.get()))))))))));
+        }),
+        hydra.lib.lists.Uncons.apply(fields)));
   }
 
   static hydra.java.syntax.InclusiveOrExpression compareToZeroClause(String tmpName, String fname) {
@@ -1719,7 +1729,15 @@ public interface Coder {
           hydra.lib.equality.Equal.apply(
             hydra.lib.lists.Length.apply(typeArgs),
             2),
-          () -> hydra.util.Either.<T2, hydra.core.Type>right(new hydra.core.Type.Pair(new hydra.core.PairType(hydra.lib.lists.Head.apply(typeArgs), hydra.lib.lists.Head.apply(hydra.lib.lists.Tail.apply(typeArgs))))),
+          () -> hydra.util.Either.<T2, hydra.core.Type>right(new hydra.core.Type.Pair(new hydra.core.PairType(hydra.lib.maybes.FromMaybe.applyLazy(
+            () -> fallback,
+            hydra.lib.lists.MaybeAt.apply(
+              0,
+              typeArgs)), hydra.lib.maybes.FromMaybe.applyLazy(
+            () -> fallback,
+            hydra.lib.lists.MaybeAt.apply(
+              1,
+              typeArgs))))),
           () -> hydra.util.Either.<T2, hydra.core.Type>right(fallback));
       }
     });
@@ -2283,7 +2301,7 @@ public interface Coder {
                     @Override
                     public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Record rec) {
                       return hydra.lib.maybes.Bind.apply(
-                        hydra.lib.lists.SafeHead.apply(hydra.lib.lists.Filter.apply(
+                        hydra.lib.lists.MaybeHead.apply(hydra.lib.lists.Filter.apply(
                           (java.util.function.Function<hydra.core.Field, Boolean>) (f -> hydra.lib.equality.Equal.apply(
                             (f).name,
                             new hydra.core.Name("body"))),
@@ -2304,7 +2322,7 @@ public interface Coder {
                       @Override
                       public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Record rec) {
                         return hydra.lib.maybes.Bind.apply(
-                          hydra.lib.lists.SafeHead.apply(hydra.lib.lists.Filter.apply(
+                          hydra.lib.lists.MaybeHead.apply(hydra.lib.lists.Filter.apply(
                             (java.util.function.Function<hydra.core.Field, Boolean>) (f -> hydra.lib.equality.Equal.apply(
                               (f).name,
                               new hydra.core.Name("function"))),
@@ -2312,7 +2330,7 @@ public interface Coder {
                           (java.util.function.Function<hydra.core.Field, hydra.util.Maybe<hydra.core.Type>>) (funcField -> hydra.lib.maybes.Bind.apply(
                             hydra.java.Coder.decodeTypeFromTerm((funcField).term),
                             (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (func -> hydra.lib.maybes.Bind.apply(
-                              hydra.lib.lists.SafeHead.apply(hydra.lib.lists.Filter.apply(
+                              hydra.lib.lists.MaybeHead.apply(hydra.lib.lists.Filter.apply(
                                 (java.util.function.Function<hydra.core.Field, Boolean>) (f -> hydra.lib.equality.Equal.apply(
                                   (f).name,
                                   new hydra.core.Name("argument"))),
@@ -2335,7 +2353,7 @@ public interface Coder {
                         @Override
                         public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Record rec) {
                           return hydra.lib.maybes.Bind.apply(
-                            hydra.lib.lists.SafeHead.apply(hydra.lib.lists.Filter.apply(
+                            hydra.lib.lists.MaybeHead.apply(hydra.lib.lists.Filter.apply(
                               (java.util.function.Function<hydra.core.Field, Boolean>) (f -> hydra.lib.equality.Equal.apply(
                                 (f).name,
                                 new hydra.core.Name("domain"))),
@@ -2343,7 +2361,7 @@ public interface Coder {
                             (java.util.function.Function<hydra.core.Field, hydra.util.Maybe<hydra.core.Type>>) (domField -> hydra.lib.maybes.Bind.apply(
                               hydra.java.Coder.decodeTypeFromTerm((domField).term),
                               (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (dom -> hydra.lib.maybes.Bind.apply(
-                                hydra.lib.lists.SafeHead.apply(hydra.lib.lists.Filter.apply(
+                                hydra.lib.lists.MaybeHead.apply(hydra.lib.lists.Filter.apply(
                                   (java.util.function.Function<hydra.core.Field, Boolean>) (f -> hydra.lib.equality.Equal.apply(
                                     (f).name,
                                     new hydra.core.Name("codomain"))),
@@ -2382,53 +2400,50 @@ public interface Coder {
   }
 
   static java.util.List<hydra.core.Binding> dedupBindings(java.util.Set<hydra.core.Name> inScope, java.util.List<hydra.core.Binding> bs) {
-    return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.lists.Null.apply(bs),
+    return hydra.lib.maybes.FromMaybe.applyLazy(
       () -> (java.util.List<hydra.core.Binding>) (java.util.Collections.<hydra.core.Binding>emptyList()),
-      () -> ((java.util.function.Supplier<java.util.List<hydra.core.Binding>>) (() -> {
-        hydra.util.Lazy<hydra.core.Binding> b = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(bs));
-        return ((java.util.function.Supplier<java.util.List<hydra.core.Binding>>) (() -> {
-          hydra.util.Lazy<java.util.List<hydra.core.Binding>> rest = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply(bs));
-          return ((java.util.function.Supplier<java.util.List<hydra.core.Binding>>) (() -> {
-            hydra.core.Name name = b.get().name;
-            return hydra.lib.logic.IfElse.lazy(
-              hydra.lib.sets.Member.apply(
+      hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<hydra.util.Pair<hydra.core.Binding, java.util.List<hydra.core.Binding>>, java.util.List<hydra.core.Binding>>) (p -> {
+          hydra.util.Lazy<hydra.core.Binding> b = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(p));
+          hydra.core.Name name = b.get().name;
+          hydra.util.Lazy<java.util.List<hydra.core.Binding>> rest = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(p));
+          return hydra.lib.logic.IfElse.lazy(
+            hydra.lib.sets.Member.apply(
+              name,
+              inScope),
+            () -> ((java.util.function.Supplier<java.util.List<hydra.core.Binding>>) (() -> {
+              hydra.core.Name newName = hydra.java.Coder.freshJavaName(
                 name,
-                inScope),
-              () -> ((java.util.function.Supplier<java.util.List<hydra.core.Binding>>) (() -> {
-                hydra.core.Name newName = hydra.java.Coder.freshJavaName(
+                inScope);
+              return ((java.util.function.Supplier<java.util.List<hydra.core.Binding>>) (() -> {
+                hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Name>> subst = new hydra.util.Lazy<>(() -> hydra.lib.maps.Singleton.apply(
                   name,
-                  inScope);
+                  newName));
                 return ((java.util.function.Supplier<java.util.List<hydra.core.Binding>>) (() -> {
-                  hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Name>> subst = new hydra.util.Lazy<>(() -> hydra.lib.maps.Singleton.apply(
-                    name,
-                    newName));
-                  return ((java.util.function.Supplier<java.util.List<hydra.core.Binding>>) (() -> {
-                    hydra.util.Lazy<java.util.List<hydra.core.Binding>> rest2 = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-                      (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b2 -> new hydra.core.Binding((b2).name, hydra.Variables.substituteVariables(
-                        subst.get(),
-                        (b2).term), (b2).type)),
-                      rest.get()));
-                    return hydra.lib.lists.Cons.apply(
-                      new hydra.core.Binding(newName, b.get().term, b.get().type),
-                      hydra.java.Coder.dedupBindings(
-                        hydra.lib.sets.Insert.apply(
-                          newName,
-                          inScope),
-                        rest2.get()));
-                  })).get();
+                  hydra.util.Lazy<java.util.List<hydra.core.Binding>> rest2 = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+                    (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b2 -> new hydra.core.Binding((b2).name, hydra.Variables.substituteVariables(
+                      subst.get(),
+                      (b2).term), (b2).type)),
+                    rest.get()));
+                  return hydra.lib.lists.Cons.apply(
+                    new hydra.core.Binding(newName, b.get().term, b.get().type),
+                    hydra.java.Coder.dedupBindings(
+                      hydra.lib.sets.Insert.apply(
+                        newName,
+                        inScope),
+                      rest2.get()));
                 })).get();
-              })).get(),
-              () -> hydra.lib.lists.Cons.apply(
-                b.get(),
-                hydra.java.Coder.dedupBindings(
-                  hydra.lib.sets.Insert.apply(
-                    name,
-                    inScope),
-                  rest.get())));
-          })).get();
-        })).get();
-      })).get());
+              })).get();
+            })).get(),
+            () -> hydra.lib.lists.Cons.apply(
+              b.get(),
+              hydra.java.Coder.dedupBindings(
+                hydra.lib.sets.Insert.apply(
+                  name,
+                  inScope),
+                rest.get())));
+        }),
+        hydra.lib.lists.Uncons.apply(bs)));
   }
 
   static java.util.Map<hydra.core.Name, hydra.core.Type> detectAccumulatorUnification(java.util.List<hydra.core.Type> doms, hydra.core.Type cod, java.util.List<hydra.core.Name> tparams) {
@@ -2632,7 +2647,9 @@ public interface Coder {
       nsStr);
     return hydra.Formatting.sanitizeWithUnderscores(
       hydra.java.Language.reservedWords(),
-      hydra.Formatting.capitalize(hydra.lib.lists.Last.apply(parts)));
+      hydra.Formatting.capitalize(hydra.lib.maybes.FromMaybe.applyLazy(
+        () -> nsStr,
+        hydra.lib.lists.MaybeLast.apply(parts))));
   }
 
   static hydra.core.Name elementsQualifiedName(hydra.packaging.Namespace ns) {
@@ -3940,9 +3957,13 @@ public interface Coder {
             return ((java.util.function.Supplier<hydra.util.Either<hydra.errors.Error_, hydra.java.syntax.Expression>>) (() -> {
               hydra.util.Lazy<hydra.java.syntax.Identifier> className = new hydra.util.Lazy<>(() -> new hydra.java.syntax.Identifier(hydra.lib.strings.Intercalate.apply(
                 ".",
-                hydra.lib.lists.Init.apply(parts))));
+                hydra.lib.maybes.FromMaybe.applyLazy(
+                  () -> (java.util.List<String>) (java.util.Collections.<String>emptyList()),
+                  hydra.lib.lists.MaybeInit.apply(parts)))));
               return ((java.util.function.Supplier<hydra.util.Either<hydra.errors.Error_, hydra.java.syntax.Expression>>) (() -> {
-                hydra.util.Lazy<hydra.java.syntax.Identifier> methodName = new hydra.util.Lazy<>(() -> new hydra.java.syntax.Identifier(hydra.lib.lists.Last.apply(parts)));
+                hydra.util.Lazy<hydra.java.syntax.Identifier> methodName = new hydra.util.Lazy<>(() -> new hydra.java.syntax.Identifier(hydra.lib.maybes.FromMaybe.applyLazy(
+                  () -> fullName,
+                  hydra.lib.lists.MaybeLast.apply(parts))));
                 return hydra.util.Either.<hydra.errors.Error_, hydra.java.syntax.Expression>right(hydra.java.Utils.javaMethodInvocationToJavaExpression(hydra.java.Utils.methodInvocationStaticWithTypeArgs(
                   className.get(),
                   methodName.get(),
@@ -5066,7 +5087,15 @@ public interface Coder {
                               hydra.lib.lists.Length.apply(allTypeArgs.get()),
                               2),
                             () -> ((java.util.function.Supplier<hydra.util.Either<hydra.errors.Error_, hydra.java.syntax.Expression>>) (() -> {
-                              hydra.util.Lazy<hydra.util.Pair<hydra.core.Type, hydra.core.Type>> eitherBranchTypes = new hydra.util.Lazy<>(() -> (hydra.util.Pair<hydra.core.Type, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Type, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Type, hydra.core.Type>(hydra.lib.lists.Head.apply(allTypeArgs.get()), hydra.lib.lists.Head.apply(hydra.lib.lists.Tail.apply(allTypeArgs.get()))))));
+                              hydra.util.Lazy<hydra.util.Pair<hydra.core.Type, hydra.core.Type>> eitherBranchTypes = new hydra.util.Lazy<>(() -> (hydra.util.Pair<hydra.core.Type, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Type, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Type, hydra.core.Type>(hydra.lib.maybes.FromMaybe.applyLazy(
+                                () -> correctedTyp,
+                                hydra.lib.lists.MaybeAt.apply(
+                                  0,
+                                  allTypeArgs.get())), hydra.lib.maybes.FromMaybe.applyLazy(
+                                () -> correctedTyp,
+                                hydra.lib.lists.MaybeAt.apply(
+                                  1,
+                                  allTypeArgs.get()))))));
                               return hydra.lib.eithers.Bind.apply(
                                 hydra.lib.eithers.MapList.apply(
                                   (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.Error_, hydra.java.syntax.ReferenceType>>) (t -> hydra.lib.eithers.Bind.apply(
@@ -5223,7 +5252,9 @@ public interface Coder {
               hydra.lib.lists.Length.apply(args2.get()),
               1),
             () -> ((java.util.function.Supplier<hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.java.syntax.BlockStatement>>>) (() -> {
-              hydra.util.Lazy<hydra.core.Term> arg = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(args2.get()));
+              hydra.util.Lazy<hydra.core.Term> arg = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+                () -> new hydra.core.Term.Unit(),
+                hydra.lib.lists.MaybeHead.apply(args2.get())));
               return hydra.Strip.deannotateAndDetypeTerm(body2.get()).accept(new hydra.core.Term.PartialVisitor<>() {
                 @Override
                 public hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.java.syntax.BlockStatement>> otherwise(hydra.core.Term instance) {
@@ -5967,14 +5998,15 @@ public interface Coder {
   }
 
   static hydra.java.syntax.Expression encodeVariable_buildCurried(java.util.List<hydra.core.Name> params, hydra.java.syntax.Expression inner) {
-    return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.lists.Null.apply(params),
+    return hydra.lib.maybes.FromMaybe.applyLazy(
       () -> inner,
-      () -> hydra.java.Utils.javaLambda(
-        hydra.lib.lists.Head.apply(params),
-        hydra.java.Coder.encodeVariable_buildCurried(
-          hydra.lib.lists.Tail.apply(params),
-          inner)));
+      hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>, hydra.java.syntax.Expression>) (p -> hydra.java.Utils.javaLambda(
+          hydra.lib.pairs.First.apply(p),
+          hydra.java.Coder.encodeVariable_buildCurried(
+            hydra.lib.pairs.Second.apply(p),
+            inner))),
+        hydra.lib.lists.Uncons.apply(params)));
   }
 
   static <T0> hydra.util.Either<hydra.errors.Error_, hydra.java.syntax.Expression> encodeVariable_hoistedLambdaCase(hydra.java.environment.Aliases aliases, hydra.core.Name name, Integer arity, T0 cx, hydra.graph.Graph g) {
@@ -6387,11 +6419,9 @@ public interface Coder {
   }
 
   static <T0> hydra.util.Maybe<T0> findSelfRefVar(java.util.Map<T0, java.util.List<T0>> grouped) {
-    hydra.util.Lazy<java.util.List<hydra.util.Pair<T0, java.util.List<T0>>>> selfRefs = new hydra.util.Lazy<>(() -> hydra.java.Coder.<T0>findSelfRefVar_selfRefs(grouped));
-    return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.lists.Null.apply(selfRefs.get()),
-      () -> (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
-      () -> hydra.util.Maybe.just(hydra.lib.pairs.First.apply(hydra.lib.lists.Head.apply(selfRefs.get()))));
+    return hydra.lib.maybes.Map.apply(
+      (java.util.function.Function<hydra.util.Pair<T0, java.util.List<T0>>, T0>) (entry -> hydra.lib.pairs.First.apply(entry)),
+      hydra.lib.lists.MaybeHead.apply(hydra.java.Coder.<T0>findSelfRefVar_selfRefs(grouped)));
   }
 
   static <T0> java.util.List<hydra.util.Pair<T0, java.util.List<T0>>> findSelfRefVar_selfRefs(java.util.Map<T0, java.util.List<T0>> grouped) {
@@ -6925,22 +6955,24 @@ public interface Coder {
 
   static Boolean isUnresolvedInferenceVar(hydra.core.Name name) {
     java.util.List<Integer> chars = hydra.lib.strings.ToList.apply((name).value);
-    return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.lists.Null.apply(chars),
+    return hydra.lib.maybes.FromMaybe.applyLazy(
       () -> false,
-      () -> hydra.lib.logic.IfElse.lazy(
-        hydra.lib.logic.Not.apply(hydra.lib.equality.Equal.apply(
-          hydra.lib.lists.Head.apply(chars),
-          116)),
-        () -> false,
-        () -> ((java.util.function.Supplier<Boolean>) (() -> {
-          hydra.util.Lazy<java.util.List<Integer>> rest = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply(chars));
-          return hydra.lib.logic.And.apply(
-            hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(rest.get())),
-            hydra.lib.lists.Null.apply(hydra.lib.lists.Filter.apply(
-              (java.util.function.Function<Integer, Boolean>) (c -> hydra.lib.logic.Not.apply(hydra.java.Coder.isUnresolvedInferenceVar_isDigit(c))),
-              rest.get())));
-        })).get()));
+      hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<hydra.util.Pair<Integer, java.util.List<Integer>>, Boolean>) (p -> {
+          hydra.util.Lazy<Integer> firstCh = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(p));
+          hydra.util.Lazy<java.util.List<Integer>> rest = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(p));
+          return hydra.lib.logic.IfElse.lazy(
+            hydra.lib.logic.Not.apply(hydra.lib.equality.Equal.apply(
+              firstCh.get(),
+              116)),
+            () -> false,
+            () -> hydra.lib.logic.And.apply(
+              hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(rest.get())),
+              hydra.lib.lists.Null.apply(hydra.lib.lists.Filter.apply(
+                (java.util.function.Function<Integer, Boolean>) (c -> hydra.lib.logic.Not.apply(hydra.java.Coder.isUnresolvedInferenceVar_isDigit(c))),
+                rest.get()))));
+        }),
+        hydra.lib.lists.Uncons.apply(chars)));
   }
 
   static Boolean isUnresolvedInferenceVar_isDigit(Integer c) {
@@ -7054,12 +7086,15 @@ public interface Coder {
     java.util.List<String> parts = hydra.lib.strings.SplitOn.apply(
       ".",
       (ns).value);
+    hydra.util.Lazy<java.util.List<String>> initParts = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> (java.util.List<String>) (java.util.Collections.<String>emptyList()),
+      hydra.lib.lists.MaybeInit.apply(parts)));
     return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.lists.Null.apply(hydra.lib.lists.Init.apply(parts)),
+      hydra.lib.lists.Null.apply(initParts.get()),
       () -> (hydra.util.Maybe<hydra.packaging.Namespace>) (hydra.util.Maybe.<hydra.packaging.Namespace>nothing()),
       () -> hydra.util.Maybe.just(new hydra.packaging.Namespace(hydra.lib.strings.Intercalate.apply(
         ".",
-        hydra.lib.lists.Init.apply(parts)))));
+        initParts.get()))));
   }
 
   static Boolean needsThunking(hydra.core.Term t) {
@@ -7448,18 +7483,24 @@ public interface Coder {
 
         @Override
         public hydra.core.Term visit(hydra.core.Type.Function ft) {
-          hydra.util.Lazy<hydra.core.Term> arg = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(args));
-          hydra.core.Term app = new hydra.core.Term.Application(new hydra.core.Application(f, arg.get()));
-          hydra.core.Type remainingType = (ft).value.codomain;
-          hydra.core.Term annotatedApp = hydra.Annotations.setTermAnnotation(
-            hydra.Constants.key_type(),
-            hydra.util.Maybe.just(hydra.encode.Core.type(remainingType)),
-            app);
-          hydra.util.Lazy<java.util.List<hydra.core.Term>> rest = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply(args));
-          return hydra.java.Coder.rebuildApps(
-            annotatedApp,
-            rest.get(),
-            remainingType);
+          return hydra.lib.maybes.FromMaybe.applyLazy(
+            () -> f,
+            hydra.lib.maybes.Map.apply(
+              (java.util.function.Function<hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Term>>, hydra.core.Term>) (p -> {
+                hydra.util.Lazy<hydra.core.Term> arg = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(p));
+                hydra.core.Term app = new hydra.core.Term.Application(new hydra.core.Application(f, arg.get()));
+                hydra.core.Type remainingType = (ft).value.codomain;
+                hydra.core.Term annotatedApp = hydra.Annotations.setTermAnnotation(
+                  hydra.Constants.key_type(),
+                  hydra.util.Maybe.just(hydra.encode.Core.type(remainingType)),
+                  app);
+                hydra.util.Lazy<java.util.List<hydra.core.Term>> rest = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(p));
+                return hydra.java.Coder.rebuildApps(
+                  annotatedApp,
+                  rest.get(),
+                  remainingType);
+              }),
+              hydra.lib.lists.Uncons.apply(args)));
         }
       }));
   }
@@ -7998,11 +8039,13 @@ public interface Coder {
         name,
         recursiveVars),
       () -> ((java.util.function.Supplier<hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.java.syntax.BlockStatement>>>) (() -> {
-        hydra.util.Lazy<hydra.core.Binding> binding = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(hydra.lib.lists.Filter.apply(
-          (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.equality.Equal.apply(
-            (b).name,
-            name)),
-          flatBindings)));
+        hydra.util.Lazy<hydra.core.Binding> binding = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> new hydra.core.Binding(name, new hydra.core.Term.Unit(), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())),
+          hydra.lib.lists.MaybeHead.apply(hydra.lib.lists.Filter.apply(
+            (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.equality.Equal.apply(
+              (b).name,
+              name)),
+            flatBindings))));
         return ((java.util.function.Supplier<hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.java.syntax.BlockStatement>>>) (() -> {
           hydra.core.Term value = binding.get().term;
           return hydra.lib.eithers.Bind.apply(
@@ -8057,11 +8100,13 @@ public interface Coder {
   }
 
   static hydra.util.Either<hydra.errors.Error_, hydra.java.syntax.BlockStatement> toDeclStatement(hydra.java.environment.JavaEnvironment envExt, hydra.java.environment.Aliases aliasesExt, hydra.graph.Graph gExt, java.util.Set<hydra.core.Name> recursiveVars, java.util.Set<hydra.core.Name> thunkedVars, java.util.List<hydra.core.Binding> flatBindings, hydra.core.Name name, hydra.context.Context cx, hydra.graph.Graph g) {
-    hydra.util.Lazy<hydra.core.Binding> binding = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(hydra.lib.lists.Filter.apply(
-      (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.equality.Equal.apply(
-        (b).name,
-        name)),
-      flatBindings)));
+    hydra.util.Lazy<hydra.core.Binding> binding = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> new hydra.core.Binding(name, new hydra.core.Term.Unit(), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())),
+      hydra.lib.lists.MaybeHead.apply(hydra.lib.lists.Filter.apply(
+        (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.equality.Equal.apply(
+          (b).name,
+          name)),
+        flatBindings))));
     hydra.core.Term value = binding.get().term;
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.maybes.Cases.applyLazy(
@@ -8579,6 +8624,12 @@ public interface Coder {
   }
 
   static hydra.util.Pair<java.util.List<hydra.java.syntax.Expression>, hydra.util.Maybe<String>> wrapLazyArguments(hydra.core.Name name, java.util.List<hydra.java.syntax.Expression> args) {
+    hydra.java.syntax.Expression dummyExpr = hydra.java.Utils.javaIntExpression(new java.math.BigInteger("0"));
+    java.util.function.Function<Integer, hydra.java.syntax.Expression> argAt = (java.util.function.Function<Integer, hydra.java.syntax.Expression>) (i -> hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> dummyExpr,
+      hydra.lib.lists.MaybeAt.apply(
+        i,
+        args)));
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.And.apply(
         hydra.lib.equality.Equal.apply(
@@ -8588,15 +8639,9 @@ public interface Coder {
           hydra.lib.lists.Length.apply(args),
           3)),
       () -> (hydra.util.Pair<java.util.List<hydra.java.syntax.Expression>, hydra.util.Maybe<String>>) ((hydra.util.Pair<java.util.List<hydra.java.syntax.Expression>, hydra.util.Maybe<String>>) (new hydra.util.Pair<java.util.List<hydra.java.syntax.Expression>, hydra.util.Maybe<String>>(java.util.Arrays.asList(
-        hydra.lib.lists.At.apply(
-          0,
-          args),
-        hydra.java.Coder.wrapInSupplierLambda(hydra.lib.lists.At.apply(
-          1,
-          args)),
-        hydra.java.Coder.wrapInSupplierLambda(hydra.lib.lists.At.apply(
-          2,
-          args))), hydra.util.Maybe.just("lazy")))),
+        (argAt).apply(0),
+        hydra.java.Coder.wrapInSupplierLambda((argAt).apply(1)),
+        hydra.java.Coder.wrapInSupplierLambda((argAt).apply(2))), hydra.util.Maybe.just("lazy")))),
       () -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.logic.And.apply(
           hydra.lib.equality.Equal.apply(
@@ -8606,15 +8651,9 @@ public interface Coder {
             hydra.lib.lists.Length.apply(args),
             3)),
         () -> (hydra.util.Pair<java.util.List<hydra.java.syntax.Expression>, hydra.util.Maybe<String>>) ((hydra.util.Pair<java.util.List<hydra.java.syntax.Expression>, hydra.util.Maybe<String>>) (new hydra.util.Pair<java.util.List<hydra.java.syntax.Expression>, hydra.util.Maybe<String>>(java.util.Arrays.asList(
-          hydra.java.Coder.wrapInSupplierLambda(hydra.lib.lists.At.apply(
-            0,
-            args)),
-          hydra.lib.lists.At.apply(
-            1,
-            args),
-          hydra.lib.lists.At.apply(
-            2,
-            args)), hydra.util.Maybe.just("applyLazy")))),
+          hydra.java.Coder.wrapInSupplierLambda((argAt).apply(0)),
+          (argAt).apply(1),
+          (argAt).apply(2)), hydra.util.Maybe.just("applyLazy")))),
         () -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.logic.And.apply(
             hydra.lib.equality.Equal.apply(
@@ -8624,15 +8663,9 @@ public interface Coder {
               hydra.lib.lists.Length.apply(args),
               3)),
           () -> (hydra.util.Pair<java.util.List<hydra.java.syntax.Expression>, hydra.util.Maybe<String>>) ((hydra.util.Pair<java.util.List<hydra.java.syntax.Expression>, hydra.util.Maybe<String>>) (new hydra.util.Pair<java.util.List<hydra.java.syntax.Expression>, hydra.util.Maybe<String>>(java.util.Arrays.asList(
-            hydra.lib.lists.At.apply(
-              0,
-              args),
-            hydra.java.Coder.wrapInSupplierLambda(hydra.lib.lists.At.apply(
-              1,
-              args)),
-            hydra.lib.lists.At.apply(
-              2,
-              args)), hydra.util.Maybe.just("applyLazy")))),
+            (argAt).apply(0),
+            hydra.java.Coder.wrapInSupplierLambda((argAt).apply(1)),
+            (argAt).apply(2)), hydra.util.Maybe.just("applyLazy")))),
           () -> hydra.lib.logic.IfElse.lazy(
             hydra.lib.logic.And.apply(
               hydra.lib.equality.Equal.apply(
@@ -8642,15 +8675,9 @@ public interface Coder {
                 hydra.lib.lists.Length.apply(args),
                 3)),
             () -> (hydra.util.Pair<java.util.List<hydra.java.syntax.Expression>, hydra.util.Maybe<String>>) ((hydra.util.Pair<java.util.List<hydra.java.syntax.Expression>, hydra.util.Maybe<String>>) (new hydra.util.Pair<java.util.List<hydra.java.syntax.Expression>, hydra.util.Maybe<String>>(java.util.Arrays.asList(
-              hydra.java.Coder.wrapInSupplierLambda(hydra.lib.lists.At.apply(
-                0,
-                args)),
-              hydra.lib.lists.At.apply(
-                1,
-                args),
-              hydra.lib.lists.At.apply(
-                2,
-                args)), hydra.util.Maybe.just("applyLazy")))),
+              hydra.java.Coder.wrapInSupplierLambda((argAt).apply(0)),
+              (argAt).apply(1),
+              (argAt).apply(2)), hydra.util.Maybe.just("applyLazy")))),
             () -> hydra.lib.logic.IfElse.lazy(
               hydra.lib.logic.And.apply(
                 hydra.lib.logic.Or.apply(
@@ -8668,12 +8695,8 @@ public interface Coder {
                   hydra.lib.lists.Length.apply(args),
                   2)),
               () -> (hydra.util.Pair<java.util.List<hydra.java.syntax.Expression>, hydra.util.Maybe<String>>) ((hydra.util.Pair<java.util.List<hydra.java.syntax.Expression>, hydra.util.Maybe<String>>) (new hydra.util.Pair<java.util.List<hydra.java.syntax.Expression>, hydra.util.Maybe<String>>(java.util.Arrays.asList(
-                hydra.java.Coder.wrapInSupplierLambda(hydra.lib.lists.At.apply(
-                  0,
-                  args)),
-                hydra.lib.lists.At.apply(
-                  1,
-                  args)), hydra.util.Maybe.just("applyLazy")))),
+                hydra.java.Coder.wrapInSupplierLambda((argAt).apply(0)),
+                (argAt).apply(1)), hydra.util.Maybe.just("applyLazy")))),
               () -> (hydra.util.Pair<java.util.List<hydra.java.syntax.Expression>, hydra.util.Maybe<String>>) ((hydra.util.Pair<java.util.List<hydra.java.syntax.Expression>, hydra.util.Maybe<String>>) (new hydra.util.Pair<java.util.List<hydra.java.syntax.Expression>, hydra.util.Maybe<String>>(args, (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())))))))));
   }
 }

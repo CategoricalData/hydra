@@ -141,7 +141,8 @@ object literals:
     val e = precision - scale - 1
     val sign = if (stripped.signum < 0) "-" else ""
     val plain = stripped.unscaledValue.abs.toString
-    if (e >= 7 || e < -3) {
+    // Haskell Scientific uses plain form iff -1 <= e <= 6; otherwise scientific.
+    if (e >= 7 || e < -1) {
       val mantissa = if (plain.length == 1) plain + ".0" else plain.charAt(0).toString + "." + plain.substring(1)
       s"$sign${mantissa}e$e"
     } else {

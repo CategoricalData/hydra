@@ -3800,7 +3800,7 @@
                                                       "let": {
                                                         "bindings": [
                                                           {
-                                                            "name": "letfnBindings",
+                                                            "name": "fnSpecs",
                                                             "term": {
                                                               "application": {
                                                                 "argument": {"variable": "bindings"},
@@ -3822,7 +3822,7 @@
                                                                                           "let": {
                                                                                             "bindings": [
                                                                                               {
-                                                                                                "name": "sbName",
+                                                                                                "name": "name",
                                                                                                 "term": {
                                                                                                   "application": {
                                                                                                     "argument": {
@@ -3831,128 +3831,122 @@
                                                                                                         "function": {
                                                                                                           "project": {"field": "name", "typeName": "hydra.lisp.syntax.SimpleBinding"}}}},
                                                                                                     "function": {"variable": "hydra.lisp.serde.symbolToExpr"}}},
-                                                                                                "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}}],
-                                                                                            "body": {
-                                                                                              "let": {
-                                                                                                "bindings": [
-                                                                                                  {
-                                                                                                    "name": "sbVal",
-                                                                                                    "term": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "sb"},
-                                                                                                        "function": {
-                                                                                                          "project": {"field": "value", "typeName": "hydra.lisp.syntax.SimpleBinding"}}}},
-                                                                                                    "type": {
-                                                                                                      "type": {"variable": "hydra.lisp.syntax.Expression"},
-                                                                                                      "variables": []}}],
-                                                                                                "body": {
+                                                                                                "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}},
+                                                                                              {
+                                                                                                "name": "val",
+                                                                                                "term": {
                                                                                                   "application": {
-                                                                                                    "argument": {"variable": "sbVal"},
+                                                                                                    "argument": {"variable": "sb"},
                                                                                                     "function": {
-                                                                                                      "cases": {
-                                                                                                        "cases": [
-                                                                                                          {
-                                                                                                            "name": "lambda",
-                                                                                                            "term": {
-                                                                                                              "lambda": {
-                                                                                                                "body": {
-                                                                                                                  "let": {
-                                                                                                                    "bindings": [
-                                                                                                                      {
-                                                                                                                        "name": "params",
-                                                                                                                        "term": {
-                                                                                                                          "application": {
-                                                                                                                            "argument": {
-                                                                                                                              "application": {
-                                                                                                                                "argument": {"variable": "lam"},
-                                                                                                                                "function": {
-                                                                                                                                  "project": {"field": "params", "typeName": "hydra.lisp.syntax.Lambda"}}}},
-                                                                                                                            "function": {
-                                                                                                                              "application": {
-                                                                                                                                "argument": {"variable": "hydra.lisp.serde.symbolToExpr"},
-                                                                                                                                "function": {
-                                                                                                                                  "typeApplication": {
-                                                                                                                                    "body": {
-                                                                                                                                      "typeApplication": {
-                                                                                                                                        "body": {"variable": "hydra.lib.lists.map"},
-                                                                                                                                        "type": {"variable": "hydra.lisp.syntax.Symbol"}}},
-                                                                                                                                    "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                                                                                                        "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
-                                                                                                                    "body": {
-                                                                                                                      "let": {
-                                                                                                                        "bindings": [
-                                                                                                                          {
-                                                                                                                            "name": "lamBody",
-                                                                                                                            "term": {
-                                                                                                                              "application": {
-                                                                                                                                "argument": {
-                                                                                                                                  "application": {
-                                                                                                                                    "argument": {"variable": "lam"},
-                                                                                                                                    "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.Lambda"}}}},
-                                                                                                                                "function": {
-                                                                                                                                  "application": {
-                                                                                                                                    "argument": {
-                                                                                                                                      "application": {
-                                                                                                                                        "argument": {"variable": "d"},
-                                                                                                                                        "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}},
-                                                                                                                                    "function": {
-                                                                                                                                      "typeApplication": {
-                                                                                                                                        "body": {
-                                                                                                                                          "typeApplication": {
-                                                                                                                                            "body": {"variable": "hydra.lib.lists.map"},
-                                                                                                                                            "type": {"variable": "hydra.lisp.syntax.Expression"}}},
-                                                                                                                                        "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                                                                                                            "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
-                                                                                                                        "body": {
-                                                                                                                          "application": {
-                                                                                                                            "argument": {
-                                                                                                                              "application": {
-                                                                                                                                "argument": {
-                                                                                                                                  "application": {
-                                                                                                                                    "argument": {
-                                                                                                                                      "list": [
-                                                                                                                                        {"list": [{"variable": "sbName"}]},
-                                                                                                                                        {
-                                                                                                                                          "list": [
-                                                                                                                                            {
-                                                                                                                                              "application": {
-                                                                                                                                                "argument": {
-                                                                                                                                                  "application": {
-                                                                                                                                                    "argument": {"variable": "params"},
-                                                                                                                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
-                                                                                                                                                "function": {
-                                                                                                                                                  "application": {
-                                                                                                                                                    "argument": {"variable": "hydra.serialization.inlineStyle"},
-                                                                                                                                                    "function": {
-                                                                                                                                                      "application": {
-                                                                                                                                                        "argument": {"variable": "hydra.serialization.squareBrackets"},
-                                                                                                                                                        "function": {"variable": "hydra.serialization.brackets"}}}}}}}]},
-                                                                                                                                        {"variable": "lamBody"}]},
-                                                                                                                                    "function": {
-                                                                                                                                      "typeApplication": {
-                                                                                                                                        "body": {"variable": "hydra.lib.lists.concat"},
-                                                                                                                                        "type": {"variable": "hydra.ast.Expr"}}}}},
-                                                                                                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
-                                                                                                                            "function": {"variable": "hydra.serialization.parens"}}}}}}},
-                                                                                                                "domain": {"variable": "hydra.lisp.syntax.Lambda"},
-                                                                                                                "parameter": "lam"}}}],
-                                                                                                        "default": {
-                                                                                                          "application": {
-                                                                                                            "argument": {
-                                                                                                              "application": {
-                                                                                                                "argument": {
-                                                                                                                  "list": [
-                                                                                                                    {"variable": "sbName"},
-                                                                                                                    {
+                                                                                                      "project": {"field": "value", "typeName": "hydra.lisp.syntax.SimpleBinding"}}}},
+                                                                                                "type": {
+                                                                                                  "type": {"variable": "hydra.lisp.syntax.Expression"},
+                                                                                                  "variables": []}}],
+                                                                                            "body": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "val"},
+                                                                                                "function": {
+                                                                                                  "cases": {
+                                                                                                    "cases": [
+                                                                                                      {
+                                                                                                        "name": "lambda",
+                                                                                                        "term": {
+                                                                                                          "lambda": {
+                                                                                                            "body": {
+                                                                                                              "let": {
+                                                                                                                "bindings": [
+                                                                                                                  {
+                                                                                                                    "name": "params",
+                                                                                                                    "term": {
                                                                                                                       "application": {
-                                                                                                                        "argument": {"variable": "sbVal"},
+                                                                                                                        "argument": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {"variable": "lam"},
+                                                                                                                            "function": {
+                                                                                                                              "project": {"field": "params", "typeName": "hydra.lisp.syntax.Lambda"}}}},
                                                                                                                         "function": {
                                                                                                                           "application": {
-                                                                                                                            "argument": {"variable": "d"},
-                                                                                                                            "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
-                                                                                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
-                                                                                                            "function": {"variable": "hydra.serialization.parens"}}},
-                                                                                                        "typeName": "hydra.lisp.syntax.Expression"}}}}}}}},
+                                                                                                                            "argument": {"variable": "hydra.lisp.serde.symbolToExpr"},
+                                                                                                                            "function": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"variable": "hydra.lib.lists.map"},
+                                                                                                                                    "type": {"variable": "hydra.lisp.syntax.Symbol"}}},
+                                                                                                                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                                                                                                    "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
+                                                                                                                  {
+                                                                                                                    "name": "lbody",
+                                                                                                                    "term": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {"variable": "lam"},
+                                                                                                                            "function": {"project": {"field": "body", "typeName": "hydra.lisp.syntax.Lambda"}}}},
+                                                                                                                        "function": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {"variable": "d"},
+                                                                                                                                "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}},
+                                                                                                                            "function": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"variable": "hydra.lib.lists.map"},
+                                                                                                                                    "type": {"variable": "hydra.lisp.syntax.Expression"}}},
+                                                                                                                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                                                                                                    "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
+                                                                                                                "body": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {
+                                                                                                                              "list": [
+                                                                                                                                {"list": [{"variable": "name"}]},
+                                                                                                                                {
+                                                                                                                                  "list": [
+                                                                                                                                    {
+                                                                                                                                      "application": {
+                                                                                                                                        "argument": {
+                                                                                                                                          "application": {
+                                                                                                                                            "argument": {"variable": "params"},
+                                                                                                                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                                                                                        "function": {
+                                                                                                                                          "application": {
+                                                                                                                                            "argument": {"variable": "hydra.serialization.inlineStyle"},
+                                                                                                                                            "function": {
+                                                                                                                                              "application": {
+                                                                                                                                                "argument": {"variable": "hydra.serialization.squareBrackets"},
+                                                                                                                                                "function": {"variable": "hydra.serialization.brackets"}}}}}}}]},
+                                                                                                                                {"variable": "lbody"}]},
+                                                                                                                            "function": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {"variable": "hydra.lib.lists.concat"},
+                                                                                                                                "type": {"variable": "hydra.ast.Expr"}}}}},
+                                                                                                                        "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                                                                    "function": {"variable": "hydra.serialization.parens"}}}}},
+                                                                                                            "domain": {"variable": "hydra.lisp.syntax.Lambda"},
+                                                                                                            "parameter": "lam"}}}],
+                                                                                                    "default": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "argument": {
+                                                                                                              "list": [
+                                                                                                                {"variable": "name"},
+                                                                                                                {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"variable": "val"},
+                                                                                                                    "function": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {"variable": "d"},
+                                                                                                                        "function": {"variable": "hydra.lisp.serde.expressionToExpr"}}}}}]},
+                                                                                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                                                        "function": {"variable": "hydra.serialization.parens"}}},
+                                                                                                    "typeName": "hydra.lisp.syntax.Expression"}}}}}},
                                                                                         "domain": {"variable": "hydra.lisp.syntax.SimpleBinding"},
                                                                                         "parameter": "sb"}}},
                                                                                   {
@@ -3996,7 +3990,7 @@
                                                                               "application": {
                                                                                 "argument": {
                                                                                   "application": {
-                                                                                    "argument": {"variable": "letfnBindings"},
+                                                                                    "argument": {"variable": "fnSpecs"},
                                                                                     "function": {"variable": "hydra.serialization.spaceSep"}}},
                                                                                 "function": {
                                                                                   "application": {

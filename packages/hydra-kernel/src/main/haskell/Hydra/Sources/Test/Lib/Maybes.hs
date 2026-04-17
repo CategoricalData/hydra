@@ -162,14 +162,6 @@ maybesCases = subgroup "cases" [
       (Maybes.cases opt (Phantoms.int32 def) (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
       (Phantoms.int32 expected)
 
-maybesFromJust :: TTerm TestGroup
-maybesFromJust = subgroup "fromJust" [
-  test "extract from just" (justInt 42) 42]
-  where
-    test name x expected = evalPair name showInt32
-      (Maybes.fromJust x)
-      (Phantoms.int32 expected)
-
 maybesMapMaybe :: TTerm TestGroup
 maybesMapMaybe = subgroup "mapMaybe" [
   test "filter and transform" [1, 2, 3, 4, 5] [6, 8, 10],
@@ -225,7 +217,6 @@ allTests = definitionInModule module_ "allTests" $
       maybesCases,
       maybesCat,
       maybesCompose,
-      maybesFromJust,
       maybesFromMaybe,
       maybesIsJust,
       maybesIsNothing,

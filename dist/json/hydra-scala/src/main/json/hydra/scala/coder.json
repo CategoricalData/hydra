@@ -753,35 +753,44 @@
                                                   "application": {
                                                     "argument": {
                                                       "application": {
-                                                        "argument": {"variable": "sn"},
-                                                        "function": {
+                                                        "argument": {
                                                           "application": {
-                                                            "argument": {
-                                                              "lambda": {
-                                                                "body": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "n"},
-                                                                    "function": {"unwrap": "hydra.core.Name"}}},
-                                                                "domain": {"variable": "hydra.core.Name"},
-                                                                "parameter": "n"}},
+                                                            "argument": {"variable": "sn"},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {"literal": {"string": "x"}},
-                                                                "function": {
-                                                                  "typeApplication": {
+                                                                "argument": {
+                                                                  "lambda": {
                                                                     "body": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "n"},
+                                                                        "function": {"unwrap": "hydra.core.Name"}}},
+                                                                    "domain": {"variable": "hydra.core.Name"},
+                                                                    "parameter": "n"}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"string": "x"}},
+                                                                    "function": {
                                                                       "typeApplication": {
-                                                                        "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                                        "type": {"literal": {"string": {}}}}},
-                                                                    "type": {"variable": "hydra.core.Name"}}}}}}}}},
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {"variable": "hydra.lib.maybes.maybe"},
+                                                                            "type": {"literal": {"string": {}}}}},
+                                                                        "type": {"variable": "hydra.core.Name"}}}}}}}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {"literal": {"string": "."}},
+                                                            "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
                                                     "function": {
-                                                      "application": {
-                                                        "argument": {"literal": {"string": "."}},
-                                                        "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.lists.maybeLast"},
+                                                        "type": {"literal": {"string": {}}}}}}},
                                                 "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.lists.last"},
-                                                    "type": {"literal": {"string": {}}}}}}},
+                                                  "application": {
+                                                    "argument": {"literal": {"string": "x"}},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                        "type": {"literal": {"string": {}}}}}}}}},
                                             "type": {"type": {"literal": {"string": {}}}, "variables": []}},
                                           {
                                             "name": "lamParamSuffix",
@@ -7115,11 +7124,20 @@
                                                                           "application": {
                                                                             "argument": {
                                                                               "application": {
-                                                                                "argument": {"variable": "parts"},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "parts"},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                                                                        "type": {"literal": {"string": {}}}}}}},
                                                                                 "function": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {"variable": "hydra.lib.lists.head"},
-                                                                                    "type": {"literal": {"string": {}}}}}}},
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "fullName"},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                                                        "type": {"literal": {"string": {}}}}}}}}},
                                                                             "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                                                     "function": {
                                                                       "application": {

@@ -25,10 +25,6 @@ cat = Y.catMaybes
 compose :: (a -> Y.Maybe b) -> (b -> Y.Maybe c) -> (a -> Y.Maybe c)
 compose f g = \x -> f x >>= g
 
--- | Extract value from a Just, or error on Nothing (partial function).
-fromJust :: Y.Maybe a -> a
-fromJust = Y.fromJust
-
 -- | Get a value from an optional value, or return a default value.
 fromMaybe :: a -> Y.Maybe a -> a
 fromMaybe = Y.fromMaybe

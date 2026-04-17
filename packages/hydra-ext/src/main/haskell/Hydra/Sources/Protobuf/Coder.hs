@@ -678,12 +678,12 @@ encodeTypeReference = def "encodeTypeReference" $
     "qn">: Names.qualifyName @@ var "name",
     "local">: Packaging.qualifiedNameLocal (var "qn"),
     "ns_">: Packaging.qualifiedNameNamespace (var "qn"),
-    "localNsParts">: Lists.init (Strings.splitOn (string ".") (unwrap _Namespace @@ var "localNs"))] $
+    "localNsParts">: Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (Strings.splitOn (string ".") (unwrap _Namespace @@ var "localNs")))] $
     wrap P3._TypeName $
       Maybes.maybe
         (var "local")
         ("nsVal" ~> lets [
-          "nsParts">: Lists.init (Strings.splitOn (string ".") (unwrap _Namespace @@ var "nsVal"))] $
+          "nsParts">: Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (Strings.splitOn (string ".") (unwrap _Namespace @@ var "nsVal")))] $
           Logic.ifElse (Equality.equal (var "nsParts") (var "localNsParts"))
             (var "local")
             (Strings.intercalate (string ".") (Lists.concat (list [var "nsParts", list [var "local"]]))))
@@ -769,7 +769,7 @@ namespaceToPackageName = def "namespaceToPackageName" $
       Strings.intercalate (string ".")
         (Lists.map
           (lambda "s" $ Formatting.convertCaseCamelToLowerSnake @@ var "s")
-          (Lists.init (Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns_"))))
+          (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns_")))))
 
 -- =============================================================================
 -- Boolean annotation reading

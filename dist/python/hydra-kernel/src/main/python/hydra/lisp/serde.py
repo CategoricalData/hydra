@@ -622,36 +622,36 @@ def let_expression_to_expr(d: hydra.lisp.syntax.Dialect, let_expr: hydra.lisp.sy
         match v1:
             case hydra.lisp.syntax.LetKind.RECURSIVE:
                 @lru_cache(1)
-                def letfn_bindings():
-                    def _hoist_letfn_bindings_1(v12):
+                def fn_specs():
+                    def _hoist_fn_specs_1(v12):
                         match v12:
                             case hydra.lisp.syntax.LetBindingSimple(value=sb):
                                 @lru_cache(1)
-                                def sb_name() -> hydra.ast.Expr:
+                                def name() -> hydra.ast.Expr:
                                     return symbol_to_expr(sb.name)
-                                sb_val = sb.value
-                                def _hoist_sb_val_body_1(v13):
+                                val = sb.value
+                                def _hoist_name_body_1(v13):
                                     match v13:
                                         case hydra.lisp.syntax.ExpressionLambda(value=lam):
                                             @lru_cache(1)
                                             def params() -> frozenlist[hydra.ast.Expr]:
                                                 return hydra.lib.lists.map((lambda x1: symbol_to_expr(x1)), lam.params)
                                             @lru_cache(1)
-                                            def lam_body() -> frozenlist[hydra.ast.Expr]:
+                                            def lbody() -> frozenlist[hydra.ast.Expr]:
                                                 return hydra.lib.lists.map((lambda v14: expression_to_expr(d, v14)), lam.body)
-                                            return hydra.serialization.parens(hydra.serialization.space_sep(hydra.lib.lists.concat(((sb_name(),), (hydra.serialization.brackets(hydra.serialization.square_brackets, hydra.serialization.inline_style, hydra.serialization.space_sep(params())),), lam_body()))))
+                                            return hydra.serialization.parens(hydra.serialization.space_sep(hydra.lib.lists.concat(((name(),), (hydra.serialization.brackets(hydra.serialization.square_brackets, hydra.serialization.inline_style, hydra.serialization.space_sep(params())),), lbody()))))
 
                                         case _:
-                                            return hydra.serialization.parens(hydra.serialization.space_sep((sb_name(), expression_to_expr(d, sb_val))))
-                                return _hoist_sb_val_body_1(sb_val)
+                                            return hydra.serialization.parens(hydra.serialization.space_sep((name(), expression_to_expr(d, val))))
+                                return _hoist_name_body_1(val)
 
                             case hydra.lisp.syntax.LetBindingDestructuring():
                                 return hydra.serialization.cst("<destructuring>")
 
                             case _:
                                 raise AssertionError("Unreachable: all variants handled")
-                    return hydra.lib.lists.map((lambda b: _hoist_letfn_bindings_1(b)), bindings)
-                return hydra.serialization.parens(hydra.serialization.space_sep(hydra.lib.lists.concat(((hydra.serialization.cst("letfn"),), (hydra.serialization.brackets(hydra.serialization.square_brackets, hydra.serialization.inline_style, hydra.serialization.space_sep(letfn_bindings())),), body()))))
+                    return hydra.lib.lists.map((lambda b: _hoist_fn_specs_1(b)), bindings)
+                return hydra.serialization.parens(hydra.serialization.space_sep(hydra.lib.lists.concat(((hydra.serialization.cst("letfn"),), (hydra.serialization.brackets(hydra.serialization.square_brackets, hydra.serialization.inline_style, hydra.serialization.space_sep(fn_specs())),), body()))))
 
             case hydra.lisp.syntax.LetKind.PARALLEL:
                 return hydra.serialization.parens(hydra.serialization.space_sep(hydra.lib.lists.concat(((hydra.serialization.cst("let"),), (hydra.serialization.brackets(hydra.serialization.square_brackets, hydra.serialization.inline_style, hydra.serialization.space_sep(hydra.lib.lists.concat(hydra.lib.lists.map((lambda p: (hydra.lib.pairs.first(p), hydra.lib.pairs.second(p))), binding_pairs())))),), body()))))

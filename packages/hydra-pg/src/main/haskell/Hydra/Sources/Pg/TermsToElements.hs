@@ -334,11 +334,13 @@ evalPath :: TTermDefinition (Context -> [String] -> Term -> Either Error [Term])
 evalPath = define "evalPath" $
   doc "Evaluate a path (list of steps) on a term, returning all resulting terms" $
   "cx" ~> "path" ~> "term" ~>
-    Logic.ifElse (Lists.null $ var "path")
+    Maybes.maybe
       (right (list [var "term"]))
-      (Eithers.bind (evalStep @@ var "cx" @@ (Lists.head $ var "path") @@ var "term")
-        ("results" ~> Eithers.map (lambda "xs" $ Lists.concat (var "xs"))
-          (Eithers.mapList (evalPath @@ var "cx" @@ (Lists.tail $ var "path")) (var "results"))))
+      (lambda "p" $
+        Eithers.bind (evalStep @@ var "cx" @@ Pairs.first (var "p") @@ var "term")
+          ("results" ~> Eithers.map (lambda "xs" $ Lists.concat (var "xs"))
+            (Eithers.mapList (evalPath @@ var "cx" @@ Pairs.second (var "p")) (var "results"))))
+      (Lists.uncons $ var "path")
 
 -- | Convert a term to its string representation
 termToString :: TTermDefinition (Term -> String)
@@ -400,14 +402,14 @@ parsePattern = define "parsePattern" $
     -- Split on "${" to get segments. First segment is a literal prefix.
     -- Remaining segments each start with a path (up to "}") followed by a literal.
     "segments">: Strings.splitOn (string "${") (var "pat"),
-    "firstLit">: Lists.head $ var "segments",
-    "rest">: Lists.tail $ var "segments",
+    "firstLit">: Maybes.fromMaybe (var "pat") (Lists.maybeHead $ var "segments"),
+    "rest">: Lists.drop (int32 1) (var "segments"),
     -- Parse each remaining segment into (pathSteps, trailingLiteral) pairs
     "parsed">: Lists.map
       ("seg" ~> lets [
         "parts">: Strings.splitOn (string "}") (var "seg"),
-        "pathStr">: Lists.head $ var "parts",
-        "litPart">: Strings.intercalate (string "}") (Lists.tail $ var "parts"),
+        "pathStr">: Maybes.fromMaybe (string "") (Lists.maybeHead $ var "parts"),
+        "litPart">: Strings.intercalate (string "}") (Lists.drop (int32 1) (var "parts")),
         "pathSteps">: Strings.splitOn (string "/") (var "pathStr")] $
         pair (var "pathSteps") (var "litPart"))
       (var "rest")] $
@@ -490,16 +492,17 @@ readInjection = define "readInjection" $
     Eithers.bind (ExtractCore.map @@ ("k" ~> Eithers.map ("_n" ~> Core.name (var "_n")) (ExtractCore.string @@ var "g" @@ var "k")) @@ ("_v" ~> right (var "_v")) @@ var "g" @@ var "encoded")
       ("mp" ~> lets [
         "entries">: Maps.toList $ var "mp"] $
-        Logic.ifElse (Lists.null $ var "entries")
+        Maybes.maybe
           (left $ Error.errorOther $ Error.otherError $ string "empty injection")
-          (lets [
-            "f">: Lists.head $ var "entries",
+          (lambda "f" $ lets [
             "key">: Pairs.first $ var "f",
             "val">: Pairs.second $ var "f",
             "matching">: Lists.filter ("c" ~> Equality.equal (Pairs.first $ var "c") (var "key")) (var "cases")] $
-            Logic.ifElse (Lists.null $ var "matching")
+            Maybes.maybe
               (left $ Error.errorOther $ Error.otherError $ string "unexpected field: " ++ (Core.unName $ var "key"))
-              ((Pairs.second $ Lists.head $ var "matching") @@ var "val")))
+              (lambda "m" $ (Pairs.second $ var "m") @@ var "val")
+              (Lists.maybeHead $ var "matching"))
+          (Lists.maybeHead $ var "entries"))
 
 -- | Read a record from a term as a map of field names to values
 readRecord :: TTermDefinition (Context -> Graph -> (M.Map Name Term -> Either Error x) -> Term -> Either Error x)
@@ -519,7 +522,10 @@ requireUnique = define "requireUnique" $
         Logic.ifElse (Lists.null $ var "results")
           (left $ Error.errorOther $ Error.otherError $ string "No value found: " ++ var "context")
           (Logic.ifElse (Equality.equal (Lists.length $ var "results") (int32 1))
-            (right $ Lists.head $ var "results")
+            (Maybes.maybe
+              (left $ Error.errorOther $ Error.otherError $ string "Multiple values found: " ++ var "context")
+              (unaryFunction right)
+              (Lists.maybeHead $ var "results"))
             (left $ Error.errorOther $ Error.otherError $ string "Multiple values found: " ++ var "context")))
 
 -- | Create an adapter that maps terms to property graph elements using a mapping specification

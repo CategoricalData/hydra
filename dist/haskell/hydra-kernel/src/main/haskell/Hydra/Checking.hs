@@ -44,30 +44,33 @@ import qualified Data.Set as S
 
 allEqual :: Eq t0 => ([t0] -> Bool)
 allEqual els =
-    Logic.ifElse (Lists.null els) True (Lists.foldl (\b -> \t -> Logic.and b (Equality.equal t (Lists.head els))) True (Lists.tail els))
+    Maybes.maybe True (\uc ->
+      let h = Pairs.first uc
+          t = Pairs.second uc
+      in (Lists.foldl (\b -> \x -> Logic.and b (Equality.equal x h)) True t)) (Lists.uncons els)
 
 -- | Apply type arguments to a type, substituting forall-bound variables
 applyTypeArgumentsToType :: t0 -> Graph.Graph -> [Core.Type] -> Core.Type -> Either Errors.Error Core.Type
 applyTypeArgumentsToType cx tx typeArgs t =
-    Logic.ifElse (Lists.null typeArgs) (Right t) (
-      let nonnull =
-              case t of
-                Core.TypeForall v0 ->
-                  let v = Core.forallTypeParameter v0
-                      tbody = Core.forallTypeBody v0
-                  in (applyTypeArgumentsToType cx tx (Lists.tail typeArgs) (Substitution.substInType (Typing.TypeSubst (Maps.singleton v (Lists.head typeArgs))) tbody))
-                _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-                  Errors.unexpectedShapeErrorExpected = "forall type",
-                  Errors.unexpectedShapeErrorActual = (Strings.cat [
-                    ShowCore.type_ t,
-                    ". Trying to apply ",
-                    (Literals.showInt32 (Lists.length typeArgs)),
-                    " type args: ",
-                    (Formatting.showList ShowCore.type_ typeArgs),
-                    ". Context has vars: {",
-                    (Strings.intercalate ", " (Lists.map Core.unName (Maps.keys (Graph.graphBoundTypes tx)))),
-                    "}"])})))
-      in nonnull)
+    Maybes.maybe (Right t) (\uc ->
+      let ah = Pairs.first uc
+          at = Pairs.second uc
+      in case t of
+        Core.TypeForall v0 ->
+          let v = Core.forallTypeParameter v0
+              tbody = Core.forallTypeBody v0
+          in (applyTypeArgumentsToType cx tx at (Substitution.substInType (Typing.TypeSubst (Maps.singleton v ah)) tbody))
+        _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+          Errors.unexpectedShapeErrorExpected = "forall type",
+          Errors.unexpectedShapeErrorActual = (Strings.cat [
+            ShowCore.type_ t,
+            ". Trying to apply ",
+            (Literals.showInt32 (Lists.length typeArgs)),
+            " type args: ",
+            (Formatting.showList ShowCore.type_ typeArgs),
+            ". Context has vars: {",
+            (Strings.intercalate ", " (Lists.map Core.unName (Maps.keys (Graph.graphBoundTypes tx)))),
+            "}"])})))) (Lists.uncons typeArgs)
 
 -- | Check that a term has no unbound type variables (Either version)
 checkForUnboundTypeVariables :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error ()
@@ -120,9 +123,12 @@ checkNominalApplication cx tx tname typeArgs =
 -- | Ensure all types in a list are equal and return the common type
 checkSameType :: t0 -> Graph.Graph -> String -> [Core.Type] -> Either Errors.Error Core.Type
 checkSameType cx tx desc types =
-    Logic.ifElse (typesAllEffectivelyEqual tx types) (Right (Lists.head types)) (Left (Errors.ErrorChecking (Checking.CheckingErrorUnequalTypes (Checking.UnequalTypesError {
-      Checking.unequalTypesErrorTypes = types,
-      Checking.unequalTypesErrorDescription = desc}))))
+
+      let unequalErr =
+              Left (Errors.ErrorChecking (Checking.CheckingErrorUnequalTypes (Checking.UnequalTypesError {
+                Checking.unequalTypesErrorTypes = types,
+                Checking.unequalTypesErrorDescription = desc})))
+      in (Logic.ifElse (typesAllEffectivelyEqual tx types) (Maybes.maybe unequalErr (\t -> Right t) (Lists.maybeHead types)) unequalErr)
 
 -- | Check that a term has the expected type
 checkType :: Context.Context -> Graph.Graph -> Core.Term -> Core.Type -> Either Errors.Error ()
@@ -294,23 +300,29 @@ typeOfEither :: Context.Context -> Graph.Graph -> [Core.Type] -> Either Core.Ter
 typeOfEither cx tx typeArgs et =
 
       let n = Lists.length typeArgs
-      in (Logic.ifElse (Equality.equal n 2) (Eithers.either (\leftTerm -> Eithers.bind (typeOf cx tx [] leftTerm) (\result ->
-        let leftType = Pairs.first result
-            cx2 = Pairs.second result
-        in (Right (Core.TypeEither (Core.EitherType {
-          Core.eitherTypeLeft = leftType,
-          Core.eitherTypeRight = (Lists.at 1 typeArgs)}), cx2)))) (\rightTerm -> Eithers.bind (typeOf cx tx [] rightTerm) (\result ->
-        let rightType = Pairs.first result
-            cx2 = Pairs.second result
-        in (Right (Core.TypeEither (Core.EitherType {
-          Core.eitherTypeLeft = (Lists.at 0 typeArgs),
-          Core.eitherTypeRight = rightType}), cx2)))) et) (Left (Errors.ErrorChecking (Checking.CheckingErrorTypeArityMismatch (Checking.TypeArityMismatchError {
-        Checking.typeArityMismatchErrorType = (Core.TypeEither (Core.EitherType {
-          Core.eitherTypeLeft = Core.TypeUnit,
-          Core.eitherTypeRight = Core.TypeUnit})),
-        Checking.typeArityMismatchErrorExpectedArity = 2,
-        Checking.typeArityMismatchErrorActualArity = n,
-        Checking.typeArityMismatchErrorTypeArguments = typeArgs})))))
+          arityErr =
+                  Left (Errors.ErrorChecking (Checking.CheckingErrorTypeArityMismatch (Checking.TypeArityMismatchError {
+                    Checking.typeArityMismatchErrorType = (Core.TypeEither (Core.EitherType {
+                      Core.eitherTypeLeft = Core.TypeUnit,
+                      Core.eitherTypeRight = Core.TypeUnit})),
+                    Checking.typeArityMismatchErrorExpectedArity = 2,
+                    Checking.typeArityMismatchErrorActualArity = n,
+                    Checking.typeArityMismatchErrorTypeArguments = typeArgs})))
+      in (Maybes.maybe arityErr (\uc0 ->
+        let ta0 = Pairs.first uc0
+        in (Maybes.maybe arityErr (\uc1 ->
+          let ta1 = Pairs.first uc1
+          in (Logic.ifElse (Equality.equal n 2) (Eithers.either (\leftTerm -> Eithers.bind (typeOf cx tx [] leftTerm) (\result ->
+            let leftType = Pairs.first result
+                cx2 = Pairs.second result
+            in (Right (Core.TypeEither (Core.EitherType {
+              Core.eitherTypeLeft = leftType,
+              Core.eitherTypeRight = ta1}), cx2)))) (\rightTerm -> Eithers.bind (typeOf cx tx [] rightTerm) (\result ->
+            let rightType = Pairs.first result
+                cx2 = Pairs.second result
+            in (Right (Core.TypeEither (Core.EitherType {
+              Core.eitherTypeLeft = ta0,
+              Core.eitherTypeRight = rightType}), cx2)))) et) arityErr)) (Lists.uncons (Pairs.second uc0)))) (Lists.uncons typeArgs))
 
 -- | Reconstruct the type of a union injection (Either/Context version)
 typeOfInjection :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Injection -> Either Errors.Error (Core.Type, Context.Context)
@@ -389,23 +401,26 @@ typeOfLet cx tx typeArgs letTerm =
 -- | Reconstruct the type of a list (Either/Context version)
 typeOfList :: Context.Context -> Graph.Graph -> [Core.Type] -> [Core.Term] -> Either Errors.Error (Core.Type, Context.Context)
 typeOfList cx tx typeArgs els =
-    Logic.ifElse (Lists.null els) (Logic.ifElse (Equality.equal (Lists.length typeArgs) 1) (Right (Core.TypeList (Lists.head typeArgs), cx)) (Left (Errors.ErrorChecking (Checking.CheckingErrorTypeArityMismatch (Checking.TypeArityMismatchError {
-      Checking.typeArityMismatchErrorType = (Core.TypeList Core.TypeUnit),
-      Checking.typeArityMismatchErrorExpectedArity = 1,
-      Checking.typeArityMismatchErrorActualArity = (Lists.length typeArgs),
-      Checking.typeArityMismatchErrorTypeArguments = typeArgs}))))) (
-      let foldResult =
-              Lists.foldl (\acc -> \term -> Eithers.bind acc (\accR ->
-                let types = Pairs.first accR
-                    cxA = Pairs.second accR
-                in (Eithers.bind (typeOf cxA tx [] term) (\tResult ->
-                  let t = Pairs.first tResult
-                      cxB = Pairs.second tResult
-                  in (Right (Lists.concat2 types (Lists.pure t), cxB)))))) (Right ([], cx)) els
-      in (Eithers.bind foldResult (\foldR ->
-        let eltypes = Pairs.first foldR
-            cx2 = Pairs.second foldR
-        in (Eithers.bind (checkSameType cx2 tx "list elements" eltypes) (\unifiedType -> Right (Core.TypeList unifiedType, cx2))))))
+
+      let listArityErr =
+              Left (Errors.ErrorChecking (Checking.CheckingErrorTypeArityMismatch (Checking.TypeArityMismatchError {
+                Checking.typeArityMismatchErrorType = (Core.TypeList Core.TypeUnit),
+                Checking.typeArityMismatchErrorExpectedArity = 1,
+                Checking.typeArityMismatchErrorActualArity = (Lists.length typeArgs),
+                Checking.typeArityMismatchErrorTypeArguments = typeArgs})))
+      in (Logic.ifElse (Lists.null els) (Logic.ifElse (Equality.equal (Lists.length typeArgs) 1) (Maybes.maybe listArityErr (\ta0 -> Right (Core.TypeList ta0, cx)) (Lists.maybeHead typeArgs)) listArityErr) (
+        let foldResult =
+                Lists.foldl (\acc -> \term -> Eithers.bind acc (\accR ->
+                  let types = Pairs.first accR
+                      cxA = Pairs.second accR
+                  in (Eithers.bind (typeOf cxA tx [] term) (\tResult ->
+                    let t = Pairs.first tResult
+                        cxB = Pairs.second tResult
+                    in (Right (Lists.concat2 types (Lists.pure t), cxB)))))) (Right ([], cx)) els
+        in (Eithers.bind foldResult (\foldR ->
+          let eltypes = Pairs.first foldR
+              cx2 = Pairs.second foldR
+          in (Eithers.bind (checkSameType cx2 tx "list elements" eltypes) (\unifiedType -> Right (Core.TypeList unifiedType, cx2)))))))
 
 -- | Reconstruct the type of a literal (Either/Context version)
 typeOfLiteral :: t0 -> Graph.Graph -> [Core.Type] -> Core.Literal -> Either Errors.Error (Core.Type, t0)
@@ -417,42 +432,49 @@ typeOfLiteral cx tx typeArgs lit =
 -- | Reconstruct the type of a map (Either/Context version)
 typeOfMap :: Context.Context -> Graph.Graph -> [Core.Type] -> M.Map Core.Term Core.Term -> Either Errors.Error (Core.Type, Context.Context)
 typeOfMap cx tx typeArgs m =
-    Logic.ifElse (Maps.null m) (Logic.ifElse (Equality.equal (Lists.length typeArgs) 2) (Right (Core.TypeMap (Core.MapType {
-      Core.mapTypeKeys = (Lists.at 0 typeArgs),
-      Core.mapTypeValues = (Lists.at 1 typeArgs)}), cx)) (Left (Errors.ErrorChecking (Checking.CheckingErrorTypeArityMismatch (Checking.TypeArityMismatchError {
-      Checking.typeArityMismatchErrorType = (Core.TypeMap (Core.MapType {
-        Core.mapTypeKeys = Core.TypeUnit,
-        Core.mapTypeValues = Core.TypeUnit})),
-      Checking.typeArityMismatchErrorExpectedArity = 2,
-      Checking.typeArityMismatchErrorActualArity = (Lists.length typeArgs),
-      Checking.typeArityMismatchErrorTypeArguments = typeArgs}))))) (
-      let pairs = Maps.toList m
-          keyFoldResult =
-                  Lists.foldl (\acc -> \p -> Eithers.bind acc (\accR ->
-                    let types = Pairs.first accR
-                        cxA = Pairs.second accR
-                    in (Eithers.bind (typeOf cxA tx [] (Pairs.first p)) (\tResult ->
-                      let t = Pairs.first tResult
-                          cxB = Pairs.second tResult
-                      in (Right (Lists.concat2 types (Lists.pure t), cxB)))))) (Right ([], cx)) pairs
-      in (Eithers.bind keyFoldResult (\keyFoldR ->
-        let keyTypes = Pairs.first keyFoldR
-            cx2 = Pairs.second keyFoldR
-        in (Eithers.bind (checkSameType cx2 tx "map keys" keyTypes) (\kt ->
-          let valFoldResult =
-                  Lists.foldl (\acc -> \p -> Eithers.bind acc (\accR ->
-                    let types = Pairs.first accR
-                        cxA = Pairs.second accR
-                    in (Eithers.bind (typeOf cxA tx [] (Pairs.second p)) (\tResult ->
-                      let t = Pairs.first tResult
-                          cxB = Pairs.second tResult
-                      in (Right (Lists.concat2 types (Lists.pure t), cxB)))))) (Right ([], cx2)) pairs
-          in (Eithers.bind valFoldResult (\valFoldR ->
-            let valTypes = Pairs.first valFoldR
-                cx3 = Pairs.second valFoldR
-            in (Eithers.bind (checkSameType cx3 tx "map values" valTypes) (\vt -> Eithers.bind (applyTypeArgumentsToType cx3 tx typeArgs (Core.TypeMap (Core.MapType {
-              Core.mapTypeKeys = kt,
-              Core.mapTypeValues = vt}))) (\applied -> Right (applied, cx3)))))))))))
+
+      let mapArityErr =
+              Left (Errors.ErrorChecking (Checking.CheckingErrorTypeArityMismatch (Checking.TypeArityMismatchError {
+                Checking.typeArityMismatchErrorType = (Core.TypeMap (Core.MapType {
+                  Core.mapTypeKeys = Core.TypeUnit,
+                  Core.mapTypeValues = Core.TypeUnit})),
+                Checking.typeArityMismatchErrorExpectedArity = 2,
+                Checking.typeArityMismatchErrorActualArity = (Lists.length typeArgs),
+                Checking.typeArityMismatchErrorTypeArguments = typeArgs})))
+      in (Logic.ifElse (Maps.null m) (Logic.ifElse (Equality.equal (Lists.length typeArgs) 2) (Maybes.maybe mapArityErr (\uc0 ->
+        let ta0 = Pairs.first uc0
+        in (Maybes.maybe mapArityErr (\uc1 ->
+          let ta1 = Pairs.first uc1
+          in (Right (Core.TypeMap (Core.MapType {
+            Core.mapTypeKeys = ta0,
+            Core.mapTypeValues = ta1}), cx))) (Lists.uncons (Pairs.second uc0)))) (Lists.uncons typeArgs)) mapArityErr) (
+        let pairs = Maps.toList m
+            keyFoldResult =
+                    Lists.foldl (\acc -> \p -> Eithers.bind acc (\accR ->
+                      let types = Pairs.first accR
+                          cxA = Pairs.second accR
+                      in (Eithers.bind (typeOf cxA tx [] (Pairs.first p)) (\tResult ->
+                        let t = Pairs.first tResult
+                            cxB = Pairs.second tResult
+                        in (Right (Lists.concat2 types (Lists.pure t), cxB)))))) (Right ([], cx)) pairs
+        in (Eithers.bind keyFoldResult (\keyFoldR ->
+          let keyTypes = Pairs.first keyFoldR
+              cx2 = Pairs.second keyFoldR
+          in (Eithers.bind (checkSameType cx2 tx "map keys" keyTypes) (\kt ->
+            let valFoldResult =
+                    Lists.foldl (\acc -> \p -> Eithers.bind acc (\accR ->
+                      let types = Pairs.first accR
+                          cxA = Pairs.second accR
+                      in (Eithers.bind (typeOf cxA tx [] (Pairs.second p)) (\tResult ->
+                        let t = Pairs.first tResult
+                            cxB = Pairs.second tResult
+                        in (Right (Lists.concat2 types (Lists.pure t), cxB)))))) (Right ([], cx2)) pairs
+            in (Eithers.bind valFoldResult (\valFoldR ->
+              let valTypes = Pairs.first valFoldR
+                  cx3 = Pairs.second valFoldR
+              in (Eithers.bind (checkSameType cx3 tx "map values" valTypes) (\vt -> Eithers.bind (applyTypeArgumentsToType cx3 tx typeArgs (Core.TypeMap (Core.MapType {
+                Core.mapTypeKeys = kt,
+                Core.mapTypeValues = vt}))) (\applied -> Right (applied, cx3))))))))))))
 
 -- | Reconstruct the type of an optional value (Either/Context version)
 typeOfMaybe :: Context.Context -> Graph.Graph -> [Core.Type] -> Maybe Core.Term -> Either Errors.Error (Core.Type, Context.Context)
@@ -461,11 +483,13 @@ typeOfMaybe cx tx typeArgs mt =
       let forNothing =
 
                 let n = Lists.length typeArgs
-                in (Logic.ifElse (Equality.equal n 1) (Right (Core.TypeMaybe (Lists.head typeArgs), cx)) (Left (Errors.ErrorChecking (Checking.CheckingErrorTypeArityMismatch (Checking.TypeArityMismatchError {
-                  Checking.typeArityMismatchErrorType = (Core.TypeMaybe Core.TypeUnit),
-                  Checking.typeArityMismatchErrorExpectedArity = 1,
-                  Checking.typeArityMismatchErrorActualArity = n,
-                  Checking.typeArityMismatchErrorTypeArguments = typeArgs})))))
+                    maybeArityErr =
+                            Left (Errors.ErrorChecking (Checking.CheckingErrorTypeArityMismatch (Checking.TypeArityMismatchError {
+                              Checking.typeArityMismatchErrorType = (Core.TypeMaybe Core.TypeUnit),
+                              Checking.typeArityMismatchErrorExpectedArity = 1,
+                              Checking.typeArityMismatchErrorActualArity = n,
+                              Checking.typeArityMismatchErrorTypeArguments = typeArgs})))
+                in (Logic.ifElse (Equality.equal n 1) (Maybes.maybe maybeArityErr (\ta0 -> Right (Core.TypeMaybe ta0, cx)) (Lists.maybeHead typeArgs)) maybeArityErr)
           forJust =
                   \term -> Eithers.bind (typeOf cx tx [] term) (\tResult ->
                     let termType = Pairs.first tResult
@@ -551,23 +575,26 @@ typeOfRecord cx tx typeArgs record =
 -- | Reconstruct the type of a set (Either/Context version)
 typeOfSet :: Context.Context -> Graph.Graph -> [Core.Type] -> S.Set Core.Term -> Either Errors.Error (Core.Type, Context.Context)
 typeOfSet cx tx typeArgs els =
-    Logic.ifElse (Sets.null els) (Logic.ifElse (Equality.equal (Lists.length typeArgs) 1) (Right (Core.TypeSet (Lists.head typeArgs), cx)) (Left (Errors.ErrorChecking (Checking.CheckingErrorTypeArityMismatch (Checking.TypeArityMismatchError {
-      Checking.typeArityMismatchErrorType = (Core.TypeSet Core.TypeUnit),
-      Checking.typeArityMismatchErrorExpectedArity = 1,
-      Checking.typeArityMismatchErrorActualArity = (Lists.length typeArgs),
-      Checking.typeArityMismatchErrorTypeArguments = typeArgs}))))) (
-      let foldResult =
-              Lists.foldl (\acc -> \term -> Eithers.bind acc (\accR ->
-                let types = Pairs.first accR
-                    cxA = Pairs.second accR
-                in (Eithers.bind (typeOf cxA tx [] term) (\tResult ->
-                  let t = Pairs.first tResult
-                      cxB = Pairs.second tResult
-                  in (Right (Lists.concat2 types (Lists.pure t), cxB)))))) (Right ([], cx)) (Sets.toList els)
-      in (Eithers.bind foldResult (\foldR ->
-        let eltypes = Pairs.first foldR
-            cx2 = Pairs.second foldR
-        in (Eithers.bind (checkSameType cx2 tx "set elements" eltypes) (\unifiedType -> Right (Core.TypeSet unifiedType, cx2))))))
+
+      let setArityErr =
+              Left (Errors.ErrorChecking (Checking.CheckingErrorTypeArityMismatch (Checking.TypeArityMismatchError {
+                Checking.typeArityMismatchErrorType = (Core.TypeSet Core.TypeUnit),
+                Checking.typeArityMismatchErrorExpectedArity = 1,
+                Checking.typeArityMismatchErrorActualArity = (Lists.length typeArgs),
+                Checking.typeArityMismatchErrorTypeArguments = typeArgs})))
+      in (Logic.ifElse (Sets.null els) (Logic.ifElse (Equality.equal (Lists.length typeArgs) 1) (Maybes.maybe setArityErr (\ta0 -> Right (Core.TypeSet ta0, cx)) (Lists.maybeHead typeArgs)) setArityErr) (
+        let foldResult =
+                Lists.foldl (\acc -> \term -> Eithers.bind acc (\accR ->
+                  let types = Pairs.first accR
+                      cxA = Pairs.second accR
+                  in (Eithers.bind (typeOf cxA tx [] term) (\tResult ->
+                    let t = Pairs.first tResult
+                        cxB = Pairs.second tResult
+                    in (Right (Lists.concat2 types (Lists.pure t), cxB)))))) (Right ([], cx)) (Sets.toList els)
+        in (Eithers.bind foldResult (\foldR ->
+          let eltypes = Pairs.first foldR
+              cx2 = Pairs.second foldR
+          in (Eithers.bind (checkSameType cx2 tx "set elements" eltypes) (\unifiedType -> Right (Core.TypeSet unifiedType, cx2)))))))
 
 -- | Check the type of a term
 typeOfTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Type

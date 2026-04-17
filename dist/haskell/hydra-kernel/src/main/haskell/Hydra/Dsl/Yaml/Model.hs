@@ -43,6 +43,14 @@ scalarBool x =
         Core.fieldName = (Core.Name "bool"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
+scalarDecimal :: Phantoms.TTerm Sci.Scientific -> Phantoms.TTerm Model.Scalar
+scalarDecimal x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.yaml.model.Scalar"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "decimal"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
 scalarFloat :: Phantoms.TTerm Double -> Phantoms.TTerm Model.Scalar
 scalarFloat x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {

@@ -362,32 +362,28 @@ def letExpressionToExpr(d: hydra.lisp.syntax.Dialect)(letExpr: hydra.lisp.syntax
   d match
     case hydra.lisp.syntax.Dialect.clojure => kind match
       case hydra.lisp.syntax.LetKind.recursive => {
-        lazy val letfnBindings: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.LetBinding,
+        lazy val fnSpecs: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.LetBinding,
            hydra.ast.Expr]((b: hydra.lisp.syntax.LetBinding) =>
           b match
           case hydra.lisp.syntax.LetBinding.simple(v_LetBinding_simple_sb) => {
-            lazy val sbName: hydra.ast.Expr = hydra.lisp.serde.symbolToExpr(v_LetBinding_simple_sb.name)
-            {
-              lazy val sbVal: hydra.lisp.syntax.Expression = (v_LetBinding_simple_sb.value)
-              sbVal match
-                case hydra.lisp.syntax.Expression.lambda(v_Expression_lambda_lam) => {
-                  lazy val params: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Symbol,
-                     hydra.ast.Expr](hydra.lisp.serde.symbolToExpr)(v_Expression_lambda_lam.params)
-                  {
-                    lazy val lamBody: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Expression,
-                       hydra.ast.Expr]((v1: hydra.lisp.syntax.Expression) => hydra.lisp.serde.expressionToExpr(d)(v1))(v_Expression_lambda_lam.body)
-                    hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(sbName),
-                       Seq(hydra.serialization.brackets(hydra.serialization.squareBrackets)(hydra.serialization.inlineStyle)(hydra.serialization.spaceSep(params))),
-                       lamBody))))
-                  }
-                }
-                case _ => hydra.serialization.parens(hydra.serialization.spaceSep(Seq(sbName,
-                   hydra.lisp.serde.expressionToExpr(d)(sbVal))))
-            }
+            lazy val name: hydra.ast.Expr = hydra.lisp.serde.symbolToExpr(v_LetBinding_simple_sb.name)
+            lazy val `val`: hydra.lisp.syntax.Expression = (v_LetBinding_simple_sb.value)
+            `val` match
+              case hydra.lisp.syntax.Expression.lambda(v_Expression_lambda_lam) => {
+                lazy val params: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Symbol,
+                   hydra.ast.Expr](hydra.lisp.serde.symbolToExpr)(v_Expression_lambda_lam.params)
+                lazy val lbody: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Expression,
+                   hydra.ast.Expr]((v1: hydra.lisp.syntax.Expression) => hydra.lisp.serde.expressionToExpr(d)(v1))(v_Expression_lambda_lam.body)
+                hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(name),
+                   Seq(hydra.serialization.brackets(hydra.serialization.squareBrackets)(hydra.serialization.inlineStyle)(hydra.serialization.spaceSep(params))),
+                   lbody))))
+              }
+              case _ => hydra.serialization.parens(hydra.serialization.spaceSep(Seq(name,
+                 hydra.lisp.serde.expressionToExpr(d)(`val`))))
           }
           case hydra.lisp.syntax.LetBinding.destructuring(v_LetBinding_destructuring__3) => hydra.serialization.cst("<destructuring>"))(bindings)
         hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst("letfn")),
-           Seq(hydra.serialization.brackets(hydra.serialization.squareBrackets)(hydra.serialization.inlineStyle)(hydra.serialization.spaceSep(letfnBindings))),
+           Seq(hydra.serialization.brackets(hydra.serialization.squareBrackets)(hydra.serialization.inlineStyle)(hydra.serialization.spaceSep(fnSpecs))),
            body))))
       }
       case hydra.lisp.syntax.LetKind.parallel => hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst("let")),

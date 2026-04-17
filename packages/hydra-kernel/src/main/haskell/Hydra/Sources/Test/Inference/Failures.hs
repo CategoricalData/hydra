@@ -262,9 +262,9 @@ typeConstructorMisuseTests = define "typeConstructorMisuseTests" $
     expectFailure 2 []
       (primitive _lists_length @@ int32 42),  -- Not a list
     expectFailure 3 []
-      (primitive _lists_head @@ string "not a list"),
+      (primitive _lists_maybeHead @@ string "not a list"),
     expectFailure 4 []
-      (primitive _lists_tail @@ int32 42)],
+      (primitive _lists_maybeTail @@ int32 42)],
 
   subgroup "String constructor errors" [
     expectFailure 1 []
@@ -284,7 +284,7 @@ typeConstructorMisuseTests = define "typeConstructorMisuseTests" $
     expectFailure 3 []
       (primitive _math_mul @@ int32 42 @@ string "not a number"),
     expectFailure 4 []
-      (primitive _math_div @@ true @@ false)]]
+      (primitive _math_maybeDiv @@ true @@ false)]]
 
 polymorphismViolationTests :: TTermDefinition TestGroup
 polymorphismViolationTests = define "polymorphismViolationTests" $
@@ -421,7 +421,7 @@ primitiveTypeErrorTests = define "primitiveTypeErrorTests" $
     expectFailure 2 []
       (primitive _sets_member @@ int32 42 @@ list [int32 42]),  -- Not a set
     expectFailure 3 []
-      (primitive _lists_head @@ string "not a list"),
+      (primitive _lists_maybeHead @@ string "not a list"),
     expectFailure 4 []
       (primitive _maybes_fromMaybe @@ int32 42 @@ string "not optional")],
 
@@ -431,9 +431,9 @@ primitiveTypeErrorTests = define "primitiveTypeErrorTests" $
     expectFailure 2 []
       (primitive _math_mul @@ true @@ false),
     expectFailure 3 []
-      (primitive _math_div @@ list [int32 42] @@ int32 2),
+      (primitive _math_maybeDiv @@ list [int32 42] @@ int32 2),
     expectFailure 4 []
-      (primitive _math_mod @@ int32 42 @@ string "not a number")]]
+      (primitive _math_maybeMod @@ int32 42 @@ string "not a number")]]
 
 complexConstraintFailureTests :: TTermDefinition TestGroup
 complexConstraintFailureTests = define "complexConstraintFailureTests" $

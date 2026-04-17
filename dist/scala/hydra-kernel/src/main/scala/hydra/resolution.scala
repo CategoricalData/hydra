@@ -68,8 +68,11 @@ def findFieldType[T0](cx: T0)(fname: hydra.core.Name)(fields: Seq[hydra.core.Fie
   {
   lazy val matchingFields: Seq[hydra.core.FieldType] = hydra.lib.lists.filter[hydra.core.FieldType]((ft: hydra.core.FieldType) =>
     hydra.lib.equality.equal[scala.Predef.String](ft.name)(fname))(fields)
-  hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.Type]](hydra.lib.lists.`null`[hydra.core.FieldType](matchingFields))(Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noMatchingField(hydra.errors.NoMatchingFieldError(fname)))))(hydra.lib.logic.ifElse[Either[hydra.errors.Error,
-     hydra.core.Type]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.FieldType](matchingFields))(1))(Right(hydra.lib.lists.head[hydra.core.FieldType](matchingFields).`type`))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.multipleFields(hydra.errors.MultipleFieldsError(fname))))))
+  def noMatch[T1]: Either[hydra.errors.Error, T1] =
+    Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noMatchingField(hydra.errors.NoMatchingFieldError(fname))))
+  hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.Type]](hydra.lib.lists.`null`[hydra.core.FieldType](matchingFields))(noMatch)(hydra.lib.logic.ifElse[Either[hydra.errors.Error,
+     hydra.core.Type]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.FieldType](matchingFields))(1))(hydra.lib.maybes.maybe[Either[hydra.errors.Error,
+     hydra.core.Type], hydra.core.FieldType](noMatch)((ft: hydra.core.FieldType) => Right(ft.`type`))(hydra.lib.lists.maybeHead[hydra.core.FieldType](matchingFields)))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.multipleFields(hydra.errors.MultipleFieldsError(fname))))))
 }
 
 def fullyStripAndNormalizeType(typ: hydra.core.Type): hydra.core.Type =
@@ -180,8 +183,9 @@ def requireUnionField[T0](cx: T0)(graph: hydra.graph.Graph)(tname: hydra.core.Na
   {
   def withRowType(rt: Seq[hydra.core.FieldType]): Either[hydra.errors.Error, hydra.core.Type] =
     {
-    lazy val matches: Seq[hydra.core.FieldType] = hydra.lib.lists.filter[hydra.core.FieldType]((ft: hydra.core.FieldType) => hydra.lib.equality.equal[hydra.core.Name](ft.name)(fname))(rt)
-    hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.Type]](hydra.lib.lists.`null`[hydra.core.FieldType](matches))(Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noMatchingField(hydra.errors.NoMatchingFieldError(fname)))))(Right(hydra.lib.lists.head[hydra.core.FieldType](matches).`type`))
+    def noMatchErr[T1]: Either[hydra.errors.Error, T1] =
+      Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noMatchingField(hydra.errors.NoMatchingFieldError(fname))))
+    hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.core.Type], hydra.core.FieldType](noMatchErr)((ft: hydra.core.FieldType) => Right(ft.`type`))(hydra.lib.lists.find[hydra.core.FieldType]((ft: hydra.core.FieldType) => hydra.lib.equality.equal[hydra.core.Name](ft.name)(fname))(rt))
   }
   hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.FieldType], hydra.core.Type](hydra.resolution.requireUnionType(cx)(graph)(tname))(withRowType)
 }

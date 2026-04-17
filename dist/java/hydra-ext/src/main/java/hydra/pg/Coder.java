@@ -652,26 +652,29 @@ public interface Coder {
         fields),
       (java.util.function.Function<hydra.util.Maybe<hydra.core.FieldType>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>>>) (mfield -> hydra.lib.maybes.Maybe.applyLazy(
         () -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>>right((hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>) (hydra.util.Maybe.<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>nothing())),
-        (java.util.function.Function<hydra.core.FieldType, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>>>) (field -> hydra.lib.eithers.Bind.apply(
-          hydra.pg.TermsToElements.<T0>decodeValueSpec(
-            cx,
-            g,
-            hydra.lib.maybes.FromJust.apply(hydra.Annotations.getTypeAnnotation(
-              key,
-              (field).type))),
-          (java.util.function.Function<hydra.pg.mapping.ValueSpec, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>>>) (spec -> hydra.lib.eithers.Bind.apply(
-            hydra.lib.maybes.Maybe.applyLazy(
-              () -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<String>>right((hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())),
-              (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<String>>>) (t -> hydra.lib.eithers.Map.apply(
-                (java.util.function.Function<String, hydra.util.Maybe<String>>) (x -> hydra.util.Maybe.just(x)),
-                hydra.pg.Coder.<T0>extractString(
-                  cx,
-                  g,
-                  t))),
-              hydra.Annotations.getTypeAnnotation(
-                aliasKey,
-                (field).type)),
-            (java.util.function.Function<hydra.util.Maybe<String>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>>>) (alias -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>>right(hydra.util.Maybe.just((hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>) ((hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>) (new hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>(field, (hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>) ((hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>) (new hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>(spec, alias))))))))))))),
+        (java.util.function.Function<hydra.core.FieldType, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>>>) (field -> hydra.lib.maybes.Maybe.applyLazy(
+          () -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>>left(new hydra.errors.Error_.Other(new hydra.errors.OtherError("findProjectionSpec: missing type annotation for key"))),
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>>>) (annot -> hydra.lib.eithers.Bind.apply(
+            hydra.pg.TermsToElements.<T0>decodeValueSpec(
+              cx,
+              g,
+              annot),
+            (java.util.function.Function<hydra.pg.mapping.ValueSpec, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>>>) (spec -> hydra.lib.eithers.Bind.apply(
+              hydra.lib.maybes.Maybe.applyLazy(
+                () -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<String>>right((hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())),
+                (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<String>>>) (t -> hydra.lib.eithers.Map.apply(
+                  (java.util.function.Function<String, hydra.util.Maybe<String>>) (x -> hydra.util.Maybe.just(x)),
+                  hydra.pg.Coder.<T0>extractString(
+                    cx,
+                    g,
+                    t))),
+                hydra.Annotations.getTypeAnnotation(
+                  aliasKey,
+                  (field).type)),
+              (java.util.function.Function<hydra.util.Maybe<String>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>>>) (alias -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>>right(hydra.util.Maybe.just((hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>) ((hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>) (new hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>(field, (hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>) ((hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>) (new hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>(spec, alias))))))))))))),
+          hydra.Annotations.getTypeAnnotation(
+            key,
+            (field).type))),
         mfield)));
   }
 
@@ -768,7 +771,7 @@ public interface Coder {
             (key).value),
           "' in record type "),
         (tname).value)))),
-      () -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.core.FieldType>>right(hydra.lib.lists.SafeHead.apply(matches.get())));
+      () -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.core.FieldType>>right(hydra.lib.lists.MaybeHead.apply(matches.get())));
   }
 
   static <T0, T1> Boolean hasVertexAdapters(hydra.pg.model.Direction dir, hydra.util.Maybe<T0> mOutSpec, hydra.util.Maybe<T1> mInSpec) {
@@ -894,7 +897,12 @@ public interface Coder {
           hydra.lib.equality.Equal.apply(
             hydra.lib.lists.Length.apply(terms),
             1),
-          () -> hydra.util.Either.<hydra.errors.Error_, T2>right(hydra.lib.lists.Head.apply(terms)),
+          () -> hydra.lib.maybes.Maybe.applyLazy(
+            () -> hydra.util.Either.<hydra.errors.Error_, T2>left(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
+              desc,
+              " resolved to multiple terms")))),
+            (java.util.function.Function<T2, hydra.util.Either<hydra.errors.Error_, T2>>) (x -> hydra.util.Either.<hydra.errors.Error_, T2>right(x)),
+            hydra.lib.lists.MaybeHead.apply(terms)),
           () -> hydra.util.Either.<hydra.errors.Error_, T2>left(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
             desc,
             " resolved to multiple terms"))))))));
@@ -1070,14 +1078,15 @@ public interface Coder {
         name,
         idKey,
         fields),
-      (java.util.function.Function<hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>, hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, T5, hydra.core.Term, T4>>>>) (mIdSpec -> hydra.lib.eithers.Bind.apply(
-        hydra.util.Either.<hydra.errors.Error_, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>right(hydra.lib.maybes.FromJust.apply(mIdSpec)),
+      (java.util.function.Function<hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>, hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, T5, hydra.core.Term, T4>>>>) (mIdSpec -> hydra.lib.maybes.Maybe.applyLazy(
+        () -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, T5, hydra.core.Term, T4>>>left(new hydra.errors.Error_.Other(new hydra.errors.OtherError("vertexIdAdapter: no id projection spec"))),
         (java.util.function.Function<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>, hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, T5, hydra.core.Term, T4>>>>) (idSpec -> hydra.pg.Coder.projectionAdapter(
           cx,
           g,
           vidType,
           ((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.coders.Coder<hydra.core.Term, T4>>) ((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.coders.Coder<hydra.core.Term, T4>>) ((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.coders.Coder<hydra.core.Term, T4>>) (projected -> projected.vertexIds)))).apply(schema),
           idSpec,
-          "id")))));
+          "id")),
+        mIdSpec)));
   }
 }

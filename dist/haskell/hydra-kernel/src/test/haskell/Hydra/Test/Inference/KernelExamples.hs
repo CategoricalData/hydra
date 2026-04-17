@@ -48,22 +48,23 @@ testGroupForNestedLet =
                     Core.lambdaBody = (Core.TermLet (Core.Let {
                       Core.letBindings = [
                         Core.Binding {
+                          Core.bindingName = (Core.Name "list"),
+                          Core.bindingTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.toList")),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "s"))})),
+                          Core.bindingType = Nothing},
+                        Core.Binding {
                           Core.bindingName = (Core.Name "firstLetter"),
                           Core.bindingTerm = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "mapping")),
                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.fromList")),
                               Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.pure")),
-                                Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.head")),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "list"))}))}))}))})),
-                          Core.bindingType = Nothing},
-                        Core.Binding {
-                          Core.bindingName = (Core.Name "list"),
-                          Core.bindingTerm = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.toList")),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "s"))})),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.cat")),
+                                Core.applicationArgument = (Core.TermList [
+                                  Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.maybeHead")),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "list"))})])}))}))})),
                           Core.bindingType = Nothing}],
                       Core.letBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -80,7 +81,9 @@ testGroupForNestedLet =
                           Core.applicationArgument = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.fromList")),
                             Core.applicationArgument = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.tail")),
+                              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.drop")),
+                                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "list"))}))}))}))}))}))}))})))),
                 Testing.universalTestCaseExpected = (ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],

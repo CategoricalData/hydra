@@ -156,7 +156,7 @@ decodeField cx m =
 decodeFixed :: t0 -> M.Map String Model.Value -> Either Errors.Error Schema.NamedType
 decodeFixed cx m =
     Eithers.bind (requireNumberE cx avro_size m) (\n ->
-      let size = Literals.bigintToInt32 (Literals.bigfloatToBigint n)
+      let size = Literals.bigintToInt32 (Literals.decimalToBigint n)
       in (Right (Schema.NamedTypeFixed (Schema.Fixed {
         Schema.fixedSize = size}))))
 
@@ -258,7 +258,7 @@ encodeFixed :: Schema.Fixed -> [(String, Model.Value)]
 encodeFixed f =
     [
       ("type", (Model.ValueString "fixed")),
-      ("size", (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint (Schema.fixedSize f)))))]
+      ("size", (Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint (Schema.fixedSize f)))))]
 
 -- | Encode an Avro map schema to a JSON object
 encodeMap :: Schema.Map -> Model.Value
@@ -344,7 +344,7 @@ expectArrayE cx value =
       Model.ValueArray v0 -> Right v0
 
 -- | Extract a JSON number or return an error
-expectNumberE :: t0 -> Model.Value -> Either t1 Double
+expectNumberE :: t0 -> Model.Value -> Either t1 Sci.Scientific
 expectNumberE cx value =
     case value of
       Model.ValueNumber v0 -> Right v0
@@ -367,7 +367,7 @@ getAnnotations m =
     Maps.fromList (Maybes.cat (Lists.map (\entry ->
       let k = Pairs.first entry
           v = Pairs.second entry
-      in (Logic.ifElse (Equality.equal (Strings.charAt 0 k) 64) (Maybes.pure (Strings.fromList (Lists.drop 1 (Strings.toList k)), v)) Nothing)) (Maps.toList m)))
+      in (Logic.ifElse (Equality.equal (Maybes.fromMaybe 0 (Strings.maybeCharAt 0 k)) 64) (Maybes.pure (Strings.fromList (Lists.drop 1 (Strings.toList k)), v)) Nothing)) (Maps.toList m)))
 
 -- | Look up an optional array attribute in a JSON object map
 optArrayE :: Ord t1 => (t0 -> t1 -> M.Map t1 Model.Value -> Either t2 (Maybe [Model.Value]))
@@ -396,7 +396,7 @@ requireE cx fname m =
       " not found"])) (\v -> Right v) (Maps.lookup fname m)
 
 -- | Look up a required number attribute in a JSON object map
-requireNumberE :: t0 -> String -> M.Map String Model.Value -> Either Errors.Error Double
+requireNumberE :: t0 -> String -> M.Map String Model.Value -> Either Errors.Error Sci.Scientific
 requireNumberE cx fname m = Eithers.bind (requireE cx fname m) (\v -> expectNumberE cx v)
 
 -- | Look up a required string attribute in a JSON object map

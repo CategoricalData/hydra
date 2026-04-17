@@ -22,17 +22,19 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 
--- | Encode a float value to JSON. Float64/Bigfloat use native numbers; Float32 uses string. NaN/Inf always encoded as strings.
-encodeFloat :: Core.FloatValue -> Either t0 Model.Value
+-- | Encode a float value to JSON. Bigfloat rejects anything the decimal space can't hold; Float64 uses string sentinels for NaN/Inf/-0.0; Float32 always strings.
+encodeFloat :: Core.FloatValue -> Either String Model.Value
 encodeFloat fv =
     case fv of
       Core.FloatValueBigfloat v0 ->
         let s = Literals.showBigfloat v0
-        in (Logic.ifElse (isSpecialFloatString s) (Right (Model.ValueString s)) (Right (Model.ValueNumber v0)))
+        in (Logic.ifElse (requiresJsonStringSentinel s) (Left (Strings.cat [
+          "JSON cannot represent bigfloat value: ",
+          s])) (Right (Model.ValueNumber (Literals.float64ToDecimal (Literals.bigfloatToFloat64 v0)))))
       Core.FloatValueFloat32 v0 -> Right (Model.ValueString (Literals.showFloat32 v0))
       Core.FloatValueFloat64 v0 ->
         let s = Literals.showFloat64 v0
-        in (Logic.ifElse (isSpecialFloatString s) (Right (Model.ValueString s)) (Right (Model.ValueNumber (Literals.float64ToBigfloat v0))))
+        in (Logic.ifElse (requiresJsonStringSentinel s) (Right (Model.ValueString s)) (Right (Model.ValueNumber (Literals.float64ToDecimal v0))))
 
 -- | Encode an integer value to JSON. Small ints use native numbers; large ints use strings.
 encodeInteger :: Core.IntegerValue -> Either t0 Model.Value
@@ -42,26 +44,26 @@ encodeInteger iv =
       Core.IntegerValueInt64 v0 -> Right (Model.ValueString (Literals.showInt64 v0))
       Core.IntegerValueUint32 v0 -> Right (Model.ValueString (Literals.showUint32 v0))
       Core.IntegerValueUint64 v0 -> Right (Model.ValueString (Literals.showUint64 v0))
-      Core.IntegerValueInt8 v0 -> Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int8ToBigint v0)))
-      Core.IntegerValueInt16 v0 -> Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int16ToBigint v0)))
-      Core.IntegerValueInt32 v0 -> Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint v0)))
-      Core.IntegerValueUint8 v0 -> Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.uint8ToBigint v0)))
-      Core.IntegerValueUint16 v0 -> Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.uint16ToBigint v0)))
+      Core.IntegerValueInt8 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.int8ToBigint v0)))
+      Core.IntegerValueInt16 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.int16ToBigint v0)))
+      Core.IntegerValueInt32 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint v0)))
+      Core.IntegerValueUint8 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.uint8ToBigint v0)))
+      Core.IntegerValueUint16 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.uint16ToBigint v0)))
 
 -- | Encode a Hydra literal to a JSON value
-encodeLiteral :: Core.Literal -> Either t0 Model.Value
+encodeLiteral :: Core.Literal -> Either String Model.Value
 encodeLiteral lit =
     case lit of
       Core.LiteralBinary v0 -> Right (Model.ValueString (Literals.binaryToString v0))
       Core.LiteralBoolean v0 -> Right (Model.ValueBoolean v0)
-      Core.LiteralDecimal v0 -> Right (Model.ValueNumber (Literals.float64ToBigfloat (Literals.decimalToFloat64 v0)))
+      Core.LiteralDecimal v0 -> Right (Model.ValueNumber v0)
       Core.LiteralFloat v0 -> encodeFloat v0
       Core.LiteralInteger v0 -> encodeInteger v0
       Core.LiteralString v0 -> Right (Model.ValueString v0)
 
--- | Check whether a string is one of the special float sentinels: NaN, Infinity, -Infinity, -0.0.
-isSpecialFloatString :: String -> Bool
-isSpecialFloatString s =
+-- | True for IEEE sentinel strings that JSON must escape as a string to preserve.
+requiresJsonStringSentinel :: String -> Bool
+requiresJsonStringSentinel s =
     Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))
 
 -- | Encode a Hydra term to a JSON value given a type and type name. Returns Left for unsupported constructs.
@@ -132,11 +134,10 @@ toJson types tname typ term =
             let field = Core.injectionField v1
                 fname = Core.unName (Core.fieldName field)
                 fterm = Core.fieldTerm field
-                findFieldType =
-                        \fts -> Logic.ifElse (Lists.null fts) (Left (Strings.cat [
+                ftypeResult =
+                        Maybes.maybe (Left (Strings.cat [
                           "unknown variant: ",
-                          fname])) (Logic.ifElse (Equality.equal (Core.unName (Core.fieldTypeName (Lists.head fts))) fname) (Right (Core.fieldTypeType (Lists.head fts))) (findFieldType (Lists.tail fts)))
-                ftypeResult = findFieldType v0
+                          fname])) (\ft -> Right (Core.fieldTypeType ft)) (Lists.find (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) fname) v0)
             in (Eithers.either (\err -> Left err) (\ftype ->
               let encodedUnion = toJson types tname ftype fterm
               in (Eithers.map (\v -> Model.ValueObject (Maps.fromList [

@@ -486,20 +486,29 @@
                                       "application": {
                                         "argument": {
                                           "application": {
-                                            "argument": {"variable": "sanitized3"},
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "sanitized3"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"literal": {"integer": {"int32": 1}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "sanitized3"},
+                                                                "function": {"variable": "hydra.lib.strings.length"}}},
+                                                            "function": {"variable": "hydra.lib.math.sub"}}}}},
+                                                    "function": {"variable": "hydra.lib.strings.maybeCharAt"}}}}},
                                             "function": {
                                               "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {"literal": {"integer": {"int32": 1}}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "application": {
-                                                            "argument": {"variable": "sanitized3"},
-                                                            "function": {"variable": "hydra.lib.strings.length"}}},
-                                                        "function": {"variable": "hydra.lib.math.sub"}}}}},
-                                                "function": {"variable": "hydra.lib.strings.charAt"}}}}},
+                                                "argument": {"literal": {"integer": {"int32": 0}}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                         "function": {
                                           "typeApplication": {
                                             "body": {"variable": "hydra.lib.equality.equal"},
@@ -785,9 +794,15 @@
                                     "function": {
                                       "project": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
                                 "function": {
-                                  "typeApplication": {
-                                    "body": {"variable": "hydra.lib.maybes.fromJust"},
-                                    "type": {"variable": "hydra.packaging.Namespace"}}}}},
+                                  "application": {
+                                    "argument": {
+                                      "wrap": {
+                                        "body": {"literal": {"string": ""}},
+                                        "typeName": "hydra.packaging.Namespace"}},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                        "type": {"variable": "hydra.packaging.Namespace"}}}}}}},
                             "function": {"unwrap": "hydra.packaging.Namespace"}}},
                         "type": {"type": {"literal": {"string": {}}}, "variables": []}},
                       {

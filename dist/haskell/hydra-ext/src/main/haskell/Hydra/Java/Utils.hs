@@ -30,11 +30,11 @@ import qualified Data.Scientific as Sci
 addExpressions :: [Syntax.MultiplicativeExpression] -> Syntax.AdditiveExpression
 addExpressions exprs =
 
-      let first = Syntax.AdditiveExpressionUnary (Lists.head exprs)
-          rest = Lists.tail exprs
+      let dummyMult =
+              Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix (Syntax.PostfixExpressionPrimary (Syntax.PrimaryNoNewArray (Syntax.PrimaryNoNewArrayExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral 0)))))))
       in (Lists.foldl (\ae -> \me -> Syntax.AdditiveExpressionPlus (Syntax.AdditiveExpression_Binary {
         Syntax.additiveExpression_BinaryLhs = ae,
-        Syntax.additiveExpression_BinaryRhs = me})) first rest)
+        Syntax.additiveExpression_BinaryRhs = me})) (Syntax.AdditiveExpressionUnary (Maybes.fromMaybe dummyMult (Lists.maybeHead exprs))) (Lists.drop 1 exprs))
 
 addInScopeVar :: Core.Name -> Environment.Aliases -> Environment.Aliases
 addInScopeVar name aliases =
@@ -153,7 +153,7 @@ interfaceMethodDeclaration mods tparams methodName params result stmts =
       Syntax.interfaceMethodDeclarationBody = (javaMethodBody stmts)})
 
 isEscaped :: String -> Bool
-isEscaped s = Equality.equal (Strings.charAt 0 s) 36
+isEscaped s = Equality.equal (Maybes.fromMaybe 0 (Strings.maybeCharAt 0 s)) 36
 
 javaAdditiveExpressionToJavaExpression :: Syntax.AdditiveExpression -> Syntax.Expression
 javaAdditiveExpressionToJavaExpression ae =
@@ -340,15 +340,15 @@ javaExpressionToJavaPrimary e =
           Syntax.AssignmentExpressionConditional v1 -> case v1 of
             Syntax.ConditionalExpressionSimple v2 ->
               let cands = Syntax.unConditionalOrExpression v2
-              in (Logic.ifElse (Equality.equal (Lists.length cands) 1) (
-                let iors = Syntax.unConditionalAndExpression (Lists.head cands)
-                in (Logic.ifElse (Equality.equal (Lists.length iors) 1) (
-                  let xors = Syntax.unInclusiveOrExpression (Lists.head iors)
-                  in (Logic.ifElse (Equality.equal (Lists.length xors) 1) (
-                    let ands = Syntax.unExclusiveOrExpression (Lists.head xors)
-                    in (Logic.ifElse (Equality.equal (Lists.length ands) 1) (
-                      let eqs = Syntax.unAndExpression (Lists.head ands)
-                      in (Logic.ifElse (Equality.equal (Lists.length eqs) 1) (case (Lists.head eqs) of
+              in (Maybes.fromMaybe fallback (Maybes.bind (Lists.maybeHead cands) (\candHead ->
+                let iors = Syntax.unConditionalAndExpression candHead
+                in (Maybes.bind (Lists.maybeHead iors) (\iorHead ->
+                  let xors = Syntax.unInclusiveOrExpression iorHead
+                  in (Maybes.bind (Lists.maybeHead xors) (\xorHead ->
+                    let ands = Syntax.unExclusiveOrExpression xorHead
+                    in (Maybes.bind (Lists.maybeHead ands) (\andHead ->
+                      let eqs = Syntax.unAndExpression andHead
+                      in (Maybes.bind (Lists.maybeHead eqs) (\eqHead -> Just (case eqHead of
                         Syntax.EqualityExpressionUnary v3 -> case v3 of
                           Syntax.RelationalExpressionSimple v4 -> case v4 of
                             Syntax.ShiftExpressionUnary v5 -> case v5 of
@@ -364,7 +364,7 @@ javaExpressionToJavaPrimary e =
                               _ -> fallback
                             _ -> fallback
                           _ -> fallback
-                        _ -> fallback) fallback)) fallback)) fallback)) fallback)) fallback)
+                        _ -> fallback))))))))))))
             _ -> fallback
           _ -> fallback
         _ -> fallback
@@ -931,7 +931,7 @@ unTypeParameter :: Syntax.TypeParameter -> String
 unTypeParameter tp = Syntax.unIdentifier (Syntax.unTypeIdentifier (Syntax.typeParameterIdentifier tp))
 
 unescape :: String -> String
-unescape s = Strings.fromList (Lists.tail (Strings.toList s))
+unescape s = Strings.fromList (Lists.drop 1 (Strings.toList s))
 
 uniqueVarName :: Environment.Aliases -> Core.Name -> Core.Name
 uniqueVarName aliases name =

@@ -259,7 +259,7 @@ encodeType = define "encodeType" $
       -- primitives like `Type`, locally-bound type-param names like `t0`);
       -- only `hydra.<ns>.<x>` / `Build_hydra.<ns>.<x>` references need to
       -- flow through the full qualified-name resolver.
-      "headSeg">: Lists.head (Strings.splitOn (string ".") (var "raw"))] $
+      "headSeg">: Maybes.fromMaybe (var "raw") (Lists.maybeHead (Strings.splitOn (string ".") (var "raw")))] $
       Logic.ifElse (Logic.or
           (Equality.equal (var "headSeg") (string "hydra"))
           (Equality.equal (var "headSeg") (string "Build_hydra")))
@@ -699,9 +699,7 @@ localTypeName = define "localTypeName" $
   doc "Take the last dot-separated segment of a (possibly) qualified Hydra name and sanitize it" $
   lambda "s" $ lets [
     "parts">: Strings.splitOn (string ".") (var "s"),
-    "localPart">: Logic.ifElse (Lists.null $ var "parts")
-      (var "s")
-      (Lists.last $ var "parts")] $
+    "localPart">: Maybes.fromMaybe (var "s") (Lists.maybeLast $ var "parts")] $
     sanitizeVar @@ var "localPart"
 
 -- | Combine a universe of type and term definitions into a single Coq Document.
@@ -765,24 +763,24 @@ resolveQualifiedName = define "resolveQualifiedName" $
   doc "Resolve a (possibly qualified) Hydra identifier to the form that should appear in Coq source" $
   lambdas ["env", "s"] $ lets [
     "parts">: Strings.splitOn (string ".") (var "s"),
-    "head1">: Lists.head (var "parts"),
+    "head1">: Maybes.fromMaybe (var "s") (Lists.maybeHead (var "parts")),
     "currentNs">: project CE._CoqEnvironment CE._CoqEnvironment_currentNamespace @@ var "env",
     "ambig">: project CE._CoqEnvironment CE._CoqEnvironment_ambiguousNames @@ var "env"] $
     -- Build_hydra.<ns>.<x> : strip to Build_<sanitized local>.
     Logic.ifElse (Equality.equal (var "head1") (string "Build_hydra"))
-      (Strings.cat2 (string "Build_") (sanitizeStripped @@ Lists.last (var "parts"))) $
+      (Strings.cat2 (string "Build_") (sanitizeStripped @@ (Maybes.fromMaybe (var "s") (Lists.maybeLast (var "parts"))))) $
     Logic.ifElse (Equality.equal (var "head1") (string "hydra"))
       (lets [
-        "rest">: Lists.tail (var "parts"),
-        "head2">: Lists.head (var "rest")] $
+        "rest">: Lists.drop (int32 1) (var "parts"),
+        "head2">: Maybes.fromMaybe (string "") (Lists.maybeHead (var "rest"))] $
         -- hydra.lib.<mod>.<func> : keep module.function, with keyword rewrites.
         Logic.ifElse (Equality.equal (var "head2") (string "lib"))
-          (renameLibKeyword @@ (Strings.intercalate (string ".") (Lists.tail (var "rest")))) $
+          (renameLibKeyword @@ (Strings.intercalate (string ".") (Lists.drop (int32 1) (var "rest")))) $
           -- hydra.<ns>...<x> : compute local name + source namespace.
           lets [
-            "localRaw">: Lists.last (var "parts"),
+            "localRaw">: Maybes.fromMaybe (var "s") (Lists.maybeLast (var "parts")),
             "localN">: sanitizeStripped @@ var "localRaw",
-            "sourceNs">: Strings.intercalate (string ".") (Lists.init (var "parts")),
+            "sourceNs">: Strings.intercalate (string ".") (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts"))),
             "isCurrent">: Equality.equal (var "sourceNs") (var "currentNs"),
             -- Ambiguity check is against the raw (unsanitised) local name,
             -- since the ambiguous-names set in the environment is populated
@@ -794,13 +792,13 @@ resolveQualifiedName = define "resolveQualifiedName" $
             "isCollisionProne">: Logic.and
               (Equality.equal (Lists.length (var "parts")) (int32 3))
               (Logic.and
-                (Equality.equal (Lists.head (var "rest")) (string "parsers"))
+                (Equality.equal (var "head2") (string "parsers"))
                 (Logic.not (var "isCurrent")))] $
           Logic.ifElse (Logic.and (var "isAmbig") (Logic.not (var "isCurrent")))
             (Strings.cat (list [var "sourceNs", string ".", var "localN"])) $
           Logic.ifElse (var "isCollisionProne")
             (Strings.cat (list [
-              sanitizeStripped @@ Lists.head (var "rest"),
+              sanitizeStripped @@ var "head2",
               string ".",
               sanitizeStripped @@ var "localRaw"]))
             (var "localN"))
@@ -888,8 +886,8 @@ unionConstructorName = define "unionConstructorName" $
   doc "Combine a type name and field name into a constructor identifier, preserving the namespace prefix" $
   lambdas ["typeName", "fieldName"] $ lets [
     "parts">: Strings.splitOn (string ".") (var "typeName"),
-    "localPart">: Lists.last $ var "parts",
-    "prefixParts">: Lists.init $ var "parts",
+    "localPart">: Maybes.fromMaybe (var "typeName") (Lists.maybeLast $ var "parts"),
+    "prefixParts">: Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit $ var "parts"),
     "prefix">: Logic.ifElse (Lists.null $ var "prefixParts")
       (string "")
       (Strings.cat2 (Strings.intercalate (string ".") (var "prefixParts")) (string ".")),

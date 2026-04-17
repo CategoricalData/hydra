@@ -99,8 +99,8 @@ decodeVertexSpec cx g term =
 -- | Evaluate a path (list of steps) on a term, returning all resulting terms
 evalPath :: t0 -> [String] -> Core.Term -> Either Errors.Error [Core.Term]
 evalPath cx path term =
-    Logic.ifElse (Lists.null path) (Right [
-      term]) (Eithers.bind (evalStep cx (Lists.head path) term) (\results -> Eithers.map (\xs -> Lists.concat xs) (Eithers.mapList (evalPath cx (Lists.tail path)) results)))
+    Maybes.maybe (Right [
+      term]) (\p -> Eithers.bind (evalStep cx (Pairs.first p) term) (\results -> Eithers.map (\xs -> Lists.concat xs) (Eithers.mapList (evalPath cx (Pairs.second p)) results))) (Lists.uncons path)
 
 -- | Evaluate a single step of a path traversal on a term
 evalStep :: t0 -> String -> Core.Term -> Either Errors.Error [Core.Term]
@@ -153,13 +153,13 @@ parsePattern :: t0 -> t1 -> String -> Either t2 (t3 -> Core.Term -> Either Error
 parsePattern cx _g pat =
 
       let segments = Strings.splitOn "${" pat
-          firstLit = Lists.head segments
-          rest = Lists.tail segments
+          firstLit = Maybes.fromMaybe pat (Lists.maybeHead segments)
+          rest = Lists.drop 1 segments
           parsed =
                   Lists.map (\seg ->
                     let parts = Strings.splitOn "}" seg
-                        pathStr = Lists.head parts
-                        litPart = Strings.intercalate "}" (Lists.tail parts)
+                        pathStr = Maybes.fromMaybe "" (Lists.maybeHead parts)
+                        litPart = Strings.intercalate "}" (Lists.drop 1 parts)
                         pathSteps = Strings.splitOn "/" pathStr
                     in (pathSteps, litPart)) rest
       in (Right (\cx_ -> \term -> applyPattern cx_ firstLit parsed term))
@@ -208,12 +208,11 @@ readInjection :: t0 -> Graph.Graph -> [(Core.Name, (Core.Term -> Either Errors.E
 readInjection cx g cases encoded =
     Eithers.bind (ExtractCore.map (\k -> Eithers.map (\_n -> Core.Name _n) (ExtractCore.string g k)) (\_v -> Right _v) g encoded) (\mp ->
       let entries = Maps.toList mp
-      in (Logic.ifElse (Lists.null entries) (Left (Errors.ErrorOther (Errors.OtherError "empty injection"))) (
-        let f = Lists.head entries
-            key = Pairs.first f
+      in (Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError "empty injection"))) (\f ->
+        let key = Pairs.first f
             val = Pairs.second f
             matching = Lists.filter (\c -> Equality.equal (Pairs.first c) key) cases
-        in (Logic.ifElse (Lists.null matching) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected field: " (Core.unName key))))) (Pairs.second (Lists.head matching) val)))))
+        in (Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected field: " (Core.unName key))))) (\m -> Pairs.second m val) (Lists.maybeHead matching))) (Lists.maybeHead entries)))
 
 -- | Read a record from a term as a map of field names to values
 readRecord :: t0 -> Graph.Graph -> (M.Map Core.Name Core.Term -> Either Errors.Error t1) -> Core.Term -> Either Errors.Error t1
@@ -223,7 +222,7 @@ readRecord cx g cons term =
 -- | Require exactly one result from a list-producing function
 requireUnique :: t0 -> String -> (t1 -> Either Errors.Error [t2]) -> t1 -> Either Errors.Error t2
 requireUnique cx context fun term =
-    Eithers.bind (fun term) (\results -> Logic.ifElse (Lists.null results) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "No value found: " context)))) (Logic.ifElse (Equality.equal (Lists.length results) 1) (Right (Lists.head results)) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Multiple values found: " context))))))
+    Eithers.bind (fun term) (\results -> Logic.ifElse (Lists.null results) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "No value found: " context)))) (Logic.ifElse (Equality.equal (Lists.length results) 1) (Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Multiple values found: " context)))) (\x -> Right x) (Lists.maybeHead results)) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Multiple values found: " context))))))
 
 -- | Create an adapter that maps terms to property graph elements using a mapping specification
 termToElementsAdapter :: t0 -> Graph.Graph -> Mapping.Schema t1 t2 t3 -> Core.Type -> Either Errors.Error (Coders.Adapter Core.Type [Model.Label] Core.Term [Model.Element t3])

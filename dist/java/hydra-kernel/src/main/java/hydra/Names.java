@@ -133,14 +133,19 @@ public interface Names {
     hydra.util.Lazy<java.util.List<String>> parts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Reverse.apply(hydra.lib.strings.SplitOn.apply(
       ".",
       (name).value)));
-    return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.equality.Equal.apply(
-        1,
-        hydra.lib.lists.Length.apply(parts.get())),
+    return hydra.lib.maybes.Maybe.applyLazy(
       () -> new hydra.packaging.QualifiedName((hydra.util.Maybe<hydra.packaging.Namespace>) (hydra.util.Maybe.<hydra.packaging.Namespace>nothing()), (name).value),
-      () -> new hydra.packaging.QualifiedName(hydra.util.Maybe.just(new hydra.packaging.Namespace(hydra.lib.strings.Intercalate.apply(
-        ".",
-        hydra.lib.lists.Reverse.apply(hydra.lib.lists.Tail.apply(parts.get()))))), hydra.lib.lists.Head.apply(parts.get())));
+      (java.util.function.Function<hydra.util.Pair<String, java.util.List<String>>, hydra.packaging.QualifiedName>) (uc -> {
+        hydra.util.Lazy<String> localName = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(uc));
+        hydra.util.Lazy<java.util.List<String>> restReversed = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(uc));
+        return hydra.lib.logic.IfElse.lazy(
+          hydra.lib.lists.Null.apply(restReversed.get()),
+          () -> new hydra.packaging.QualifiedName((hydra.util.Maybe<hydra.packaging.Namespace>) (hydra.util.Maybe.<hydra.packaging.Namespace>nothing()), (name).value),
+          () -> new hydra.packaging.QualifiedName(hydra.util.Maybe.just(new hydra.packaging.Namespace(hydra.lib.strings.Intercalate.apply(
+            ".",
+            hydra.lib.lists.Reverse.apply(restReversed.get())))), localName.get()));
+      }),
+      hydra.lib.lists.Uncons.apply(parts.get()));
   }
 
   static String uniqueLabel(java.util.Set<String> visited, String l) {

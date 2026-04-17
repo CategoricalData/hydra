@@ -238,11 +238,10 @@ avroHydraAdapter = define "avroHydraAdapter" $
       right (pair
         (Coders.adapter (boolean False) (var "schema") (var "typ") (Coders.coder (var "encode") (var "decode")))
         (var "env")),
-    -- doubleToInt: truncate a JSON number (bigfloat) to int32 (toward zero)
-    -- Math.truncate returns Float64 (divergence from Haskell); convert back to bigfloat before bigint.
-    "doubleToInt">: lambda "d" $ Literals.bigintToInt32 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 (var "d"))))),
-    -- doubleToLong: truncate a JSON number (bigfloat) to int64 (toward zero)
-    "doubleToLong">: lambda "d" $ Literals.bigintToInt64 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 (var "d")))))] $
+    -- doubleToInt / doubleToLong: truncate a JSON number (now decimal) to a bounded integer.
+    -- decimalToBigint already truncates toward zero, so no intermediate Math.truncate is needed.
+    "doubleToInt">: lambda "d" $ Literals.bigintToInt32 (Literals.decimalToBigint (var "d")),
+    "doubleToLong">: lambda "d" $ Literals.bigintToInt64 (Literals.decimalToBigint (var "d"))] $
     cases Avro._Schema (var "schema") Nothing [
       -- SchemaArray
       Avro._Schema_array>>: lambda "arr" $
@@ -438,7 +437,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
                 cases JM._Value (var "jv") Nothing [
                   JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt32 (var "doubleToInt" @@ var "d"))))])
               @@ (lambda "cx1" $ lambda "t" $
-                Eithers.map (lambda "i" $ inject JM._Value JM._Value_number (Literals.bigintToBigfloat (Literals.int32ToBigint (var "i"))))
+                Eithers.map (lambda "i" $ inject JM._Value JM._Value_number (Literals.bigintToDecimal (Literals.int32ToBigint (var "i"))))
                   (ExtractCore.int32 @@ Graph.emptyGraph @@ var "t")),
           -- Long
           Avro._Primitive_long>>: constant $
@@ -447,25 +446,25 @@ avroHydraAdapter = define "avroHydraAdapter" $
                 cases JM._Value (var "jv") Nothing [
                   JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt64 (var "doubleToLong" @@ var "d"))))])
               @@ (lambda "cx1" $ lambda "t" $
-                Eithers.map (lambda "i" $ inject JM._Value JM._Value_number (Literals.bigintToBigfloat (Literals.int64ToBigint (var "i"))))
+                Eithers.map (lambda "i" $ inject JM._Value JM._Value_number (Literals.bigintToDecimal (Literals.int64ToBigint (var "i"))))
                   (ExtractCore.int64 @@ Graph.emptyGraph @@ var "t")),
           -- Float
           Avro._Primitive_float>>: constant $
             var "simpleAdapter" @@ var "env0" @@ MetaTypes.float32
               @@ (lambda "_cx" $ lambda "jv" $
                 cases JM._Value (var "jv") Nothing [
-                  JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat32 (Literals.bigfloatToFloat32 (var "d")))))])
+                  JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat32 (Literals.decimalToFloat32 (var "d")))))])
               @@ (lambda "cx1" $ lambda "t" $
-                Eithers.map (lambda "f" $ inject JM._Value JM._Value_number (Literals.float32ToBigfloat (var "f")))
+                Eithers.map (lambda "f" $ inject JM._Value JM._Value_number (Literals.float32ToDecimal (var "f")))
                   (ExtractCore.float32 @@ Graph.emptyGraph @@ var "t")),
           -- Double
           Avro._Primitive_double>>: constant $
             var "simpleAdapter" @@ var "env0" @@ MetaTypes.float64
               @@ (lambda "_cx" $ lambda "jv" $
                 cases JM._Value (var "jv") Nothing [
-                  JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat64 (Literals.bigfloatToFloat64 (var "d")))))])
+                  JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat64 (Literals.decimalToFloat64 (var "d")))))])
               @@ (lambda "cx1" $ lambda "t" $
-                Eithers.map (lambda "d" $ inject JM._Value JM._Value_number (Literals.float64ToBigfloat (var "d")))
+                Eithers.map (lambda "d" $ inject JM._Value JM._Value_number (Literals.float64ToDecimal (var "d")))
                   (ExtractCore.float64 @@ Graph.emptyGraph @@ var "t")),
           -- Bytes
           Avro._Primitive_bytes>>: constant $
@@ -527,17 +526,19 @@ avroHydraAdapter = define "avroHydraAdapter" $
               (var "env1")))] $
         Logic.ifElse (Equality.gt (Lists.length (var "nonNulls")) (int32 1))
           (err @@ var "cx" @@ string "general-purpose unions are not yet supported")
-          (Logic.ifElse (Lists.null (var "nonNulls"))
+          (Maybes.maybe
             (err @@ var "cx" @@ string "cannot generate the empty type")
-            (Logic.ifElse (var "hasNull")
-              (var "forOptional" @@ Lists.head (var "nonNulls"))
-              (Eithers.bind (avroHydraAdapter @@ var "cx" @@ Lists.head (var "nonNulls") @@ var "env0") (lambda "adEnv" $ lets [
-                "ad">: Pairs.first (var "adEnv"),
-                "env1">: Pairs.second (var "adEnv")] $
-                right (pair
-                  (Coders.adapter (Coders.adapterIsLossy (var "ad")) (var "schema")
-                    (Coders.adapterTarget (var "ad")) (Coders.adapterCoder (var "ad")))
-                  (var "env1"))))))
+            (lambda "nonNullHead" $
+              Logic.ifElse (var "hasNull")
+                (var "forOptional" @@ var "nonNullHead")
+                (Eithers.bind (avroHydraAdapter @@ var "cx" @@ var "nonNullHead" @@ var "env0") (lambda "adEnv" $ lets [
+                  "ad">: Pairs.first (var "adEnv"),
+                  "env1">: Pairs.second (var "adEnv")] $
+                  right (pair
+                    (Coders.adapter (Coders.adapterIsLossy (var "ad")) (var "schema")
+                      (Coders.adapterTarget (var "ad")) (Coders.adapterCoder (var "ad")))
+                    (var "env1")))))
+            (Lists.maybeHead (var "nonNulls")))
       ]
 
 prepareFields :: TTermDefinition (Context -> AvroEnv.AvroEnvironment -> [Avro.Field] -> Result (M.Map String (Avro.Field, AvroHydraAdapter), AvroEnv.AvroEnvironment))
@@ -646,7 +647,7 @@ findAvroPrimaryKeyField = define "findAvroPrimaryKeyField" $
     Logic.ifElse (Lists.null (var "keys"))
       (right nothing)
       (Logic.ifElse (Equality.equal (Lists.length (var "keys")) (int32 1))
-        (right (just (Lists.head (var "keys"))))
+        (right (Lists.maybeHead (var "keys")))
         (err @@ var "cx" @@ Strings.cat2 (string "multiple primary key fields for ") (showQname @@ var "qname")))
 
 avroNameToHydraName :: TTermDefinition (AvroEnv.AvroQualifiedName -> Name)
@@ -671,7 +672,7 @@ encodeAnnotationValue = define "encodeAnnotationValue" $
       JM._Value_null>>: constant $
         MetaTerms.tuple ([] :: [TTerm Term]),
       JM._Value_number>>: lambda "d" $
-        MetaTerms.bigfloatLift (var "d"),
+        MetaTerms.decimalLift (var "d"),
       JM._Value_object>>: lambda "m" $
         MetaTerms.map (Maps.fromList (Lists.map
           (lambda "entry" $ lets [
@@ -756,13 +757,13 @@ parseAvroName = define "parseAvroName" $
   doc "Parse a dotted Avro name into a qualified name" $
   lambda "mns" $ lambda "name_" $ lets [
     "parts">: Strings.splitOn (string ".") (var "name_"),
-    "local">: Lists.last (var "parts")] $
+    "local">: Maybes.fromMaybe (var "name_") (Lists.maybeLast (var "parts"))] $
     Logic.ifElse (Equality.equal (Lists.length (var "parts")) (int32 1))
       (record AvroEnv._AvroQualifiedName [
         AvroEnv._AvroQualifiedName_namespace>>: var "mns",
         AvroEnv._AvroQualifiedName_name>>: var "local"])
       (record AvroEnv._AvroQualifiedName [
-        AvroEnv._AvroQualifiedName_namespace>>: just (Strings.intercalate (string ".") (Lists.init (var "parts"))),
+        AvroEnv._AvroQualifiedName_namespace>>: Maybes.map (lambda "ps" $ Strings.intercalate (string ".") (var "ps")) (Lists.maybeInit (var "parts")),
         AvroEnv._AvroQualifiedName_name>>: var "local"])
 
 putAvroHydraAdapter :: TTermDefinition (AvroEnv.AvroQualifiedName -> AvroHydraAdapter -> AvroEnv.AvroEnvironment -> AvroEnv.AvroEnvironment)
@@ -841,7 +842,7 @@ jsonToStringE = define "jsonToStringE" $
       JM._Value_string>>: lambda "s" $
         right (var "s"),
       JM._Value_number>>: lambda "d" $
-        right (Literals.showBigfloat (var "d"))]
+        right (Literals.showDecimal (var "d"))]
 
 showQname :: TTermDefinition (AvroEnv.AvroQualifiedName -> String)
 showQname = define "showQname" $

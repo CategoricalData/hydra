@@ -433,7 +433,7 @@ def eta_expand_typed_term(cx: hydra.context.Context, tx0: hydra.graph.Graph, ter
         def extra_variables(n: int) -> frozenlist[hydra.core.Name]:
             return hydra.lib.lists.map((lambda i: hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(i)))), hydra.lib.math.range_(1, n))
         def pad(vars: frozenlist[hydra.core.Name], body: hydra.core.Term) -> hydra.core.Term:
-            return hydra.lib.logic.if_else(hydra.lib.lists.null(vars), (lambda : body), (lambda : cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.lib.lists.head(vars), Nothing(), pad(hydra.lib.lists.tail(vars), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(body, cast(hydra.core.Term, hydra.core.TermVariable(hydra.lib.lists.head(vars))))))))))))
+            return hydra.lib.maybes.maybe((lambda : body), (lambda uc: (v0 := hydra.lib.pairs.first(uc), vrest := hydra.lib.pairs.second(uc), cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(v0, Nothing(), pad(vrest, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(body, cast(hydra.core.Term, hydra.core.TermVariable(v0))))))))))[2]), hydra.lib.lists.uncons(vars))
         def padn(n: int, body: hydra.core.Term) -> hydra.core.Term:
             return pad(extra_variables(n), body)
         def unwind(term2: hydra.core.Term) -> hydra.core.Term:
@@ -590,51 +590,27 @@ def reduce_term(cx: hydra.context.Context, graph: hydra.graph.Graph, eager: bool
     def reduce_arg(eager2: bool, arg: hydra.core.Term) -> Either[hydra.errors.Error, hydra.core.Term]:
         return hydra.lib.logic.if_else(eager2, (lambda : Right(arg)), (lambda : reduce(False, arg)))
     def apply_to_arguments(fun: hydra.core.Term, args: frozenlist[hydra.core.Term]) -> hydra.core.Term:
-        return hydra.lib.logic.if_else(hydra.lib.lists.null(args), (lambda : fun), (lambda : apply_to_arguments(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun, hydra.lib.lists.head(args)))), hydra.lib.lists.tail(args))))
+        return hydra.lib.maybes.maybe((lambda : fun), (lambda uc: apply_to_arguments(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun, hydra.lib.pairs.first(uc)))), hydra.lib.pairs.second(uc))), hydra.lib.lists.uncons(args))
     def map_error_to_string(e: hydra.errors.Error) -> hydra.errors.Error:
         return cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.show.errors.error(e))))
     def apply_projection(proj: hydra.core.Projection, reduced_arg: hydra.core.Term) -> Either[hydra.errors.Error, hydra.core.Term]:
-        return hydra.lib.eithers.bind(hydra.extract.core.record(proj.type_name, graph, hydra.strip.deannotate_term(reduced_arg)), (lambda fields: (matching_fields := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, proj.field)), fields), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorResolution(cast(hydra.errors.ResolutionError, hydra.errors.ResolutionErrorNoMatchingField(hydra.errors.NoMatchingFieldError(proj.field))))))), (lambda : Right(hydra.lib.lists.head(matching_fields).term))))[1]))
+        return hydra.lib.eithers.bind(hydra.extract.core.record(proj.type_name, graph, hydra.strip.deannotate_term(reduced_arg)), (lambda fields: (matching := hydra.lib.lists.find((lambda f: hydra.lib.equality.equal(f.name, proj.field)), fields), hydra.lib.maybes.maybe((lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorResolution(cast(hydra.errors.ResolutionError, hydra.errors.ResolutionErrorNoMatchingField(hydra.errors.NoMatchingFieldError(proj.field))))))), (lambda mf: Right(mf.term)), matching))[1]))
     def apply_cases(cs: hydra.core.CaseStatement, reduced_arg: hydra.core.Term) -> Either[hydra.errors.Error, hydra.core.Term]:
-        return hydra.lib.eithers.bind(hydra.extract.core.injection(cs.type_name, graph, reduced_arg), (lambda field: (matching_fields := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, field.name)), cs.cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields), (lambda : hydra.lib.maybes.maybe((lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorResolution(cast(hydra.errors.ResolutionError, hydra.errors.ResolutionErrorNoMatchingField(hydra.errors.NoMatchingFieldError(field.name))))))), (lambda x: Right(x)), cs.default)), (lambda : Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(hydra.lib.lists.head(matching_fields).term, field.term)))))))[1]))
+        return hydra.lib.eithers.bind(hydra.extract.core.injection(cs.type_name, graph, reduced_arg), (lambda field: (matching := hydra.lib.lists.find((lambda f: hydra.lib.equality.equal(f.name, field.name)), cs.cases), hydra.lib.maybes.maybe((lambda : hydra.lib.maybes.maybe((lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorResolution(cast(hydra.errors.ResolutionError, hydra.errors.ResolutionErrorNoMatchingField(hydra.errors.NoMatchingFieldError(field.name))))))), (lambda x: Right(x)), cs.default)), (lambda mf: Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(mf.term, field.term))))), matching))[1]))
     def apply_if_nullary(eager2: bool, original: hydra.core.Term, args: frozenlist[hydra.core.Term]) -> Either[hydra.errors.Error, hydra.core.Term]:
         @lru_cache(1)
         def stripped() -> hydra.core.Term:
             return hydra.strip.deannotate_term(original)
         def for_projection(proj: hydra.core.Projection, args2: frozenlist[hydra.core.Term]) -> Either[hydra.errors.Error, hydra.core.Term]:
-            @lru_cache(1)
-            def arg() -> hydra.core.Term:
-                return hydra.lib.lists.head(args2)
-            @lru_cache(1)
-            def remaining_args() -> frozenlist[hydra.core.Term]:
-                return hydra.lib.lists.tail(args2)
-            return hydra.lib.eithers.bind(reduce_arg(eager2, hydra.strip.deannotate_term(arg())), (lambda reduced_arg: hydra.lib.eithers.bind(hydra.lib.eithers.bind(apply_projection(proj, reduced_arg), (lambda v1: reduce(eager2, v1))), (lambda reduced_result: apply_if_nullary(eager2, reduced_result, remaining_args())))))
+            return hydra.lib.maybes.maybe((lambda : Right(original)), (lambda uc: (arg := hydra.lib.pairs.first(uc), remaining_args := hydra.lib.pairs.second(uc), hydra.lib.eithers.bind(reduce_arg(eager2, hydra.strip.deannotate_term(arg)), (lambda reduced_arg: hydra.lib.eithers.bind(hydra.lib.eithers.bind(apply_projection(proj, reduced_arg), (lambda v1: reduce(eager2, v1))), (lambda reduced_result: apply_if_nullary(eager2, reduced_result, remaining_args))))))[2]), hydra.lib.lists.uncons(args2))
         def for_cases(cs: hydra.core.CaseStatement, args2: frozenlist[hydra.core.Term]) -> Either[hydra.errors.Error, hydra.core.Term]:
-            @lru_cache(1)
-            def arg() -> hydra.core.Term:
-                return hydra.lib.lists.head(args2)
-            @lru_cache(1)
-            def remaining_args() -> frozenlist[hydra.core.Term]:
-                return hydra.lib.lists.tail(args2)
-            return hydra.lib.eithers.bind(reduce_arg(eager2, hydra.strip.deannotate_term(arg())), (lambda reduced_arg: hydra.lib.eithers.bind(hydra.lib.eithers.bind(apply_cases(cs, reduced_arg), (lambda v1: reduce(eager2, v1))), (lambda reduced_result: apply_if_nullary(eager2, reduced_result, remaining_args())))))
+            return hydra.lib.maybes.maybe((lambda : Right(original)), (lambda uc: (arg := hydra.lib.pairs.first(uc), remaining_args := hydra.lib.pairs.second(uc), hydra.lib.eithers.bind(reduce_arg(eager2, hydra.strip.deannotate_term(arg)), (lambda reduced_arg: hydra.lib.eithers.bind(hydra.lib.eithers.bind(apply_cases(cs, reduced_arg), (lambda v1: reduce(eager2, v1))), (lambda reduced_result: apply_if_nullary(eager2, reduced_result, remaining_args))))))[2]), hydra.lib.lists.uncons(args2))
         def for_unwrap(name: hydra.core.Name, args2: frozenlist[hydra.core.Term]) -> Either[hydra.errors.Error, hydra.core.Term]:
-            @lru_cache(1)
-            def arg() -> hydra.core.Term:
-                return hydra.lib.lists.head(args2)
-            @lru_cache(1)
-            def remaining_args() -> frozenlist[hydra.core.Term]:
-                return hydra.lib.lists.tail(args2)
-            return hydra.lib.eithers.bind(reduce_arg(eager2, hydra.strip.deannotate_term(arg())), (lambda reduced_arg: hydra.lib.eithers.bind(hydra.lib.eithers.bind(hydra.extract.core.wrap(name, graph, reduced_arg), (lambda v1: reduce(eager2, v1))), (lambda reduced_result: apply_if_nullary(eager2, reduced_result, remaining_args())))))
+            return hydra.lib.maybes.maybe((lambda : Right(original)), (lambda uc: (arg := hydra.lib.pairs.first(uc), remaining_args := hydra.lib.pairs.second(uc), hydra.lib.eithers.bind(reduce_arg(eager2, hydra.strip.deannotate_term(arg)), (lambda reduced_arg: hydra.lib.eithers.bind(hydra.lib.eithers.bind(hydra.extract.core.wrap(name, graph, reduced_arg), (lambda v1: reduce(eager2, v1))), (lambda reduced_result: apply_if_nullary(eager2, reduced_result, remaining_args))))))[2]), hydra.lib.lists.uncons(args2))
         def for_lambda(l: hydra.core.Lambda, args2: frozenlist[hydra.core.Term]) -> Either[hydra.errors.Error, hydra.core.Term]:
             param = l.parameter
             body = l.body
-            @lru_cache(1)
-            def arg() -> hydra.core.Term:
-                return hydra.lib.lists.head(args2)
-            @lru_cache(1)
-            def remaining_args() -> frozenlist[hydra.core.Term]:
-                return hydra.lib.lists.tail(args2)
-            return hydra.lib.eithers.bind(reduce(eager2, hydra.strip.deannotate_term(arg())), (lambda reduced_arg: hydra.lib.eithers.bind(reduce(eager2, hydra.variables.replace_free_term_variable(param, reduced_arg, body)), (lambda reduced_result: apply_if_nullary(eager2, reduced_result, remaining_args())))))
+            return hydra.lib.maybes.maybe((lambda : Right(original)), (lambda uc: (arg := hydra.lib.pairs.first(uc), remaining_args := hydra.lib.pairs.second(uc), hydra.lib.eithers.bind(reduce(eager2, hydra.strip.deannotate_term(arg)), (lambda reduced_arg: hydra.lib.eithers.bind(reduce(eager2, hydra.variables.replace_free_term_variable(param, reduced_arg, body)), (lambda reduced_result: apply_if_nullary(eager2, reduced_result, remaining_args))))))[2]), hydra.lib.lists.uncons(args2))
         def for_primitive(prim: hydra.graph.Primitive, arity: int, args2: frozenlist[hydra.core.Term]) -> Either[hydra.errors.Error, hydra.core.Term]:
             @lru_cache(1)
             def arg_list() -> frozenlist[hydra.core.Term]:

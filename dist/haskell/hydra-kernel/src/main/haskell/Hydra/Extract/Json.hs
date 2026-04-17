@@ -21,7 +21,7 @@ expectArray value =
       _ -> Left (Strings.cat2 (Strings.cat2 "expected " "JSON array") (Strings.cat2 " but found " (showValue value)))
 
 -- | Extract a number from a JSON value, failing if the value is not a number
-expectNumber :: Model.Value -> Either String Double
+expectNumber :: Model.Value -> Either String Sci.Scientific
 expectNumber value =
     case value of
       Model.ValueNumber v0 -> Right v0
@@ -66,7 +66,7 @@ requireArray :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Either String [Model.Va
 requireArray fname m = Eithers.bind (require fname m) expectArray
 
 -- | Look up a required number field in a JSON object
-requireNumber :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Either String Double)
+requireNumber :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Either String Sci.Scientific)
 requireNumber fname m = Eithers.bind (require fname m) expectNumber
 
 -- | Look up a required string field in a JSON object

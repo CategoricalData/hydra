@@ -149,12 +149,21 @@ qualifyName = define "qualifyName" $
   doc "Split a dot-separated name into a namespace and local name" $
   lambda "name" $ lets [
     "parts">: Lists.reverse (Strings.splitOn (string ".") (Core.unName $ var "name"))]
-    $ Logic.ifElse
-      (Equality.equal (int32 1) (Lists.length $ var "parts"))
+    -- Use uncons to destructure (last, rest) from the reversed parts list.
+    -- Empty parts is unreachable (splitOn on a string produces >= 1 element);
+    -- in that case fall back to an unqualified name.
+    $ Maybes.maybe
       (Packaging.qualifiedName nothing (Core.unName $ var "name"))
-      (Packaging.qualifiedName
-        (just $ wrap _Namespace (Strings.intercalate (string ".") (Lists.reverse (Lists.tail $ var "parts"))))
-        (Lists.head $ var "parts"))
+      ("uc" ~>
+        "localName" <~ Pairs.first (var "uc") $
+        "restReversed" <~ Pairs.second (var "uc") $
+        Logic.ifElse
+          (Lists.null $ var "restReversed")
+          (Packaging.qualifiedName nothing (Core.unName $ var "name"))
+          (Packaging.qualifiedName
+            (just $ wrap _Namespace (Strings.intercalate (string ".") (Lists.reverse (var "restReversed"))))
+            (var "localName")))
+      (Lists.uncons $ var "parts")
 
 uniqueLabel :: TTermDefinition (S.Set String -> String -> String)
 uniqueLabel = define "uniqueLabel" $

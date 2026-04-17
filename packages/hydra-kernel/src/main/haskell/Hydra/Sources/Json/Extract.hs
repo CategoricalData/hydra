@@ -76,6 +76,7 @@ import           Prelude hiding ((++))
 import qualified Data.Int                                  as I
 import qualified Data.List                                 as L
 import qualified Data.Map                                  as M
+import qualified Data.Scientific                           as Sci
 import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
@@ -116,7 +117,7 @@ expectArray = define "expectArray" $
     (Just $ left $ Strings.cat2 (Strings.cat2 (string "expected ") (string "JSON array")) (Strings.cat2 (string " but found ") (showValue @@ var "value"))) [
     _Value_array>>: lambda "els" $ right $ var "els"]
 
-expectNumber :: TTermDefinition (Value -> Either String Double)
+expectNumber :: TTermDefinition (Value -> Either String Sci.Scientific)
 expectNumber = define "expectNumber" $
   doc "Extract a number from a JSON value, failing if the value is not a number" $
   lambda "value" $ cases _Value (var "value")
@@ -176,7 +177,7 @@ requireArray = define "requireArray" $
     (require @@ var "fname" @@ var "m")
     (asTerm expectArray)
 
-requireNumber :: TTermDefinition (String -> M.Map String Value -> Either String Double)
+requireNumber :: TTermDefinition (String -> M.Map String Value -> Either String Sci.Scientific)
 requireNumber = define "requireNumber" $
   doc "Look up a required number field in a JSON object" $
   lambdas ["fname", "m"] $ Eithers.bind

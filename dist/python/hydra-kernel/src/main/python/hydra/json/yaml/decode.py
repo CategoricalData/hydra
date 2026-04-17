@@ -23,11 +23,14 @@ def yaml_to_json(node: hydra.yaml.model.Node_):
             case hydra.yaml.model.ScalarBool(value=b):
                 return Right(cast(hydra.json.model.Value, hydra.json.model.ValueBoolean(b)))
 
+            case hydra.yaml.model.ScalarDecimal(value=d):
+                return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(d)))
+
             case hydra.yaml.model.ScalarFloat(value=f):
-                return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(f)))
+                return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.float64_to_decimal(hydra.lib.literals.bigfloat_to_float64(f)))))
 
             case hydra.yaml.model.ScalarInt(value=i):
-                return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(i))))
+                return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_decimal(i))))
 
             case hydra.yaml.model.ScalarNull():
                 return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNull()))

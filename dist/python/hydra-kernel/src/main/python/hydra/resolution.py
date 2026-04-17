@@ -93,7 +93,10 @@ def find_field_type(cx: T0, fname: hydra.core.Name, fields: frozenlist[hydra.cor
     @lru_cache(1)
     def matching_fields() -> frozenlist[hydra.core.FieldType]:
         return hydra.lib.lists.filter((lambda ft: hydra.lib.equality.equal(ft.name.value, fname.value)), fields)
-    return hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields()), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorResolution(cast(hydra.errors.ResolutionError, hydra.errors.ResolutionErrorNoMatchingField(hydra.errors.NoMatchingFieldError(fname))))))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_fields()), 1), (lambda : Right(hydra.lib.lists.head(matching_fields()).type)), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorMultipleFields(hydra.errors.MultipleFieldsError(fname))))))))))
+    @lru_cache(1)
+    def no_match() -> Either[hydra.errors.Error, T1]:
+        return Left(cast(hydra.errors.Error, hydra.errors.ErrorResolution(cast(hydra.errors.ResolutionError, hydra.errors.ResolutionErrorNoMatchingField(hydra.errors.NoMatchingFieldError(fname))))))
+    return hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields()), (lambda : no_match()), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_fields()), 1), (lambda : hydra.lib.maybes.maybe((lambda : no_match()), (lambda ft: Right(ft.type)), hydra.lib.lists.maybe_head(matching_fields()))), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorMultipleFields(hydra.errors.MultipleFieldsError(fname))))))))))
 
 def fully_strip_and_normalize_type(typ: hydra.core.Type) -> hydra.core.Type:
     r"""Fully strip a type of forall quantifiers, normalizing bound variable names for alpha-equivalence comparison."""
@@ -238,9 +241,9 @@ def require_union_field(cx: T0, graph: hydra.graph.Graph, tname: hydra.core.Name
 
     def with_row_type(rt: frozenlist[hydra.core.FieldType]) -> Either[hydra.errors.Error, hydra.core.Type]:
         @lru_cache(1)
-        def matches() -> frozenlist[hydra.core.FieldType]:
-            return hydra.lib.lists.filter((lambda ft: hydra.lib.equality.equal(ft.name, fname)), rt)
-        return hydra.lib.logic.if_else(hydra.lib.lists.null(matches()), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorResolution(cast(hydra.errors.ResolutionError, hydra.errors.ResolutionErrorNoMatchingField(hydra.errors.NoMatchingFieldError(fname))))))), (lambda : Right(hydra.lib.lists.head(matches()).type)))
+        def no_match_err() -> Either[hydra.errors.Error, T1]:
+            return Left(cast(hydra.errors.Error, hydra.errors.ErrorResolution(cast(hydra.errors.ResolutionError, hydra.errors.ResolutionErrorNoMatchingField(hydra.errors.NoMatchingFieldError(fname))))))
+        return hydra.lib.maybes.maybe((lambda : no_match_err()), (lambda ft: Right(ft.type)), hydra.lib.lists.find((lambda ft: hydra.lib.equality.equal(ft.name, fname)), rt))
     return hydra.lib.eithers.bind(require_union_type(cx, graph, tname), (lambda x1: with_row_type(x1)))
 
 def resolve_type(graph: hydra.graph.Graph, typ: hydra.core.Type) -> Maybe[hydra.core.Type]:
