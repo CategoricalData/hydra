@@ -31,6 +31,8 @@ import Hydra.Protobuf.Coder (moduleToProtobuf)
 import Hydra.Python.Coder (moduleToPython)
 import Hydra.Rust.Coder (moduleToRust)
 import Hydra.Rust.Language (rustLanguage)
+import Hydra.Wasm.Coder (moduleToWasm)
+import Hydra.Wasm.Language (wasmLanguage)
 import Hydra.Lisp.Coder (moduleToLisp)
 import Hydra.Lisp.Language (lispLanguage)
 import Hydra.Lisp.Serde (programToExpr)
@@ -227,6 +229,13 @@ writeScala basePath universeMods mods = do
   n <- generateSources moduleToScala scalaLanguage True True False False basePath universeMods mods
   wrapLongLinesInScalaTree basePath
   return n
+
+-- | Generate WebAssembly text format (WAT) files from modules.
+-- First argument: output directory
+-- Second argument: universe modules (all modules for type/term resolution)
+-- Third argument: modules to transform and generate
+writeWasm :: FP.FilePath -> [Module] -> [Module] -> IO Int
+writeWasm = generateSources moduleToWasm wasmLanguage True False False False
 
 -- | Soft maximum line length for generated source files in any target
 --   language. Lines longer than this are broken at the first eligible break
