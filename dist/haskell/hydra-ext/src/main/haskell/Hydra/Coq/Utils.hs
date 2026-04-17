@@ -624,45 +624,45 @@ typeRefs locals ty =
       Core.TypeWrap v0 -> typeRefs locals v0
       _ -> Sets.empty
 
--- | Convert a Hydra Type to a placeholder Term for use as an explicit Coq type argument
+-- | Convert a Hydra Type to a placeholder Term for use as an explicit Coq type argument. Coq-builtin type constructors are marked with a `Coq.` prefix so the encoder can emit them raw without going through sanitizeVar, which would clash with user-level lambda parameters of the same name (e.g. `list` -> `list_`).
 typeToTerm :: Core.Type -> Core.Term
 typeToTerm ty =
     case ty of
       Core.TypeVariable v0 -> Core.TermVariable v0
       Core.TypeList v0 -> Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermVariable (Core.Name "list")),
+        Core.applicationFunction = (Core.TermVariable (Core.Name "Coq.list")),
         Core.applicationArgument = (typeToTerm v0)})
       Core.TypeMaybe v0 -> Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermVariable (Core.Name "option")),
+        Core.applicationFunction = (Core.TermVariable (Core.Name "Coq.option")),
         Core.applicationArgument = (typeToTerm v0)})
       Core.TypeSet v0 -> Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermVariable (Core.Name "list")),
+        Core.applicationFunction = (Core.TermVariable (Core.Name "Coq.list")),
         Core.applicationArgument = (typeToTerm v0)})
       Core.TypeApplication v0 -> Core.TermApplication (Core.Application {
         Core.applicationFunction = (typeToTerm (Core.applicationTypeFunction v0)),
         Core.applicationArgument = (typeToTerm (Core.applicationTypeArgument v0))})
-      Core.TypeFunction _ -> Core.TermVariable (Core.Name "unit")
+      Core.TypeFunction _ -> Core.TermVariable (Core.Name "Coq.unit")
       Core.TypePair v0 -> Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermVariable (Core.Name "prod")),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "Coq.prod")),
           Core.applicationArgument = (typeToTerm (Core.pairTypeFirst v0))})),
         Core.applicationArgument = (typeToTerm (Core.pairTypeSecond v0))})
       Core.TypeMap v0 -> Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermVariable (Core.Name "list")),
+        Core.applicationFunction = (Core.TermVariable (Core.Name "Coq.list")),
         Core.applicationArgument = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermVariable (Core.Name "prod")),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "Coq.prod")),
           Core.applicationArgument = (typeToTerm (Core.mapTypeKeys v0))}))})
-      Core.TypeUnit -> Core.TermVariable (Core.Name "unit")
-      Core.TypeLiteral _ -> Core.TermVariable (Core.Name "unit")
+      Core.TypeUnit -> Core.TermVariable (Core.Name "Coq.unit")
+      Core.TypeLiteral _ -> Core.TermVariable (Core.Name "Coq.unit")
       Core.TypeEither v0 -> Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermVariable (Core.Name "sum")),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "Coq.sum")),
           Core.applicationArgument = (typeToTerm (Core.eitherTypeLeft v0))})),
         Core.applicationArgument = (typeToTerm (Core.eitherTypeRight v0))})
-      Core.TypeRecord _ -> Core.TermVariable (Core.Name "unit")
-      Core.TypeUnion _ -> Core.TermVariable (Core.Name "unit")
+      Core.TypeRecord _ -> Core.TermVariable (Core.Name "Coq.unit")
+      Core.TypeUnion _ -> Core.TermVariable (Core.Name "Coq.unit")
       Core.TypeWrap v0 -> typeToTerm v0
       Core.TypeAnnotated v0 -> typeToTerm (Core.annotatedTypeBody v0)
       Core.TypeForall v0 -> typeToTerm (Core.forallTypeBody v0)
-      Core.TypeVoid -> Core.TermVariable (Core.Name "Empty_set")
-      _ -> Core.TermVariable (Core.Name "unit")
+      Core.TypeVoid -> Core.TermVariable (Core.Name "Coq.Empty_set")
+      _ -> Core.TermVariable (Core.Name "Coq.unit")

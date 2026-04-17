@@ -797,42 +797,42 @@ targetsPolyName = define "targetsPolyName" $
 -- TypeForall binders are stripped; TypeAnnotated passes through.
 typeToTerm :: TTermDefinition (Type -> Term)
 typeToTerm = define "typeToTerm" $
-  doc "Convert a Hydra Type to a placeholder Term for use as an explicit Coq type argument" $
-  lambda "ty" $ cases _Type (var "ty") (Just $ Core.termVariable (wrap _Name (string "unit"))) [
+  doc "Convert a Hydra Type to a placeholder Term for use as an explicit Coq type argument. Coq-builtin type constructors are marked with a `Coq.` prefix so the encoder can emit them raw without going through sanitizeVar, which would clash with user-level lambda parameters of the same name (e.g. `list` -> `list_`)." $
+  lambda "ty" $ cases _Type (var "ty") (Just $ Core.termVariable (wrap _Name (string "Coq.unit"))) [
     _Type_variable>>: "v" ~> Core.termVariable $ var "v",
     _Type_list>>: "t" ~> Core.termApplication $ Core.application
-      (Core.termVariable (wrap _Name (string "list"))) (typeToTerm @@ var "t"),
+      (Core.termVariable (wrap _Name (string "Coq.list"))) (typeToTerm @@ var "t"),
     _Type_maybe>>: "t" ~> Core.termApplication $ Core.application
-      (Core.termVariable (wrap _Name (string "option"))) (typeToTerm @@ var "t"),
+      (Core.termVariable (wrap _Name (string "Coq.option"))) (typeToTerm @@ var "t"),
     _Type_set>>: "t" ~> Core.termApplication $ Core.application
-      (Core.termVariable (wrap _Name (string "list"))) (typeToTerm @@ var "t"),
+      (Core.termVariable (wrap _Name (string "Coq.list"))) (typeToTerm @@ var "t"),
     _Type_application>>: "at" ~> Core.termApplication $ Core.application
       (typeToTerm @@ (Core.applicationTypeFunction $ var "at"))
       (typeToTerm @@ (Core.applicationTypeArgument $ var "at")),
-    _Type_function>>: constant (Core.termVariable $ wrap _Name (string "unit")),
+    _Type_function>>: constant (Core.termVariable $ wrap _Name (string "Coq.unit")),
     _Type_pair>>: "pt" ~> Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
-        (Core.termVariable (wrap _Name (string "prod")))
+        (Core.termVariable (wrap _Name (string "Coq.prod")))
         (typeToTerm @@ (Core.pairTypeFirst $ var "pt")))
       (typeToTerm @@ (Core.pairTypeSecond $ var "pt")),
     _Type_map>>: "mt" ~> Core.termApplication $ Core.application
-      (Core.termVariable (wrap _Name (string "list")))
+      (Core.termVariable (wrap _Name (string "Coq.list")))
       (Core.termApplication $ Core.application
-        (Core.termVariable (wrap _Name (string "prod")))
+        (Core.termVariable (wrap _Name (string "Coq.prod")))
         (typeToTerm @@ (Core.mapTypeKeys $ var "mt"))),
-    _Type_unit>>: constant (Core.termVariable $ wrap _Name (string "unit")),
-    _Type_literal>>: constant (Core.termVariable $ wrap _Name (string "unit")),
+    _Type_unit>>: constant (Core.termVariable $ wrap _Name (string "Coq.unit")),
+    _Type_literal>>: constant (Core.termVariable $ wrap _Name (string "Coq.unit")),
     _Type_either>>: "et" ~> Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
-        (Core.termVariable (wrap _Name (string "sum")))
+        (Core.termVariable (wrap _Name (string "Coq.sum")))
         (typeToTerm @@ (Core.eitherTypeLeft $ var "et")))
       (typeToTerm @@ (Core.eitherTypeRight $ var "et")),
-    _Type_record>>: constant (Core.termVariable $ wrap _Name (string "unit")),
-    _Type_union>>: constant (Core.termVariable $ wrap _Name (string "unit")),
+    _Type_record>>: constant (Core.termVariable $ wrap _Name (string "Coq.unit")),
+    _Type_union>>: constant (Core.termVariable $ wrap _Name (string "Coq.unit")),
     _Type_wrap>>: "wt" ~> typeToTerm @@ var "wt",
     _Type_annotated>>: "at" ~> typeToTerm @@ (Core.annotatedTypeBody $ var "at"),
     _Type_forall>>: "ft" ~> typeToTerm @@ (Core.forallTypeBody $ var "ft"),
-    _Type_void>>: constant (Core.termVariable $ wrap _Name (string "Empty_set"))]
+    _Type_void>>: constant (Core.termVariable $ wrap _Name (string "Coq.Empty_set"))]
 
 -- | Normalize inner TermTypeLambda nodes inside a term, rewriting them as
 -- regular term lambdas whose domain is `Type`. At each TermLet node, any
