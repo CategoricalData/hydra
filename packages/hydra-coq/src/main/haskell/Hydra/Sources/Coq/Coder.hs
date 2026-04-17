@@ -22,7 +22,7 @@ import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
-import qualified Hydra.Sources.Other.Coq                   as CoqSyntax
+import qualified Hydra.Sources.Coq.Syntax                  as CoqSyntax
 import qualified Hydra.Sources.Coq.Environment             as CoqEnvironmentSource
 import qualified Hydra.Sources.Coq.Language                as CoqLanguage
 import qualified Hydra.Sources.Coq.Utils                   as CoqUtils

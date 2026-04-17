@@ -1,4 +1,4 @@
-module Hydra.Sources.Other.Coq where
+module Hydra.Sources.Coq.Syntax where
 
 -- Standard imports for type-level sources outside of the kernel
 import           Hydra.Kernel                    hiding (letBindings)
