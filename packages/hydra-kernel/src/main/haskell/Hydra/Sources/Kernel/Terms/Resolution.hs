@@ -167,10 +167,11 @@ findFieldType = define "findFieldType" $
   "matchingFields" <~ Lists.filter
     ("ft" ~> Equality.equal (Core.unName (Core.fieldTypeName (var "ft"))) (Core.unName (var "fname")))
     (var "fields") $
+  "noMatch" <~ (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname")) (var "cx")) $
   Logic.ifElse (Lists.null (var "matchingFields"))
-    (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname")) (var "cx"))
+    (var "noMatch")
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingFields")) (int32 1))
-      (right (Core.fieldTypeType (Lists.head (var "matchingFields"))))
+      (Maybes.maybe (var "noMatch") ("ft" ~> right (Core.fieldTypeType $ var "ft")) (Lists.maybeHead $ var "matchingFields"))
       (Ctx.failInContext (Error.errorExtraction $ Error.extractionErrorMultipleFields $ Error.multipleFieldsError (var "fname")) (var "cx")))
 
 fTypeIsPolymorphic :: TTermDefinition (Type -> Bool)
@@ -302,12 +303,13 @@ requireUnionField_ = define "requireUnionField" $
   doc "Require a field type from a union type" $
   "cx" ~> "graph" ~> "tname" ~> "fname" ~>
   "withRowType" <~ ("rt" ~>
-    "matches" <~ (Lists.filter
-      ("ft" ~> Equality.equal (Core.fieldTypeName $ var "ft") (var "fname"))
-      (var "rt")) $
-    Logic.ifElse (Lists.null $ var "matches")
-      (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname")) (var "cx"))
-      (right $ Core.fieldTypeType $ Lists.head $ var "matches")) $
+    "noMatchErr" <~ (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname")) (var "cx")) $
+    Maybes.maybe
+      (var "noMatchErr")
+      ("ft" ~> right $ Core.fieldTypeType $ var "ft")
+      (Lists.find
+        ("ft" ~> Equality.equal (Core.fieldTypeName $ var "ft") (var "fname"))
+        (var "rt"))) $
   Eithers.bind (requireUnionType @@ var "cx" @@ var "graph" @@ var "tname") (var "withRowType")
 
 requireUnionType :: TTermDefinition (Context -> Graph -> Name -> Either Error [FieldType])

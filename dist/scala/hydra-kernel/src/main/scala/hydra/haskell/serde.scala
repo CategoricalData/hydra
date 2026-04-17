@@ -229,7 +229,7 @@ def literalToExpr(lit: hydra.haskell.syntax.Literal): hydra.ast.Expr =
   def showFloat[T0](showFn: (T0 => scala.Predef.String))(v: T0): scala.Predef.String =
     {
     lazy val raw: scala.Predef.String = showFn(v)
-    hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](raw)("NaN"))("(0/0)")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](raw)("Infinity"))("(1/0)")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](raw)("-Infinity"))("(-(1/0))")(parensIfNeg(hydra.lib.equality.equal[Int](hydra.lib.strings.charAt(0)(raw))(45))(raw))))
+    hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](raw)("NaN"))("(0/0)")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](raw)("Infinity"))("(1/0)")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](raw)("-Infinity"))("(-(1/0))")(parensIfNeg(hydra.lib.equality.equal[Int](hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.strings.maybeCharAt(0)(raw)))(45))(raw))))
   }
   hydra.serialization.cst(lit match
     case hydra.haskell.syntax.Literal.char(v_Literal_char_c) => hydra.lib.literals.showString(hydra.lib.literals.showUint16(v_Literal_char_c))

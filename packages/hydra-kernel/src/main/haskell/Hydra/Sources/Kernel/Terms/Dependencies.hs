@@ -232,10 +232,12 @@ pruneLet = define "pruneLet" $
   "bindingMap" <~ Maps.fromList (Lists.map
     ("b" ~> pair (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")) $ Core.letBindings $ var "l") $
   "rootName" <~ Core.name (string "[[[root]]]") $
+  -- Look up n in bindingMap; a missing name is unreachable here since the
+  -- caller only calls adj on names present in the map. Fall back to Unit.
   "adj" <~ ("n" ~> Sets.intersection (Sets.fromList $ Maps.keys $ var "bindingMap")
       (Variables.freeVariablesInTerm @@ (Logic.ifElse (Equality.equal (var "n") (var "rootName"))
         (Core.letBody $ var "l")
-        (Maybes.fromJust $ Maps.lookup (var "n") (var "bindingMap"))))) $
+        (Maybes.fromMaybe Core.termUnit (Maps.lookup (var "n") (var "bindingMap")))))) $
   "reachable" <~ Sorting.findReachableNodes @@ var "adj" @@ var "rootName" $
   "prunedBindings" <~ Lists.filter
     ("b" ~> Sets.member (Core.bindingName $ var "b") (var "reachable"))

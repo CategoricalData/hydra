@@ -40,4 +40,4 @@ JAVA_CP="$JAVA_CP:$(find $GRADLE_CACHE -name 'commons-lang3-3.12.0.jar' | head -
 # Run the Java bootstrap (its output includes detailed timing and file counts)
 # Large stack needed for deeply-nested polymorphic type traversals in eta expansion.
 # Increase heap to accommodate the large stack + code generation data structures.
-java -Xss256m -Xmx2g -cp "$JAVA_CP" hydra.Bootstrap "$@" --json-dir "$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json"
+java -Xss256m -Xmx2g -cp "$JAVA_CP" hydra.Bootstrap "$@" --json-dir "$HYDRA_ROOT/dist/json"

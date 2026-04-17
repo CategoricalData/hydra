@@ -167,7 +167,7 @@ public interface Parser {
             return hydra.Parsers.pure(new hydra.json.model.Value.Number_(hydra.lib.maybes.Maybe.applyLazy(
               () -> new java.math.BigDecimal("0.0"),
               (java.util.function.Function<java.math.BigDecimal, java.math.BigDecimal>) (hydra.lib.equality.Identity::apply),
-              hydra.lib.literals.ReadBigfloat.apply(numStr.get()))));
+              hydra.lib.literals.ReadDecimal.apply(numStr.get()))));
           })))))));
   }
 

@@ -509,9 +509,10 @@ generateTypeGroup = define "generateTypeGroup" $
   Logic.ifElse
     (Logic.and (Logic.not $ var "cyclic") (Equality.equal (Lists.length $ var "defs") (int32 1)))
     -- Non-cyclic singleton: delegate.
-    (lets [
-      "d">: Lists.head $ var "defs"] $
-      generateTypeSentence @@ var "env" @@ (Pairs.first $ var "d") @@ (Pairs.second $ var "d"))
+    (Maybes.fromMaybe (list ([] :: [TTerm C.Sentence])) (Maybes.map
+      (lambda "d" $
+        generateTypeSentence @@ var "env" @@ (Pairs.first $ var "d") @@ (Pairs.second $ var "d"))
+      (Lists.maybeHead $ var "defs")))
     -- Mutual group (possibly with positivity sanitization).
     (lets [
       "groupNames">: Sets.fromList $ Lists.map (lambda "d" $ Pairs.first $ var "d") (var "defs"),
@@ -551,8 +552,8 @@ namespaceToPath = define "namespaceToPath" $
   doc "Convert a Hydra namespace string (e.g. hydra.show.core) into a relative .v file path" $
   lambda "ns" $ lets [
     "parts">: Strings.splitOn (string ".") (var "ns"),
-    "dirParts">: Lists.init (var "parts"),
-    "fileName">: Strings.cat (list [Lists.last (var "parts"), string ".v"])] $
+    "dirParts">: Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts")),
+    "fileName">: Strings.cat (list [Maybes.fromMaybe (var "ns") (Lists.maybeLast (var "parts")), string ".v"])] $
     Logic.ifElse (Lists.null (var "dirParts"))
       (var "fileName")
       (Strings.cat (list [
@@ -618,16 +619,17 @@ makeProdType :: TTermDefinition ([String] -> String)
 makeProdType = define "makeProdType" $
   doc "Emit nested `prod (T1) (prod ...)` textual type expression" $
   lambda "ts" $
-    Logic.ifElse (Lists.null $ var "ts")
-      (string "unit")
-      (Logic.ifElse (Equality.equal (Lists.length $ var "ts") (int32 1))
-        (Lists.head $ var "ts")
-        (Strings.cat (list [
-          string "prod (",
-          Lists.head $ var "ts",
-          string ") (",
-          makeProdType @@ (Lists.tail $ var "ts"),
-          string ")"])))
+    Maybes.fromMaybe (string "unit") (Maybes.map
+      (lambda "p" $
+        Logic.ifElse (Equality.equal (Lists.length $ var "ts") (int32 1))
+          (Pairs.first $ var "p")
+          (Strings.cat (list [
+            string "prod (",
+            Pairs.first $ var "p",
+            string ") (",
+            makeProdType @@ (Pairs.second $ var "p"),
+            string ")"])))
+      (Lists.uncons $ var "ts"))
 
 -- | Build a nested Coq pair-value textual expression.
 -- `[b]` -> `"b"`; multi -> `"(pair (b1) ((pair (b2) (...))))"`.
@@ -636,16 +638,17 @@ makeProdVal :: TTermDefinition ([String] -> String)
 makeProdVal = define "makeProdVal" $
   doc "Emit a nested `(pair (b1) (...))` textual value expression" $
   lambda "bs" $
-    Logic.ifElse (Lists.null $ var "bs")
-      (string "tt")
-      (Logic.ifElse (Equality.equal (Lists.length $ var "bs") (int32 1))
-        (Lists.head $ var "bs")
-        (Strings.cat (list [
-          string "(pair (",
-          Lists.head $ var "bs",
-          string ") (",
-          makeProdVal @@ (Lists.tail $ var "bs"),
-          string "))"])))
+    Maybes.fromMaybe (string "tt") (Maybes.map
+      (lambda "p" $
+        Logic.ifElse (Equality.equal (Lists.length $ var "bs") (int32 1))
+          (Pairs.first $ var "p")
+          (Strings.cat (list [
+            string "(pair (",
+            Pairs.first $ var "p",
+            string ") (",
+            makeProdVal @@ (Pairs.second $ var "p"),
+            string "))"])))
+      (Lists.uncons $ var "bs"))
 
 -- | Build n projection expressions for a given bundle variable name.
 -- n = 0: []; n = 1: [var]; n > 1: for each index 0..n-1, emit

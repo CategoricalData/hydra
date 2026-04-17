@@ -27,26 +27,26 @@ def hex_digit(n: int) -> int:
 def pad_hex4(n: int) -> str:
     @lru_cache(1)
     def d3() -> int:
-        return hydra.lib.math.div(n, 4096)
+        return hydra.lib.maybes.from_maybe((lambda : 0), hydra.lib.math.maybe_div(n, 4096))
     @lru_cache(1)
     def r3() -> int:
-        return hydra.lib.math.mod(n, 4096)
+        return hydra.lib.maybes.from_maybe((lambda : 0), hydra.lib.math.maybe_mod(n, 4096))
     @lru_cache(1)
     def d2() -> int:
-        return hydra.lib.math.div(r3(), 256)
+        return hydra.lib.maybes.from_maybe((lambda : 0), hydra.lib.math.maybe_div(r3(), 256))
     @lru_cache(1)
     def r2() -> int:
-        return hydra.lib.math.mod(r3(), 256)
+        return hydra.lib.maybes.from_maybe((lambda : 0), hydra.lib.math.maybe_mod(r3(), 256))
     @lru_cache(1)
     def d1() -> int:
-        return hydra.lib.math.div(r2(), 16)
+        return hydra.lib.maybes.from_maybe((lambda : 0), hydra.lib.math.maybe_div(r2(), 16))
     @lru_cache(1)
     def d0() -> int:
-        return hydra.lib.math.mod(r2(), 16)
+        return hydra.lib.maybes.from_maybe((lambda : 0), hydra.lib.math.maybe_mod(r2(), 16))
     return hydra.lib.strings.from_list((hex_digit(d3()), hex_digit(d2()), hex_digit(d1()), hex_digit(d0())))
 
 def java_unicode_escape(n: int) -> str:
-    return hydra.lib.logic.if_else(hydra.lib.equality.gt(n, 65535), (lambda : (n_ := hydra.lib.math.sub(n, 65536), (hi := hydra.lib.math.add(55296, hydra.lib.math.div(n_, 1024)), (lo := hydra.lib.math.add(56320, hydra.lib.math.mod(n_, 1024)), hydra.lib.strings.cat2(hydra.lib.strings.cat2("\\u", pad_hex4(hi)), hydra.lib.strings.cat2("\\u", pad_hex4(lo))))[1])[1])[1]), (lambda : hydra.lib.strings.cat2("\\u", pad_hex4(n))))
+    return hydra.lib.logic.if_else(hydra.lib.equality.gt(n, 65535), (lambda : (n_ := hydra.lib.math.sub(n, 65536), (hi := hydra.lib.math.add(55296, hydra.lib.maybes.from_maybe((lambda : 0), hydra.lib.math.maybe_div(n_, 1024))), (lo := hydra.lib.math.add(56320, hydra.lib.maybes.from_maybe((lambda : 0), hydra.lib.math.maybe_mod(n_, 1024))), hydra.lib.strings.cat2(hydra.lib.strings.cat2("\\u", pad_hex4(hi)), hydra.lib.strings.cat2("\\u", pad_hex4(lo))))[1])[1])[1]), (lambda : hydra.lib.strings.cat2("\\u", pad_hex4(n))))
 
 def escape_java_char(c: int) -> str:
     return hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 34), (lambda : "\\\""), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 92), (lambda : "\\\\"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 10), (lambda : "\\n"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 13), (lambda : "\\r"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 9), (lambda : "\\t"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 8), (lambda : "\\b"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 12), (lambda : "\\f"), (lambda : hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.gte(c, 32), hydra.lib.equality.lt(c, 127)), (lambda : hydra.lib.strings.from_list((c,))), (lambda : java_unicode_escape(c)))))))))))))))))
@@ -364,7 +364,7 @@ def write_array_creation_expression(ace: hydra.java.syntax.ArrayCreationExpressi
 
 def write_array_initializer(ai: hydra.java.syntax.ArrayInitializer) -> hydra.ast.Expr:
     groups = ai.value
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(groups), 1), (lambda : hydra.serialization.no_sep((hydra.serialization.cst("{"), hydra.serialization.comma_sep(hydra.serialization.inline_style, hydra.lib.lists.map((lambda x1: write_variable_initializer(x1)), hydra.lib.lists.head(groups))), hydra.serialization.cst("}")))), (lambda : hydra.serialization.cst("{}")))
+    return hydra.lib.maybes.from_maybe((lambda : hydra.serialization.cst("{}")), hydra.lib.maybes.map((lambda first_group: hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(groups), 1), (lambda : hydra.serialization.no_sep((hydra.serialization.cst("{"), hydra.serialization.comma_sep(hydra.serialization.inline_style, hydra.lib.lists.map((lambda x1: write_variable_initializer(x1)), first_group)), hydra.serialization.cst("}")))), (lambda : hydra.serialization.cst("{}")))), hydra.lib.lists.maybe_head(groups)))
 
 def write_array_type(at: hydra.java.syntax.ArrayType) -> hydra.ast.Expr:
     dims = at.dims

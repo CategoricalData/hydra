@@ -401,13 +401,10 @@ public interface Core {
     hydra.util.Lazy<java.util.Set<hydra.core.Name>> undefined = new hydra.util.Lazy<>(() -> hydra.lib.sets.Difference.apply(
       freeVars,
       (cx).typeVariables));
-    return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.sets.Null.apply(undefined.get()),
+    return hydra.lib.maybes.Maybe.applyLazy(
       () -> (hydra.util.Maybe<T1>) (hydra.util.Maybe.<T1>nothing()),
-      () -> ((java.util.function.Supplier<hydra.util.Maybe<T1>>) (() -> {
-        hydra.util.Lazy<hydra.core.Name> firstUndefined = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(hydra.lib.sets.ToList.apply(undefined.get())));
-        return (mkError).apply(firstUndefined.get());
-      })).get());
+      (java.util.function.Function<hydra.core.Name, hydra.util.Maybe<T1>>) (firstUndefined -> (mkError).apply(firstUndefined)),
+      hydra.lib.lists.MaybeHead.apply(hydra.lib.sets.ToList.apply(undefined.get())));
   }
 
   static <T0, T1> hydra.util.Maybe<T1> checkUndefinedTypeVariablesInTypeScheme(T0 path, hydra.graph.Graph cx, hydra.core.TypeScheme ts, java.util.function.Function<hydra.core.Name, hydra.util.Maybe<T1>> mkError) {
@@ -415,13 +412,10 @@ public interface Core {
     hydra.util.Lazy<java.util.Set<hydra.core.Name>> undefined = new hydra.util.Lazy<>(() -> hydra.lib.sets.Difference.apply(
       freeVars,
       (cx).typeVariables));
-    return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.sets.Null.apply(undefined.get()),
+    return hydra.lib.maybes.Maybe.applyLazy(
       () -> (hydra.util.Maybe<T1>) (hydra.util.Maybe.<T1>nothing()),
-      () -> ((java.util.function.Supplier<hydra.util.Maybe<T1>>) (() -> {
-        hydra.util.Lazy<hydra.core.Name> firstUndefined = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(hydra.lib.sets.ToList.apply(undefined.get())));
-        return (mkError).apply(firstUndefined.get());
-      })).get());
+      (java.util.function.Function<hydra.core.Name, hydra.util.Maybe<T1>>) (firstUndefined -> (mkError).apply(firstUndefined)),
+      hydra.lib.lists.MaybeHead.apply(hydra.lib.sets.ToList.apply(undefined.get())));
   }
 
   static hydra.util.Maybe<hydra.error.core.InvalidTypeError> checkVoid(hydra.core.Type typ) {
@@ -813,10 +807,10 @@ public interface Core {
             hydra.lib.equality.Equal.apply(
               hydra.lib.lists.Length.apply((fields).value),
               1),
-            () -> ((java.util.function.Supplier<hydra.util.Maybe<hydra.error.core.InvalidTypeError>>) (() -> {
-              hydra.util.Lazy<hydra.core.FieldType> singleField = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply((fields).value));
-              return hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.SingleVariantUnion(new hydra.error.core.SingleVariantUnionError(new hydra.paths.SubtermPath((java.util.List<hydra.paths.SubtermStep>) (java.util.Collections.<hydra.paths.SubtermStep>emptyList())), singleField.get().name)));
-            })).get(),
+            () -> hydra.lib.maybes.Maybe.applyLazy(
+              () -> (hydra.util.Maybe<hydra.error.core.InvalidTypeError>) (hydra.util.Maybe.<hydra.error.core.InvalidTypeError>nothing()),
+              (java.util.function.Function<hydra.core.FieldType, hydra.util.Maybe<hydra.error.core.InvalidTypeError>>) (singleField -> hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.SingleVariantUnion(new hydra.error.core.SingleVariantUnionError(new hydra.paths.SubtermPath((java.util.List<hydra.paths.SubtermStep>) (java.util.Collections.<hydra.paths.SubtermStep>emptyList())), (singleField).name)))),
+              hydra.lib.lists.MaybeHead.apply((fields).value)),
             () -> (hydra.util.Maybe<hydra.error.core.InvalidTypeError>) (hydra.util.Maybe.<hydra.error.core.InvalidTypeError>nothing())),
           hydra.validate.Core.checkDuplicateFieldTypes(
             (fields).value,

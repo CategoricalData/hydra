@@ -30,7 +30,7 @@ adjacentEdgeToJson out ae =
 doubleValueToJson :: Syntax.DoubleValue -> Model.Value
 doubleValueToJson x =
     case x of
-      Syntax.DoubleValueFinite v0 -> Model.ValueNumber (Literals.float64ToBigfloat v0)
+      Syntax.DoubleValueFinite v0 -> Model.ValueNumber (Literals.float64ToDecimal v0)
       Syntax.DoubleValueInfinity -> Model.ValueString "Infinity"
       Syntax.DoubleValueNegativeInfinity -> Model.ValueString "-Infinity"
       Syntax.DoubleValueNotANumber -> Model.ValueString "NaN"
@@ -49,7 +49,7 @@ edgePropertyMapToJson m =
 floatValueToJson :: Syntax.FloatValue -> Model.Value
 floatValueToJson x =
     case x of
-      Syntax.FloatValueFinite v0 -> Model.ValueNumber (Literals.float32ToBigfloat v0)
+      Syntax.FloatValueFinite v0 -> Model.ValueNumber (Literals.float32ToDecimal v0)
       Syntax.FloatValueInfinity -> Model.ValueString "Infinity"
       Syntax.FloatValueNegativeInfinity -> Model.ValueString "-Infinity"
       Syntax.FloatValueNotANumber -> Model.ValueString "NaN"
@@ -78,24 +78,24 @@ valueToJson :: Syntax.Value -> Model.Value
 valueToJson x =
     case x of
       Syntax.ValueBigDecimal v0 -> typedValueToJson "g:BigDecimal" (Model.ValueString (Syntax.unBigDecimalValue v0))
-      Syntax.ValueBigInteger v0 -> typedValueToJson "g:BigInteger" (Model.ValueNumber (Literals.bigintToBigfloat v0))
+      Syntax.ValueBigInteger v0 -> typedValueToJson "g:BigInteger" (Model.ValueNumber (Literals.bigintToDecimal v0))
       Syntax.ValueBinary v0 -> typedValueToJson "g:Binary" (Model.ValueString v0)
       Syntax.ValueBoolean v0 -> Model.ValueBoolean v0
-      Syntax.ValueByte v0 -> typedValueToJson "g:Byte" (Model.ValueNumber (Literals.bigintToBigfloat (Literals.uint8ToBigint v0)))
+      Syntax.ValueByte v0 -> typedValueToJson "g:Byte" (Model.ValueNumber (Literals.bigintToDecimal (Literals.uint8ToBigint v0)))
       Syntax.ValueChar v0 -> typedValueToJson "g:Char" (Model.ValueString (Strings.fromList (Lists.pure (Literals.bigintToInt32 (Literals.uint32ToBigint v0)))))
       Syntax.ValueComposite v0 -> typedValueToJson (Syntax.unTypeName (Syntax.compositeTypedValueType v0)) (mapToJson (Syntax.compositeTypedValueFields v0))
       Syntax.ValueDateTime v0 -> typedValueToJson "g:DateTime" (Model.ValueString (Syntax.unDateTime v0))
       Syntax.ValueDouble v0 -> typedValueToJson "g:Double" (doubleValueToJson v0)
       Syntax.ValueDuration v0 -> typedValueToJson "g:Duration" (Model.ValueString (Syntax.unDuration v0))
       Syntax.ValueFloat v0 -> typedValueToJson "g:Float" (floatValueToJson v0)
-      Syntax.ValueInteger v0 -> typedValueToJson "g:Int32" (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint v0)))
+      Syntax.ValueInteger v0 -> typedValueToJson "g:Int32" (Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint v0)))
       Syntax.ValueList v0 -> typedValueToJson "g:List" (Model.ValueArray (Lists.map valueToJson v0))
-      Syntax.ValueLong v0 -> typedValueToJson "g:Long" (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int64ToBigint v0)))
+      Syntax.ValueLong v0 -> typedValueToJson "g:Long" (Model.ValueNumber (Literals.bigintToDecimal (Literals.int64ToBigint v0)))
       Syntax.ValueMap v0 -> typedValueToJson "g:Map" (mapToJson v0)
       Syntax.ValueNull -> Model.ValueNull
       Syntax.ValuePrimitive v0 -> typedValueToJson "g:PrimitivePdt" (Model.ValueString (Syntax.primitiveTypedValueValue v0))
       Syntax.ValueSet v0 -> typedValueToJson "g:Set" (Model.ValueArray (Lists.map valueToJson v0))
-      Syntax.ValueShort v0 -> typedValueToJson "g:Int16" (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int16ToBigint v0)))
+      Syntax.ValueShort v0 -> typedValueToJson "g:Int16" (Model.ValueNumber (Literals.bigintToDecimal (Literals.int16ToBigint v0)))
       Syntax.ValueString v0 -> Model.ValueString v0
       Syntax.ValueUuid v0 -> typedValueToJson "g:UUID" (Model.ValueString (Syntax.unUuid v0))
 

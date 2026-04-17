@@ -521,9 +521,11 @@ public interface Serde {
             "-Infinity"),
           () -> "(-(1/0))",
           () -> (parensIfNeg).apply(hydra.lib.equality.Equal.apply(
-            hydra.lib.strings.CharAt.apply(
-              0,
-              raw),
+            hydra.lib.maybes.FromMaybe.applyLazy(
+              () -> 0,
+              hydra.lib.strings.MaybeCharAt.apply(
+                0,
+                raw)),
             45)).apply(raw))));
   }
 

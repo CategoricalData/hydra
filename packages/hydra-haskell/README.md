@@ -35,8 +35,9 @@ for the full picture.
 - **Generated Haskell kernel** ([`dist/haskell/hydra-kernel/src/main/haskell/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-kernel/src/main/haskell))
   - `Hydra/Core.hs`, `Hydra/Graph.hs`, etc. — generated from the kernel DSL sources
 
-- **Generated ext-coder output** ([`dist/haskell/hydra-ext/src/main/haskell/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-ext/src/main/haskell))
-  - `Hydra/Java/Coder.hs`, `Hydra/Python/Coder.hs`, ... — generated from each language's DSL sources
+- **Generated coder output** — per-package and catch-all directories under `dist/haskell/`
+  - [`dist/haskell/hydra-haskell/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-haskell/src/main/haskell) — Haskell coder
+  - [`dist/haskell/hydra-ext/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-ext/src/main/haskell) — Java, Python, Scala, Lisp, and other coders
 
 The Haskell head is the **bootstrapping implementation**: the DSL sources in `packages/`
 are compiled through it to generate code for Java, Python, Scala, Lisp, and other languages.

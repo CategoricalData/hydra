@@ -11,6 +11,7 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -83,7 +84,7 @@ customIndentBlock idt els =
                   Ast.paddingRight = (Ast.WsBreakAndIndent idt)},
                 Ast.opPrecedence = (Ast.Precedence 0),
                 Ast.opAssociativity = Ast.AssociativityNone}
-      in (Maybes.maybe (cst "") (\head -> Logic.ifElse (Equality.equal (Lists.length els) 1) head (ifx idtOp head (newlineSep (Lists.drop 1 els)))) (Lists.safeHead els))
+      in (Maybes.maybe (cst "") (\head -> Logic.ifElse (Equality.equal (Lists.length els) 1) head (ifx idtOp head (newlineSep (Lists.drop 1 els)))) (Lists.maybeHead els))
 
 dotSep :: [Ast.Expr] -> Ast.Expr
 dotSep =
@@ -273,7 +274,7 @@ orSep :: Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr
 orSep style l =
 
       let newlines = Ast.blockStyleNewlineBeforeContent style
-      in (Maybes.maybe (cst "") (\h -> Lists.foldl (\acc -> \el -> ifx (orOp newlines) acc el) h (Lists.drop 1 l)) (Lists.safeHead l))
+      in (Maybes.maybe (cst "") (\h -> Lists.foldl (\acc -> \el -> ifx (orOp newlines) acc el) h (Lists.drop 1 l)) (Lists.maybeHead l))
 
 parenList :: Bool -> [Ast.Expr] -> Ast.Expr
 parenList newlines els =
@@ -386,7 +387,7 @@ printExpr e =
               ilns =
                       case style of
                         Ast.IndentStyleAllLines v1 -> Lists.map (\line -> Strings.cat2 v1 line) lns
-                        Ast.IndentStyleSubsequentLines v1 -> Logic.ifElse (Equality.equal (Lists.length lns) 1) lns (Lists.cons (Lists.head lns) (Lists.map (\line -> Strings.cat2 v1 line) (Lists.tail lns)))
+                        Ast.IndentStyleSubsequentLines v1 -> Logic.ifElse (Equality.equal (Lists.length lns) 1) lns (Maybes.fromMaybe lns (Maybes.map (\uc -> Lists.cons (Pairs.first uc) (Lists.map (\line -> Strings.cat2 v1 line) (Pairs.second uc))) (Lists.uncons lns)))
           in (Strings.intercalate "\n" ilns)
         Ast.ExprSeq v0 ->
           let sop = Ast.seqExprOp v0
@@ -429,7 +430,7 @@ semicolonSep = symbolSep ";" inlineStyle
 
 sep :: Ast.Op -> [Ast.Expr] -> Ast.Expr
 sep op els =
-    Maybes.maybe (cst "") (\h -> Lists.foldl (\acc -> \el -> ifx op acc el) h (Lists.drop 1 els)) (Lists.safeHead els)
+    Maybes.maybe (cst "") (\h -> Lists.foldl (\acc -> \el -> ifx op acc el) h (Lists.drop 1 els)) (Lists.maybeHead els)
 
 spaceSep :: [Ast.Expr] -> Ast.Expr
 spaceSep =
@@ -450,7 +451,7 @@ squareBrackets =
 -- | Like sep, but produces a SeqExpr instead of an OpExpr chain. SeqExpr is treated as structural layout and is not subject to parenthesization.
 structuralSep :: Ast.Op -> [Ast.Expr] -> Ast.Expr
 structuralSep op els =
-    Logic.ifElse (Lists.null els) (cst "") (Logic.ifElse (Equality.equal (Lists.length els) 1) (Lists.head els) (Ast.ExprSeq (Ast.SeqExpr {
+    Logic.ifElse (Lists.null els) (cst "") (Logic.ifElse (Equality.equal (Lists.length els) 1) (Maybes.fromMaybe (cst "") (Lists.maybeHead els)) (Ast.ExprSeq (Ast.SeqExpr {
       Ast.seqExprOp = op,
       Ast.seqExprElements = els})))
 
@@ -499,7 +500,7 @@ symbolSep symb style l =
                       Ast.paddingRight = break},
                     Ast.opPrecedence = (Ast.Precedence 0),
                     Ast.opAssociativity = Ast.AssociativityNone}
-      in (Maybes.maybe (cst "") (\h -> Lists.foldl (\acc -> \el -> ifx commaOp acc el) h (Lists.drop 1 l)) (Lists.safeHead l))
+      in (Maybes.maybe (cst "") (\h -> Lists.foldl (\acc -> \el -> ifx commaOp acc el) h (Lists.drop 1 l)) (Lists.maybeHead l))
 
 tabIndent :: Ast.Expr -> Ast.Expr
 tabIndent e =

@@ -31,6 +31,7 @@ module Main where
 
 import Hydra.Kernel
 import Hydra.Generation
+import Hydra.PackageRouting (groupByPackage, namespaceToPackage, packagePrefixes)
 import Hydra.Sources.All (kernelModules)
 import Hydra.ExtGeneration (moduleToLispDialect, wrapLongLinesInScalaTree)
 import Hydra.Haskell.Coder (moduleToHaskell)
@@ -48,8 +49,7 @@ import qualified Hydra.Sources.Test.TestSuite as TestSuite
 import Control.Exception (catch, IOException)
 import Control.Monad (when, forM)
 import qualified Control.Monad as CM
-import Data.List (isPrefixOf, partition, sortOn, groupBy)
-import Data.Function (on)
+import Data.List (isPrefixOf)
 import Data.Time.Clock (getCurrentTime, diffUTCTime, UTCTime)
 import System.Directory (listDirectory, doesFileExist)
 import System.Environment (getArgs)
@@ -93,11 +93,11 @@ data Options = Options
   , optIncludeGenTests    :: Bool  -- deprecated; ignored
   , optKernelOnly         :: Bool
   , optTypesOnly          :: Bool
-  , optExtJavaOnly        :: Bool
+  , optExtOnly            :: Bool
   , optPackageSplit       :: Bool
   , optSynthesizeSources  :: Bool
-  , optJsonDir            :: Maybe FilePath
-  , optExtJsonDir         :: Maybe FilePath
+  , optDistJsonRoot       :: Maybe FilePath
+  , optPackage            :: Maybe String  -- Layer 1: narrow generation to one package
   }
 
 defaultOptions :: Options
@@ -110,12 +110,22 @@ defaultOptions = Options
   , optIncludeGenTests    = False
   , optKernelOnly         = False
   , optTypesOnly          = False
-  , optExtJavaOnly        = False
+  , optExtOnly            = False
   , optPackageSplit       = False
   , optSynthesizeSources  = False
-  , optJsonDir            = Nothing
-  , optExtJsonDir         = Nothing
+  , optDistJsonRoot       = Nothing
+  , optPackage            = Nothing
   }
+
+-- | Map a legacy --json-dir value (e.g. "../../dist/json/hydra-kernel/src/main/json")
+-- to a dist-json root (e.g. "../../dist/json"). If the path does not match
+-- the expected shape, returned unchanged.
+legacyJsonDirToRoot :: FilePath -> FilePath
+legacyJsonDirToRoot d =
+    let parts = FP.splitDirectories d
+    in case reverse parts of
+      ("json" : "main" : "src" : _pkg : rest) -> FP.joinPath (reverse rest)
+      _                                        -> d
 
 parseArgs :: [String] -> Either String Options
 parseArgs = go defaultOptions
@@ -131,12 +141,14 @@ parseArgs = go defaultOptions
     go opts ("--include-gentests" : rest) = go (opts { optIncludeGenTests = True }) rest
     go opts ("--kernel-only" : rest) = go (opts { optKernelOnly = True }) rest
     go opts ("--types-only" : rest) = go (opts { optTypesOnly = True }) rest
-    go opts ("--ext-only" : rest) = go (opts { optExtJavaOnly = True }) rest
-    go opts ("--ext-java-only" : rest) = go (opts { optExtJavaOnly = True }) rest  -- legacy alias
+    go opts ("--ext-only" : rest) = go (opts { optExtOnly = True }) rest
+    go opts ("--ext-java-only" : rest) = go (opts { optExtOnly = True }) rest  -- legacy alias
     go opts ("--package-split" : rest) = go (opts { optPackageSplit = True }) rest
     go opts ("--synthesize-sources" : rest) = go (opts { optSynthesizeSources = True }) rest
-    go opts ("--json-dir" : d : rest) = go (opts { optJsonDir = Just d }) rest
-    go opts ("--ext-json-dir" : d : rest) = go (opts { optExtJsonDir = Just d }) rest
+    go opts ("--dist-json-root" : d : rest) = go (opts { optDistJsonRoot = Just d }) rest
+    go opts ("--json-dir" : d : rest) = go (opts { optDistJsonRoot = Just (legacyJsonDirToRoot d) }) rest  -- legacy alias; strips trailing "<pkg>/src/main/json" if present
+    go opts ("--ext-json-dir" : _ : rest) = go opts rest  -- legacy flag, ignored under per-package split
+    go opts ("--package" : p : rest) = go (opts { optPackage = Just p }) rest
     go _ (arg : _) = Left $ "Unknown argument: " ++ arg
 
 usage :: String
@@ -144,90 +156,30 @@ usage = unlines
   [ "Usage: bootstrap-from-json --target <haskell|java|python|clojure|scheme|common-lisp|emacs-lisp> [OPTIONS]"
   , ""
   , "Options:"
-  , "  --output <dir>         Output base directory"
-  , "  --include-coders       Also generate ext coder modules (Java/Python coders)"
-  , "  --include-dsls         Also generate DSL modules"
-  , "  --include-tests        Also generate kernel test modules"
-  , "  --include-gentests     (deprecated, ignored)"
-  , "  --kernel-only          Only generate kernel modules (exclude ext coder modules)"
-  , "  --types-only           Only generate type-defining modules"
-  , "  --ext-only             Only generate hydraExtDemoModules from ext manifest"
-  , "  --ext-java-only        Legacy alias for --ext-only"
-  , "  --package-split        Route each module to <output>/<package>/src/main/<lang>/"
-  , "                         based on namespace prefix instead of a single output dir."
-  , "  --synthesize-sources   Also synthesize decoder/encoder DSL source modules"
-  , "                         (Hydra.Sources.Decode.*, Hydra.Sources.Encode.*) from"
-  , "                         the loaded kernel type modules."
-  , "  --json-dir <dir>       Override kernel JSON directory"
-  , "  --ext-json-dir <dir>   Override ext JSON directory (for --include-coders)"
+  , "  --output <dir>           Output base directory"
+  , "  --include-coders         Also load coder packages (hydra-java/python/scala/lisp)"
+  , "  --include-dsls           Also load DSL wrapper modules"
+  , "  --include-tests          Also generate kernel test modules"
+  , "  --include-gentests       (deprecated, ignored)"
+  , "  --kernel-only            Only generate kernel modules (exclude coder packages)"
+  , "  --types-only             Only generate type-defining modules"
+  , "  --ext-only               Only generate ext demo modules from hydra-pg / hydra-rdf"
+  , "  --ext-java-only          Legacy alias for --ext-only"
+  , "  --package-split          Route each module to <output>/<package>/src/main/<lang>/"
+  , "                           based on namespace prefix instead of a single output dir."
+  , "  --synthesize-sources     Also synthesize decoder/encoder DSL source modules"
+  , "                           (Hydra.Sources.Decode.*, Hydra.Sources.Encode.*) from"
+  , "                           the loaded kernel type modules."
+  , "  --dist-json-root <dir>   Override the root dist/json directory (default:"
+  , "                           ../../dist/json). The tool walks"
+  , "                           <root>/<package>/src/main/json/ for each package it"
+  , "                           needs to load, in dependency order."
+  , "  --json-dir <dir>         Legacy alias for --dist-json-root."
+  , "  --ext-json-dir <dir>     Legacy flag; ignored under per-package layout."
+  , "  --package <pkg>          Narrow generation to modules owned by <pkg>."
+  , "                           The full universe is still loaded so cross-"
+  , "                           package type references resolve."
   ]
-
--- | Map a module namespace to the package that owns it.
---
--- This is a temporary hardcoded mapping for Step 1 of the DSL→JSON→Haskell
--- conversion. See feature_290_packaging-plan.md, "Sync system redesign /
--- Package manifests". Eventually this should be derived from each package's
--- package.json (or its Manifest.hs), but for now a prefix table is enough.
---
--- The ordering matters: more specific prefixes must come before less
--- specific ones. The fallback "hydra-kernel" covers all namespaces that
--- don't match any explicit prefix.
-namespaceToPackage :: Namespace -> String
-namespaceToPackage (Namespace ns) = go packagePrefixes
-  where
-    go []                 = "hydra-kernel"
-    go ((prefix, pkg) : rest)
-      | prefix `isPrefixOf` ns = pkg
-      | otherwise              = go rest
-
-packagePrefixes :: [(String, String)]
-packagePrefixes =
-  [ -- Coder packages (main runtime modules)
-    ("hydra.haskell.",              "hydra-haskell")
-  , ("hydra.java.",                 "hydra-java")
-  , ("hydra.python.",               "hydra-python")
-  , ("hydra.scala.",                "hydra-scala")
-  , ("hydra.lisp.",                 "hydra-lisp")
-  , ("hydra.coq.",                  "hydra-coq")
-  , ("hydra.javaScript.",           "hydra-javascript")
-    -- DSL wrapper modules for coder packages
-  , ("hydra.dsl.haskell.",          "hydra-haskell")
-  , ("hydra.dsl.java.",             "hydra-java")
-  , ("hydra.dsl.python.",           "hydra-python")
-  , ("hydra.dsl.scala.",            "hydra-scala")
-  , ("hydra.dsl.lisp.",             "hydra-lisp")
-  , ("hydra.dsl.coq.",              "hydra-coq")
-  , ("hydra.dsl.javaScript.",       "hydra-javascript")
-    -- Synthesized decoder source modules for coder packages
-  , ("hydra.sources.decode.haskell.",    "hydra-haskell")
-  , ("hydra.sources.decode.java.",       "hydra-java")
-  , ("hydra.sources.decode.python.",     "hydra-python")
-  , ("hydra.sources.decode.scala.",      "hydra-scala")
-  , ("hydra.sources.decode.lisp.",       "hydra-lisp")
-  , ("hydra.sources.decode.coq.",        "hydra-coq")
-  , ("hydra.sources.decode.javaScript.", "hydra-javascript")
-    -- Synthesized encoder source modules for coder packages
-  , ("hydra.sources.encode.haskell.",    "hydra-haskell")
-  , ("hydra.sources.encode.java.",       "hydra-java")
-  , ("hydra.sources.encode.python.",     "hydra-python")
-  , ("hydra.sources.encode.scala.",      "hydra-scala")
-  , ("hydra.sources.encode.lisp.",       "hydra-lisp")
-  , ("hydra.sources.encode.coq.",        "hydra-coq")
-  , ("hydra.sources.encode.javaScript.", "hydra-javascript")
-  ]
-
--- | Partition a list of modules by owning package, returning a list of
---   (packageName, modules) groups. The groups are sorted by package name
---   for deterministic output ordering.
-groupByPackage :: [Module] -> [(String, [Module])]
-groupByPackage mods =
-    fmap collapse
-      $ groupBy ((==) `on` fst)
-      $ sortOn fst
-      $ fmap (\m -> (namespaceToPackage (moduleNamespace m), m)) mods
-  where
-    collapse [] = ("", [])  -- unreachable; groupBy never returns empty inner lists
-    collapse grp@((pkg, _) : _) = (pkg, fmap snd grp)
 
 main :: IO ()
 main = do
@@ -276,10 +228,19 @@ main = do
   let packageOutMain pkg = outBase FP.</> pkg FP.</> ("src/main/" ++ target)
   let packageOutTest pkg = outBase FP.</> pkg FP.</> ("src/test/" ++ target)
 
-  -- JSON directories (relative to hydra-ext working directory)
-  let kernelJsonDir = maybe "../../dist/json/hydra-kernel/src/main/json" id (optJsonDir opts)
-  let testJsonDir   = "../../dist/json/hydra-kernel/src/test/json"
-  let extJsonDir    = maybe "../../dist/json/hydra-ext/src/main/json" id (optExtJsonDir opts)
+  -- Per-package JSON layout. Every package's main-side modules live at
+  -- <root>/<pkg>/src/main/json/; the kernel's test modules live at
+  -- <root>/hydra-kernel/src/test/json/.
+  let distJsonRoot = maybe "../../dist/json" id (optDistJsonRoot opts)
+  let pkgMainDir pkg = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
+  let kernelJsonDir = pkgMainDir "hydra-kernel"
+  let testJsonDir   = distJsonRoot FP.</> "hydra-kernel" FP.</> "src" FP.</> "test" FP.</> "json"
+
+  -- Dependency order: baseline packages (hydra-kernel + hydra-haskell) are
+  -- loaded individually in Step 1. Coder packages are loaded with
+  -- --include-coders. Ext demo packages are loaded with --ext-only.
+  let coderPackages   = ["hydra-java", "hydra-python", "hydra-scala", "hydra-lisp"]
+  let extDemoPackages = ["hydra-pg", "hydra-rdf"]
 
   let targetCap = case target of
         "haskell"     -> "Haskell"
@@ -304,46 +265,75 @@ main = do
   putStrLn $ "  Include gen tests: " ++ show (optIncludeGenTests opts)
   putStrLn ""
 
-  -- Step 1: Load main + eval lib modules from kernel JSON
-  putStrLn "Step 1: Loading main modules from JSON..."
-  mainNamespaces <- readManifestField kernelJsonDir "mainModules"
-  evalLibNamespaces <- readManifestField kernelJsonDir "evalLibModules"
-  let allKernelNamespaces = mainNamespaces ++ evalLibNamespaces
+  -- Load a single package's mainModules + evalLibModules from its per-package
+  -- manifest. Returns the accumulated Modules; missing fields are treated as
+  -- empty.
+  let loadPackageMain :: String -> IO [Module]
+      loadPackageMain pkg = do
+        let pkgDir = pkgMainDir pkg
+        mainNs <- readManifestFieldOrEmpty pkgDir "mainModules"
+        evalNs <- readManifestFieldOrEmpty pkgDir "evalLibModules"
+        let allNs = mainNs ++ evalNs
+        if Prelude.null allNs
+          then return []
+          else do
+            putStrLn $ "  " ++ pkg ++ ": " ++ show (length allNs) ++ " modules from " ++ pkgDir
+            loadModulesFromJson pkgDir kernelModules allNs
 
+  -- Load a single package's DSL wrapper modules.
+  let loadPackageDsl :: String -> IO [Module]
+      loadPackageDsl pkg = do
+        let pkgDir = pkgMainDir pkg
+        dslNs <- readManifestFieldOrEmpty pkgDir "dslModules"
+        if Prelude.null dslNs
+          then return []
+          else do
+            putStrLn $ "  " ++ pkg ++ ": " ++ show (length dslNs) ++ " DSL modules from " ++ pkgDir
+            loadModulesFromJson pkgDir kernelModules dslNs
+
+  -- Step 1: Load baseline main modules (hydra-kernel + hydra-haskell).
+  -- Both packages are part of the bootstrap baseline: hydra-haskell provides
+  -- the runtime AST modules (Hydra.Haskell.Syntax, Environment, Coder, Serde,
+  -- ...) that the generated DSL source modules import, so it must pass
+  -- --kernel-only filtering as part of the kernel namespace set.
+  putStrLn "Step 1: Loading baseline main modules from JSON..."
   loadStart <- getCurrentTime
-  mainMods <- loadModulesFromJson kernelJsonDir kernelModules allKernelNamespaces
+  kernelBaselineMods <- loadPackageMain "hydra-kernel"
+  haskellBaselineMods <- loadPackageMain "hydra-haskell"
+  let baselineMods = kernelBaselineMods ++ haskellBaselineMods
   loadEnd <- getCurrentTime
-  putStrLn $ "  Loaded " ++ show (length mainMods) ++ " modules."
+  putStrLn $ "  Loaded " ++ show (length baselineMods) ++ " baseline modules."
   putStrLn $ "  Time: " ++ formatTime (elapsed loadEnd loadStart)
   putStrLn ""
 
-  -- Step 2: Optionally load ext coder modules
+  let allKernelNamespaces = fmap moduleNamespace baselineMods
+
+  -- Step 2: Optionally load coder-package main modules.
   coderMods <- if optIncludeCoders opts
     then do
-      putStrLn "Step 2: Loading hydra-ext coder modules from JSON..."
-      coderNamespaces <- readManifestField extJsonDir "hydraBootstrapCoderModules"
-      -- Filter out haskell coder modules (already loaded as part of mainModules)
-      let kernelNsSet = fmap unNamespace allKernelNamespaces
-          (_, extCoderNamespaces) = partition (\ns -> unNamespace ns `elem` kernelNsSet) coderNamespaces
+      putStrLn "Step 2: Loading coder package modules from JSON..."
       loadStart2 <- getCurrentTime
-      mods <- loadModulesFromJson extJsonDir kernelModules extCoderNamespaces
+      mods <- fmap concat $ CM.forM coderPackages loadPackageMain
       loadEnd2 <- getCurrentTime
-      putStrLn $ "  Loaded " ++ show (length mods) ++ " modules."
+      putStrLn $ "  Loaded " ++ show (length mods) ++ " coder modules."
       putStrLn $ "  Time: " ++ formatTime (elapsed loadEnd2 loadStart2)
       putStrLn ""
       return mods
     else do
-      putStrLn "Step 2: Skipping ext coder modules"
+      putStrLn "Step 2: Skipping coder packages"
       putStrLn ""
       return []
 
-  -- Step 2b: Optionally load DSL modules from kernel JSON
+  -- Step 2b: Optionally load DSL wrapper modules from every loaded package.
   dslMods <- if optIncludeDsls opts
     then do
-      putStrLn "Step 2b: Loading DSL modules from kernel JSON..."
-      dslNamespaces <- readManifestField kernelJsonDir "dslModules"
+      putStrLn "Step 2b: Loading DSL wrapper modules from JSON..."
       loadStart3 <- getCurrentTime
-      mods <- loadModulesFromJson kernelJsonDir kernelModules dslNamespaces
+      let dslPackages =
+            ["hydra-kernel", "hydra-haskell"]
+              ++ (if optIncludeCoders opts then coderPackages else [])
+              ++ (if optExtOnly opts then extDemoPackages else [])
+      mods <- fmap concat $ CM.forM dslPackages loadPackageDsl
       loadEnd3 <- getCurrentTime
       putStrLn $ "  Loaded " ++ show (length mods) ++ " DSL modules."
       putStrLn $ "  Time: " ++ formatTime (elapsed loadEnd3 loadStart3)
@@ -352,7 +342,7 @@ main = do
     else return []
 
   -- Apply filters
-  let allMods = mainMods ++ coderMods ++ dslMods
+  let allMods = baselineMods ++ coderMods ++ dslMods
   let kernelNsStrings = fmap unNamespace allKernelNamespaces
   let filtered1 = if optKernelOnly opts
         then Prelude.filter (\m -> unNamespace (moduleNamespace m) `elem` kernelNsStrings) allMods
@@ -404,24 +394,42 @@ main = do
       return inferred
     else return []
 
-  -- When --ext-only (or legacy --ext-java-only) is used, load the ext demo modules
-  -- from JSON and generate only those (using allMainMods as the universe for type resolution)
-  (modsToGenerate, allModsFinal) <- if optExtJavaOnly opts
+  -- When --ext-only (or legacy --ext-java-only) is used, load the ext demo
+  -- packages (hydra-pg, hydra-rdf) and generate only those, using allMainMods
+  -- plus the loaded ext demo modules as the universe for type resolution.
+  (modsToGenerate, allModsFinal) <- if optExtOnly opts
     then do
-      extDemoNamespaces <- readManifestFieldWithFallback extJsonDir "hydraExtDemoModules" "hydraExtJavaModules"
-      -- Filter out modules already loaded as kernel or coder modules
+      putStrLn "Loading ext demo packages from JSON..."
+      extMods <- fmap concat $ CM.forM extDemoPackages loadPackageMain
+      -- Filter out any namespace already present in the baseline/coder set
+      -- so that downstream generation doesn't see duplicates.
       let loadedNsSet = fmap (unNamespace . moduleNamespace) allMainMods
-          toLoad = Prelude.filter (\ns -> unNamespace ns `notElem` loadedNsSet) extDemoNamespaces
-      putStrLn $ "Loading " ++ show (length toLoad) ++ " ext demo modules from JSON..."
-      extMods <- loadModulesFromJson extJsonDir kernelModules toLoad
-      putStrLn $ "  Loaded " ++ show (length extMods) ++ " ext demo modules"
+          extMods' = Prelude.filter
+            (\m -> unNamespace (moduleNamespace m) `notElem` loadedNsSet)
+            extMods
+      putStrLn $ "  Loaded " ++ show (length extMods') ++ " ext demo modules"
       putStrLn ""
-      return (extMods, allMainMods ++ extMods)
+      return (extMods', allMainMods ++ extMods')
     else return (allMainMods, allMainMods)
+
+  -- Layer 1 per-package scoping: if --package <pkg> is set, narrow
+  -- modsToGenerate to modules owned by that package (per namespaceToPackage).
+  -- The universe (allModsFinal) is unchanged, so type references across
+  -- packages still resolve. Applies AFTER all other filters.
+  modsToGenerateScoped <- case optPackage opts of
+    Nothing  -> return modsToGenerate
+    Just pkg -> do
+      let owned = Prelude.filter
+            (\m -> namespaceToPackage (moduleNamespace m) == pkg)
+            modsToGenerate
+      putStrLn $ "Scoping to package " ++ pkg ++ ": "
+        ++ show (length owned) ++ " of " ++ show (length modsToGenerate) ++ " modules"
+      putStrLn ""
+      return owned
 
   -- Prepend synthesized source modules to modsToGenerate (deduping by namespace
   -- to keep ordering stable). They go into the same universe as the main modules.
-  let modsToGenerate' = modsToGenerate ++ synthesizedSourceMods
+  let modsToGenerate' = modsToGenerateScoped ++ synthesizedSourceMods
   let allModsFinal'   = allModsFinal ++ synthesizedSourceMods
 
   -- Generate main modules
@@ -474,11 +482,26 @@ main = do
     then do
       putStrLn "Loading test modules from JSON..."
       testNamespaces <- readManifestField kernelJsonDir "testModules"
-      testMods <- loadModulesFromJson testJsonDir kernelModules testNamespaces
-      putStrLn $ "  Loaded " ++ show (length testMods) ++ " test modules"
+      testModsAll <- loadModulesFromJson testJsonDir kernelModules testNamespaces
+      putStrLn $ "  Loaded " ++ show (length testModsAll) ++ " test modules"
+
+      -- Layer 1 per-package scoping for tests: if --package <pkg> is set,
+      -- narrow testMods to modules owned by that package. The universe is
+      -- unchanged so cross-package refs still resolve.
+      let testMods = case optPackage opts of
+            Nothing  -> testModsAll
+            Just pkg ->
+              Prelude.filter
+                (\m -> namespaceToPackage (moduleNamespace m) == pkg)
+                testModsAll
+      case optPackage opts of
+        Just pkg | length testMods /= length testModsAll ->
+          putStrLn $ "  Scoping to package " ++ pkg ++ ": "
+            ++ show (length testMods) ++ " of " ++ show (length testModsAll) ++ " test modules"
+        _ -> return ()
       putStrLn ""
 
-      let allUniverse = allMods ++ testMods
+      let allUniverse = allMods ++ testModsAll
 
       -- When --kernel-only is active, non-kernel modules are excluded from allMainMods.
       -- But test modules may depend on non-kernel modules (e.g. hydra.test.serialization

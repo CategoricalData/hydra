@@ -45,7 +45,7 @@ arrowFunctionExpressionToExpr arrow =
           asyncKw = Logic.ifElse async [
                 Serialization.cst "async"] []
           paramsExpr =
-                  Logic.ifElse (Equality.equal (Lists.length params) 1) (patternToExpr (Lists.head params)) (Serialization.parenList False (Lists.map patternToExpr params))
+                  Logic.ifElse (Equality.equal (Lists.length params) 1) (Maybes.fromMaybe (Serialization.cst "") (Maybes.map patternToExpr (Lists.maybeHead params))) (Serialization.parenList False (Lists.map patternToExpr params))
           bodyExpr =
                   case body of
                     Syntax.ArrowFunctionBodyExpression v0 -> expressionToExpr v0

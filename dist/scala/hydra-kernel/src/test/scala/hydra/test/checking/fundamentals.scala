@@ -95,11 +95,11 @@ lazy val applicationsWithComplexArgumentsTests: hydra.testing.TestGroup = hydra.
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.show.core.`type`(hydra.scoping.typeSchemeToFType(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
-     hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("head",
-     hydra.core.Term.lambda(hydra.core.Lambda("xs", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.lists.head"),
-     hydra.core.Term.variable("xs"))))), None)), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("head"),
+     hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("maybeHead",
+     hydra.core.Term.lambda(hydra.core.Lambda("xs", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.lists.maybeHead"),
+     hydra.core.Term.variable("xs"))))), None)), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("maybeHead"),
      hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.string("first")),
-     hydra.core.Term.literal(hydra.core.Literal.string("second")))))))))), hydra.show.core.`type`(hydra.core.Type.literal(hydra.core.LiteralType.string)))),
+     hydra.core.Term.literal(hydra.core.Literal.string("second")))))))))), hydra.show.core.`type`(hydra.core.Type.maybe(hydra.core.Type.literal(hydra.core.LiteralType.string))))),
      None, Seq())))
 
 lazy val binaryPrimitivesTests: hydra.testing.TestGroup = hydra.testing.TestGroup("Binary primitives",
@@ -1182,15 +1182,15 @@ lazy val ternaryPrimitivesTests: hydra.testing.TestGroup = hydra.testing.TestGro
      hydra.core.Type.variable("t0")))))))))))))), None, Seq())))
 
 lazy val unaryPrimitivesTests: hydra.testing.TestGroup = hydra.testing.TestGroup("Unary primitives",
-   None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("lists head", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+   None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("lists maybeHead", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
    Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
    scala.Predef.String]((e: hydra.errors.Error) => "<<inference error>>")((result: Tuple2[Tuple2[hydra.core.Term,
    hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.show.core.`type`(hydra.scoping.typeSchemeToFType(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
-     hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.variable("hydra.lib.lists.head"))),
+     hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.variable("hydra.lib.lists.maybeHead"))),
      hydra.show.core.`type`(hydra.core.Type.forall(hydra.core.ForallType("t0", hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.list(hydra.core.Type.variable("t0")),
-     hydra.core.Type.variable("t0")))))))), None, Seq()), hydra.testing.TestCaseWithMetadata("math neg",
+     hydra.core.Type.maybe(hydra.core.Type.variable("t0"))))))))), None, Seq()), hydra.testing.TestCaseWithMetadata("math neg",
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "<<inference error>>")((result: Tuple2[Tuple2[hydra.core.Term,
