@@ -235,6 +235,13 @@ Definition take {x : Type} (n : Z) (xs : list x) : list x :=
   takeNat (Z.to_nat n) xs.
 Arguments take {x}.
 
+Definition uncons {x : Type} (xs : list x) : option (x * list x) :=
+  match xs with
+  | [] => None
+  | h :: t => Some (h, t)
+  end.
+Arguments uncons {x}.
+
 Fixpoint zip {x y : Type} (xs : list x) (ys : list y) : list (x * y) :=
   match xs, ys with
   | a :: xs', b :: ys' => (a, b) :: zip xs' ys'

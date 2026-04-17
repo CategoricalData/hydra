@@ -542,7 +542,7 @@ resolveQualifiedName env s =
           head1 = Maybes.fromMaybe s (Lists.maybeHead parts)
           currentNs = Environment.coqEnvironmentCurrentNamespace env
           ambig = Environment.coqEnvironmentAmbiguousNames env
-      in (Logic.ifElse (Equality.equal head1 "Build_hydra") (Strings.cat2 "Build_" (sanitizeStripped (Maybes.fromMaybe s (Lists.maybeLast parts)))) (Logic.ifElse (Equality.equal head1 "hydra") (
+      in (Logic.ifElse (Equality.equal head1 "Coq") (Maybes.fromMaybe s (Lists.maybeLast parts)) (Logic.ifElse (Equality.equal head1 "Build_hydra") (Strings.cat2 "Build_" (sanitizeStripped (Maybes.fromMaybe s (Lists.maybeLast parts)))) (Logic.ifElse (Equality.equal head1 "hydra") (
         let rest = Lists.drop 1 parts
             head2 = Maybes.fromMaybe "" (Lists.maybeHead rest)
         in (Logic.ifElse (Equality.equal head2 "lib") (renameLibKeyword (Strings.intercalate "." (Lists.drop 1 rest))) (
@@ -559,7 +559,7 @@ resolveQualifiedName env s =
             localN]) (Logic.ifElse isCollisionProne (Strings.cat [
             sanitizeStripped head2,
             ".",
-            (sanitizeStripped localRaw)]) localN))))) (sanitizeVar s)))
+            (sanitizeStripped localRaw)]) localN))))) (sanitizeVar s))))
 
 -- | Append an underscore if a stripped-local-name reference collides with a Coq reserved word
 sanitizeStripped :: String -> String
