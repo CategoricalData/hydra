@@ -1,0 +1,306 @@
+{
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.osv.schema.Credited",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "name", "type": {"literal": {"string": {}}}},
+              {
+                "name": "contact",
+                "type": {"maybe": {"list": {"variable": "hydra.osv.schema.Url"}}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.Ecosystem",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "One of a limited set of defined ecosystems, currently Go, npm, OSS-Fuzz, PyPI, RubyGems, crates.io, Packagist, Maven, NuGet, Linux, Debian, Hex, Android, GitHub Actions, or Pub"}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.Entry",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "schemaVersion",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {
+                          "literal": {
+                            "string": "The default value is '1.0.0', matching version 1.0 of the OSV Schema"}}}],
+                    "body": {"maybe": {"variable": "hydra.osv.schema.OsvVersion"}}}}},
+              {"name": "id", "type": {"variable": "hydra.osv.schema.Id"}},
+              {
+                "name": "modified",
+                "type": {"variable": "hydra.osv.schema.Timestamp"}},
+              {
+                "name": "published",
+                "type": {"maybe": {"variable": "hydra.osv.schema.Timestamp"}}},
+              {
+                "name": "withdrawn",
+                "type": {"maybe": {"variable": "hydra.osv.schema.Timestamp"}}},
+              {
+                "name": "aliases",
+                "type": {"maybe": {"list": {"variable": "hydra.osv.schema.Id"}}}},
+              {
+                "name": "related",
+                "type": {"maybe": {"list": {"variable": "hydra.osv.schema.Id"}}}},
+              {"name": "summary", "type": {"maybe": {"literal": {"string": {}}}}},
+              {
+                "name": "details",
+                "type": {"maybe": {"variable": "hydra.osv.schema.Markdown"}}},
+              {
+                "name": "severity",
+                "type": {"maybe": {"list": {"variable": "hydra.osv.schema.Severity"}}}},
+              {
+                "name": "affected",
+                "type": {"maybe": {"list": {"variable": "hydra.osv.schema.PackageVersions"}}}},
+              {
+                "name": "references",
+                "type": {"maybe": {"list": {"variable": "hydra.osv.schema.Reference"}}}},
+              {
+                "name": "credits",
+                "type": {"maybe": {"list": {"variable": "hydra.osv.schema.Credited"}}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.Event",
+        "type": {
+          "type": {
+            "union": [
+              {
+                "name": "introduced",
+                "type": {"variable": "hydra.osv.schema.VersionOrZero"}},
+              {"name": "fixed", "type": {"variable": "hydra.osv.schema.Version"}},
+              {
+                "name": "lastAffected",
+                "type": {"variable": "hydra.osv.schema.Version"}},
+              {
+                "name": "limit",
+                "type": {"variable": "hydra.osv.schema.VersionOrStar"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.Id",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A string of the format <DB>-<ENTRYID>, where DB names the database and ENTRYID is in the format used by the database. For example: OSV-2020-111, CVE-2021-3114, or GHSA-vp9c-fpxx-744v"}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.Markdown",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "CommonMark markdown text"}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.OsvVersion",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A string which follows the SemVer 2.0.0 format, with no leading 'v' prefix"}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.Package",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "ecosystem",
+                "type": {"variable": "hydra.osv.schema.Ecosystem"}},
+              {"name": "name", "type": {"literal": {"string": {}}}},
+              {
+                "name": "purl",
+                "type": {"maybe": {"variable": "hydra.osv.schema.Url"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.PackageVersions",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "package", "type": {"variable": "hydra.osv.schema.Package"}},
+              {
+                "name": "ranges",
+                "type": {"maybe": {"list": {"variable": "hydra.osv.schema.VersionRange"}}}},
+              {
+                "name": "versions",
+                "type": {"maybe": {"list": {"variable": "hydra.osv.schema.Version"}}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.Reference",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "type",
+                "type": {"variable": "hydra.osv.schema.ReferenceType"}},
+              {"name": "url", "type": {"variable": "hydra.osv.schema.Url"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.ReferenceType",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "One of ADVISORY, ARTICLE, REPORT, FIX, GIT, PACKAGE, EVIDENCE, or WEB"}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.Severity",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "type",
+                "type": {"variable": "hydra.osv.schema.SeverityType"}},
+              {
+                "name": "score",
+                "type": {"variable": "hydra.osv.schema.SeverityScore"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.SeverityScore",
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.SeverityType",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "The value CVSS_V3, or future supported types"}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.Timestamp",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "An RFC3339-formatted timestamp in UTC (ending in 'Z')"}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.Url",
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.Version",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "A version number in an ecosystem-specific format"}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.VersionOrStar",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "An ecosystem-specific version number, or the string '*' representing infinity"}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.VersionOrZero",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "An ecosystem-specific version number, or the string '0' representing a version that sorts before any other version"}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.VersionRange",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "type", "type": {"variable": "hydra.osv.schema.VersionType"}},
+              {
+                "name": "repo",
+                "type": {"maybe": {"variable": "hydra.osv.schema.Url"}}},
+              {
+                "name": "events",
+                "type": {"list": {"variable": "hydra.osv.schema.Event"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.osv.schema.VersionType",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "One of the values 'SEMVER', 'ECOSYSTEM', or 'GIT"}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}}],
+  "description": "See https://ossf.github.io/osv-schema",
+  "namespace": "hydra.osv.schema",
+  "termDependencies": [],
+  "typeDependencies": []}
