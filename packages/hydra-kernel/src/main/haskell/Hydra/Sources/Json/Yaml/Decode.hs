@@ -95,7 +95,7 @@ define = definitionInNamespace ns
 module_ :: Module
 module_ = Module ns definitions
     [JsonDecode.ns, YamlModel.ns]
-    KernelTypes.kernelTypesNamespaces $
+    (YamlModel.ns : KernelTypes.kernelTypesNamespaces) $
     Just "YAML-to-JSON decoding. Converts YAML Nodes to JSON Values (may fail for non-JSON YAML), and YAML Nodes to Hydra Terms via JSON."
   where
     definitions = [
@@ -136,8 +136,9 @@ yamlToJson = define "yamlToJson" $
       cases YM._Scalar (var "s")
         Nothing [
         YM._Scalar_bool>>: "b" ~> right $ Json.valueBoolean $ var "b",
-        YM._Scalar_float>>: "f" ~> right $ Json.valueNumber $ var "f",
-        YM._Scalar_int>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToBigfloat $ var "i",
+        YM._Scalar_decimal>>: "d" ~> right $ Json.valueNumber $ var "d",
+        YM._Scalar_float>>: "f" ~> right $ Json.valueNumber $ Literals.float64ToDecimal $ Literals.bigfloatToFloat64 $ var "f",
+        YM._Scalar_int>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ var "i",
         YM._Scalar_null>>: constant $ right Json.valueNull,
         YM._Scalar_str>>: "str" ~> right $ Json.valueString $ var "str"],
 

@@ -19,6 +19,7 @@ import hydra.lib.lists
 import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.maybes
+import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
 import hydra.names
@@ -30,7 +31,14 @@ T0 = TypeVar("T0")
 def encode_binding_name(n: hydra.core.Name) -> hydra.core.Name:
     r"""Generate a binding name for an encoder function from a type name."""
 
-    return hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.lists.null(hydra.lib.lists.tail(hydra.lib.strings.split_on(".", n.value)))), (lambda : hydra.core.Name(hydra.lib.strings.intercalate(".", hydra.lib.lists.concat2(("hydra", "encode"), hydra.lib.lists.concat2(hydra.lib.lists.tail(hydra.lib.lists.init(hydra.lib.strings.split_on(".", n.value))), (hydra.formatting.decapitalize(hydra.names.local_name_of(n)),)))))), (lambda : hydra.core.Name(hydra.formatting.decapitalize(hydra.names.local_name_of(n)))))
+    @lru_cache(1)
+    def parts() -> frozenlist[str]:
+        return hydra.lib.strings.split_on(".", n.value)
+    @lru_cache(1)
+    def local_part() -> str:
+        return hydra.formatting.decapitalize(hydra.names.local_name_of(n))
+    local_result = hydra.core.Name(local_part())
+    return hydra.lib.maybes.maybe((lambda : local_result), (lambda ns_parts: hydra.lib.maybes.maybe((lambda : local_result), (lambda ns_uc: (tail := hydra.lib.pairs.second(ns_uc), hydra.core.Name(hydra.lib.strings.intercalate(".", hydra.lib.lists.concat2(("hydra", "encode"), hydra.lib.lists.concat2(tail, (local_part(),))))))[1]), hydra.lib.lists.uncons(ns_parts))), hydra.lib.lists.maybe_init(parts()))
 
 def encode_float_value(float_type: hydra.core.FloatType, val_term: hydra.core.Term) -> hydra.core.Term:
     def _hoist_hydra_encoding_encode_float_value_1(v1):
@@ -564,7 +572,11 @@ def encode_binding(cx: T0, graph: hydra.graph.Graph, b: hydra.core.Binding) -> E
 def encode_namespace(ns: hydra.packaging.Namespace) -> hydra.packaging.Namespace:
     r"""Generate an encoder module namespace from a source module namespace."""
 
-    return hydra.packaging.Namespace(hydra.lib.strings.cat(("hydra.encode.", hydra.lib.strings.intercalate(".", hydra.lib.lists.tail(hydra.lib.strings.split_on(".", ns.value))))))
+    @lru_cache(1)
+    def parts() -> frozenlist[str]:
+        return hydra.lib.strings.split_on(".", ns.value)
+    fallback = hydra.packaging.Namespace(ns.value)
+    return hydra.lib.maybes.maybe((lambda : fallback), (lambda uc: hydra.packaging.Namespace(hydra.lib.strings.cat(("hydra.encode.", hydra.lib.strings.intercalate(".", hydra.lib.pairs.second(uc)))))), hydra.lib.lists.uncons(parts()))
 
 def is_encodable_binding(cx: hydra.context.Context, graph: hydra.graph.Graph, b: hydra.core.Binding) -> Either[hydra.errors.Error, Maybe[hydra.core.Binding]]:
     r"""Check if a binding is encodable (serializable type)."""

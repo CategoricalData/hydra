@@ -16,6 +16,7 @@ import hydra.lib.lists
 import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.maybes
+import hydra.lib.pairs
 import hydra.lib.strings
 import hydra.rewriting
 import hydra.show.core
@@ -247,7 +248,7 @@ def unify_type_constraints(cx: T0, schema_types: FrozenDict[hydra.core.Name, T1]
 
             case _:
                 return dflt()
-    return hydra.lib.logic.if_else(hydra.lib.lists.null(constraints), (lambda : Right(hydra.substitution.id_type_subst())), (lambda : with_constraint(hydra.lib.lists.head(constraints), hydra.lib.lists.tail(constraints))))
+    return hydra.lib.maybes.maybe((lambda : Right(hydra.substitution.id_type_subst())), (lambda uc: with_constraint(hydra.lib.pairs.first(uc), hydra.lib.pairs.second(uc))), hydra.lib.lists.uncons(constraints))
 
 def unify_type_lists(cx: T0, schema_types: FrozenDict[hydra.core.Name, T1], l: frozenlist[hydra.core.Type], r: frozenlist[hydra.core.Type], comment: str) -> Either[hydra.errors.UnificationError, hydra.typing.TypeSubst]:
     def to_constraint(l2: hydra.core.Type, r2: hydra.core.Type) -> hydra.typing.TypeConstraint:

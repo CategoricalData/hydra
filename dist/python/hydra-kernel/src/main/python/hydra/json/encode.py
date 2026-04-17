@@ -25,20 +25,20 @@ import hydra.strip
 
 T0 = TypeVar("T0")
 
-def is_special_float_string(s: str) -> bool:
-    r"""Check whether a string is one of the special float sentinels: NaN, Infinity, -Infinity, -0.0."""
+def requires_json_string_sentinel(s: str) -> bool:
+    r"""True for IEEE sentinel strings that JSON must escape as a string to preserve."""
 
     return hydra.lib.logic.or_(hydra.lib.equality.equal(s, "NaN"), hydra.lib.logic.or_(hydra.lib.equality.equal(s, "Infinity"), hydra.lib.logic.or_(hydra.lib.equality.equal(s, "-Infinity"), hydra.lib.equality.equal(s, "-0.0"))))
 
-def encode_float(fv: hydra.core.FloatValue) -> Either[T0, hydra.json.model.Value]:
-    r"""Encode a float value to JSON. Float64/Bigfloat use native numbers; Float32 uses string. NaN/Inf always encoded as strings."""
+def encode_float(fv: hydra.core.FloatValue) -> Either[str, hydra.json.model.Value]:
+    r"""Encode a float value to JSON. Bigfloat rejects anything the decimal space can't hold; Float64 uses string sentinels for NaN/Inf/-0.0; Float32 always strings."""
 
     match fv:
         case hydra.core.FloatValueBigfloat(value=bf):
             @lru_cache(1)
             def s() -> str:
                 return hydra.lib.literals.show_bigfloat(bf)
-            return hydra.lib.logic.if_else(is_special_float_string(s()), (lambda : Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(s())))), (lambda : Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(bf)))))
+            return hydra.lib.logic.if_else(requires_json_string_sentinel(s()), (lambda : Left(hydra.lib.strings.cat(("JSON cannot represent bigfloat value: ", s())))), (lambda : Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.float64_to_decimal(hydra.lib.literals.bigfloat_to_float64(bf)))))))
 
         case hydra.core.FloatValueFloat32(value=f):
             return Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(hydra.lib.literals.show_float32(f))))
@@ -47,7 +47,7 @@ def encode_float(fv: hydra.core.FloatValue) -> Either[T0, hydra.json.model.Value
             @lru_cache(1)
             def s() -> str:
                 return hydra.lib.literals.show_float64(f2)
-            return hydra.lib.logic.if_else(is_special_float_string(s()), (lambda : Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(s())))), (lambda : Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.float64_to_bigfloat(f2))))))
+            return hydra.lib.logic.if_else(requires_json_string_sentinel(s()), (lambda : Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(s())))), (lambda : Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.float64_to_decimal(f2))))))
 
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -69,24 +69,24 @@ def encode_integer(iv: hydra.core.IntegerValue) -> Either[T0, hydra.json.model.V
             return Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(hydra.lib.literals.show_uint64(i3))))
 
         case hydra.core.IntegerValueInt8(value=i4):
-            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.int8_to_bigint(i4)))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_decimal(hydra.lib.literals.int8_to_bigint(i4)))))
 
         case hydra.core.IntegerValueInt16(value=i5):
-            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.int16_to_bigint(i5)))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_decimal(hydra.lib.literals.int16_to_bigint(i5)))))
 
         case hydra.core.IntegerValueInt32(value=i6):
-            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.int32_to_bigint(i6)))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_decimal(hydra.lib.literals.int32_to_bigint(i6)))))
 
         case hydra.core.IntegerValueUint8(value=i7):
-            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.uint8_to_bigint(i7)))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_decimal(hydra.lib.literals.uint8_to_bigint(i7)))))
 
         case hydra.core.IntegerValueUint16(value=i8):
-            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.uint16_to_bigint(i8)))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_decimal(hydra.lib.literals.uint16_to_bigint(i8)))))
 
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def encode_literal(lit: hydra.core.Literal) -> Either[T0, hydra.json.model.Value]:
+def encode_literal(lit: hydra.core.Literal) -> Either[str, hydra.json.model.Value]:
     r"""Encode a Hydra literal to a JSON value."""
 
     match lit:
@@ -97,7 +97,7 @@ def encode_literal(lit: hydra.core.Literal) -> Either[T0, hydra.json.model.Value
             return Right(cast(hydra.json.model.Value, hydra.json.model.ValueBoolean(b2)))
 
         case hydra.core.LiteralDecimal(value=d):
-            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.float64_to_bigfloat(hydra.lib.literals.decimal_to_float64(d)))))
+            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(d)))
 
         case hydra.core.LiteralFloat(value=f):
             return encode_float(f)
@@ -294,11 +294,9 @@ def to_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], tname: hydra.co
                 field = inj.field
                 fname = field.name.value
                 fterm = field.term
-                def find_field_type(fts: frozenlist[hydra.core.FieldType]) -> Either[str, hydra.core.Type]:
-                    return hydra.lib.logic.if_else(hydra.lib.lists.null(fts), (lambda : Left(hydra.lib.strings.cat(("unknown variant: ", fname)))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.head(fts).name.value, fname), (lambda : Right(hydra.lib.lists.head(fts).type)), (lambda : find_field_type(hydra.lib.lists.tail(fts))))))
                 @lru_cache(1)
                 def ftype_result() -> Either[str, hydra.core.Type]:
-                    return find_field_type(rt)
+                    return hydra.lib.maybes.maybe((lambda : Left(hydra.lib.strings.cat(("unknown variant: ", fname)))), (lambda ft: Right(ft.type)), hydra.lib.lists.find((lambda ft: hydra.lib.equality.equal(ft.name.value, fname)), rt))
                 return hydra.lib.eithers.either((lambda err: Left(err)), (lambda ftype: (encoded_union := to_json(types, tname, ftype, fterm), hydra.lib.eithers.map((lambda v: cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(((fname, v),))))), encoded_union))[1]), ftype_result())
 
             case _:

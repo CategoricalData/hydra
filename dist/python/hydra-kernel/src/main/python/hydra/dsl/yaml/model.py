@@ -22,6 +22,9 @@ def node_sequence(x: hydra.phantoms.TTerm[frozenlist[hydra.yaml.model.Node_]]) -
 def scalar_bool(x: hydra.phantoms.TTerm[bool]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.yaml.model.Scalar"), hydra.core.Field(hydra.core.Name("bool"), x.value)))))
 
+def scalar_decimal(x: hydra.phantoms.TTerm[Decimal]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.yaml.model.Scalar"), hydra.core.Field(hydra.core.Name("decimal"), x.value)))))
+
 def scalar_float(x: hydra.phantoms.TTerm[Decimal]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.yaml.model.Scalar"), hydra.core.Field(hydra.core.Name("float"), x.value)))))
 

@@ -173,7 +173,7 @@ pruneLet l =
       let bindingMap = Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) (Core.letBindings l))
           rootName = Core.Name "[[[root]]]"
           adj =
-                  \n -> Sets.intersection (Sets.fromList (Maps.keys bindingMap)) (Variables.freeVariablesInTerm (Logic.ifElse (Equality.equal n rootName) (Core.letBody l) (Maybes.fromJust (Maps.lookup n bindingMap))))
+                  \n -> Sets.intersection (Sets.fromList (Maps.keys bindingMap)) (Variables.freeVariablesInTerm (Logic.ifElse (Equality.equal n rootName) (Core.letBody l) (Maybes.fromMaybe Core.TermUnit (Maps.lookup n bindingMap))))
           reachable = Sorting.findReachableNodes adj rootName
           prunedBindings = Lists.filter (\b -> Sets.member (Core.bindingName b) reachable) (Core.letBindings l)
       in Core.Let {

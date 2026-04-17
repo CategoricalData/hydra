@@ -98,11 +98,6 @@ def cosh(x: float) -> float:
     return math.cosh(x)
 
 
-def div(x: int, y: int) -> int:
-    """Divide two integers using integer division."""
-    return x // y
-
-
 def e() -> float:
     """Euler's number (e ≈ 2.71828)."""
     return math.e
@@ -187,11 +182,6 @@ def min_(x: int, y: int) -> int:
 min = min_
 
 
-def mod(a: int, b: int) -> int:
-    """Mathematical modulo."""
-    return a % b
-
-
 def mul(x: int, y: int) -> int:
     """Multiply two numbers."""
     return x * y
@@ -239,22 +229,9 @@ def pow_(x: float, y: float) -> float:
 pow = pow_
 
 
-def pred(x: int) -> int:
-    """Return the predecessor (x - 1)."""
-    return x - 1
-
-
 def range_(start: int, end: int) -> frozenlist[int]:
     """Generate a range of values from start to end (inclusive)."""
     return tuple(range(start, end + 1))
-
-
-def rem(a: int, b: int) -> int:
-    """Integer remainder."""
-    # Use int() to truncate toward zero (Haskell behavior)
-    # Python's // floors toward negative infinity
-    q = int(a / b)  # Truncate toward zero
-    return a - q * b
 
 
 def round_(x: float) -> float:
@@ -331,11 +308,6 @@ def sub(x: int, y: int) -> int:
 def sub_float64(x: float, y: float) -> float:
     """Subtract two Float64 numbers."""
     return x - y
-
-
-def succ(x: int) -> int:
-    """Return the successor (x + 1)."""
-    return x + 1
 
 
 def tan(x: float) -> float:

@@ -10,9 +10,11 @@ public interface Testing {
     hydra.util.Lazy<java.util.Set<hydra.packaging.Namespace>> newNamespaces = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
       hydra.Names::namespaceOf,
       hydra.lib.sets.ToList.apply(names)))));
-    java.util.function.Function<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName> toModuleName = (java.util.function.Function<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>) (namespace -> new hydra.haskell.syntax.ModuleName(hydra.Formatting.capitalize(hydra.lib.lists.Last.apply(hydra.lib.strings.SplitOn.apply(
-      ".",
-      (namespace).value)))));
+    java.util.function.Function<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName> toModuleName = (java.util.function.Function<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>) (namespace -> new hydra.haskell.syntax.ModuleName(hydra.Formatting.capitalize(hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> (namespace).value,
+      hydra.lib.lists.MaybeLast.apply(hydra.lib.strings.SplitOn.apply(
+        ".",
+        (namespace).value))))));
     hydra.util.Lazy<java.util.Map<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>> newMappings = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.packaging.Namespace, hydra.util.Pair<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>>) (ns_ -> (hydra.util.Pair<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>) ((hydra.util.Pair<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>) (new hydra.util.Pair<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>(ns_, (toModuleName).apply(ns_))))),
       hydra.lib.sets.ToList.apply(newNamespaces.get()))));
@@ -153,9 +155,11 @@ public interface Testing {
     hydra.util.Lazy<java.util.Map<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>> mapping_ = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.packaging.Namespaces<hydra.haskell.syntax.ModuleName>, java.util.Map<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>>) (projected -> projected.mapping)).apply(namespaces));
     hydra.util.Lazy<java.util.Map<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>> filtered = new hydra.util.Lazy<>(() -> hydra.lib.maps.FilterWithKey.apply(
       (java.util.function.Function<hydra.packaging.Namespace, java.util.function.Function<hydra.haskell.syntax.ModuleName, Boolean>>) (ns_ -> (java.util.function.Function<hydra.haskell.syntax.ModuleName, Boolean>) (_v -> hydra.lib.logic.Not.apply(hydra.lib.equality.Equal.apply(
-        hydra.lib.lists.Head.apply(hydra.lib.strings.SplitOn.apply(
-          "hydra.test.",
-          (ns_).value)),
+        hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> "",
+          hydra.lib.lists.MaybeHead.apply(hydra.lib.strings.SplitOn.apply(
+            "hydra.test.",
+            (ns_).value))),
         "")))),
       mapping_.get()));
     return hydra.lib.lists.Map.apply(

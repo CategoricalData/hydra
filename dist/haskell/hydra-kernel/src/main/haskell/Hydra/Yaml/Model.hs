@@ -35,6 +35,8 @@ _Node_sequence = Core.Name "sequence"
 data Scalar =
   -- | Represents a true/false value
   ScalarBool Bool |
+  -- | An arbitrary-precision decimal number (lexically a valid JSON number)
+  ScalarDecimal Sci.Scientific |
   -- | Represents an approximation to real numbers
   ScalarFloat Double |
   -- | Represents arbitrary sized finite mathematical integers
@@ -48,6 +50,8 @@ data Scalar =
 _Scalar = Core.Name "hydra.yaml.model.Scalar"
 
 _Scalar_bool = Core.Name "bool"
+
+_Scalar_decimal = Core.Name "decimal"
 
 _Scalar_float = Core.Name "float"
 

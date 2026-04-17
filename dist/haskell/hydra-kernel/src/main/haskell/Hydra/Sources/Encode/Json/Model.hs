@@ -185,12 +185,8 @@ module_ =
                                           Core.fieldTerm = (Core.TermInject (Core.Injection {
                                             Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
                                             Core.injectionField = Core.Field {
-                                              Core.fieldName = (Core.Name "float"),
-                                              Core.fieldTerm = (Core.TermInject (Core.Injection {
-                                                Core.injectionTypeName = (Core.Name "hydra.core.FloatValue"),
-                                                Core.injectionField = Core.Field {
-                                                  Core.fieldName = (Core.Name "bigfloat"),
-                                                  Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))}}))})),
+                                              Core.fieldName = (Core.Name "decimal"),
+                                              Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
               Core.Field {
                 Core.fieldName = (Core.Name "object"),

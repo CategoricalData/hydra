@@ -73,13 +73,18 @@ public interface Decode {
           }
 
           @Override
+          public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.yaml.model.Scalar.Decimal d) {
+            return hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.Number_((d).value));
+          }
+
+          @Override
           public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.yaml.model.Scalar.Float_ f) {
-            return hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.Number_((f).value));
+            return hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.Number_(hydra.lib.literals.Float64ToDecimal.apply(hydra.lib.literals.BigfloatToFloat64.apply((f).value))));
           }
 
           @Override
           public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.yaml.model.Scalar.Int i) {
-            return hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.Number_(hydra.lib.literals.BigintToBigfloat.apply((i).value)));
+            return hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.Number_(hydra.lib.literals.BigintToDecimal.apply((i).value)));
           }
 
           @Override

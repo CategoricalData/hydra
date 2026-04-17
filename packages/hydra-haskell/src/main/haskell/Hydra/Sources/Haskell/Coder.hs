@@ -349,7 +349,7 @@ encodeUnwrap = haskellCoderDefinition "encodeUnwrap" $
   doc "Encode an unwrap term as a Haskell expression" $
   "namespaces" ~> "name" ~>
   right $ inject H._Expression H._Expression_variable $ HaskellUtils.elementReference @@ var "namespaces" @@
-    (Names.qname @@ (Maybes.fromJust $ Names.namespaceOf @@ var "name") @@ (HaskellUtils.newtypeAccessorName @@ var "name"))
+    (Names.qname @@ (Maybes.fromMaybe (wrap _Namespace $ string "") (Names.namespaceOf @@ var "name")) @@ (HaskellUtils.newtypeAccessorName @@ var "name"))
 
 encodeProjection :: TTermDefinition (HaskellNamespaces -> Projection -> Either Error H.Expression)
 encodeProjection = haskellCoderDefinition "encodeProjection" $
@@ -697,7 +697,7 @@ encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAsser
         (right $ var "htyp") (lets [
           "encoded">: Lists.map (var "encodeAssertion") (var "assertPairs"),
           "hassert">: Logic.ifElse (Equality.equal (Lists.length $ var "encoded") (int32 1))
-            (Lists.head $ var "encoded")
+            (Maybes.fromMaybe (inject H._Assertion H._Assertion_tuple $ var "encoded") (Lists.maybeHead $ var "encoded"))
             (inject H._Assertion H._Assertion_tuple $ var "encoded")] $
           right $ inject H._Type H._Type_ctx $ record H._ContextType [
             H._ContextType_ctx>>: var "hassert",
@@ -951,15 +951,18 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
   "namespaces" ~> "elementName" ~> "typ" ~> "cx" ~> "g" ~> lets [
     "lname">: Names.localNameOf @@ var "elementName",
     "hname">: HaskellUtils.simpleName @@ var "lname",
-    "declHead">: "name" ~> "vars'" ~> Logic.ifElse (Lists.null $ var "vars'")
-      (inject H._DeclarationHead H._DeclarationHead_simple $ var "name")
-      (lets [
-        "h">: Lists.head $ var "vars'",
-        "rest">: Lists.tail $ var "vars'",
-        "hvar">: wrap H._Variable $ HaskellUtils.simpleName @@ (Core.unName $ var "h")] $
-        inject H._DeclarationHead H._DeclarationHead_application $ record H._ApplicationDeclarationHead [
-          H._ApplicationDeclarationHead_function>>: var "declHead" @@ var "name" @@ var "rest",
-          H._ApplicationDeclarationHead_operand>>: var "hvar"]),
+    "declHead">: "name" ~> "vars'" ~>
+      Maybes.fromMaybe
+        (inject H._DeclarationHead H._DeclarationHead_simple $ var "name")
+        (Maybes.map
+          ("p" ~> lets [
+            "h">: Pairs.first $ var "p",
+            "rest">: Pairs.second $ var "p",
+            "hvar">: wrap H._Variable $ HaskellUtils.simpleName @@ (Core.unName $ var "h")] $
+            inject H._DeclarationHead H._DeclarationHead_application $ record H._ApplicationDeclarationHead [
+              H._ApplicationDeclarationHead_function>>: var "declHead" @@ var "name" @@ var "rest",
+              H._ApplicationDeclarationHead_operand>>: var "hvar"])
+          (Lists.uncons $ var "vars'")),
     "newtypeCons">: "tname" ~> "typ'" ~> lets [
       "hname0">: HaskellUtils.simpleName @@ (HaskellUtils.newtypeAccessorName @@ var "tname")] $
       "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ'" @@ var "cx" @@ var "g" $ lets [

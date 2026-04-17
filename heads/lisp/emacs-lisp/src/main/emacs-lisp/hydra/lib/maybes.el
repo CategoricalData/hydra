@@ -61,13 +61,6 @@
               (list :nothing)
               (funcall g (maybe-value result))))))))
 
-;; from_just :: Maybe a -> a
-(defvar hydra_lib_maybes_from_just
-  (lambda (m)
-    (if (maybe-nothing-p m)
-        (error "fromJust: Nothing")
-        (maybe-value m))))
-
 ;; from_maybe :: a -> Maybe a -> a
 ;; Thunk-aware: if def is a zero-arg function (thunk), only called when Maybe is Nothing
 (defvar hydra_lib_maybes_from_maybe

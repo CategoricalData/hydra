@@ -9,6 +9,7 @@ import qualified Hydra.Environment as Environment
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Lib.Eithers as Eithers
+import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -283,7 +284,7 @@ encodeTypeDefinition cx g tdef =
           typ = Core.typeSchemeType (Packaging.typeDefinitionType tdef)
           lname = Formatting.capitalize (Names.localNameOf name)
           freeVars =
-                  Lists.filter (\v -> Lists.null (Lists.tail (Strings.splitOn "." (Core.unName v)))) (Sets.toList (Variables.freeVariablesInType typ))
+                  Lists.filter (\v -> Equality.equal (Lists.length (Strings.splitOn "." (Core.unName v))) 1) (Sets.toList (Variables.freeVariablesInType typ))
           generics =
                   Lists.map (\v -> Syntax.GenericParam {
                     Syntax.genericParamName = (Formatting.capitalize (Core.unName v)),

@@ -72,9 +72,19 @@ def qname(ns: hydra.packaging.Namespace)(name: scala.Predef.String): hydra.core.
 def qualifyName(name: hydra.core.Name): hydra.packaging.QualifiedName =
   {
   lazy val parts: Seq[scala.Predef.String] = hydra.lib.lists.reverse[scala.Predef.String](hydra.lib.strings.splitOn(".")(name))
-  hydra.lib.logic.ifElse[hydra.packaging.QualifiedName](hydra.lib.equality.equal[Int](1)(hydra.lib.lists.length[scala.Predef.String](parts)))(hydra.packaging.QualifiedName(None,
-     name))(hydra.packaging.QualifiedName(Some(hydra.lib.strings.intercalate(".")(hydra.lib.lists.reverse[scala.Predef.String](hydra.lib.lists.tail[scala.Predef.String](parts)))),
-     hydra.lib.lists.head[scala.Predef.String](parts)))
+  hydra.lib.maybes.maybe[hydra.packaging.QualifiedName, Tuple2[scala.Predef.String,
+     Seq[scala.Predef.String]]](hydra.packaging.QualifiedName(None, name))((uc: Tuple2[scala.Predef.String,
+     Seq[scala.Predef.String]]) =>
+    {
+    lazy val localName: scala.Predef.String = hydra.lib.pairs.first[scala.Predef.String, Seq[scala.Predef.String]](uc)
+    {
+      lazy val restReversed: Seq[scala.Predef.String] = hydra.lib.pairs.second[scala.Predef.String,
+         Seq[scala.Predef.String]](uc)
+      hydra.lib.logic.ifElse[hydra.packaging.QualifiedName](hydra.lib.lists.`null`[scala.Predef.String](restReversed))(hydra.packaging.QualifiedName(None,
+         name))(hydra.packaging.QualifiedName(Some(hydra.lib.strings.intercalate(".")(hydra.lib.lists.reverse[scala.Predef.String](restReversed))),
+         localName))
+    }
+  })(hydra.lib.lists.uncons[scala.Predef.String](parts))
 }
 
 def uniqueLabel(visited: scala.collection.immutable.Set[scala.Predef.String])(l: scala.Predef.String): scala.Predef.String =

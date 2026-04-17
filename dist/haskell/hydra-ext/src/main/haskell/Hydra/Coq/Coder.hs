@@ -20,6 +20,7 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 
 -- | Build the Coq dependent-function term `forall (_ : dom), cod` used as the arrow type
 coqArrow :: Syntax.Term -> Syntax.Term -> Syntax.Term
@@ -301,7 +302,7 @@ encodeType env ty =
       Core.TypeUnit -> coqTermQualid "unit"
       Core.TypeVariable v0 ->
         let raw = Core.unName v0
-            headSeg = Lists.head (Strings.splitOn "." raw)
+            headSeg = Maybes.fromMaybe raw (Lists.maybeHead (Strings.splitOn "." raw))
         in (Logic.ifElse (Logic.or (Equality.equal headSeg "hydra") (Equality.equal headSeg "Build_hydra")) (coqTermQualid (resolveQualifiedName env raw)) (coqTermQualid raw))
       Core.TypeVoid -> coqTermQualid "Empty_set"
       Core.TypeWrap v0 -> encodeType env v0
@@ -454,7 +455,7 @@ localTypeName :: String -> String
 localTypeName s =
 
       let parts = Strings.splitOn "." s
-          localPart = Logic.ifElse (Lists.null parts) s (Lists.last parts)
+          localPart = Maybes.fromMaybe s (Lists.maybeLast parts)
       in (sanitizeVar localPart)
 
 -- | Build a Coq Document from lists of type definitions and term definitions
@@ -491,25 +492,25 @@ resolveQualifiedName :: Environment.CoqEnvironment -> String -> String
 resolveQualifiedName env s =
 
       let parts = Strings.splitOn "." s
-          head1 = Lists.head parts
+          head1 = Maybes.fromMaybe s (Lists.maybeHead parts)
           currentNs = Environment.coqEnvironmentCurrentNamespace env
           ambig = Environment.coqEnvironmentAmbiguousNames env
-      in (Logic.ifElse (Equality.equal head1 "Build_hydra") (Strings.cat2 "Build_" (sanitizeStripped (Lists.last parts))) (Logic.ifElse (Equality.equal head1 "hydra") (
-        let rest = Lists.tail parts
-            head2 = Lists.head rest
-        in (Logic.ifElse (Equality.equal head2 "lib") (renameLibKeyword (Strings.intercalate "." (Lists.tail rest))) (
-          let localRaw = Lists.last parts
+      in (Logic.ifElse (Equality.equal head1 "Build_hydra") (Strings.cat2 "Build_" (sanitizeStripped (Maybes.fromMaybe s (Lists.maybeLast parts)))) (Logic.ifElse (Equality.equal head1 "hydra") (
+        let rest = Lists.drop 1 parts
+            head2 = Maybes.fromMaybe "" (Lists.maybeHead rest)
+        in (Logic.ifElse (Equality.equal head2 "lib") (renameLibKeyword (Strings.intercalate "." (Lists.drop 1 rest))) (
+          let localRaw = Maybes.fromMaybe s (Lists.maybeLast parts)
               localN = sanitizeStripped localRaw
-              sourceNs = Strings.intercalate "." (Lists.init parts)
+              sourceNs = Strings.intercalate "." (Maybes.fromMaybe [] (Lists.maybeInit parts))
               isCurrent = Equality.equal sourceNs currentNs
               isAmbig = Sets.member localRaw ambig
               isCollisionProne =
-                      Logic.and (Equality.equal (Lists.length parts) 3) (Logic.and (Equality.equal (Lists.head rest) "parsers") (Logic.not isCurrent))
+                      Logic.and (Equality.equal (Lists.length parts) 3) (Logic.and (Equality.equal head2 "parsers") (Logic.not isCurrent))
           in (Logic.ifElse (Logic.and isAmbig (Logic.not isCurrent)) (Strings.cat [
             sourceNs,
             ".",
             localN]) (Logic.ifElse isCollisionProne (Strings.cat [
-            sanitizeStripped (Lists.head rest),
+            sanitizeStripped head2,
             ".",
             (sanitizeStripped localRaw)]) localN))))) (sanitizeVar s)))
 
@@ -565,8 +566,8 @@ unionConstructorName :: String -> String -> String
 unionConstructorName typeName fieldName =
 
       let parts = Strings.splitOn "." typeName
-          localPart = Lists.last parts
-          prefixParts = Lists.init parts
+          localPart = Maybes.fromMaybe typeName (Lists.maybeLast parts)
+          prefixParts = Maybes.fromMaybe [] (Lists.maybeInit parts)
           prefix = Logic.ifElse (Lists.null prefixParts) "" (Strings.cat2 (Strings.intercalate "." prefixParts) ".")
           sanitized = sanitizeVar localPart
       in (Strings.cat [

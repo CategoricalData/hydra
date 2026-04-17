@@ -12,11 +12,11 @@ import hydra.packaging.*
 
 def addExpressions(exprs: Seq[hydra.java.syntax.MultiplicativeExpression]): hydra.java.syntax.AdditiveExpression =
   {
-  lazy val first: hydra.java.syntax.AdditiveExpression = hydra.java.syntax.AdditiveExpression.unary(hydra.lib.lists.head[hydra.java.syntax.MultiplicativeExpression](exprs))
-  lazy val rest: Seq[hydra.java.syntax.MultiplicativeExpression] = hydra.lib.lists.tail[hydra.java.syntax.MultiplicativeExpression](exprs)
+  lazy val dummyMult: hydra.java.syntax.MultiplicativeExpression = hydra.java.syntax.MultiplicativeExpression.unary(hydra.java.syntax.UnaryExpression.other(hydra.java.syntax.UnaryExpressionNotPlusMinus.postfix(hydra.java.syntax.PostfixExpression.primary(hydra.java.syntax.Primary.noNewArray(hydra.java.syntax.PrimaryNoNewArrayExpression.literal(hydra.java.syntax.Literal.integer(BigInt("0"))))))))
   hydra.lib.lists.foldl[hydra.java.syntax.AdditiveExpression, hydra.java.syntax.MultiplicativeExpression]((ae: hydra.java.syntax.AdditiveExpression) =>
     (me: hydra.java.syntax.MultiplicativeExpression) =>
-    hydra.java.syntax.AdditiveExpression.plus(hydra.java.syntax.AdditiveExpression_Binary(ae, me)))(first)(rest)
+    hydra.java.syntax.AdditiveExpression.plus(hydra.java.syntax.AdditiveExpression_Binary(ae,
+       me)))(hydra.java.syntax.AdditiveExpression.unary(hydra.lib.maybes.fromMaybe[hydra.java.syntax.MultiplicativeExpression](dummyMult)(hydra.lib.lists.maybeHead[hydra.java.syntax.MultiplicativeExpression](exprs))))(hydra.lib.lists.drop[hydra.java.syntax.MultiplicativeExpression](1)(exprs))
 }
 
 def addInScopeVar(name: hydra.core.Name)(aliases: hydra.java.environment.Aliases): hydra.java.environment.Aliases =
@@ -84,7 +84,8 @@ def interfaceMethodDeclaration(mods: Seq[hydra.java.syntax.InterfaceMethodModifi
   hydra.java.syntax.InterfaceMemberDeclaration.interfaceMethod(hydra.java.syntax.InterfaceMethodDeclaration(mods,
      hydra.java.utils.javaMethodHeader(tparams)(methodName)(params)(result), hydra.java.utils.javaMethodBody(stmts)))
 
-def isEscaped(s: scala.Predef.String): Boolean = hydra.lib.equality.equal[Int](hydra.lib.strings.charAt(0)(s))(36)
+def isEscaped(s: scala.Predef.String): Boolean =
+  hydra.lib.equality.equal[Int](hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.strings.maybeCharAt(0)(s)))(36)
 
 def javaAdditiveExpressionToJavaExpression(ae: hydra.java.syntax.AdditiveExpression): hydra.java.syntax.Expression =
   hydra.java.syntax.Expression.assignment(hydra.java.syntax.AssignmentExpression.conditional(hydra.java.syntax.ConditionalExpression.simple(Seq(Seq(Seq(Seq(Seq(hydra.java.syntax.EqualityExpression.unary(hydra.java.syntax.RelationalExpression.simple(hydra.java.syntax.ShiftExpression.unary(ae)))))))))))
@@ -192,15 +193,21 @@ def javaExpressionToJavaPrimary(e: hydra.java.syntax.Expression): hydra.java.syn
       case hydra.java.syntax.AssignmentExpression.conditional(v_AssignmentExpression_conditional_ce) => v_AssignmentExpression_conditional_ce match
         case hydra.java.syntax.ConditionalExpression.simple(v_ConditionalExpression_simple_cor) => {
           lazy val cands: Seq[hydra.java.syntax.ConditionalAndExpression] = v_ConditionalExpression_simple_cor
-          hydra.lib.logic.ifElse[hydra.java.syntax.Primary](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.java.syntax.ConditionalAndExpression](cands))(1))({
-            lazy val iors: Seq[hydra.java.syntax.InclusiveOrExpression] = hydra.lib.lists.head[hydra.java.syntax.ConditionalAndExpression](cands)
-            hydra.lib.logic.ifElse[hydra.java.syntax.Primary](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.java.syntax.InclusiveOrExpression](iors))(1))({
-              lazy val xors: Seq[hydra.java.syntax.ExclusiveOrExpression] = hydra.lib.lists.head[hydra.java.syntax.InclusiveOrExpression](iors)
-              hydra.lib.logic.ifElse[hydra.java.syntax.Primary](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.java.syntax.ExclusiveOrExpression](xors))(1))({
-                lazy val ands: Seq[hydra.java.syntax.AndExpression] = hydra.lib.lists.head[hydra.java.syntax.ExclusiveOrExpression](xors)
-                hydra.lib.logic.ifElse[hydra.java.syntax.Primary](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.java.syntax.AndExpression](ands))(1))({
-                  lazy val eqs: Seq[hydra.java.syntax.EqualityExpression] = hydra.lib.lists.head[hydra.java.syntax.AndExpression](ands)
-                  hydra.lib.logic.ifElse[hydra.java.syntax.Primary](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.java.syntax.EqualityExpression](eqs))(1))(hydra.lib.lists.head[hydra.java.syntax.EqualityExpression](eqs) match
+          hydra.lib.maybes.fromMaybe[hydra.java.syntax.Primary](fallback)(hydra.lib.maybes.bind[hydra.java.syntax.ConditionalAndExpression,
+             hydra.java.syntax.Primary](hydra.lib.lists.maybeHead[hydra.java.syntax.ConditionalAndExpression](cands))((candHead: hydra.java.syntax.ConditionalAndExpression) =>
+            {
+            lazy val iors: Seq[hydra.java.syntax.InclusiveOrExpression] = candHead
+            hydra.lib.maybes.bind[hydra.java.syntax.InclusiveOrExpression, hydra.java.syntax.Primary](hydra.lib.lists.maybeHead[hydra.java.syntax.InclusiveOrExpression](iors))((iorHead: hydra.java.syntax.InclusiveOrExpression) =>
+              {
+              lazy val xors: Seq[hydra.java.syntax.ExclusiveOrExpression] = iorHead
+              hydra.lib.maybes.bind[hydra.java.syntax.ExclusiveOrExpression, hydra.java.syntax.Primary](hydra.lib.lists.maybeHead[hydra.java.syntax.ExclusiveOrExpression](xors))((xorHead: hydra.java.syntax.ExclusiveOrExpression) =>
+                {
+                lazy val ands: Seq[hydra.java.syntax.AndExpression] = xorHead
+                hydra.lib.maybes.bind[hydra.java.syntax.AndExpression, hydra.java.syntax.Primary](hydra.lib.lists.maybeHead[hydra.java.syntax.AndExpression](ands))((andHead: hydra.java.syntax.AndExpression) =>
+                  {
+                  lazy val eqs: Seq[hydra.java.syntax.EqualityExpression] = andHead
+                  hydra.lib.maybes.bind[hydra.java.syntax.EqualityExpression, hydra.java.syntax.Primary](hydra.lib.lists.maybeHead[hydra.java.syntax.EqualityExpression](eqs))((eqHead: hydra.java.syntax.EqualityExpression) =>
+                    Some(eqHead match
                     case hydra.java.syntax.EqualityExpression.unary(v_EqualityExpression_unary_rel) => v_EqualityExpression_unary_rel match
                       case hydra.java.syntax.RelationalExpression.simple(v_RelationalExpression_simple_shift) => v_RelationalExpression_simple_shift match
                         case hydra.java.syntax.ShiftExpression.unary(v_ShiftExpression_unary_add) => v_ShiftExpression_unary_add match
@@ -216,11 +223,11 @@ def javaExpressionToJavaPrimary(e: hydra.java.syntax.Expression): hydra.java.syn
                           case _ => fallback
                         case _ => fallback
                       case _ => fallback
-                    case _ => fallback)(fallback)
-                })(fallback)
-              })(fallback)
-            })(fallback)
-          })(fallback)
+                    case _ => fallback))
+                })
+              })
+            })
+          }))
         }
         case _ => fallback
       case _ => fallback
@@ -595,7 +602,7 @@ def typeParameterToTypeArgument(tp: hydra.java.syntax.TypeParameter): hydra.java
 def unTypeParameter(tp: hydra.java.syntax.TypeParameter): scala.Predef.String = (tp.identifier)
 
 def unescape(s: scala.Predef.String): scala.Predef.String =
-  hydra.lib.strings.fromList(hydra.lib.lists.tail[Int](hydra.lib.strings.toList(s)))
+  hydra.lib.strings.fromList(hydra.lib.lists.drop[Int](1)(hydra.lib.strings.toList(s)))
 
 def uniqueVarName(aliases: hydra.java.environment.Aliases)(name: hydra.core.Name): hydra.core.Name =
   hydra.lib.logic.ifElse[hydra.core.Name](hydra.lib.sets.member[hydra.core.Name](name)(aliases.inScopeJavaVars))(hydra.java.utils.uniqueVarName_go(aliases)(name)(2))(name)

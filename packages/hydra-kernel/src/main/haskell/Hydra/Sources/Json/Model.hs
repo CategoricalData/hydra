@@ -39,7 +39,7 @@ value = define "Value" $
       T.unit,
     "number">:
       doc "A numeric value" $
-      T.bigfloat, -- TODO: JSON numbers are decimal-encoded
+      T.decimal,
     "object">:
       doc "A JSON object as a set of key/value pairs" $
       T.map T.string value,

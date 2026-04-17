@@ -9,6 +9,7 @@ import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as Core
 import qualified Hydra.Testing as Testing
@@ -140,7 +141,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "filter values starting with a",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\m -> Core.map (\n -> Literals.showInt32 n) (\s -> Literals.showString s) m) (Maps.filter (\v -> Equality.equal (Chars.toLower (Strings.charAt 0 v)) 97) (M.fromList [
+                Testing.universalTestCaseActual = ((\m -> Core.map (\n -> Literals.showInt32 n) (\s -> Literals.showString s) m) (Maps.filter (\v -> Equality.equal (Maybes.fromMaybe 0 (Maybes.map (\c -> Chars.toLower c) (Strings.maybeCharAt 0 v))) 97) (M.fromList [
                   (1, "a"),
                   (2, "b"),
                   (3, "ab")]))),
@@ -152,7 +153,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "filter all",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\m -> Core.map (\n -> Literals.showInt32 n) (\s -> Literals.showString s) m) (Maps.filter (\v -> Equality.equal (Chars.toLower (Strings.charAt 0 v)) 97) (M.fromList [
+                Testing.universalTestCaseActual = ((\m -> Core.map (\n -> Literals.showInt32 n) (\s -> Literals.showString s) m) (Maps.filter (\v -> Equality.equal (Maybes.fromMaybe 0 (Maybes.map (\c -> Chars.toLower c) (Strings.maybeCharAt 0 v))) 97) (M.fromList [
                   (1, "b"),
                   (2, "c")]))),
                 Testing.universalTestCaseExpected = ((\m -> Core.map (\n -> Literals.showInt32 n) (\s -> Literals.showString s) m) M.empty)})),
@@ -161,7 +162,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty map",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\m -> Core.map (\n -> Literals.showInt32 n) (\s -> Literals.showString s) m) (Maps.filter (\v -> Equality.equal (Chars.toLower (Strings.charAt 0 v)) 97) M.empty)),
+                Testing.universalTestCaseActual = ((\m -> Core.map (\n -> Literals.showInt32 n) (\s -> Literals.showString s) m) (Maps.filter (\v -> Equality.equal (Maybes.fromMaybe 0 (Maybes.map (\c -> Chars.toLower c) (Strings.maybeCharAt 0 v))) 97) M.empty)),
                 Testing.universalTestCaseExpected = ((\m -> Core.map (\n -> Literals.showInt32 n) (\s -> Literals.showString s) m) M.empty)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},

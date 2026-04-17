@@ -1,5 +1,5 @@
 (defpackage :hydra.python.testing
-(:use :cl :hydra.constants :hydra.lib.chars :hydra.lib.eithers :hydra.lib.equality :hydra.lib.lists :hydra.lib.logic :hydra.lib.strings :hydra.packaging :hydra.testing)
+(:use :cl :hydra.constants :hydra.lib.chars :hydra.lib.eithers :hydra.lib.equality :hydra.lib.lists :hydra.lib.logic :hydra.lib.maybes :hydra.lib.strings :hydra.packaging :hydra.testing)
 (:export :hydra_python_testing_build_python_test_module :hydra_python_testing_format_python_test_name :hydra_python_testing_generate_python_test_case :hydra_python_testing_generate_python_test_group_hierarchy :hydra_python_testing_generate_test_file_with_python_codec :hydra_python_testing_generate_python_test_file))
 
 (in-package :hydra.python.testing)
@@ -24,6 +24,6 @@
 
 ") subgroups_str))))))))))))
 
-(cl:defvar hydra_python_testing_generate_test_file_with_python_codec (cl:lambda (test_module) (cl:lambda (test_group) ((hydra_lib_eithers_map (cl:lambda (test_body) (let* ((ns_ ((cl:lambda (v) (hydra_packaging_module-namespace v)) test_module)) (parts ((hydra_lib_strings_split_on ".") ((cl:lambda (v) v) ns_))) (dir_parts (hydra_lib_lists_init parts)) (file_name (hydra_lib_strings_cat (cl:list "test_" (hydra_lib_lists_last parts) ".py"))) (file_path (hydra_lib_strings_cat (cl:list ((hydra_lib_strings_intercalate "/") dir_parts) "/" file_name))) (test_module_content (((hydra_python_testing_build_python_test_module test_module) test_group) test_body))) (cl:list file_path test_module_content)))) ((hydra_python_testing_generate_python_test_group_hierarchy (cl:list)) test_group)))))
+(cl:defvar hydra_python_testing_generate_test_file_with_python_codec (cl:lambda (test_module) (cl:lambda (test_group) ((hydra_lib_eithers_map (cl:lambda (test_body) (let* ((ns_ ((cl:lambda (v) (hydra_packaging_module-namespace v)) test_module)) (parts ((hydra_lib_strings_split_on ".") ((cl:lambda (v) v) ns_))) (dir_parts ((hydra_lib_maybes_from_maybe (cl:lambda () (cl:list))) (hydra_lib_lists_maybe_init parts))) (file_name (hydra_lib_strings_cat (cl:list "test_" ((hydra_lib_maybes_from_maybe (cl:lambda () "")) (hydra_lib_lists_maybe_last parts)) ".py"))) (file_path (hydra_lib_strings_cat (cl:list ((hydra_lib_strings_intercalate "/") dir_parts) "/" file_name))) (test_module_content (((hydra_python_testing_build_python_test_module test_module) test_group) test_body))) (cl:list file_path test_module_content)))) ((hydra_python_testing_generate_python_test_group_hierarchy (cl:list)) test_group)))))
 
 (cl:defvar hydra_python_testing_generate_python_test_file (cl:lambda (test_module) (cl:lambda (test_group) (cl:lambda (_g) ((hydra_python_testing_generate_test_file_with_python_codec test_module) test_group)))))

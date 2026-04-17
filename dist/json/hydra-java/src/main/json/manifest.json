@@ -1,0 +1,14 @@
+{
+  "dslModules": [],
+  "evalLibModules": [],
+  "mainModules": [
+    "hydra.java.coder",
+    "hydra.java.environment",
+    "hydra.java.language",
+    "hydra.java.names",
+    "hydra.java.serde",
+    "hydra.java.syntax",
+    "hydra.java.testing",
+    "hydra.java.utils"],
+  "package": "hydra-java",
+  "testModules": []}

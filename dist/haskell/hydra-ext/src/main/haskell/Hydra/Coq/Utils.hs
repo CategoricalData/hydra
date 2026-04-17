@@ -22,6 +22,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
 
@@ -227,7 +228,7 @@ encodeMutualLetGroup grp body =
                     Core.bindingTerm = (stripHydraFix (Core.bindingName b) (Core.bindingTerm b)),
                     Core.bindingType = (Core.bindingType b)}) grp
           mkPair =
-                  \ts -> Logic.ifElse (Lists.null ts) (Core.TermVariable (Core.Name "tt")) (Logic.ifElse (Equality.equal (Lists.length ts) 1) (Lists.head ts) (Core.TermPair (Lists.head ts, (mkPair (Lists.tail ts)))))
+                  \ts -> Maybes.fromMaybe (Core.TermVariable (Core.Name "tt")) (Maybes.map (\p -> Logic.ifElse (Equality.equal (Lists.length ts) 1) (Pairs.first p) (Core.TermPair (Pairs.first p, (mkPair (Pairs.second p))))) (Lists.uncons ts))
           pairExpr = mkPair (Lists.map (\b -> Core.bindingTerm b) strippedBindings)
           fixBody = rebuildLets innerProjBindings pairExpr
           fixTerm =
@@ -275,7 +276,7 @@ extractQualifiedNamespace :: String -> String
 extractQualifiedNamespace s =
 
       let parts = Strings.splitOn "." s
-      in (Logic.ifElse (Equality.gte (Lists.length parts) 2) (Strings.intercalate "." (Lists.init parts)) s)
+      in (Logic.ifElse (Equality.gte (Lists.length parts) 2) (Strings.intercalate "." (Maybes.fromMaybe [] (Lists.maybeInit parts))) s)
 
 -- | Peel off leading forall binders, returning the list of parameter names and the inner body type
 extractTypeParams :: Core.Type -> ([String], Core.Type)
@@ -340,16 +341,17 @@ isTypeVarLike :: String -> Bool
 isTypeVarLike s =
 
       let chars = Strings.toList s
-      in (Logic.ifElse (Logic.or (Lists.null chars) (Logic.not (Equality.equal (Lists.head chars) 116))) False (
-        let rest = Lists.tail chars
-        in (Logic.and (Logic.not (Lists.null rest)) (Lists.foldl (\acc -> \c -> Logic.and acc (Logic.and (Equality.gte c 48) (Equality.lte c 57))) True rest))))
+      in (Maybes.fromMaybe False (Maybes.map (\p ->
+        let firstCh = Pairs.first p
+            rest = Pairs.second p
+        in (Logic.ifElse (Logic.not (Equality.equal firstCh 116)) False (Logic.and (Logic.not (Lists.null rest)) (Lists.foldl (\acc -> \c -> Logic.and acc (Logic.and (Equality.gte c 48) (Equality.lte c 57))) True rest)))) (Lists.uncons chars)))
 
 -- | Return the last dot-separated segment of a qualified Hydra name, sanitised via `sanitize`
 localName :: String -> String
 localName s =
 
       let parts = Strings.splitOn "." s
-          raw = Logic.ifElse (Lists.null parts) s (Lists.last parts)
+          raw = Maybes.fromMaybe s (Lists.maybeLast parts)
       in (sanitize raw)
 
 -- | Return the last dot-separated segment of a qualified Hydra name, unsanitized
@@ -357,7 +359,7 @@ localNameRaw :: String -> String
 localNameRaw s =
 
       let parts = Strings.splitOn "." s
-      in (Logic.ifElse (Lists.null parts) s (Lists.last parts))
+      in (Maybes.fromMaybe s (Lists.maybeLast parts))
 
 -- | Return the deduplicated list of dependency namespace strings for a Module, excluding its own namespace
 moduleDependencies :: Packaging.Module -> [String]
@@ -434,7 +436,7 @@ qualifiedFromName n =
 
       let raw = Core.unName n
           parts = Strings.splitOn "." raw
-      in (Logic.ifElse (Logic.and (Equality.gte (Lists.length parts) 2) (Equality.equal (Lists.head parts) "hydra")) (Sets.singleton raw) Sets.empty)
+      in (Logic.ifElse (Logic.and (Equality.gte (Lists.length parts) 2) (Equality.equal (Maybes.fromMaybe "" (Lists.maybeHead parts)) "hydra")) (Sets.singleton raw) Sets.empty)
 
 -- | Build a chain of single-binding TermLet wrappers around the given body
 rebuildLets :: [Core.Binding] -> Core.Term -> Core.Term
@@ -519,11 +521,10 @@ sortTermDefsSCC defs =
       let localNames = Sets.fromList (Lists.map (\d -> Pairs.first d) defs)
           depsOf = \d -> Sets.toList (termRefs localNames (Pairs.second d))
           comps = Sorting.topologicalSortNodes (\d -> Pairs.first d) depsOf defs
-      in (Lists.map (\grp -> Logic.ifElse (Equality.gte (Lists.length grp) 2) (True, grp) (
-        let d = Lists.head grp
-            name = Pairs.first d
+      in (Lists.map (\grp -> Logic.ifElse (Equality.gte (Lists.length grp) 2) (True, grp) (Maybes.fromMaybe (False, grp) (Maybes.map (\d ->
+        let name = Pairs.first d
             deps = termRefs localNames (Pairs.second d)
-        in (Sets.member name deps, grp))) comps)
+        in (Sets.member name deps, grp)) (Lists.maybeHead grp)))) comps)
 
 -- | Group type definitions into SCC components with a cyclic/acyclic flag
 sortTypeDefsSCC :: [(String, Core.Type)] -> [(Bool, [(String, Core.Type)])]
@@ -532,11 +533,10 @@ sortTypeDefsSCC defs =
       let localNames = Sets.fromList (Lists.map (\d -> Pairs.first d) defs)
           depsOf = \d -> Sets.toList (typeRefs localNames (Pairs.second d))
           comps = Sorting.topologicalSortNodes (\d -> Pairs.first d) depsOf defs
-      in (Lists.map (\grp -> Logic.ifElse (Equality.gte (Lists.length grp) 2) (True, grp) (
-        let d = Lists.head grp
-            name = Pairs.first d
+      in (Lists.map (\grp -> Logic.ifElse (Equality.gte (Lists.length grp) 2) (True, grp) (Maybes.fromMaybe (False, grp) (Maybes.map (\d ->
+        let name = Pairs.first d
             deps = typeRefs localNames (Pairs.second d)
-        in (Sets.member name deps, grp))) comps)
+        in (Sets.member name deps, grp)) (Lists.maybeHead grp)))) comps)
 
 -- | Strip an outer hydra_fix lambda wrapper, substituting the inner self-reference for the binding name
 stripHydraFix :: Core.Name -> Core.Term -> Core.Term

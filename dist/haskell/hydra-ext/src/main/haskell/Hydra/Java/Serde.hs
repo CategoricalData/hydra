@@ -37,19 +37,19 @@ javaUnicodeEscape :: Int -> String
 javaUnicodeEscape n =
     Logic.ifElse (Equality.gt n 65535) (
       let n_ = Math.sub n 65536
-          hi = Math.add 55296 (Math.div n_ 1024)
-          lo = Math.add 56320 (Math.mod n_ 1024)
+          hi = Math.add 55296 (Maybes.fromMaybe 0 (Math.maybeDiv n_ 1024))
+          lo = Math.add 56320 (Maybes.fromMaybe 0 (Math.maybeMod n_ 1024))
       in (Strings.cat2 (Strings.cat2 "\\u" (padHex4 hi)) (Strings.cat2 "\\u" (padHex4 lo)))) (Strings.cat2 "\\u" (padHex4 n))
 
 padHex4 :: Int -> String
 padHex4 n =
 
-      let d3 = Math.div n 4096
-          r3 = Math.mod n 4096
-          d2 = Math.div r3 256
-          r2 = Math.mod r3 256
-          d1 = Math.div r2 16
-          d0 = Math.mod r2 16
+      let d3 = Maybes.fromMaybe 0 (Math.maybeDiv n 4096)
+          r3 = Maybes.fromMaybe 0 (Math.maybeMod n 4096)
+          d2 = Maybes.fromMaybe 0 (Math.maybeDiv r3 256)
+          r2 = Maybes.fromMaybe 0 (Math.maybeMod r3 256)
+          d1 = Maybes.fromMaybe 0 (Math.maybeDiv r2 16)
+          d0 = Maybes.fromMaybe 0 (Math.maybeMod r2 16)
       in (Strings.fromList [
         hexDigit d3,
         (hexDigit d2),
@@ -126,10 +126,10 @@ writeArrayInitializer :: Syntax.ArrayInitializer -> Ast.Expr
 writeArrayInitializer ai =
 
       let groups = Syntax.unArrayInitializer ai
-      in (Logic.ifElse (Equality.equal (Lists.length groups) 1) (Serialization.noSep [
+      in (Maybes.fromMaybe (Serialization.cst "{}") (Maybes.map (\firstGroup -> Logic.ifElse (Equality.equal (Lists.length groups) 1) (Serialization.noSep [
         Serialization.cst "{",
-        (Serialization.commaSep Serialization.inlineStyle (Lists.map writeVariableInitializer (Lists.head groups))),
-        (Serialization.cst "}")]) (Serialization.cst "{}"))
+        (Serialization.commaSep Serialization.inlineStyle (Lists.map writeVariableInitializer firstGroup)),
+        (Serialization.cst "}")]) (Serialization.cst "{}")) (Lists.maybeHead groups)))
 
 writeArrayType :: Syntax.ArrayType -> Ast.Expr
 writeArrayType at =

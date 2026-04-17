@@ -506,10 +506,11 @@ public interface Transform {
         hydra.util.Lazy<java.util.List<java.util.List<hydra.util.Maybe<String>>>> rows = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(parsedRows));
         return hydra.lib.logic.IfElse.lazy(
           hasHeader,
-          () -> ((java.util.function.Supplier<hydra.util.Either<String, hydra.tabular.Table<String>>>) (() -> {
-            hydra.util.Lazy<java.util.List<hydra.util.Maybe<String>>> headerRow = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(rows.get()));
-            return ((java.util.function.Supplier<hydra.util.Either<String, hydra.tabular.Table<String>>>) (() -> {
-              hydra.util.Lazy<java.util.List<java.util.List<hydra.util.Maybe<String>>>> dataRows = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply(rows.get()));
+          () -> hydra.lib.maybes.Maybe.applyLazy(
+            () -> hydra.util.Either.<String, hydra.tabular.Table<String>>left("empty rows: cannot parse header"),
+            (java.util.function.Function<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, java.util.List<java.util.List<hydra.util.Maybe<String>>>>, hydra.util.Either<String, hydra.tabular.Table<String>>>) (p -> {
+              hydra.util.Lazy<java.util.List<java.util.List<hydra.util.Maybe<String>>>> dataRows = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(p));
+              hydra.util.Lazy<java.util.List<hydra.util.Maybe<String>>> headerRow = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(p));
               return hydra.lib.logic.IfElse.lazy(
                 hydra.demos.genpg.Transform.listAny(
                   (java.util.function.Function<hydra.util.Maybe<String>, Boolean>) (m -> hydra.lib.maybes.IsNothing.apply(m)),
@@ -518,8 +519,8 @@ public interface Transform {
                 () -> hydra.util.Either.<String, hydra.tabular.Table<String>>right((hydra.tabular.Table<String>) (new hydra.tabular.Table<String>(hydra.util.Maybe.just(new hydra.tabular.HeaderRow(hydra.lib.maybes.Cat.apply(headerRow.get()))), hydra.lib.lists.Map.apply(
                   (java.util.function.Function<java.util.List<hydra.util.Maybe<String>>, hydra.tabular.DataRow<String>>) (r -> (hydra.tabular.DataRow<String>) (new hydra.tabular.DataRow(r))),
                   dataRows.get())))));
-            })).get();
-          })).get(),
+            }),
+            hydra.lib.lists.Uncons.apply(rows.get())),
           () -> hydra.util.Either.<String, hydra.tabular.Table<String>>right((hydra.tabular.Table<String>) (new hydra.tabular.Table<String>((hydra.util.Maybe<hydra.tabular.HeaderRow>) (hydra.util.Maybe.<hydra.tabular.HeaderRow>nothing()), hydra.lib.lists.Map.apply(
             (java.util.function.Function<java.util.List<hydra.util.Maybe<String>>, hydra.tabular.DataRow<String>>) (r -> (hydra.tabular.DataRow<String>) (new hydra.tabular.DataRow(r))),
             rows.get())))));
@@ -554,7 +555,10 @@ public interface Transform {
       hydra.lib.equality.Equal.apply(
         hydra.lib.sets.Size.apply(tables.get()),
         1),
-      () -> hydra.util.Either.<String, String>right(hydra.lib.lists.Head.apply(hydra.lib.sets.ToList.apply(tables.get()))),
+      () -> hydra.lib.maybes.Maybe.applyLazy(
+        () -> hydra.util.Either.<String, String>left("unreachable: empty tables set"),
+        (java.util.function.Function<String, hydra.util.Either<String, String>>) (x -> hydra.util.Either.<String, String>right(x)),
+        hydra.lib.lists.MaybeHead.apply(hydra.lib.sets.ToList.apply(tables.get()))),
       () -> hydra.util.Either.<String, String>left(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
         "Specification for ",
         label.get().value,
@@ -572,7 +576,10 @@ public interface Transform {
       hydra.lib.equality.Equal.apply(
         hydra.lib.sets.Size.apply(tables.get()),
         1),
-      () -> hydra.util.Either.<String, String>right(hydra.lib.lists.Head.apply(hydra.lib.sets.ToList.apply(tables.get()))),
+      () -> hydra.lib.maybes.Maybe.applyLazy(
+        () -> hydra.util.Either.<String, String>left("unreachable: empty tables set"),
+        (java.util.function.Function<String, hydra.util.Either<String, String>>) (x -> hydra.util.Either.<String, String>right(x)),
+        hydra.lib.lists.MaybeHead.apply(hydra.lib.sets.ToList.apply(tables.get()))),
       () -> hydra.util.Either.<String, String>left(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
         "Specification for ",
         label.get().value,

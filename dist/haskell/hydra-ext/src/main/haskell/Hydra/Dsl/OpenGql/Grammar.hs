@@ -11125,6 +11125,22 @@ localDatetimeType notNull =
           Core.fieldName = (Core.Name "notNull"),
           Core.fieldTerm = (Phantoms.unTTerm notNull)}]}))
 
+localDatetimeTypeChoiceLocalDatetime :: Phantoms.TTerm Grammar.LocalDatetimeType -> Phantoms.TTerm Grammar.LocalDatetimeTypeChoice
+localDatetimeTypeChoiceLocalDatetime x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "openGql.grammar.LocalDatetimeTypeChoice"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "localDatetime"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+localDatetimeTypeChoiceTimestampWithoutTimeZone :: Phantoms.TTerm Grammar.TimestampWithoutTimeZoneType -> Phantoms.TTerm Grammar.LocalDatetimeTypeChoice
+localDatetimeTypeChoiceTimestampWithoutTimeZone x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "openGql.grammar.LocalDatetimeTypeChoice"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "timestampWithoutTimeZone"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
 localDatetimeTypeNotNull :: Phantoms.TTerm Grammar.LocalDatetimeType -> Phantoms.TTerm Bool
 localDatetimeTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -11150,6 +11166,22 @@ localTimeType notNull =
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
           Core.fieldTerm = (Phantoms.unTTerm notNull)}]}))
+
+localTimeTypeChoiceLocalTime :: Phantoms.TTerm Grammar.LocalTimeType -> Phantoms.TTerm Grammar.LocalTimeTypeChoice
+localTimeTypeChoiceLocalTime x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "openGql.grammar.LocalTimeTypeChoice"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "localTime"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+localTimeTypeChoiceTimeWithoutTimeZone :: Phantoms.TTerm Grammar.TimeWithoutTimeZoneType -> Phantoms.TTerm Grammar.LocalTimeTypeChoice
+localTimeTypeChoiceTimeWithoutTimeZone x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "openGql.grammar.LocalTimeTypeChoice"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "timeWithoutTimeZone"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 localTimeTypeNotNull :: Phantoms.TTerm Grammar.LocalTimeType -> Phantoms.TTerm Bool
 localTimeTypeNotNull x =
@@ -11183,38 +11215,6 @@ localdatetimeFunctionLocalTimestamp =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "localTimestamp"),
         Core.fieldTerm = Core.TermUnit}}))
-
-localdatetimeTypeLocalDatetime :: Phantoms.TTerm Grammar.LocalDatetimeType -> Phantoms.TTerm Grammar.LocaldatetimeType
-localdatetimeTypeLocalDatetime x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "openGql.grammar.LocaldatetimeType"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "localDatetime"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-localdatetimeTypeTimestampWithoutTimeZone :: Phantoms.TTerm Grammar.TimestampWithoutTimeZoneType -> Phantoms.TTerm Grammar.LocaldatetimeType
-localdatetimeTypeTimestampWithoutTimeZone x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "openGql.grammar.LocaldatetimeType"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "timestampWithoutTimeZone"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-localtimeTypeLocalTime :: Phantoms.TTerm Grammar.LocalTimeType -> Phantoms.TTerm Grammar.LocaltimeType
-localtimeTypeLocalTime x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "openGql.grammar.LocaltimeType"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "localTime"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-localtimeTypeTimeWithoutTimeZone :: Phantoms.TTerm Grammar.TimeWithoutTimeZoneType -> Phantoms.TTerm Grammar.LocaltimeType
-localtimeTypeTimeWithoutTimeZone x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "openGql.grammar.LocaltimeType"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "timeWithoutTimeZone"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 matchModeDifferentEdges :: Phantoms.TTerm Grammar.DifferentEdgesMatchMode -> Phantoms.TTerm Grammar.MatchMode
 matchModeDifferentEdges x =
@@ -20130,20 +20130,20 @@ temporalInstantTypeDatetimeType x =
         Core.fieldName = (Core.Name "datetimeType"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-temporalInstantTypeLocaldatetimeType :: Phantoms.TTerm Grammar.LocaldatetimeType -> Phantoms.TTerm Grammar.TemporalInstantType
-temporalInstantTypeLocaldatetimeType x =
+temporalInstantTypeLocalDatetimeTypeChoice :: Phantoms.TTerm Grammar.LocalDatetimeTypeChoice -> Phantoms.TTerm Grammar.TemporalInstantType
+temporalInstantTypeLocalDatetimeTypeChoice x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TemporalInstantType"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "localdatetimeType"),
+        Core.fieldName = (Core.Name "localDatetimeTypeChoice"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-temporalInstantTypeLocaltimeType :: Phantoms.TTerm Grammar.LocaltimeType -> Phantoms.TTerm Grammar.TemporalInstantType
-temporalInstantTypeLocaltimeType x =
+temporalInstantTypeLocalTimeTypeChoice :: Phantoms.TTerm Grammar.LocalTimeTypeChoice -> Phantoms.TTerm Grammar.TemporalInstantType
+temporalInstantTypeLocalTimeTypeChoice x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "openGql.grammar.TemporalInstantType"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "localtimeType"),
+        Core.fieldName = (Core.Name "localTimeTypeChoice"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 temporalInstantTypeTimeType :: Phantoms.TTerm Grammar.TimeType -> Phantoms.TTerm Grammar.TemporalInstantType
