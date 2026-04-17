@@ -52,55 +52,57 @@ public interface Codegen {
       117,
       48,
       48,
-      (hexDigit).apply(hydra.lib.math.Div.apply(
-        b,
-        16)),
-      (hexDigit).apply(hydra.lib.math.Mod.apply(
-        b,
-        16))));
+      (hexDigit).apply(hydra.lib.maybes.FromMaybe.applyLazy(
+        () -> 0,
+        hydra.lib.math.MaybeDiv.apply(
+          b,
+          16))),
+      (hexDigit).apply(hydra.lib.maybes.FromMaybe.applyLazy(
+        () -> 0,
+        hydra.lib.math.MaybeMod.apply(
+          b,
+          16)))));
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<Boolean, java.util.function.Function<Boolean, java.util.function.Function<java.util.List<Integer>, java.util.List<Integer>>>>> go = new java.util.concurrent.atomic.AtomicReference<>();
-    go.set((java.util.function.Function<Boolean, java.util.function.Function<Boolean, java.util.function.Function<java.util.List<Integer>, java.util.List<Integer>>>>) (inStr -> (java.util.function.Function<Boolean, java.util.function.Function<java.util.List<Integer>, java.util.List<Integer>>>) (esc -> (java.util.function.Function<java.util.List<Integer>, java.util.List<Integer>>) (bytes -> hydra.lib.logic.IfElse.lazy(
-      hydra.lib.lists.Null.apply(bytes),
+    go.set((java.util.function.Function<Boolean, java.util.function.Function<Boolean, java.util.function.Function<java.util.List<Integer>, java.util.List<Integer>>>>) (inStr -> (java.util.function.Function<Boolean, java.util.function.Function<java.util.List<Integer>, java.util.List<Integer>>>) (esc -> (java.util.function.Function<java.util.List<Integer>, java.util.List<Integer>>) (bytes -> hydra.lib.maybes.Maybe.applyLazy(
       () -> (java.util.List<Integer>) (java.util.Collections.<Integer>emptyList()),
-      () -> ((java.util.function.Supplier<java.util.List<Integer>>) (() -> {
-        hydra.util.Lazy<Integer> b = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(bytes));
-        return ((java.util.function.Supplier<java.util.List<Integer>>) (() -> {
-          hydra.util.Lazy<java.util.List<Integer>> bs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply(bytes));
-          return hydra.lib.logic.IfElse.lazy(
-            esc,
+      (java.util.function.Function<hydra.util.Pair<Integer, java.util.List<Integer>>, java.util.List<Integer>>) (uc -> {
+        hydra.util.Lazy<Integer> b = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(uc));
+        hydra.util.Lazy<java.util.List<Integer>> bs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(uc));
+        return hydra.lib.logic.IfElse.lazy(
+          esc,
+          () -> hydra.lib.lists.Cons.apply(
+            b.get(),
+            go.get().apply(inStr).apply(false).apply(bs.get())),
+          () -> hydra.lib.logic.IfElse.lazy(
+            hydra.lib.logic.And.apply(
+              hydra.lib.equality.Equal.apply(
+                b.get(),
+                92),
+              inStr),
             () -> hydra.lib.lists.Cons.apply(
               b.get(),
-              go.get().apply(inStr).apply(false).apply(bs.get())),
+              go.get().apply(inStr).apply(true).apply(bs.get())),
             () -> hydra.lib.logic.IfElse.lazy(
-              hydra.lib.logic.And.apply(
-                hydra.lib.equality.Equal.apply(
-                  b.get(),
-                  92),
-                inStr),
+              hydra.lib.equality.Equal.apply(
+                b.get(),
+                34),
               () -> hydra.lib.lists.Cons.apply(
                 b.get(),
-                go.get().apply(inStr).apply(true).apply(bs.get())),
+                go.get().apply(hydra.lib.logic.Not.apply(inStr)).apply(false).apply(bs.get())),
               () -> hydra.lib.logic.IfElse.lazy(
-                hydra.lib.equality.Equal.apply(
-                  b.get(),
-                  34),
+                hydra.lib.logic.And.apply(
+                  inStr,
+                  hydra.lib.equality.Lt.apply(
+                    b.get(),
+                    32)),
+                () -> hydra.lib.lists.Concat2.apply(
+                  (escapeToUnicode).apply(b.get()),
+                  go.get().apply(inStr).apply(false).apply(bs.get())),
                 () -> hydra.lib.lists.Cons.apply(
                   b.get(),
-                  go.get().apply(hydra.lib.logic.Not.apply(inStr)).apply(false).apply(bs.get())),
-                () -> hydra.lib.logic.IfElse.lazy(
-                  hydra.lib.logic.And.apply(
-                    inStr,
-                    hydra.lib.equality.Lt.apply(
-                      b.get(),
-                      32)),
-                  () -> hydra.lib.lists.Concat2.apply(
-                    (escapeToUnicode).apply(b.get()),
-                    go.get().apply(inStr).apply(false).apply(bs.get())),
-                  () -> hydra.lib.lists.Cons.apply(
-                    b.get(),
-                    go.get().apply(inStr).apply(false).apply(bs.get()))))));
-        })).get();
-      })).get())))));
+                  go.get().apply(inStr).apply(false).apply(bs.get()))))));
+      }),
+      hydra.lib.lists.Uncons.apply(bytes))))));
     return go.get().apply(false).apply(false).apply(input);
   }
 

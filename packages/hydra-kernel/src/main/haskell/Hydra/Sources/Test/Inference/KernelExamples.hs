@@ -43,12 +43,12 @@ testGroupForNestedLet = define "testGroupForNestedLet" $
     subgroup "hydra.formatting.mapFirstLetter" [
       expectMono 1 [tag_disabledForMinimalInference]
         (lambda "mapping" $ lambda "s" $ lets [
-          "firstLetter">: var "mapping" @@ (primitive _strings_fromList @@ (primitive _lists_pure @@ (primitive _lists_head @@ var "list"))),
-          "list">: primitive _strings_toList @@ var "s"] $
+          "list">: primitive _strings_toList @@ var "s",
+          "firstLetter">: var "mapping" @@ (primitive _strings_fromList @@ (primitive _maybes_cat @@ list [primitive _lists_maybeHead @@ var "list"]))] $
           primitive _logic_ifElse
             @@ (primitive _strings_null @@ var "s")
             @@ (var "s")
-            @@ (primitive _strings_cat2 @@ var "firstLetter" @@ (primitive _strings_fromList @@ (primitive _lists_tail @@ var "list"))))
+            @@ (primitive _strings_cat2 @@ var "firstLetter" @@ (primitive _strings_fromList @@ (primitive _lists_drop @@ int32 1 @@ var "list"))))
         (T.functionMany [T.function T.string T.string, T.string, T.string])],
 
     -- Simplified reproduction of fullyStripAndNormalizeType's 'go' binding using ifElse.

@@ -73,8 +73,8 @@ def encodeCase[T0](cx: T0)(g: hydra.graph.Graph)(ftypes: Map[hydra.core.Name, hy
     case hydra.core.Type.unit => true
     case hydra.core.Type.record(v_Type_record_rt) => hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.FieldType](v_Type_record_rt))(0)
     case _ => false)(hydra.lib.maps.lookup[hydra.core.Name, hydra.core.Type](fname)(ftypes))
-  lazy val shortTypeName: scala.Predef.String = hydra.lib.lists.last[scala.Predef.String](hydra.lib.strings.splitOn(".")(hydra.lib.maybes.maybe[scala.Predef.String,
-     hydra.core.Name]("x")((n: hydra.core.Name) => n)(sn)))
+  lazy val shortTypeName: scala.Predef.String = hydra.lib.maybes.fromMaybe[scala.Predef.String]("x")(hydra.lib.lists.maybeLast[scala.Predef.String](hydra.lib.strings.splitOn(".")(hydra.lib.maybes.maybe[scala.Predef.String,
+     hydra.core.Name]("x")((n: hydra.core.Name) => n)(sn))))
   lazy val lamParamSuffix: scala.Predef.String = hydra.strip.deannotateAndDetypeTerm(fterm) match
     case hydra.core.Term.lambda(v_Term_lambda_lam) => {
       lazy val rawName: scala.Predef.String = (v_Term_lambda_lam.parameter)
@@ -461,7 +461,7 @@ def encodeTerm[T0](cx: T0)(g: hydra.graph.Graph)(term0: hydra.core.Term): Either
       lazy val localName: scala.Predef.String = hydra.names.localNameOf(v_Term_variable_v)
       lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(fullName)
       lazy val numParts: Int = hydra.lib.lists.length[scala.Predef.String](parts)
-      lazy val escaped: scala.Predef.String = hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.lte[Int](numParts)(1))(hydra.scala.utils.scalaEscapeName(fullName))(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](numParts)(2))(hydra.lib.strings.cat2(hydra.lib.lists.head[scala.Predef.String](parts))(hydra.lib.strings.cat2(".")(hydra.scala.utils.scalaEscapeName(localName))))(hydra.lib.strings.intercalate(".")(hydra.lib.lists.concat2[scala.Predef.String](hydra.lib.lists.take[scala.Predef.String](hydra.lib.math.sub(numParts)(1))(parts))(Seq(hydra.scala.utils.scalaEscapeName(localName))))))
+      lazy val escaped: scala.Predef.String = hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.lte[Int](numParts)(1))(hydra.scala.utils.scalaEscapeName(fullName))(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](numParts)(2))(hydra.lib.strings.cat2(hydra.lib.maybes.fromMaybe[scala.Predef.String](fullName)(hydra.lib.lists.maybeHead[scala.Predef.String](parts)))(hydra.lib.strings.cat2(".")(hydra.scala.utils.scalaEscapeName(localName))))(hydra.lib.strings.intercalate(".")(hydra.lib.lists.concat2[scala.Predef.String](hydra.lib.lists.take[scala.Predef.String](hydra.lib.math.sub(numParts)(1))(parts))(Seq(hydra.scala.utils.scalaEscapeName(localName))))))
       Right(hydra.scala.utils.sname(escaped))
     }
     case hydra.core.Term.annotated(v_Term_annotated_at) => hydra.scala.coder.encodeTerm(cx)(g)(v_Term_annotated_at.body)

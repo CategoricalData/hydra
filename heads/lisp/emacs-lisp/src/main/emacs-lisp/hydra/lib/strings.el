@@ -21,14 +21,6 @@
     (lambda (b)
       (concat a b))))
 
-;; char_at :: Int -> String -> Int32 (char as codepoint)
-(defvar hydra_lib_strings_char_at
-  (lambda (n)
-    "Get the Unicode code point of the character at a specific index in a string."
-    (lambda (s)
-      (let ((ms (hydra--ensure-multibyte s)))
-        (aref (vconcat (string-to-list ms)) n)))))
-
 ;; cons :: Int32 (char as codepoint) -> String -> String
 (defvar hydra_lib_strings_cons
   (lambda (c)

@@ -18,9 +18,9 @@ def javaUnicodeEscape(n: Int): scala.Predef.String =
   hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.gt[Int](n)(65535))({
   lazy val `n_`: Int = hydra.lib.math.sub(n)(65536)
   {
-    lazy val hi: Int = hydra.lib.math.add(55296)(hydra.lib.math.div(`n_`)(1024))
+    lazy val hi: Int = hydra.lib.math.add(55296)(hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.math.maybeDiv(`n_`)(1024)))
     {
-      lazy val lo: Int = hydra.lib.math.add(56320)(hydra.lib.math.mod(`n_`)(1024))
+      lazy val lo: Int = hydra.lib.math.add(56320)(hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.math.maybeMod(`n_`)(1024)))
       hydra.lib.strings.cat2(hydra.lib.strings.cat2("\\u")(hydra.java.serde.padHex4(hi)))(hydra.lib.strings.cat2("\\u")(hydra.java.serde.padHex4(lo)))
     }
   }
@@ -28,12 +28,12 @@ def javaUnicodeEscape(n: Int): scala.Predef.String =
 
 def padHex4(n: Int): scala.Predef.String =
   {
-  lazy val d3: Int = hydra.lib.math.div(n)(4096)
-  lazy val r3: Int = hydra.lib.math.mod(n)(4096)
-  lazy val d2: Int = hydra.lib.math.div(r3)(256)
-  lazy val r2: Int = hydra.lib.math.mod(r3)(256)
-  lazy val d1: Int = hydra.lib.math.div(r2)(16)
-  lazy val d0: Int = hydra.lib.math.mod(r2)(16)
+  lazy val d3: Int = hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.math.maybeDiv(n)(4096))
+  lazy val r3: Int = hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.math.maybeMod(n)(4096))
+  lazy val d2: Int = hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.math.maybeDiv(r3)(256))
+  lazy val r2: Int = hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.math.maybeMod(r3)(256))
+  lazy val d1: Int = hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.math.maybeDiv(r2)(16))
+  lazy val d0: Int = hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.math.maybeMod(r2)(16))
   hydra.lib.strings.fromList(Seq(hydra.java.serde.hexDigit(d3), hydra.java.serde.hexDigit(d2),
      hydra.java.serde.hexDigit(d1), hydra.java.serde.hexDigit(d0)))
 }
@@ -93,10 +93,11 @@ def writeArrayCreationExpression(ace: hydra.java.syntax.ArrayCreationExpression)
 def writeArrayInitializer(ai: hydra.java.syntax.ArrayInitializer): hydra.ast.Expr =
   {
   lazy val groups: Seq[Seq[hydra.java.syntax.VariableInitializer]] = ai
-  hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.equality.equal[Int](hydra.lib.lists.length[Seq[hydra.java.syntax.VariableInitializer]](groups))(1))(hydra.serialization.noSep(Seq(hydra.serialization.cst("{"),
-     hydra.serialization.commaSep(hydra.serialization.inlineStyle)(hydra.lib.lists.map[hydra.java.syntax.VariableInitializer,
-     hydra.ast.Expr](hydra.java.serde.writeVariableInitializer)(hydra.lib.lists.head[Seq[hydra.java.syntax.VariableInitializer]](groups))),
-     hydra.serialization.cst("}"))))(hydra.serialization.cst("{}"))
+  hydra.lib.maybes.fromMaybe[hydra.ast.Expr](hydra.serialization.cst("{}"))(hydra.lib.maybes.map[Seq[hydra.java.syntax.VariableInitializer],
+     hydra.ast.Expr]((firstGroup: Seq[hydra.java.syntax.VariableInitializer]) =>
+    hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.equality.equal[Int](hydra.lib.lists.length[Seq[hydra.java.syntax.VariableInitializer]](groups))(1))(hydra.serialization.noSep(Seq(hydra.serialization.cst("{"),
+       hydra.serialization.commaSep(hydra.serialization.inlineStyle)(hydra.lib.lists.map[hydra.java.syntax.VariableInitializer,
+       hydra.ast.Expr](hydra.java.serde.writeVariableInitializer)(firstGroup)), hydra.serialization.cst("}"))))(hydra.serialization.cst("{}")))(hydra.lib.lists.maybeHead[Seq[hydra.java.syntax.VariableInitializer]](groups)))
 }
 
 def writeArrayType(at: hydra.java.syntax.ArrayType): hydra.ast.Expr =

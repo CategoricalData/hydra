@@ -17,11 +17,6 @@ def apply(fs: Sequence[Callable[[A], B]], values: Sequence[A]) -> frozenlist[B]:
     return tuple(f(v) for f in fs for v in values)
 
 
-def at(i: int, values: Sequence[A]) -> A:
-    """Get the element at a specified index in a list."""
-    return values[i]
-
-
 def bind(values: Sequence[A], f: Callable[[A], Sequence[B]]) -> frozenlist[B]:
     """Apply a function that returns lists to each element and flatten results."""
     return tuple(s for v in values for s in f(v))
@@ -110,16 +105,6 @@ def group(values: Sequence[A]) -> frozenlist[frozenlist[A]]:
     return tuple(result)
 
 
-def head(values: Sequence[A]) -> A:
-    """Get the first element of a list."""
-    return values[0]
-
-
-def init(values: Sequence[A]) -> frozenlist[A]:
-    """Return all elements except the last one."""
-    return tuple(values[:-1])
-
-
 def intercalate(
     separator: Sequence[A], values: Sequence[Sequence[A]]
 ) -> frozenlist[A]:
@@ -139,11 +124,6 @@ def intersperse(separator: A, values: Sequence[A]) -> frozenlist[A]:
     return tuple(x for pair in zip(values, [separator] * len(values)) for x in pair)[
         :-1
     ]
-
-
-def last(values: Sequence[A]) -> A:
-    """Get the last element of a list."""
-    return values[-1]
 
 
 def length(values: Sequence[Any]) -> int:
@@ -219,11 +199,6 @@ def reverse(values: Sequence[A]) -> frozenlist[A]:
     return tuple(values[::-1])
 
 
-def safe_head(values: Sequence[A]) -> Maybe[A]:
-    """Get the first element of a list, returning Nothing if the list is empty."""
-    return Just(values[0]) if len(values) > 0 else Nothing()
-
-
 def singleton(value: A) -> frozenlist[A]:
     """Create a single-element list."""
     return (value,)
@@ -249,11 +224,6 @@ def span(predicate: Callable[[A], bool], values: Sequence[A]) -> tuple[frozenlis
     return (tuple(values), ())
 
 
-def tail(values: Sequence[A]) -> frozenlist[A]:
-    """Get all elements of a list except the first."""
-    return tuple(values[1:])
-
-
 def take(n: int, values: Sequence[A]) -> frozenlist[A]:
     """Take the first n elements from a list.
 
@@ -269,6 +239,11 @@ def transpose(values: Sequence[Sequence[A]]) -> frozenlist[frozenlist[A]]:
     if not values:
         return ()
     return tuple(tuple(row[i] for row in values if i < len(row)) for i in range(max(len(row) for row in values)))
+
+
+def uncons(values: Sequence[A]) -> Maybe[tuple[A, frozenlist[A]]]:
+    """Split a list into its head and tail, returning Nothing if the list is empty."""
+    return Just((values[0], tuple(values[1:]))) if len(values) > 0 else Nothing()
 
 
 def zip(values1: Sequence[A], values2: Sequence[B]) -> frozenlist[tuple[A, B]]:

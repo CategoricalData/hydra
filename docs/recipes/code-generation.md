@@ -55,8 +55,8 @@ writeHaskell "../../dist/haskell/hydra-kernel/src/main/haskell" kernelModules ke
 let allMods = mainModules ++ testModules
 writeJava "../../dist/java/hydra-kernel/src/test/java" allMods testModules
 
--- Generate only ext modules, using main + ext as universe
-writeJava "../../dist/java/hydra-ext/src/main/java" (mainModules ++ extModules) extModules
+-- Generate PG modules, using main + pg as universe
+writeJava "../../dist/java/hydra-pg/src/main/java" (mainModules ++ pgModules) pgModules
 ```
 
 If the universe is missing a transitive dependency, generation may fail with
@@ -131,8 +131,7 @@ Module lists are Haskell values from `Hydra.Sources.All` and `Hydra.Sources.All`
 | `kernelModules` | Core kernel types and terms |
 | `mainModules` | Kernel + standard libraries (encoders, decoders, DSLs) |
 | `testModules` | Common test suite modules |
-| `hydraExtModules` | All ext modules (coders, demos, domain models) |
-| `hydraBootstrapCoderModules` | Coder modules needed for cross-language bootstrapping |
+| `hydraExtModules` | All ext modules (coders, domain models) |
 
 ### Python example
 
@@ -161,15 +160,21 @@ bootstrapping demo works and how non-Haskell hosts generate code.
 
 ### JSON directory layout
 
-JSON module files are exported to two locations:
+JSON modules are exported per package under `dist/json/`:
 
 | Directory | Contents |
 |-----------|----------|
 | `dist/json/hydra-kernel/src/main/json/` | Kernel and main modules |
 | `dist/json/hydra-kernel/src/test/json/` | Test modules |
-| `dist/json/hydra-ext/src/main/json/` | Ext modules (coders, demos, domain models) |
+| `dist/json/hydra-haskell/src/main/json/` | Haskell coder modules |
+| `dist/json/hydra-java/src/main/json/` | Java coder modules |
+| `dist/json/hydra-python/src/main/json/` | Python coder modules |
+| `dist/json/hydra-scala/src/main/json/` | Scala coder modules |
+| `dist/json/hydra-lisp/src/main/json/` | Lisp coder modules |
+| `dist/json/hydra-pg/src/main/json/` | Property graph, TinkerPop, Cypher, GraphSON, etc. |
+| `dist/json/hydra-rdf/src/main/json/` | RDF, OWL, SHACL, ShEx, XML Schema |
 
-Each directory contains a `manifest.json` that lists available module groups:
+Each package directory contains a `manifest.json` listing its modules.
 
 **Kernel manifest** (`dist/json/hydra-kernel/src/main/json/manifest.json`):
 
@@ -181,69 +186,66 @@ Each directory contains a `manifest.json` that lists available module groups:
 | `dslModules` | DSL generator output modules |
 | `testModules` | Test suite modules |
 
-**Ext manifest** (`dist/json/hydra-ext/src/main/json/manifest.json`):
+**Per-package manifests** (e.g. `dist/json/hydra-java/src/main/json/manifest.json`):
 
 | Field | Contents |
 |-------|----------|
-| `hydraBootstrapCoderModules` | Language coders needed for bootstrapping |
-| `hydraExtEssentialModules` | Core ext modules (Java + Python coders) |
-| `hydraExtModules` | All ext modules |
-| `hydraExtDemoModules` | Demo-specific modules |
+| `mainModules` | The package's modules |
 
 ### Bootstrap CLI
 
-The bootstrap CLI loads JSON modules and generates code:
+The Haskell bootstrap CLI (`bootstrap-from-json`) loads JSON modules from
+per-package directories and generates code:
 
 ```bash
-# Generate Java from kernel modules
-python -m hydra.bootstrap \
+# Generate Java from all packages
+stack exec bootstrap-from-json -- \
   --target java \
-  --json-dir ../dist/json/hydra-kernel/src/main/json \
+  --json-dir ../../dist/json \
   --output /tmp/hydra-gen
 
-# Generate Python, including ext coders
-python -m hydra.bootstrap \
+# Generate Python, kernel modules only
+stack exec bootstrap-from-json -- \
   --target python \
-  --json-dir ../dist/json/hydra-kernel/src/main/json \
-  --ext-json-dir ../dist/json/hydra-ext/src/main/json \
-  --include-coders \
-  --output /tmp/hydra-gen
-
-# Generate Java, kernel modules only
-python -m hydra.bootstrap \
-  --target java \
-  --json-dir ../dist/json/hydra-kernel/src/main/json \
+  --json-dir ../../dist/json \
   --kernel-only \
   --output /tmp/hydra-gen
 
 # Generate Haskell, including tests
-python -m hydra.bootstrap \
+stack exec bootstrap-from-json -- \
   --target haskell \
-  --json-dir ../dist/json/hydra-kernel/src/main/json \
+  --json-dir ../../dist/json \
   --include-tests \
   --output /tmp/hydra-gen
 ```
+
+The `--json-dir` flag points to the `dist/json/` root.
+The CLI walks per-package subdirectories in dependency order
+(kernel -> haskell -> coders -> pg/rdf).
 
 **CLI options:**
 
 | Option | Description |
 |--------|-------------|
 | `--target` | Target language: `haskell`, `java`, `python`, `scala`, `clojure`, `scheme`, `common-lisp`, `emacs-lisp` |
-| `--json-dir` | Directory containing kernel/main JSON modules and manifest |
+| `--json-dir` | Root of the per-package JSON directories (`dist/json/`) |
 | `--output` | Output base directory (default: `/tmp/hydra-bootstrapping-demo`) |
-| `--ext-json-dir` | Directory containing ext JSON modules (required with `--include-coders`) |
-| `--include-coders` | Also generate ext coder modules |
 | `--include-tests` | Also generate test modules |
 | `--kernel-only` | Only generate kernel modules |
 | `--types-only` | Only generate type-defining modules |
 
-The Scala bootstrap has the same options: `sbt "runMain hydra.bootstrap --target java --json-dir ..."`.
+> **Note:** The `--ext-json-dir` and `--include-coders` flags are legacy and ignored.
+> Coder modules are now loaded automatically from their per-package directories.
+
+The Python and Scala bootstraps still use the old `--json-dir` + `--ext-json-dir`
+interface and have not yet been updated for the per-package layout.
+See issue #290 Phase 1c.
 
 ### How the bootstrap CLI works
 
-1. Reads `mainModules` and `evalLibModules` from the manifest in `--json-dir`
-2. Loads those modules from JSON files using `load_modules_from_json`
-3. If `--include-coders`, reads `hydraBootstrapCoderModules` from `--ext-json-dir` manifest and loads those too
+1. Walks `--json-dir` for per-package subdirectories in dependency order
+2. Reads each package's `manifest.json` to discover its modules
+3. Loads modules from JSON, accumulating a growing universe of dependencies
 4. Applies filters (`--kernel-only`, `--types-only`)
 5. Calls `write_xxx` with all loaded modules as universe and the filtered set as modules to generate
 6. If `--include-tests`, loads and generates test modules separately
@@ -277,7 +279,7 @@ To make DSL-defined modules available for JSON-based generation, export them:
 
 ```bash
 cd heads/haskell
-./bin/update-json-main.sh      # Export main modules
+./bin/update-json-main.sh      # Export all packages (kernel + coders + pg + rdf)
 ./bin/update-json-test.sh      # Export test modules
 ./bin/verify-json-kernel.sh    # Verify round-trip consistency
 ```
@@ -315,11 +317,6 @@ python -m hydra.bootstrap --json-dir dist/json/hydra-kernel/src/main/json ...
 # From heads/haskell/:
 python -m hydra.bootstrap --json-dir ../../dist/json/hydra-kernel/src/main/json ...
 ```
-
-### --include-coders fails silently
-
-`--include-coders` requires `--ext-json-dir` to know where ext JSON modules live.
-Without it, coder modules won't be loaded.
 
 ### Generated files don't compile
 

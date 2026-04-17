@@ -36,7 +36,7 @@ encodeArrayRestriction r =
 
 -- | Encode an integer as a JSON number value
 encodeInteger :: Int -> Model.Value
-encodeInteger n = Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint n))
+encodeInteger n = Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint n))
 
 -- | Encode items as a key-value pair
 encodeItems :: Schema.Items -> (String, Model.Value)
@@ -159,8 +159,8 @@ encodeSchemaReference sr = Model.ValueString (Schema.unSchemaReference sr)
 encodeStringRestriction :: Schema.StringRestriction -> (String, Model.Value)
 encodeStringRestriction r =
     case r of
-      Schema.StringRestrictionMaxLength v0 -> (key_maxLength, (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint v0))))
-      Schema.StringRestrictionMinLength v0 -> (key_minLength, (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint v0))))
+      Schema.StringRestrictionMaxLength v0 -> (key_maxLength, (Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint v0))))
+      Schema.StringRestrictionMinLength v0 -> (key_minLength, (Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint v0))))
       Schema.StringRestrictionPattern v0 -> (key_pattern, (Model.ValueString (Schema.unRegularExpression v0)))
 
 -- | Encode a type as a JSON value

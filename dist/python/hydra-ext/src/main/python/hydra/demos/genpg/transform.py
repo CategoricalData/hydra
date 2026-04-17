@@ -170,7 +170,7 @@ def table_for_edge(edge: hydra.pg.model.Edge[hydra.core.Term]) -> Either[str, st
     @lru_cache(1)
     def tables() -> frozenset[str]:
         return find_tables_in_terms(hydra.lib.lists.concat2((id(), out_id(), in_id()), hydra.lib.maps.elems(props())))
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.sets.size(tables()), 1), (lambda : Right(hydra.lib.lists.head(hydra.lib.sets.to_list(tables())))), (lambda : Left(hydra.lib.strings.cat(("Specification for ", label().value, " edges has wrong number of tables")))))
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.sets.size(tables()), 1), (lambda : hydra.lib.maybes.maybe((lambda : Left("unreachable: empty tables set")), (lambda x: Right(x)), hydra.lib.lists.maybe_head(hydra.lib.sets.to_list(tables())))), (lambda : Left(hydra.lib.strings.cat(("Specification for ", label().value, " edges has wrong number of tables")))))
 
 def table_for_vertex(vertex: hydra.pg.model.Vertex[hydra.core.Term]) -> Either[str, str]:
     r"""Get the table name for a vertex specification. Returns an error if not exactly one table is referenced."""
@@ -187,7 +187,7 @@ def table_for_vertex(vertex: hydra.pg.model.Vertex[hydra.core.Term]) -> Either[s
     @lru_cache(1)
     def tables() -> frozenset[str]:
         return find_tables_in_terms(hydra.lib.lists.cons(id(), hydra.lib.maps.elems(props())))
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.sets.size(tables()), 1), (lambda : Right(hydra.lib.lists.head(hydra.lib.sets.to_list(tables())))), (lambda : Left(hydra.lib.strings.cat(("Specification for ", label().value, " vertices has wrong number of tables")))))
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.sets.size(tables()), 1), (lambda : hydra.lib.maybes.maybe((lambda : Left("unreachable: empty tables set")), (lambda x: Right(x)), hydra.lib.lists.maybe_head(hydra.lib.sets.to_list(tables())))), (lambda : Left(hydra.lib.strings.cat(("Specification for ", label().value, " vertices has wrong number of tables")))))
 
 def element_specs_by_table(graph: hydra.pg.model.LazyGraph[hydra.core.Term]) -> Either[str, FrozenDict[str, tuple[frozenlist[hydra.pg.model.Vertex[hydra.core.Term]], frozenlist[hydra.pg.model.Edge[hydra.core.Term]]]]]:
     r"""Group element specifications by their source table."""
@@ -325,7 +325,7 @@ def parse_single_line(line: str) -> Either[str, Maybe[frozenlist[Maybe[str]]]]:
 def parse_table_lines(has_header: bool, raw_lines: frozenlist[str]) -> Either[str, hydra.tabular.Table[str]]:
     r"""Parse raw CSV lines into a Table of strings."""
 
-    return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda ln: parse_single_line(ln)), raw_lines), (lambda parsed_rows: (rows := hydra.lib.maybes.cat(parsed_rows), hydra.lib.logic.if_else(has_header, (lambda : (header_row := hydra.lib.lists.head(rows), (data_rows := hydra.lib.lists.tail(rows), hydra.lib.logic.if_else(list_any((lambda m: hydra.lib.maybes.is_nothing(m)), header_row), (lambda : Left("null header column(s)")), (lambda : Right(hydra.tabular.Table(Just(hydra.tabular.HeaderRow(hydra.lib.maybes.cat(header_row))), hydra.lib.lists.map((lambda r: hydra.tabular.DataRow(r)), data_rows))))))[1])[1]), (lambda : Right(hydra.tabular.Table(Nothing(), hydra.lib.lists.map((lambda r: hydra.tabular.DataRow(r)), rows))))))[1]))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda ln: parse_single_line(ln)), raw_lines), (lambda parsed_rows: (rows := hydra.lib.maybes.cat(parsed_rows), hydra.lib.logic.if_else(has_header, (lambda : hydra.lib.maybes.maybe((lambda : Left("empty rows: cannot parse header")), (lambda p: (header_row := hydra.lib.pairs.first(p), data_rows := hydra.lib.pairs.second(p), hydra.lib.logic.if_else(list_any((lambda m: hydra.lib.maybes.is_nothing(m)), header_row), (lambda : Left("null header column(s)")), (lambda : Right(hydra.tabular.Table(Just(hydra.tabular.HeaderRow(hydra.lib.maybes.cat(header_row))), hydra.lib.lists.map((lambda r: hydra.tabular.DataRow(r)), data_rows))))))[2]), hydra.lib.lists.uncons(rows))), (lambda : Right(hydra.tabular.Table(Nothing(), hydra.lib.lists.map((lambda r: hydra.tabular.DataRow(r)), rows))))))[1]))
 
 def table_types_by_name(table_types: frozenlist[hydra.tabular.TableType]) -> FrozenDict[hydra.relational.RelationName, hydra.tabular.TableType]:
     r"""Build a map from table name to table type."""

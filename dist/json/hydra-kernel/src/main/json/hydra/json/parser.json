@@ -802,23 +802,23 @@
                                                           "argument": {
                                                             "application": {
                                                               "argument": {"variable": "numStr"},
-                                                              "function": {"variable": "hydra.lib.literals.readBigfloat"}}},
+                                                              "function": {"variable": "hydra.lib.literals.readDecimal"}}},
                                                           "function": {
                                                             "application": {
                                                               "argument": {
                                                                 "typeApplication": {
                                                                   "body": {"variable": "hydra.lib.equality.identity"},
-                                                                  "type": {"literal": {"float": {"bigfloat": {}}}}}},
+                                                                  "type": {"literal": {"decimal": {}}}}},
                                                               "function": {
                                                                 "application": {
-                                                                  "argument": {"literal": {"float": {"bigfloat": 0}}},
+                                                                  "argument": {"literal": {"decimal": 0}},
                                                                   "function": {
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "typeApplication": {
                                                                           "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                                          "type": {"literal": {"float": {"bigfloat": {}}}}}},
-                                                                      "type": {"literal": {"float": {"bigfloat": {}}}}}}}}}}}}},
+                                                                          "type": {"literal": {"decimal": {}}}}},
+                                                                      "type": {"literal": {"decimal": {}}}}}}}}}}}},
                                                     "typeName": "hydra.json.model.Value"}},
                                                 "function": {
                                                   "typeApplication": {

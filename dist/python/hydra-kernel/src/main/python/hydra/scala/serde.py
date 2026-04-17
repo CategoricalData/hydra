@@ -71,10 +71,10 @@ def write_type(typ: hydra.scala.syntax.Type):
     def _hoist_hydra_scala_serde_write_type_2(v1):
         match v1:
             case hydra.scala.syntax.Type_FunctionTypeFunction(value=tf):
+                cod = tf.res
                 @lru_cache(1)
                 def dom() -> hydra.scala.syntax.Type:
-                    return hydra.lib.lists.head(tf.params)
-                cod = tf.res
+                    return hydra.lib.maybes.from_maybe((lambda : cod), hydra.lib.lists.maybe_head(tf.params))
                 return hydra.serialization.ifx(function_arrow_op(), write_type(dom()), write_type(cod))
 
             case _:
@@ -234,7 +234,7 @@ def write_importer(imp: hydra.scala.syntax.Importer) -> hydra.ast.Expr:
 
                 case _:
                     raise TypeError("Unsupported Importee")
-        return hydra.lib.logic.if_else(hydra.lib.lists.null(importees), (lambda : hydra.serialization.cst("")), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(importees), 1), (lambda : hydra.serialization.no_sep((hydra.serialization.cst("."), _hoist_for_importees_2(hydra.lib.lists.head(importees))))), (lambda : hydra.serialization.no_sep((hydra.serialization.cst("."), hydra.serialization.curly_braces_list(Nothing(), hydra.serialization.inline_style, hydra.lib.lists.map((lambda it: _hoist_for_importees_4(it)), importees))))))))
+        return hydra.lib.logic.if_else(hydra.lib.lists.null(importees), (lambda : hydra.serialization.cst("")), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(importees), 1), (lambda : hydra.lib.maybes.from_maybe((lambda : hydra.serialization.cst("")), hydra.lib.maybes.map((lambda first_imp: hydra.serialization.no_sep((hydra.serialization.cst("."), _hoist_for_importees_2(first_imp)))), hydra.lib.lists.maybe_head(importees)))), (lambda : hydra.serialization.no_sep((hydra.serialization.cst("."), hydra.serialization.curly_braces_list(Nothing(), hydra.serialization.inline_style, hydra.lib.lists.map((lambda it: _hoist_for_importees_4(it)), importees))))))))
     return hydra.serialization.space_sep((hydra.serialization.cst("import"), hydra.serialization.no_sep((hydra.serialization.cst(ref_name()), for_importees()))))
 
 def write_import_export_stat(ie: hydra.scala.syntax.ImportExportStat) -> hydra.ast.Expr:
@@ -338,22 +338,11 @@ def write_defn(def_: hydra.scala.syntax.Defn) -> hydra.ast.Expr:
             typ = dv.decltpe
             rhs = dv.rhs
             @lru_cache(1)
-            def first_pat() -> hydra.scala.syntax.Pat:
-                return hydra.lib.lists.head(pats)
-            @lru_cache(1)
-            def pat_name():
-                def _hoist_pat_name_1(v1):
-                    match v1:
-                        case hydra.scala.syntax.PatVar(value=pv):
-                            return pv.name
-
-                        case _:
-                            raise TypeError("Unsupported Pat")
-                return _hoist_pat_name_1(first_pat())
-            name_str = pat_name().value.value
+            def name_str() -> str:
+                return hydra.lib.maybes.from_maybe((lambda : ""), hydra.lib.maybes.map((lambda first_pat: (pat_name := (_hoist_pat_name_1 := (lambda v1: (lambda pv: pv.name)(v1.value) if isinstance(v1, hydra.scala.syntax.PatVar) else hydra.dsl.python.unsupported("no matching case in inline union elimination")), _hoist_pat_name_1(first_pat))[1], pat_name.value.value)[1]), hydra.lib.lists.maybe_head(pats)))
             @lru_cache(1)
             def name_and_type() -> hydra.ast.Expr:
-                return hydra.lib.maybes.maybe((lambda : hydra.serialization.cst(name_str)), (lambda t: hydra.serialization.space_sep((hydra.serialization.cst(hydra.lib.strings.cat2(name_str, ":")), write_type(t)))), typ)
+                return hydra.lib.maybes.maybe((lambda : hydra.serialization.cst(name_str())), (lambda t: hydra.serialization.space_sep((hydra.serialization.cst(hydra.lib.strings.cat2(name_str(), ":")), write_type(t)))), typ)
             @lru_cache(1)
             def val_keyword() -> str:
                 return hydra.lib.logic.if_else(hydra.lib.lists.null(mods), (lambda : "val"), (lambda : "lazy val"))

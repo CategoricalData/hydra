@@ -326,9 +326,11 @@ encodeTerm = define "encodeTerm" $
             "descs">: Pairs.first (var "__dr"),
             "cx1">: Pairs.second (var "__dr")] $
             pair
-              (Lists.cons
-                (withType @@ (Core.wrappedTermTypeName (var "wt")) @@ (Lists.head (var "descs")))
-                (Lists.tail (var "descs")))
+              (Maybes.fromMaybe (var "descs") (Maybes.map
+                (lambda "p" $ Lists.cons
+                  (withType @@ (Core.wrappedTermTypeName (var "wt")) @@ Pairs.first (var "p"))
+                  (Pairs.second (var "p")))
+                (Lists.uncons (var "descs"))))
               (var "cx1"))
           (encodeTerm @@ var "subject" @@ (Core.wrappedTermBody (var "wt")) @@ var "cx" @@ var "g"),
       _Term_maybe>>: lambda "mterm" $
@@ -385,49 +387,54 @@ encodeList = define "encodeList" $
           Rdf._Description_subject>>: inject Rdf._Node Rdf._Node_iri (wrap Rdf._Iri (string "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")),
           Rdf._Description_graph>>: wrap Rdf._Graph Sets.empty]])
         (var "cx0"))
-      (lets [
-        "pair1">: nextBlankNode @@ var "cx0",
-        "node1">: Pairs.first (var "pair1"),
-        "cx1">: Pairs.second (var "pair1")] $
-        Eithers.bind
-          (encodeTerm @@ var "node1" @@ (Lists.head (var "terms")) @@ var "cx1" @@ var "g")
-          ("__r1" ~> lets [
-            "fdescs">: Pairs.first (var "__r1"),
-            "cx2">: Pairs.second (var "__r1"),
-            "firstTriples">: Lists.concat2
-              (triplesOf @@ var "fdescs")
-              (forObjects @@ var "subj" @@ (rdfIri @@ string "first") @@ (subjectsOf @@ var "fdescs")),
-            "pair2">: nextBlankNode @@ var "cx2",
-            "next">: Pairs.first (var "pair2"),
-            "cx3">: Pairs.second (var "pair2")] $
-            Eithers.map
-              ("__r2" ~> lets [
-                "rdescs">: Pairs.first (var "__r2"),
-                "cx4">: Pairs.second (var "__r2"),
-                "restTriples">: Lists.concat2
-                  (triplesOf @@ var "rdescs")
-                  (forObjects @@ var "subj" @@ (rdfIri @@ string "rest") @@ (subjectsOf @@ var "rdescs"))] $
-                pair
-                  (list [record Rdf._Description [
-                    Rdf._Description_subject>>: resourceToNode @@ var "subj",
-                    Rdf._Description_graph>>: wrap Rdf._Graph (Sets.fromList (Lists.concat2 (var "firstTriples") (var "restTriples")))]])
-                  (var "cx4"))
-              (encodeList @@ var "next" @@ (Lists.tail (var "terms")) @@ var "cx3" @@ var "g")))
+      (Maybes.maybe
+        (right $ pair (list ([] :: [TTerm Rdf.Description])) (var "cx0"))
+        (lambda "p" $ lets [
+          "pair1">: nextBlankNode @@ var "cx0",
+          "node1">: Pairs.first (var "pair1"),
+          "cx1">: Pairs.second (var "pair1")] $
+          Eithers.bind
+            (encodeTerm @@ var "node1" @@ Pairs.first (var "p") @@ var "cx1" @@ var "g")
+            ("__r1" ~> lets [
+              "fdescs">: Pairs.first (var "__r1"),
+              "cx2">: Pairs.second (var "__r1"),
+              "firstTriples">: Lists.concat2
+                (triplesOf @@ var "fdescs")
+                (forObjects @@ var "subj" @@ (rdfIri @@ string "first") @@ (subjectsOf @@ var "fdescs")),
+              "pair2">: nextBlankNode @@ var "cx2",
+              "next">: Pairs.first (var "pair2"),
+              "cx3">: Pairs.second (var "pair2")] $
+              Eithers.map
+                ("__r2" ~> lets [
+                  "rdescs">: Pairs.first (var "__r2"),
+                  "cx4">: Pairs.second (var "__r2"),
+                  "restTriples">: Lists.concat2
+                    (triplesOf @@ var "rdescs")
+                    (forObjects @@ var "subj" @@ (rdfIri @@ string "rest") @@ (subjectsOf @@ var "rdescs"))] $
+                  pair
+                    (list [record Rdf._Description [
+                      Rdf._Description_subject>>: resourceToNode @@ var "subj",
+                      Rdf._Description_graph>>: wrap Rdf._Graph (Sets.fromList (Lists.concat2 (var "firstTriples") (var "restTriples")))]])
+                    (var "cx4"))
+                (encodeList @@ var "next" @@ Pairs.second (var "p") @@ var "cx3" @@ var "g")))
+        (Lists.uncons (var "terms")))
 
 -- | Fold over a list, accumulating results and threading context
 foldAccumResult :: TTermDefinition ((Context -> a -> Either Error (b, Context)) -> Context -> [a] -> Either Error ([b], Context))
 foldAccumResult = define "foldAccumResult" $
   doc "Fold over a list, accumulating results and threading context through each step" $
   lambda "f" $ lambda "cx" $ lambda "xs" $
-    Logic.ifElse (Lists.null (var "xs"))
+    Maybes.maybe
       (right (pair (list ([] :: [TTerm b])) (var "cx")))
-      (Eithers.bind
-        (var "f" @@ var "cx" @@ (Lists.head (var "xs")))
-        ("__r" ~> Eithers.map
-          ("__rest" ~> pair
-            (Lists.cons (Pairs.first (var "__r")) (Pairs.first (var "__rest")))
-            (Pairs.second (var "__rest")))
-          (foldAccumResult @@ var "f" @@ (Pairs.second (var "__r")) @@ (Lists.tail (var "xs")))))
+      (lambda "p" $
+        Eithers.bind
+          (var "f" @@ var "cx" @@ Pairs.first (var "p"))
+          ("__r" ~> Eithers.map
+            ("__rest" ~> pair
+              (Lists.cons (Pairs.first (var "__r")) (Pairs.first (var "__rest")))
+              (Pairs.second (var "__rest")))
+            (foldAccumResult @@ var "f" @@ (Pairs.second (var "__r")) @@ Pairs.second (var "p"))))
+      (Lists.uncons (var "xs"))
 
 -- | Encode a Hydra Type as SHACL CommonProperties
 encodeType :: TTermDefinition (Name -> Type -> Context -> Either Error Shacl.CommonProperties)

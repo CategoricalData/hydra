@@ -116,11 +116,13 @@ public interface Utils {
           hydra.lib.strings.Length.apply(sanitized3.get()),
           0),
         hydra.lib.equality.Equal.apply(
-          hydra.lib.strings.CharAt.apply(
-            hydra.lib.math.Sub.apply(
-              hydra.lib.strings.Length.apply(sanitized3.get()),
-              1),
-            sanitized3.get()),
+          hydra.lib.maybes.FromMaybe.applyLazy(
+            () -> 0,
+            hydra.lib.strings.MaybeCharAt.apply(
+              hydra.lib.math.Sub.apply(
+                hydra.lib.strings.Length.apply(sanitized3.get()),
+                1),
+              sanitized3.get())),
           95))));
     return hydra.lib.logic.IfElse.lazy(
       needsBackticks.get(),
@@ -157,7 +159,9 @@ public interface Utils {
   static hydra.scala.syntax.Data sprim(hydra.core.Name name) {
     hydra.packaging.QualifiedName qname = hydra.Names.qualifyName(name);
     String local = hydra.scala.Utils.scalaEscapeName((qname).local);
-    hydra.util.Lazy<String> prefix = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromJust.apply((qname).namespace).value);
+    hydra.util.Lazy<String> prefix = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> new hydra.packaging.Namespace(""),
+      (qname).namespace).value);
     return hydra.scala.Utils.sname(hydra.lib.strings.Cat2.apply(
       hydra.lib.strings.Cat2.apply(
         prefix.get(),

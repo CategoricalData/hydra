@@ -170,6 +170,9 @@ float32_type = T.float32()
 float64_type = T.float64()
 bigfloat_type = T.bigfloat()
 
+# Arbitrary-precision decimal (Python Decimal)
+decimal_type = T.decimal()
+
 # Container types
 string_list = T.list_(T.string())
 string_map = T.map_(T.string(), T.int32())

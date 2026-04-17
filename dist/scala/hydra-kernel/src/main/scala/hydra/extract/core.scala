@@ -48,10 +48,10 @@ def caseField(name: hydra.core.Name)(n: scala.Predef.String)(graph: hydra.graph.
   lazy val fieldName: hydra.core.Name = n
   hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.CaseStatement, hydra.core.Field](hydra.extract.core.cases(name)(graph)(term))((cs: hydra.core.CaseStatement) =>
     {
-    lazy val matching: Seq[hydra.core.Field] = hydra.lib.lists.filter[hydra.core.Field]((f: hydra.core.Field) =>
+    lazy val matching: Option[hydra.core.Field] = hydra.lib.lists.find[hydra.core.Field]((f: hydra.core.Field) =>
       hydra.lib.equality.equal[scala.Predef.String](f.name)(fieldName))(cs.cases)
-    hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.Field]](hydra.lib.lists.`null`[hydra.core.Field](matching))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("matching case",
-       "no matching case")))))(Right(hydra.lib.lists.head[hydra.core.Field](matching)))
+    hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.core.Field], hydra.core.Field](Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("matching case",
+       "no matching case")))))((mf: hydra.core.Field) => Right(mf))(matching)
   })
 }
 
@@ -183,10 +183,14 @@ def field[T0](fname: hydra.core.Name)(mapping: (hydra.core.Term => Either[hydra.
    T0] =
   {
   lazy val matchingFields: Seq[hydra.core.Field] = hydra.lib.lists.filter[hydra.core.Field]((f: hydra.core.Field) => hydra.lib.equality.equal[scala.Predef.String](f.name)(fname))(fields)
-  hydra.lib.logic.ifElse[Either[hydra.errors.Error, T0]](hydra.lib.lists.`null`[hydra.core.Field](matchingFields))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2("field ")(fname),
-     "no matching field")))))(hydra.lib.logic.ifElse[Either[hydra.errors.Error, T0]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Field](matchingFields))(1))(hydra.lib.eithers.bind[hydra.errors.Error,
-     hydra.core.Term, T0](hydra.lexical.stripAndDereferenceTerm(graph)(hydra.lib.lists.head[hydra.core.Field](matchingFields).term))((stripped: hydra.core.Term) => mapping(stripped)))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("single field",
-     hydra.lib.strings.cat2("multiple fields named ")(fname)))))))
+  def noMatchErr[T1]: Either[hydra.errors.Error, T1] =
+    Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2("field ")(fname),
+       "no matching field"))))
+  hydra.lib.logic.ifElse[Either[hydra.errors.Error, T0]](hydra.lib.lists.`null`[hydra.core.Field](matchingFields))(noMatchErr)(hydra.lib.logic.ifElse[Either[hydra.errors.Error,
+     T0]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Field](matchingFields))(1))(hydra.lib.maybes.maybe[Either[hydra.errors.Error,
+     T0], hydra.core.Field](noMatchErr)((mf: hydra.core.Field) =>
+    hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, T0](hydra.lexical.stripAndDereferenceTerm(graph)(mf.term))((stripped: hydra.core.Term) => mapping(stripped)))(hydra.lib.lists.maybeHead[hydra.core.Field](matchingFields)))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("single field",
+       hydra.lib.strings.cat2("multiple fields named ")(fname)))))))
 }
 
 def float32(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.errors.Error, Float] =
@@ -310,8 +314,13 @@ def letBinding(n: scala.Predef.String)(graph: hydra.graph.Graph)(term: hydra.cor
   hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Let, hydra.core.Term](hydra.extract.core.let(graph)(term))((letExpr: hydra.core.Let) =>
     {
     lazy val matchingBindings: Seq[hydra.core.Binding] = hydra.lib.lists.filter[hydra.core.Binding]((b: hydra.core.Binding) => hydra.lib.equality.equal[scala.Predef.String](b.name)(name))(letExpr.bindings)
-    hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.Term]](hydra.lib.lists.`null`[hydra.core.Binding](matchingBindings))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.noSuchBinding(hydra.errors.NoSuchBindingError(name)))))(hydra.lib.logic.ifElse[Either[hydra.errors.Error,
-       hydra.core.Term]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Binding](matchingBindings))(1))(Right(hydra.lib.lists.head[hydra.core.Binding](matchingBindings).term))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.multipleBindings(hydra.errors.MultipleBindingsError(name))))))
+    {
+      def noBindingErr[T0]: Either[hydra.errors.Error, T0] =
+        Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.noSuchBinding(hydra.errors.NoSuchBindingError(name))))
+      hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.Term]](hydra.lib.lists.`null`[hydra.core.Binding](matchingBindings))(noBindingErr)(hydra.lib.logic.ifElse[Either[hydra.errors.Error,
+         hydra.core.Term]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Binding](matchingBindings))(1))(hydra.lib.maybes.maybe[Either[hydra.errors.Error,
+         hydra.core.Term], hydra.core.Binding](noBindingErr)((b: hydra.core.Binding) => Right(b.term))(hydra.lib.lists.maybeHead[hydra.core.Binding](matchingBindings)))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.multipleBindings(hydra.errors.MultipleBindingsError(name))))))
+    }
   })
 }
 
@@ -324,8 +333,8 @@ def list(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.E
 
 def listHead(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.Error, hydra.core.Term] =
   hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.Term], hydra.core.Term](hydra.extract.core.list(graph)(term))((l: Seq[hydra.core.Term]) =>
-  hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.Term]](hydra.lib.lists.`null`[hydra.core.Term](l))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("non-empty list",
-     "empty list")))))(Right(hydra.lib.lists.head[hydra.core.Term](l))))
+  hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.core.Term], hydra.core.Term](Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("non-empty list",
+     "empty list")))))((h: hydra.core.Term) => Right(h))(hydra.lib.lists.maybeHead[hydra.core.Term](l)))
 
 def listOf[T0](f: (hydra.core.Term => Either[hydra.errors.Error, T0]))(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.Error,
    Seq[T0]] =

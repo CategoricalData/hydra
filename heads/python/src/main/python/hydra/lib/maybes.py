@@ -58,15 +58,6 @@ def compose(f: Callable[[A], Maybe[B]], g: Callable[[B], Maybe[C]], x: A) -> May
     return bind(f(x), g)
 
 
-def from_just(x: Maybe[A]) -> A:
-    """Extract value from a Just, or error on Nothing (partial function)."""
-    match x:
-        case Just(val):
-            return val
-        case Nothing():
-            raise ValueError("from_just: Nothing")
-
-
 def from_maybe(default: A | Callable[[], A], x: Maybe[A]) -> A:
     """Get a value from an optional value, or return a default value."""
     match x:

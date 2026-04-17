@@ -24,7 +24,7 @@ def value(v1: hydra.json.model.Value) -> hydra.core.Term:
             return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.json.model.Value"), hydra.core.Field(hydra.core.Name("null"), cast(hydra.core.Term, hydra.core.TermUnit())))))
 
         case hydra.json.model.ValueNumber(value=y4):
-            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.json.model.Value"), hydra.core.Field(hydra.core.Name("number"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueBigfloat(y4))))))))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.json.model.Value"), hydra.core.Field(hydra.core.Name("number"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralDecimal(y4))))))))
 
         case hydra.json.model.ValueObject(value=y5):
             return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.json.model.Value"), hydra.core.Field(hydra.core.Name("object"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap((lambda x: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x))))), (lambda x1: value(x1)), y5)))))))

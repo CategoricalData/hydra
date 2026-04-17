@@ -10,6 +10,7 @@ import Hydra.Sources.Libraries
 import           Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
@@ -708,7 +709,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
     "lname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ var "name")) $
     -- Filter free type variables to unqualified names only (type parameters, not type references)
     "freeVars" <~ (Lists.filter
-      (lambda "v" $ Lists.null (Lists.tail (Strings.splitOn (string ".") (Core.unName (var "v")))))
+      (lambda "v" $ Equality.equal (Lists.length (Strings.splitOn (string ".") (Core.unName (var "v")))) (int32 1))
       (Sets.toList (Variables.freeVariablesInType @@ var "typ"))) $
     "generics" <~ (Lists.map (lambda "v" $
       record R._GenericParam [

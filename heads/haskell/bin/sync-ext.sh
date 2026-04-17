@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Script to regenerate hydra-ext's Haskell modules, JSON exports, and ext Java from Hydra sources.
+# Script to regenerate hydra-ext's Haskell modules from Hydra sources.
 #
-# This regenerates:
-#   1. Haskell modules for hydraExtModules (Java/Python coders, language syntaxes, etc.)
-#   2. JSON exports for hydraExtModules
-#   3. Java modules for ext modules needed by hydra-ext (PG, GraphSON, domain models, etc.)
+# Under the per-package JSON layout (feature_290_packaging), JSON export for
+# every package is performed by sync-haskell.sh's unified update-json-main
+# call. This script only regenerates the Haskell dist tree for hydra-ext
+# (and the second-order decode/encode DSL source modules it depends on).
 #
 # This must be run AFTER sync-haskell.sh and BEFORE sync-java.sh or sync-python.sh,
 # since those scripts depend on hydra-ext's generated Haskell code being up to date.
@@ -30,14 +30,13 @@ for arg in "$@"; do
         --help|-h)
             echo "Usage: $0 [OPTIONS]"
             echo ""
-            echo "Regenerate hydra-ext Haskell modules, JSON exports, and ext Java."
+            echo "Regenerate hydra-ext Haskell dist tree."
             echo ""
             echo "Steps performed:"
             echo "  1. Build executables"
             echo "  2. Generate ext encoder/decoder source modules"
             echo "  3. Generate Haskell ext modules"
             echo "  4. Rebuild (to pick up new Haskell files)"
-            echo "  5. Export ext modules to JSON"
             exit 0
             ;;
         *)
@@ -51,14 +50,13 @@ cd "$HYDRA_EXT_DIR"
 banner2 "Synchronizing Hydra-Ext"
 echo ""
 
-TOTAL_STEPS=5
+TOTAL_STEPS=4
 
 step 1 $TOTAL_STEPS "Building executables"
 echo ""
 stack build \
     hydra:exe:update-ext-sources \
     hydra:exe:update-haskell-ext-main \
-    hydra:exe:update-json-ext \
     hydra:exe:bootstrap-from-json
 
 step 2 $TOTAL_STEPS "Generating ext encoder/decoder source modules"
@@ -80,9 +78,5 @@ find ../../dist/haskell/hydra-ext/src/main/haskell -name "*.hs" -empty -delete 2
 step 4 $TOTAL_STEPS "Rebuilding"
 echo ""
 stack build
-
-step 5 $TOTAL_STEPS "Exporting ext modules to JSON"
-echo ""
-stack exec update-json-ext -- $RTS_FLAGS
 
 banner2_done "Hydra-Ext sync complete!"

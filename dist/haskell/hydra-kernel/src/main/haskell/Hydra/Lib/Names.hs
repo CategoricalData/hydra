@@ -114,9 +114,6 @@ lists = Packaging.Namespace "hydra.lib.lists"
 listsApply :: Core.Name
 listsApply = Core.Name "hydra.lib.lists.apply"
 
-listsAt :: Core.Name
-listsAt = Core.Name "hydra.lib.lists.at"
-
 listsBind :: Core.Name
 listsBind = Core.Name "hydra.lib.lists.bind"
 
@@ -153,20 +150,11 @@ listsFoldr = Core.Name "hydra.lib.lists.foldr"
 listsGroup :: Core.Name
 listsGroup = Core.Name "hydra.lib.lists.group"
 
-listsHead :: Core.Name
-listsHead = Core.Name "hydra.lib.lists.head"
-
-listsInit :: Core.Name
-listsInit = Core.Name "hydra.lib.lists.init"
-
 listsIntercalate :: Core.Name
 listsIntercalate = Core.Name "hydra.lib.lists.intercalate"
 
 listsIntersperse :: Core.Name
 listsIntersperse = Core.Name "hydra.lib.lists.intersperse"
-
-listsLast :: Core.Name
-listsLast = Core.Name "hydra.lib.lists.last"
 
 listsLength :: Core.Name
 listsLength = Core.Name "hydra.lib.lists.length"
@@ -207,9 +195,6 @@ listsReplicate = Core.Name "hydra.lib.lists.replicate"
 listsReverse :: Core.Name
 listsReverse = Core.Name "hydra.lib.lists.reverse"
 
-listsSafeHead :: Core.Name
-listsSafeHead = Core.Name "hydra.lib.lists.safeHead"
-
 listsSingleton :: Core.Name
 listsSingleton = Core.Name "hydra.lib.lists.singleton"
 
@@ -222,14 +207,14 @@ listsSortOn = Core.Name "hydra.lib.lists.sortOn"
 listsSpan :: Core.Name
 listsSpan = Core.Name "hydra.lib.lists.span"
 
-listsTail :: Core.Name
-listsTail = Core.Name "hydra.lib.lists.tail"
-
 listsTake :: Core.Name
 listsTake = Core.Name "hydra.lib.lists.take"
 
 listsTranspose :: Core.Name
 listsTranspose = Core.Name "hydra.lib.lists.transpose"
+
+listsUncons :: Core.Name
+listsUncons = Core.Name "hydra.lib.lists.uncons"
 
 listsZip :: Core.Name
 listsZip = Core.Name "hydra.lib.lists.zip"
@@ -543,9 +528,6 @@ mathCos = Core.Name "hydra.lib.math.cos"
 mathCosh :: Core.Name
 mathCosh = Core.Name "hydra.lib.math.cosh"
 
-mathDiv :: Core.Name
-mathDiv = Core.Name "hydra.lib.math.div"
-
 mathE :: Core.Name
 mathE = Core.Name "hydra.lib.math.e"
 
@@ -585,9 +567,6 @@ mathMaybeSucc = Core.Name "hydra.lib.math.maybeSucc"
 mathMin :: Core.Name
 mathMin = Core.Name "hydra.lib.math.min"
 
-mathMod :: Core.Name
-mathMod = Core.Name "hydra.lib.math.mod"
-
 mathMul :: Core.Name
 mathMul = Core.Name "hydra.lib.math.mul"
 
@@ -609,14 +588,8 @@ mathPi = Core.Name "hydra.lib.math.pi"
 mathPow :: Core.Name
 mathPow = Core.Name "hydra.lib.math.pow"
 
-mathPred :: Core.Name
-mathPred = Core.Name "hydra.lib.math.pred"
-
 mathRange :: Core.Name
 mathRange = Core.Name "hydra.lib.math.range"
-
-mathRem :: Core.Name
-mathRem = Core.Name "hydra.lib.math.rem"
 
 mathRound :: Core.Name
 mathRound = Core.Name "hydra.lib.math.round"
@@ -648,9 +621,6 @@ mathSub = Core.Name "hydra.lib.math.sub"
 mathSubFloat64 :: Core.Name
 mathSubFloat64 = Core.Name "hydra.lib.math.subFloat64"
 
-mathSucc :: Core.Name
-mathSucc = Core.Name "hydra.lib.math.succ"
-
 mathTan :: Core.Name
 mathTan = Core.Name "hydra.lib.math.tan"
 
@@ -677,9 +647,6 @@ maybesCat = Core.Name "hydra.lib.maybes.cat"
 
 maybesCompose :: Core.Name
 maybesCompose = Core.Name "hydra.lib.maybes.compose"
-
-maybesFromJust :: Core.Name
-maybesFromJust = Core.Name "hydra.lib.maybes.fromJust"
 
 maybesFromMaybe :: Core.Name
 maybesFromMaybe = Core.Name "hydra.lib.maybes.fromMaybe"
@@ -791,9 +758,6 @@ stringsCat = Core.Name "hydra.lib.strings.cat"
 
 stringsCat2 :: Core.Name
 stringsCat2 = Core.Name "hydra.lib.strings.cat2"
-
-stringsCharAt :: Core.Name
-stringsCharAt = Core.Name "hydra.lib.strings.charAt"
 
 stringsFromList :: Core.Name
 stringsFromList = Core.Name "hydra.lib.strings.fromList"

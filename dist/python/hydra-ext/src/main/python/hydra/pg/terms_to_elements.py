@@ -59,7 +59,7 @@ def eval_step(cx: T0, step: str, term: hydra.core.Term):
 def eval_path(cx: T0, path: frozenlist[str], term: hydra.core.Term) -> Either[hydra.errors.Error, frozenlist[hydra.core.Term]]:
     r"""Evaluate a path (list of steps) on a term, returning all resulting terms."""
 
-    return hydra.lib.logic.if_else(hydra.lib.lists.null(path), (lambda : Right((term,))), (lambda : hydra.lib.eithers.bind(eval_step(cx, hydra.lib.lists.head(path), term), (lambda results: hydra.lib.eithers.map((lambda xs: hydra.lib.lists.concat(xs)), hydra.lib.eithers.map_list((lambda v1: eval_path(cx, hydra.lib.lists.tail(path), v1)), results))))))
+    return hydra.lib.maybes.maybe((lambda : Right((term,))), (lambda p: hydra.lib.eithers.bind(eval_step(cx, hydra.lib.pairs.first(p), term), (lambda results: hydra.lib.eithers.map((lambda xs: hydra.lib.lists.concat(xs)), hydra.lib.eithers.map_list((lambda v1: eval_path(cx, hydra.lib.pairs.second(p), v1)), results))))), hydra.lib.lists.uncons(path))
 
 def term_to_string(term: hydra.core.Term):
     def _hoist_hydra_pg_terms_to_elements_term_to_string_1(term, v1):
@@ -120,7 +120,7 @@ def decode_property_key(cx: T0, g: hydra.graph.Graph, t: hydra.core.Term) -> Eit
 def read_injection(cx: T0, g: hydra.graph.Graph, cases: frozenlist[tuple[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.errors.Error, T1]]]], encoded: hydra.core.Term) -> Either[hydra.errors.Error, T1]:
     r"""Read an injection (union value) from a term."""
 
-    return hydra.lib.eithers.bind(hydra.extract.core.map((lambda k: hydra.lib.eithers.map((lambda _n: hydra.core.Name(_n)), hydra.extract.core.string(g, k))), (lambda _v: Right(_v)), g, encoded), (lambda mp: (entries := hydra.lib.maps.to_list(mp), hydra.lib.logic.if_else(hydra.lib.lists.null(entries), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("empty injection"))))), (lambda : (f := hydra.lib.lists.head(entries), key := hydra.lib.pairs.first(f), val := hydra.lib.pairs.second(f), matching := hydra.lib.lists.filter((lambda c: hydra.lib.equality.equal(hydra.lib.pairs.first(c), key)), cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2("unexpected field: ", key.value)))))), (lambda : (lambda : hydra.lib.pairs.second(hydra.lib.lists.head(matching), val)))))[4])))[1]))
+    return hydra.lib.eithers.bind(hydra.extract.core.map((lambda k: hydra.lib.eithers.map((lambda _n: hydra.core.Name(_n)), hydra.extract.core.string(g, k))), (lambda _v: Right(_v)), g, encoded), (lambda mp: (entries := hydra.lib.maps.to_list(mp), hydra.lib.maybes.maybe((lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("empty injection"))))), (lambda f: (key := hydra.lib.pairs.first(f), val := hydra.lib.pairs.second(f), matching := hydra.lib.lists.filter((lambda c: hydra.lib.equality.equal(hydra.lib.pairs.first(c), key)), cases), hydra.lib.maybes.maybe((lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2("unexpected field: ", key.value)))))), (lambda m: (lambda : hydra.lib.pairs.second(m, val))), hydra.lib.lists.maybe_head(matching)))[3]), hydra.lib.lists.maybe_head(entries)))[1]))
 
 def decode_value_spec(cx: T0, g: hydra.graph.Graph, term: hydra.core.Term):
     def _hoist_hydra_pg_terms_to_elements_decode_value_spec_1(cx, g, term, v1):
@@ -185,13 +185,13 @@ def parse_pattern(cx: T0, _g: T1, pat: str) -> Either[T2, Callable[[T3, hydra.co
         return hydra.lib.strings.split_on("${", pat)
     @lru_cache(1)
     def first_lit() -> str:
-        return hydra.lib.lists.head(segments())
+        return hydra.lib.maybes.from_maybe((lambda : pat), hydra.lib.lists.maybe_head(segments()))
     @lru_cache(1)
     def rest() -> frozenlist[str]:
-        return hydra.lib.lists.tail(segments())
+        return hydra.lib.lists.drop(1, segments())
     @lru_cache(1)
     def parsed() -> frozenlist[tuple[frozenlist[str], str]]:
-        return hydra.lib.lists.map((lambda seg: (parts := hydra.lib.strings.split_on("}", seg), path_str := hydra.lib.lists.head(parts), lit_part := hydra.lib.strings.intercalate("}", hydra.lib.lists.tail(parts)), path_steps := hydra.lib.strings.split_on("/", path_str), (path_steps, lit_part))[4]), rest())
+        return hydra.lib.lists.map((lambda seg: (parts := hydra.lib.strings.split_on("}", seg), path_str := hydra.lib.maybes.from_maybe((lambda : ""), hydra.lib.lists.maybe_head(parts)), lit_part := hydra.lib.strings.intercalate("}", hydra.lib.lists.drop(1, parts)), path_steps := hydra.lib.strings.split_on("/", path_str), (path_steps, lit_part))[4]), rest())
     return Right((lambda cx_, term: apply_pattern(cx_, first_lit(), parsed(), term)))
 
 def parse_value_spec(cx: T0, g: T1, spec: hydra.pg.mapping.ValueSpec) -> Either[T2, Callable[[T3, hydra.core.Term], Either[hydra.errors.Error, frozenlist[hydra.core.Term]]]]:
@@ -227,7 +227,7 @@ def parse_vertex_id_pattern(cx: T0, g: T1, schema: hydra.pg.mapping.Schema[T2, T
 def require_unique(cx: T0, context: str, fun: Callable[[T1], Either[hydra.errors.Error, frozenlist[T2]]], term: T1) -> Either[hydra.errors.Error, T2]:
     r"""Require exactly one result from a list-producing function."""
 
-    return hydra.lib.eithers.bind(fun(term), (lambda results: hydra.lib.logic.if_else(hydra.lib.lists.null(results), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2("No value found: ", context)))))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(results), 1), (lambda : Right(hydra.lib.lists.head(results))), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2("Multiple values found: ", context)))))))))))
+    return hydra.lib.eithers.bind(fun(term), (lambda results: hydra.lib.logic.if_else(hydra.lib.lists.null(results), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2("No value found: ", context)))))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(results), 1), (lambda : hydra.lib.maybes.maybe((lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2("Multiple values found: ", context)))))), (lambda x: Right(x)), hydra.lib.lists.maybe_head(results))), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2("Multiple values found: ", context)))))))))))
 
 def parse_edge_spec(cx: T0, g: T1, schema: hydra.pg.mapping.Schema[T2, T3, T4], spec: hydra.pg.mapping.EdgeSpec) -> Either[T5, tuple[hydra.pg.model.Label, Callable[[hydra.context.Context, hydra.core.Term], Either[hydra.errors.Error, frozenlist[hydra.pg.model.Element[T4]]]]]]:
     r"""Parse an edge specification into a label and encoder function."""

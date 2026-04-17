@@ -83,7 +83,7 @@ def py_expression_to_py_slice(expr: hydra.python.syntax.Expression) -> hydra.pyt
 def primary_with_expression_slices(prim: hydra.python.syntax.Primary, exprs: frozenlist[hydra.python.syntax.Expression]) -> hydra.python.syntax.Primary:
     r"""Create a Primary with expression slices."""
 
-    return primary_with_slices(prim, py_expression_to_py_slice(hydra.lib.lists.head(exprs)), hydra.lib.lists.map((lambda e: cast(hydra.python.syntax.SliceOrStarredExpression, hydra.python.syntax.SliceOrStarredExpressionSlice(py_expression_to_py_slice(e)))), hydra.lib.lists.tail(exprs)))
+    return hydra.lib.maybes.from_maybe((lambda : prim), hydra.lib.maybes.map((lambda p: primary_with_slices(prim, py_expression_to_py_slice(hydra.lib.pairs.first(p)), hydra.lib.lists.map((lambda e: cast(hydra.python.syntax.SliceOrStarredExpression, hydra.python.syntax.SliceOrStarredExpressionSlice(py_expression_to_py_slice(e)))), hydra.lib.pairs.second(p)))), hydra.lib.lists.uncons(exprs)))
 
 def py_name_to_py_primary(name: hydra.python.syntax.Name) -> hydra.python.syntax.Primary:
     r"""Convert a Name to a Primary (simple atom)."""
@@ -213,7 +213,7 @@ def decode_py_conjunction_to_py_primary(c: hydra.python.syntax.Conjunction) -> M
     r"""Decode a Conjunction to a Primary if possible."""
 
     inversions = c.value
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(inversions), 1), (lambda : decode_py_inversion_to_py_primary(hydra.lib.lists.head(inversions))), (lambda : Nothing()))
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(inversions), 1), (lambda : hydra.lib.maybes.bind(hydra.lib.lists.maybe_head(inversions), (lambda i: decode_py_inversion_to_py_primary(i)))), (lambda : Nothing()))
 
 def decode_py_expression_to_py_primary(e: hydra.python.syntax.Expression) -> Maybe[hydra.python.syntax.Primary]:
     r"""Decode an Expression to a Primary if possible."""
@@ -221,7 +221,7 @@ def decode_py_expression_to_py_primary(e: hydra.python.syntax.Expression) -> May
     match e:
         case hydra.python.syntax.ExpressionSimple(value=disj):
             conjunctions = disj.value
-            return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(conjunctions), 1), (lambda : decode_py_conjunction_to_py_primary(hydra.lib.lists.head(conjunctions))), (lambda : Nothing()))
+            return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(conjunctions), 1), (lambda : hydra.lib.maybes.bind(hydra.lib.lists.maybe_head(conjunctions), (lambda c2: decode_py_conjunction_to_py_primary(c2)))), (lambda : Nothing()))
 
         case _:
             return Nothing()
@@ -287,7 +287,7 @@ def or_expression(prims: frozenlist[hydra.python.syntax.Primary]) -> hydra.pytho
     r"""Build an or-expression from multiple primaries."""
 
     def build(prev: Maybe[hydra.python.syntax.BitwiseOr], ps: frozenlist[hydra.python.syntax.Primary]) -> hydra.python.syntax.BitwiseOr:
-        return hydra.lib.logic.if_else(hydra.lib.lists.null(hydra.lib.lists.tail(ps)), (lambda : hydra.python.syntax.BitwiseOr(prev, py_primary_to_py_bitwise_xor(hydra.lib.lists.head(ps)))), (lambda : build(Just(hydra.python.syntax.BitwiseOr(prev, py_primary_to_py_bitwise_xor(hydra.lib.lists.head(ps)))), hydra.lib.lists.tail(ps))))
+        return hydra.lib.maybes.maybe((lambda : hydra.python.syntax.BitwiseOr(prev, py_primary_to_py_bitwise_xor(cast(hydra.python.syntax.Primary, hydra.python.syntax.PrimarySimple(cast(hydra.python.syntax.Atom, hydra.python.syntax.AtomEllipsis())))))), (lambda p: hydra.lib.logic.if_else(hydra.lib.lists.null(hydra.lib.pairs.second(p)), (lambda : hydra.python.syntax.BitwiseOr(prev, py_primary_to_py_bitwise_xor(hydra.lib.pairs.first(p)))), (lambda : build(Just(hydra.python.syntax.BitwiseOr(prev, py_primary_to_py_bitwise_xor(hydra.lib.pairs.first(p)))), hydra.lib.pairs.second(p))))), hydra.lib.lists.uncons(ps))
     return py_bitwise_or_to_py_expression(build(Nothing(), prims))
 
 def project_from_expression(exp: hydra.python.syntax.Expression, name: hydra.python.syntax.Name) -> hydra.python.syntax.Expression:

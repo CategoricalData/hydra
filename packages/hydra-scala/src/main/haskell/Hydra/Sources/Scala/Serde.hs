@@ -261,10 +261,12 @@ writeDefn = define "writeDefn" $
         "pats">: project Scala._Defn_Val Scala._Defn_Val_pats @@ var "dv",
         "typ">: project Scala._Defn_Val Scala._Defn_Val_decltpe @@ var "dv",
         "rhs">: project Scala._Defn_Val Scala._Defn_Val_rhs @@ var "dv",
-        "firstPat">: Lists.head (var "pats"),
-        "patName">: cases Scala._Pat (var "firstPat") Nothing [
-          Scala._Pat_var>>: lambda "pv" $ project Scala._Pat_Var Scala._Pat_Var_name @@ var "pv"],
-        "nameStr">: unwrap Scala._PredefString @@ (project Scala._Data_Name Scala._Data_Name_value @@ var "patName"),
+        "nameStr">: Maybes.fromMaybe (string "") (Maybes.map
+          (lambda "firstPat" $
+            "patName" <~ (cases Scala._Pat (var "firstPat") Nothing [
+              Scala._Pat_var>>: lambda "pv" $ project Scala._Pat_Var Scala._Pat_Var_name @@ var "pv"]) $
+            unwrap Scala._PredefString @@ (project Scala._Data_Name Scala._Data_Name_value @@ var "patName"))
+          (Lists.maybeHead (var "pats"))),
         "nameAndType">: Maybes.maybe
           (Serialization.cst @@ var "nameStr")
           (lambda "t" $ Serialization.spaceSep @@ list [
@@ -356,13 +358,15 @@ writeImporter = define "writeImporter" $
     "forImportees">: Logic.ifElse (Lists.null (var "importees"))
       (Serialization.cst @@ string "")
       (Logic.ifElse (Equality.equal (Lists.length (var "importees")) (int32 1))
-        (Serialization.noSep @@ list [
-          Serialization.cst @@ string ".",
-          cases Scala._Importee (Lists.head (var "importees")) Nothing [
-            Scala._Importee_wildcard>>: constant (Serialization.cst @@ string "*"),
-            Scala._Importee_name>>: lambda "in" $
-              Serialization.cst @@ (cases Scala._Name (project Scala._Importee_Name Scala._Importee_Name_name @@ var "in") Nothing [
-                Scala._Name_value>>: lambda "s" $ var "s"])]])
+        (Maybes.fromMaybe (Serialization.cst @@ string "") (Maybes.map
+          (lambda "firstImp" $ Serialization.noSep @@ list [
+            Serialization.cst @@ string ".",
+            cases Scala._Importee (var "firstImp") Nothing [
+              Scala._Importee_wildcard>>: constant (Serialization.cst @@ string "*"),
+              Scala._Importee_name>>: lambda "in" $
+                Serialization.cst @@ (cases Scala._Name (project Scala._Importee_Name Scala._Importee_Name_name @@ var "in") Nothing [
+                  Scala._Name_value>>: lambda "s" $ var "s"])]])
+          (Lists.maybeHead (var "importees"))))
         (Serialization.noSep @@ list [
           Serialization.cst @@ string ".",
           Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@
@@ -525,8 +529,8 @@ writeType = define "writeType" $
       Scala._Type_functionType>>: lambda "ft" $
         cases Scala._Type_FunctionType (var "ft") Nothing [
           Scala._Type_FunctionType_function>>: lambda "tf" $ lets [
-            "dom">: Lists.head (project Scala._Type_Function Scala._Type_Function_params @@ var "tf"),
-            "cod">: project Scala._Type_Function Scala._Type_Function_res @@ var "tf"] $
+            "cod">: project Scala._Type_Function Scala._Type_Function_res @@ var "tf",
+            "dom">: Maybes.fromMaybe (var "cod") (Lists.maybeHead (project Scala._Type_Function Scala._Type_Function_params @@ var "tf"))] $
             Serialization.ifx @@ functionArrowOp @@ (writeType @@ var "dom") @@ (writeType @@ var "cod")],
       Scala._Type_lambda>>: lambda "tl" $ lets [
         "params">: project Scala._Type_Lambda Scala._Type_Lambda_tparams @@ var "tl",

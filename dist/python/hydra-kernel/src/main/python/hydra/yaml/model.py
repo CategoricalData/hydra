@@ -38,6 +38,9 @@ class Node_(metaclass=_Node_Meta):
 class ScalarBool(Node[bool]):
     r"""Represents a true/false value"""
 
+class ScalarDecimal(Node[Decimal]):
+    r"""An arbitrary-precision decimal number (lexically a valid JSON number)"""
+
 class ScalarFloat(Node[Decimal]):
     r"""Represents an approximation to real numbers"""
 
@@ -62,10 +65,11 @@ class _ScalarMeta(type):
 
 # A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here.
 class Scalar(metaclass=_ScalarMeta):
-    r"""ScalarBool | ScalarFloat | ScalarInt | ScalarNull | ScalarStr"""
+    r"""ScalarBool | ScalarDecimal | ScalarFloat | ScalarInt | ScalarNull | ScalarStr"""
 
     TYPE_ = hydra.core.Name("hydra.yaml.model.Scalar")
     BOOL = hydra.core.Name("bool")
+    DECIMAL = hydra.core.Name("decimal")
     FLOAT = hydra.core.Name("float")
     INT = hydra.core.Name("int")
     NULL = hydra.core.Name("null")

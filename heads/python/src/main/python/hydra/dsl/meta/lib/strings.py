@@ -1,7 +1,13 @@
 """Phantom-typed term DSL for the hydra.lib.strings library."""
 
+from typing import Sequence
+
 from hydra.phantoms import TTerm
-from hydra.dsl.meta.phantoms import lib_primitive1 as primitive1, lib_primitive2 as primitive2
+from hydra.dsl.meta.phantoms import (
+    lib_primitive1 as primitive1,
+    lib_primitive2 as primitive2,
+    list_,
+)
 
 
 def cat(strings: TTerm) -> TTerm:
@@ -14,9 +20,9 @@ def cat2(s1: TTerm, s2: TTerm) -> TTerm:
     return primitive2(s1, s2)
 
 
-def char_at(index: TTerm, s: TTerm) -> TTerm:
-    """Get the character at a given index in a string."""
-    return primitive2(index, s)
+def concat(strings: Sequence[TTerm]) -> TTerm:
+    """Concatenate a Python sequence of string terms into a single string."""
+    return cat(list_(strings))
 
 
 def from_list(chars: TTerm) -> TTerm:
@@ -37,6 +43,11 @@ def length(s: TTerm) -> TTerm:
 def lines(s: TTerm) -> TTerm:
     """Split a string into lines."""
     return primitive1(s)
+
+
+def maybe_char_at(index: TTerm, s: TTerm) -> TTerm:
+    """Get the character at a given index in a string, returning Nothing if out of bounds."""
+    return primitive2(index, s)
 
 
 def null(s: TTerm) -> TTerm:
