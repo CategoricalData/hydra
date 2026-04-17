@@ -648,17 +648,13 @@ greet = lambda "person" $
 
 ```haskell
 module_ :: Module
-module_ = Module {
-  moduleNamespace = Namespace "myapp",
-  moduleElements = [
-    el $ def "addOne" $
-      doc "Adds one to a number" $
-      lambda "x" (Math.add (var "x") (int32 1))
-  ],
-  moduleTermDependencies = [],
-  moduleTypeDependencies = [],
-  moduleDescription = Just "My application module"
-}
+module_ = Module ns definitions [] [] (Just "My application module")
+  where
+    ns = Namespace "myapp"
+    definitions = [
+      toDefinition $ def "addOne" $
+        doc "Adds one to a number" $
+        lambda "x" (Math.add (var "x") (int32 1))]
 ```
 
 ### When to use
@@ -1262,16 +1258,12 @@ Create Hydra modules:
 
 ```haskell
 myModule :: Module
-myModule = Module {
-  moduleNamespace = Namespace "myapp.utils",
-  moduleElements = [
-    el $ def "addOne" $ lambda "x" (Math.add (var "x") (int32 1)),
-    el $ def "double" $ lambda "x" (Math.mul (var "x") (int32 2))
-  ],
-  moduleTermDependencies = [mathModule],
-  moduleTypeDependencies = [coreModule],
-  moduleDescription = Just "Utility functions"
-}
+myModule = Module ns definitions [mathNs] [coreNs] (Just "Utility functions")
+  where
+    ns = Namespace "myapp.utils"
+    definitions = [
+      toDefinition $ def "addOne" $ lambda "x" (Math.add (var "x") (int32 1)),
+      toDefinition $ def "double" $ lambda "x" (Math.mul (var "x") (int32 2))]
 ```
 
 ### Code generation workflow
@@ -1287,15 +1279,14 @@ Example:
 
 ```haskell
 -- In Hydra/Sources/MyApp/Types.hs
-module_ = Module {
-  moduleNamespace = Namespace "myapp.types",
-  moduleElements = [
-    el $ def "Person" $ record [
-      "name">: string,
-      "age">: int32]
-  ],
-  ...
-}
+module_ :: Module
+module_ = Module ns definitions [] [] (Just "User-defined types")
+  where
+    ns = Namespace "myapp.types"
+    definitions = [
+      toDefinition $ def "Person" $ record [
+        "name">: string,
+        "age">: int32]]
 
 -- Generate Haskell code
 -- First argument: output directory
