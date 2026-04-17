@@ -1,0 +1,2298 @@
+{
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Command",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A Command describes a function or operation that can be performed on any digital twin."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "This must be 'Command'"}}}],
+                        "body": {"variable": "hydra.azure.dtld.Iri"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The 'programming' name of the command. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$."}}},
+                          {
+                            "@key": "maxLength",
+                            "@value": {"literal": {"integer": {"int32": 64}}}},
+                          {
+                            "@key": "minLength",
+                            "@value": {"literal": {"integer": {"int32": 64}}}}],
+                        "body": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The ID of the command. If no @id is provided, the digital twin interface processor will assign one."}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}}],
+                              "body": {"variable": "hydra.azure.dtld.Dtmi"}}}}}}},
+                  {
+                    "name": "comment",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A comment for model authors"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable description for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "displayName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable name for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "commandType",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "This property is deprecated. Either value, synchronous or asynchronous, has the same meaning: a command that starts execution within a configurable time and that completes execution within a configurable time."}}}],
+                        "body": {"maybe": {"variable": "hydra.azure.dtld.CommandType"}}}}},
+                  {
+                    "name": "request",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A description of the input to the Command"}}}],
+                        "body": {"maybe": {"variable": "hydra.azure.dtld.CommandPayload"}}}}},
+                  {
+                    "name": "response",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A description of the output of the Command"}}}],
+                        "body": {"maybe": {"variable": "hydra.azure.dtld.CommandPayload"}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.CommandPayload",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A CommandPayload describes the inputs to or the outputs from a Command."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The 'programming' name of the payload. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$."}}},
+                          {
+                            "@key": "maxLength",
+                            "@value": {"literal": {"integer": {"int32": 64}}}},
+                          {
+                            "@key": "minLength",
+                            "@value": {"literal": {"integer": {"int32": 64}}}}],
+                        "body": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "schema",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The data type of the payload"}}}],
+                        "body": {"variable": "hydra.azure.dtld.Schema"}}}},
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The ID of the payload. If no @id is provided, the digital twin interface processor will assign one."}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}}],
+                              "body": {"variable": "hydra.azure.dtld.Dtmi"}}}}}}},
+                  {
+                    "name": "comment",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A comment for model authors"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable description for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "displayName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable name for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.CommandType",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "CommandType is deprecated. Either value, synchronous or asynchronous, has the same meaning: a command that starts execution within a configurable time and that completes execution within a configurable time."}}}],
+              "body": {
+                "union": [
+                  {"name": "synchronous", "type": {"unit": {}}},
+                  {"name": "asynchronous", "type": {"unit": {}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Component",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Components enable interfaces to be composed of other interfaces. Components are different from relationships because they describe contents that are directly part of the interface. (A relationship describes a link between two interfaces.)"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "This must be 'Component'"}}}],
+                        "body": {"variable": "hydra.azure.dtld.Iri"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The 'programming' name of the component. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$."}}},
+                          {
+                            "@key": "maxLength",
+                            "@value": {"literal": {"integer": {"int32": 64}}}},
+                          {
+                            "@key": "minLength",
+                            "@value": {"literal": {"integer": {"int32": 64}}}}],
+                        "body": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "schema",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The data type of the component"}}}],
+                        "body": {"variable": "hydra.azure.dtld.Interface"}}}},
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The ID of the component. If no @id is provided, the digital twin interface processor will assign one."}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}}],
+                              "body": {"variable": "hydra.azure.dtld.Dtmi"}}}}}}},
+                  {
+                    "name": "comment",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A comment for model authors"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable description for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "displayName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable name for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Dtmi",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "A digital twin model identifier"}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.EnumValue",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "An EnumValue describes an element of an Enum."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The 'programming' name of the enum value. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$."}}},
+                          {
+                            "@key": "maxLength",
+                            "@value": {"literal": {"integer": {"int32": 64}}}},
+                          {
+                            "@key": "minLength",
+                            "@value": {"literal": {"integer": {"int32": 64}}}}],
+                        "body": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "enumValue",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The on-the-wire value that maps to the EnumValue. EnumValue may be either an integer or a string and must be unique for all enum values in this enum."}}}],
+                        "body": {"variable": "hydra.azure.dtld.IntegerOrString"}}}},
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The ID of the enum value. If no @id is provided, the digital twin interface processor will assign one."}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}}],
+                              "body": {"variable": "hydra.azure.dtld.Dtmi"}}}}}}},
+                  {
+                    "name": "comment",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A comment for model authors"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable description for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "displayName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable name for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Field",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "A Field describes a field in an Object."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The 'programming' name of the field. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$."}}},
+                          {
+                            "@key": "maxLength",
+                            "@value": {"literal": {"integer": {"int32": 64}}}},
+                          {
+                            "@key": "minLength",
+                            "@value": {"literal": {"integer": {"int32": 64}}}}],
+                        "body": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "schema",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The data type of the field"}}}],
+                        "body": {"variable": "hydra.azure.dtld.Schema"}}}},
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The ID of the field. If no @id is provided, the digital twin interface processor will assign one."}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}}],
+                              "body": {"variable": "hydra.azure.dtld.Dtmi"}}}}}}},
+                  {
+                    "name": "comment",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A comment for model authors"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable description for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "displayName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable name for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.IntegerOrString",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "integer", "type": {"literal": {"integer": {"int32": {}}}}},
+              {"name": "string", "type": {"literal": {"string": {}}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Interface",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "id",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {
+                          "literal": {"string": "A digital twin model identifier for the interface"}}},
+                      {
+                        "@key": "maxLength",
+                        "@value": {"literal": {"integer": {"int32": 128}}}},
+                      {
+                        "@key": "minLength",
+                        "@value": {"literal": {"integer": {"int32": 128}}}}],
+                    "body": {"variable": "hydra.azure.dtld.Dtmi"}}}},
+              {
+                "name": "type",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "This must be 'Interface'"}}}],
+                    "body": {"variable": "hydra.azure.dtld.Iri"}}}},
+              {
+                "name": "context",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {
+                          "literal": {
+                            "string": "The context to use when processing this interface. For this version, it must be set to 'dtmi:dtdl:context;2'"}}}],
+                    "body": {"variable": "hydra.azure.dtld.Iri"}}}},
+              {
+                "name": "comment",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "A comment for model authors"}}}],
+                    "body": {
+                      "maybe": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "maxLength",
+                              "@value": {"literal": {"integer": {"int32": 512}}}},
+                            {
+                              "@key": "minLength",
+                              "@value": {"literal": {"integer": {"int32": 512}}}}],
+                          "body": {"literal": {"string": {}}}}}}}}},
+              {
+                "name": "contents",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {
+                          "literal": {
+                            "string": "A set of objects that define the contents (Telemetry, Properties, Commands, Relationships, and/or Components) of this interface"}}}],
+                    "body": {
+                      "maybe": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "maxLength",
+                              "@value": {"literal": {"integer": {"int32": 300}}}},
+                            {
+                              "@key": "minLength",
+                              "@value": {"literal": {"integer": {"int32": 300}}}}],
+                          "body": {"set": {"variable": "hydra.azure.dtld.Interface_Contents"}}}}}}}},
+              {
+                "name": "description",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "A localizable description for display"}}}],
+                    "body": {
+                      "maybe": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "maxLength",
+                              "@value": {"literal": {"integer": {"int32": 512}}}},
+                            {
+                              "@key": "minLength",
+                              "@value": {"literal": {"integer": {"int32": 512}}}}],
+                          "body": {"literal": {"string": {}}}}}}}}},
+              {
+                "name": "displayName",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "A localizable name for display"}}}],
+                    "body": {
+                      "maybe": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "maxLength",
+                              "@value": {"literal": {"integer": {"int32": 64}}}},
+                            {
+                              "@key": "minLength",
+                              "@value": {"literal": {"integer": {"int32": 64}}}}],
+                          "body": {"literal": {"string": {}}}}}}}}},
+              {
+                "name": "extends",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {
+                          "literal": {
+                            "string": "A set of DTMIs that refer to interfaces this interface inherits from. Interfaces can inherit from multiple interfaces."}}}],
+                    "body": {
+                      "maybe": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "maxLength",
+                              "@value": {"literal": {"integer": {"int32": 2}}}},
+                            {
+                              "@key": "minLength",
+                              "@value": {"literal": {"integer": {"int32": 2}}}}],
+                          "body": {"set": {"variable": "hydra.azure.dtld.Interface"}}}}}}}},
+              {
+                "name": "schemas",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {
+                          "literal": {
+                            "string": "A set of IRIs or objects that refer to the reusable schemas within this interface."}}}],
+                    "body": {"maybe": {"set": {"variable": "hydra.azure.dtld.Schema_Interface"}}}}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Interface_Contents",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "command", "type": {"variable": "hydra.azure.dtld.Command"}},
+              {
+                "name": "component",
+                "type": {"variable": "hydra.azure.dtld.Component"}},
+              {
+                "name": "property",
+                "type": {"variable": "hydra.azure.dtld.Property"}},
+              {
+                "name": "relationship",
+                "type": {"variable": "hydra.azure.dtld.Relationship"}},
+              {
+                "name": "telemetry",
+                "type": {"variable": "hydra.azure.dtld.Telemetry"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Iri",
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.MapKey",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A MapKey describes the key in a Map. The schema of a MapKey must be string."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The 'programming' name of the map's key. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$."}}},
+                          {
+                            "@key": "maxLength",
+                            "@value": {"literal": {"integer": {"int32": 64}}}},
+                          {
+                            "@key": "minLength",
+                            "@value": {"literal": {"integer": {"int32": 64}}}}],
+                        "body": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "schema",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The data type of the map's key"}}}],
+                        "body": {"variable": "hydra.azure.dtld.Schema"}}}},
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The ID of the map key. If no @id is provided, the digital twin interface processor will assign one."}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}}],
+                              "body": {"variable": "hydra.azure.dtld.Dtmi"}}}}}}},
+                  {
+                    "name": "comment",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A comment for model authors"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable description for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "displayName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable name for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.MapValue",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "A MapValue describes the values in a Map."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The 'programming' name of the map's value. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$."}}},
+                          {
+                            "@key": "maxLength",
+                            "@value": {"literal": {"integer": {"int32": 64}}}},
+                          {
+                            "@key": "minLength",
+                            "@value": {"literal": {"integer": {"int32": 64}}}}],
+                        "body": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "schema",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The data type of the map's values"}}}],
+                        "body": {"variable": "hydra.azure.dtld.Schema"}}}},
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The ID of the map value. If no @id is provided, the digital twin interface processor will assign one."}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}}],
+                              "body": {"variable": "hydra.azure.dtld.Dtmi"}}}}}}},
+                  {
+                    "name": "comment",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A comment for model authors"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable description for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "displayName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable name for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Property",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A Property describes the read-only and read/write state of any digital twin. For example, a device serial number may be a read-only property, the desired temperature on a thermostat may be a read-write property; and the name of a room may be a read-write property."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "This must at least be 'Property'. It can also include a semantic type."}}}],
+                        "body": {"variable": "hydra.azure.dtld.Iri"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The 'programming' name of the property. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$.."}}},
+                          {
+                            "@key": "maxLength",
+                            "@value": {"literal": {"integer": {"int32": 64}}}},
+                          {
+                            "@key": "minLength",
+                            "@value": {"literal": {"integer": {"int32": 64}}}}],
+                        "body": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "schema",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The data type of the Property"}}}],
+                        "body": {"variable": "hydra.azure.dtld.Schema"}}}},
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The ID of the property. If no @id is provided, the digital twin interface processor will assign one."}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}}],
+                              "body": {"variable": "hydra.azure.dtld.Dtmi"}}}}}}},
+                  {
+                    "name": "comment",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A comment for model authors"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable description for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "displayName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable name for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "unit",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The unit type of the property. A semantic type is required for the unit property to be available."}}}],
+                        "body": {"maybe": {"variable": "hydra.azure.dtld.Unit"}}}}},
+                  {
+                    "name": "writable",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "A boolean value that indicates whether the property is writable by an external source, such as an application, or not. The default value is false (read-only)."}}}],
+                        "body": {"maybe": {"literal": {"boolean": {}}}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Relationship",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A Relationship describes a link to another digital twin and enables graphs of digital twins to be created. Relationships are different from Components because they describe a link to a separate digital twin."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "This must be 'Relationship'"}}}],
+                        "body": {"variable": "hydra.azure.dtld.Iri"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The 'programming' name of the relationship. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$."}}},
+                          {
+                            "@key": "maxLength",
+                            "@value": {"literal": {"integer": {"int32": 64}}}},
+                          {
+                            "@key": "minLength",
+                            "@value": {"literal": {"integer": {"int32": 64}}}}],
+                        "body": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The ID of the relationship description. If no @id is provided, the digital twin interface processor will assign one."}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}}],
+                              "body": {"variable": "hydra.azure.dtld.Dtmi"}}}}}}},
+                  {
+                    "name": "comment",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A comment for model authors"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable description for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "displayName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable name for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "maxMultiplicity",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The maximum multiplicity for the target of the relationship. The default value is infinite (there may be an unlimited number of relationship instances for this relationship)."}}}],
+                        "body": {"maybe": {"literal": {"integer": {"int32": {}}}}}}}},
+                  {
+                    "name": "minMultiplicity",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The minimum multiplicity for the target of the relationship. The default value is 0 (this relationship is permitted to have no instances). In DTDL v2, minMultiplicity must always be 0."}}}],
+                        "body": {"maybe": {"literal": {"integer": {"int32": {}}}}}}}},
+                  {
+                    "name": "properties",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "A set of Properties that define relationship-specific state"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 300}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 300}}}}],
+                              "body": {"set": {"variable": "hydra.azure.dtld.Property"}}}}}}}},
+                  {
+                    "name": "target",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "An interface ID. The default value (when target is not specified) is that the target may be any interface."}}}],
+                        "body": {"maybe": {"variable": "hydra.azure.dtld.Interface"}}}}},
+                  {
+                    "name": "writable",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "A boolean value that indicates whether the relationship is writable by an external source, such as an application, or not. The default value is false (read-only)."}}}],
+                        "body": {"maybe": {"literal": {"boolean": {}}}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Schema",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Schemas are used to describe the on-the-wire or serialized format of the data in a digital twin interface. A full set of primitive data types are provided, along with support for a variety of complex schemas in the forms of Arrays, Enums, Maps, and Objects. Schemas described through digital twin's schema definition language are compatible with popular serialization formats, including JSON, Avro, and Protobuf."}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "primitive",
+                    "type": {"variable": "hydra.azure.dtld.Schema_Primitive"}},
+                  {
+                    "name": "complex",
+                    "type": {"variable": "hydra.azure.dtld.Schema_Complex"}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Schema_Array",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "An Array describes an indexable data type where each element is of the same schema. An Array elements' schema can itself be a primitive or complex schema."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "This must be 'Array'"}}}],
+                        "body": {"variable": "hydra.azure.dtld.Iri"}}}},
+                  {
+                    "name": "elementSchema",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The data type of the array elements"}}}],
+                        "body": {"variable": "hydra.azure.dtld.Schema"}}}},
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The ID of the array. If no @id is provided, the digital twin interface processor will assign one."}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}}],
+                              "body": {"variable": "hydra.azure.dtld.Dtmi"}}}}}}},
+                  {
+                    "name": "comment",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A comment for model authors"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable description for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "displayName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable name for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Schema_Complex",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Complex schemas are designed for supporting complex data types made up of primitive data types. Currently the following complex schemas are provided: Array, Enum, Map, and Object. A complex schema can be specified directly as the value in a schema statement or described in the interface schemas set and referenced in the schema statement."}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "array",
+                    "type": {"variable": "hydra.azure.dtld.Schema_Array"}},
+                  {"name": "enum", "type": {"variable": "hydra.azure.dtld.Schema_Enum"}},
+                  {"name": "map", "type": {"variable": "hydra.azure.dtld.Schema_Map"}},
+                  {
+                    "name": "object",
+                    "type": {"variable": "hydra.azure.dtld.Schema_Object"}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Schema_Enum",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "An Enum describes a data type with a set of named labels that map to values. The values in an Enum can be either integers or strings, but the labels are always strings."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "Enum"}}}],
+                        "body": {"variable": "hydra.azure.dtld.Iri"}}}},
+                  {
+                    "name": "enumValues",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A set of enum value and label mappings"}}}],
+                        "body": {"list": {"variable": "hydra.azure.dtld.EnumValue"}}}}},
+                  {
+                    "name": "valueSchema",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The data type for the enum values. All enum values must be of the same type."}}}],
+                        "body": {"variable": "hydra.azure.dtld.IntegerOrString"}}}},
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The ID of the enum. If no @id is provided, the digital twin interface processor will assign one."}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}}],
+                              "body": {"variable": "hydra.azure.dtld.Dtmi"}}}}}}},
+                  {
+                    "name": "comment",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A comment for model authors"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable description for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "displayName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable name for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Schema_Interface",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Within an interface definition, complex schemas may be defined for reusability across Telemetry, Properties, and Commands. This is designed to promote readability and improved maintenance because schemas that are reused can be defined once (per interface). Interface schemas are defined in the schemas property of an interface."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "The globally unique identifier for the schema"}}},
+                          {
+                            "@key": "maxLength",
+                            "@value": {"literal": {"integer": {"int32": 2048}}}},
+                          {
+                            "@key": "minLength",
+                            "@value": {"literal": {"integer": {"int32": 2048}}}}],
+                        "body": {"variable": "hydra.azure.dtld.Dtmi"}}}},
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The type of complex schema. This must refer to one of the complex schema classes (Array, Enum, Map, or Object)."}}}],
+                        "body": {"variable": "hydra.azure.dtld.Schema_Interface_Type"}}}},
+                  {
+                    "name": "comment",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A comment for model authors"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable description for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "displayName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable name for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Schema_Interface_Type",
+        "type": {
+          "type": {
+            "union": [
+              {
+                "name": "array",
+                "type": {"variable": "hydra.azure.dtld.Schema_Array"}},
+              {"name": "enum", "type": {"variable": "hydra.azure.dtld.Schema_Enum"}},
+              {"name": "map", "type": {"variable": "hydra.azure.dtld.Schema_Map"}},
+              {
+                "name": "object",
+                "type": {"variable": "hydra.azure.dtld.Schema_Object"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Schema_Map",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A Map describes a data type of key-value pairs where the values share the same schema. The key in a Map must be a string. The values in a Map can be any schema."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "Map"}}}],
+                        "body": {"variable": "hydra.azure.dtld.Iri"}}}},
+                  {
+                    "name": "mapKey",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A description of the keys in the map"}}}],
+                        "body": {"variable": "hydra.azure.dtld.MapKey"}}}},
+                  {
+                    "name": "mapValue",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A description of the values in the map"}}}],
+                        "body": {"variable": "hydra.azure.dtld.MapValue"}}}},
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The ID of the map. If no @id is provided, the digital twin interface processor will assign one."}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}}],
+                              "body": {"variable": "hydra.azure.dtld.Dtmi"}}}}}}},
+                  {
+                    "name": "comment",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A comment for model authors"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable description for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "displayName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable name for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Schema_Object",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "An Object describes a data type made up of named fields (like a struct in C). The fields in an Object map can be primitive or complex schemas."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"@key": "description", "@value": {"literal": {"string": "Object"}}}],
+                        "body": {"variable": "hydra.azure.dtld.Iri"}}}},
+                  {
+                    "name": "fields",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "A set of field descriptions, one for each field in the Object"}}},
+                          {
+                            "@key": "maxLength",
+                            "@value": {"literal": {"integer": {"int32": 30}}}},
+                          {
+                            "@key": "minLength",
+                            "@value": {"literal": {"integer": {"int32": 30}}}}],
+                        "body": {"set": {"variable": "hydra.azure.dtld.Field"}}}}},
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The ID of the object. If no @id is provided, the digital twin interface processor will assign one."}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}}],
+                              "body": {"variable": "hydra.azure.dtld.Dtmi"}}}}}}},
+                  {
+                    "name": "comment",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A comment for model authors"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable description for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "displayName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable name for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Schema_Primitive",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A full set of primitive data types are provided and can be specified directly as the value in a schema statement in a digital twin interface."}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "boolean",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A boolean value"}}}],
+                        "body": {"unit": {}}}}},
+                  {
+                    "name": "date",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "A full-date as defined in section 5.6 of RFC 3339"}}}],
+                        "body": {"unit": {}}}}},
+                  {
+                    "name": "dateTime",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A date-time as defined in RFC 3339"}}}],
+                        "body": {"unit": {}}}}},
+                  {
+                    "name": "double",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "An IEEE 8-byte floating point"}}}],
+                        "body": {"unit": {}}}}},
+                  {
+                    "name": "duration",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A duration in ISO 8601 format"}}}],
+                        "body": {"unit": {}}}}},
+                  {
+                    "name": "float",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "An IEEE 4-byte floating point"}}}],
+                        "body": {"unit": {}}}}},
+                  {
+                    "name": "integer",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A signed 4-byte integer"}}}],
+                        "body": {"unit": {}}}}},
+                  {
+                    "name": "long",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A signed 8-byte integer"}}}],
+                        "body": {"unit": {}}}}},
+                  {
+                    "name": "string",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A UTF8 string"}}}],
+                        "body": {"unit": {}}}}},
+                  {
+                    "name": "time",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "A full-time as defined in section 5.6 of RFC 3339"}}}],
+                        "body": {"unit": {}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Telemetry",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Telemetry describes the data emitted by any digital twin, whether the data is a regular stream of sensor readings or a computed stream of data, such as occupancy, or an occasional error or information message."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "This must be at least 'Telemetry'. It can also include a semantic type"}}}],
+                        "body": {"variable": "hydra.azure.dtld.Iri"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The 'programming' name of the telemetry. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$.."}}},
+                          {
+                            "@key": "maxLength",
+                            "@value": {"literal": {"integer": {"int32": 64}}}},
+                          {
+                            "@key": "minLength",
+                            "@value": {"literal": {"integer": {"int32": 64}}}}],
+                        "body": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "schema",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The data type of the Telemetry"}}}],
+                        "body": {"variable": "hydra.azure.dtld.Schema"}}}},
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The ID of the telemetry. If no @id is provided, the digital twin interface processor will assign one."}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 2048}}}}],
+                              "body": {"variable": "hydra.azure.dtld.Dtmi"}}}}}}},
+                  {
+                    "name": "comment",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A comment for model authors"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable description for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 512}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "displayName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A localizable name for display"}}}],
+                        "body": {
+                          "maybe": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "maxLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}},
+                                {
+                                  "@key": "minLength",
+                                  "@value": {"literal": {"integer": {"int32": 64}}}}],
+                              "body": {"literal": {"string": {}}}}}}}}},
+                  {
+                    "name": "unit",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The unit type of the Telemetry. A semantic type is required for the unit property to be available."}}}],
+                        "body": {"maybe": {"variable": "hydra.azure.dtld.Unit"}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.azure.dtld.Unit",
+        "type": {"type": {"wrap": {"unit": {}}}, "variables": []}}}],
+  "description": "An Azure Digital Twin Definition Language (DTLD) model. Based on:\n  https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#digital-twins-definition-language\nDTLD features which are not currently included in this model:\n  * geospatial schemas (https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#geospatial-schemas)\n  * semantic types and units (https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#semantic-types)\n  * model versioning (https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#model-versioning)",
+  "namespace": "hydra.azure.dtld",
+  "termDependencies": ["hydra.core"],
+  "typeDependencies": []}

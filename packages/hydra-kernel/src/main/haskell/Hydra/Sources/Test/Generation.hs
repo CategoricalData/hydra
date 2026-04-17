@@ -114,12 +114,82 @@ universeMods :: TTerm [Module]
 universeMods = Phantoms.list [modA, modB]
 
 ----------------------------------------
+-- Second toy universe: a "clean" module carrying a scheme with vacuous
+-- quantifiers (type variables that appear only in the domain, never in the
+-- codomain), plus a "stale" target that applies the function. This shape is
+-- actually produced by a prior inference run on the real kernel, e.g. the
+-- stored scheme for `hydra.eval.lib.eithers.either` after round-tripping
+-- through JSON. `inferModules` and `inferModulesGiven` must agree on the
+-- rendered inferred modules for any such universe.
+--
+--   hydra.testInput.v.funky :: forall t0 t1. t0 -> t1 -> int32 -> int32
+--     (the body is irrelevant; only the scheme matters for seeding.)
+--   hydra.testInput.w.useFunky = funky "foo" 7 100
+
+nsV :: TTerm Namespace
+nsV = Packaging.namespace (Phantoms.string "hydra.testInput.v")
+
+nsW :: TTerm Namespace
+nsW = Packaging.namespace (Phantoms.string "hydra.testInput.w")
+
+nameFunky :: TTerm Name
+nameFunky = Core.name (Phantoms.string "hydra.testInput.v.funky")
+
+nameUseFunky :: TTerm Name
+nameUseFunky = Core.name (Phantoms.string "hydra.testInput.w.useFunky")
+
+-- forall t0 t1 t2. t0 -> t1 -> t2 -> t2
+-- This is the canonical scheme that inferModules produces when funky is
+-- inferred alone (without useFunky constraining it). The body `\x.\y.\z. z`
+-- gives 3 free type variables; a caching layer would store exactly this.
+funkyScheme :: TTerm TypeScheme
+funkyScheme = T.poly ["t0", "t1", "t2"]
+  (T.function (T.var "t0")
+    (T.function (T.var "t1")
+      (T.function (T.var "t2") (T.var "t2"))))
+
+-- Body: `\x. \y. \z. z`. Three args, returns the third.
+funkyTerm :: TTerm Term
+funkyTerm = Terms.lambda "x" (Terms.lambda "y" (Terms.lambda "z" (Terms.var "z")))
+
+modV :: TTerm Module
+modV = Packaging.module_
+  nsV
+  (Phantoms.list [typedTermDef nameFunky funkyTerm funkyScheme])
+  (Phantoms.list ([] :: [TTerm Namespace]))
+  (Phantoms.list ([] :: [TTerm Namespace]))
+  Phantoms.nothing
+
+-- useFunky = funky "foo" 7 100
+modW :: TTerm Module
+modW = Packaging.module_
+  nsW
+  (Phantoms.list [
+    untypedTermDef nameUseFunky
+      (Terms.apply
+        (Terms.apply
+          (Terms.apply (Terms.var "hydra.testInput.v.funky")
+                       (Terms.string "foo"))
+          (Terms.int32 7))
+        (Terms.int32 100))])
+  (Phantoms.list [nsV])
+  (Phantoms.list ([] :: [TTerm Namespace]))
+  Phantoms.nothing
+
+vacuousUniverse :: TTerm [Module]
+vacuousUniverse = Phantoms.list [modV, modW]
+
+----------------------------------------
 -- Show helpers.
 --
 -- Render a `[Module]` deterministically as the concatenation, in module order,
 -- of `"<binding-name> :: <type-scheme>\n"` for every term definition. Type
 -- definitions are skipped (they aren't touched by inference).
 
+-- | Render a definition as "<name> :: <scheme> = <term>\n". The term component
+-- is included so that two runs producing the same final type but different
+-- inferred term bodies (e.g. different TypeApplication wrappers) fail the
+-- equality check.
 showDef :: TTerm Definition -> TTerm String
 showDef d = Phantoms.cases _Definition d Nothing [
     _Definition_type>>: "td" ~> Phantoms.string "",
@@ -131,6 +201,8 @@ showDef d = Phantoms.cases _Definition d Nothing [
           (Phantoms.string "<no scheme>")
           ("ts" ~> ShowCore.typeScheme # var "ts")
           (Packaging.termDefinitionType (var "td")),
+        Phantoms.string " = ",
+        ShowCore.term # (Packaging.termDefinitionTerm (var "td")),
         Phantoms.string "\n"]]
 
 showModule :: TTerm Module -> TTerm String
@@ -174,10 +246,29 @@ incrementalFullCase = universalCase "incremental inference of full universe matc
     expected = showResult (Generation.inferModules
       # TestGraph.testContext # TestGraph.testGraph # universeMods # universeMods)
 
+-- | Regression test for issue #247: when a clean universe module carries a
+-- scheme with vacuous quantifiers (variables bound but never appearing in the
+-- codomain), `inferModules` and `inferModulesGiven` must produce the same
+-- inferred term bodies for any stale target that references it. Without this
+-- property, incremental inference can emit term ASTs that differ from
+-- non-incremental inference, even when both produce the same type.
+vacuousQuantifierCase :: TTerm TestCaseWithMetadata
+vacuousQuantifierCase = universalCase
+    "incremental inference agrees with full inference on vacuous-quantifier schemes"
+    actual
+    expected
+  where
+    target = Phantoms.list [modW]
+    actual = showResult (Generation.inferModulesGiven
+      # TestGraph.testContext # TestGraph.testGraph # vacuousUniverse # target)
+    expected = showResult (Generation.inferModules
+      # TestGraph.testContext # TestGraph.testGraph # vacuousUniverse # target)
+
 allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for code generation operations" $
     supergroup "generation" [
       subgroup "inferModulesGiven" [
         incrementalSubsetCase,
-        incrementalFullCase]]
+        incrementalFullCase,
+        vacuousQuantifierCase]]

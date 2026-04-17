@@ -41,6 +41,10 @@ node_modules/
 
 # sbt build artifacts
 project/target/
+/target/
+# heads/scala has no build.sbt — these are orphan sbt scratch dirs
+heads/scala/target/
+heads/scala/project/
 
 # Run logs
 runs/
