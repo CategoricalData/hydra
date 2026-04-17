@@ -54,6 +54,8 @@ library:
     - ../../packages/hydra-python/src/main/haskell
     - ../../packages/hydra-rdf/src/main/haskell
     - ../../packages/hydra-scala/src/main/haskell
+    - ../../packages/hydra-wasm/src/main/haskell
+    - ../../dist/haskell/hydra-wasm/src/main/haskell
 
 executables:
   update-json-kernel:
