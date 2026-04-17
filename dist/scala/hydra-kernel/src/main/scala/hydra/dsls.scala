@@ -30,19 +30,34 @@ def deduplicateBindings(bindings: Seq[hydra.core.Binding]): Seq[hydra.core.Bindi
 def dslBindingName(n: hydra.core.Name): hydra.core.Name =
   {
   lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(n)
-  hydra.lib.logic.ifElse[hydra.core.Name](hydra.lib.logic.not(hydra.lib.lists.`null`[scala.Predef.String](hydra.lib.lists.tail[scala.Predef.String](parts))))(hydra.lib.logic.ifElse[hydra.core.Name](hydra.lib.equality.equal[scala.Predef.String](hydra.lib.lists.head[scala.Predef.String](parts))("hydra"))(hydra.lib.strings.intercalate(".")(hydra.lib.lists.concat2[scala.Predef.String](Seq("hydra",
-     "dsl"))(hydra.lib.lists.concat2[scala.Predef.String](hydra.lib.lists.tail[scala.Predef.String](hydra.lib.lists.init[scala.Predef.String](parts)))(Seq(hydra.formatting.decapitalize(hydra.names.localNameOf(n)))))))(hydra.lib.strings.intercalate(".")(hydra.lib.lists.concat2[scala.Predef.String](Seq("hydra",
-     "dsl"))(hydra.lib.lists.concat2[scala.Predef.String](hydra.lib.lists.init[scala.Predef.String](parts))(Seq(hydra.formatting.decapitalize(hydra.names.localNameOf(n))))))))(hydra.formatting.decapitalize(hydra.names.localNameOf(n)))
+  lazy val localPart: scala.Predef.String = hydra.formatting.decapitalize(hydra.names.localNameOf(n))
+  lazy val localResult: hydra.core.Name = localPart
+  hydra.lib.maybes.maybe[hydra.core.Name, Seq[scala.Predef.String]](localResult)((nsParts: Seq[scala.Predef.String]) =>
+    hydra.lib.maybes.maybe[hydra.core.Name, Tuple2[scala.Predef.String, Seq[scala.Predef.String]]](localResult)((nsHeadTail: Tuple2[scala.Predef.String,
+       Seq[scala.Predef.String]]) =>
+    {
+    lazy val dslNsParts: Seq[scala.Predef.String] = hydra.lib.logic.ifElse[Seq[scala.Predef.String]](hydra.lib.equality.equal[scala.Predef.String](hydra.lib.pairs.first[scala.Predef.String,
+       Seq[scala.Predef.String]](nsHeadTail))("hydra"))(hydra.lib.lists.concat2[scala.Predef.String](Seq("hydra",
+       "dsl"))(hydra.lib.pairs.second[scala.Predef.String, Seq[scala.Predef.String]](nsHeadTail)))(hydra.lib.lists.concat2[scala.Predef.String](Seq("hydra",
+       "dsl"))(nsParts))
+    hydra.lib.strings.intercalate(".")(hydra.lib.lists.concat2[scala.Predef.String](dslNsParts)(Seq(localPart)))
+  })(hydra.lib.lists.uncons[scala.Predef.String](nsParts)))(hydra.lib.lists.maybeInit[scala.Predef.String](parts))
 }
 
 def dslDefinitionName(typeName: hydra.core.Name)(localName: scala.Predef.String): hydra.core.Name =
   {
   lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(typeName)
-  lazy val nsParts: Seq[scala.Predef.String] = hydra.lib.lists.init[scala.Predef.String](parts)
-  lazy val dslNsParts: Seq[scala.Predef.String] = hydra.lib.logic.ifElse[Seq[scala.Predef.String]](hydra.lib.equality.equal[scala.Predef.String](hydra.lib.lists.head[scala.Predef.String](nsParts))("hydra"))(hydra.lib.lists.concat2[scala.Predef.String](Seq("hydra",
-     "dsl"))(hydra.lib.lists.tail[scala.Predef.String](nsParts)))(hydra.lib.lists.concat2[scala.Predef.String](Seq("hydra",
-     "dsl"))(nsParts))
-  hydra.lib.strings.intercalate(".")(hydra.lib.lists.concat2[scala.Predef.String](dslNsParts)(Seq(localName)))
+  hydra.lib.maybes.maybe[hydra.core.Name, Seq[scala.Predef.String]](localName)((nsParts: Seq[scala.Predef.String]) =>
+    {
+    lazy val dslNsParts: Seq[scala.Predef.String] = hydra.lib.maybes.maybe[Seq[scala.Predef.String],
+       Tuple2[scala.Predef.String, Seq[scala.Predef.String]]](Seq("hydra", "dsl"))((nsHeadTail: Tuple2[scala.Predef.String,
+       Seq[scala.Predef.String]]) =>
+      hydra.lib.logic.ifElse[Seq[scala.Predef.String]](hydra.lib.equality.equal[scala.Predef.String](hydra.lib.pairs.first[scala.Predef.String,
+         Seq[scala.Predef.String]](nsHeadTail))("hydra"))(hydra.lib.lists.concat2[scala.Predef.String](Seq("hydra",
+         "dsl"))(hydra.lib.pairs.second[scala.Predef.String, Seq[scala.Predef.String]](nsHeadTail)))(hydra.lib.lists.concat2[scala.Predef.String](Seq("hydra",
+         "dsl"))(nsParts)))(hydra.lib.lists.uncons[scala.Predef.String](nsParts))
+    hydra.lib.strings.intercalate(".")(hydra.lib.lists.concat2[scala.Predef.String](dslNsParts)(Seq(localName)))
+  })(hydra.lib.lists.maybeInit[scala.Predef.String](parts))
 }
 
 def dslModule[T0](cx: T0)(graph: hydra.graph.Graph)(mod: hydra.packaging.Module): Either[hydra.errors.Error,
@@ -78,9 +93,13 @@ def dslModule[T0](cx: T0)(graph: hydra.graph.Graph)(mod: hydra.packaging.Module)
 def dslNamespace(ns: hydra.packaging.Namespace): hydra.packaging.Namespace =
   {
   lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(ns)
-  hydra.lib.logic.ifElse[hydra.packaging.Namespace](hydra.lib.equality.equal[scala.Predef.String](hydra.lib.lists.head[scala.Predef.String](parts))("hydra"))(hydra.lib.strings.cat(Seq("hydra.dsl.",
-     hydra.lib.strings.intercalate(".")(hydra.lib.lists.tail[scala.Predef.String](parts)))))(hydra.lib.strings.cat(Seq("hydra.dsl.",
-     ns)))
+  lazy val prefixFull: hydra.packaging.Namespace = hydra.lib.strings.cat(Seq("hydra.dsl.", ns))
+  hydra.lib.maybes.maybe[hydra.packaging.Namespace, Tuple2[scala.Predef.String, Seq[scala.Predef.String]]](prefixFull)((ht: Tuple2[scala.Predef.String,
+     Seq[scala.Predef.String]]) =>
+    hydra.lib.logic.ifElse[hydra.packaging.Namespace](hydra.lib.equality.equal[scala.Predef.String](hydra.lib.pairs.first[scala.Predef.String,
+       Seq[scala.Predef.String]](ht))("hydra"))(hydra.lib.strings.cat(Seq("hydra.dsl.",
+       hydra.lib.strings.intercalate(".")(hydra.lib.pairs.second[scala.Predef.String,
+       Seq[scala.Predef.String]](ht)))))(prefixFull))(hydra.lib.lists.uncons[scala.Predef.String](parts))
 }
 
 def dslTypeScheme(origType: hydra.core.Type)(paramTypes: Seq[hydra.core.Type])(resultType: hydra.core.Type): hydra.core.TypeScheme =

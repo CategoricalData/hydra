@@ -390,36 +390,18 @@
                                                                                                                                   "cases": {
                                                                                                                                     "cases": [
                                                                                                                                       {
-                                                                                                                                        "name": "float",
+                                                                                                                                        "name": "decimal",
                                                                                                                                         "term": {
-                                                                                                                                          "cases": {
-                                                                                                                                            "cases": [
-                                                                                                                                              {
-                                                                                                                                                "name": "bigfloat",
-                                                                                                                                                "term": {
-                                                                                                                                                  "lambda": {
-                                                                                                                                                    "body": {
-                                                                                                                                                      "typeApplication": {
-                                                                                                                                                        "body": {
-                                                                                                                                                          "typeApplication": {
-                                                                                                                                                            "body": {"either": {"@right": {"variable": "f"}}},
-                                                                                                                                                            "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                                                                                        "type": {"literal": {"float": {"bigfloat": {}}}}}},
-                                                                                                                                                    "domain": {"literal": {"float": {"bigfloat": {}}}},
-                                                                                                                                                    "parameter": "f"}}}],
-                                                                                                                                            "default": {
+                                                                                                                                          "lambda": {
+                                                                                                                                            "body": {
                                                                                                                                               "typeApplication": {
                                                                                                                                                 "body": {
                                                                                                                                                   "typeApplication": {
-                                                                                                                                                    "body": {
-                                                                                                                                                      "either": {
-                                                                                                                                                        "@left": {
-                                                                                                                                                          "wrap": {
-                                                                                                                                                            "body": {"literal": {"string": "expected bigfloat value"}},
-                                                                                                                                                            "typeName": "hydra.errors.DecodingError"}}}},
+                                                                                                                                                    "body": {"either": {"@right": {"variable": "d"}}},
                                                                                                                                                     "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                                                                                "type": {"literal": {"float": {"bigfloat": {}}}}}},
-                                                                                                                                            "typeName": "hydra.core.FloatValue"}}}],
+                                                                                                                                                "type": {"literal": {"decimal": {}}}}},
+                                                                                                                                            "domain": {"literal": {"decimal": {}}},
+                                                                                                                                            "parameter": "d"}}}],
                                                                                                                                     "default": {
                                                                                                                                       "typeApplication": {
                                                                                                                                         "body": {
@@ -428,10 +410,10 @@
                                                                                                                                               "either": {
                                                                                                                                                 "@left": {
                                                                                                                                                   "wrap": {
-                                                                                                                                                    "body": {"literal": {"string": "expected bigfloat literal"}},
+                                                                                                                                                    "body": {"literal": {"string": "expected decimal literal"}},
                                                                                                                                                     "typeName": "hydra.errors.DecodingError"}}}},
                                                                                                                                             "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                                                                        "type": {"literal": {"float": {"bigfloat": {}}}}}},
+                                                                                                                                        "type": {"literal": {"decimal": {}}}}},
                                                                                                                                     "typeName": "hydra.core.Literal"}}}},
                                                                                                                             "domain": {"variable": "hydra.core.Literal"},
                                                                                                                             "parameter": "v"}}}],
@@ -446,7 +428,7 @@
                                                                                                                                     "body": {"literal": {"string": "expected literal"}},
                                                                                                                                     "typeName": "hydra.errors.DecodingError"}}}},
                                                                                                                             "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                                                        "type": {"literal": {"float": {"bigfloat": {}}}}}},
+                                                                                                                        "type": {"literal": {"decimal": {}}}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}},
                                                                                                             "domain": {"variable": "hydra.core.Term"},
                                                                                                             "parameter": "stripped"}},
@@ -460,7 +442,7 @@
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {"either": {"@left": {"variable": "err"}}},
                                                                                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                                                    "type": {"literal": {"float": {"bigfloat": {}}}}}},
+                                                                                                                    "type": {"literal": {"decimal": {}}}}},
                                                                                                                 "domain": {"variable": "hydra.errors.DecodingError"},
                                                                                                                 "parameter": "err"}},
                                                                                                             "function": {
@@ -475,7 +457,7 @@
                                                                                                                 "type": {
                                                                                                                   "either": {
                                                                                                                     "left": {"variable": "hydra.errors.DecodingError"},
-                                                                                                                    "right": {"literal": {"float": {"bigfloat": {}}}}}}}}}}}}}},
+                                                                                                                    "right": {"literal": {"decimal": {}}}}}}}}}}}}},
                                                                                                 "domain": {"variable": "hydra.core.Term"},
                                                                                                 "parameter": "raw"}},
                                                                                             "domain": {"variable": "hydra.graph.Graph"},
@@ -488,7 +470,7 @@
                                                                                           "inject": {
                                                                                             "field": {"name": "number", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.json.model.Value"}},
-                                                                                        "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                                                                        "domain": {"literal": {"decimal": {}}},
                                                                                         "parameter": "t"}},
                                                                                     "function": {
                                                                                       "typeApplication": {
@@ -497,7 +479,7 @@
                                                                                             "body": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"variable": "hydra.lib.eithers.map"},
-                                                                                                "type": {"literal": {"float": {"bigfloat": {}}}}}},
+                                                                                                "type": {"literal": {"decimal": {}}}}},
                                                                                             "type": {"variable": "hydra.json.model.Value"}}},
                                                                                         "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                                             "domain": {"variable": "hydra.core.Term"},

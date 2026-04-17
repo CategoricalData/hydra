@@ -22,6 +22,10 @@ public interface Model {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.yaml.model.Scalar"), new hydra.core.Field(new hydra.core.Name("bool"), (x).value))));
   }
 
+  static hydra.phantoms.TTerm<hydra.yaml.model.Scalar> scalarDecimal(hydra.phantoms.TTerm<java.math.BigDecimal> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.yaml.model.Scalar"), new hydra.core.Field(new hydra.core.Name("decimal"), (x).value))));
+  }
+
   static hydra.phantoms.TTerm<hydra.yaml.model.Scalar> scalarFloat(hydra.phantoms.TTerm<java.math.BigDecimal> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.yaml.model.Scalar"), new hydra.core.Field(new hydra.core.Name("float"), (x).value))));
   }

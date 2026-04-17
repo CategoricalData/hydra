@@ -22,7 +22,6 @@ object math:
     if x.isNaN || x.isInfinite then x else scala.math.ceil(x)
   def cos(x: Double): Double = scala.math.cos(x)
   def cosh(x: Double): Double = scala.math.cosh(x)
-  def div(x: Int)(y: Int): Int = if y == 0 then 0 else Math.floorDiv(x, y)
   def e: Double = scala.math.E
   def even(x: Int): Boolean = x % 2 == 0
   def exp(x: Double): Double = scala.math.exp(x)
@@ -38,7 +37,6 @@ object math:
   def maybeRem(x: Int)(y: Int): Option[Int] = if y == 0 then None else Some(x % y)
   def maybeSucc(x: Int): Option[Int] = if x == 2147483647 then None else Some(x + 1)
   def min(x: Int)(y: Int): Int = scala.math.min(x, y)
-  def mod(x: Int)(y: Int): Int = if y == 0 then 0 else Math.floorMod(x, y)
   def mul(x: Int)(y: Int): Int = x * y
   def mulFloat64(x: Double)(y: Double): Double = x * y
   def negate(x: Int): Int = -x
@@ -46,9 +44,7 @@ object math:
   def odd(x: Int): Boolean = x % 2 != 0
   def pi: Double = scala.math.Pi
   def pow(base: Double)(exp: Double): Double = scala.math.pow(base, exp)
-  def pred(x: Int): Int = x - 1
   def range(start: Int)(end: Int): Seq[Int] = (start to end).toSeq
-  def rem(x: Int)(y: Int): Int = if y == 0 then 0 else x % y
   // Haskell uses half-even (banker's) rounding
   // DIVERGENCE FROM HASKELL: returns a Double, not a BigInt (see ceiling).
   def round(x: Double): Double =
@@ -79,7 +75,6 @@ object math:
   def sqrt(x: Double): Double = scala.math.sqrt(x)
   def sub(x: Int)(y: Int): Int = x - y
   def subFloat64(x: Double)(y: Double): Double = x - y
-  def succ(x: Int): Int = x + 1
   def tan(x: Double): Double = scala.math.tan(x)
   def tanh(x: Double): Double = scala.math.tanh(x)
   // DIVERGENCE FROM HASKELL: returns a Double, not a BigInt (see ceiling).

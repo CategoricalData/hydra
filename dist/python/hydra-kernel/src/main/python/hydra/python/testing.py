@@ -14,6 +14,7 @@ import hydra.lib.eithers
 import hydra.lib.equality
 import hydra.lib.lists
 import hydra.lib.logic
+import hydra.lib.maybes
 import hydra.lib.strings
 import hydra.packaging
 import hydra.testing
@@ -65,7 +66,7 @@ def generate_python_test_group_hierarchy(group_path: frozenlist[str], test_group
 def generate_test_file_with_python_codec(test_module: hydra.packaging.Module, test_group: hydra.testing.TestGroup) -> Either[T0, tuple[str, str]]:
     r"""Generate a complete test file for Python."""
 
-    return hydra.lib.eithers.map((lambda test_body: (test_module_content := build_python_test_module(test_module, test_group, test_body), ns_ := test_module.namespace, parts := hydra.lib.strings.split_on(".", ns_.value), dir_parts := hydra.lib.lists.init(parts), file_name := hydra.lib.strings.cat(("test_", hydra.lib.lists.last(parts), ".py")), file_path := hydra.lib.strings.cat((hydra.lib.strings.intercalate("/", dir_parts), "/", file_name)), (file_path, test_module_content))[6]), generate_python_test_group_hierarchy((), test_group))
+    return hydra.lib.eithers.map((lambda test_body: (test_module_content := build_python_test_module(test_module, test_group, test_body), ns_ := test_module.namespace, parts := hydra.lib.strings.split_on(".", ns_.value), dir_parts := hydra.lib.maybes.from_maybe((lambda : ()), hydra.lib.lists.maybe_init(parts)), file_name := hydra.lib.strings.cat(("test_", hydra.lib.maybes.from_maybe((lambda : ""), hydra.lib.lists.maybe_last(parts)), ".py")), file_path := hydra.lib.strings.cat((hydra.lib.strings.intercalate("/", dir_parts), "/", file_name)), (file_path, test_module_content))[6]), generate_python_test_group_hierarchy((), test_group))
 
 def generate_python_test_file(test_module: hydra.packaging.Module, test_group: hydra.testing.TestGroup, _g: T0) -> Either[T1, tuple[str, str]]:
     r"""Generate a Python test file for a test group."""

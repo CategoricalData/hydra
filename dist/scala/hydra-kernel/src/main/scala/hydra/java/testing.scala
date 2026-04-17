@@ -10,8 +10,8 @@ def buildJavaTestModule(testModule: hydra.packaging.Module)(testGroup: hydra.tes
   {
   lazy val `ns_`: hydra.packaging.Namespace = (testModule.namespace)
   lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(`ns_`)
-  lazy val packageName: scala.Predef.String = hydra.lib.strings.intercalate(".")(hydra.lib.lists.init[scala.Predef.String](parts))
-  lazy val `className_`: scala.Predef.String = hydra.lib.strings.cat2(hydra.formatting.capitalize(hydra.lib.lists.last[scala.Predef.String](parts)))("Test")
+  lazy val packageName: scala.Predef.String = hydra.lib.strings.intercalate(".")(hydra.lib.maybes.fromMaybe[Seq[scala.Predef.String]](Seq())(hydra.lib.lists.maybeInit[scala.Predef.String](parts)))
+  lazy val `className_`: scala.Predef.String = hydra.lib.strings.cat2(hydra.formatting.capitalize(hydra.lib.maybes.fromMaybe[scala.Predef.String]("")(hydra.lib.lists.maybeLast[scala.Predef.String](parts))))("Test")
   lazy val `groupName_`: scala.Predef.String = (testGroup.name)
   lazy val standardImports: Seq[scala.Predef.String] = Seq("import org.junit.jupiter.api.Test;",
      "import static org.junit.jupiter.api.Assertions.*;", "import java.util.*;", "import hydra.util.*;")
@@ -84,8 +84,8 @@ def generateTestFileWithJavaCodec[T0](testModule: hydra.packaging.Module)(testGr
   lazy val testModuleContent: scala.Predef.String = hydra.java.testing.buildJavaTestModule(testModule)(testGroup)(testBody)
   lazy val `ns_`: hydra.packaging.Namespace = (testModule.namespace)
   lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(`ns_`)
-  lazy val dirParts: Seq[scala.Predef.String] = hydra.lib.lists.drop[scala.Predef.String](1)(hydra.lib.lists.init[scala.Predef.String](parts))
-  lazy val `className_`: scala.Predef.String = hydra.lib.strings.cat2(hydra.formatting.capitalize(hydra.lib.lists.last[scala.Predef.String](parts)))("Test")
+  lazy val dirParts: Seq[scala.Predef.String] = hydra.lib.lists.drop[scala.Predef.String](1)(hydra.lib.maybes.fromMaybe[Seq[scala.Predef.String]](Seq())(hydra.lib.lists.maybeInit[scala.Predef.String](parts)))
+  lazy val `className_`: scala.Predef.String = hydra.lib.strings.cat2(hydra.formatting.capitalize(hydra.lib.maybes.fromMaybe[scala.Predef.String]("")(hydra.lib.lists.maybeLast[scala.Predef.String](parts))))("Test")
   lazy val fileName: scala.Predef.String = hydra.lib.strings.cat2(`className_`)(".java")
   lazy val filePath: scala.Predef.String = hydra.lib.strings.cat(Seq(hydra.lib.strings.intercalate("/")(dirParts),
      "/", fileName))

@@ -206,22 +206,27 @@ public interface Serde {
 
       @Override
       public hydra.ast.Expr visit(hydra.scala.syntax.Defn.Val dv) {
-        java.util.List<hydra.scala.syntax.Pat> pats = (dv).value.pats;
-        hydra.util.Lazy<hydra.scala.syntax.Pat> firstPat = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(pats));
         java.util.List<hydra.scala.syntax.Mod> mods = (dv).value.mods;
-        hydra.scala.syntax.Data_Name patName = firstPat.get().accept(new hydra.scala.syntax.Pat.PartialVisitor<>() {
-          @Override
-          public hydra.scala.syntax.Data_Name visit(hydra.scala.syntax.Pat.Var pv) {
-            return (pv).value.name;
-          }
-        });
-        String nameStr = (patName).value.value;
+        java.util.List<hydra.scala.syntax.Pat> pats = (dv).value.pats;
+        hydra.util.Lazy<String> nameStr = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> "",
+          hydra.lib.maybes.Map.apply(
+            (java.util.function.Function<hydra.scala.syntax.Pat, String>) (firstPat -> {
+              hydra.scala.syntax.Data_Name patName = (firstPat).accept(new hydra.scala.syntax.Pat.PartialVisitor<>() {
+                @Override
+                public hydra.scala.syntax.Data_Name visit(hydra.scala.syntax.Pat.Var pv) {
+                  return (pv).value.name;
+                }
+              });
+              return (patName).value.value;
+            }),
+            hydra.lib.lists.MaybeHead.apply(pats))));
         hydra.util.Maybe<hydra.scala.syntax.Type> typ = (dv).value.decltpe;
         hydra.util.Lazy<hydra.ast.Expr> nameAndType = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
-          () -> hydra.Serialization.cst(nameStr),
+          () -> hydra.Serialization.cst(nameStr.get()),
           (java.util.function.Function<hydra.scala.syntax.Type, hydra.ast.Expr>) (t -> hydra.Serialization.spaceSep(java.util.Arrays.asList(
             hydra.Serialization.cst(hydra.lib.strings.Cat2.apply(
-              nameStr,
+              nameStr.get(),
               ":")),
             hydra.scala.Serde.writeType(t)))),
           typ));
@@ -358,24 +363,28 @@ public interface Serde {
         hydra.lib.equality.Equal.apply(
           hydra.lib.lists.Length.apply(importees),
           1),
-        () -> hydra.Serialization.noSep(java.util.Arrays.asList(
-          hydra.Serialization.cst("."),
-          hydra.lib.lists.Head.apply(importees).accept(new hydra.scala.syntax.Importee.PartialVisitor<>() {
-            @Override
-            public hydra.ast.Expr visit(hydra.scala.syntax.Importee.Wildcard ignored) {
-              return hydra.Serialization.cst("*");
-            }
-
-            @Override
-            public hydra.ast.Expr visit(hydra.scala.syntax.Importee.Name in) {
-              return hydra.Serialization.cst((in).value.name.accept(new hydra.scala.syntax.Name.PartialVisitor<>() {
+        () -> hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> hydra.Serialization.cst(""),
+          hydra.lib.maybes.Map.apply(
+            (java.util.function.Function<hydra.scala.syntax.Importee, hydra.ast.Expr>) (firstImp -> hydra.Serialization.noSep(java.util.Arrays.asList(
+              hydra.Serialization.cst("."),
+              (firstImp).accept(new hydra.scala.syntax.Importee.PartialVisitor<>() {
                 @Override
-                public String visit(hydra.scala.syntax.Name.Value s) {
-                  return (s).value;
+                public hydra.ast.Expr visit(hydra.scala.syntax.Importee.Wildcard ignored) {
+                  return hydra.Serialization.cst("*");
                 }
-              }));
-            }
-          }))),
+
+                @Override
+                public hydra.ast.Expr visit(hydra.scala.syntax.Importee.Name in) {
+                  return hydra.Serialization.cst((in).value.name.accept(new hydra.scala.syntax.Name.PartialVisitor<>() {
+                    @Override
+                    public String visit(hydra.scala.syntax.Name.Value s) {
+                      return (s).value;
+                    }
+                  }));
+                }
+              })))),
+            hydra.lib.lists.MaybeHead.apply(importees))),
         () -> hydra.Serialization.noSep(java.util.Arrays.asList(
           hydra.Serialization.cst("."),
           hydra.Serialization.curlyBracesList(
@@ -729,7 +738,9 @@ public interface Serde {
           @Override
           public hydra.ast.Expr visit(hydra.scala.syntax.Type_FunctionType.Function tf) {
             hydra.scala.syntax.Type cod = (tf).value.res;
-            hydra.util.Lazy<hydra.scala.syntax.Type> dom = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply((tf).value.params));
+            hydra.util.Lazy<hydra.scala.syntax.Type> dom = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+              () -> cod,
+              hydra.lib.lists.MaybeHead.apply((tf).value.params)));
             return hydra.Serialization.ifx(
               hydra.scala.Serde.functionArrowOp(),
               hydra.scala.Serde.writeType(dom.get()),

@@ -32,13 +32,6 @@
             (recur (next rest_) (cons (maybe-value m) acc))
             (recur (next rest_) acc)))))))
 
-;; from_just :: Maybe a -> a
-(def hydra_lib_maybes_from_just
-  (fn [m]
-    (if (maybe-nothing? m)
-      (throw (ex-info "fromJust: Nothing" {}))
-      (maybe-value m))))
-
 ;; from_maybe :: a -> Maybe a -> a
 ;; Thunk-aware: if def_ is a zero-arg fn, only called when Maybe is Nothing
 (def hydra_lib_maybes_from_maybe

@@ -1,0 +1,14 @@
+{
+  "dslModules": ["hydra.dsl.haskell.environment", "hydra.dsl.haskell.syntax"],
+  "evalLibModules": [],
+  "mainModules": [
+    "hydra.haskell.coder",
+    "hydra.haskell.environment",
+    "hydra.haskell.language",
+    "hydra.haskell.operators",
+    "hydra.haskell.serde",
+    "hydra.haskell.syntax",
+    "hydra.haskell.testing",
+    "hydra.haskell.utils"],
+  "package": "hydra-haskell",
+  "testModules": []}

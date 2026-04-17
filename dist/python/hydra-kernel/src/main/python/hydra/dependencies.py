@@ -232,7 +232,7 @@ def prune_let(l: hydra.core.Let) -> hydra.core.Let:
         return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda b: (b.name, b.term)), l.bindings))
     root_name = hydra.core.Name("[[[root]]]")
     def adj(n: hydra.core.Name) -> frozenset[hydra.core.Name]:
-        return hydra.lib.sets.intersection(hydra.lib.sets.from_list(hydra.lib.maps.keys(binding_map())), hydra.variables.free_variables_in_term(hydra.lib.logic.if_else(hydra.lib.equality.equal(n, root_name), (lambda : l.body), (lambda : hydra.lib.maybes.from_just(hydra.lib.maps.lookup(n, binding_map()))))))
+        return hydra.lib.sets.intersection(hydra.lib.sets.from_list(hydra.lib.maps.keys(binding_map())), hydra.variables.free_variables_in_term(hydra.lib.logic.if_else(hydra.lib.equality.equal(n, root_name), (lambda : l.body), (lambda : hydra.lib.maybes.from_maybe((lambda : cast(hydra.core.Term, hydra.core.TermUnit())), hydra.lib.maps.lookup(n, binding_map()))))))
     @lru_cache(1)
     def reachable() -> frozenset[hydra.core.Name]:
         return hydra.sorting.find_reachable_nodes((lambda x1: adj(x1)), root_name)

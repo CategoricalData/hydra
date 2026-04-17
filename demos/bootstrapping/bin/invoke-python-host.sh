@@ -34,7 +34,9 @@ echo ""
 
 PYTHONPATH="$HYDRA_PYTHON_DIR/src/main/python:$HYDRA_ROOT/dist/python/hydra-kernel/src/main/python:$HYDRA_ROOT/dist/python/hydra-ext/src/main/python"
 export PYTHONPATH
-export HYDRA_JSON_DIR="$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json"
+export HYDRA_JSON_DIR="$HYDRA_ROOT/dist/json"
 
-# Run the Python bootstrap (its output includes detailed timing and file counts)
-"$PYTHON" -m hydra.bootstrap "$@" --json-dir "$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json"
+# Run the Python bootstrap (its output includes detailed timing and file counts).
+# --json-dir now points at the dist/json root; the bootstrap walks per-package
+# subdirectories in dependency order.
+"$PYTHON" -m hydra.bootstrap "$@" --json-dir "$HYDRA_ROOT/dist/json"

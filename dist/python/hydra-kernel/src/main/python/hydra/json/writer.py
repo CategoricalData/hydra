@@ -16,6 +16,7 @@ import hydra.lib.literals
 import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.math
+import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.strings
 import hydra.serialization
@@ -23,17 +24,24 @@ import hydra.serialization
 # The colon operator used to separate keys and values in JSON objects.
 colon_op = hydra.ast.Op(hydra.ast.Symbol(":"), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone()), cast(hydra.ast.Ws, hydra.ast.WsSpace())), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)
 
+def hex_byte(c: int) -> str:
+    r"""Encode a byte (0..255) as a two-character lowercase hex string. Non-byte inputs yield placeholder '?' characters."""
+
+    def nibble(i: int) -> str:
+        return hydra.lib.maybes.from_maybe((lambda : "?"), hydra.lib.maybes.map((lambda ch: hydra.lib.strings.from_list(hydra.lib.lists.pure(ch))), hydra.lib.strings.maybe_char_at(i, "0123456789abcdef")))
+    @lru_cache(1)
+    def hi() -> str:
+        return nibble(hydra.lib.maybes.from_maybe((lambda : 0), hydra.lib.math.maybe_div(c, 16)))
+    @lru_cache(1)
+    def lo() -> str:
+        return nibble(hydra.lib.maybes.from_maybe((lambda : 0), hydra.lib.math.maybe_mod(c, 16)))
+    return hydra.lib.strings.cat2(hi(), lo())
+
 def json_string(s: str) -> str:
     r"""Escape and quote a string for JSON output."""
 
     def hex_escape(c: int) -> str:
-        @lru_cache(1)
-        def hi() -> str:
-            return hydra.lib.strings.from_list(hydra.lib.lists.pure(hydra.lib.strings.char_at(hydra.lib.math.div(c, 16), "0123456789abcdef")))
-        @lru_cache(1)
-        def lo() -> str:
-            return hydra.lib.strings.from_list(hydra.lib.lists.pure(hydra.lib.strings.char_at(hydra.lib.math.mod(c, 16), "0123456789abcdef")))
-        return hydra.lib.strings.cat2(hydra.lib.strings.cat2("\\u00", hi()), lo())
+        return hydra.lib.strings.cat2("\\u00", hex_byte(c))
     def escape(c: int) -> str:
         return hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 34), (lambda : "\\\""), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 92), (lambda : "\\\\"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 8), (lambda : "\\b"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 12), (lambda : "\\f"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 10), (lambda : "\\n"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 13), (lambda : "\\r"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 9), (lambda : "\\t"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.lt(c, 32), (lambda : hex_escape(c)), (lambda : hydra.lib.strings.from_list(hydra.lib.lists.pure(c))))))))))))))))))
     @lru_cache(1)
@@ -68,11 +76,17 @@ def value_to_expr(value: hydra.json.model.Value) -> hydra.ast.Expr:
         case hydra.json.model.ValueNumber(value=n):
             @lru_cache(1)
             def rounded() -> int:
-                return hydra.lib.literals.bigfloat_to_bigint(n)
+                return hydra.lib.literals.decimal_to_bigint(n)
             @lru_cache(1)
             def shown() -> str:
-                return hydra.lib.literals.show_bigfloat(n)
-            return hydra.serialization.cst(hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.equal(n, hydra.lib.literals.bigint_to_bigfloat(rounded())), hydra.lib.logic.not_(hydra.lib.equality.equal(shown(), "-0.0"))), (lambda : hydra.lib.literals.show_bigint(rounded())), (lambda : shown())))
+                return hydra.lib.literals.show_decimal(n)
+            @lru_cache(1)
+            def is_whole() -> bool:
+                return hydra.lib.equality.equal(n, hydra.lib.literals.bigint_to_decimal(rounded()))
+            @lru_cache(1)
+            def plain() -> str:
+                return hydra.lib.literals.show_bigint(rounded())
+            return hydra.serialization.cst(hydra.lib.logic.if_else(hydra.lib.logic.and_(is_whole(), hydra.lib.equality.lte(hydra.lib.strings.length(plain()), hydra.lib.strings.length(shown()))), (lambda : plain()), (lambda : shown())))
 
         case hydra.json.model.ValueObject(value=obj):
             return hydra.serialization.braces_list_adaptive(hydra.lib.lists.map((lambda x1: key_value_to_expr(x1)), hydra.lib.maps.to_list(obj)))

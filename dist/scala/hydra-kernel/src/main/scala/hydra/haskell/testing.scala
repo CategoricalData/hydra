@@ -17,7 +17,7 @@ def addNamespacesToNamespaces(ns0: hydra.packaging.Namespaces[hydra.haskell.synt
   lazy val newNamespaces: scala.collection.immutable.Set[hydra.packaging.Namespace] = hydra.lib.sets.fromList[hydra.packaging.Namespace](hydra.lib.maybes.cat[hydra.packaging.Namespace](hydra.lib.lists.map[hydra.core.Name,
      Option[hydra.packaging.Namespace]](hydra.names.namespaceOf)(hydra.lib.sets.toList[hydra.core.Name](names))))
   def toModuleName(namespace: hydra.packaging.Namespace): hydra.haskell.syntax.ModuleName =
-    hydra.formatting.capitalize(hydra.lib.lists.last[scala.Predef.String](hydra.lib.strings.splitOn(".")(namespace)))
+    hydra.formatting.capitalize(hydra.lib.maybes.fromMaybe[scala.Predef.String](namespace)(hydra.lib.lists.maybeLast[scala.Predef.String](hydra.lib.strings.splitOn(".")(namespace))))
   lazy val newMappings: Map[hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName] = hydra.lib.maps.fromList[hydra.packaging.Namespace,
      hydra.haskell.syntax.ModuleName](hydra.lib.lists.map[hydra.packaging.Namespace,
      Tuple2[hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName]]((`ns_`: hydra.packaging.Namespace) => Tuple2(`ns_`,
@@ -93,7 +93,7 @@ def findHaskellImports[T0](namespaces: hydra.packaging.Namespaces[hydra.haskell.
   lazy val filtered: Map[hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName] = hydra.lib.maps.filterWithKey[hydra.packaging.Namespace,
      hydra.haskell.syntax.ModuleName]((`ns_`: hydra.packaging.Namespace) =>
     (_v: hydra.haskell.syntax.ModuleName) =>
-    hydra.lib.logic.not(hydra.lib.equality.equal[scala.Predef.String](hydra.lib.lists.head[scala.Predef.String](hydra.lib.strings.splitOn("hydra.test.")(`ns_`)))("")))(`mapping_`)
+    hydra.lib.logic.not(hydra.lib.equality.equal[scala.Predef.String](hydra.lib.maybes.fromMaybe[scala.Predef.String]("")(hydra.lib.lists.maybeHead[scala.Predef.String](hydra.lib.strings.splitOn("hydra.test.")(`ns_`))))("")))(`mapping_`)
   hydra.lib.lists.map[Tuple2[hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName],
      scala.Predef.String]((entry: Tuple2[hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName]) =>
     hydra.lib.strings.cat(Seq("import qualified ", hydra.lib.strings.intercalate(".")(hydra.lib.lists.map[scala.Predef.String,

@@ -547,10 +547,10 @@ inductiveDefinitionToExpr = define "inductiveDefinitionToExpr" $
       (kw "Inductive"),
     "bodyExprs">: Lists.map (lambda "b" $ inductiveBodyToExpr @@ var "b")
       (project C._InductiveDefinition C._InductiveDefinition_bodies @@ var "id"),
-    "firstBody">: Lists.head $ var "bodyExprs",
+    "firstBody">: Maybes.fromMaybe (Serialization.cst @@ string "") (Lists.maybeHead $ var "bodyExprs"),
     "restBodies">: Lists.map
       (lambda "b" $ Serialization.spaceSep @@ list [kw "with", var "b"])
-      (Lists.tail $ var "bodyExprs"),
+      (Lists.drop (int32 1) $ var "bodyExprs"),
     "firstLine">: Serialization.spaceSep @@ Lists.concat (list [
       var "locPart",
       list [var "kwPart", var "firstBody"]])] $

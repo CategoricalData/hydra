@@ -305,13 +305,16 @@ public interface Utils {
   }
 
   static hydra.haskell.syntax.Type toTypeApplication(java.util.List<hydra.haskell.syntax.Type> types) {
+    hydra.util.Lazy<hydra.haskell.syntax.Type> dummyType = new hydra.util.Lazy<>(() -> new hydra.haskell.syntax.Type.Variable(new hydra.haskell.syntax.Name.Normal(new hydra.haskell.syntax.QualifiedName((java.util.List<hydra.haskell.syntax.NamePart>) (java.util.Collections.<hydra.haskell.syntax.NamePart>emptyList()), new hydra.haskell.syntax.NamePart("")))));
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.haskell.syntax.Type>, hydra.haskell.syntax.Type>> app = new java.util.concurrent.atomic.AtomicReference<>();
-    app.set((java.util.function.Function<java.util.List<hydra.haskell.syntax.Type>, hydra.haskell.syntax.Type>) (l -> hydra.lib.logic.IfElse.lazy(
-      hydra.lib.equality.Gt.apply(
-        hydra.lib.lists.Length.apply(l),
-        1),
-      () -> new hydra.haskell.syntax.Type.Application(new hydra.haskell.syntax.ApplicationType(app.get().apply(hydra.lib.lists.Tail.apply(l)), hydra.lib.lists.Head.apply(l))),
-      () -> hydra.lib.lists.Head.apply(l))));
+    app.set((java.util.function.Function<java.util.List<hydra.haskell.syntax.Type>, hydra.haskell.syntax.Type>) (l -> hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> dummyType.get(),
+      hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<hydra.util.Pair<hydra.haskell.syntax.Type, java.util.List<hydra.haskell.syntax.Type>>, hydra.haskell.syntax.Type>) (p -> hydra.lib.logic.IfElse.lazy(
+          hydra.lib.lists.Null.apply(hydra.lib.pairs.Second.apply(p)),
+          () -> hydra.lib.pairs.First.apply(p),
+          () -> new hydra.haskell.syntax.Type.Application(new hydra.haskell.syntax.ApplicationType(app.get().apply(hydra.lib.pairs.Second.apply(p)), hydra.lib.pairs.First.apply(p))))),
+        hydra.lib.lists.Uncons.apply(l)))));
     return app.get().apply(hydra.lib.lists.Reverse.apply(types));
   }
 
@@ -320,7 +323,9 @@ public interface Utils {
     java.util.List<String> parts = hydra.lib.strings.SplitOn.apply(
       ".",
       snameStr);
-    return hydra.lib.lists.Last.apply(parts);
+    return hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> snameStr,
+      hydra.lib.lists.MaybeLast.apply(parts));
   }
 
   static hydra.haskell.syntax.Name unionFieldReference(java.util.Set<hydra.core.Name> boundNames, hydra.packaging.Namespaces<hydra.haskell.syntax.ModuleName> namespaces, hydra.core.Name sname, hydra.core.Name fname) {

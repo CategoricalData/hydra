@@ -49,9 +49,17 @@ optionalIntList :: Maybe [Int] -> TTerm Term
 optionalIntList Nothing = Core.termMaybe nothing
 optionalIntList (Just xs) = Core.termMaybe $ just (intList xs)
 
+optionalIntAndIntList :: Maybe (Int, [Int]) -> TTerm Term
+optionalIntAndIntList Nothing = Core.termMaybe nothing
+optionalIntAndIntList (Just (x, xs)) = Core.termMaybe $ just (pair (int32 x) (intList xs))
+
 optionalString :: Maybe String -> TTerm Term
 optionalString Nothing = Core.termMaybe nothing
 optionalString (Just x) = Core.termMaybe  $ just (string x)
+
+optionalStringList :: Maybe [String] -> TTerm Term
+optionalStringList Nothing = Core.termMaybe nothing
+optionalStringList (Just xs) = Core.termMaybe $ just (stringList xs)
 
 stringList :: [String] -> TTerm Term
 stringList els = list (string <$> els)
@@ -61,7 +69,6 @@ allTests = define "allTests" $
     Phantoms.doc "Test cases for hydra.lib.lists primitives" $
     supergroup "hydra.lib.lists primitives" [
       listsApply,
-      listsAt,
       listsBind,
       listsConcat,
       listsConcat2,
@@ -74,11 +81,8 @@ allTests = define "allTests" $
       listsFoldl,
       listsFoldr,
       listsGroup,
-      listsHead,
-      listsInit,
       listsIntercalate,
       listsIntersperse,
-      listsLast,
       listsLength,
       listsMap,
       listsMaybeAt,
@@ -92,14 +96,13 @@ allTests = define "allTests" $
       listsPure,
       listsReplicate,
       listsReverse,
-      listsSafeHead,
       listsSingleton,
       listsSort,
       listsSortOn,
       listsSpan,
-      listsTail,
       listsTake,
       listsTranspose,
+      listsUncons,
       listsZip,
       listsZipWith]
     where
@@ -113,16 +116,6 @@ allTests = define "allTests" $
           testStr "single input" [primitive _strings_toUpper, primitive _strings_toLower] ["Test"] ["TEST", "test"]]]
         where
           testStr name funs lst result = primCase name _lists_apply [list funs, stringList lst] (stringList result)
-  
-      listsAt = subgroup "at" [
-        testInt "first element" 0 [1, 2, 3] 1,
-        testInt "middle element" 1 [1, 2, 3] 2,
-        testInt "last element" 2 [1, 2, 3] 3,
-        testInt "single element list" 0 [42] 42,
-        testStr "string list access" 1 ["hello", "world"] "world"]
-        where
-          testInt name idx lst result = primCase name _lists_at [int32 idx, intList lst] (int32 result)
-          testStr name idx lst result = primCase name _lists_at [int32 idx, stringList lst] (string result)
   
       listsBind = subgroup "bind" [
         test "negation function" [1, 2, 3, 4] (lambda "x" (primitive _lists_pure @@ (primitive _math_negate @@ var "x"))) (negate <$> [1, 2, 3, 4]),
@@ -236,24 +229,6 @@ allTests = define "allTests" $
         where
           test name lst result = primCase name _lists_group [intList lst] (intListList result)
   
-      listsHead = subgroup "head" [
-        testInt "three element list" [1, 2, 3] 1,
-        testInt "single element list" [42] 42,
-        testInt "negative numbers" [-1, -2, -3] (-1),
-        testStr "string list" ["hello", "world"] "hello"]
-        where
-          testInt name lst result = primCase name _lists_head [intList lst] (int32 result)
-          testStr name lst result = primCase name _lists_head [stringList lst] (string result)
-  
-      listsInit = subgroup "init" [
-        testInt "multiple elements" [1, 2, 3, 4] [1, 2, 3],
-        testInt "two elements" [1, 2] [1],
-        testInt "single element" [1] [],
-        testStr "string list" ["a", "b", "c"] ["a", "b"]]
-        where
-          testInt name lst result = primCase name _lists_init [intList lst] (intList result)
-          testStr name lst result = primCase name _lists_init [stringList lst] (stringList result)
-  
       listsIntercalate = subgroup "intercalate" [
         test "double zero separator" [0, 0] [[1, 2, 3], [4, 5], [6, 7, 8]] [1, 2, 3, 0, 0, 4, 5, 0, 0, 6, 7, 8],
         test "empty separator" [] [[1, 2], [3, 4]] [1, 2, 3, 4],
@@ -273,15 +248,6 @@ allTests = define "allTests" $
         where
           testStr name ifx lst result = primCase name _lists_intersperse [string ifx, stringList lst] (stringList result)
           testInt name ifx lst result = primCase name _lists_intersperse [int32 ifx, intList lst] (intList result)
-  
-      listsLast = subgroup "last" [
-        testInt "three element list" [1, 2, 3] 3,
-        testInt "single element list" [42] 42,
-        testInt "negative numbers" [-1, -2, -3] (-3),
-        testStr "string list" ["hello", "world"] "world"]
-        where
-          testInt name lst result = primCase name _lists_last [intList lst] (int32 result)
-          testStr name lst result = primCase name _lists_last [stringList lst] (string result)
   
       listsLength = subgroup "length" [
         testInt "three elements" [1, 2, 3] 3,
@@ -324,25 +290,31 @@ allTests = define "allTests" $
           testStr name lst result = primCase name _lists_maybeHead [stringList lst] (optionalString result)
 
       listsMaybeInit = subgroup "maybeInit" [
-        test "three elements" [1, 2, 3] (Just [1, 2]),
-        test "single element" [42] (Just []),
-        test "empty list" [] Nothing]
+        testInt "three elements" [1, 2, 3] (Just [1, 2]),
+        testInt "single element" [42] (Just []),
+        testInt "empty list" [] Nothing,
+        testStr "string list" ["a", "b", "c"] (Just ["a", "b"])]
         where
-          test name lst result = primCase name _lists_maybeInit [intList lst] (optionalIntList result)
+          testInt name lst result = primCase name _lists_maybeInit [intList lst] (optionalIntList result)
+          testStr name lst result = primCase name _lists_maybeInit [stringList lst] (optionalStringList result)
 
       listsMaybeLast = subgroup "maybeLast" [
         testInt "three elements" [1, 2, 3] (Just 3),
         testInt "single element" [42] (Just 42),
-        testInt "empty list" [] Nothing]
+        testInt "empty list" [] Nothing,
+        testStr "string list" ["hello", "world"] (Just "world")]
         where
           testInt name lst result = primCase name _lists_maybeLast [intList lst] (optionalInt32 result)
+          testStr name lst result = primCase name _lists_maybeLast [stringList lst] (optionalString result)
 
       listsMaybeTail = subgroup "maybeTail" [
-        test "three elements" [1, 2, 3] (Just [2, 3]),
-        test "single element" [42] (Just []),
-        test "empty list" [] Nothing]
+        testInt "three elements" [1, 2, 3] (Just [2, 3]),
+        testInt "single element" [42] (Just []),
+        testInt "empty list" [] Nothing,
+        testStr "string list" ["a", "b", "c"] (Just ["b", "c"])]
         where
-          test name lst result = primCase name _lists_maybeTail [intList lst] (optionalIntList result)
+          testInt name lst result = primCase name _lists_maybeTail [intList lst] (optionalIntList result)
+          testStr name lst result = primCase name _lists_maybeTail [stringList lst] (optionalStringList result)
 
       listsNub = subgroup "nub" [
         testInt "remove duplicates" [1, 2, 1, 3, 2, 4] [1, 2, 3, 4],
@@ -402,16 +374,6 @@ allTests = define "allTests" $
           testInt name lst result = primCase name _lists_reverse [intList lst] (intList result)
           testStr name lst result = primCase name _lists_reverse [stringList lst] (stringList result)
   
-      listsSafeHead = subgroup "safeHead" [
-        testInt "non-empty int list" [1, 2, 3] (Just 1),
-        testInt "empty int list" [] Nothing,
-        testInt "single element" [42] (Just 42),
-        testStr "non-empty string list" ["hello", "world"] (Just "hello"),
-        testStr "empty string list" [] Nothing]
-        where
-          testInt name lst result = primCase name _lists_safeHead [intList lst] (optionalInt32 result)
-          testStr name lst result = primCase name _lists_safeHead [stringList lst] (optionalString result)
-  
       listsSingleton = subgroup "singleton" [
         testInt "number element" 42 [42],
         testInt "negative number" (-1) [-1],
@@ -451,15 +413,6 @@ allTests = define "allTests" $
         where
           test name pred lst (prefix, suffix) = primCase name _lists_span [pred, intList lst] (pair (intList prefix) (intList suffix))
   
-      listsTail = subgroup "tail" [
-        testInt "multiple elements" [1, 2, 3, 4] [2, 3, 4],
-        testInt "two elements" [1, 2] [2],
-        testInt "single element" [1] [],
-        testStr "string list" ["a", "b", "c"] ["b", "c"]]
-        where
-          testInt name lst result = primCase name _lists_tail [intList lst] (intList result)
-          testStr name lst result = primCase name _lists_tail [stringList lst] (stringList result)
-  
       listsTake = subgroup "take" [
         test "take from beginning" 2 [1, 2, 3, 4, 5] [1, 2],
         test "take zero elements" 0 [1, 2, 3] [],
@@ -478,7 +431,14 @@ allTests = define "allTests" $
         test "ragged matrix" [[1, 2], [3], [4, 5, 6]] [[1, 3, 4], [2, 5], [6]]]
         where
           test name matrix result = primCase name _lists_transpose [intListList matrix] (intListList result)
-  
+
+      listsUncons = subgroup "uncons" [
+        test "three elements" [1, 2, 3] (Just (1, [2, 3])),
+        test "single element" [42] (Just (42, [])),
+        test "empty list" [] Nothing]
+        where
+          test name lst result = primCase name _lists_uncons [intList lst] (optionalIntAndIntList result)
+
       listsZip = subgroup "zip" [
         test "equal length lists" [1, 2, 3] ["a", "b", "c"] [(1, "a"), (2, "b"), (3, "c")],
         test "first list shorter" [1, 2] ["a", "b", "c"] [(1, "a"), (2, "b")],

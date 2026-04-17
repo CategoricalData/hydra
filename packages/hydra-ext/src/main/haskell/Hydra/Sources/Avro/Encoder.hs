@@ -77,6 +77,7 @@ import           Prelude hiding ((++))
 import qualified Data.Int                                  as I
 import qualified Data.List                                 as L
 import qualified Data.Map                                  as M
+import qualified Data.Scientific                           as Sci
 import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
@@ -378,36 +379,36 @@ floatAdapter = define "floatAdapter" $
                 _Literal_float>>: lambda "fv" $ right (inject JM._Value JM._Value_number (floatValueToDouble @@ var "fv"))]])
         @@ (lambda "_cx" $ lambda "j" $
           cases JM._Value (var "j") Nothing [
-            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat64 (Literals.bigfloatToFloat64 (var "d")))))])) [
+            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat64 (Literals.decimalToFloat64 (var "d")))))])) [
     _FloatType_float32>>: constant $
       var "simple"
         @@ inject Avro._Schema Avro._Schema_primitive (injectUnit Avro._Primitive Avro._Primitive_float)
         @@ boolean False
         @@ (lambda "_cx" $ lambda "t" $
-          Eithers.map (lambda "f" $ inject JM._Value JM._Value_number (Literals.float32ToBigfloat (var "f")))
+          Eithers.map (lambda "f" $ inject JM._Value JM._Value_number (Literals.float32ToDecimal (var "f")))
             (ExtractCore.float32 @@ Graph.emptyGraph @@ var "t"))
         @@ (lambda "_cx" $ lambda "j" $
           cases JM._Value (var "j") Nothing [
-            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat32 (Literals.bigfloatToFloat32 (var "d")))))]),
+            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat32 (Literals.decimalToFloat32 (var "d")))))]),
     _FloatType_float64>>: constant $
       var "simple"
         @@ inject Avro._Schema Avro._Schema_primitive (injectUnit Avro._Primitive Avro._Primitive_double)
         @@ boolean False
         @@ (lambda "_cx" $ lambda "t" $
-          Eithers.map (lambda "d" $ inject JM._Value JM._Value_number (Literals.float64ToBigfloat (var "d")))
+          Eithers.map (lambda "d" $ inject JM._Value JM._Value_number (Literals.float64ToDecimal (var "d")))
             (ExtractCore.float64 @@ Graph.emptyGraph @@ var "t"))
         @@ (lambda "_cx" $ lambda "j" $
           cases JM._Value (var "j") Nothing [
-            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat64 (Literals.bigfloatToFloat64 (var "d")))))])]
+            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat64 (Literals.decimalToFloat64 (var "d")))))])]
 
-floatValueToDouble :: TTermDefinition (FloatValue -> Double)
+floatValueToDouble :: TTermDefinition (FloatValue -> Sci.Scientific)
 floatValueToDouble = define "floatValueToDouble" $
-  doc "Convert any float value to a double (bigfloat)" $
+  doc "Convert any float value to a JSON decimal number" $
   lambda "fv" $
     cases _FloatValue (var "fv") Nothing [
-      _FloatValue_bigfloat>>: lambda "d" $ var "d",
-      _FloatValue_float32>>: lambda "f" $ Literals.float32ToBigfloat (var "f"),
-      _FloatValue_float64>>: lambda "d" $ Literals.float64ToBigfloat (var "d")]
+      _FloatValue_bigfloat>>: lambda "d" $ Literals.float64ToDecimal (Literals.bigfloatToFloat64 (var "d")),
+      _FloatValue_float32>>: lambda "f" $ Literals.float32ToDecimal (var "f"),
+      _FloatValue_float64>>: lambda "d" $ Literals.float64ToDecimal (var "d")]
 
 foldFieldAdapters :: TTermDefinition (Context -> [FieldType] -> AvroEnv.EncodeEnvironment -> Result ([(Name, HydraAvroAdapter)], AvroEnv.EncodeEnvironment))
 foldFieldAdapters = define "foldFieldAdapters" $
@@ -471,42 +472,42 @@ integerAdapter = define "integerAdapter" $
                 _Literal_integer>>: lambda "iv" $ right (inject JM._Value JM._Value_number (integerValueToDouble @@ var "iv"))]])
         @@ (lambda "_cx" $ lambda "j" $
           cases JM._Value (var "j") Nothing [
-            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt64 (Literals.bigintToInt64 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 (var "d")))))))))])) [
+            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt64 (Literals.bigintToInt64 (Literals.decimalToBigint (var "d"))))))])) [
     _IntegerType_int32>>: constant $
       var "simple"
         @@ inject Avro._Schema Avro._Schema_primitive (injectUnit Avro._Primitive Avro._Primitive_int)
         @@ boolean False
         @@ (lambda "_cx" $ lambda "t" $
-          Eithers.map (lambda "i" $ inject JM._Value JM._Value_number (Literals.bigintToBigfloat (Literals.int32ToBigint (var "i"))))
+          Eithers.map (lambda "i" $ inject JM._Value JM._Value_number (Literals.bigintToDecimal (Literals.int32ToBigint (var "i"))))
             (ExtractCore.int32 @@ Graph.emptyGraph @@ var "t"))
         @@ (lambda "_cx" $ lambda "j" $
           cases JM._Value (var "j") Nothing [
-            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt32 (Literals.bigintToInt32 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 (var "d")))))))))]),
+            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt32 (Literals.bigintToInt32 (Literals.decimalToBigint (var "d"))))))]),
     _IntegerType_int64>>: constant $
       var "simple"
         @@ inject Avro._Schema Avro._Schema_primitive (injectUnit Avro._Primitive Avro._Primitive_long)
         @@ boolean False
         @@ (lambda "_cx" $ lambda "t" $
-          Eithers.map (lambda "i" $ inject JM._Value JM._Value_number (Literals.bigintToBigfloat (Literals.int64ToBigint (var "i"))))
+          Eithers.map (lambda "i" $ inject JM._Value JM._Value_number (Literals.bigintToDecimal (Literals.int64ToBigint (var "i"))))
             (ExtractCore.int64 @@ Graph.emptyGraph @@ var "t"))
         @@ (lambda "_cx" $ lambda "j" $
           cases JM._Value (var "j") Nothing [
-            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt64 (Literals.bigintToInt64 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 (var "d")))))))))])]
+            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt64 (Literals.bigintToInt64 (Literals.decimalToBigint (var "d"))))))])]
 
-integerValueToDouble :: TTermDefinition (IntegerValue -> Double)
+integerValueToDouble :: TTermDefinition (IntegerValue -> Sci.Scientific)
 integerValueToDouble = define "integerValueToDouble" $
-  doc "Convert any integer value to a double (bigfloat)" $
+  doc "Convert any integer value to a JSON decimal number" $
   lambda "iv" $
     cases _IntegerValue (var "iv") Nothing [
-      _IntegerValue_bigint>>: lambda "i" $ Literals.bigintToBigfloat (var "i"),
-      _IntegerValue_int8>>: lambda "i" $ Literals.bigintToBigfloat (Literals.int8ToBigint (var "i")),
-      _IntegerValue_int16>>: lambda "i" $ Literals.bigintToBigfloat (Literals.int16ToBigint (var "i")),
-      _IntegerValue_int32>>: lambda "i" $ Literals.bigintToBigfloat (Literals.int32ToBigint (var "i")),
-      _IntegerValue_int64>>: lambda "i" $ Literals.bigintToBigfloat (Literals.int64ToBigint (var "i")),
-      _IntegerValue_uint8>>: lambda "i" $ Literals.bigintToBigfloat (Literals.uint8ToBigint (var "i")),
-      _IntegerValue_uint16>>: lambda "i" $ Literals.bigintToBigfloat (Literals.uint16ToBigint (var "i")),
-      _IntegerValue_uint32>>: lambda "i" $ Literals.bigintToBigfloat (Literals.uint32ToBigint (var "i")),
-      _IntegerValue_uint64>>: lambda "i" $ Literals.bigintToBigfloat (Literals.uint64ToBigint (var "i"))]
+      _IntegerValue_bigint>>: lambda "i" $ Literals.bigintToDecimal (var "i"),
+      _IntegerValue_int8>>: lambda "i" $ Literals.bigintToDecimal (Literals.int8ToBigint (var "i")),
+      _IntegerValue_int16>>: lambda "i" $ Literals.bigintToDecimal (Literals.int16ToBigint (var "i")),
+      _IntegerValue_int32>>: lambda "i" $ Literals.bigintToDecimal (Literals.int32ToBigint (var "i")),
+      _IntegerValue_int64>>: lambda "i" $ Literals.bigintToDecimal (Literals.int64ToBigint (var "i")),
+      _IntegerValue_uint8>>: lambda "i" $ Literals.bigintToDecimal (Literals.uint8ToBigint (var "i")),
+      _IntegerValue_uint16>>: lambda "i" $ Literals.bigintToDecimal (Literals.uint16ToBigint (var "i")),
+      _IntegerValue_uint32>>: lambda "i" $ Literals.bigintToDecimal (Literals.uint32ToBigint (var "i")),
+      _IntegerValue_uint64>>: lambda "i" $ Literals.bigintToDecimal (Literals.uint64ToBigint (var "i"))]
 
 literalAdapter :: TTermDefinition (Context -> Type -> LiteralType -> Result HydraAvroAdapter)
 literalAdapter = define "literalAdapter" $
@@ -560,7 +561,7 @@ localName = define "localName" $
   lambda "name_" $ lets [
     "s">: unwrap _Name @@ var "name_",
     "parts">: Strings.splitOn (string ".") (var "s")] $
-    Lists.last (var "parts")
+    Maybes.fromMaybe (var "s") (Lists.maybeLast (var "parts"))
 
 nameNamespace :: TTermDefinition (Name -> Maybe String)
 nameNamespace = define "nameNamespace" $
@@ -570,7 +571,7 @@ nameNamespace = define "nameNamespace" $
     "parts">: Strings.splitOn (string ".") (var "s")] $
     Logic.ifElse (Equality.equal (Lists.length (var "parts")) (int32 1))
       nothing
-      (just (Strings.intercalate (string ".") (Lists.init (var "parts"))))
+      (Maybes.map (lambda "ps" $ Strings.intercalate (string ".") (var "ps")) (Lists.maybeInit (var "parts")))
 
 namedTypeAdapter :: TTermDefinition (Context -> Type -> Maybe Name -> M.Map Name Term -> [FieldType] -> AvroEnv.EncodeEnvironment
   -> ([Avro.Field] -> Avro.NamedType)
@@ -731,11 +732,11 @@ unionAsRecordAdapter = define "unionAsRecordAdapter" $
             cases JM._Value (var "j") (Just (err @@ var "cx1" @@ string "expected JSON object for union-as-record")) [
               JM._Value_object>>: lambda "m" $ lets [
                 "findActive">: lambda "remaining" $
-                  Logic.ifElse (Lists.null (var "remaining"))
+                  Maybes.maybe
                     (err @@ var "cx1" @@ string "no non-null field in union record")
-                    (lets [
-                      "head_">: Lists.head (var "remaining"),
-                      "rest_">: Lists.tail (var "remaining"),
+                    (lambda "p" $ lets [
+                      "head_">: Pairs.first (var "p"),
+                      "rest_">: Pairs.second (var "p"),
                       "fname">: Pairs.first (var "head_"),
                       "ad">: Pairs.second (var "head_"),
                       "mjv">: Maps.lookup (localName @@ var "fname") (var "m")] $
@@ -746,7 +747,8 @@ unionAsRecordAdapter = define "unionAsRecordAdapter" $
                             Eithers.map (lambda "t" $ Core.termInject (Core.injection (var "typeName") (Core.field (var "fname") (var "t"))))
                               (Coders.coderDecode (Coders.adapterCoder (var "ad")) @@ var "cx1" @@ var "jv"))) [
                             JM._Value_null>>: constant (var "findActive" @@ var "rest_")])
-                        (var "mjv"))] $
+                        (var "mjv"))
+                    (Lists.uncons (var "remaining"))] $
                 var "findActive" @@ var "fieldAdapters"])),
       "env2">: record AvroEnv._EncodeEnvironment [
         AvroEnv._EncodeEnvironment_typeMap>>: project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_typeMap @@ var "env1",

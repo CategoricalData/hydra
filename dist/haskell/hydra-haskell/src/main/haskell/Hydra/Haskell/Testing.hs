@@ -43,7 +43,7 @@ addNamespacesToNamespaces ns0 names =
 
       let newNamespaces = Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList names)))
           toModuleName =
-                  \namespace -> Syntax.ModuleName (Formatting.capitalize (Lists.last (Strings.splitOn "." (Packaging.unNamespace namespace))))
+                  \namespace -> Syntax.ModuleName (Formatting.capitalize (Maybes.fromMaybe (Packaging.unNamespace namespace) (Lists.maybeLast (Strings.splitOn "." (Packaging.unNamespace namespace)))))
           newMappings = Maps.fromList (Lists.map (\ns_ -> (ns_, (toModuleName ns_))) (Sets.toList newNamespaces))
       in Packaging.Namespaces {
         Packaging.namespacesFocus = (Packaging.namespacesFocus ns0),
@@ -143,7 +143,7 @@ findHaskellImports namespaces names_ =
 
       let mapping_ = Packaging.namespacesMapping namespaces
           filtered =
-                  Maps.filterWithKey (\ns_ -> \_v -> Logic.not (Equality.equal (Lists.head (Strings.splitOn "hydra.test." (Packaging.unNamespace ns_))) "")) mapping_
+                  Maps.filterWithKey (\ns_ -> \_v -> Logic.not (Equality.equal (Maybes.fromMaybe "" (Lists.maybeHead (Strings.splitOn "hydra.test." (Packaging.unNamespace ns_)))) "")) mapping_
       in (Lists.map (\entry -> Strings.cat [
         "import qualified ",
         (Strings.intercalate "." (Lists.map Formatting.capitalize (Strings.splitOn "." (Packaging.unNamespace (Pairs.first entry))))),

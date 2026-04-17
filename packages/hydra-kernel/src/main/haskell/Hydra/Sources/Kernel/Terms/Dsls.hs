@@ -215,15 +215,22 @@ dslNamespace = define "dslNamespace" $
   doc "Generate a DSL module namespace from a source module namespace" $
   "ns" ~>
   "parts" <~ (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))) $
+  "prefixFull" <~ (Packaging.namespace (Strings.cat $ list [
+    string "hydra.dsl.",
+    Packaging.unNamespace (var "ns")])) $
   -- For hydra.* namespaces: hydra.foo -> hydra.dsl.foo
   -- For other namespaces: foo.bar -> hydra.dsl.foo.bar (preserve full path)
-  Logic.ifElse (Equality.equal (Lists.head (var "parts")) (string "hydra"))
-    (Packaging.namespace (Strings.cat $ list [
-      string "hydra.dsl.",
-      Strings.intercalate (string ".") (Lists.tail (var "parts"))]))
-    (Packaging.namespace (Strings.cat $ list [
-      string "hydra.dsl.",
-      Packaging.unNamespace (var "ns")]))
+  -- An empty parts list is unreachable for a well-formed namespace; fall back
+  -- to the full-prefix form.
+  Maybes.maybe
+    (var "prefixFull")
+    ("ht" ~>
+      Logic.ifElse (Equality.equal (Pairs.first (var "ht")) (string "hydra"))
+        (Packaging.namespace (Strings.cat $ list [
+          string "hydra.dsl.",
+          Strings.intercalate (string ".") (Pairs.second (var "ht"))]))
+        (var "prefixFull"))
+    (Lists.uncons (var "parts"))
 
 -- | Generate a fully qualified binding name for a DSL function from a type name
 -- For example, "hydra.core.AnnotatedTerm" -> "hydra.dsl.core.annotatedTerm"
@@ -233,24 +240,28 @@ dslBindingName = define "dslBindingName" $
   doc "Generate a binding name for a DSL function from a type name" $
   "n" ~>
   "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "n"))) $
-  -- Check if name has a namespace (contains ".")
-  Logic.ifElse (Logic.not (Lists.null (Lists.tail (var "parts"))))
-    -- Qualified type: check if namespace starts with "hydra"
-    (Logic.ifElse (Equality.equal (Lists.head (var "parts")) (string "hydra"))
-      -- hydra.core.Foo -> hydra.dsl.core.foo
-      (Core.name (Strings.intercalate (string ".") (Lists.concat2
-        (list [string "hydra", string "dsl"])
-        (Lists.concat2
-          (Lists.tail (Lists.init (var "parts")))
-          (list [Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))])))))
-      -- openGql.grammar.Foo -> hydra.dsl.openGql.grammar.foo
-      (Core.name (Strings.intercalate (string ".") (Lists.concat2
-        (list [string "hydra", string "dsl"])
-        (Lists.concat2
-          (Lists.init (var "parts"))
-          (list [Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))]))))))
-    -- Local type: just decapitalize
-    (Core.name (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))))
+  "localPart" <~ (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))) $
+  "localResult" <~ (Core.name (var "localPart")) $
+  -- nsParts = parts minus the last element (the namespace components).
+  -- Nothing means parts was empty (unreachable for a valid name);
+  -- Just [] means the name has no namespace (local type).
+  Maybes.maybe
+    (var "localResult")
+    ("nsParts" ~>
+      Maybes.maybe
+        -- single-element parts: local type, no namespace
+        (var "localResult")
+        ("nsHeadTail" ~>
+          "dslNsParts" <~ (Logic.ifElse
+            (Equality.equal (Pairs.first (var "nsHeadTail")) (string "hydra"))
+            -- hydra.core.Foo -> [hydra, dsl] ++ tail nsParts
+            (Lists.concat2 (list [string "hydra", string "dsl"]) (Pairs.second (var "nsHeadTail")))
+            -- openGql.grammar.Foo -> [hydra, dsl] ++ nsParts
+            (Lists.concat2 (list [string "hydra", string "dsl"]) (var "nsParts"))) $
+          Core.name (Strings.intercalate (string ".")
+            (Lists.concat2 (var "dslNsParts") (list [var "localPart"]))))
+        (Lists.uncons (var "nsParts")))
+    (Lists.maybeInit (var "parts"))
 
 -- | Generate a DSL element name from a type name and a local element name.
 -- For example, ("hydra.core.AnnotatedTerm", "annotatedTermBody") -> "hydra.dsl.core.annotatedTermBody"
@@ -261,14 +272,24 @@ dslDefinitionName = define "dslDefinitionName" $
   doc "Generate a qualified DSL element name from a type name and local element name" $
   "typeName" ~> "localName" ~>
   "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "typeName"))) $
-  -- Extract namespace parts (all but last), transform to DSL namespace
-  "nsParts" <~ (Lists.init (var "parts")) $
-  "dslNsParts" <~ (Logic.ifElse (Equality.equal (Lists.head (var "nsParts")) (string "hydra"))
-    -- hydra.core -> hydra.dsl.core
-    (Lists.concat2 (list [string "hydra", string "dsl"]) (Lists.tail (var "nsParts")))
-    -- openGql.grammar -> hydra.dsl.openGql.grammar
-    (Lists.concat2 (list [string "hydra", string "dsl"]) (var "nsParts"))) $
-  Core.name (Strings.intercalate (string ".") (Lists.concat2 (var "dslNsParts") (list [var "localName"])))
+  -- Extract namespace parts (all but last); fall back to the bare local name
+  -- when the type name has no namespace (unreachable for well-formed inputs).
+  Maybes.maybe
+    (Core.name (var "localName"))
+    ("nsParts" ~>
+      "dslNsParts" <~ (Maybes.maybe
+        -- nsParts empty: just prepend hydra.dsl
+        (list [string "hydra", string "dsl"])
+        ("nsHeadTail" ~> Logic.ifElse
+          (Equality.equal (Pairs.first (var "nsHeadTail")) (string "hydra"))
+          -- hydra.core -> hydra.dsl.core (drop the leading "hydra", keep the rest)
+          (Lists.concat2 (list [string "hydra", string "dsl"]) (Pairs.second (var "nsHeadTail")))
+          -- openGql.grammar -> hydra.dsl.openGql.grammar
+          (Lists.concat2 (list [string "hydra", string "dsl"]) (var "nsParts")))
+        (Lists.uncons (var "nsParts"))) $
+      Core.name (Strings.intercalate (string ".")
+        (Lists.concat2 (var "dslNsParts") (list [var "localName"]))))
+    (Lists.maybeInit (var "parts"))
 
 -- | Generate a record constructor function.
 -- For a record type like {body: Term, annotation: Map(Name, Term)},

@@ -95,5 +95,6 @@ writeDslHaskell basePath universeModules typeModules = do
 ----------------------------------------
 
 -- | Generate the lexicon to the standard location, using the Haskell-host kernel modules.
+-- Path is relative to heads/haskell/ (where the sync script runs stack ghci).
 writeLexiconToStandardPath :: IO ()
-writeLexiconToStandardPath = writeLexicon "../docs/hydra-lexicon.txt" Sources.kernelModules
+writeLexiconToStandardPath = writeLexicon "../../docs/hydra-lexicon.txt" Sources.kernelModules

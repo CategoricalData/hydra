@@ -15,11 +15,11 @@ public interface Lexical {
         (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>) (ts -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>((b).name, ts)))),
         (b).type)),
       elements))));
-    hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Term>> letTerms = new hydra.util.Lazy<>(() -> hydra.lib.maps.Map.apply(
-      (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.core.Term>) (mt -> hydra.lib.maybes.FromJust.apply(mt)),
-      hydra.lib.maps.Filter.apply(
-        (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, Boolean>) (mt -> hydra.lib.maybes.IsJust.apply(mt)),
-        environment)));
+    hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Term>> letTerms = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.maybes.MapMaybe.apply(
+      (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>>) (kv -> hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.core.Name, hydra.core.Term>>) (t -> (hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>(hydra.lib.pairs.First.apply(kv), t)))),
+        hydra.lib.pairs.Second.apply(kv))),
+      hydra.lib.maps.ToList.apply(environment))));
     hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Term>> mergedTerms = new hydra.util.Lazy<>(() -> hydra.lib.maps.Union.apply(
       elementTerms.get(),
       letTerms.get()));

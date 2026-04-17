@@ -10,24 +10,33 @@ public interface Writer {
     return new hydra.ast.Op(new hydra.ast.Symbol(":"), new hydra.ast.Padding(new hydra.ast.Ws.None(), new hydra.ast.Ws.Space()), new hydra.ast.Precedence(0), new hydra.ast.Associativity.None());
   }
 
+  static String hexByte(Integer c) {
+    java.util.function.Function<Integer, String> nibble = (java.util.function.Function<Integer, String>) (i -> hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> "?",
+      hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<Integer, String>) (ch -> hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(ch))),
+        hydra.lib.strings.MaybeCharAt.apply(
+          i,
+          "0123456789abcdef"))));
+    hydra.util.Lazy<String> hi = new hydra.util.Lazy<>(() -> (nibble).apply(hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> 0,
+      hydra.lib.math.MaybeDiv.apply(
+        c,
+        16))));
+    hydra.util.Lazy<String> lo = new hydra.util.Lazy<>(() -> (nibble).apply(hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> 0,
+      hydra.lib.math.MaybeMod.apply(
+        c,
+        16))));
+    return hydra.lib.strings.Cat2.apply(
+      hi.get(),
+      lo.get());
+  }
+
   static String jsonString(String s) {
-    java.util.function.Function<Integer, String> hexEscape = (java.util.function.Function<Integer, String>) (c -> {
-      hydra.util.Lazy<String> hi = new hydra.util.Lazy<>(() -> hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(hydra.lib.strings.CharAt.apply(
-        hydra.lib.math.Div.apply(
-          c,
-          16),
-        "0123456789abcdef"))));
-      hydra.util.Lazy<String> lo = new hydra.util.Lazy<>(() -> hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(hydra.lib.strings.CharAt.apply(
-        hydra.lib.math.Mod.apply(
-          c,
-          16),
-        "0123456789abcdef"))));
-      return hydra.lib.strings.Cat2.apply(
-        hydra.lib.strings.Cat2.apply(
-          "\\u00",
-          hi.get()),
-        lo.get());
-    });
+    java.util.function.Function<Integer, String> hexEscape = (java.util.function.Function<Integer, String>) (c -> hydra.lib.strings.Cat2.apply(
+      "\\u00",
+      hydra.json.Writer.hexByte(c)));
     java.util.function.Function<Integer, String> escape = (java.util.function.Function<Integer, String>) (c -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
         c,
@@ -116,17 +125,19 @@ public interface Writer {
 
       @Override
       public hydra.ast.Expr visit(hydra.json.model.Value.Number_ n) {
-        java.math.BigInteger rounded = hydra.lib.literals.BigfloatToBigint.apply((n).value);
-        String shown = hydra.lib.literals.ShowBigfloat.apply((n).value);
+        java.math.BigInteger rounded = hydra.lib.literals.DecimalToBigint.apply((n).value);
+        hydra.util.Lazy<Boolean> isWhole = new hydra.util.Lazy<>(() -> hydra.lib.equality.Equal.apply(
+          (n).value,
+          hydra.lib.literals.BigintToDecimal.apply(rounded)));
+        String plain = hydra.lib.literals.ShowBigint.apply(rounded);
+        String shown = hydra.lib.literals.ShowDecimal.apply((n).value);
         return hydra.Serialization.cst(hydra.lib.logic.IfElse.lazy(
           hydra.lib.logic.And.apply(
-            hydra.lib.equality.Equal.apply(
-              (n).value,
-              hydra.lib.literals.BigintToBigfloat.apply(rounded)),
-            hydra.lib.logic.Not.apply(hydra.lib.equality.Equal.apply(
-              shown,
-              "-0.0"))),
-          () -> hydra.lib.literals.ShowBigint.apply(rounded),
+            isWhole.get(),
+            hydra.lib.equality.Lte.apply(
+              hydra.lib.strings.Length.apply(plain),
+              hydra.lib.strings.Length.apply(shown))),
+          () -> plain,
           () -> shown));
       }
 

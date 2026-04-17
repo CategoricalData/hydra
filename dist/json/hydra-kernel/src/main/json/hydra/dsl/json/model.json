@@ -234,7 +234,7 @@
                       {
                         "@key": "description",
                         "@value": {"literal": {"string": "A numeric value"}}}],
-                    "body": {"literal": {"float": {"bigfloat": {}}}}}},
+                    "body": {"literal": {"decimal": {}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
@@ -252,7 +252,7 @@
                         {
                           "@key": "description",
                           "@value": {"literal": {"string": "A numeric value"}}}],
-                      "body": {"literal": {"float": {"bigfloat": {}}}}}},
+                      "body": {"literal": {"decimal": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {

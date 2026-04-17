@@ -1,5 +1,7 @@
 package hydra
 
+import hydra.core.Type
+
 import _root_.java.io.File
 
 /**
@@ -8,20 +10,23 @@ import _root_.java.io.File
  * regenerate Hydra from a language-independent JSON representation.
  *
  * Usage:
- *   scala hydra.Bootstrap --target <haskell|java|python> --json-dir <path> [OPTIONS]
+ *   scala hydra.Bootstrap --target <lang> --json-dir <dist/json root> [OPTIONS]
  *
  * Options:
  *   --output <dir>         Output base directory (default: /tmp/hydra-bootstrapping-demo)
- *   --include-coders       Also load and generate ext coder modules
+ *   --include-coders       Also load coder packages (hydra-java/python/scala/lisp)
  *   --include-tests        Also load and generate kernel test modules
- *   --ext-json-dir <dir>   Directory containing ext JSON modules (for --include-coders)
- *   --kernel-only          Only generate kernel modules (exclude hydra.*)
+ *   --kernel-only          Only generate kernel modules (exclude coder packages)
  *   --types-only           Only generate type-defining modules
+ *   --ext-json-dir <dir>   Legacy flag; ignored under the per-package layout.
  */
 @main def bootstrap(args: String*): Unit =
+  // Coder packages loaded on top of the kernel + Haskell baseline when
+  // --include-coders is set.
+  val coderPackages = Seq("hydra-java", "hydra-python", "hydra-scala", "hydra-lisp")
+
   var target: Option[String] = None
-  var jsonDir: Option[String] = None
-  var extJsonDir: Option[String] = None
+  var jsonDirArg: Option[String] = None
   var outBase = "/tmp/hydra-bootstrapping-demo"
   var includeCoders = false
   var includeTests = false
@@ -32,8 +37,8 @@ import _root_.java.io.File
   while i < args.length do
     args(i) match
       case "--target" => i += 1; target = Some(args(i))
-      case "--json-dir" => i += 1; jsonDir = Some(args(i))
-      case "--ext-json-dir" => i += 1; extJsonDir = Some(args(i))
+      case "--json-dir" => i += 1; jsonDirArg = Some(args(i))
+      case "--ext-json-dir" => i += 1  // legacy flag, skip the value too
       case "--output" => i += 1; outBase = args(i)
       case "--include-coders" => includeCoders = true
       case "--include-tests" => includeTests = true
@@ -42,24 +47,23 @@ import _root_.java.io.File
       case other => System.err.println(s"Unknown option: $other")
     i += 1
 
-  if target.isEmpty || jsonDir.isEmpty then
-    println("Usage: scala hydra.Bootstrap --target <haskell|java|python> --json-dir <path> [OPTIONS]")
+  if target.isEmpty || jsonDirArg.isEmpty then
+    println("Usage: scala hydra.Bootstrap --target <lang> --json-dir <dist/json root> [OPTIONS]")
     println()
     println("Options:")
     println("  --output <dir>         Output base directory")
-    println("  --include-coders       Also load and generate ext coder modules")
+    println("  --include-coders       Also load coder package modules")
     println("  --include-tests        Also load and generate kernel test modules")
-    println("  --ext-json-dir <dir>   Directory containing ext JSON modules (for --include-coders)")
-    println("  --kernel-only          Only generate kernel modules (exclude hydra.*)")
+    println("  --kernel-only          Only generate kernel modules (exclude coder packages)")
     println("  --types-only           Only generate type-defining modules")
-    System.exit(1)
-
-  if includeCoders && extJsonDir.isEmpty then
-    println("Error: --include-coders requires --ext-json-dir")
+    println("  --ext-json-dir <dir>   Legacy flag; ignored under the per-package layout")
     System.exit(1)
 
   val tgt = target.get
-  val jDir = jsonDir.get
+
+  // Backward compatibility: accept an old-style --json-dir ending in
+  // <pkg>/src/main/json and strip down to the dist/json root.
+  val distJsonRoot = BootstrapHelpers.legacyJsonDirToRoot(jsonDirArg.get)
   val targetCap = tgt.capitalize
   val outDir = outBase + File.separator + "scala-to-" + tgt
 
@@ -68,7 +72,7 @@ import _root_.java.io.File
   println("==========================================")
   println(s"  Host language:   Scala")
   println(s"  Target language: $targetCap")
-  println(s"  JSON directory:  $jDir")
+  println(s"  JSON root:       $distJsonRoot")
   println(s"  Output:          $outDir")
   println(s"  Include coders:  $includeCoders")
   println(s"  Include tests:   $includeTests")
@@ -79,7 +83,7 @@ import _root_.java.io.File
 
   val totalStart = System.currentTimeMillis()
 
-  // Step 1: Build schema map
+  // Step 1: Build schema map (shared across all module loads)
   println("Step 1: Building schema map...")
   var stepStart = System.currentTimeMillis()
   val schemaMap = Generation.bootstrapSchemaMap()
@@ -87,46 +91,42 @@ import _root_.java.io.File
   println(s"  Time: ${Generation.formatTime(System.currentTimeMillis() - stepStart)}")
   println()
 
-  // Step 2: Load main + eval lib modules from JSON
-  println("Step 2: Loading main modules from JSON...")
-  println(s"  Source: $jDir")
+  // Step 2: Load baseline packages (hydra-kernel + hydra-haskell).
+  println("Step 2: Loading baseline main modules from JSON...")
   stepStart = System.currentTimeMillis()
-  val mainNamespaces = Generation.readManifestField(jDir, "mainModules")
-  val evalLibNamespaces = Generation.readManifestField(jDir, "evalLibModules")
-  val allKernelNamespaces = mainNamespaces ++ evalLibNamespaces
-  val mainMods = Generation.loadModulesFromJson(jDir, schemaMap, allKernelNamespaces)
+  val kernelMods = BootstrapHelpers.loadPackageMain(distJsonRoot, "hydra-kernel", schemaMap)
+  val haskellMods = BootstrapHelpers.loadPackageMain(distJsonRoot, "hydra-haskell", schemaMap)
+  val baselineMods = kernelMods ++ haskellMods
   var stepTime = System.currentTimeMillis() - stepStart
-  val totalDefs = mainMods.map(_.definitions.size).sum
-  println(s"  Loaded ${mainMods.size} modules ($totalDefs definitions).")
+  val totalDefs = baselineMods.map(_.definitions.size).sum
+  println(s"  Loaded ${baselineMods.size} baseline modules ($totalDefs definitions).")
   println(s"  Time: ${Generation.formatTime(stepTime)}")
   println()
 
-  // Step 3: Optionally load ext coder modules
+  val kernelNsSet = kernelMods.map(_.namespace).toSet
+
+  // Step 3: Optionally load coder packages.
   var coderMods: Seq[hydra.packaging.Module] = Seq.empty
   if includeCoders then
-    println("Step 3: Loading hydra-ext coder modules from JSON...")
-    val coderNamespaces = Generation.readManifestField(extJsonDir.get, "hydraBootstrapCoderModules")
-    val kernelNsSet = allKernelNamespaces.toSet
-    val extCoderNamespaces = coderNamespaces.filterNot(kernelNsSet.contains)
+    println("Step 3: Loading coder package modules from JSON...")
     stepStart = System.currentTimeMillis()
-    coderMods = Generation.loadModulesFromJson(extJsonDir.get, schemaMap, extCoderNamespaces)
+    coderMods = coderPackages.flatMap(pkg => BootstrapHelpers.loadPackageMain(distJsonRoot, pkg, schemaMap))
     stepTime = System.currentTimeMillis() - stepStart
-    println(s"  Loaded ${coderMods.size} modules.")
+    println(s"  Loaded ${coderMods.size} coder modules.")
     println(s"  Time: ${Generation.formatTime(stepTime)}")
     println()
   else
-    println("Step 3: Skipping ext coder modules")
+    println("Step 3: Skipping coder packages")
     println()
 
-  var allMainMods = mainMods ++ coderMods
+  var allMainMods = baselineMods ++ coderMods
 
   // Apply filters
   var modsToGenerate = allMainMods
   if kernelOnly then
     val before = modsToGenerate.size
-    val kernelNsStrings = allKernelNamespaces.toSet
-    modsToGenerate = modsToGenerate.filter(m => kernelNsStrings.contains(m.namespace))
-    allMainMods = allMainMods.filter(m => kernelNsStrings.contains(m.namespace))
+    modsToGenerate = modsToGenerate.filter(m => kernelNsSet.contains(m.namespace))
+    allMainMods = allMainMods.filter(m => kernelNsSet.contains(m.namespace))
     println(s"Filtering to kernel modules... $before -> ${modsToGenerate.size}")
     println()
 
@@ -154,14 +154,17 @@ import _root_.java.io.File
   println(s"  Time: ${Generation.formatTime(stepTime)}")
   println()
 
-  // Optionally load and generate test modules
+  // Optionally load and generate test modules. Test modules live under
+  // hydra-kernel/src/test/json/, and the kernel's main manifest lists them.
   var testFileCount = 0
   if includeTests then
-    val testJsonDir = jDir.replace("src/main/json", "src/test/json")
+    val kernelMainDir = BootstrapHelpers.packageMainDir(distJsonRoot, "hydra-kernel")
+    val testJsonDir = distJsonRoot + File.separator + "hydra-kernel" +
+      File.separator + "src" + File.separator + "test" + File.separator + "json"
     println("Loading test modules from JSON...")
     println(s"  Source: $testJsonDir")
     stepStart = System.currentTimeMillis()
-    val testNamespaces = Generation.readManifestField(jDir, "testModules")
+    val testNamespaces = Generation.readManifestField(kernelMainDir, "testModules")
     val testMods = Generation.loadModulesFromJson(testJsonDir, schemaMap, testNamespaces)
     stepTime = System.currentTimeMillis() - stepStart
     val testBindings = testMods.map(_.definitions.size).sum
@@ -199,3 +202,45 @@ import _root_.java.io.File
   println(s"  Output: $outDir")
   println(s"  Total time: ${Generation.formatTime(totalTime)}")
   println("==========================================")
+end bootstrap
+
+/** Helpers for walking the per-package dist/json/ layout. */
+object BootstrapHelpers:
+  /** Return the JSON directory for a package's main modules. */
+  def packageMainDir(root: String, pkg: String): String =
+    root + File.separator + pkg + File.separator + "src" +
+      File.separator + "main" + File.separator + "json"
+
+  /** Read a manifest field, returning empty if the manifest or field is missing. */
+  def readManifestFieldOrEmpty(pkgDir: String, fieldName: String): Seq[String] =
+    val manifestFile = new File(pkgDir + File.separator + "manifest.json")
+    if !manifestFile.exists() then Seq.empty
+    else
+      try Generation.readManifestField(pkgDir, fieldName)
+      catch case _: RuntimeException => Seq.empty
+
+  /** Load a package's mainModules + evalLibModules from its manifest. */
+  def loadPackageMain(root: String, pkg: String,
+      schemaMap: Map[String, Type]): Seq[hydra.packaging.Module] =
+    val pkgDir = packageMainDir(root, pkg)
+    val mainNs = readManifestFieldOrEmpty(pkgDir, "mainModules")
+    val evalNs = readManifestFieldOrEmpty(pkgDir, "evalLibModules")
+    val allNs = mainNs ++ evalNs
+    if allNs.isEmpty then Seq.empty
+    else
+      println(s"  $pkg: ${allNs.size} modules from $pkgDir")
+      Generation.loadModulesFromJson(pkgDir, schemaMap, allNs)
+
+  /** Map a legacy --json-dir value (e.g. ".../dist/json/hydra-kernel/src/main/json")
+   *  to the dist-json root (".../dist/json"). If the path does not match the
+   *  expected shape, return unchanged. */
+  def legacyJsonDirToRoot(path: String): String =
+    val sep = File.separator
+    val trimmed = if path.endsWith(sep) then path.dropRight(sep.length) else path
+    val parts = trimmed.split(_root_.java.util.regex.Pattern.quote(sep)).toSeq
+    if parts.length >= 4 && parts.takeRight(3) == Seq("src", "main", "json") then
+      parts.dropRight(4).mkString(sep) match
+        case "" => "."
+        case s => s
+    else path
+end BootstrapHelpers

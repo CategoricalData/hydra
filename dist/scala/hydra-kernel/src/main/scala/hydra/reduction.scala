@@ -357,9 +357,16 @@ def etaExpandTypedTerm(cx: hydra.context.Context)(tx0: hydra.graph.Graph)(term0:
     def extraVariables(n: Int): Seq[hydra.core.Name] =
       hydra.lib.lists.map[Int, hydra.core.Name]((i: Int) => hydra.lib.strings.cat2("v")(hydra.lib.literals.showInt32(i)))(hydra.lib.math.range(1)(n))
     def pad(vars: Seq[hydra.core.Name])(body: hydra.core.Term): hydra.core.Term =
-      hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.lists.`null`[hydra.core.Name](vars))(body)(hydra.core.Term.lambda(hydra.core.Lambda(hydra.lib.lists.head[hydra.core.Name](vars),
-         None, pad(hydra.lib.lists.tail[hydra.core.Name](vars))(hydra.core.Term.application(hydra.core.Application(body,
-         hydra.core.Term.variable(hydra.lib.lists.head[hydra.core.Name](vars))))))))
+      hydra.lib.maybes.maybe[hydra.core.Term, Tuple2[hydra.core.Name, Seq[hydra.core.Name]]](body)((uc: Tuple2[hydra.core.Name,
+         Seq[hydra.core.Name]]) =>
+      {
+      lazy val v0: hydra.core.Name = hydra.lib.pairs.first[hydra.core.Name, Seq[hydra.core.Name]](uc)
+      {
+        lazy val vrest: Seq[hydra.core.Name] = hydra.lib.pairs.second[hydra.core.Name, Seq[hydra.core.Name]](uc)
+        hydra.core.Term.lambda(hydra.core.Lambda(v0, None, pad(vrest)(hydra.core.Term.application(hydra.core.Application(body,
+           hydra.core.Term.variable(v0))))))
+      }
+    })(hydra.lib.lists.uncons[hydra.core.Name](vars))
     def padn(n: Int)(body: hydra.core.Term): hydra.core.Term = pad(extraVariables(n))(body)
     def unwind(term2: hydra.core.Term): hydra.core.Term =
       hydra.lib.lists.foldl[hydra.core.Term, hydra.core.Type]((e: hydra.core.Term) =>
@@ -497,26 +504,28 @@ def reduceTerm(cx: hydra.context.Context)(graph: hydra.graph.Graph)(eager: Boole
   def reduceArg(eager2: Boolean)(arg: hydra.core.Term): Either[hydra.errors.Error, hydra.core.Term] =
     hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.Term]](eager2)(Right(arg))(reduce(false)(arg))
   def applyToArguments(fun: hydra.core.Term)(args: Seq[hydra.core.Term]): hydra.core.Term =
-    hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.lists.`null`[hydra.core.Term](args))(fun)(applyToArguments(hydra.core.Term.application(hydra.core.Application(fun,
-       hydra.lib.lists.head[hydra.core.Term](args))))(hydra.lib.lists.tail[hydra.core.Term](args)))
+    hydra.lib.maybes.maybe[hydra.core.Term, Tuple2[hydra.core.Term, Seq[hydra.core.Term]]](fun)((uc: Tuple2[hydra.core.Term,
+       Seq[hydra.core.Term]]) =>
+    applyToArguments(hydra.core.Term.application(hydra.core.Application(fun, hydra.lib.pairs.first[hydra.core.Term,
+       Seq[hydra.core.Term]](uc))))(hydra.lib.pairs.second[hydra.core.Term, Seq[hydra.core.Term]](uc)))(hydra.lib.lists.uncons[hydra.core.Term](args))
   def mapErrorToString(e: hydra.errors.Error): hydra.errors.Error = hydra.errors.Error.other(hydra.show.errors.error(e))
   def applyProjection(proj: hydra.core.Projection)(reducedArg: hydra.core.Term): Either[hydra.errors.Error,
      hydra.core.Term] =
     hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.Field], hydra.core.Term](hydra.extract.core.record(proj.typeName)(graph)(hydra.strip.deannotateTerm(reducedArg)))((fields: Seq[hydra.core.Field]) =>
     {
-    lazy val matchingFields: Seq[hydra.core.Field] = hydra.lib.lists.filter[hydra.core.Field]((f: hydra.core.Field) =>
+    lazy val matching: Option[hydra.core.Field] = hydra.lib.lists.find[hydra.core.Field]((f: hydra.core.Field) =>
       hydra.lib.equality.equal[hydra.core.Name](f.name)(proj.field))(fields)
-    hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.Term]](hydra.lib.lists.`null`[hydra.core.Field](matchingFields))(Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noMatchingField(hydra.errors.NoMatchingFieldError(proj.field)))))(Right(hydra.lib.lists.head[hydra.core.Field](matchingFields).term))
+    hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.core.Term], hydra.core.Field](Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noMatchingField(hydra.errors.NoMatchingFieldError(proj.field)))))((mf: hydra.core.Field) => Right(mf.term))(matching)
   })
   def applyCases(cs: hydra.core.CaseStatement)(reducedArg: hydra.core.Term): Either[hydra.errors.Error,
      hydra.core.Term] =
     hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Field, hydra.core.Term](hydra.extract.core.injection(cs.typeName)(graph)(reducedArg))((field: hydra.core.Field) =>
     {
-    lazy val matchingFields: Seq[hydra.core.Field] = hydra.lib.lists.filter[hydra.core.Field]((f: hydra.core.Field) =>
+    lazy val matching: Option[hydra.core.Field] = hydra.lib.lists.find[hydra.core.Field]((f: hydra.core.Field) =>
       hydra.lib.equality.equal[hydra.core.Name](f.name)(field.name))(cs.cases)
-    hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.Term]](hydra.lib.lists.`null`[hydra.core.Field](matchingFields))(hydra.lib.maybes.maybe[Either[hydra.errors.Error,
-       hydra.core.Term], hydra.core.Term](Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noMatchingField(hydra.errors.NoMatchingFieldError(field.name)))))((x: hydra.core.Term) => Right(x))(cs.default))(Right(hydra.core.Term.application(hydra.core.Application(hydra.lib.lists.head[hydra.core.Field](matchingFields).term,
-       (field.term)))))
+    hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.core.Term], hydra.core.Field](hydra.lib.maybes.maybe[Either[hydra.errors.Error,
+       hydra.core.Term], hydra.core.Term](Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noMatchingField(hydra.errors.NoMatchingFieldError(field.name)))))((x: hydra.core.Term) => Right(x))(cs.default))((mf: hydra.core.Field) =>
+      Right(hydra.core.Term.application(hydra.core.Application(mf.term, (field.term)))))(matching)
   })
   def applyIfNullary(eager2: Boolean)(original: hydra.core.Term)(args: Seq[hydra.core.Term]): Either[hydra.errors.Error,
      hydra.core.Term] =
@@ -524,38 +533,57 @@ def reduceTerm(cx: hydra.context.Context)(graph: hydra.graph.Graph)(eager: Boole
     lazy val stripped: hydra.core.Term = hydra.strip.deannotateTerm(original)
     def forProjection(proj: hydra.core.Projection)(args2: Seq[hydra.core.Term]): Either[hydra.errors.Error,
        hydra.core.Term] =
+      hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.core.Term], Tuple2[hydra.core.Term,
+         Seq[hydra.core.Term]]](Right(original))((uc: Tuple2[hydra.core.Term, Seq[hydra.core.Term]]) =>
       {
-      lazy val arg: hydra.core.Term = hydra.lib.lists.head[hydra.core.Term](args2)
-      lazy val remainingArgs: Seq[hydra.core.Term] = hydra.lib.lists.tail[hydra.core.Term](args2)
-      hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](reduceArg(eager2)(hydra.strip.deannotateTerm(arg)))((reducedArg: hydra.core.Term) =>
-        hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](hydra.lib.eithers.bind[hydra.errors.Error,
-           hydra.core.Term, hydra.core.Term](applyProjection(proj)(reducedArg))((v1: hydra.core.Term) => reduce(eager2)(v1)))((reducedResult: hydra.core.Term) => applyIfNullary(eager2)(reducedResult)(remainingArgs)))
-    }
+      lazy val arg: hydra.core.Term = hydra.lib.pairs.first[hydra.core.Term, Seq[hydra.core.Term]](uc)
+      {
+        lazy val remainingArgs: Seq[hydra.core.Term] = hydra.lib.pairs.second[hydra.core.Term, Seq[hydra.core.Term]](uc)
+        hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](reduceArg(eager2)(hydra.strip.deannotateTerm(arg)))((reducedArg: hydra.core.Term) =>
+          hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](hydra.lib.eithers.bind[hydra.errors.Error,
+             hydra.core.Term, hydra.core.Term](applyProjection(proj)(reducedArg))((v1: hydra.core.Term) => reduce(eager2)(v1)))((reducedResult: hydra.core.Term) => applyIfNullary(eager2)(reducedResult)(remainingArgs)))
+      }
+    })(hydra.lib.lists.uncons[hydra.core.Term](args2))
     def forCases(cs: hydra.core.CaseStatement)(args2: Seq[hydra.core.Term]): Either[hydra.errors.Error,
        hydra.core.Term] =
+      hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.core.Term], Tuple2[hydra.core.Term,
+         Seq[hydra.core.Term]]](Right(original))((uc: Tuple2[hydra.core.Term, Seq[hydra.core.Term]]) =>
       {
-      lazy val arg: hydra.core.Term = hydra.lib.lists.head[hydra.core.Term](args2)
-      lazy val remainingArgs: Seq[hydra.core.Term] = hydra.lib.lists.tail[hydra.core.Term](args2)
-      hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](reduceArg(eager2)(hydra.strip.deannotateTerm(arg)))((reducedArg: hydra.core.Term) =>
-        hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](hydra.lib.eithers.bind[hydra.errors.Error,
-           hydra.core.Term, hydra.core.Term](applyCases(cs)(reducedArg))((v1: hydra.core.Term) => reduce(eager2)(v1)))((reducedResult: hydra.core.Term) => applyIfNullary(eager2)(reducedResult)(remainingArgs)))
-    }
+      lazy val arg: hydra.core.Term = hydra.lib.pairs.first[hydra.core.Term, Seq[hydra.core.Term]](uc)
+      {
+        lazy val remainingArgs: Seq[hydra.core.Term] = hydra.lib.pairs.second[hydra.core.Term, Seq[hydra.core.Term]](uc)
+        hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](reduceArg(eager2)(hydra.strip.deannotateTerm(arg)))((reducedArg: hydra.core.Term) =>
+          hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](hydra.lib.eithers.bind[hydra.errors.Error,
+             hydra.core.Term, hydra.core.Term](applyCases(cs)(reducedArg))((v1: hydra.core.Term) => reduce(eager2)(v1)))((reducedResult: hydra.core.Term) => applyIfNullary(eager2)(reducedResult)(remainingArgs)))
+      }
+    })(hydra.lib.lists.uncons[hydra.core.Term](args2))
     def forUnwrap(name: hydra.core.Name)(args2: Seq[hydra.core.Term]): Either[hydra.errors.Error, hydra.core.Term] =
+      hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.core.Term], Tuple2[hydra.core.Term,
+         Seq[hydra.core.Term]]](Right(original))((uc: Tuple2[hydra.core.Term, Seq[hydra.core.Term]]) =>
       {
-      lazy val arg: hydra.core.Term = hydra.lib.lists.head[hydra.core.Term](args2)
-      lazy val remainingArgs: Seq[hydra.core.Term] = hydra.lib.lists.tail[hydra.core.Term](args2)
-      hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](reduceArg(eager2)(hydra.strip.deannotateTerm(arg)))((reducedArg: hydra.core.Term) =>
-        hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](hydra.lib.eithers.bind[hydra.errors.Error,
-           hydra.core.Term, hydra.core.Term](hydra.extract.core.wrap(name)(graph)(reducedArg))((v1: hydra.core.Term) => reduce(eager2)(v1)))((reducedResult: hydra.core.Term) => applyIfNullary(eager2)(reducedResult)(remainingArgs)))
-    }
+      lazy val arg: hydra.core.Term = hydra.lib.pairs.first[hydra.core.Term, Seq[hydra.core.Term]](uc)
+      {
+        lazy val remainingArgs: Seq[hydra.core.Term] = hydra.lib.pairs.second[hydra.core.Term, Seq[hydra.core.Term]](uc)
+        hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](reduceArg(eager2)(hydra.strip.deannotateTerm(arg)))((reducedArg: hydra.core.Term) =>
+          hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](hydra.lib.eithers.bind[hydra.errors.Error,
+             hydra.core.Term, hydra.core.Term](hydra.extract.core.wrap(name)(graph)(reducedArg))((v1: hydra.core.Term) => reduce(eager2)(v1)))((reducedResult: hydra.core.Term) => applyIfNullary(eager2)(reducedResult)(remainingArgs)))
+      }
+    })(hydra.lib.lists.uncons[hydra.core.Term](args2))
     def forLambda(l: hydra.core.Lambda)(args2: Seq[hydra.core.Term]): Either[hydra.errors.Error, hydra.core.Term] =
       {
       lazy val param: hydra.core.Name = (l.parameter)
       lazy val body: hydra.core.Term = (l.body)
-      lazy val arg: hydra.core.Term = hydra.lib.lists.head[hydra.core.Term](args2)
-      lazy val remainingArgs: Seq[hydra.core.Term] = hydra.lib.lists.tail[hydra.core.Term](args2)
-      hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](reduce(eager2)(hydra.strip.deannotateTerm(arg)))((reducedArg: hydra.core.Term) =>
-        hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](reduce(eager2)(hydra.variables.replaceFreeTermVariable(param)(reducedArg)(body)))((reducedResult: hydra.core.Term) => applyIfNullary(eager2)(reducedResult)(remainingArgs)))
+      hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.core.Term], Tuple2[hydra.core.Term,
+         Seq[hydra.core.Term]]](Right(original))((uc: Tuple2[hydra.core.Term, Seq[hydra.core.Term]]) =>
+        {
+        lazy val arg: hydra.core.Term = hydra.lib.pairs.first[hydra.core.Term, Seq[hydra.core.Term]](uc)
+        {
+          lazy val remainingArgs: Seq[hydra.core.Term] = hydra.lib.pairs.second[hydra.core.Term,
+             Seq[hydra.core.Term]](uc)
+          hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](reduce(eager2)(hydra.strip.deannotateTerm(arg)))((reducedArg: hydra.core.Term) =>
+            hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](reduce(eager2)(hydra.variables.replaceFreeTermVariable(param)(reducedArg)(body)))((reducedResult: hydra.core.Term) => applyIfNullary(eager2)(reducedResult)(remainingArgs)))
+        }
+      })(hydra.lib.lists.uncons[hydra.core.Term](args2))
     }
     def forPrimitive(prim: hydra.graph.Primitive)(arity: Int)(args2: Seq[hydra.core.Term]): Either[hydra.errors.Error,
        hydra.core.Term] =

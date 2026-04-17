@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Script to regenerate hydra-ext's Haskell modules, JSON exports, and ext Java from Hydra sources.
+# Script to regenerate hydra-ext's Haskell modules from Hydra sources.
 #
-# This regenerates:
-#   1. Haskell modules for hydraExtModules (Java/Python coders, language syntaxes, etc.)
-#   2. JSON exports for hydraExtModules
-#   3. Java modules for ext modules needed by hydra-ext (PG, GraphSON, domain models, etc.)
-#   4. WebAssembly text format (WAT) files for the kernel modules
+# Under the per-package JSON layout (feature_290_packaging), JSON export for
+# every package is performed by sync-haskell.sh's unified update-json-main
+# call. This script regenerates the Haskell dist tree for hydra-ext (and the
+# second-order decode/encode DSL source modules it depends on), and emits
+# the WebAssembly text format (WAT) files for the Hydra kernel under
+# dist/wasm/. See feature_325_wasm-plan.md.
 #
 # This must be run AFTER sync-haskell.sh and BEFORE sync-java.sh or sync-python.sh,
 # since those scripts depend on hydra-ext's generated Haskell code being up to date.
@@ -31,15 +32,14 @@ for arg in "$@"; do
         --help|-h)
             echo "Usage: $0 [OPTIONS]"
             echo ""
-            echo "Regenerate hydra-ext Haskell modules, JSON exports, and ext Java."
+            echo "Regenerate hydra-ext Haskell dist tree."
             echo ""
             echo "Steps performed:"
             echo "  1. Build executables"
             echo "  2. Generate ext encoder/decoder source modules"
             echo "  3. Generate Haskell ext modules"
             echo "  4. Rebuild (to pick up new Haskell files)"
-            echo "  5. Export ext modules to JSON"
-            echo "  6. Generate WebAssembly text format (WAT) files"
+            echo "  5. Generate WebAssembly text format (WAT) files"
             exit 0
             ;;
         *)
@@ -53,14 +53,13 @@ cd "$HYDRA_EXT_DIR"
 banner2 "Synchronizing Hydra-Ext"
 echo ""
 
-TOTAL_STEPS=6
+TOTAL_STEPS=5
 
 step 1 $TOTAL_STEPS "Building executables"
 echo ""
 stack build \
     hydra:exe:update-ext-sources \
     hydra:exe:update-haskell-ext-main \
-    hydra:exe:update-json-ext \
     hydra:exe:update-wasm \
     hydra:exe:bootstrap-from-json
 
@@ -84,11 +83,7 @@ step 4 $TOTAL_STEPS "Rebuilding"
 echo ""
 stack build
 
-step 5 $TOTAL_STEPS "Exporting ext modules to JSON"
-echo ""
-stack exec update-json-ext -- $RTS_FLAGS
-
-step 6 $TOTAL_STEPS "Generating WebAssembly text format (WAT) files"
+step 5 $TOTAL_STEPS "Generating WebAssembly text format (WAT) files"
 echo ""
 stack exec update-wasm -- $RTS_FLAGS
 

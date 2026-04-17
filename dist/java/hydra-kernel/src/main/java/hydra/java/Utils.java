@@ -7,12 +7,15 @@ package hydra.java;
  */
 public interface Utils {
   static hydra.java.syntax.AdditiveExpression addExpressions(java.util.List<hydra.java.syntax.MultiplicativeExpression> exprs) {
-    hydra.util.Lazy<hydra.java.syntax.AdditiveExpression> first = new hydra.util.Lazy<>(() -> new hydra.java.syntax.AdditiveExpression.Unary(hydra.lib.lists.Head.apply(exprs)));
-    hydra.util.Lazy<java.util.List<hydra.java.syntax.MultiplicativeExpression>> rest = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply(exprs));
+    hydra.java.syntax.MultiplicativeExpression dummyMult = new hydra.java.syntax.MultiplicativeExpression.Unary(new hydra.java.syntax.UnaryExpression.Other(new hydra.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.java.syntax.PostfixExpression.Primary(new hydra.java.syntax.Primary.NoNewArray(new hydra.java.syntax.PrimaryNoNewArrayExpression.Literal(new hydra.java.syntax.Literal.Integer_(new hydra.java.syntax.IntegerLiteral(new java.math.BigInteger("0")))))))));
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<hydra.java.syntax.AdditiveExpression, java.util.function.Function<hydra.java.syntax.MultiplicativeExpression, hydra.java.syntax.AdditiveExpression>>) (ae -> (java.util.function.Function<hydra.java.syntax.MultiplicativeExpression, hydra.java.syntax.AdditiveExpression>) (me -> new hydra.java.syntax.AdditiveExpression.Plus(new hydra.java.syntax.AdditiveExpression_Binary(ae, me)))),
-      first.get(),
-      rest.get());
+      new hydra.java.syntax.AdditiveExpression.Unary(hydra.lib.maybes.FromMaybe.applyLazy(
+        () -> dummyMult,
+        hydra.lib.lists.MaybeHead.apply(exprs))),
+      hydra.lib.lists.Drop.apply(
+        1,
+        exprs));
   }
 
   static hydra.java.environment.Aliases addInScopeVar(hydra.core.Name name, hydra.java.environment.Aliases aliases) {
@@ -124,9 +127,11 @@ public interface Utils {
 
   static Boolean isEscaped(String s) {
     return hydra.lib.equality.Equal.apply(
-      hydra.lib.strings.CharAt.apply(
-        0,
-        s),
+      hydra.lib.maybes.FromMaybe.applyLazy(
+        () -> 0,
+        hydra.lib.strings.MaybeCharAt.apply(
+          0,
+          s)),
       36);
   }
 
@@ -292,124 +297,111 @@ public interface Utils {
               @Override
               public hydra.java.syntax.Primary visit(hydra.java.syntax.ConditionalExpression.Simple cor) {
                 java.util.List<hydra.java.syntax.ConditionalAndExpression> cands = (cor).value.value;
-                return hydra.lib.logic.IfElse.lazy(
-                  hydra.lib.equality.Equal.apply(
-                    hydra.lib.lists.Length.apply(cands),
-                    1),
-                  () -> ((java.util.function.Supplier<hydra.java.syntax.Primary>) (() -> {
-                    hydra.util.Lazy<java.util.List<hydra.java.syntax.InclusiveOrExpression>> iors = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(cands).value);
-                    return hydra.lib.logic.IfElse.lazy(
-                      hydra.lib.equality.Equal.apply(
-                        hydra.lib.lists.Length.apply(iors.get()),
-                        1),
-                      () -> ((java.util.function.Supplier<hydra.java.syntax.Primary>) (() -> {
-                        hydra.util.Lazy<java.util.List<hydra.java.syntax.ExclusiveOrExpression>> xors = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(iors.get()).value);
-                        return hydra.lib.logic.IfElse.lazy(
-                          hydra.lib.equality.Equal.apply(
-                            hydra.lib.lists.Length.apply(xors.get()),
-                            1),
-                          () -> ((java.util.function.Supplier<hydra.java.syntax.Primary>) (() -> {
-                            hydra.util.Lazy<java.util.List<hydra.java.syntax.AndExpression>> ands = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(xors.get()).value);
-                            return hydra.lib.logic.IfElse.lazy(
-                              hydra.lib.equality.Equal.apply(
-                                hydra.lib.lists.Length.apply(ands.get()),
-                                1),
-                              () -> ((java.util.function.Supplier<hydra.java.syntax.Primary>) (() -> {
-                                hydra.util.Lazy<java.util.List<hydra.java.syntax.EqualityExpression>> eqs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(ands.get()).value);
-                                return hydra.lib.logic.IfElse.lazy(
-                                  hydra.lib.equality.Equal.apply(
-                                    hydra.lib.lists.Length.apply(eqs.get()),
-                                    1),
-                                  () -> hydra.lib.lists.Head.apply(eqs.get()).accept(new hydra.java.syntax.EqualityExpression.PartialVisitor<>() {
-                                    @Override
-                                    public hydra.java.syntax.Primary otherwise(hydra.java.syntax.EqualityExpression instance) {
-                                      return fallback;
-                                    }
+                return hydra.lib.maybes.FromMaybe.applyLazy(
+                  () -> fallback,
+                  hydra.lib.maybes.Bind.apply(
+                    hydra.lib.lists.MaybeHead.apply(cands),
+                    (java.util.function.Function<hydra.java.syntax.ConditionalAndExpression, hydra.util.Maybe<hydra.java.syntax.Primary>>) (candHead -> {
+                      java.util.List<hydra.java.syntax.InclusiveOrExpression> iors = (candHead).value;
+                      return hydra.lib.maybes.Bind.apply(
+                        hydra.lib.lists.MaybeHead.apply(iors),
+                        (java.util.function.Function<hydra.java.syntax.InclusiveOrExpression, hydra.util.Maybe<hydra.java.syntax.Primary>>) (iorHead -> {
+                          java.util.List<hydra.java.syntax.ExclusiveOrExpression> xors = (iorHead).value;
+                          return hydra.lib.maybes.Bind.apply(
+                            hydra.lib.lists.MaybeHead.apply(xors),
+                            (java.util.function.Function<hydra.java.syntax.ExclusiveOrExpression, hydra.util.Maybe<hydra.java.syntax.Primary>>) (xorHead -> {
+                              java.util.List<hydra.java.syntax.AndExpression> ands = (xorHead).value;
+                              return hydra.lib.maybes.Bind.apply(
+                                hydra.lib.lists.MaybeHead.apply(ands),
+                                (java.util.function.Function<hydra.java.syntax.AndExpression, hydra.util.Maybe<hydra.java.syntax.Primary>>) (andHead -> {
+                                  java.util.List<hydra.java.syntax.EqualityExpression> eqs = (andHead).value;
+                                  return hydra.lib.maybes.Bind.apply(
+                                    hydra.lib.lists.MaybeHead.apply(eqs),
+                                    (java.util.function.Function<hydra.java.syntax.EqualityExpression, hydra.util.Maybe<hydra.java.syntax.Primary>>) (eqHead -> hydra.util.Maybe.just((eqHead).accept(new hydra.java.syntax.EqualityExpression.PartialVisitor<>() {
+                                      @Override
+                                      public hydra.java.syntax.Primary otherwise(hydra.java.syntax.EqualityExpression instance) {
+                                        return fallback;
+                                      }
 
-                                    @Override
-                                    public hydra.java.syntax.Primary visit(hydra.java.syntax.EqualityExpression.Unary rel) {
-                                      return (rel).value.accept(new hydra.java.syntax.RelationalExpression.PartialVisitor<>() {
-                                        @Override
-                                        public hydra.java.syntax.Primary otherwise(hydra.java.syntax.RelationalExpression instance) {
-                                          return fallback;
-                                        }
+                                      @Override
+                                      public hydra.java.syntax.Primary visit(hydra.java.syntax.EqualityExpression.Unary rel) {
+                                        return (rel).value.accept(new hydra.java.syntax.RelationalExpression.PartialVisitor<>() {
+                                          @Override
+                                          public hydra.java.syntax.Primary otherwise(hydra.java.syntax.RelationalExpression instance) {
+                                            return fallback;
+                                          }
 
-                                        @Override
-                                        public hydra.java.syntax.Primary visit(hydra.java.syntax.RelationalExpression.Simple shift) {
-                                          return (shift).value.accept(new hydra.java.syntax.ShiftExpression.PartialVisitor<>() {
-                                            @Override
-                                            public hydra.java.syntax.Primary otherwise(hydra.java.syntax.ShiftExpression instance) {
-                                              return fallback;
-                                            }
+                                          @Override
+                                          public hydra.java.syntax.Primary visit(hydra.java.syntax.RelationalExpression.Simple shift) {
+                                            return (shift).value.accept(new hydra.java.syntax.ShiftExpression.PartialVisitor<>() {
+                                              @Override
+                                              public hydra.java.syntax.Primary otherwise(hydra.java.syntax.ShiftExpression instance) {
+                                                return fallback;
+                                              }
 
-                                            @Override
-                                            public hydra.java.syntax.Primary visit(hydra.java.syntax.ShiftExpression.Unary add) {
-                                              return (add).value.accept(new hydra.java.syntax.AdditiveExpression.PartialVisitor<>() {
-                                                @Override
-                                                public hydra.java.syntax.Primary otherwise(hydra.java.syntax.AdditiveExpression instance) {
-                                                  return fallback;
-                                                }
+                                              @Override
+                                              public hydra.java.syntax.Primary visit(hydra.java.syntax.ShiftExpression.Unary add) {
+                                                return (add).value.accept(new hydra.java.syntax.AdditiveExpression.PartialVisitor<>() {
+                                                  @Override
+                                                  public hydra.java.syntax.Primary otherwise(hydra.java.syntax.AdditiveExpression instance) {
+                                                    return fallback;
+                                                  }
 
-                                                @Override
-                                                public hydra.java.syntax.Primary visit(hydra.java.syntax.AdditiveExpression.Unary mul) {
-                                                  return (mul).value.accept(new hydra.java.syntax.MultiplicativeExpression.PartialVisitor<>() {
-                                                    @Override
-                                                    public hydra.java.syntax.Primary otherwise(hydra.java.syntax.MultiplicativeExpression instance) {
-                                                      return fallback;
-                                                    }
+                                                  @Override
+                                                  public hydra.java.syntax.Primary visit(hydra.java.syntax.AdditiveExpression.Unary mul) {
+                                                    return (mul).value.accept(new hydra.java.syntax.MultiplicativeExpression.PartialVisitor<>() {
+                                                      @Override
+                                                      public hydra.java.syntax.Primary otherwise(hydra.java.syntax.MultiplicativeExpression instance) {
+                                                        return fallback;
+                                                      }
 
-                                                    @Override
-                                                    public hydra.java.syntax.Primary visit(hydra.java.syntax.MultiplicativeExpression.Unary unary) {
-                                                      return (unary).value.accept(new hydra.java.syntax.UnaryExpression.PartialVisitor<>() {
-                                                        @Override
-                                                        public hydra.java.syntax.Primary otherwise(hydra.java.syntax.UnaryExpression instance) {
-                                                          return fallback;
-                                                        }
+                                                      @Override
+                                                      public hydra.java.syntax.Primary visit(hydra.java.syntax.MultiplicativeExpression.Unary unary) {
+                                                        return (unary).value.accept(new hydra.java.syntax.UnaryExpression.PartialVisitor<>() {
+                                                          @Override
+                                                          public hydra.java.syntax.Primary otherwise(hydra.java.syntax.UnaryExpression instance) {
+                                                            return fallback;
+                                                          }
 
-                                                        @Override
-                                                        public hydra.java.syntax.Primary visit(hydra.java.syntax.UnaryExpression.Other npm) {
-                                                          return (npm).value.accept(new hydra.java.syntax.UnaryExpressionNotPlusMinus.PartialVisitor<>() {
-                                                            @Override
-                                                            public hydra.java.syntax.Primary otherwise(hydra.java.syntax.UnaryExpressionNotPlusMinus instance) {
-                                                              return fallback;
-                                                            }
+                                                          @Override
+                                                          public hydra.java.syntax.Primary visit(hydra.java.syntax.UnaryExpression.Other npm) {
+                                                            return (npm).value.accept(new hydra.java.syntax.UnaryExpressionNotPlusMinus.PartialVisitor<>() {
+                                                              @Override
+                                                              public hydra.java.syntax.Primary otherwise(hydra.java.syntax.UnaryExpressionNotPlusMinus instance) {
+                                                                return fallback;
+                                                              }
 
-                                                            @Override
-                                                            public hydra.java.syntax.Primary visit(hydra.java.syntax.UnaryExpressionNotPlusMinus.Postfix pf) {
-                                                              return (pf).value.accept(new hydra.java.syntax.PostfixExpression.PartialVisitor<>() {
-                                                                @Override
-                                                                public hydra.java.syntax.Primary otherwise(hydra.java.syntax.PostfixExpression instance) {
-                                                                  return fallback;
-                                                                }
+                                                              @Override
+                                                              public hydra.java.syntax.Primary visit(hydra.java.syntax.UnaryExpressionNotPlusMinus.Postfix pf) {
+                                                                return (pf).value.accept(new hydra.java.syntax.PostfixExpression.PartialVisitor<>() {
+                                                                  @Override
+                                                                  public hydra.java.syntax.Primary otherwise(hydra.java.syntax.PostfixExpression instance) {
+                                                                    return fallback;
+                                                                  }
 
-                                                                @Override
-                                                                public hydra.java.syntax.Primary visit(hydra.java.syntax.PostfixExpression.Primary p) {
-                                                                  return (p).value;
-                                                                }
-                                                              });
-                                                            }
-                                                          });
-                                                        }
-                                                      });
-                                                    }
-                                                  });
-                                                }
-                                              });
-                                            }
-                                          });
-                                        }
-                                      });
-                                    }
-                                  }),
-                                  () -> fallback);
-                              })).get(),
-                              () -> fallback);
-                          })).get(),
-                          () -> fallback);
-                      })).get(),
-                      () -> fallback);
-                  })).get(),
-                  () -> fallback);
+                                                                  @Override
+                                                                  public hydra.java.syntax.Primary visit(hydra.java.syntax.PostfixExpression.Primary p) {
+                                                                    return (p).value;
+                                                                  }
+                                                                });
+                                                              }
+                                                            });
+                                                          }
+                                                        });
+                                                      }
+                                                    });
+                                                  }
+                                                });
+                                              }
+                                            });
+                                          }
+                                        });
+                                      }
+                                    }))));
+                                }));
+                            }));
+                        }));
+                    })));
               }
             });
           }
@@ -1017,7 +1009,9 @@ public interface Utils {
   }
 
   static String unescape(String s) {
-    return hydra.lib.strings.FromList.apply(hydra.lib.lists.Tail.apply(hydra.lib.strings.ToList.apply(s)));
+    return hydra.lib.strings.FromList.apply(hydra.lib.lists.Drop.apply(
+      1,
+      hydra.lib.strings.ToList.apply(s)));
   }
 
   static hydra.core.Name uniqueVarName(hydra.java.environment.Aliases aliases, hydra.core.Name name) {

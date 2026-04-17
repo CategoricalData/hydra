@@ -98,7 +98,7 @@ def adapt_type(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict
                 return Just(typ)
     def for_unsupported(typ: hydra.core.Type) -> Maybe[hydra.core.Type]:
         def try_alts(alts: frozenlist[hydra.core.Type]) -> Maybe[hydra.core.Type]:
-            return hydra.lib.logic.if_else(hydra.lib.lists.null(alts), (lambda : Nothing()), (lambda : hydra.lib.maybes.maybe((lambda : try_alts(hydra.lib.lists.tail(alts))), (lambda t: Just(t)), try_type(hydra.lib.lists.head(alts)))))
+            return hydra.lib.maybes.bind(hydra.lib.lists.uncons(alts), (lambda uc: hydra.lib.maybes.maybe((lambda : try_alts(hydra.lib.pairs.second(uc))), (lambda t: Just(t)), try_type(hydra.lib.pairs.first(uc)))))
         @lru_cache(1)
         def alts0() -> frozenlist[hydra.core.Type]:
             return type_alternatives(typ)
@@ -372,10 +372,8 @@ def adapt_term(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict
                 case _:
                     return Right(Just(term))
         def for_unsupported(term: hydra.core.Term) -> Either[hydra.errors.Error, Maybe[hydra.core.Term]]:
-            def for_non_null(alts: frozenlist[hydra.core.Term]) -> Either[hydra.errors.Error, Maybe[hydra.core.Term]]:
-                return hydra.lib.eithers.bind(try_term(hydra.lib.lists.head(alts)), (lambda mterm: hydra.lib.maybes.maybe((lambda : try_alts(hydra.lib.lists.tail(alts))), (lambda t: Right(Just(t))), mterm)))
             def try_alts(alts: frozenlist[hydra.core.Term]) -> Either[hydra.errors.Error, Maybe[hydra.core.Term]]:
-                return hydra.lib.logic.if_else(hydra.lib.lists.null(alts), (lambda : Right(Nothing())), (lambda : for_non_null(alts)))
+                return hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda uc: hydra.lib.eithers.bind(try_term(hydra.lib.pairs.first(uc)), (lambda mterm: hydra.lib.maybes.maybe((lambda : try_alts(hydra.lib.pairs.second(uc))), (lambda t: Right(Just(t))), mterm)))), hydra.lib.lists.uncons(alts))
             return hydra.lib.eithers.bind(term_alternatives(cx, graph, term), (lambda alts0: try_alts(alts0)))
         def try_term(term: hydra.core.Term) -> Either[hydra.errors.Error, Maybe[hydra.core.Term]]:
             @lru_cache(1)
@@ -760,7 +758,7 @@ def schema_graph_to_definitions(constraints: hydra.coders.LanguageConstraints, g
     @lru_cache(1)
     def litmap() -> FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType]:
         return adapt_literal_types_map(constraints)
-    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda e: cast(hydra.errors.Error, hydra.errors.ErrorDecoding(e))), (lambda x: x), hydra.environment.graph_as_types(graph, hydra.lexical.graph_to_bindings(graph))), (lambda tmap0: hydra.lib.eithers.bind(adapt_graph_schema(constraints, litmap(), tmap0), (lambda tmap1: (to_def := (lambda pair: hydra.packaging.TypeDefinition(hydra.lib.pairs.first(pair), hydra.core.TypeScheme((), hydra.lib.pairs.second(pair), Nothing()))), Right((tmap1, hydra.lib.lists.map((lambda names: hydra.lib.lists.map((lambda x1: to_def(x1)), hydra.lib.lists.map((lambda n: (n, hydra.lib.maybes.from_just(hydra.lib.maps.lookup(n, tmap1)))), names))), name_lists))))[1]))))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda e: cast(hydra.errors.Error, hydra.errors.ErrorDecoding(e))), (lambda x: x), hydra.environment.graph_as_types(graph, hydra.lexical.graph_to_bindings(graph))), (lambda tmap0: hydra.lib.eithers.bind(adapt_graph_schema(constraints, litmap(), tmap0), (lambda tmap1: (to_def := (lambda pair: hydra.packaging.TypeDefinition(hydra.lib.pairs.first(pair), hydra.core.TypeScheme((), hydra.lib.pairs.second(pair), Nothing()))), Right((tmap1, hydra.lib.lists.map((lambda names: hydra.lib.lists.map((lambda x1: to_def(x1)), hydra.lib.maybes.map_maybe((lambda n: hydra.lib.maybes.map((lambda t: (n, t)), hydra.lib.maps.lookup(n, tmap1))), names))), name_lists))))[1]))))
 
 def simple_language_adapter(lang: hydra.coders.Language, cx: T0, g: hydra.graph.Graph, typ: hydra.core.Type) -> Either[hydra.errors.Error, hydra.coders.Adapter[hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
     r"""Given a target language and a source type, produce an adapter which rewrites the type and its terms according to the language's constraints. The encode direction adapts terms; the decode direction is identity."""

@@ -371,7 +371,8 @@ def show_decimal(x: Decimal) -> str:
         return "0.0"
     e = len(digits) + exp - 1
     sign_str = "-" if sign else ""
-    if e >= 7 or e < -3:
+    # Haskell Scientific uses plain form iff -1 <= e <= 6; otherwise scientific.
+    if e >= 7 or e < -1:
         if len(coefficient) == 1:
             mantissa = coefficient + ".0"
         else:

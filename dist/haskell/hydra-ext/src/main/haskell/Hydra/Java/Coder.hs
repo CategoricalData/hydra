@@ -296,10 +296,8 @@ bindingsToStatements env bindings cx g0 =
                         deps = Pairs.second entry
                     in (key, (Sets.toList deps))) (Maps.toList allDeps))
           recursiveVars =
-                  Sets.fromList (Lists.concat (Lists.map (\names -> Logic.ifElse (Equality.equal (Lists.length names) 1) (
-                    let singleName = Lists.head names
-                    in (Maybes.cases (Maps.lookup singleName allDeps) [] (\deps -> Logic.ifElse (Sets.member singleName deps) [
-                      singleName] []))) names) sorted))
+                  Sets.fromList (Lists.concat (Lists.map (\names -> Logic.ifElse (Equality.equal (Lists.length names) 1) (Maybes.maybe [] (\singleName -> Maybes.cases (Maps.lookup singleName allDeps) [] (\deps -> Logic.ifElse (Sets.member singleName deps) [
+                    singleName] [])) (Lists.maybeHead names)) names) sorted))
           thunkedVars =
                   Sets.fromList (Lists.concat (Lists.map (\b ->
                     let bname = Core.bindingName b
@@ -589,11 +587,16 @@ compareFieldExpr otherVar ft =
 
 compareToBody :: t0 -> String -> [Core.FieldType] -> [Syntax.BlockStatement]
 compareToBody aliases otherVar fields =
-    Logic.ifElse (Lists.null fields) [
-      Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just (Utils.javaIntExpression 0)))] (Logic.ifElse (Equality.equal (Lists.length fields) 1) [
-      Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just (compareFieldExpr otherVar (Lists.head fields))))] (Lists.concat2 [
-      cmpDeclStatement aliases] (Lists.concat2 (Lists.concat (Lists.map (\f -> compareAndReturnStmts otherVar f) (Lists.init fields))) [
-      Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just (compareFieldExpr otherVar (Lists.last fields))))])))
+
+      let zeroStmts = [
+            Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just (Utils.javaIntExpression 0)))]
+      in (Maybes.fromMaybe zeroStmts (Maybes.map (\p ->
+        let firstField = Pairs.first p
+            restFields = Pairs.second p
+        in (Logic.ifElse (Lists.null restFields) [
+          Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just (compareFieldExpr otherVar firstField)))] (Lists.concat2 [
+          cmpDeclStatement aliases] (Lists.concat2 (Lists.concat (Lists.map (\f -> compareAndReturnStmts otherVar f) (Lists.cons firstField (Maybes.fromMaybe [] (Lists.maybeInit restFields))))) [
+          Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just (compareFieldExpr otherVar (Maybes.fromMaybe firstField (Lists.maybeLast restFields)))))])))) (Lists.uncons fields)))
 
 compareToZeroClause :: String -> String -> Syntax.InclusiveOrExpression
 compareToZeroClause tmpName fname =
@@ -681,8 +684,8 @@ correctCastType :: Core.Term -> [Core.Type] -> Core.Type -> t0 -> t1 -> Either t
 correctCastType innerBody typeArgs fallback cx g =
     case (Strip.deannotateTerm innerBody) of
       Core.TermPair _ -> Logic.ifElse (Equality.equal (Lists.length typeArgs) 2) (Right (Core.TypePair (Core.PairType {
-        Core.pairTypeFirst = (Lists.head typeArgs),
-        Core.pairTypeSecond = (Lists.head (Lists.tail typeArgs))}))) (Right fallback)
+        Core.pairTypeFirst = (Maybes.fromMaybe fallback (Lists.maybeAt 0 typeArgs)),
+        Core.pairTypeSecond = (Maybes.fromMaybe fallback (Lists.maybeAt 1 typeArgs))}))) (Right fallback)
       _ -> Right fallback
 
 correctTypeApps :: t0 -> Core.Name -> [Core.Term] -> [Core.Type] -> t1 -> Graph.Graph -> Either Errors.Error [Core.Type]
@@ -858,13 +861,13 @@ decodeTypeFromTerm term =
               _ -> Nothing
             _ -> Nothing
           _ -> Nothing) (Logic.ifElse (Equality.equal fname "annotated") (case fterm of
-          Core.TermRecord v1 -> Maybes.bind (Lists.safeHead (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.Name "body")) (Core.recordFields v1))) (\bodyField -> decodeTypeFromTerm (Core.fieldTerm bodyField))
+          Core.TermRecord v1 -> Maybes.bind (Lists.maybeHead (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.Name "body")) (Core.recordFields v1))) (\bodyField -> decodeTypeFromTerm (Core.fieldTerm bodyField))
           _ -> Nothing) (Logic.ifElse (Equality.equal fname "application") (case fterm of
-          Core.TermRecord v1 -> Maybes.bind (Lists.safeHead (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.Name "function")) (Core.recordFields v1))) (\funcField -> Maybes.bind (decodeTypeFromTerm (Core.fieldTerm funcField)) (\func -> Maybes.bind (Lists.safeHead (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.Name "argument")) (Core.recordFields v1))) (\argField -> Maybes.map (\arg -> Core.TypeApplication (Core.ApplicationType {
+          Core.TermRecord v1 -> Maybes.bind (Lists.maybeHead (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.Name "function")) (Core.recordFields v1))) (\funcField -> Maybes.bind (decodeTypeFromTerm (Core.fieldTerm funcField)) (\func -> Maybes.bind (Lists.maybeHead (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.Name "argument")) (Core.recordFields v1))) (\argField -> Maybes.map (\arg -> Core.TypeApplication (Core.ApplicationType {
             Core.applicationTypeFunction = func,
             Core.applicationTypeArgument = arg})) (decodeTypeFromTerm (Core.fieldTerm argField)))))
           _ -> Nothing) (Logic.ifElse (Equality.equal fname "function") (case fterm of
-          Core.TermRecord v1 -> Maybes.bind (Lists.safeHead (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.Name "domain")) (Core.recordFields v1))) (\domField -> Maybes.bind (decodeTypeFromTerm (Core.fieldTerm domField)) (\dom -> Maybes.bind (Lists.safeHead (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.Name "codomain")) (Core.recordFields v1))) (\codField -> Maybes.map (\cod -> Core.TypeFunction (Core.FunctionType {
+          Core.TermRecord v1 -> Maybes.bind (Lists.maybeHead (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.Name "domain")) (Core.recordFields v1))) (\domField -> Maybes.bind (decodeTypeFromTerm (Core.fieldTerm domField)) (\dom -> Maybes.bind (Lists.maybeHead (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.Name "codomain")) (Core.recordFields v1))) (\codField -> Maybes.map (\cod -> Core.TypeFunction (Core.FunctionType {
             Core.functionTypeDomain = dom,
             Core.functionTypeCodomain = cod})) (decodeTypeFromTerm (Core.fieldTerm codField)))))
           _ -> Nothing) (Logic.ifElse (Equality.equal fname "literal") (case fterm of
@@ -874,9 +877,9 @@ decodeTypeFromTerm term =
 
 dedupBindings :: S.Set Core.Name -> [Core.Binding] -> [Core.Binding]
 dedupBindings inScope bs =
-    Logic.ifElse (Lists.null bs) [] (
-      let b = Lists.head bs
-          rest = Lists.tail bs
+    Maybes.fromMaybe [] (Maybes.map (\p ->
+      let b = Pairs.first p
+          rest = Pairs.second p
           name = Core.bindingName b
       in (Logic.ifElse (Sets.member name inScope) (
         let newName = freshJavaName name inScope
@@ -889,7 +892,7 @@ dedupBindings inScope bs =
         in (Lists.cons (Core.Binding {
           Core.bindingName = newName,
           Core.bindingTerm = (Core.bindingTerm b),
-          Core.bindingType = (Core.bindingType b)}) (dedupBindings (Sets.insert newName inScope) rest2))) (Lists.cons b (dedupBindings (Sets.insert name inScope) rest))))
+          Core.bindingType = (Core.bindingType b)}) (dedupBindings (Sets.insert newName inScope) rest2))) (Lists.cons b (dedupBindings (Sets.insert name inScope) rest)))) (Lists.uncons bs))
 
 detectAccumulatorUnification :: [Core.Type] -> Core.Type -> [Core.Name] -> M.Map Core.Name Core.Type
 detectAccumulatorUnification doms cod tparams =
@@ -952,7 +955,7 @@ elementsClassName ns =
 
       let nsStr = Packaging.unNamespace ns
           parts = Strings.splitOn "." nsStr
-      in (Formatting.sanitizeWithUnderscores Language.reservedWords (Formatting.capitalize (Lists.last parts)))
+      in (Formatting.sanitizeWithUnderscores Language.reservedWords (Formatting.capitalize (Maybes.fromMaybe nsStr (Lists.maybeLast parts))))
 
 elementsQualifiedName :: Packaging.Namespace -> Core.Name
 elementsQualifiedName ns =
@@ -1298,8 +1301,8 @@ encodeNullaryPrimitiveByName env typ name cx g =
           Syntax.methodInvocationArguments = []})))) (
         let fullName = Syntax.unIdentifier (elementJavaIdentifier True False aliases name)
             parts = Strings.splitOn "." fullName
-            className = Syntax.Identifier (Strings.intercalate "." (Lists.init parts))
-            methodName = Syntax.Identifier (Lists.last parts)
+            className = Syntax.Identifier (Strings.intercalate "." (Maybes.fromMaybe [] (Lists.maybeInit parts)))
+            methodName = Syntax.Identifier (Maybes.fromMaybe fullName (Lists.maybeLast parts))
         in (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs className methodName targs []))))))
 
 encodeTerm :: JavaEnvironment.JavaEnvironment -> Core.Term -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
@@ -1561,7 +1564,8 @@ encodeTermInternal env anns tyapps term cx g0 =
                 in case innermostBody of
                   Core.TermVariable v1 -> Eithers.bind (classifyDataReference v1 cx g) (\cls -> typeAppNullaryOrHoisted env aliases anns tyapps jatyp body correctedTyp v1 cls allTypeArgs cx g)
                   Core.TermEither v1 -> Logic.ifElse (Equality.equal (Lists.length allTypeArgs) 2) (
-                    let eitherBranchTypes = (Lists.head allTypeArgs, (Lists.head (Lists.tail allTypeArgs)))
+                    let eitherBranchTypes =
+                            (Maybes.fromMaybe correctedTyp (Lists.maybeAt 0 allTypeArgs), (Maybes.fromMaybe correctedTyp (Lists.maybeAt 1 allTypeArgs)))
                     in (Eithers.bind (Eithers.mapList (\t -> Eithers.bind (encodeType aliases Sets.empty t cx g) (\jt -> Utils.javaTypeToJavaReferenceType jt cx)) allTypeArgs) (\jTypeArgs ->
                       let eitherTargs = Lists.map (\rt -> Syntax.TypeArgumentReference rt) jTypeArgs
                           encodeEitherBranch =
@@ -1632,7 +1636,7 @@ encodeTermTCO env0 funcName paramNames tcoVarRenames tcoDepth term cx g =
               args2 = Pairs.first gathered2
               body2 = Pairs.second gathered2
           in (Logic.ifElse (Equality.equal (Lists.length args2) 1) (
-            let arg = Lists.head args2
+            let arg = Maybes.fromMaybe Core.TermUnit (Lists.maybeHead args2)
             in case (Strip.deannotateAndDetypeTerm body2) of
               Core.TermCases v0 ->
                 let aliases = JavaEnvironment.javaEnvironmentAliases env
@@ -1789,7 +1793,7 @@ encodeVariable env name cx g =
 
 encodeVariable_buildCurried :: [Core.Name] -> Syntax.Expression -> Syntax.Expression
 encodeVariable_buildCurried params inner =
-    Logic.ifElse (Lists.null params) inner (Utils.javaLambda (Lists.head params) (encodeVariable_buildCurried (Lists.tail params) inner))
+    Maybes.fromMaybe inner (Maybes.map (\p -> Utils.javaLambda (Pairs.first p) (encodeVariable_buildCurried (Pairs.second p) inner)) (Lists.uncons params))
 
 encodeVariable_hoistedLambdaCase :: JavaEnvironment.Aliases -> Core.Name -> Int -> t0 -> Graph.Graph -> Either Errors.Error Syntax.Expression
 encodeVariable_hoistedLambdaCase aliases name arity cx g =
@@ -1930,7 +1934,7 @@ findSelfRefVar :: (Eq t0, Ord t0) => (M.Map t0 [t0] -> Maybe t0)
 findSelfRefVar grouped =
 
       let selfRefs = Lists.filter (\entry -> Lists.elem (Pairs.first entry) (Pairs.second entry)) (Maps.toList grouped)
-      in (Logic.ifElse (Lists.null selfRefs) Nothing (Just (Pairs.first (Lists.head selfRefs))))
+      in (Maybes.map (\entry -> Pairs.first entry) (Lists.maybeHead selfRefs))
 
 first20Primes :: [Integer]
 first20Primes =
@@ -2206,9 +2210,10 @@ isUnresolvedInferenceVar :: Core.Name -> Bool
 isUnresolvedInferenceVar name =
 
       let chars = Strings.toList (Core.unName name)
-      in (Logic.ifElse (Lists.null chars) False (Logic.ifElse (Logic.not (Equality.equal (Lists.head chars) 116)) False (
-        let rest = Lists.tail chars
-        in (Logic.and (Logic.not (Lists.null rest)) (Lists.null (Lists.filter (\c -> Logic.not (isUnresolvedInferenceVar_isDigit c)) rest))))))
+      in (Maybes.fromMaybe False (Maybes.map (\p ->
+        let firstCh = Pairs.first p
+            rest = Pairs.second p
+        in (Logic.ifElse (Logic.not (Equality.equal firstCh 116)) False (Logic.and (Logic.not (Lists.null rest)) (Lists.null (Lists.filter (\c -> Logic.not (isUnresolvedInferenceVar_isDigit c)) rest))))) (Lists.uncons chars)))
 
 isUnresolvedInferenceVar_isDigit :: Int -> Bool
 isUnresolvedInferenceVar_isDigit c = Logic.and (Equality.gte c 48) (Equality.lte c 57)
@@ -2280,7 +2285,8 @@ namespaceParent :: Packaging.Namespace -> Maybe Packaging.Namespace
 namespaceParent ns =
 
       let parts = Strings.splitOn "." (Packaging.unNamespace ns)
-      in (Logic.ifElse (Lists.null (Lists.init parts)) Nothing (Just (Packaging.Namespace (Strings.intercalate "." (Lists.init parts)))))
+          initParts = Maybes.fromMaybe [] (Lists.maybeInit parts)
+      in (Logic.ifElse (Lists.null initParts) Nothing (Just (Packaging.Namespace (Strings.intercalate "." initParts))))
 
 needsThunking :: Core.Term -> Bool
 needsThunking t =
@@ -2440,16 +2446,16 @@ propagateTypesInAppChain fixedCod resultType t =
 rebuildApps :: Core.Term -> [Core.Term] -> Core.Type -> Core.Term
 rebuildApps f args fType =
     Logic.ifElse (Lists.null args) f (case (Strip.deannotateType fType) of
-      Core.TypeFunction v0 ->
-        let arg = Lists.head args
-            rest = Lists.tail args
+      Core.TypeFunction v0 -> Maybes.fromMaybe f (Maybes.map (\p ->
+        let arg = Pairs.first p
+            rest = Pairs.second p
             remainingType = Core.functionTypeCodomain v0
             app =
                     Core.TermApplication (Core.Application {
                       Core.applicationFunction = f,
                       Core.applicationArgument = arg})
             annotatedApp = Annotations.setTermAnnotation Constants.key_type (Just (EncodeCore.type_ remainingType)) app
-        in (rebuildApps annotatedApp rest remainingType)
+        in (rebuildApps annotatedApp rest remainingType)) (Lists.uncons args))
       _ -> Lists.foldl (\acc -> \a -> Core.TermApplication (Core.Application {
         Core.applicationFunction = acc,
         Core.applicationArgument = a})) f args)
@@ -2741,7 +2747,11 @@ toClassDecl isInner isSer aliases tparams elName t cx g =
 toDeclInit :: JavaEnvironment.Aliases -> Graph.Graph -> S.Set Core.Name -> [Core.Binding] -> Core.Name -> Context.Context -> Graph.Graph -> Either Errors.Error (Maybe Syntax.BlockStatement)
 toDeclInit aliasesExt gExt recursiveVars flatBindings name cx g =
     Logic.ifElse (Sets.member name recursiveVars) (
-      let binding = Lists.head (Lists.filter (\b -> Equality.equal (Core.bindingName b) name) flatBindings)
+      let binding =
+              Maybes.fromMaybe (Core.Binding {
+                Core.bindingName = name,
+                Core.bindingTerm = Core.TermUnit,
+                Core.bindingType = Nothing}) (Lists.maybeHead (Lists.filter (\b -> Equality.equal (Core.bindingName b) name) flatBindings))
           value = Core.bindingTerm binding
       in (Eithers.bind (Maybes.cases (Core.bindingType binding) (Checking.typeOfTerm cx gExt value) (\ts -> Right (Core.typeSchemeType ts))) (\typ -> Eithers.bind (encodeType aliasesExt Sets.empty typ cx g) (\jtype ->
         let id = Utils.variableToJavaIdentifier name
@@ -2772,7 +2782,11 @@ toDeclInit aliasesExt gExt recursiveVars flatBindings name cx g =
 toDeclStatement :: JavaEnvironment.JavaEnvironment -> JavaEnvironment.Aliases -> Graph.Graph -> S.Set Core.Name -> S.Set Core.Name -> [Core.Binding] -> Core.Name -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.BlockStatement
 toDeclStatement envExt aliasesExt gExt recursiveVars thunkedVars flatBindings name cx g =
 
-      let binding = Lists.head (Lists.filter (\b -> Equality.equal (Core.bindingName b) name) flatBindings)
+      let binding =
+              Maybes.fromMaybe (Core.Binding {
+                Core.bindingName = name,
+                Core.bindingTerm = Core.TermUnit,
+                Core.bindingType = Nothing}) (Lists.maybeHead (Lists.filter (\b -> Equality.equal (Core.bindingName b) name) flatBindings))
           value = Core.bindingTerm binding
       in (Eithers.bind (Maybes.cases (Core.bindingType binding) (Checking.typeOfTerm cx gExt value) (\ts -> Right (Core.typeSchemeType ts))) (\typ -> Eithers.bind (encodeType aliasesExt Sets.empty typ cx g) (\jtype ->
         let id = Utils.variableToJavaIdentifier name
@@ -2962,18 +2976,21 @@ wrapInSupplierLambda expr =
 
 wrapLazyArguments :: Core.Name -> [Syntax.Expression] -> ([Syntax.Expression], (Maybe String))
 wrapLazyArguments name args =
-    Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.logic.ifElse")) (Equality.equal (Lists.length args) 3)) ([
-      Lists.at 0 args,
-      (wrapInSupplierLambda (Lists.at 1 args)),
-      (wrapInSupplierLambda (Lists.at 2 args))], (Just "lazy")) (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maybes.maybe")) (Equality.equal (Lists.length args) 3)) ([
-      wrapInSupplierLambda (Lists.at 0 args),
-      (Lists.at 1 args),
-      (Lists.at 2 args)], (Just "applyLazy")) (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maybes.cases")) (Equality.equal (Lists.length args) 3)) ([
-      Lists.at 0 args,
-      (wrapInSupplierLambda (Lists.at 1 args)),
-      (Lists.at 2 args)], (Just "applyLazy")) (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maps.findWithDefault")) (Equality.equal (Lists.length args) 3)) ([
-      wrapInSupplierLambda (Lists.at 0 args),
-      (Lists.at 1 args),
-      (Lists.at 2 args)], (Just "applyLazy")) (Logic.ifElse (Logic.and (Logic.or (Equality.equal name (Core.Name "hydra.lib.maybes.fromMaybe")) (Logic.or (Equality.equal name (Core.Name "hydra.lib.eithers.fromLeft")) (Equality.equal name (Core.Name "hydra.lib.eithers.fromRight")))) (Equality.equal (Lists.length args) 2)) ([
-      wrapInSupplierLambda (Lists.at 0 args),
-      (Lists.at 1 args)], (Just "applyLazy")) (args, Nothing)))))
+
+      let dummyExpr = Utils.javaIntExpression 0
+          argAt = \i -> Maybes.fromMaybe dummyExpr (Lists.maybeAt i args)
+      in (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.logic.ifElse")) (Equality.equal (Lists.length args) 3)) ([
+        argAt 0,
+        (wrapInSupplierLambda (argAt 1)),
+        (wrapInSupplierLambda (argAt 2))], (Just "lazy")) (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maybes.maybe")) (Equality.equal (Lists.length args) 3)) ([
+        wrapInSupplierLambda (argAt 0),
+        (argAt 1),
+        (argAt 2)], (Just "applyLazy")) (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maybes.cases")) (Equality.equal (Lists.length args) 3)) ([
+        argAt 0,
+        (wrapInSupplierLambda (argAt 1)),
+        (argAt 2)], (Just "applyLazy")) (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maps.findWithDefault")) (Equality.equal (Lists.length args) 3)) ([
+        wrapInSupplierLambda (argAt 0),
+        (argAt 1),
+        (argAt 2)], (Just "applyLazy")) (Logic.ifElse (Logic.and (Logic.or (Equality.equal name (Core.Name "hydra.lib.maybes.fromMaybe")) (Logic.or (Equality.equal name (Core.Name "hydra.lib.eithers.fromLeft")) (Equality.equal name (Core.Name "hydra.lib.eithers.fromRight")))) (Equality.equal (Lists.length args) 2)) ([
+        wrapInSupplierLambda (argAt 0),
+        (argAt 1)], (Just "applyLazy")) (args, Nothing))))))

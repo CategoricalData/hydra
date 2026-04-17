@@ -14,7 +14,7 @@ def value(v1: hydra.json.model.Value): hydra.core.Term =
   case hydra.json.model.Value.`null` => hydra.core.Term.inject(hydra.core.Injection("hydra.json.model.Value",
      hydra.core.Field("null", hydra.core.Term.unit)))
   case hydra.json.model.Value.number(v_Value_number_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.json.model.Value",
-     hydra.core.Field("number", hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.bigfloat(v_Value_number_y))))))
+     hydra.core.Field("number", hydra.core.Term.literal(hydra.core.Literal.decimal(v_Value_number_y)))))
   case hydra.json.model.Value.`object`(v_Value_object_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.json.model.Value",
      hydra.core.Field("object", hydra.core.Term.map(hydra.lib.maps.bimap[scala.Predef.String,
      hydra.core.Term, hydra.json.model.Value, hydra.core.Term]((x: scala.Predef.String) => hydra.core.Term.literal(hydra.core.Literal.string(x)))(hydra.encode.json.model.value)(v_Value_object_y)))))

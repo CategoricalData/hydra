@@ -8,8 +8,6 @@
 
 (require 'hydra.formatting)
 
-(require 'hydra.lib.equality)
-
 (require 'hydra.lib.lists)
 
 (require 'hydra.lib.literals)
@@ -32,7 +30,7 @@
 
 (require 'hydra.util)
 
-(defvar hydra_names_qualify_name (lambda (name) (let ((parts (hydra_lib_lists_reverse (funcall (hydra_lib_strings_split_on ".") (funcall (lambda (v) v) name))))) (if (funcall (hydra_lib_equality_equal 1) (hydra_lib_lists_length parts)) (make-hydra_packaging_qualified_name (list :nothing) (funcall (lambda (v) v) name)) (make-hydra_packaging_qualified_name (list :just (funcall (hydra_lib_strings_intercalate ".") (hydra_lib_lists_reverse (hydra_lib_lists_tail parts)))) (hydra_lib_lists_head parts))))))
+(defvar hydra_names_qualify_name (lambda (name) (let ((parts (hydra_lib_lists_reverse (funcall (hydra_lib_strings_split_on ".") (funcall (lambda (v) v) name))))) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (make-hydra_packaging_qualified_name (list :nothing) (funcall (lambda (v) v) name)))) (lambda (uc) (let ((local_name (hydra_lib_pairs_first uc))) (let ((rest_reversed (hydra_lib_pairs_second uc))) (if (hydra_lib_lists_null rest_reversed) (make-hydra_packaging_qualified_name (list :nothing) (funcall (lambda (v) v) name)) (make-hydra_packaging_qualified_name (list :just (funcall (hydra_lib_strings_intercalate ".") (hydra_lib_lists_reverse rest_reversed))) local_name)))))) (hydra_lib_lists_uncons parts)))))
 
 (defvar hydra_names_compact_name (lambda (namespaces) (lambda (name) (let* ((qual_name (hydra_names_qualify_name name)) (local (funcall (lambda (v) (hydra_packaging_qualified_name-local v)) qual_name)) (mns (funcall (lambda (v) (hydra_packaging_qualified_name-namespace v)) qual_name))) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (funcall (lambda (v) v) name))) (lambda (ns_) (funcall (funcall (hydra_lib_maybes_maybe (lambda () local)) (lambda (pre) (hydra_lib_strings_cat (list pre ":" local)))) (funcall (hydra_lib_maps_lookup ns_) namespaces)))) mns)))))
 
