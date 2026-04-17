@@ -142,6 +142,10 @@ coqReservedWords = define "coqReservedWords" $
       "Theorem", "Example", "Variable", "Variables",
       -- Coq stdlib names that appear as Hydra-generated lambda parameter names
       "cons", "pair", "nil",
+      -- Coq stdlib type constructors that can be shadowed by local let bindings,
+      -- causing cryptic "Non-functional construction" errors when subsequent
+      -- code tries to use the type.
+      "list", "option", "prod", "sum", "unit", "bool", "nat", "string",
       -- Names that collide with Hydra kernel function names after namespace
       -- stripping (e.g., hydra.show.core.term, hydra.show.core.type).
       "term", "literal", "graph", "element"]

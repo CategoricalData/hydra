@@ -875,6 +875,12 @@ resolveQualifiedName = define "resolveQualifiedName" $
     "head1">: Maybes.fromMaybe (var "s") (Lists.maybeHead (var "parts")),
     "currentNs">: project CE._CoqEnvironment CE._CoqEnvironment_currentNamespace @@ var "env",
     "ambig">: project CE._CoqEnvironment CE._CoqEnvironment_ambiguousNames @@ var "env"] $
+    -- Coq.<name> : synthetic marker (from `typeToTerm`) for a Coq-builtin
+    -- type constructor referenced in a term position. Emit the tail segment
+    -- raw, bypassing sanitizeVar — otherwise `Coq.list` would collide with a
+    -- user-level lambda parameter named `list` and get escaped to `list_`.
+    Logic.ifElse (Equality.equal (var "head1") (string "Coq"))
+      (Maybes.fromMaybe (var "s") (Lists.maybeLast (var "parts"))) $
     -- Build_hydra.<ns>.<x> : strip to Build_<sanitized local>.
     Logic.ifElse (Equality.equal (var "head1") (string "Build_hydra"))
       (Strings.cat2 (string "Build_") (sanitizeStripped @@ (Maybes.fromMaybe (var "s") (Lists.maybeLast (var "parts"))))) $
