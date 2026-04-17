@@ -48,7 +48,6 @@ import qualified Hydra.Sources.Json.Schema.Serde as JsonSchemaSerde
 import qualified Hydra.Sources.Kusto.Kql as Kql
 import qualified Hydra.Sources.Other.Atlas as Atlas
 import qualified Hydra.Sources.Other.AzureDtld as AzureDtld
-import qualified Hydra.Sources.Other.Coq as OtherCoq
 import qualified Hydra.Sources.Other.Datalog as Datalog
 import qualified Hydra.Sources.Other.GeoJson as GeoJson
 import qualified Hydra.Sources.Other.IanaRelations as IanaRelations
@@ -119,7 +118,6 @@ mainModules = [
   JsonSchemaSerde.module_,
   Kql.module_,
   Osv.module_,
-  OtherCoq.module_,
   ParquetFormat.module_,
   Pdl.module_,
   PegasusCoder.module_,

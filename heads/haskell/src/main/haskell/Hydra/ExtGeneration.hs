@@ -48,6 +48,7 @@ import Hydra.Coq.Language (coqLanguage)
 import Control.Monad (when)
 import qualified Data.List as L
 import qualified Data.Map as M
+import qualified Data.Set as Set
 import qualified System.Directory as SD
 import qualified System.FilePath as FP
 import qualified System.IO as SIO
@@ -131,9 +132,60 @@ writeCoq basePath universeModules modulesToGenerate =
   let allMods = universeModules ++ modulesToGenerate
       fm = globalFieldMapping allMods
       cc = globalConstructorCounts allMods
-      an = globalAmbiguousNames allMods
+      -- Hydra primitive library functions are not Hydra modules — they are
+      -- implemented host-side (in this case as Coq Definitions/Axioms in
+      -- `hydra/lib/*.v`) and are therefore invisible to `globalAmbiguousNames`.
+      -- Collisions like `hydra.lib.maybes.maybe` vs `hydra.show.core.maybe`
+      -- only manifest at Coq's import level. Inject the lib primitive names
+      -- into the ambiguous set so that cross-module references in the
+      -- non-lib source (`hydra.show.core.maybe`) stay fully qualified.
+      an = Set.union (globalAmbiguousNames allMods) coqLibPrimitiveNames
       sa = globalSanitizedAccessors allMods
   in generateSources (moduleToCoq fm cc an sa) coqLanguage True False False False basePath universeModules modulesToGenerate
+
+-- | Names of Hydra primitive library functions exported by `hydra.lib.*`
+-- Coq modules. These are invisible to `globalAmbiguousNames` (which walks
+-- Hydra module definitions) because the lib modules are implemented
+-- host-side in hand-written Coq. Used to disambiguate references like
+-- `hydra.show.core.maybe` that would otherwise collide with bare imports
+-- of the lib modules.
+coqLibPrimitiveNames :: Set.Set String
+coqLibPrimitiveNames = Set.fromList [
+  "abs","acos","acosh","add","addFloat64","alter","and","apply","asin",
+  "asinh","at","atan","atan2","atanh","bigfloatToBigint","bigfloatToFloat32",
+  "bigfloatToFloat64","bigintToBigfloat","bigintToDecimal","bigintToInt16",
+  "bigintToInt32","bigintToInt64","bigintToInt8","bigintToUint16",
+  "bigintToUint32","bigintToUint64","bigintToUint8","bimap","binaryToBytes",
+  "binaryToString","bind","cases","cat","cat2","ceiling","charAt","compare",
+  "compose","concat","concat2","cons","contains","cos","cosh",
+  "decimalToBigint","decimalToFloat32","decimalToFloat64","delete",
+  "difference","div","drop","dropWhile","e","either","elem","elems","empty",
+  "equal","even","exp","filter","filterWithKey","find","findAll",
+  "findWithDefault","first","float32ToBigfloat","float32ToDecimal",
+  "float64ToBigfloat","float64ToDecimal","floor","foldl","foldr","fromJust",
+  "fromLeft","fromList","fromMaybe","fromRight","group","gt","gte","head",
+  "identity","ifElse","init","insert","int16ToBigint","int32ToBigint",
+  "int64ToBigint","int8ToBigint","intercalate","intersection","intersperse",
+  "isAlphaNum","isJust","isLeft","isLower","isNothing","isRight","isSpace",
+  "isUpper","keys","last","lefts","length","lines","log","logBase","lookup",
+  "lt","lte","map","mapKeys","mapList","mapMaybe","mapSet","matches","max",
+  "maybe","maybeAt","maybeCharAt","maybeDiv","maybeHead","maybeInit",
+  "maybeLast","maybeMod","maybePred","maybeRem","maybeSucc","maybeTail",
+  "member","min","mod","mul","mulFloat64","negate","negateFloat64","not",
+  "nub","null","odd","or","partition","partitionEithers","pi","pow","pred",
+  "pure","range","readBigfloat","readBigint","readBoolean","readDecimal",
+  "readFloat32","readFloat64","readInt16","readInt32","readInt64","readInt8",
+  "readString","readUint16","readUint32","readUint64","readUint8","rem",
+  "replace","replaceAll","replicate","reverse","rights","round",
+  "roundBigfloat","roundFloat32","roundFloat64","safeHead","second",
+  "showBigfloat","showBigint","showBoolean","showDecimal","showFloat32",
+  "showFloat64","showInt16","showInt32","showInt64","showInt8","showString",
+  "showUint16","showUint32","showUint64","showUint8","signum","sin",
+  "singleton","sinh","size","sort","sortOn","span","split","splitOn","sqrt",
+  "stringToBinary","sub","subFloat64","succ","tail","take","tan","tanh",
+  "toList","toLower","toUpper","transpose","truncate","uint16ToBigint",
+  "uint32ToBigint","uint64ToBigint","uint8ToBigint","union","unions",
+  "unlines","zip","zipWith"]
 
 -- | Wrap moduleToLisp for a specific dialect
 moduleToLispDialect

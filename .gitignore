@@ -60,3 +60,5 @@ docs/work/
 .claude
 # Hydra branch plan files (see CLAUDE.md)
 *-plan.md
+# Cross-worktree Claude messages (see CLAUDE.md)
+claude-hydra-messages/
