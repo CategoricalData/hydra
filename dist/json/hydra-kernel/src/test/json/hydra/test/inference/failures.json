@@ -12007,7 +12007,7 @@
                                                                                   "name": "variable",
                                                                                   "term": {
                                                                                     "wrap": {
-                                                                                      "body": {"literal": {"string": "hydra.lib.lists.head"}},
+                                                                                      "body": {"literal": {"string": "hydra.lib.lists.maybeHead"}},
                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
@@ -12142,7 +12142,7 @@
                                                                                   "name": "variable",
                                                                                   "term": {
                                                                                     "wrap": {
-                                                                                      "body": {"literal": {"string": "hydra.lib.lists.tail"}},
+                                                                                      "body": {"literal": {"string": "hydra.lib.lists.maybeTail"}},
                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
@@ -13388,7 +13388,7 @@
                                                                                                 "name": "variable",
                                                                                                 "term": {
                                                                                                   "wrap": {
-                                                                                                    "body": {"literal": {"string": "hydra.lib.math.div"}},
+                                                                                                    "body": {"literal": {"string": "hydra.lib.math.maybeDiv"}},
                                                                                                     "typeName": "hydra.core.Name"}}},
                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                         {
@@ -21010,7 +21010,7 @@
                                                                                   "name": "variable",
                                                                                   "term": {
                                                                                     "wrap": {
-                                                                                      "body": {"literal": {"string": "hydra.lib.lists.head"}},
+                                                                                      "body": {"literal": {"string": "hydra.lib.lists.maybeHead"}},
                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                 "typeName": "hydra.core.Term"}}},
                                                                           {
@@ -21656,7 +21656,7 @@
                                                                                                 "name": "variable",
                                                                                                 "term": {
                                                                                                   "wrap": {
-                                                                                                    "body": {"literal": {"string": "hydra.lib.math.div"}},
+                                                                                                    "body": {"literal": {"string": "hydra.lib.math.maybeDiv"}},
                                                                                                     "typeName": "hydra.core.Name"}}},
                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                         {
@@ -21830,7 +21830,7 @@
                                                                                                 "name": "variable",
                                                                                                 "term": {
                                                                                                   "wrap": {
-                                                                                                    "body": {"literal": {"string": "hydra.lib.math.mod"}},
+                                                                                                    "body": {"literal": {"string": "hydra.lib.math.maybeMod"}},
                                                                                                     "typeName": "hydra.core.Name"}}},
                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                         {

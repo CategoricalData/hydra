@@ -4,10 +4,8 @@ import hydra.core.Term;
 import hydra.lib.lists.Apply;
 import hydra.lib.lists.Bind;
 import hydra.lib.lists.Concat;
-import hydra.lib.lists.Head;
 import hydra.lib.lists.Intercalate;
 import hydra.lib.lists.Intersperse;
-import hydra.lib.lists.Last;
 import hydra.lib.lists.Length;
 import hydra.lib.lists.Map;
 import hydra.lib.lists.Pure;
@@ -44,15 +42,6 @@ public interface Lists {
     }
 
     /**
-     * Returns a term representing the head primitive operation for lists.
-     *
-     * @return a term for getting the first element of a list
-     */
-    static Term head() {
-        return new Head().term();
-    }
-
-    /**
      * Returns a term representing the intercalate primitive operation for lists.
      *
      * @return a term for inserting a list between lists and concatenating
@@ -68,15 +57,6 @@ public interface Lists {
      */
     static Term intersperse() {
         return new Intersperse().term();
-    }
-
-    /**
-     * Returns a term representing the last primitive operation for lists.
-     *
-     * @return a term for getting the last element of a list
-     */
-    static Term last() {
-        return new Last().term();
     }
 
     /**

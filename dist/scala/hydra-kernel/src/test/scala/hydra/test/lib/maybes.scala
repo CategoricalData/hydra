@@ -45,10 +45,8 @@ lazy val allTests: hydra.testing.TestGroup = hydra.testing.TestGroup("hydra.lib.
   hydra.lib.logic.ifElse[Option[Int]](hydra.lib.equality.lte[Int](x)(5))(Some(hydra.lib.math.add(x)(1)))(None))((y: Int) =>
   hydra.lib.logic.ifElse[Option[Int]](hydra.lib.equality.gte[Int](y)(5))(Some(hydra.lib.math.mul(y)(2)))(None))(3)),
      hydra.show.core.maybe((n: Int) => hydra.lib.literals.showInt32(n))(None))), None,
-     Seq()))), hydra.testing.TestGroup("fromJust", None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("extract from just",
-     hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.literals.showInt32(hydra.lib.maybes.fromJust[Int](Some(42))),
-     hydra.lib.literals.showInt32(42))), None, Seq()))), hydra.testing.TestGroup("fromMaybe",
-     None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("just value", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.literals.showInt32(hydra.lib.maybes.fromMaybe[Int](0)(Some(42))),
+     Seq()))), hydra.testing.TestGroup("fromMaybe", None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("just value",
+     hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.literals.showInt32(hydra.lib.maybes.fromMaybe[Int](0)(Some(42))),
      hydra.lib.literals.showInt32(42))), None, Seq()), hydra.testing.TestCaseWithMetadata("nothing with default",
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.literals.showInt32(hydra.lib.maybes.fromMaybe[Int](99)(None)),
      hydra.lib.literals.showInt32(99))), None, Seq()))), hydra.testing.TestGroup("isJust",

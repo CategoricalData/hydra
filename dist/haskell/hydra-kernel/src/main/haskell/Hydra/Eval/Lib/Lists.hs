@@ -11,7 +11,7 @@ import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Logic as Logic
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Reduction as Reduction
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -88,7 +88,7 @@ filter cx g predTerm listTerm =
 find :: t0 -> t1 -> Core.Term -> Core.Term -> Either t2 Core.Term
 find cx g predTerm listTerm =
     Right (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.safeHead")),
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.maybeHead")),
       Core.applicationArgument = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.filter")),
@@ -194,7 +194,7 @@ group cx g listTerm =
                               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))})])}))))}))}))})),
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.safeHead")),
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.maybeHead")),
                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))}))}))}))}))}))})),
@@ -215,9 +215,9 @@ intercalate cx g sep listsTerm =
 -- | Interpreter-friendly intersperse for List terms.
 intersperse :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 intersperse cx g sep listTerm =
-    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Logic.ifElse (Lists.null elements) (Core.TermList []) (Core.TermList (Lists.cons (Lists.head elements) (Lists.concat (Lists.map (\el -> [
+    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Core.TermList (Maybes.maybe [] (\p -> Lists.cons (Pairs.first p) (Lists.concat (Lists.map (\el -> [
       sep,
-      el]) (Lists.tail elements)))))))
+      el]) (Pairs.second p)))) (Lists.uncons elements))))
 
 -- | Interpreter-friendly map for List terms.
 map :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
@@ -229,7 +229,7 @@ map cx g funTerm listTerm =
 -- | Interpreter-friendly maybeHead for List terms.
 maybeHead :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 maybeHead cx g listTerm =
-    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Logic.ifElse (Lists.null elements) (Core.TermMaybe Nothing) (Core.TermMaybe (Just (Lists.head elements)))))
+    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Core.TermMaybe (Maybes.maybe Nothing (\p -> Just (Pairs.first p)) (Lists.uncons elements))))
 
 -- | Interpreter-friendly nub for List terms.
 nub :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
@@ -319,11 +319,6 @@ replicate cx g n x =
           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.range")),
           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
         Core.applicationArgument = n}))}))
-
--- | Interpreter-friendly safeHead for List terms.
-safeHead :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
-safeHead cx g listTerm =
-    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Logic.ifElse (Lists.null elements) (Core.TermMaybe Nothing) (Core.TermMaybe (Just (Lists.head elements)))))
 
 -- | Interpreter-friendly singleton for List terms.
 singleton :: t0 -> t1 -> Core.Term -> Either t2 Core.Term
@@ -432,6 +427,11 @@ span cx g predTerm listTerm =
           Core.applicationArgument = finalState}))}), (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
         Core.applicationArgument = finalState}))))))
+
+-- | Interpreter-friendly uncons for List terms.
+uncons :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
+uncons cx g listTerm =
+    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Core.TermMaybe (Maybes.maybe Nothing (\h -> Just (Core.TermPair (h, (Core.TermList (Lists.drop 1 elements))))) (Lists.maybeAt 0 elements))))
 
 -- | Interpreter-friendly zipWith for List terms.
 zipWith :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term

@@ -7,8 +7,12 @@ import hydra.json.model.*
 def decodeFloat(ft: hydra.core.FloatType)(value: hydra.json.model.Value): Either[scala.Predef.String, hydra.core.Term] =
   ft match
   case hydra.core.FloatType.bigfloat => value match
-    case hydra.json.model.Value.number(v_Value_number_n) => Right(hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.bigfloat(v_Value_number_n))))
-    case _ => Left("expected number for bigfloat")
+    case hydra.json.model.Value.number(v_Value_number_n) => Right(hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.bigfloat(hydra.lib.literals.float64ToBigfloat(hydra.lib.literals.decimalToFloat64(v_Value_number_n))))))
+    case hydra.json.model.Value.string(v_Value_string_s) => hydra.lib.maybes.maybe[Either[scala.Predef.String,
+       hydra.core.Term], Double](Left(hydra.lib.strings.cat(Seq("invalid bigfloat sentinel: ",
+       v_Value_string_s))))((v: Double) =>
+      Right(hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.bigfloat(hydra.lib.literals.float64ToBigfloat(v))))))(hydra.json.decode.parseSpecialFloat(v_Value_string_s))
+    case _ => Left("expected number or special float string for bigfloat")
   case hydra.core.FloatType.float32 => {
     lazy val strResult: Either[scala.Predef.String, scala.Predef.String] = hydra.json.decode.expectString(value)
     hydra.lib.eithers.either[scala.Predef.String, scala.Predef.String, Either[scala.Predef.String,
@@ -21,7 +25,7 @@ def decodeFloat(ft: hydra.core.FloatType)(value: hydra.json.model.Value): Either
     })(strResult)
   }
   case hydra.core.FloatType.float64 => value match
-    case hydra.json.model.Value.number(v_Value_number_n) => Right(hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(hydra.lib.literals.bigfloatToFloat64(v_Value_number_n)))))
+    case hydra.json.model.Value.number(v_Value_number_n) => Right(hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(hydra.lib.literals.decimalToFloat64(v_Value_number_n)))))
     case hydra.json.model.Value.string(v_Value_string_s) => hydra.lib.maybes.maybe[Either[scala.Predef.String,
        hydra.core.Term], Double](Left(hydra.lib.strings.cat(Seq("invalid float64 sentinel: ",
        v_Value_string_s))))((v: Double) =>
@@ -78,27 +82,27 @@ def decodeInteger(it: hydra.core.IntegerType)(value: hydra.json.model.Value): Ei
   case hydra.core.IntegerType.int8 => {
     lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
     hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
-      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int8(hydra.lib.literals.bigintToInt8(hydra.lib.literals.bigfloatToBigint(n))))))(numResult)
+      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int8(hydra.lib.literals.bigintToInt8(hydra.lib.literals.decimalToBigint(n))))))(numResult)
   }
   case hydra.core.IntegerType.int16 => {
     lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
     hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
-      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int16(hydra.lib.literals.bigintToInt16(hydra.lib.literals.bigfloatToBigint(n))))))(numResult)
+      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int16(hydra.lib.literals.bigintToInt16(hydra.lib.literals.decimalToBigint(n))))))(numResult)
   }
   case hydra.core.IntegerType.int32 => {
     lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
     hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
-      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(hydra.lib.literals.bigintToInt32(hydra.lib.literals.bigfloatToBigint(n))))))(numResult)
+      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(hydra.lib.literals.bigintToInt32(hydra.lib.literals.decimalToBigint(n))))))(numResult)
   }
   case hydra.core.IntegerType.uint8 => {
     lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
     hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
-      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint8(hydra.lib.literals.bigintToUint8(hydra.lib.literals.bigfloatToBigint(n))))))(numResult)
+      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint8(hydra.lib.literals.bigintToUint8(hydra.lib.literals.decimalToBigint(n))))))(numResult)
   }
   case hydra.core.IntegerType.uint16 => {
     lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
     hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
-      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint16(hydra.lib.literals.bigintToUint16(hydra.lib.literals.bigfloatToBigint(n))))))(numResult)
+      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint16(hydra.lib.literals.bigintToUint16(hydra.lib.literals.decimalToBigint(n))))))(numResult)
   }
 
 def decodeLiteral(lt: hydra.core.LiteralType)(value: hydra.json.model.Value): Either[scala.Predef.String,
@@ -113,7 +117,7 @@ def decodeLiteral(lt: hydra.core.LiteralType)(value: hydra.json.model.Value): Ei
     case hydra.json.model.Value.boolean(v_Value_boolean_b) => Right(hydra.core.Term.literal(hydra.core.Literal.boolean(v_Value_boolean_b)))
     case _ => Left("expected boolean")
   case hydra.core.LiteralType.decimal => value match
-    case hydra.json.model.Value.number(v_Value_number_n) => Right(hydra.core.Term.literal(hydra.core.Literal.decimal(hydra.lib.literals.float64ToDecimal(hydra.lib.literals.bigfloatToFloat64(v_Value_number_n)))))
+    case hydra.json.model.Value.number(v_Value_number_n) => Right(hydra.core.Term.literal(hydra.core.Literal.decimal(v_Value_number_n)))
     case _ => Left("expected number for decimal")
   case hydra.core.LiteralType.float(v_LiteralType_float_ft) => hydra.json.decode.decodeFloat(v_LiteralType_float_ft)(value)
   case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => hydra.json.decode.decodeInteger(v_LiteralType_integer_it)(value)
@@ -184,7 +188,8 @@ def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Nam
           case _ => false
         hydra.lib.logic.ifElse[Either[scala.Predef.String, hydra.core.Term]](isNestedMaybe)({
           def decodeJust(arr: Seq[hydra.json.model.Value]): Either[scala.Predef.String, hydra.core.Term] =
-            hydra.lib.eithers.map[hydra.core.Term, hydra.core.Term, scala.Predef.String]((v: hydra.core.Term) => hydra.core.Term.maybe(Some(v)))(hydra.json.decode.fromJson(types)(tname)(v_Type_maybe_innerType)(hydra.lib.lists.head[hydra.json.model.Value](arr)))
+            hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], hydra.json.model.Value](Left("expected single-element array for Just"))((firstVal: hydra.json.model.Value) =>
+            hydra.lib.eithers.map[hydra.core.Term, hydra.core.Term, scala.Predef.String]((v: hydra.core.Term) => hydra.core.Term.maybe(Some(v)))(hydra.json.decode.fromJson(types)(tname)(v_Type_maybe_innerType)(firstVal)))(hydra.lib.lists.maybeHead[hydra.json.model.Value](arr))
           {
             def decodeMaybeArray(arr: Seq[hydra.json.model.Value]): Either[scala.Predef.String, hydra.core.Term] =
               {
@@ -238,35 +243,27 @@ def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Nam
           hydra.core.Term.inject(hydra.core.Injection(tname, hydra.core.Field(key, v))))(decoded)
       }
       {
-        def tryField(key: scala.Predef.String)(`val`: Option[hydra.json.model.Value])(ft: hydra.core.FieldType): Option[Either[scala.Predef.String,
-           hydra.core.Term]] =
-          hydra.lib.logic.ifElse[Option[Either[scala.Predef.String, hydra.core.Term]]](hydra.lib.equality.equal[scala.Predef.String](ft.name)(key))(Some(decodeVariant(key)(`val`)(ft.`type`)))(None)
+        def findAndDecode(key: scala.Predef.String)(`val`: Option[hydra.json.model.Value])(fts: Seq[hydra.core.FieldType]): Either[scala.Predef.String,
+           hydra.core.Term] =
+          hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], hydra.core.FieldType](Left(hydra.lib.strings.cat(Seq("unknown variant: ",
+             key))))((ft: hydra.core.FieldType) => decodeVariant(key)(`val`)(ft.`type`))(hydra.lib.lists.find[hydra.core.FieldType]((ft: hydra.core.FieldType) => hydra.lib.equality.equal[scala.Predef.String](ft.name)(key))(fts))
         {
-          def findAndDecode(key: scala.Predef.String)(`val`: Option[hydra.json.model.Value])(fts: Seq[hydra.core.FieldType]): Either[scala.Predef.String,
+          def decodeSingleKey(obj: Map[scala.Predef.String, hydra.json.model.Value]): Either[scala.Predef.String,
              hydra.core.Term] =
-            hydra.lib.logic.ifElse[Either[scala.Predef.String, hydra.core.Term]](hydra.lib.lists.`null`[hydra.core.FieldType](fts))(Left(hydra.lib.strings.cat(Seq("unknown variant: ",
-               key))))(hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term],
-               Either[scala.Predef.String, hydra.core.Term]](findAndDecode(key)(`val`)(hydra.lib.lists.tail[hydra.core.FieldType](fts)))((r: Either[scala.Predef.String,
-               hydra.core.Term]) => r)(tryField(key)(`val`)(hydra.lib.lists.head[hydra.core.FieldType](fts))))
+            hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], scala.Predef.String](Left("expected single-key object for union"))((k: scala.Predef.String) =>
+            findAndDecode(k)(hydra.lib.maps.lookup[scala.Predef.String, hydra.json.model.Value](k)(obj))(v_Type_union_rt))(hydra.lib.lists.maybeHead[scala.Predef.String](hydra.lib.maps.keys[scala.Predef.String,
+               hydra.json.model.Value](obj)))
           {
-            def decodeSingleKey(obj: Map[scala.Predef.String, hydra.json.model.Value]): Either[scala.Predef.String,
+            def processUnion(obj: Map[scala.Predef.String, hydra.json.model.Value]): Either[scala.Predef.String,
                hydra.core.Term] =
-              findAndDecode(hydra.lib.lists.head[scala.Predef.String](hydra.lib.maps.keys[scala.Predef.String,
-                 hydra.json.model.Value](obj)))(hydra.lib.maps.lookup[scala.Predef.String,
-                 hydra.json.model.Value](hydra.lib.lists.head[scala.Predef.String](hydra.lib.maps.keys[scala.Predef.String,
-                 hydra.json.model.Value](obj)))(obj))(v_Type_union_rt)
+              hydra.lib.logic.ifElse[Either[scala.Predef.String, hydra.core.Term]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[scala.Predef.String](hydra.lib.maps.keys[scala.Predef.String,
+                 hydra.json.model.Value](obj)))(1))(decodeSingleKey(obj))(Left("expected single-key object for union"))
             {
-              def processUnion(obj: Map[scala.Predef.String, hydra.json.model.Value]): Either[scala.Predef.String,
-                 hydra.core.Term] =
-                hydra.lib.logic.ifElse[Either[scala.Predef.String, hydra.core.Term]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[scala.Predef.String](hydra.lib.maps.keys[scala.Predef.String,
-                   hydra.json.model.Value](obj)))(1))(decodeSingleKey(obj))(Left("expected single-key object for union"))
-              {
-                lazy val objResult: Either[scala.Predef.String, Map[scala.Predef.String,
-                   hydra.json.model.Value]] = hydra.json.decode.expectObject(value)
-                hydra.lib.eithers.either[scala.Predef.String, Map[scala.Predef.String,
-                   hydra.json.model.Value], Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((obj: Map[scala.Predef.String,
-                   hydra.json.model.Value]) => processUnion(obj))(objResult)
-              }
+              lazy val objResult: Either[scala.Predef.String, Map[scala.Predef.String,
+                 hydra.json.model.Value]] = hydra.json.decode.expectObject(value)
+              hydra.lib.eithers.either[scala.Predef.String, Map[scala.Predef.String,
+                 hydra.json.model.Value], Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((obj: Map[scala.Predef.String,
+                 hydra.json.model.Value]) => processUnion(obj))(objResult)
             }
           }
         }

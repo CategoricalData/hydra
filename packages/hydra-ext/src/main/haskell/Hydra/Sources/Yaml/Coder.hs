@@ -14,6 +14,7 @@ import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
@@ -56,6 +57,7 @@ module_ = Module ns definitions
     definitions = [
       toDefinition yamlCoder,
       toDefinition literalYamlCoder,
+      toDefinition requiresYamlStringSentinel,
       toDefinition recordCoder,
       toDefinition encodeRecord,
       toDefinition decodeRecord,
@@ -79,9 +81,16 @@ literalYamlCoder = define "literalYamlCoder" $
     cases YM._Scalar (var "s")
       (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected boolean, found scalar"])) (var "cx")) [
       YM._Scalar_bool>>: "b" ~> right (Core.literalBoolean $ var "b")]) $
+  "decodeDecimal" <~ ("cx" ~> "s" ~>
+    cases YM._Scalar (var "s")
+      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected decimal, found scalar"])) (var "cx")) [
+      YM._Scalar_decimal>>: "d" ~> right (Core.literalDecimal $ var "d"),
+      YM._Scalar_float>>: "f" ~> right (Core.literalDecimal $ Literals.float64ToDecimal $ Literals.bigfloatToFloat64 $ var "f"),
+      YM._Scalar_int>>: "i" ~> right (Core.literalDecimal $ Literals.bigintToDecimal $ var "i")]) $
   "decodeFloat" <~ ("cx" ~> "s" ~>
     cases YM._Scalar (var "s")
       (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected float, found scalar"])) (var "cx")) [
+      YM._Scalar_decimal>>: "d" ~> right (Core.literalFloat $ Core.floatValueBigfloat $ Literals.float64ToBigfloat $ Literals.decimalToFloat64 $ var "d"),
       YM._Scalar_float>>: "f" ~> right (Core.literalFloat $ Core.floatValueBigfloat $ var "f")]) $
   "decodeInteger" <~ ("cx" ~> "s" ~>
     cases YM._Scalar (var "s")
@@ -97,11 +106,19 @@ literalYamlCoder = define "literalYamlCoder" $
         "b" <<~ ExtractCore.booleanLiteral @@ var "lit" $
         right (Yaml.scalarBool $ var "b"))
       (var "decodeBool"),
+    _LiteralType_decimal>>: constant $ Coders.coder
+      ("cx" ~> "lit" ~>
+        "d" <<~ ExtractCore.decimalLiteral @@ var "lit" $
+        right (Yaml.scalarDecimal $ var "d"))
+      (var "decodeDecimal"),
     _LiteralType_float>>: constant $ Coders.coder
       ("cx" ~> "lit" ~>
         "f" <<~ ExtractCore.floatLiteral @@ var "lit" $
         "bf" <<~ ExtractCore.bigfloatValue @@ var "f" $
-        right (Yaml.scalarFloat $ var "bf"))
+        "shown" <~ (Literals.showBigfloat $ var "bf") $
+        Logic.ifElse (requiresYamlStringSentinel @@ var "shown")
+          (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "YAML cannot represent bigfloat value: ", var "shown"])) (var "cx"))
+          (right (Yaml.scalarFloat $ var "bf")))
       (var "decodeFloat"),
     _LiteralType_integer>>: constant $ Coders.coder
       ("cx" ~> "lit" ~>
@@ -115,6 +132,17 @@ literalYamlCoder = define "literalYamlCoder" $
         right (Yaml.scalarStr $ var "s"))
       (var "decodeString")]) $
   right $ var "encoded"
+
+-- | Check whether a float's string form is an IEEE value that Hydra YAML cannot represent
+-- as a plain scalar: NaN, Infinity, -Infinity, or -0.0. Hydra YAML's float scalar deliberately
+-- excludes these (see Yaml.Model) so the encoder must refuse them rather than silently coerce.
+requiresYamlStringSentinel :: TTermDefinition (String -> Bool)
+requiresYamlStringSentinel = define "requiresYamlStringSentinel" $
+  doc "True for IEEE sentinel strings that Hydra YAML cannot represent as a float scalar." $
+  "s" ~> Logic.or (Equality.equal (var "s") (string "NaN")) $
+         Logic.or (Equality.equal (var "s") (string "Infinity")) $
+         Logic.or (Equality.equal (var "s") (string "-Infinity"))
+                  (Equality.equal (var "s") (string "-0.0"))
 
 recordCoder :: TTermDefinition (Name -> [FieldType] -> Context -> Graph -> Either Error (Coder Term YM.Node))
 recordCoder = define "recordCoder" $
@@ -204,10 +232,12 @@ termCoder = define "termCoder" $
     cases _Term (var "strippedMaybeTerm")
       (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected optional term, found: ", ShowCore.term @@ var "maybeTerm"])) (var "cx")) [
       _Term_maybe>>: "maybeContents" ~>
-        Logic.ifElse (Maybes.isNothing $ var "maybeContents")
+        Maybes.maybe
           (right $ Yaml.nodeScalar Yaml.scalarNull)
-          ("encodedInner" <<~ Coders.coderEncode (var "maybeElementCoder") @@ var "cx" @@ (Maybes.fromJust $ var "maybeContents") $
-            right (var "encodedInner"))]) $
+          ("innerTerm" ~>
+            "encodedInner" <<~ Coders.coderEncode (var "maybeElementCoder") @@ var "cx" @@ var "innerTerm" $
+            right (var "encodedInner"))
+          (var "maybeContents")]) $
   "decodeMaybe" <~ ("maybeElementCoder" ~> "cx" ~> "yamlVal" ~>
     cases YM._Node (var "yamlVal")
       (Just $

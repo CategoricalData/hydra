@@ -1737,48 +1737,67 @@
                                       "application": {
                                         "argument": {
                                           "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "constraints"},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.lists.tail"},
-                                                    "type": {"variable": "hydra.typing.TypeConstraint"}}}}},
+                                            "argument": {"variable": "constraints"},
                                             "function": {
-                                              "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "constraints"},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.head"},
-                                                        "type": {"variable": "hydra.typing.TypeConstraint"}}}}},
-                                                "function": {"variable": "withConstraint"}}}}},
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.lists.uncons"},
+                                                "type": {"variable": "hydra.typing.TypeConstraint"}}}}},
                                         "function": {
                                           "application": {
                                             "argument": {
-                                              "typeApplication": {
+                                              "lambda": {
                                                 "body": {
-                                                  "typeApplication": {
-                                                    "body": {"either": {"@right": {"variable": "hydra.substitution.idTypeSubst"}}},
-                                                    "type": {"variable": "hydra.errors.UnificationError"}}},
-                                                "type": {"variable": "hydra.typing.TypeSubst"}}},
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "uc"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"variable": "hydra.lib.pairs.second"},
+                                                                "type": {"variable": "hydra.typing.TypeConstraint"}}},
+                                                            "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "uc"},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.pairs.first"},
+                                                                    "type": {"variable": "hydra.typing.TypeConstraint"}}},
+                                                                "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}}},
+                                                        "function": {"variable": "withConstraint"}}}}},
+                                                "domain": {
+                                                  "pair": {
+                                                    "first": {"variable": "hydra.typing.TypeConstraint"},
+                                                    "second": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
+                                                "parameter": "uc"}},
                                             "function": {
                                               "application": {
                                                 "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "constraints"},
-                                                    "function": {
+                                                  "typeApplication": {
+                                                    "body": {
                                                       "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.null"},
-                                                        "type": {"variable": "hydra.typing.TypeConstraint"}}}}},
+                                                        "body": {"either": {"@right": {"variable": "hydra.substitution.idTypeSubst"}}},
+                                                        "type": {"variable": "hydra.errors.UnificationError"}}},
+                                                    "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.maybes.maybe"},
+                                                        "type": {
+                                                          "either": {
+                                                            "left": {"variable": "hydra.errors.UnificationError"},
+                                                            "right": {"variable": "hydra.typing.TypeSubst"}}}}},
                                                     "type": {
-                                                      "either": {
-                                                        "left": {"variable": "hydra.errors.UnificationError"},
-                                                        "right": {"variable": "hydra.typing.TypeSubst"}}}}}}}}}}}}},
+                                                      "pair": {
+                                                        "first": {"variable": "hydra.typing.TypeConstraint"},
+                                                        "second": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}}}}}}}}}}},
                                 "domain": {"list": {"variable": "hydra.typing.TypeConstraint"}},
                                 "parameter": "constraints"}},
                             "domain": {

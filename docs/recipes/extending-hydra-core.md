@@ -339,11 +339,13 @@ typeOfEitherDef = define "typeOfEither" $
     ("leftTerm" ~>
       Eithers.bind (ref typeOfDef @@ var "tx" @@ list [] @@ var "leftTerm") ("leftType" ~>
       Eithers.bind (ref checkTypeVariablesDef @@ var "tx" @@ var "leftType") ("_" ~>
-      right $ Core.typeEither $ Core.eitherType (var "leftType") (Lists.at (int32 1) $ var "typeArgs"))))
+      right $ Core.typeEither $ Core.eitherType (var "leftType")
+        (Maybes.fromMaybe (Core.typeVariable $ Core.name $ string "a") (Lists.maybeAt (int32 1) $ var "typeArgs")))))
     ("rightTerm" ~>
       Eithers.bind (ref typeOfDef @@ var "tx" @@ list [] @@ var "rightTerm") ("rightType" ~>
       Eithers.bind (ref checkTypeVariablesDef @@ var "tx" @@ var "rightType") ("_" ~>
-      right $ Core.typeEither $ Core.eitherType (Lists.at (int32 0) $ var "typeArgs") (var "rightType"))))
+      right $ Core.typeEither $ Core.eitherType
+        (Maybes.fromMaybe (Core.typeVariable $ Core.name $ string "a") (Lists.maybeAt (int32 0) $ var "typeArgs")) (var "rightType"))))
     (var "et"))
 ```
 

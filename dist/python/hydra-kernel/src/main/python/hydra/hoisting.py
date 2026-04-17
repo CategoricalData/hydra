@@ -406,7 +406,7 @@ def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.paths.SubtermS
             return hydra.lib.lists.concat2(path, (cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepLetBody()),))
         @lru_cache(1)
         def first_binding_name() -> str:
-            return hydra.lib.maybes.maybe((lambda : "body"), (lambda b: hydra.lib.strings.intercalate("_", hydra.lib.strings.split_on(".", b.name.value))), hydra.lib.lists.safe_head(bindings))
+            return hydra.lib.maybes.maybe((lambda : "body"), (lambda b: hydra.lib.strings.intercalate("_", hydra.lib.strings.split_on(".", b.name.value))), hydra.lib.lists.maybe_head(bindings))
         @lru_cache(1)
         def body_prefix() -> str:
             return hydra.lib.strings.cat2(first_binding_name(), "_body")
@@ -569,5 +569,5 @@ def normalize_path_for_hoisting(path: frozenlist[hydra.paths.SubtermStep]) -> fr
     r"""Normalize a path for hoisting by treating immediately-applied lambdas as let bindings. Replaces [applicationFunction, lambdaBody, ...] with [letBody, ...]."""
 
     def go(remaining: frozenlist[hydra.paths.SubtermStep]) -> frozenlist[hydra.paths.SubtermStep]:
-        return hydra.lib.logic.if_else(hydra.lib.logic.or_(hydra.lib.lists.null(remaining), hydra.lib.lists.null(hydra.lib.lists.tail(remaining))), (lambda : remaining), (lambda : (first := hydra.lib.lists.head(remaining), (second := hydra.lib.lists.head(hydra.lib.lists.tail(remaining)), (rest := hydra.lib.lists.tail(hydra.lib.lists.tail(remaining)), hydra.lib.logic.if_else(hydra.lib.logic.and_(is_application_function(first), is_lambda_body(second)), (lambda : hydra.lib.lists.cons(cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepLetBody()), go(rest))), (lambda : hydra.lib.lists.cons(first, go(hydra.lib.lists.tail(remaining))))))[1])[1])[1]))
+        return hydra.lib.maybes.maybe((lambda : remaining), (lambda uc1: (first := hydra.lib.pairs.first(uc1), after_first := hydra.lib.pairs.second(uc1), hydra.lib.maybes.maybe((lambda : remaining), (lambda uc2: (second := hydra.lib.pairs.first(uc2), rest := hydra.lib.pairs.second(uc2), hydra.lib.logic.if_else(hydra.lib.logic.and_(is_application_function(first), is_lambda_body(second)), (lambda : hydra.lib.lists.cons(cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepLetBody()), go(rest))), (lambda : hydra.lib.lists.cons(first, go(after_first)))))[2]), hydra.lib.lists.uncons(after_first)))[2]), hydra.lib.lists.uncons(remaining))
     return go(path)

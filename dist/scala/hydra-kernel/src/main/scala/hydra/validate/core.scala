@@ -173,20 +173,14 @@ def checkUndefinedTypeVariablesInType[T0, T1](path: T0)(cx: hydra.graph.Graph)(t
   {
   lazy val freeVars: scala.collection.immutable.Set[hydra.core.Name] = hydra.variables.freeVariablesInType(typ)
   lazy val undefined: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.difference[hydra.core.Name](freeVars)(cx.typeVariables)
-  hydra.lib.logic.ifElse[Option[T1]](hydra.lib.sets.`null`[hydra.core.Name](undefined))(None)({
-    lazy val firstUndefined: hydra.core.Name = hydra.lib.lists.head[hydra.core.Name](hydra.lib.sets.toList[hydra.core.Name](undefined))
-    mkError(firstUndefined)
-  })
+  hydra.lib.maybes.maybe[Option[T1], hydra.core.Name](None)((firstUndefined: hydra.core.Name) => mkError(firstUndefined))(hydra.lib.lists.maybeHead[hydra.core.Name](hydra.lib.sets.toList[hydra.core.Name](undefined)))
 }
 
 def checkUndefinedTypeVariablesInTypeScheme[T0, T1](path: T0)(cx: hydra.graph.Graph)(ts: hydra.core.TypeScheme)(mkError: (hydra.core.Name => Option[T1])): Option[T1] =
   {
   lazy val freeVars: scala.collection.immutable.Set[hydra.core.Name] = hydra.variables.freeVariablesInTypeScheme(ts)
   lazy val undefined: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.difference[hydra.core.Name](freeVars)(cx.typeVariables)
-  hydra.lib.logic.ifElse[Option[T1]](hydra.lib.sets.`null`[hydra.core.Name](undefined))(None)({
-    lazy val firstUndefined: hydra.core.Name = hydra.lib.lists.head[hydra.core.Name](hydra.lib.sets.toList[hydra.core.Name](undefined))
-    mkError(firstUndefined)
-  })
+  hydra.lib.maybes.maybe[Option[T1], hydra.core.Name](None)((firstUndefined: hydra.core.Name) => mkError(firstUndefined))(hydra.lib.lists.maybeHead[hydra.core.Name](hydra.lib.sets.toList[hydra.core.Name](undefined)))
 }
 
 def checkVoid(typ: hydra.core.Type): Option[hydra.error.core.InvalidTypeError] =
@@ -325,11 +319,11 @@ def validateTypeNode(boundVars: scala.collection.immutable.Set[hydra.core.Name])
        v_Type_set_elemType)))
     case _ => None, hydra.validate.core.checkVoid(v_Type_set_elemType)))
   case hydra.core.Type.union(v_Type_union_fields) => hydra.validate.core.firstTypeError(Seq(hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTypeError]](hydra.lib.lists.`null`[hydra.core.FieldType](v_Type_union_fields))(Some(hydra.error.core.InvalidTypeError.emptyUnionType(hydra.error.core.EmptyUnionTypeError(Seq()))))(None),
-     hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTypeError]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.FieldType](v_Type_union_fields))(1))({
-    lazy val singleField: hydra.core.FieldType = hydra.lib.lists.head[hydra.core.FieldType](v_Type_union_fields)
+     hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTypeError]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.FieldType](v_Type_union_fields))(1))(hydra.lib.maybes.maybe[Option[hydra.error.core.InvalidTypeError],
+     hydra.core.FieldType](None)((singleField: hydra.core.FieldType) =>
     Some(hydra.error.core.InvalidTypeError.singleVariantUnion(hydra.error.core.SingleVariantUnionError(Seq(),
-       (singleField.name))))
-  })(None), hydra.validate.core.checkDuplicateFieldTypes(v_Type_union_fields)((dupName: hydra.core.Name) =>
+       (singleField.name)))))(hydra.lib.lists.maybeHead[hydra.core.FieldType](v_Type_union_fields)))(None),
+       hydra.validate.core.checkDuplicateFieldTypes(v_Type_union_fields)((dupName: hydra.core.Name) =>
     Some(hydra.error.core.InvalidTypeError.duplicateUnionTypeFieldNames(hydra.error.core.DuplicateUnionTypeFieldNamesError(Seq(),
        dupName)))), hydra.validate.core.firstTypeError(hydra.lib.lists.map[hydra.core.FieldType,
        Option[hydra.error.core.InvalidTypeError]]((f: hydra.core.FieldType) => hydra.validate.core.checkVoid(f.`type`))(v_Type_union_fields))))

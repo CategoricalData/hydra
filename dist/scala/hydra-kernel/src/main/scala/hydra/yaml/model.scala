@@ -9,6 +9,7 @@ enum Node :
 
 enum Scalar :
    case bool(value: Boolean) extends Scalar
+   case decimal(value: BigDecimal) extends Scalar
    case float(value: BigDecimal) extends Scalar
    case int(value: BigInt) extends Scalar
    case `null` extends Scalar

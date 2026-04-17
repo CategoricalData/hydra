@@ -586,7 +586,7 @@
                             "argument": {"variable": "els"},
                             "function": {
                               "typeApplication": {
-                                "body": {"variable": "hydra.lib.lists.safeHead"},
+                                "body": {"variable": "hydra.lib.lists.maybeHead"},
                                 "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {
                           "application": {
@@ -2066,7 +2066,7 @@
                             "argument": {"variable": "l"},
                             "function": {
                               "typeApplication": {
-                                "body": {"variable": "hydra.lib.lists.safeHead"},
+                                "body": {"variable": "hydra.lib.lists.maybeHead"},
                                 "type": {"variable": "hydra.ast.Expr"}}}}},
                         "function": {
                           "application": {
@@ -3109,7 +3109,7 @@
                                                                                         "argument": {"variable": "lns"},
                                                                                         "function": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"variable": "hydra.lib.lists.tail"},
+                                                                                            "body": {"variable": "hydra.lib.lists.uncons"},
                                                                                             "type": {"literal": {"string": {}}}}}}},
                                                                                     "function": {
                                                                                       "application": {
@@ -3117,33 +3117,76 @@
                                                                                           "lambda": {
                                                                                             "body": {
                                                                                               "application": {
-                                                                                                "argument": {"variable": "line"},
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "uc"},
+                                                                                                        "function": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
+                                                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                                            "type": {"list": {"literal": {"string": {}}}}}}}},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "lambda": {
+                                                                                                            "body": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "line"},
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"variable": "idt"},
+                                                                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                                                                            "domain": {"literal": {"string": {}}},
+                                                                                                            "parameter": "line"}},
+                                                                                                        "function": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"variable": "hydra.lib.lists.map"},
+                                                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                                            "type": {"literal": {"string": {}}}}}}}}},
                                                                                                 "function": {
                                                                                                   "application": {
-                                                                                                    "argument": {"variable": "idt"},
-                                                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                                            "domain": {"literal": {"string": {}}},
-                                                                                            "parameter": "line"}},
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "uc"},
+                                                                                                        "function": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"variable": "hydra.lib.pairs.first"},
+                                                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                                            "type": {"list": {"literal": {"string": {}}}}}}}},
+                                                                                                    "function": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"variable": "hydra.lib.lists.cons"},
+                                                                                                        "type": {"literal": {"string": {}}}}}}}}},
+                                                                                            "domain": {
+                                                                                              "pair": {
+                                                                                                "first": {"literal": {"string": {}}},
+                                                                                                "second": {"list": {"literal": {"string": {}}}}}},
+                                                                                            "parameter": "uc"}},
                                                                                         "function": {
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"variable": "hydra.lib.lists.map"},
-                                                                                                "type": {"literal": {"string": {}}}}},
-                                                                                            "type": {"literal": {"string": {}}}}}}}}},
+                                                                                                "body": {"variable": "hydra.lib.maybes.map"},
+                                                                                                "type": {
+                                                                                                  "pair": {
+                                                                                                    "first": {"literal": {"string": {}}},
+                                                                                                    "second": {"list": {"literal": {"string": {}}}}}}}},
+                                                                                            "type": {"list": {"literal": {"string": {}}}}}}}}}},
                                                                                 "function": {
                                                                                   "application": {
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "lns"},
-                                                                                        "function": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"variable": "hydra.lib.lists.head"},
-                                                                                            "type": {"literal": {"string": {}}}}}}},
+                                                                                    "argument": {"variable": "lns"},
                                                                                     "function": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"variable": "hydra.lib.lists.cons"},
-                                                                                        "type": {"literal": {"string": {}}}}}}}}},
+                                                                                        "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                                                        "type": {"list": {"literal": {"string": {}}}}}}}}}},
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {"variable": "lns"},
@@ -3683,7 +3726,7 @@
                         "argument": {"variable": "els"},
                         "function": {
                           "typeApplication": {
-                            "body": {"variable": "hydra.lib.lists.safeHead"},
+                            "body": {"variable": "hydra.lib.lists.maybeHead"},
                             "type": {"variable": "hydra.ast.Expr"}}}}},
                     "function": {
                       "application": {
@@ -3845,11 +3888,23 @@
                               "application": {
                                 "argument": {
                                   "application": {
-                                    "argument": {"variable": "els"},
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "els"},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.lib.lists.maybeHead"},
+                                            "type": {"variable": "hydra.ast.Expr"}}}}},
                                     "function": {
-                                      "typeApplication": {
-                                        "body": {"variable": "hydra.lib.lists.head"},
-                                        "type": {"variable": "hydra.ast.Expr"}}}}},
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"literal": {"string": ""}},
+                                            "function": {"variable": "hydra.serialization.cst"}}},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                            "type": {"variable": "hydra.ast.Expr"}}}}}}},
                                 "function": {
                                   "application": {
                                     "argument": {
@@ -4231,7 +4286,7 @@
                                         "argument": {"variable": "l"},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"variable": "hydra.lib.lists.safeHead"},
+                                            "body": {"variable": "hydra.lib.lists.maybeHead"},
                                             "type": {"variable": "hydra.ast.Expr"}}}}},
                                     "function": {
                                       "application": {

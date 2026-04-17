@@ -273,12 +273,11 @@ def bindingsToStatements(env: hydra.java.environment.JavaEnvironment)(bindings: 
   })(hydra.lib.maps.toList[hydra.core.Name, scala.collection.immutable.Set[hydra.core.Name]](allDeps)))
   lazy val recursiveVars: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.lists.concat[hydra.core.Name](hydra.lib.lists.map[Seq[hydra.core.Name],
      Seq[hydra.core.Name]]((names: Seq[hydra.core.Name]) =>
-    hydra.lib.logic.ifElse[Seq[hydra.core.Name]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Name](names))(1))({
-    lazy val singleName: hydra.core.Name = hydra.lib.lists.head[hydra.core.Name](names)
+    hydra.lib.logic.ifElse[Seq[hydra.core.Name]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Name](names))(1))(hydra.lib.maybes.maybe[Seq[hydra.core.Name],
+       hydra.core.Name](Seq())((singleName: hydra.core.Name) =>
     hydra.lib.maybes.cases[scala.collection.immutable.Set[hydra.core.Name], Seq[hydra.core.Name]](hydra.lib.maps.lookup[hydra.core.Name,
        scala.collection.immutable.Set[hydra.core.Name]](singleName)(allDeps))(Seq())((deps: scala.collection.immutable.Set[hydra.core.Name]) =>
-      hydra.lib.logic.ifElse[Seq[hydra.core.Name]](hydra.lib.sets.member[hydra.core.Name](singleName)(deps))(Seq(singleName))(Seq()))
-  })(names))(sorted)))
+    hydra.lib.logic.ifElse[Seq[hydra.core.Name]](hydra.lib.sets.member[hydra.core.Name](singleName)(deps))(Seq(singleName))(Seq())))(hydra.lib.lists.maybeHead[hydra.core.Name](names)))(names))(sorted)))
   lazy val thunkedVars: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.lists.concat[hydra.core.Name](hydra.lib.lists.map[hydra.core.Binding,
      Seq[hydra.core.Name]]((b: hydra.core.Binding) =>
     {
@@ -634,8 +633,20 @@ def compareFieldExpr(otherVar: scala.Predef.String)(ft: hydra.core.FieldType): h
 }
 
 def compareToBody[T0](aliases: T0)(otherVar: scala.Predef.String)(fields: Seq[hydra.core.FieldType]): Seq[hydra.java.syntax.BlockStatement] =
-  hydra.lib.logic.ifElse[Seq[hydra.java.syntax.BlockStatement]](hydra.lib.lists.`null`[hydra.core.FieldType](fields))(Seq(hydra.java.syntax.BlockStatement.statement(hydra.java.utils.javaReturnStatement(Some(hydra.java.utils.javaIntExpression(BigInt("0")))))))(hydra.lib.logic.ifElse[Seq[hydra.java.syntax.BlockStatement]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.FieldType](fields))(1))(Seq(hydra.java.syntax.BlockStatement.statement(hydra.java.utils.javaReturnStatement(Some(hydra.java.coder.compareFieldExpr(otherVar)(hydra.lib.lists.head[hydra.core.FieldType](fields)))))))(hydra.lib.lists.concat2[hydra.java.syntax.BlockStatement](Seq(hydra.java.coder.cmpDeclStatement(aliases)))(hydra.lib.lists.concat2[hydra.java.syntax.BlockStatement](hydra.lib.lists.concat[hydra.java.syntax.BlockStatement](hydra.lib.lists.map[hydra.core.FieldType,
-     Seq[hydra.java.syntax.BlockStatement]]((f: hydra.core.FieldType) => hydra.java.coder.compareAndReturnStmts(otherVar)(f))(hydra.lib.lists.init[hydra.core.FieldType](fields))))(Seq(hydra.java.syntax.BlockStatement.statement(hydra.java.utils.javaReturnStatement(Some(hydra.java.coder.compareFieldExpr(otherVar)(hydra.lib.lists.last[hydra.core.FieldType](fields))))))))))
+  {
+  lazy val zeroStmts: Seq[hydra.java.syntax.BlockStatement] = Seq(hydra.java.syntax.BlockStatement.statement(hydra.java.utils.javaReturnStatement(Some(hydra.java.utils.javaIntExpression(BigInt("0"))))))
+  hydra.lib.maybes.fromMaybe[Seq[hydra.java.syntax.BlockStatement]](zeroStmts)(hydra.lib.maybes.map[Tuple2[hydra.core.FieldType,
+     Seq[hydra.core.FieldType]], Seq[hydra.java.syntax.BlockStatement]]((p: Tuple2[hydra.core.FieldType,
+     Seq[hydra.core.FieldType]]) =>
+    {
+    lazy val firstField: hydra.core.FieldType = hydra.lib.pairs.first[hydra.core.FieldType,
+       Seq[hydra.core.FieldType]](p)
+    lazy val restFields: Seq[hydra.core.FieldType] = hydra.lib.pairs.second[hydra.core.FieldType,
+       Seq[hydra.core.FieldType]](p)
+    hydra.lib.logic.ifElse[Seq[hydra.java.syntax.BlockStatement]](hydra.lib.lists.`null`[hydra.core.FieldType](restFields))(Seq(hydra.java.syntax.BlockStatement.statement(hydra.java.utils.javaReturnStatement(Some(hydra.java.coder.compareFieldExpr(otherVar)(firstField))))))(hydra.lib.lists.concat2[hydra.java.syntax.BlockStatement](Seq(hydra.java.coder.cmpDeclStatement(aliases)))(hydra.lib.lists.concat2[hydra.java.syntax.BlockStatement](hydra.lib.lists.concat[hydra.java.syntax.BlockStatement](hydra.lib.lists.map[hydra.core.FieldType,
+       Seq[hydra.java.syntax.BlockStatement]]((f: hydra.core.FieldType) => hydra.java.coder.compareAndReturnStmts(otherVar)(f))(hydra.lib.lists.cons[hydra.core.FieldType](firstField)(hydra.lib.maybes.fromMaybe[Seq[hydra.core.FieldType]](Seq())(hydra.lib.lists.maybeInit[hydra.core.FieldType](restFields))))))(Seq(hydra.java.syntax.BlockStatement.statement(hydra.java.utils.javaReturnStatement(Some(hydra.java.coder.compareFieldExpr(otherVar)(hydra.lib.maybes.fromMaybe[hydra.core.FieldType](firstField)(hydra.lib.lists.maybeLast[hydra.core.FieldType](restFields))))))))))
+  })(hydra.lib.lists.uncons[hydra.core.FieldType](fields)))
+}
 
 def compareToZeroClause(tmpName: scala.Predef.String)(fname: scala.Predef.String): hydra.java.syntax.InclusiveOrExpression =
   {
@@ -701,8 +712,8 @@ def constructElementsInterface(mod: hydra.packaging.Module)(members: Seq[hydra.j
 def correctCastType[T0, T1, T2](innerBody: hydra.core.Term)(typeArgs: Seq[hydra.core.Type])(fallback: hydra.core.Type)(cx: T0)(g: T1): Either[T2,
    hydra.core.Type] =
   hydra.strip.deannotateTerm(innerBody) match
-  case hydra.core.Term.pair(v_Term_pair__p) => hydra.lib.logic.ifElse[Either[T2, hydra.core.Type]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Type](typeArgs))(2))(Right(hydra.core.Type.pair(hydra.core.PairType(hydra.lib.lists.head[hydra.core.Type](typeArgs),
-     hydra.lib.lists.head[hydra.core.Type](hydra.lib.lists.tail[hydra.core.Type](typeArgs))))))(Right(fallback))
+  case hydra.core.Term.pair(v_Term_pair__p) => hydra.lib.logic.ifElse[Either[T2, hydra.core.Type]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Type](typeArgs))(2))(Right(hydra.core.Type.pair(hydra.core.PairType(hydra.lib.maybes.fromMaybe[hydra.core.Type](fallback)(hydra.lib.lists.maybeAt[hydra.core.Type](0)(typeArgs)),
+     hydra.lib.maybes.fromMaybe[hydra.core.Type](fallback)(hydra.lib.lists.maybeAt[hydra.core.Type](1)(typeArgs))))))(Right(fallback))
   case _ => Right(fallback)
 
 def correctTypeApps[T0, T1](gr: T0)(name: hydra.core.Name)(args: Seq[hydra.core.Term])(fallbackTypeApps: Seq[hydra.core.Type])(cx: T1)(g: hydra.graph.Graph): Either[hydra.errors.Error,
@@ -1007,21 +1018,21 @@ def decodeTypeFromTerm(term: hydra.core.Term): Option[hydra.core.Type] =
           case _ => None
         case _ => None)(hydra.lib.logic.ifElse[Option[hydra.core.Type]](hydra.lib.equality.equal[scala.Predef.String](fname)("annotated"))(fterm match
         case hydra.core.Term.record(v_Term_record_rec) => hydra.lib.maybes.bind[hydra.core.Field,
-           hydra.core.Type](hydra.lib.lists.safeHead[hydra.core.Field](hydra.lib.lists.filter[hydra.core.Field]((f: hydra.core.Field) => hydra.lib.equality.equal[hydra.core.Name](f.name)("body"))(v_Term_record_rec.fields)))((bodyField: hydra.core.Field) => hydra.java.coder.decodeTypeFromTerm(bodyField.term))
+           hydra.core.Type](hydra.lib.lists.maybeHead[hydra.core.Field](hydra.lib.lists.filter[hydra.core.Field]((f: hydra.core.Field) => hydra.lib.equality.equal[hydra.core.Name](f.name)("body"))(v_Term_record_rec.fields)))((bodyField: hydra.core.Field) => hydra.java.coder.decodeTypeFromTerm(bodyField.term))
         case _ => None)(hydra.lib.logic.ifElse[Option[hydra.core.Type]](hydra.lib.equality.equal[scala.Predef.String](fname)("application"))(fterm match
         case hydra.core.Term.record(v_Term_record_rec) => hydra.lib.maybes.bind[hydra.core.Field,
-           hydra.core.Type](hydra.lib.lists.safeHead[hydra.core.Field](hydra.lib.lists.filter[hydra.core.Field]((f: hydra.core.Field) =>
+           hydra.core.Type](hydra.lib.lists.maybeHead[hydra.core.Field](hydra.lib.lists.filter[hydra.core.Field]((f: hydra.core.Field) =>
           hydra.lib.equality.equal[hydra.core.Name](f.name)("function"))(v_Term_record_rec.fields)))((funcField: hydra.core.Field) =>
           hydra.lib.maybes.bind[hydra.core.Type, hydra.core.Type](hydra.java.coder.decodeTypeFromTerm(funcField.term))((func: hydra.core.Type) =>
-          hydra.lib.maybes.bind[hydra.core.Field, hydra.core.Type](hydra.lib.lists.safeHead[hydra.core.Field](hydra.lib.lists.filter[hydra.core.Field]((f: hydra.core.Field) =>
+          hydra.lib.maybes.bind[hydra.core.Field, hydra.core.Type](hydra.lib.lists.maybeHead[hydra.core.Field](hydra.lib.lists.filter[hydra.core.Field]((f: hydra.core.Field) =>
           hydra.lib.equality.equal[hydra.core.Name](f.name)("argument"))(v_Term_record_rec.fields)))((argField: hydra.core.Field) =>
           hydra.lib.maybes.map[hydra.core.Type, hydra.core.Type]((arg: hydra.core.Type) =>
           hydra.core.Type.application(hydra.core.ApplicationType(func, arg)))(hydra.java.coder.decodeTypeFromTerm(argField.term)))))
         case _ => None)(hydra.lib.logic.ifElse[Option[hydra.core.Type]](hydra.lib.equality.equal[scala.Predef.String](fname)("function"))(fterm match
         case hydra.core.Term.record(v_Term_record_rec) => hydra.lib.maybes.bind[hydra.core.Field,
-           hydra.core.Type](hydra.lib.lists.safeHead[hydra.core.Field](hydra.lib.lists.filter[hydra.core.Field]((f: hydra.core.Field) => hydra.lib.equality.equal[hydra.core.Name](f.name)("domain"))(v_Term_record_rec.fields)))((domField: hydra.core.Field) =>
+           hydra.core.Type](hydra.lib.lists.maybeHead[hydra.core.Field](hydra.lib.lists.filter[hydra.core.Field]((f: hydra.core.Field) => hydra.lib.equality.equal[hydra.core.Name](f.name)("domain"))(v_Term_record_rec.fields)))((domField: hydra.core.Field) =>
           hydra.lib.maybes.bind[hydra.core.Type, hydra.core.Type](hydra.java.coder.decodeTypeFromTerm(domField.term))((dom: hydra.core.Type) =>
-          hydra.lib.maybes.bind[hydra.core.Field, hydra.core.Type](hydra.lib.lists.safeHead[hydra.core.Field](hydra.lib.lists.filter[hydra.core.Field]((f: hydra.core.Field) =>
+          hydra.lib.maybes.bind[hydra.core.Field, hydra.core.Type](hydra.lib.lists.maybeHead[hydra.core.Field](hydra.lib.lists.filter[hydra.core.Field]((f: hydra.core.Field) =>
           hydra.lib.equality.equal[hydra.core.Name](f.name)("codomain"))(v_Term_record_rec.fields)))((codField: hydra.core.Field) =>
           hydra.lib.maybes.map[hydra.core.Type, hydra.core.Type]((cod: hydra.core.Type) => hydra.core.Type.function(hydra.core.FunctionType(dom,
              cod)))(hydra.java.coder.decodeTypeFromTerm(codField.term)))))
@@ -1033,10 +1044,13 @@ def decodeTypeFromTerm(term: hydra.core.Term): Option[hydra.core.Type] =
   case _ => None
 
 def dedupBindings(inScope: scala.collection.immutable.Set[hydra.core.Name])(bs: Seq[hydra.core.Binding]): Seq[hydra.core.Binding] =
-  hydra.lib.logic.ifElse[Seq[hydra.core.Binding]](hydra.lib.lists.`null`[hydra.core.Binding](bs))(Seq())({
-  lazy val b: hydra.core.Binding = hydra.lib.lists.head[hydra.core.Binding](bs)
+  hydra.lib.maybes.fromMaybe[Seq[hydra.core.Binding]](Seq())(hydra.lib.maybes.map[Tuple2[hydra.core.Binding,
+     Seq[hydra.core.Binding]], Seq[hydra.core.Binding]]((p: Tuple2[hydra.core.Binding,
+     Seq[hydra.core.Binding]]) =>
   {
-    lazy val rest: Seq[hydra.core.Binding] = hydra.lib.lists.tail[hydra.core.Binding](bs)
+  lazy val b: hydra.core.Binding = hydra.lib.pairs.first[hydra.core.Binding, Seq[hydra.core.Binding]](p)
+  {
+    lazy val rest: Seq[hydra.core.Binding] = hydra.lib.pairs.second[hydra.core.Binding, Seq[hydra.core.Binding]](p)
     {
       lazy val name: hydra.core.Name = (b.name)
       hydra.lib.logic.ifElse[Seq[hydra.core.Binding]](hydra.lib.sets.member[hydra.core.Name](name)(inScope))({
@@ -1055,7 +1069,7 @@ def dedupBindings(inScope: scala.collection.immutable.Set[hydra.core.Name])(bs: 
       })(hydra.lib.lists.cons[hydra.core.Binding](b)(hydra.java.coder.dedupBindings(hydra.lib.sets.insert[hydra.core.Name](name)(inScope))(rest)))
     }
   }
-})
+})(hydra.lib.lists.uncons[hydra.core.Binding](bs)))
 
 def detectAccumulatorUnification(doms: Seq[hydra.core.Type])(cod: hydra.core.Type)(tparams: Seq[hydra.core.Name]): Map[hydra.core.Name,
    hydra.core.Type] =
@@ -1142,7 +1156,7 @@ def elementsClassName(ns: hydra.packaging.Namespace): scala.Predef.String =
   {
   lazy val nsStr: scala.Predef.String = ns
   lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(nsStr)
-  hydra.formatting.sanitizeWithUnderscores(hydra.java.language.reservedWords)(hydra.formatting.capitalize(hydra.lib.lists.last[scala.Predef.String](parts)))
+  hydra.formatting.sanitizeWithUnderscores(hydra.java.language.reservedWords)(hydra.formatting.capitalize(hydra.lib.maybes.fromMaybe[scala.Predef.String](nsStr)(hydra.lib.lists.maybeLast[scala.Predef.String](parts))))
 }
 
 def elementsQualifiedName(ns: hydra.packaging.Namespace): hydra.core.Name =
@@ -1652,9 +1666,9 @@ def encodeNullaryPrimitiveByName[T0](env: hydra.java.environment.JavaEnvironment
     {
       lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(fullName)
       {
-        lazy val className: hydra.java.syntax.Identifier = hydra.lib.strings.intercalate(".")(hydra.lib.lists.init[scala.Predef.String](parts))
+        lazy val className: hydra.java.syntax.Identifier = hydra.lib.strings.intercalate(".")(hydra.lib.maybes.fromMaybe[Seq[scala.Predef.String]](Seq())(hydra.lib.lists.maybeInit[scala.Predef.String](parts)))
         {
-          lazy val methodName: hydra.java.syntax.Identifier = hydra.lib.lists.last[scala.Predef.String](parts)
+          lazy val methodName: hydra.java.syntax.Identifier = hydra.lib.maybes.fromMaybe[scala.Predef.String](fullName)(hydra.lib.lists.maybeLast[scala.Predef.String](parts))
           Right(hydra.java.utils.javaMethodInvocationToJavaExpression(hydra.java.utils.methodInvocationStaticWithTypeArgs(className)(methodName)(targs)(Seq())))
         }
       }
@@ -2315,8 +2329,8 @@ def encodeTermInternal(env: hydra.java.environment.JavaEnvironment)(anns: Seq[Ma
                           hydra.java.coder.typeAppNullaryOrHoisted(env)(aliases)(anns)(tyapps)(jatyp)(body)(correctedTyp)(v_Term_variable_varName)(cls)(allTypeArgs)(cx)(g))
                         case hydra.core.Term.either(v_Term_either_eitherTerm) => hydra.lib.logic.ifElse[Either[hydra.errors.Error,
                            hydra.java.syntax.Expression]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Type](allTypeArgs))(2))({
-                          lazy val eitherBranchTypes: Tuple2[hydra.core.Type, hydra.core.Type] = Tuple2(hydra.lib.lists.head[hydra.core.Type](allTypeArgs),
-                             hydra.lib.lists.head[hydra.core.Type](hydra.lib.lists.tail[hydra.core.Type](allTypeArgs)))
+                          lazy val eitherBranchTypes: Tuple2[hydra.core.Type, hydra.core.Type] = Tuple2(hydra.lib.maybes.fromMaybe[hydra.core.Type](correctedTyp)(hydra.lib.lists.maybeAt[hydra.core.Type](0)(allTypeArgs)),
+                             hydra.lib.maybes.fromMaybe[hydra.core.Type](correctedTyp)(hydra.lib.lists.maybeAt[hydra.core.Type](1)(allTypeArgs)))
                           hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.java.syntax.ReferenceType],
                              hydra.java.syntax.Expression](hydra.lib.eithers.mapList[hydra.core.Type,
                              hydra.java.syntax.ReferenceType, hydra.errors.Error]((t: hydra.core.Type) =>
@@ -2441,7 +2455,7 @@ def encodeTermTCO(env0: hydra.java.environment.JavaEnvironment)(funcName: hydra.
         {
           lazy val body2: hydra.core.Term = hydra.lib.pairs.second[Seq[hydra.core.Term], hydra.core.Term](gathered2)
           hydra.lib.logic.ifElse[Either[hydra.errors.Error, Seq[hydra.java.syntax.BlockStatement]]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Term](args2))(1))({
-            lazy val arg: hydra.core.Term = hydra.lib.lists.head[hydra.core.Term](args2)
+            lazy val arg: hydra.core.Term = hydra.lib.maybes.fromMaybe[hydra.core.Term](hydra.core.Term.unit)(hydra.lib.lists.maybeHead[hydra.core.Term](args2))
             hydra.strip.deannotateAndDetypeTerm(body2) match
               case hydra.core.Term.cases(v_Term_cases_cs) => {
                 lazy val aliases: hydra.java.environment.Aliases = (env.aliases)
@@ -2713,7 +2727,11 @@ def encodeVariable[T0](env: hydra.java.environment.JavaEnvironment)(name: hydra.
 }
 
 def encodeVariable_buildCurried(params: Seq[hydra.core.Name])(inner: hydra.java.syntax.Expression): hydra.java.syntax.Expression =
-  hydra.lib.logic.ifElse[hydra.java.syntax.Expression](hydra.lib.lists.`null`[hydra.core.Name](params))(inner)(hydra.java.utils.javaLambda(hydra.lib.lists.head[hydra.core.Name](params))(hydra.java.coder.encodeVariable_buildCurried(hydra.lib.lists.tail[hydra.core.Name](params))(inner)))
+  hydra.lib.maybes.fromMaybe[hydra.java.syntax.Expression](inner)(hydra.lib.maybes.map[Tuple2[hydra.core.Name,
+     Seq[hydra.core.Name]], hydra.java.syntax.Expression]((p: Tuple2[hydra.core.Name,
+     Seq[hydra.core.Name]]) =>
+  hydra.java.utils.javaLambda(hydra.lib.pairs.first[hydra.core.Name, Seq[hydra.core.Name]](p))(hydra.java.coder.encodeVariable_buildCurried(hydra.lib.pairs.second[hydra.core.Name,
+     Seq[hydra.core.Name]](p))(inner)))(hydra.lib.lists.uncons[hydra.core.Name](params)))
 
 def encodeVariable_hoistedLambdaCase[T0](aliases: hydra.java.environment.Aliases)(name: hydra.core.Name)(arity: Int)(cx: T0)(g: hydra.graph.Graph): Either[hydra.errors.Error,
    hydra.java.syntax.Expression] =
@@ -2899,8 +2917,8 @@ def findSelfRefVar[T0](grouped: Map[T0, Seq[T0]]): Option[T0] =
      Seq[T0]]]((entry: Tuple2[T0, Seq[T0]]) =>
     hydra.lib.lists.elem[T0](hydra.lib.pairs.first[T0, Seq[T0]](entry))(hydra.lib.pairs.second[T0,
        Seq[T0]](entry)))(hydra.lib.maps.toList[T0, Seq[T0]](grouped))
-  hydra.lib.logic.ifElse[Option[T0]](hydra.lib.lists.`null`[Tuple2[T0, Seq[T0]]](selfRefs))(None)(Some(hydra.lib.pairs.first[T0,
-     Seq[T0]](hydra.lib.lists.head[Tuple2[T0, Seq[T0]]](selfRefs))))
+  hydra.lib.maybes.map[Tuple2[T0, Seq[T0]], T0]((entry: Tuple2[T0, Seq[T0]]) => hydra.lib.pairs.first[T0,
+     Seq[T0]](entry))(hydra.lib.lists.maybeHead[Tuple2[T0, Seq[T0]]](selfRefs))
 }
 
 lazy val first20Primes: Seq[BigInt] = Seq(BigInt("2"), BigInt("3"), BigInt("5"), BigInt("7"),
@@ -3142,11 +3160,14 @@ def isSimpleName(name: hydra.core.Name): Boolean =
 def isUnresolvedInferenceVar(name: hydra.core.Name): Boolean =
   {
   lazy val chars: Seq[Int] = hydra.lib.strings.toList(name)
-  hydra.lib.logic.ifElse[Boolean](hydra.lib.lists.`null`[Int](chars))(false)(hydra.lib.logic.ifElse[Boolean](hydra.lib.logic.not(hydra.lib.equality.equal[Int](hydra.lib.lists.head[Int](chars))(116)))(false)({
-    lazy val rest: Seq[Int] = hydra.lib.lists.tail[Int](chars)
-    hydra.lib.logic.and(hydra.lib.logic.not(hydra.lib.lists.`null`[Int](rest)))(hydra.lib.lists.`null`[Int](hydra.lib.lists.filter[Int]((c: Int) =>
-      hydra.lib.logic.not(hydra.java.coder.isUnresolvedInferenceVar_isDigit(c)))(rest)))
-  }))
+  hydra.lib.maybes.fromMaybe[Boolean](false)(hydra.lib.maybes.map[Tuple2[Int, Seq[Int]],
+     Boolean]((p: Tuple2[Int, Seq[Int]]) =>
+    {
+    lazy val firstCh: Int = hydra.lib.pairs.first[Int, Seq[Int]](p)
+    lazy val rest: Seq[Int] = hydra.lib.pairs.second[Int, Seq[Int]](p)
+    hydra.lib.logic.ifElse[Boolean](hydra.lib.logic.not(hydra.lib.equality.equal[Int](firstCh)(116)))(false)(hydra.lib.logic.and(hydra.lib.logic.not(hydra.lib.lists.`null`[Int](rest)))(hydra.lib.lists.`null`[Int](hydra.lib.lists.filter[Int]((c: Int) =>
+      hydra.lib.logic.not(hydra.java.coder.isUnresolvedInferenceVar_isDigit(c)))(rest))))
+  })(hydra.lib.lists.uncons[Int](chars)))
 }
 
 def isUnresolvedInferenceVar_isDigit(c: Int): Boolean =
@@ -3215,7 +3236,8 @@ def nameMapToTypeMap[T0](m: Map[T0, hydra.core.Name]): Map[T0, hydra.core.Type] 
 def namespaceParent(ns: hydra.packaging.Namespace): Option[hydra.packaging.Namespace] =
   {
   lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(ns)
-  hydra.lib.logic.ifElse[Option[hydra.packaging.Namespace]](hydra.lib.lists.`null`[scala.Predef.String](hydra.lib.lists.init[scala.Predef.String](parts)))(None)(Some(hydra.lib.strings.intercalate(".")(hydra.lib.lists.init[scala.Predef.String](parts))))
+  lazy val initParts: Seq[scala.Predef.String] = hydra.lib.maybes.fromMaybe[Seq[scala.Predef.String]](Seq())(hydra.lib.lists.maybeInit[scala.Predef.String](parts))
+  hydra.lib.logic.ifElse[Option[hydra.packaging.Namespace]](hydra.lib.lists.`null`[scala.Predef.String](initParts))(None)(Some(hydra.lib.strings.intercalate(".")(initParts)))
 }
 
 def needsThunking(t: hydra.core.Term): Boolean =
@@ -3400,10 +3422,12 @@ def propagateTypesInAppChain(fixedCod: hydra.core.Type)(resultType: hydra.core.T
 
 def rebuildApps(f: hydra.core.Term)(args: Seq[hydra.core.Term])(fType: hydra.core.Type): hydra.core.Term =
   hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.lists.`null`[hydra.core.Term](args))(f)(hydra.strip.deannotateType(fType) match
-  case hydra.core.Type.function(v_Type_function_ft) => {
-    lazy val arg: hydra.core.Term = hydra.lib.lists.head[hydra.core.Term](args)
+  case hydra.core.Type.function(v_Type_function_ft) => hydra.lib.maybes.fromMaybe[hydra.core.Term](f)(hydra.lib.maybes.map[Tuple2[hydra.core.Term,
+     Seq[hydra.core.Term]], hydra.core.Term]((p: Tuple2[hydra.core.Term, Seq[hydra.core.Term]]) =>
     {
-      lazy val rest: Seq[hydra.core.Term] = hydra.lib.lists.tail[hydra.core.Term](args)
+    lazy val arg: hydra.core.Term = hydra.lib.pairs.first[hydra.core.Term, Seq[hydra.core.Term]](p)
+    {
+      lazy val rest: Seq[hydra.core.Term] = hydra.lib.pairs.second[hydra.core.Term, Seq[hydra.core.Term]](p)
       {
         lazy val remainingType: hydra.core.Type = (v_Type_function_ft.codomain)
         {
@@ -3415,7 +3439,7 @@ def rebuildApps(f: hydra.core.Term)(args: Seq[hydra.core.Term])(fType: hydra.cor
         }
       }
     }
-  }
+  })(hydra.lib.lists.uncons[hydra.core.Term](args)))
   case _ => hydra.lib.lists.foldl[hydra.core.Term, hydra.core.Term]((acc: hydra.core.Term) =>
     (a: hydra.core.Term) => hydra.core.Term.application(hydra.core.Application(acc, a)))(f)(args))
 
@@ -3649,7 +3673,8 @@ def toClassDecl(isInner: Boolean)(isSer: Boolean)(aliases: hydra.java.environmen
 def toDeclInit(aliasesExt: hydra.java.environment.Aliases)(gExt: hydra.graph.Graph)(recursiveVars: scala.collection.immutable.Set[hydra.core.Name])(flatBindings: Seq[hydra.core.Binding])(name: hydra.core.Name)(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.errors.Error,
    Option[hydra.java.syntax.BlockStatement]] =
   hydra.lib.logic.ifElse[Either[hydra.errors.Error, Option[hydra.java.syntax.BlockStatement]]](hydra.lib.sets.member[hydra.core.Name](name)(recursiveVars))({
-  lazy val binding: hydra.core.Binding = hydra.lib.lists.head[hydra.core.Binding](hydra.lib.lists.filter[hydra.core.Binding]((b: hydra.core.Binding) => hydra.lib.equality.equal[hydra.core.Name](b.name)(name))(flatBindings))
+  lazy val binding: hydra.core.Binding = hydra.lib.maybes.fromMaybe[hydra.core.Binding](hydra.core.Binding(name,
+     hydra.core.Term.unit, None))(hydra.lib.lists.maybeHead[hydra.core.Binding](hydra.lib.lists.filter[hydra.core.Binding]((b: hydra.core.Binding) => hydra.lib.equality.equal[hydra.core.Name](b.name)(name))(flatBindings)))
   {
     lazy val value: hydra.core.Term = (binding.term)
     hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Option[hydra.java.syntax.BlockStatement]](hydra.lib.maybes.cases[hydra.core.TypeScheme,
@@ -3690,7 +3715,8 @@ def toDeclInit(aliasesExt: hydra.java.environment.Aliases)(gExt: hydra.graph.Gra
 def toDeclStatement(envExt: hydra.java.environment.JavaEnvironment)(aliasesExt: hydra.java.environment.Aliases)(gExt: hydra.graph.Graph)(recursiveVars: scala.collection.immutable.Set[hydra.core.Name])(thunkedVars: scala.collection.immutable.Set[hydra.core.Name])(flatBindings: Seq[hydra.core.Binding])(name: hydra.core.Name)(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.errors.Error,
    hydra.java.syntax.BlockStatement] =
   {
-  lazy val binding: hydra.core.Binding = hydra.lib.lists.head[hydra.core.Binding](hydra.lib.lists.filter[hydra.core.Binding]((b: hydra.core.Binding) => hydra.lib.equality.equal[hydra.core.Name](b.name)(name))(flatBindings))
+  lazy val binding: hydra.core.Binding = hydra.lib.maybes.fromMaybe[hydra.core.Binding](hydra.core.Binding(name,
+     hydra.core.Term.unit, None))(hydra.lib.lists.maybeHead[hydra.core.Binding](hydra.lib.lists.filter[hydra.core.Binding]((b: hydra.core.Binding) => hydra.lib.equality.equal[hydra.core.Name](b.name)(name))(flatBindings)))
   lazy val value: hydra.core.Term = (binding.term)
   hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, hydra.java.syntax.BlockStatement](hydra.lib.maybes.cases[hydra.core.TypeScheme,
      Either[hydra.errors.Error, hydra.core.Type]](binding.`type`)(hydra.checking.typeOfTerm(cx)(gExt)(value))((ts: hydra.core.TypeScheme) => Right(ts.`type`)))((typ: hydra.core.Type) =>
@@ -3929,19 +3955,19 @@ def wrapInSupplierLambda(expr: hydra.java.syntax.Expression): hydra.java.syntax.
 
 def wrapLazyArguments(name: hydra.core.Name)(args: Seq[hydra.java.syntax.Expression]): Tuple2[Seq[hydra.java.syntax.Expression],
    Option[scala.Predef.String]] =
-  hydra.lib.logic.ifElse[Tuple2[Seq[hydra.java.syntax.Expression], Option[scala.Predef.String]]](hydra.lib.logic.and(hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.logic.ifElse"))(hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.java.syntax.Expression](args))(3)))(Tuple2(Seq(hydra.lib.lists.at[hydra.java.syntax.Expression](0)(args),
-     hydra.java.coder.wrapInSupplierLambda(hydra.lib.lists.at[hydra.java.syntax.Expression](1)(args)),
-     hydra.java.coder.wrapInSupplierLambda(hydra.lib.lists.at[hydra.java.syntax.Expression](2)(args))),
+  {
+  lazy val dummyExpr: hydra.java.syntax.Expression = hydra.java.utils.javaIntExpression(BigInt("0"))
+  def argAt(i: Int): hydra.java.syntax.Expression =
+    hydra.lib.maybes.fromMaybe[hydra.java.syntax.Expression](dummyExpr)(hydra.lib.lists.maybeAt[hydra.java.syntax.Expression](i)(args))
+  hydra.lib.logic.ifElse[Tuple2[Seq[hydra.java.syntax.Expression], Option[scala.Predef.String]]](hydra.lib.logic.and(hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.logic.ifElse"))(hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.java.syntax.Expression](args))(3)))(Tuple2(Seq(argAt(0),
+     hydra.java.coder.wrapInSupplierLambda(argAt(1)), hydra.java.coder.wrapInSupplierLambda(argAt(2))),
      Some("lazy")))(hydra.lib.logic.ifElse[Tuple2[Seq[hydra.java.syntax.Expression],
-     Option[scala.Predef.String]]](hydra.lib.logic.and(hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.maybes.maybe"))(hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.java.syntax.Expression](args))(3)))(Tuple2(Seq(hydra.java.coder.wrapInSupplierLambda(hydra.lib.lists.at[hydra.java.syntax.Expression](0)(args)),
-     hydra.lib.lists.at[hydra.java.syntax.Expression](1)(args), hydra.lib.lists.at[hydra.java.syntax.Expression](2)(args)),
-     Some("applyLazy")))(hydra.lib.logic.ifElse[Tuple2[Seq[hydra.java.syntax.Expression],
-     Option[scala.Predef.String]]](hydra.lib.logic.and(hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.maybes.cases"))(hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.java.syntax.Expression](args))(3)))(Tuple2(Seq(hydra.lib.lists.at[hydra.java.syntax.Expression](0)(args),
-     hydra.java.coder.wrapInSupplierLambda(hydra.lib.lists.at[hydra.java.syntax.Expression](1)(args)),
-     hydra.lib.lists.at[hydra.java.syntax.Expression](2)(args)), Some("applyLazy")))(hydra.lib.logic.ifElse[Tuple2[Seq[hydra.java.syntax.Expression],
-     Option[scala.Predef.String]]](hydra.lib.logic.and(hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.maps.findWithDefault"))(hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.java.syntax.Expression](args))(3)))(Tuple2(Seq(hydra.java.coder.wrapInSupplierLambda(hydra.lib.lists.at[hydra.java.syntax.Expression](0)(args)),
-     hydra.lib.lists.at[hydra.java.syntax.Expression](1)(args), hydra.lib.lists.at[hydra.java.syntax.Expression](2)(args)),
-     Some("applyLazy")))(hydra.lib.logic.ifElse[Tuple2[Seq[hydra.java.syntax.Expression],
-     Option[scala.Predef.String]]](hydra.lib.logic.and(hydra.lib.logic.or(hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.maybes.fromMaybe"))(hydra.lib.logic.or(hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.eithers.fromLeft"))(hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.eithers.fromRight"))))(hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.java.syntax.Expression](args))(2)))(Tuple2(Seq(hydra.java.coder.wrapInSupplierLambda(hydra.lib.lists.at[hydra.java.syntax.Expression](0)(args)),
-     hydra.lib.lists.at[hydra.java.syntax.Expression](1)(args)), Some("applyLazy")))(Tuple2(args,
-     None))))))
+     Option[scala.Predef.String]]](hydra.lib.logic.and(hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.maybes.maybe"))(hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.java.syntax.Expression](args))(3)))(Tuple2(Seq(hydra.java.coder.wrapInSupplierLambda(argAt(0)),
+     argAt(1), argAt(2)), Some("applyLazy")))(hydra.lib.logic.ifElse[Tuple2[Seq[hydra.java.syntax.Expression],
+     Option[scala.Predef.String]]](hydra.lib.logic.and(hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.maybes.cases"))(hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.java.syntax.Expression](args))(3)))(Tuple2(Seq(argAt(0),
+     hydra.java.coder.wrapInSupplierLambda(argAt(1)), argAt(2)), Some("applyLazy")))(hydra.lib.logic.ifElse[Tuple2[Seq[hydra.java.syntax.Expression],
+     Option[scala.Predef.String]]](hydra.lib.logic.and(hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.maps.findWithDefault"))(hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.java.syntax.Expression](args))(3)))(Tuple2(Seq(hydra.java.coder.wrapInSupplierLambda(argAt(0)),
+     argAt(1), argAt(2)), Some("applyLazy")))(hydra.lib.logic.ifElse[Tuple2[Seq[hydra.java.syntax.Expression],
+     Option[scala.Predef.String]]](hydra.lib.logic.and(hydra.lib.logic.or(hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.maybes.fromMaybe"))(hydra.lib.logic.or(hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.eithers.fromLeft"))(hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.eithers.fromRight"))))(hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.java.syntax.Expression](args))(2)))(Tuple2(Seq(hydra.java.coder.wrapInSupplierLambda(argAt(0)),
+     argAt(1)), Some("applyLazy")))(Tuple2(args, None))))))
+}

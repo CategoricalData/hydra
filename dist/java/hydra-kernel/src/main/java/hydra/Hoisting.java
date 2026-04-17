@@ -621,7 +621,7 @@ public interface Hoisting {
         hydra.lib.strings.SplitOn.apply(
           ".",
           (b).name.value))),
-      hydra.lib.lists.SafeHead.apply(bindings)));
+      hydra.lib.lists.MaybeHead.apply(bindings)));
     String bodyPrefix = hydra.lib.strings.Cat2.apply(
       firstBindingName.get(),
       "_body");
@@ -748,17 +748,16 @@ public interface Hoisting {
 
   static java.util.List<hydra.paths.SubtermStep> normalizePathForHoisting(java.util.List<hydra.paths.SubtermStep> path) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.paths.SubtermStep>, java.util.List<hydra.paths.SubtermStep>>> go = new java.util.concurrent.atomic.AtomicReference<>();
-    go.set((java.util.function.Function<java.util.List<hydra.paths.SubtermStep>, java.util.List<hydra.paths.SubtermStep>>) (remaining -> hydra.lib.logic.IfElse.lazy(
-      hydra.lib.logic.Or.apply(
-        hydra.lib.lists.Null.apply(remaining),
-        hydra.lib.lists.Null.apply(hydra.lib.lists.Tail.apply(remaining))),
+    go.set((java.util.function.Function<java.util.List<hydra.paths.SubtermStep>, java.util.List<hydra.paths.SubtermStep>>) (remaining -> hydra.lib.maybes.Maybe.applyLazy(
       () -> remaining,
-      () -> ((java.util.function.Supplier<java.util.List<hydra.paths.SubtermStep>>) (() -> {
-        hydra.util.Lazy<hydra.paths.SubtermStep> first = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(remaining));
-        return ((java.util.function.Supplier<java.util.List<hydra.paths.SubtermStep>>) (() -> {
-          hydra.util.Lazy<hydra.paths.SubtermStep> second = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(hydra.lib.lists.Tail.apply(remaining)));
-          return ((java.util.function.Supplier<java.util.List<hydra.paths.SubtermStep>>) (() -> {
-            hydra.util.Lazy<java.util.List<hydra.paths.SubtermStep>> rest = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply(hydra.lib.lists.Tail.apply(remaining)));
+      (java.util.function.Function<hydra.util.Pair<hydra.paths.SubtermStep, java.util.List<hydra.paths.SubtermStep>>, java.util.List<hydra.paths.SubtermStep>>) (uc1 -> {
+        hydra.util.Lazy<java.util.List<hydra.paths.SubtermStep>> afterFirst = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(uc1));
+        hydra.util.Lazy<hydra.paths.SubtermStep> first = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(uc1));
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> remaining,
+          (java.util.function.Function<hydra.util.Pair<hydra.paths.SubtermStep, java.util.List<hydra.paths.SubtermStep>>, java.util.List<hydra.paths.SubtermStep>>) (uc2 -> {
+            hydra.util.Lazy<java.util.List<hydra.paths.SubtermStep>> rest = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(uc2));
+            hydra.util.Lazy<hydra.paths.SubtermStep> second = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(uc2));
             return hydra.lib.logic.IfElse.lazy(
               hydra.lib.logic.And.apply(
                 hydra.Hoisting.isApplicationFunction(first.get()),
@@ -768,10 +767,11 @@ public interface Hoisting {
                 go.get().apply(rest.get())),
               () -> hydra.lib.lists.Cons.apply(
                 first.get(),
-                go.get().apply(hydra.lib.lists.Tail.apply(remaining))));
-          })).get();
-        })).get();
-      })).get())));
+                go.get().apply(afterFirst.get())));
+          }),
+          hydra.lib.lists.Uncons.apply(afterFirst.get()));
+      }),
+      hydra.lib.lists.Uncons.apply(remaining))));
     return go.get().apply(path);
   }
 

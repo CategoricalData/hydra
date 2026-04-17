@@ -87,7 +87,7 @@ def satisfy(pred: (Int => Boolean)): hydra.parsing.Parser[Int] =
       hydra.lib.logic.ifElse[hydra.parsing.ParseResult[Int]](pred(c))(hydra.parsing.ParseResult.success(hydra.parsing.ParseSuccess(c,
          rest)))(hydra.parsing.ParseResult.failure(hydra.parsing.ParseError("character did not satisfy predicate",
          input)))
-    })(hydra.lib.lists.safeHead[Int](codes))
+    })(hydra.lib.lists.maybeHead[Int](codes))
   }
   parse
 }
