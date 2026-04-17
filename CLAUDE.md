@@ -141,6 +141,7 @@ worktrees/<branch>/
     common-lisp/      # Generated Common Lisp kernel
     emacs-lisp/       # Generated Emacs Lisp kernel
     scheme/           # Generated Scheme kernel
+    coq/              # NOT checked in. Regenerate via generate-coq + generate-coq-tests
   demos/              # Example applications (not published)
   bindings/           # Host-specific third-party integrations (future)
   docs/               # Documentation, recipes, guides
