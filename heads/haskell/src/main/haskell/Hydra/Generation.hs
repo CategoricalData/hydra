@@ -204,18 +204,15 @@ writeModulesJson doInfer basePath universeMods mods = do
 -- construction happen once over the full universe, so each per-module write
 -- is as cheap as the single-directory version.
 --
--- The content-hash cache lives at <distJsonRoot>/<primary-pkg>/digest.json,
--- where primary-pkg is the package owning the first module in the universe
--- (callers today pass a universe dominated by a single package). See
--- 'writeModulesJson' for the caching semantics.
+-- The content-hash cache lives at <distJsonRoot>/digest.main.json, scoped
+-- to this "main-universe" regeneration. See 'writeModulesJson' for the
+-- caching semantics.
 writeModulesJsonPackageSplit :: Bool -> FilePath -> [Module] -> [Module] -> IO ()
 writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
-  let digestAnchor = packageSplitDigestAnchor distJsonRoot universeMods
   hit <- if doInfer then tryCacheHitSplit distJsonRoot universeMods mods else return Nothing
   case hit of
-    Just _ -> do
+    Just _ ->
       putStrLn $ "  Cache hit (" ++ show (length universeMods) ++ " modules clean); skipping inference and writes."
-      return ()
     Nothing -> do
       mods' <- if doInfer then inferModulesIO universeMods mods else return mods
       let graph = modulesToGraph universeMods universeMods
@@ -225,17 +222,12 @@ writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
         let pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
         putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules -> " ++ pkgDir
         mapM_ (writeModuleJson schemaMap pkgDir) pkgMods
-      CM.when doInfer $ refreshDigestAt digestAnchor universeMods
+      CM.when doInfer $ refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
 
--- | Digest-anchor path for a per-package-split write. Anchors at the
--- first universe module's package root, i.e.
--- <distJsonRoot>/<pkg>/digest.json. Falls back to <distJsonRoot>/digest.json
--- for an empty universe (which is also a valid cache-lookup location even
--- if nothing ever writes to it).
-packageSplitDigestAnchor :: FilePath -> [Module] -> FilePath
-packageSplitDigestAnchor distJsonRoot universeMods = case groupByPackage universeMods of
-  ((pkg, _):_) -> distJsonRoot FP.</> pkg FP.</> "digest.json"
-  []           -> distJsonRoot FP.</> "digest.json"
+-- | Digest file for 'writeModulesJsonPackageSplit'. Single well-known
+-- location shared across all packages the universe touches.
+packageSplitDigestAnchor :: FilePath -> FilePath
+packageSplitDigestAnchor distJsonRoot = distJsonRoot FP.</> "digest.main.json"
 
 -- | If every universe module's DSL source hash matches the stored digest,
 -- and every target module's JSON file already exists, return the current
@@ -249,7 +241,7 @@ tryCacheHit basePath universeMods targetMods = do
 
 tryCacheHitSplit :: FilePath -> [Module] -> [Module] -> IO (Maybe Digest.DigestMap)
 tryCacheHitSplit distJsonRoot universeMods targetMods = do
-  let digestFile = packageSplitDigestAnchor distJsonRoot universeMods
+  let digestFile = packageSplitDigestAnchor distJsonRoot
       targetPaths = [ distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
                                     FP.</> CodeGeneration.namespaceToPath (moduleNamespace m) ++ ".json"
                     | (pkg, pkgMods) <- groupByPackage targetMods, m <- pkgMods]

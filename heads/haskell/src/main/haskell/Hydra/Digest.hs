@@ -110,13 +110,12 @@ hashUniverse nsFiles mods = do
     return $ M.fromList (Y.catMaybes pairs)
 
 
--- | Conventional path for a distribution's digest file:
--- `<distRoot>/digest.json`, where distRoot is the per-package json root
--- (e.g. `dist/json/hydra-kernel`). The passed-in basePath usually points at
--- `.../src/main/json` or `.../src/test/json`; we climb three levels to the
--- package root.
+-- | Digest path for a single-tree writer: sits next to the json/ subdir.
+-- Input `<pkg>/src/main/json` produces `<pkg>/src/main/digest.json`, and
+-- `<pkg>/src/test/json` produces `<pkg>/src/test/digest.json`. This keeps
+-- main-tree and test-tree caches distinct.
 digestPath :: FilePath -> FilePath
-digestPath basePath = FP.takeDirectory (FP.takeDirectory (FP.takeDirectory basePath)) FP.</> "digest.json"
+digestPath basePath = FP.takeDirectory basePath FP.</> "digest.json"
 
 
 -- | Read a digest file. Absent or malformed → empty map.
