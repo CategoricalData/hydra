@@ -146,6 +146,14 @@ executables:
       - hspec                      >= 2.11.0 && < 2.12
       - time
 
+  update-wasm:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-wasm
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
 tests:
   hydra-test:
     main: Spec.hs

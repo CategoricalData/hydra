@@ -7,6 +7,7 @@ set -euo pipefail
 #   1. Haskell modules for hydraExtModules (Java/Python coders, language syntaxes, etc.)
 #   2. JSON exports for hydraExtModules
 #   3. Java modules for ext modules needed by hydra-ext (PG, GraphSON, domain models, etc.)
+#   4. WebAssembly text format (WAT) files for the kernel modules
 #
 # This must be run AFTER sync-haskell.sh and BEFORE sync-java.sh or sync-python.sh,
 # since those scripts depend on hydra-ext's generated Haskell code being up to date.
@@ -38,6 +39,7 @@ for arg in "$@"; do
             echo "  3. Generate Haskell ext modules"
             echo "  4. Rebuild (to pick up new Haskell files)"
             echo "  5. Export ext modules to JSON"
+            echo "  6. Generate WebAssembly text format (WAT) files"
             exit 0
             ;;
         *)
@@ -51,7 +53,7 @@ cd "$HYDRA_EXT_DIR"
 banner2 "Synchronizing Hydra-Ext"
 echo ""
 
-TOTAL_STEPS=5
+TOTAL_STEPS=6
 
 step 1 $TOTAL_STEPS "Building executables"
 echo ""
@@ -59,6 +61,7 @@ stack build \
     hydra:exe:update-ext-sources \
     hydra:exe:update-haskell-ext-main \
     hydra:exe:update-json-ext \
+    hydra:exe:update-wasm \
     hydra:exe:bootstrap-from-json
 
 step 2 $TOTAL_STEPS "Generating ext encoder/decoder source modules"
@@ -84,5 +87,9 @@ stack build
 step 5 $TOTAL_STEPS "Exporting ext modules to JSON"
 echo ""
 stack exec update-json-ext -- $RTS_FLAGS
+
+step 6 $TOTAL_STEPS "Generating WebAssembly text format (WAT) files"
+echo ""
+stack exec update-wasm -- $RTS_FLAGS
 
 banner2_done "Hydra-Ext sync complete!"
