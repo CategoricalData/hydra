@@ -56,6 +56,12 @@ dialectEqual d =
       Syntax.DialectEmacsLisp -> "equal"
       _ -> "equal?"
 
+dialectSupportsLetrec :: Syntax.Dialect -> Bool
+dialectSupportsLetrec d =
+    case d of
+      Syntax.DialectClojure -> False
+      _ -> True
+
 encodeApplication :: Syntax.Dialect -> t0 -> t1 -> Core.Term -> Core.Term -> Either t2 Syntax.Expression
 encodeApplication dialect cx g rawFun rawArg =
 
@@ -118,63 +124,55 @@ encodeLetAsLambdaApp dialect cx g bindings body =
 
 encodeLetAsNative :: Syntax.Dialect -> t0 -> t1 -> [Core.Binding] -> Core.Term -> Either t2 Syntax.Expression
 encodeLetAsNative dialect cx g bindings body =
-
-      let isClojureTop =
-              case dialect of
-                Syntax.DialectClojure -> True
-                _ -> False
-      in (Eithers.bind (encodeTerm dialect cx g body) (\bodyExpr ->
-        let sortedBindings =
-                Logic.ifElse True (
-                  let allNames = Sets.fromList (Lists.map (\b -> Core.bindingName b) bindings)
-                      adjList =
-                              Lists.map (\b -> (Core.bindingName b, (Sets.toList (Sets.intersection allNames (Variables.freeVariablesInTerm (Core.bindingTerm b)))))) bindings
-                      sortResult = Sorting.topologicalSort adjList
-                      nameToBinding = Maps.fromList (Lists.map (\b -> (Core.bindingName b, b)) bindings)
-                  in (Eithers.either (\_ -> bindings) (\sorted -> Maybes.cat (Lists.map (\name -> Maps.lookup name nameToBinding) sorted)) sortResult)) bindings
-        in (Eithers.bind (Eithers.mapList (\b ->
-          let bname =
-                  Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.bindingName b)))
-              isSelfRef = Sets.member (Core.bindingName b) (Variables.freeVariablesInTerm (Core.bindingTerm b))
-              isLambda =
-                      case (Strip.deannotateTerm (Core.bindingTerm b)) of
-                        Core.TermLambda _ -> True
-                        _ -> False
-          in (Eithers.bind (encodeTerm dialect cx g (Core.bindingTerm b)) (\bval ->
-            let isClojure =
-                    case dialect of
-                      Syntax.DialectClojure -> True
+    Eithers.bind (encodeTerm dialect cx g body) (\bodyExpr ->
+      let supportsLetrec = dialectSupportsLetrec dialect
+          allNames = Sets.fromList (Lists.map (\b -> Core.bindingName b) bindings)
+          sccs =
+                  Logic.ifElse supportsLetrec (Lists.map (\b -> [
+                    Core.bindingName b]) bindings) (
+                    let adjList =
+                            Lists.map (\b -> (Core.bindingName b, (Sets.toList (Sets.intersection allNames (Variables.freeVariablesInTerm (Core.bindingTerm b)))))) bindings
+                    in (Sorting.topologicalSortComponents adjList))
+          nameToBinding = Maps.fromList (Lists.map (\b -> (Core.bindingName b, b)) bindings)
+          sortedBindings = Maybes.cat (Lists.map (\name -> Maps.lookup name nameToBinding) (Lists.concat sccs))
+          hasCycle = Lists.foldl (\acc -> \scc -> Logic.or acc (Equality.gt (Lists.length scc) 1)) False sccs
+      in (Eithers.bind (Eithers.mapList (\b ->
+        let bname =
+                Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.bindingName b)))
+            isSelfRef = Sets.member (Core.bindingName b) (Variables.freeVariablesInTerm (Core.bindingTerm b))
+            isLambda =
+                    case (Strip.deannotateTerm (Core.bindingTerm b)) of
+                      Core.TermLambda _ -> True
                       _ -> False
-                wrappedVal =
-                        Logic.ifElse isClojure (Logic.ifElse isSelfRef (Logic.ifElse isLambda (case bval of
-                          Syntax.ExpressionLambda v0 -> Syntax.ExpressionLambda (Syntax.Lambda {
-                            Syntax.lambdaName = (Just (Syntax.Symbol bname)),
-                            Syntax.lambdaParams = (Syntax.lambdaParams v0),
-                            Syntax.lambdaRestParam = (Syntax.lambdaRestParam v0),
-                            Syntax.lambdaBody = (Syntax.lambdaBody v0)})
-                          _ -> bval) (lispNamedLambdaExpr bname [
-                          "_arg"] (lispApp bval [
-                          lispVar "_arg"]))) bval) (Logic.ifElse (Logic.and isSelfRef (Logic.not isLambda)) (lispLambdaExpr [
-                          "_arg"] (lispApp bval [
-                          lispVar "_arg"])) bval)
-            in (Right (bname, wrappedVal))))) sortedBindings) (\encodedBindings ->
-          let allBindingNames = Sets.fromList (Lists.map (\b -> Core.bindingName b) bindings)
-              hasCrossRefs =
-                      Lists.foldl (\acc -> \b -> Logic.or acc (Logic.not (Sets.null (Sets.intersection allBindingNames (Variables.freeVariablesInTerm (Core.bindingTerm b)))))) False bindings
-              hasSelfRef =
-                      Lists.foldl (\acc -> \b -> Logic.or acc (Sets.member (Core.bindingName b) (Variables.freeVariablesInTerm (Core.bindingTerm b)))) False bindings
-              isRecursive = hasSelfRef
-              letKind =
-                      Logic.ifElse isRecursive Syntax.LetKindRecursive (Logic.ifElse (Equality.lte (Lists.length bindings) 1) Syntax.LetKindParallel Syntax.LetKindSequential)
-              lispBindings =
-                      Lists.map (\eb -> Syntax.LetBindingSimple (Syntax.SimpleBinding {
-                        Syntax.simpleBindingName = (Syntax.Symbol (Pairs.first eb)),
-                        Syntax.simpleBindingValue = (Pairs.second eb)})) encodedBindings
-          in (Right (Syntax.ExpressionLet (Syntax.LetExpression {
-            Syntax.letExpressionKind = letKind,
-            Syntax.letExpressionBindings = lispBindings,
-            Syntax.letExpressionBody = [
-              bodyExpr]})))))))
+        in (Eithers.bind (encodeTerm dialect cx g (Core.bindingTerm b)) (\bval ->
+          let isClojure = Logic.not supportsLetrec
+              wrappedVal =
+                      Logic.ifElse isClojure (Logic.ifElse isSelfRef (Logic.ifElse isLambda (case bval of
+                        Syntax.ExpressionLambda v0 -> Syntax.ExpressionLambda (Syntax.Lambda {
+                          Syntax.lambdaName = (Just (Syntax.Symbol bname)),
+                          Syntax.lambdaParams = (Syntax.lambdaParams v0),
+                          Syntax.lambdaRestParam = (Syntax.lambdaRestParam v0),
+                          Syntax.lambdaBody = (Syntax.lambdaBody v0)})
+                        _ -> bval) (lispNamedLambdaExpr bname [
+                        "_arg"] (lispApp bval [
+                        lispVar "_arg"]))) bval) (Logic.ifElse (Logic.and isSelfRef (Logic.not isLambda)) (lispLambdaExpr [
+                        "_arg"] (lispApp bval [
+                        lispVar "_arg"])) bval)
+          in (Right (bname, wrappedVal))))) sortedBindings) (\encodedBindings ->
+        let hasSelfRef =
+                Lists.foldl (\acc -> \b -> Logic.or acc (Sets.member (Core.bindingName b) (Variables.freeVariablesInTerm (Core.bindingTerm b)))) False bindings
+            isRecursive = Logic.ifElse supportsLetrec hasSelfRef hasCycle
+            letKind =
+                    Logic.ifElse isRecursive Syntax.LetKindRecursive (Logic.ifElse (Equality.lte (Lists.length bindings) 1) Syntax.LetKindParallel Syntax.LetKindSequential)
+            lispBindings =
+                    Lists.map (\eb -> Syntax.LetBindingSimple (Syntax.SimpleBinding {
+                      Syntax.simpleBindingName = (Syntax.Symbol (Pairs.first eb)),
+                      Syntax.simpleBindingValue = (Pairs.second eb)})) encodedBindings
+        in (Right (Syntax.ExpressionLet (Syntax.LetExpression {
+          Syntax.letExpressionKind = letKind,
+          Syntax.letExpressionBindings = lispBindings,
+          Syntax.letExpressionBody = [
+            bodyExpr]}))))))
 
 encodeLiteral :: Core.Literal -> Syntax.Expression
 encodeLiteral lit =
