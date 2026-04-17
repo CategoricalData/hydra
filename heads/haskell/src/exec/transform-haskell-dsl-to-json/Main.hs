@@ -29,7 +29,7 @@ import Hydra.Sources.Ext (
   mainModules, dslSourceModules,
   kernelModules, haskellModules, jsonModules, otherModules,
   hydraJavaModules, hydraPythonModules, hydraScalaModules, hydraLispModules,
-  hydraPgModules, hydraRdfModules,
+  hydraPgModules, hydraRdfModules, hydraWasmModules,
   hydraExtDecodingModules, hydraExtEncodingModules)
 import Hydra.Sources.Eval.Lib.All (evalLibModules)
 import Hydra.Sources.Test.All (testModules)
@@ -75,6 +75,7 @@ fullMainUniverse = dedupByNamespace $ L.concat
   , hydraLispModules
   , hydraPgModules
   , hydraRdfModules
+  , hydraWasmModules
   , hydraExtDecodingModules
   , hydraExtEncodingModules
   , [GenPGTransform.module_]
@@ -117,7 +118,7 @@ usage = unlines
   , "  --package <pkg>          Package to transform (required). One of:"
   , "                           hydra-kernel, hydra-haskell, hydra-java,"
   , "                           hydra-python, hydra-scala, hydra-lisp,"
-  , "                           hydra-pg, hydra-rdf."
+  , "                           hydra-pg, hydra-rdf, hydra-wasm."
   , "                           (Long-tail ext packages -- hydra-coq,"
   , "                           hydra-javascript, hydra-ext -- are Haskell-only"
   , "                           today; they have no JSON pipeline.)"
