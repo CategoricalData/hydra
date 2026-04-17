@@ -148,6 +148,24 @@ write_java("output/java", modules, modules)
 
 The Python functions have the same arguments: `write_xxx(base_path, universe, mods)`.
 
+### Coq
+
+Coq output is generated via dedicated executables rather than GHCi.
+Unlike other target languages, `dist/coq/` is **not checked into git** —
+it is fully recreatable:
+
+```bash
+cd heads/haskell
+stack exec generate-coq         # kernel .v files + lib stubs + _CoqProject
+stack exec generate-coq-tests   # common test suite .v files
+```
+
+`generate-coq` writes to `dist/coq/hydra-kernel/src/main/coq/` and
+`generate-coq-tests` writes to `dist/coq/hydra-kernel/src/test/coq/`.
+The hand-written primitive library implementations (axiom stubs with
+`Definition`/`Fixpoint` bodies) live under `heads/haskell/src/main/coq/hydra/lib/`
+and are copied into `dist/coq/` by `generate-coq`.
+
 Extra memory is typically needed for large module sets. The sync scripts handle this
 automatically; for manual invocation, use `+RTS -K256M -A32M -RTS` (Haskell) or ensure
 adequate stack size.

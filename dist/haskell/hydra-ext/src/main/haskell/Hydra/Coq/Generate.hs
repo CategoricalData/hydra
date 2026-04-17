@@ -29,7 +29,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Render an axiom-only Coq module: imports + dependency imports + Axiom declarations
-buildAxiomOnlyContent :: Environment.CoqEnvironment -> String -> t0 -> [(String, t1)] -> [(String, (t2, (t3, (Maybe Core.Type))))] -> Packaging.Module -> String
+buildAxiomOnlyContent :: Environment.CoqEnvironment -> String -> t0 -> [(String, t1)] -> [(String, (t2, ([Core.Name], (Maybe Core.Type))))] -> Packaging.Module -> String
 buildAxiomOnlyContent env desc nsStr typeDefs termDefs mod_ =
 
       let typeOfType = Core.TypeVariable (Core.Name "Type")
@@ -37,11 +37,14 @@ buildAxiomOnlyContent env desc nsStr typeDefs termDefs mod_ =
           termAxioms =
                   Maybes.cat (Lists.map (\td ->
                     let name = Pairs.first td
+                        tvars = Pairs.first (Pairs.second (Pairs.second td))
                         mty = Pairs.second (Pairs.second (Pairs.second td))
                     in (Maybes.maybe Nothing (\schemeTy ->
-                      let ep = Utils.extractTypeParams schemeTy
-                          ty = Pairs.second ep
-                      in (Just (Coder.encodeAxiomDefinitionPair env (name, ty)))) mty)) termDefs)
+                      let wrapped =
+                              Lists.foldr (\v -> \t -> Core.TypeForall (Core.ForallType {
+                                Core.forallTypeParameter = v,
+                                Core.forallTypeBody = t})) schemeTy tvars
+                      in (Just (Coder.encodeAxiomDefinitionPair env (name, wrapped)))) mty)) termDefs)
           deps = Utils.moduleDependencies mod_
           depSentences = dependencyImports deps
           allSentences = Lists.cons Coder.standardImports (Lists.concat2 depSentences (Lists.concat2 typeAxioms termAxioms))
