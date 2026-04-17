@@ -17,7 +17,7 @@ import qualified Hydra.Dsl.Meta.Variants                   as Variants
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
-import qualified Hydra.Sources.Other.Coq               as CoqSyntax
+import qualified Hydra.Sources.Coq.Syntax              as CoqSyntax
 import           Prelude hiding ((++))
 import qualified Data.List                                 as DL
 import qualified Data.Map                                  as M

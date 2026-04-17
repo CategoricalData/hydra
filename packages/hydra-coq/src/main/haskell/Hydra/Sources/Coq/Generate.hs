@@ -27,7 +27,7 @@ import qualified Hydra.Dsl.Coq.Syntax                      as CSyntax
 import qualified Hydra.Dsl.Packaging                       as Packaging
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
-import qualified Hydra.Sources.Other.Coq                   as CoqSyntax
+import qualified Hydra.Sources.Coq.Syntax                  as CoqSyntax
 import qualified Hydra.Sources.Coq.Coder                   as CoqCoderSource
 import qualified Hydra.Sources.Coq.Environment             as CoqEnvironmentSource
 import qualified Hydra.Sources.Coq.Language                as CoqLanguage
