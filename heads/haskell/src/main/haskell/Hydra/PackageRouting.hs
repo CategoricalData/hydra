@@ -164,6 +164,10 @@ packagePrefixes =
   , ("hydra.sql.",                  "hydra-ext")
   , ("hydra.stac.",                 "hydra-ext")
   , ("hydra.typeScript.",           "hydra-ext")
+    -- hydra.wasm.* modules currently live in packages/hydra-ext/. When
+    -- feature_325_wasm's package migration lands, this prefix should be
+    -- replaced with hydra.wasm. -> hydra-wasm.
+  , ("hydra.wasm.",                 "hydra-ext")
   , ("hydra.workflow",              "hydra-ext")
     -- hydra.yaml.model lives in hydra-kernel, so we route the hydra-ext yaml
     -- modules (coder, language, serde) explicitly rather than with a blanket
