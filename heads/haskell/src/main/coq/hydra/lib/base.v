@@ -27,4 +27,12 @@ Arguments hydra_eq {X}.
 Axiom hydra_compare : forall (X : Type), X -> X -> comparison.
 Arguments hydra_compare {X}.
 
+(* IEEE 754 special float values. Coq's Q (rationals) cannot represent these,
+   so they are declared as opaque axioms. Tests that exercise them stall at
+   the axiom — matching the behaviour of `hydra_eq` and `hydra_compare` — but
+   the enclosing code type-checks. *)
+Axiom hydra_posInf : Q.
+Axiom hydra_negInf : Q.
+Axiom hydra_nan : Q.
+
 

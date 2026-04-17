@@ -15,7 +15,7 @@ Definition dereferenceSchemaType_bundle :=
 | Type__Annotated v_ => (fun (at_ : AnnotatedType) => (forType) ((fun r_ => (annotatedType_body) (r_)) (at_))) (v_)
 | Type__Forall v_ => (fun (ft : ForallType) => ((maybes.map) (fun (ts : TypeScheme) => (Build_TypeScheme) (((lists.cons) ((fun r_ => (forallType_parameter) (r_)) (ft))) ((fun r_ => (typeScheme_variables) (r_)) (ts))) ((fun r_ => (typeScheme_type) (r_)) (ts)) ((fun r_ => (typeScheme_constraints) (r_)) (ts)))) ((forType) ((fun r_ => (forallType_body) (r_)) (ft)))) (v_)
 | Type__Variable v_ => (fun (v : Name) => ((dereferenceSchemaType) (v)) (types)) (v_)
-| _ => (Some) ((Build_TypeScheme) (nil) (t) (None))
+| _ => (Some) ((Build_TypeScheme) (nil) (t) ((None) : (option) ((list) ((prod) (Name) (TypeVariableMetadata)))))
 end) (t)) in ((maybes.bind) (((maps.lookup) (name)) (types))) (fun (ts : TypeScheme) => ((maybes.map) (fun (ts2 : TypeScheme) => (Build_TypeScheme) (((lists.concat2) ((fun r_ => (typeScheme_variables) (r_)) (ts))) ((fun r_ => (typeScheme_variables) (r_)) (ts2))) ((fun r_ => (typeScheme_type) (r_)) (ts2)) ((fun r_ => (typeScheme_constraints) (r_)) (ts2)))) ((forType) ((fun r_ => (typeScheme_type) (r_)) (ts))))).
 
 Definition dereferenceSchemaType : forall (_ : Name) , forall (_ : (list) ((prod) (Name) (TypeScheme))) , (option) (TypeScheme) :=
@@ -74,7 +74,7 @@ Definition resolveTerm_bundle :=
     fun (graph_ : hydra.graph.Graph) => fun (name : Name) => let recurse := fun (term_ : Term) => let stripped := (deannotateTerm) (term_) in (fun x_ => match x_ with
 | Term_Variable v_ => (fun (name' : Name) => ((resolveTerm) (graph_)) (name')) (v_)
 | _ => (Some) (term_)
-end) (stripped) in (((maybes.maybe) (None)) (recurse)) (((lookupTerm) (graph_)) (name))).
+end) (stripped) in (((maybes.maybe) ((None) : (option) (Term))) (recurse)) (((lookupTerm) (graph_)) (name))).
 
 Definition resolveTerm : forall (_ : hydra.graph.Graph) , forall (_ : Name) , (option) (Term) :=
   resolveTerm_bundle.

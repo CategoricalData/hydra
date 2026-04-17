@@ -73,14 +73,14 @@ Definition removeTypeAnnotations : forall (_ : Type_) , Type_ := fun (typ : Type
 | Type__Annotated v_ => (fun (at_ : AnnotatedType) => (fun r_ => (annotatedType_body) (r_)) (at_)) (v_)
 | _ => rewritten
 end) (rewritten) in ((rewriteType) (remove)) (typ).
-Definition removeTypeAnnotationsFromTerm : forall (_ : Term) , Term := fun (term_ : Term) => let strip := fun recurse => fun term2 => let rewritten := (recurse) (term2) in let stripBinding := fun (b : Binding) => (Build_Binding) ((fun r_ => (binding_name) (r_)) (b)) ((fun r_ => (binding_term) (r_)) (b)) (None) in (fun x_ => match x_ with
+Definition removeTypeAnnotationsFromTerm : forall (_ : Term) , Term := fun (term_ : Term) => let strip := fun recurse => fun term2 => let rewritten := (recurse) (term2) in let stripBinding := fun (b : Binding) => (Build_Binding) ((fun r_ => (binding_name) (r_)) (b)) ((fun r_ => (binding_term) (r_)) (b)) ((None) : (option) (TypeScheme)) in (fun x_ => match x_ with
 | Term_Let v_ => (fun (lt : Let) => (Term_Let) ((Build_Let) (((lists.map) (stripBinding)) ((fun r_ => (let_bindings) (r_)) (lt))) ((fun r_ => (let_body) (r_)) (lt)))) (v_)
 | Term_TypeApplication v_ => (fun (tt : TypeApplicationTerm) => (fun r_ => (typeApplicationTerm_body) (r_)) (tt)) (v_)
 | Term_TypeLambda v_ => (fun (ta : TypeLambda) => (fun r_ => (typeLambda_body) (r_)) (ta)) (v_)
 | _ => rewritten
 end) (rewritten) in ((rewriteTerm) (strip)) (term_).
-Definition removeTypesFromTerm : forall (_ : Term) , Term := fun (term_ : Term) => let strip := fun recurse => fun term2 => let rewritten := (recurse) (term2) in let stripBinding := fun (b : Binding) => (Build_Binding) ((fun r_ => (binding_name) (r_)) (b)) ((fun r_ => (binding_term) (r_)) (b)) (None) in (fun x_ => match x_ with
-| Term_Lambda v_ => (fun (l : Lambda) => (Term_Lambda) ((Build_Lambda) ((fun r_ => (lambda_parameter) (r_)) (l)) (None) ((fun r_ => (lambda_body) (r_)) (l)))) (v_)
+Definition removeTypesFromTerm : forall (_ : Term) , Term := fun (term_ : Term) => let strip := fun recurse => fun term2 => let rewritten := (recurse) (term2) in let stripBinding := fun (b : Binding) => (Build_Binding) ((fun r_ => (binding_name) (r_)) (b)) ((fun r_ => (binding_term) (r_)) (b)) ((None) : (option) (TypeScheme)) in (fun x_ => match x_ with
+| Term_Lambda v_ => (fun (l : Lambda) => (Term_Lambda) ((Build_Lambda) ((fun r_ => (lambda_parameter) (r_)) (l)) ((None) : (option) (Type_)) ((fun r_ => (lambda_body) (r_)) (l)))) (v_)
 | Term_Let v_ => (fun (lt : Let) => (Term_Let) ((Build_Let) (((lists.map) (stripBinding)) ((fun r_ => (let_bindings) (r_)) (lt))) ((fun r_ => (let_body) (r_)) (lt)))) (v_)
 | Term_TypeApplication v_ => (fun (tt : TypeApplicationTerm) => (fun r_ => (typeApplicationTerm_body) (r_)) (tt)) (v_)
 | Term_TypeLambda v_ => (fun (ta : TypeLambda) => (fun r_ => (typeLambda_body) (r_)) (ta)) (v_)
