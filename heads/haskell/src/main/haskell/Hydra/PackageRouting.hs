@@ -142,6 +142,9 @@ packagePrefixes =
   , ("hydra.shacl.",                "hydra-rdf")
   , ("hydra.shex.",                 "hydra-rdf")
   , ("hydra.xml.schema",            "hydra-rdf")
+    -- WebAssembly package
+  , ("hydra.wasm.",                 "hydra-wasm")
+  , ("hydra.dsl.wasm.",             "hydra-wasm")
     -- Extension package (truly-ext coders: Avro, Protobuf, GraphQL, etc.)
   , ("hydra.atlas",                 "hydra-ext")
   , ("hydra.avro.",                 "hydra-ext")
