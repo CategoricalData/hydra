@@ -73,10 +73,6 @@ import qualified Hydra.Sources.Rust.Syntax as RustSyntax
 import qualified Hydra.Sources.Sql.Ansi as SqlAnsi
 import qualified Hydra.Sources.TypeScript.Language as TypeScriptLanguage
 import qualified Hydra.Sources.TypeScript.Model as TypeScriptModel
-import qualified Hydra.Sources.Wasm.Coder as WasmCoder
-import qualified Hydra.Sources.Wasm.Language as WasmLanguage
-import qualified Hydra.Sources.Wasm.Serde as WasmSerde
-import qualified Hydra.Sources.Wasm.Syntax as WasmSyntax
 import qualified Hydra.Sources.Workflow as Workflow
 import qualified Hydra.Sources.Yaml.Coder as YamlCoder
 import qualified Hydra.Sources.Yaml.Language as YamlLanguage
@@ -139,10 +135,6 @@ mainModules = [
   StacItems.module_,
   TypeScriptLanguage.module_,
   TypeScriptModel.module_,
-  WasmCoder.module_,
-  WasmLanguage.module_,
-  WasmSerde.module_,
-  WasmSyntax.module_,
   Workflow.module_,
   YamlCoder.module_,
   YamlLanguage.module_,

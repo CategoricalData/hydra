@@ -629,38 +629,46 @@ encodeTermDefinition cx g stringOffsets fieldOffsets variantIndexes funcSigs tde
           extracted = extractLambdaParams term
           paramNames = Pairs.first extracted
           innerBody = Pairs.second extracted
-          paramNameStrs = Lists.map (\pn -> Formatting.convertCaseCamelToLowerSnake (Core.unName pn)) paramNames
-          wasmParams =
-                  Lists.map (\pn -> Syntax.Param {
-                    Syntax.paramName = (Just pn),
-                    Syntax.paramType = Syntax.ValTypeI32}) paramNameStrs
-          initPrologue = []
-          resultTypes = [
-                Syntax.ValTypeI32]
-          dBody = Strip.deannotateTerm innerBody
-          scrutineeInstrs = Maybes.cases (Lists.maybeHead paramNameStrs) [] (\p0 -> [
-                Syntax.InstructionLocalGet p0])
-      in (Eithers.bind (case dBody of
-        Core.TermProject v0 -> encodeProjection cx g fieldOffsets v0 scrutineeInstrs
-        Core.TermCases v0 -> encodeCases cx g stringOffsets fieldOffsets variantIndexes funcSigs v0 scrutineeInstrs
-        Core.TermUnwrap _ -> Right [
-          Syntax.InstructionConst (Syntax.ConstValueI32 0)]
-        _ -> encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs innerBody) (\rawBodyInstrs ->
-        let bodyInstrs = Lists.concat2 initPrologue rawBodyInstrs
-            referencedLocals = collectInstructionLocals bodyInstrs
-            allLocalNames = Sets.toList (Sets.difference referencedLocals (Sets.fromList paramNameStrs))
-            wasmLocals =
-                    Lists.map (\ln -> Syntax.FuncLocal {
-                      Syntax.funcLocalName = (Just ln),
-                      Syntax.funcLocalType = Syntax.ValTypeI32}) allLocalNames
-        in (Right (Syntax.ModuleFieldFunc (Syntax.Func {
-          Syntax.funcName = (Just lname),
-          Syntax.funcTypeUse = Syntax.TypeUse {
-            Syntax.typeUseIndex = Nothing,
-            Syntax.typeUseParams = wasmParams,
-            Syntax.typeUseResults = resultTypes},
-          Syntax.funcLocals = wasmLocals,
-          Syntax.funcBody = bodyInstrs})))))
+          lambdaParamNameStrs = Lists.map (\pn -> Formatting.convertCaseCamelToLowerSnake (Core.unName pn)) paramNames
+      in (Eithers.bind (extractParamTypes cx g typ) (\typeParams ->
+        let typeParamCount = Lists.length typeParams
+            lambdaParamCount = Lists.length lambdaParamNameStrs
+            syntheticCount = if typeParamCount > lambdaParamCount then typeParamCount - lambdaParamCount else 0
+            syntheticParamNames = Lists.map (\i -> Strings.cat2 "arg_synth_" (Literals.showInt32 i)) [0..syntheticCount - 1]
+            paramNameStrs = Lists.concat2 lambdaParamNameStrs syntheticParamNames
+            wasmParams =
+                    Lists.map (\pn -> Syntax.Param {
+                      Syntax.paramName = (Just pn),
+                      Syntax.paramType = Syntax.ValTypeI32}) paramNameStrs
+            initPrologue = Lists.concat (Lists.map (\sn -> [
+                    Syntax.InstructionLocalGet sn,
+                    Syntax.InstructionDrop]) syntheticParamNames)
+            resultTypes = [
+                  Syntax.ValTypeI32]
+            dBody = Strip.deannotateTerm innerBody
+            scrutineeInstrs = Maybes.cases (Lists.maybeHead paramNameStrs) [] (\p0 -> [
+                  Syntax.InstructionLocalGet p0])
+        in (Eithers.bind (case dBody of
+          Core.TermProject v0 -> encodeProjection cx g fieldOffsets v0 scrutineeInstrs
+          Core.TermCases v0 -> encodeCases cx g stringOffsets fieldOffsets variantIndexes funcSigs v0 scrutineeInstrs
+          Core.TermUnwrap _ -> Right [
+            Syntax.InstructionConst (Syntax.ConstValueI32 0)]
+          _ -> encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs innerBody) (\rawBodyInstrs ->
+          let bodyInstrs = Lists.concat2 initPrologue rawBodyInstrs
+              referencedLocals = collectInstructionLocals bodyInstrs
+              allLocalNames = Sets.toList (Sets.difference referencedLocals (Sets.fromList paramNameStrs))
+              wasmLocals =
+                      Lists.map (\ln -> Syntax.FuncLocal {
+                        Syntax.funcLocalName = (Just ln),
+                        Syntax.funcLocalType = Syntax.ValTypeI32}) allLocalNames
+          in (Right (Syntax.ModuleFieldFunc (Syntax.Func {
+            Syntax.funcName = (Just lname),
+            Syntax.funcTypeUse = Syntax.TypeUse {
+              Syntax.typeUseIndex = Nothing,
+              Syntax.typeUseParams = wasmParams,
+              Syntax.typeUseResults = resultTypes},
+            Syntax.funcLocals = wasmLocals,
+            Syntax.funcBody = bodyInstrs})))))))
 
 encodeType :: t0 -> t1 -> Core.Type -> Either t2 [Syntax.ValType]
 encodeType cx g t =

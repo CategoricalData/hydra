@@ -475,7 +475,21 @@ encodeTerm = define "encodeTerm" $
         (coqTermQualid @@ string "nil")
         (var "xs"),
     _Term_literal>>: "l" ~> encodeLiteral @@ var "l",
-    _Term_map>>: constant (coqTermQualid @@ string "nil"),
+    -- Maps are encoded as Coq association lists `list (k * v)`, matching
+    -- the representation used by `hydra.lib.maps.*`. An empty map becomes
+    -- bare `nil`; a non-empty map becomes `cons (pair k1 v1) (cons (pair k2 v2) ... nil)`.
+    -- Coq can infer the element type from surrounding context in almost all
+    -- cases; bare-`nil` cases that need an explicit cast go through
+    -- `_Term_typeApplication`.
+    _Term_map>>: "mt" ~>
+      Lists.foldr
+        (lambdas ["kv", "acc"] $ coqTermApp @@ (coqTermQualid @@ string "cons") @@ list [
+          coqTermApp @@ (coqTermQualid @@ string "pair") @@ list [
+            encodeTerm @@ var "env" @@ Pairs.first (var "kv"),
+            encodeTerm @@ var "env" @@ Pairs.second (var "kv")],
+          var "acc"])
+        (coqTermQualid @@ string "nil")
+        (Maps.toList $ var "mt"),
     _Term_maybe>>: "mt" ~> Maybes.maybe
       (coqTermQualid @@ string "None")
       (lambda "v" $ coqTermApp @@ (coqTermQualid @@ string "Some") @@ list [encodeTerm @@ var "env" @@ var "v"])
@@ -496,7 +510,15 @@ encodeTerm = define "encodeTerm" $
           @@ Lists.map
             (lambda "f" $ encodeTerm @@ var "env" @@ (Core.fieldTerm $ var "f"))
             (var "rfields")),
-    _Term_set>>: constant (coqTermQualid @@ string "nil"),
+    -- Sets are encoded as deduplicated Coq `list x`, matching the
+    -- representation used by `hydra.lib.sets.*`. An empty set becomes
+    -- bare `nil`; a non-empty set becomes `cons v1 (cons v2 ... nil)`.
+    _Term_set>>: "st" ~>
+      Lists.foldr
+        (lambdas ["el", "acc"] $ coqTermApp @@ (coqTermQualid @@ string "cons") @@ list [
+          encodeTerm @@ var "env" @@ var "el", var "acc"])
+        (coqTermQualid @@ string "nil")
+        (Sets.toList $ var "st"),
     _Term_typeApplication>>: "ta" ~> lets [
       "body">: Core.typeApplicationTermBody $ var "ta",
       "tyArg">: Core.typeApplicationTermType $ var "ta",
