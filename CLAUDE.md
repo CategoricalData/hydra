@@ -331,7 +331,7 @@ See [docs/recipes/index.md](docs/recipes/index.md) for the full list. Key recipe
 | [Code generation](docs/recipes/code-generation.md) | End-to-end guide: DSL/JSON sources, writeXxx functions, sync scripts |
 | [Refactoring](docs/recipes/refactoring.md) | Create, rename, move, delete kernel elements and modules |
 | [Refactoring namespaces](docs/recipes/refactoring-namespaces.md) | Rename/move a Hydra namespace across all implementations |
-| [Repository maintenance](docs/recipes/maintenance.md) | Periodic checks: non-source files, stale artifacts, definition ordering |
+| [Repository maintenance](docs/recipes/maintenance.md) | Periodic checks: non-source files, stale artifacts, definition ordering, logical code review |
 | [JSON kernel](docs/recipes/json-kernel.md) | Export Hydra modules to JSON for cross-language access |
 | [New implementation](docs/recipes/new-implementation.md) | Implement Hydra in a new language (11 steps) |
 | [Syncing Python](docs/recipes/syncing-python.md) | Regenerate Python from Haskell |
@@ -412,7 +412,6 @@ give the user a brief status update approximately every 10 minutes.
 | `/save()` | Save status to the plan document. Session may terminate. |
 | `/squash()` | Squash WIP commits, per "Commit workflow" section. |
 | `/sync-all()` | Run `bin/sync-all.sh --targets all`, propagating changes into all generated artifacts. |
-| `/sync-ext()` | Run `heads/haskell/bin/sync-ext.sh`. |
 | `/sync-haskell()` | Run `heads/haskell/bin/sync-haskell.sh`. |
 | `/sync-java()` | Run `heads/haskell/bin/sync-java.sh`. |
 | `/sync-lisp()` | Run `heads/haskell/bin/sync-lisp.sh`. Pass `--dialects <list>` to limit dialects. |

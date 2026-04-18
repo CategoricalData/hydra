@@ -1961,13 +1961,105 @@
                                   "lambda": {
                                     "body": {
                                       "application": {
-                                        "argument": {"literal": {"string": "nil"}},
-                                        "function": {"variable": "hydra.coq.coder.coqTermQualid"}}},
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "mt"},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.maps.toList"},
+                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                "type": {"variable": "hydra.core.Term"}}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"literal": {"string": "nil"}},
+                                                "function": {"variable": "hydra.coq.coder.coqTermQualid"}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "list": [
+                                                                {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "list": [
+                                                                        {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "kv"},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"variable": "hydra.lib.pairs.first"},
+                                                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                                                    "type": {"variable": "hydra.core.Term"}}}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "env"},
+                                                                                "function": {"variable": "hydra.coq.coder.encodeTerm"}}}}},
+                                                                        {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "kv"},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"variable": "hydra.lib.pairs.second"},
+                                                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                                                    "type": {"variable": "hydra.core.Term"}}}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "env"},
+                                                                                "function": {"variable": "hydra.coq.coder.encodeTerm"}}}}}]},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"literal": {"string": "pair"}},
+                                                                            "function": {"variable": "hydra.coq.coder.coqTermQualid"}}},
+                                                                        "function": {"variable": "hydra.coq.coder.coqTermApp"}}}}},
+                                                                {"variable": "acc"}]},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"string": "cons"}},
+                                                                    "function": {"variable": "hydra.coq.coder.coqTermQualid"}}},
+                                                                "function": {"variable": "hydra.coq.coder.coqTermApp"}}}}},
+                                                        "domain": {"variable": "hydra.coq.syntax.Term"},
+                                                        "parameter": "acc"}},
+                                                    "domain": {
+                                                      "pair": {
+                                                        "first": {"variable": "hydra.core.Term"},
+                                                        "second": {"variable": "hydra.core.Term"}}},
+                                                    "parameter": "kv"}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.lists.foldr"},
+                                                        "type": {
+                                                          "pair": {
+                                                            "first": {"variable": "hydra.core.Term"},
+                                                            "second": {"variable": "hydra.core.Term"}}}}},
+                                                    "type": {"variable": "hydra.coq.syntax.Term"}}}}}}}}},
                                     "domain": {
                                       "map": {
                                         "keys": {"variable": "hydra.core.Term"},
                                         "values": {"variable": "hydra.core.Term"}}},
-                                    "parameter": "_"}}},
+                                    "parameter": "mt"}}},
                               {
                                 "name": "maybe",
                                 "term": {
@@ -2179,10 +2271,57 @@
                                   "lambda": {
                                     "body": {
                                       "application": {
-                                        "argument": {"literal": {"string": "nil"}},
-                                        "function": {"variable": "hydra.coq.coder.coqTermQualid"}}},
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "st"},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.sets.toList"},
+                                                "type": {"variable": "hydra.core.Term"}}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"literal": {"string": "nil"}},
+                                                "function": {"variable": "hydra.coq.coder.coqTermQualid"}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "list": [
+                                                                {
+                                                                  "application": {
+                                                                    "argument": {"variable": "el"},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "env"},
+                                                                        "function": {"variable": "hydra.coq.coder.encodeTerm"}}}}},
+                                                                {"variable": "acc"}]},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"string": "cons"}},
+                                                                    "function": {"variable": "hydra.coq.coder.coqTermQualid"}}},
+                                                                "function": {"variable": "hydra.coq.coder.coqTermApp"}}}}},
+                                                        "domain": {"variable": "hydra.coq.syntax.Term"},
+                                                        "parameter": "acc"}},
+                                                    "domain": {"variable": "hydra.core.Term"},
+                                                    "parameter": "el"}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.lists.foldr"},
+                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                    "type": {"variable": "hydra.coq.syntax.Term"}}}}}}}}},
                                     "domain": {"set": {"variable": "hydra.core.Term"}},
-                                    "parameter": "_"}}},
+                                    "parameter": "st"}}},
                               {
                                 "name": "typeApplication",
                                 "term": {

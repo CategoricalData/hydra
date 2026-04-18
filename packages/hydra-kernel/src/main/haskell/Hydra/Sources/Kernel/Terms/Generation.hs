@@ -496,29 +496,67 @@ inferModules = define "inferModules" $
   right $ Lists.map (refreshModule @@ var "inferredElements") (var "targetMods")
 
 -- | Incrementally infer types for target modules, using the universe as a seeded inference context.
--- Type schemes already present on universe term bindings (e.g. loaded from a prior inference run)
--- are installed in the graph's boundTypes via modulesToGraph, providing a typed context for the
--- inference pass. All universe bindings (not just targets) are fed to inferGraphTypes so that the
--- let-inference machinery (Phase 6/7 of inferTypeOfLetNormalized) produces consistent TypeApplication
--- wrappers for cross-module references. Only the target modules' bindings are extracted from the
--- result via refreshModule.
 --
--- Note: the current implementation re-infers all universe bindings, so there is no per-binding
--- speedup over inferModules. The intended optimization path is for the calling layer to skip
--- inference entirely when the universe hasn't changed (the "all clean" fast path in the digest
--- cache) and to call this function only when some modules are stale. A future version may avoid
--- re-inferring clean bindings whose pre-attached schemes are known-correct, but that requires
--- changes to inferGraphTypes' Phase 6 term-substitution mechanism.
+-- Computes the transitive term-dependency closure of 'targetMods' (self-inclusive). Any binding in
+-- that closure is a candidate for inference; any binding OUTSIDE the closure is kept as-is. The
+-- candidate set is further partitioned:
+--
+-- 1. Bindings in the closure whose owning module is in 'targetMods', OR bindings without a
+--    pre-attached scheme, are fed to 'inferGraphTypes'. The first case is the caller's explicit
+--    request; the second covers transitive dependencies that haven't been inferred yet and would
+--    otherwise appear untyped to the inference pass.
+-- 2. Bindings in the closure that are already typed (have a 'TypeScheme' from a prior inference
+--    run) and whose module is NOT a target are kept verbatim. Their schemes flow into
+--    'graphBoundTypes' via 'modulesToGraph', so references from group (1) resolve through
+--    'inferTypeOfVariable's boundTypes branch — which already emits correctly-sized
+--    'TypeApplication' wrappers matching each cached scheme's quantifier count.
+-- 3. Bindings outside the closure are irrelevant to target inference and are returned unchanged.
+--
+-- The target modules are refreshed from the union of newly-inferred bindings (group 1) and
+-- the untouched typed closure bindings (group 2).
+--
+-- When 'targetMods' equals 'universeMods' and no non-target bindings are typed, this reduces to
+-- identical behavior to 'inferModules'. When a caching layer pre-populates schemes on clean
+-- modules, only the target set plus any transitively-reachable untyped binding is actually
+-- re-solved — the point of issue #247.
 inferModulesGiven :: TTermDefinition (Context -> Graph -> [Module] -> [Module] -> Prelude.Either Error [Module])
 inferModulesGiven = define "inferModulesGiven" $
   doc "Infer types for target modules in the context of a typed universe" $
   "cx" ~> "bsGraph" ~> "universeMods" ~> "targetMods" ~>
   "g0" <~ modulesToGraph @@ var "bsGraph" @@ var "universeMods" @@ var "universeMods" $
-  "dataElements" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m")) (var "universeMods")) $
-  "inferResultWithCx" <<~ Inference.inferGraphTypes @@ var "cx" @@ var "dataElements" @@ var "g0" $
+  -- Namespace index over the full universe, used to resolve module dep edges.
+  "nsMap" <~ Maps.fromList (Lists.map
+    ("m" ~> pair (Packaging.moduleNamespace $ var "m") (var "m"))
+    (var "universeMods")) $
+  -- Transitive closure of term-deps for the target set (self-inclusive).
+  "closureMods" <~ moduleTermDepsTransitive @@ var "nsMap" @@ var "targetMods" $
+  "targetNamespaces" <~ Sets.fromList (Lists.map (unaryFunction Packaging.moduleNamespace) (var "targetMods")) $
+  -- Walk each closure module, deciding per-module whether to re-infer all its bindings
+  -- (if it's a target) or only its untyped bindings (if it's a transitive dep). Bindings of
+  -- non-target closure modules that already carry a scheme are kept verbatim; their schemes
+  -- are in graphBoundTypes via modulesToGraph so references from re-inferred bindings resolve
+  -- through inferTypeOfVariable with correctly-sized TypeApplication wrappers.
+  "bindingsToInfer" <~ Lists.concat (Lists.map
+    ("m" ~>
+      "isTarget" <~ Sets.member (Packaging.moduleNamespace (var "m")) (var "targetNamespaces") $
+      "bs" <~ moduleTermBindings (var "m") $
+      Logic.ifElse (var "isTarget")
+        (var "bs")
+        (Lists.filter ("b" ~> Maybes.isNothing (Core.bindingType (var "b"))) (var "bs")))
+    (var "closureMods")) $
+  "untouchedTypedBindings" <~ Lists.concat (Lists.map
+    ("m" ~>
+      "isTarget" <~ Sets.member (Packaging.moduleNamespace (var "m")) (var "targetNamespaces") $
+      "bs" <~ moduleTermBindings (var "m") $
+      Logic.ifElse (var "isTarget")
+        (TTerm (Terms.list []) :: TTerm [Binding])
+        (Lists.filter ("b" ~> Maybes.isJust (Core.bindingType (var "b"))) (var "bs")))
+    (var "closureMods")) $
+  "inferResultWithCx" <<~ Inference.inferGraphTypes @@ var "cx" @@ var "bindingsToInfer" @@ var "g0" $
   "inferResult" <~ Pairs.first (var "inferResultWithCx") $
-  "inferredElements" <~ Pairs.second (var "inferResult") $
-  right $ Lists.map (refreshModule @@ var "inferredElements") (var "targetMods")
+  "newlyInferredBindings" <~ Pairs.second (var "inferResult") $
+  "allInferredBindings" <~ Lists.concat2 (var "newlyInferredBindings") (var "untouchedTypedBindings") $
+  right $ Lists.map (refreshModule @@ var "allInferredBindings") (var "targetMods")
 
 -- | Generate encoder or decoder modules for a list of type modules.
 -- Takes a codec function, bootstrap graph, universe modules, and type modules.

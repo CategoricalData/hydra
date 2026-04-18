@@ -297,17 +297,36 @@ inferModulesGiven :: Context.Context -> Graph.Graph -> [Packaging.Module] -> [Pa
 inferModulesGiven cx bsGraph universeMods targetMods =
 
       let g0 = modulesToGraph bsGraph universeMods universeMods
-          dataElements =
-                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
-                    Packaging.DefinitionTerm v0 -> Just (Core.Binding {
-                      Core.bindingName = (Packaging.termDefinitionName v0),
-                      Core.bindingTerm = (Packaging.termDefinitionTerm v0),
-                      Core.bindingType = (Packaging.termDefinitionType v0)})
-                    _ -> Nothing) (Packaging.moduleDefinitions m))) universeMods)
-      in (Eithers.bind (Inference.inferGraphTypes cx dataElements g0) (\inferResultWithCx ->
+          nsMap = Maps.fromList (Lists.map (\m -> (Packaging.moduleNamespace m, m)) universeMods)
+          closureMods = moduleTermDepsTransitive nsMap targetMods
+          targetNamespaces = Sets.fromList (Lists.map Packaging.moduleNamespace targetMods)
+          bindingsToInfer =
+                  Lists.concat (Lists.map (\m ->
+                    let isTarget = Sets.member (Packaging.moduleNamespace m) targetNamespaces
+                        bs =
+                                Maybes.cat (Lists.map (\d -> case d of
+                                  Packaging.DefinitionTerm v0 -> Just (Core.Binding {
+                                    Core.bindingName = (Packaging.termDefinitionName v0),
+                                    Core.bindingTerm = (Packaging.termDefinitionTerm v0),
+                                    Core.bindingType = (Packaging.termDefinitionType v0)})
+                                  _ -> Nothing) (Packaging.moduleDefinitions m))
+                    in (Logic.ifElse isTarget bs (Lists.filter (\b -> Maybes.isNothing (Core.bindingType b)) bs))) closureMods)
+          untouchedTypedBindings =
+                  Lists.concat (Lists.map (\m ->
+                    let isTarget = Sets.member (Packaging.moduleNamespace m) targetNamespaces
+                        bs =
+                                Maybes.cat (Lists.map (\d -> case d of
+                                  Packaging.DefinitionTerm v0 -> Just (Core.Binding {
+                                    Core.bindingName = (Packaging.termDefinitionName v0),
+                                    Core.bindingTerm = (Packaging.termDefinitionTerm v0),
+                                    Core.bindingType = (Packaging.termDefinitionType v0)})
+                                  _ -> Nothing) (Packaging.moduleDefinitions m))
+                    in (Logic.ifElse isTarget [] (Lists.filter (\b -> Maybes.isJust (Core.bindingType b)) bs))) closureMods)
+      in (Eithers.bind (Inference.inferGraphTypes cx bindingsToInfer g0) (\inferResultWithCx ->
         let inferResult = Pairs.first inferResultWithCx
-            inferredElements = Pairs.second inferResult
-        in (Right (Lists.map (refreshModule inferredElements) targetMods))))
+            newlyInferredBindings = Pairs.second inferResult
+            allInferredBindings = Lists.concat2 newlyInferredBindings untouchedTypedBindings
+        in (Right (Lists.map (refreshModule allInferredBindings) targetMods))))
 
 -- | Compute transitive closure of term dependencies for a set of modules
 moduleTermDepsTransitive :: M.Map Packaging.Namespace Packaging.Module -> [Packaging.Module] -> [Packaging.Module]

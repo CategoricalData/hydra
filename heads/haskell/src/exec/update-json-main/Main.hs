@@ -72,7 +72,7 @@ main = do
         , [GenPGTransform.module_]
         ]
 
-  putStrLn "=== Generate Hydra JSON modules (package-split) ==="
+  putStrLn "=== Generate Hydra JSON modules ==="
   putStrLn ""
   putStrLn $ "Generating " ++ show (length universe) ++ " modules to JSON, routed per package..."
   putStrLn $ "dist-json root: " ++ distRoot

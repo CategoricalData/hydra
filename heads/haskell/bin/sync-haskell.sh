@@ -12,8 +12,8 @@ set -euo pipefail
 #   dist/json/hydra-kernel/src/test/json/.
 #
 # Stage 2 — JSON → Haskell:
-#   Runs bootstrap-from-json with --package-split, so that each loaded module
-#   is routed to dist/haskell/<package>/ based on its namespace prefix.
+#   Runs bootstrap-from-json; each loaded module is routed to
+#   dist/haskell/<package>/ based on its namespace prefix (via PackageRouting).
 #   Decoder/encoder source modules (Hydra.Sources.{Decode,Encode}.*) are
 #   synthesized from the loaded kernel type modules via --synthesize-sources.
 #
@@ -99,7 +99,6 @@ echo ""
 stack exec bootstrap-from-json -- \
     --target haskell \
     --output "../../dist/haskell" \
-    --package-split \
     --include-dsls \
     --include-tests \
     --synthesize-sources \
@@ -140,7 +139,9 @@ if [ "$QUICK_MODE" = false ]; then
         echo ""
         echo "All tests passed!"
     else
-        warn "Some tests failed (exit code $TEST_RESULT). See $TEST_LOG"
+        echo ""
+        echo "ERROR: stack test exited $TEST_RESULT. See $TEST_LOG" >&2
+        exit $TEST_RESULT
     fi
 else
     step 6 $TOTAL_STEPS "Skipped (--quick mode)"
