@@ -49,6 +49,10 @@ heads/scala/project/
 # Run logs
 runs/
 
+# Generated dist trees that are not checked in (regenerated on demand)
+dist/coq/
+dist/wasm/
+
 # Analysis notebooks and debug scripts
 analysis/
 debug_*.py
