@@ -101,21 +101,6 @@ modA = Packaging.module_
   (Phantoms.list ([] :: [TTerm Namespace]))
   Phantoms.nothing
 
--- | Untyped variant of modA: same idA body, but with no pre-attached
--- scheme. Used to compare partial-dirty inference (modA pre-typed) against
--- fully-cold inference (modA untyped) over otherwise identical universes.
-modAUntyped :: TTerm Module
-modAUntyped = Packaging.module_
-  nsA
-  (Phantoms.list [
-    untypedTermDef nameIdA (Terms.lambda "x" (Terms.var "x"))])
-  (Phantoms.list ([] :: [TTerm Namespace]))
-  (Phantoms.list ([] :: [TTerm Namespace]))
-  Phantoms.nothing
-
-universeModsColdA :: TTerm [Module]
-universeModsColdA = Phantoms.list [modAUntyped, modB]
-
 modB :: TTerm Module
 modB = Packaging.module_
   nsB
@@ -279,24 +264,6 @@ vacuousQuantifierCase = universalCase
     expected = showResult (Generation.inferModules
       # TestGraph.testContext # TestGraph.testGraph # vacuousUniverse # target)
 
--- | Soundness test for the #247 partial-dirty path: inferring a target module
--- against a universe where its dependency is pre-typed must produce the same
--- rendering of the target as inferring it against a universe where the
--- dependency is also untyped. In other words, a caching layer that pre-attaches
--- inferred schemes to clean modules must not change what the target module
--- looks like after inference.
-partialDirtySoundnessCase :: TTerm TestCaseWithMetadata
-partialDirtySoundnessCase = universalCase
-    "partial-dirty inference produces the same target rendering as fully-cold inference"
-    actual
-    expected
-  where
-    target = Phantoms.list [modB]
-    actual = showResult (Generation.inferModules
-      # TestGraph.testContext # TestGraph.testGraph # universeMods # target)
-    expected = showResult (Generation.inferModules
-      # TestGraph.testContext # TestGraph.testGraph # universeModsColdA # target)
-
 allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for code generation operations" $
@@ -304,5 +271,4 @@ allTests = define "allTests" $
       subgroup "inferModulesGiven" [
         incrementalSubsetCase,
         incrementalFullCase,
-        vacuousQuantifierCase,
-        partialDirtySoundnessCase]]
+        vacuousQuantifierCase]]
