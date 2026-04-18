@@ -563,7 +563,7 @@ However, it's useful to understand the individual stages, especially when debugg
 Phase 1: stack build + update-haskell-kernel + update-kernel-tests + ... (packages/hydra-haskell)
     → Export and verify JSON
     → stack test (unless --quick)
-Phase 2: sync-ext.sh (extension Haskell generation)
+Phase 2: assemble-distribution.sh per ext / coder package (Haskell from JSON)
 Phase 3: sync-java.sh (Java from JSON)
     → gradle test (unless --quick)
 Phase 4: sync-python.sh (Python from JSON)
