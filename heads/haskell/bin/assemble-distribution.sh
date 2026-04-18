@@ -24,7 +24,8 @@ if [ $# -lt 1 ]; then
     echo "Usage: $0 <package> [--dist-root <dir>] [--json-root <dir>]" >&2
     echo "" >&2
     echo "Packages: hydra-kernel, hydra-haskell, hydra-java, hydra-python," >&2
-    echo "          hydra-scala, hydra-lisp, hydra-pg, hydra-rdf" >&2
+    echo "          hydra-scala, hydra-lisp, hydra-pg, hydra-rdf," >&2
+    echo "          hydra-coq, hydra-javascript, hydra-ext" >&2
     exit 1
 fi
 
@@ -56,13 +57,16 @@ echo ""
 # filter selects just this package for generation.
 #
 # --synthesize-sources generates hand-equivalent Hydra.Sources.Decode.* and
-# Hydra.Sources.Encode.* modules from kernel types. It only applies to
-# hydra-kernel today (the synthesis filter excludes coder-package types,
-# and non-kernel domain packages don't have synth coverage yet).
+# Hydra.Sources.Encode.* modules from type definitions. The synthesis filter
+# picks up kernel type modules and the two hydra-pg type modules
+# (hydra.pg.model, hydra.pg.mapping). hydra-pg's assembler passes the flag so
+# its own source wrappers land in dist/haskell/hydra-pg/.
 SYNTH_FLAG=""
-if [ "$PACKAGE" = "hydra-kernel" ]; then
-    SYNTH_FLAG="--synthesize-sources"
-fi
+case "$PACKAGE" in
+    hydra-kernel|hydra-pg)
+        SYNTH_FLAG="--synthesize-sources"
+        ;;
+esac
 
 echo "Step 1: Generating main Haskell modules..."
 "$SCRIPT_DIR/transform-json-to-haskell.sh" "$PACKAGE" main \

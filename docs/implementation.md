@@ -1461,9 +1461,8 @@ Shell script wrappers live in `heads/haskell/bin/`. Executables without shell wr
 
 | Script / Executable | Purpose |
 |---------------------|---------|
-| `bin/sync-ext.sh` | **Ext sync script.** Regenerate ext Haskell modules. |
 | `bin/sync-haskell.sh` | **Haskell sync script (from JSON).** Regenerate Haskell test files from JSON. Supports `--quick`. |
 | `bin/sync-java.sh` | **Main Java sync script.** Regenerate all Java artifacts, compile, and optionally run tests. Supports `--quick`. |
 | `bin/sync-python.sh` | **Main Python sync script.** Regenerate all Python artifacts and optionally run tests. Supports `--quick`. |
-| `update-haskell-ext-main` | Regenerate ext Haskell gen-main modules (executable only, called by `sync-ext.sh`) |
+| `bin/assemble-distribution.sh <pkg>` | **Layer 2 assembler.** Produce the Haskell distribution for one package via the JSON pipeline (replaces the retired `update-haskell-ext-main` and `update-ext-sources` execs / `sync-ext.sh` script). |
 | `bootstrap-from-json` | Bootstrap Hydra implementations from per-package JSON module exports (executable only, called by all sync scripts) |

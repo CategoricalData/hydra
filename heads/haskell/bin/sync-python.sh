@@ -9,7 +9,7 @@ set -euo pipefail
 #   3. Generation tests (from Haskell DSL)
 #
 # Prerequisites:
-#   - JSON modules must be up to date (run sync-haskell.sh and sync-ext.sh first)
+#   - JSON modules must be up to date (run sync-haskell.sh first)
 #   - Run from the hydra-ext directory
 #
 # Usage:
