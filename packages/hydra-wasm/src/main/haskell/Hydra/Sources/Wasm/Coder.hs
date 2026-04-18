@@ -1305,9 +1305,14 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "syntheticCount" <~ Logic.ifElse (Equality.gt (var "typeParamCount") (var "lambdaParamCount"))
       (Math.sub (var "typeParamCount") (var "lambdaParamCount"))
       (int32 0) $
-    "syntheticParamNames" <~ Lists.map
-      (lambda "i" $ Strings.cat2 (string "arg_synth_") (Literals.showInt32 (var "i")))
-      (Math.range (int32 0) (var "syntheticCount")) $
+    -- Note: Math.range is INCLUSIVE of its upper bound (range 0 n = [0..n]),
+    -- so we map over [0 .. n-1] only when n > 0. When n == 0 we want the
+    -- empty list, not [0].
+    "syntheticParamNames" <~ Logic.ifElse (Equality.gt (var "syntheticCount") (int32 0))
+      (Lists.map
+        (lambda "i" $ Strings.cat2 (string "arg_synth_") (Literals.showInt32 (var "i")))
+        (Math.range (int32 0) (Math.sub (var "syntheticCount") (int32 1))))
+      (list ([] :: [TTerm String])) $
     "paramNameStrs" <~ Lists.concat2 (var "lambdaParamNameStrs") (var "syntheticParamNames") $
     "wasmParams" <~ Lists.map
       (lambda "pn" $ record W._Param [
