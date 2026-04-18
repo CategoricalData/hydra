@@ -1,0 +1,5 @@
+{
+  "name": "hydra-wasm-node-harness",
+  "private": true,
+  "type": "module"
+}
