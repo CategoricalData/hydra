@@ -13,7 +13,7 @@ import Hydra.Sources.Ext (
   mainModules, dslSourceModules, kernelModules, haskellModules, jsonModules, otherModules,
   hydraCoqModules, hydraJavaModules, hydraJavaScriptModules,
   hydraPythonModules, hydraScalaModules, hydraLispModules,
-  hydraPgModules, hydraRdfModules,
+  hydraPgModules, hydraRdfModules, hydraWasmModules,
   hydraExtPackageModules,
   hydraExtDecodingModules, hydraExtEncodingModules)
 import Hydra.Sources.Eval.Lib.All (evalLibModules)
@@ -55,6 +55,7 @@ main = do
         , hydraLispModules
         , hydraPgModules
         , hydraRdfModules
+        , hydraWasmModules
         , hydraExtPackageModules
         , hydraExtDecodingModules
         , hydraExtEncodingModules

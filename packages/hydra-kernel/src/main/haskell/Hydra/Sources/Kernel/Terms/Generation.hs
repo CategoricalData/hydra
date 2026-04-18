@@ -113,6 +113,7 @@ module_ = Module ns definitions
       toDefinition refreshModule,
       toDefinition inferModules,
       toDefinition inferModulesGiven,
+      toDefinition inferModulesImpl,
       toDefinition generateCoderModules,
       toDefinition inferAndGenerateLexicon,
       toDefinition escapeControlCharsInJson,
@@ -482,43 +483,59 @@ refreshModule = define "refreshModule" $
       (Packaging.moduleDescription $ var "m"))
 
 -- | Perform type inference on a set of modules and reconstruct the target modules
--- with inferred types. Type-only modules (containing only native type definitions)
--- are passed through unchanged.
+-- with inferred types.
+--
+-- Universe bindings that already carry a TypeScheme are treated as external
+-- (resolved via the graph's boundTypes, which modulesToGraph seeds from
+-- pre-attached schemes). Only untyped bindings are fed to inferGraphTypes.
+-- References from untyped bindings to pre-typed ones get correctly-sized
+-- TypeApplication wrappers via inferTypeOfVariable's graphBoundTypes path;
+-- references among pre-typed bindings are kept verbatim from the cached term.
+--
+-- When no universe binding carries a scheme (the historical full-inference
+-- case), this reduces to re-inferring every binding, matching the pre-#247
+-- behavior. When all target bindings are pre-typed (warm cache), the
+-- inference pass receives no bindings and the targets are reconstructed
+-- directly from their cached schemes.
 inferModules :: TTermDefinition (Context -> Graph -> [Module] -> [Module] -> Prelude.Either Error [Module])
 inferModules = define "inferModules" $
   doc "Perform type inference on modules and reconstruct with inferred types" $
   "cx" ~> "bsGraph" ~> "universeMods" ~> "targetMods" ~>
-  "g0" <~ modulesToGraph @@ var "bsGraph" @@ var "universeMods" @@ var "universeMods" $
-  "dataElements" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m")) (var "universeMods")) $
-  "inferResultWithCx" <<~ Inference.inferGraphTypes @@ var "cx" @@ var "dataElements" @@ var "g0" $
-  "inferResult" <~ Pairs.first (var "inferResultWithCx") $
-  "inferredElements" <~ Pairs.second (var "inferResult") $
-  right $ Lists.map (refreshModule @@ var "inferredElements") (var "targetMods")
+  inferModulesImpl @@ var "cx" @@ var "bsGraph" @@ var "universeMods" @@ var "targetMods"
 
--- | Incrementally infer types for target modules, using the universe as a seeded inference context.
--- Type schemes already present on universe term bindings (e.g. loaded from a prior inference run)
--- are installed in the graph's boundTypes via modulesToGraph, providing a typed context for the
--- inference pass. All universe bindings (not just targets) are fed to inferGraphTypes so that the
--- let-inference machinery (Phase 6/7 of inferTypeOfLetNormalized) produces consistent TypeApplication
--- wrappers for cross-module references. Only the target modules' bindings are extracted from the
--- result via refreshModule.
---
--- Note: the current implementation re-infers all universe bindings, so there is no per-binding
--- speedup over inferModules. The intended optimization path is for the calling layer to skip
--- inference entirely when the universe hasn't changed (the "all clean" fast path in the digest
--- cache) and to call this function only when some modules are stale. A future version may avoid
--- re-inferring clean bindings whose pre-attached schemes are known-correct, but that requires
--- changes to inferGraphTypes' Phase 6 term-substitution mechanism.
+-- | Alias for 'inferModules' retained for API stability. The two functions
+-- share the same implementation — the partition into pre-typed and untyped
+-- bindings gives incremental behavior for free whenever pre-typed bindings
+-- are present in the universe.
 inferModulesGiven :: TTermDefinition (Context -> Graph -> [Module] -> [Module] -> Prelude.Either Error [Module])
 inferModulesGiven = define "inferModulesGiven" $
   doc "Infer types for target modules in the context of a typed universe" $
   "cx" ~> "bsGraph" ~> "universeMods" ~> "targetMods" ~>
+  inferModulesImpl @@ var "cx" @@ var "bsGraph" @@ var "universeMods" @@ var "targetMods"
+
+-- | Shared implementation of 'inferModules' and 'inferModulesGiven'.
+-- Partitions universe bindings into those that already carry a TypeScheme
+-- (treated as external; their schemes are available through graphBoundTypes
+-- as installed by modulesToGraph) and those without (fed to inferGraphTypes).
+-- Target modules are refreshed from the union of newly-inferred bindings
+-- and universe bindings whose schemes were preserved.
+inferModulesImpl :: TTermDefinition (Context -> Graph -> [Module] -> [Module] -> Prelude.Either Error [Module])
+inferModulesImpl = define "inferModulesImpl" $
+  doc "Partition universe bindings into pre-typed and untyped; infer the untyped set" $
+  "cx" ~> "bsGraph" ~> "universeMods" ~> "targetMods" ~>
   "g0" <~ modulesToGraph @@ var "bsGraph" @@ var "universeMods" @@ var "universeMods" $
-  "dataElements" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m")) (var "universeMods")) $
-  "inferResultWithCx" <<~ Inference.inferGraphTypes @@ var "cx" @@ var "dataElements" @@ var "g0" $
+  "allElements" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m")) (var "universeMods")) $
+  "untypedElements" <~ Lists.filter
+    ("b" ~> Maybes.isNothing (Core.bindingType (var "b")))
+    (var "allElements") $
+  "typedElements" <~ Lists.filter
+    ("b" ~> Maybes.isJust (Core.bindingType (var "b")))
+    (var "allElements") $
+  "inferResultWithCx" <<~ Inference.inferGraphTypes @@ var "cx" @@ var "untypedElements" @@ var "g0" $
   "inferResult" <~ Pairs.first (var "inferResultWithCx") $
-  "inferredElements" <~ Pairs.second (var "inferResult") $
-  right $ Lists.map (refreshModule @@ var "inferredElements") (var "targetMods")
+  "newlyInferredElements" <~ Pairs.second (var "inferResult") $
+  "allInferredElements" <~ Lists.concat2 (var "newlyInferredElements") (var "typedElements") $
+  right $ Lists.map (refreshModule @@ var "allInferredElements") (var "targetMods")
 
 -- | Generate encoder or decoder modules for a list of type modules.
 -- Takes a codec function, bootstrap graph, universe modules, and type modules.
@@ -555,8 +572,11 @@ inferAndGenerateLexicon = define "inferAndGenerateLexicon" $
   doc "Perform type inference and generate the lexicon for a set of modules" $
   "cx" ~> "bsGraph" ~> "kernelModules" ~>
   "g0" <~ modulesToGraph @@ var "bsGraph" @@ var "kernelModules" @@ var "kernelModules" $
-  "dataElements" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m")) (var "kernelModules")) $
-  "inferResultWithCx" <<~ Inference.inferGraphTypes @@ var "cx" @@ var "dataElements" @@ var "g0" $
+  "allElements" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m")) (var "kernelModules")) $
+  "untypedElements" <~ Lists.filter
+    ("b" ~> Maybes.isNothing (Core.bindingType (var "b")))
+    (var "allElements") $
+  "inferResultWithCx" <<~ Inference.inferGraphTypes @@ var "cx" @@ var "untypedElements" @@ var "g0" $
   "g1" <~ Pairs.first (Pairs.first $ var "inferResultWithCx") $
   generateLexicon @@ var "g1"
 

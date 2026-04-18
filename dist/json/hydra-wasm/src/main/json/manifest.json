@@ -1,0 +1,10 @@
+{
+  "dslModules": [],
+  "evalLibModules": [],
+  "mainModules": [
+    "hydra.wasm.coder",
+    "hydra.wasm.language",
+    "hydra.wasm.serde",
+    "hydra.wasm.syntax"],
+  "package": "hydra-wasm",
+  "testModules": []}
