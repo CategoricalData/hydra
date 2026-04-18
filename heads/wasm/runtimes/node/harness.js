@@ -36,6 +36,26 @@ export async function instantiate(wasmBytes, imports = {}) {
   return instance;
 }
 
+// Instantiate with automatic stubs for any import not in `imports`.
+// Reflects over the module's declared imports and fills missing ones with
+// functions returning 0. Used by surveys that want to load many kernel
+// modules without hand-providing every transitive dependency.
+// `onStub(modName, fnName)` is called once per stub created, for logging.
+export async function instantiateWithStubs(wasmBytes, imports = {}, onStub = null) {
+  const module = await WebAssembly.compile(wasmBytes);
+  const filled = { ...imports };
+  for (const imp of WebAssembly.Module.imports(module)) {
+    if (!filled[imp.module]) filled[imp.module] = {};
+    if (filled[imp.module][imp.name] === undefined) {
+      if (onStub) onStub(imp.module, imp.name);
+      if (imp.kind === "function") {
+        filled[imp.module][imp.name] = () => 0;
+      }
+    }
+  }
+  return WebAssembly.instantiate(module, filled);
+}
+
 // -----------------------------------------------------------------------
 // Kernel value decoding
 // -----------------------------------------------------------------------
