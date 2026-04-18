@@ -184,12 +184,33 @@ encodeApplication cx g stringOffsets fieldOffsets variantIndexes funcSigs term =
           Core.TermVariable v0 ->
             let rawName = Core.unName v0
                 lname = Formatting.convertCaseCamelToLowerSnake rawName
-            in (Logic.ifElse (Lists.null (Maybes.fromMaybe [] (Lists.maybeTail (Strings.splitOn "." rawName)))) (Right (Lists.concat [
-              droppedArgInstrs,
-              [
-                Syntax.InstructionLocalGet lname,
-                Syntax.InstructionDrop,
-                (Syntax.InstructionConst (Syntax.ConstValueI32 0))]])) (
+            in (Logic.ifElse (Lists.null (Maybes.fromMaybe [] (Lists.maybeTail (Strings.splitOn "." rawName)))) (
+              let mFirstArg = Lists.maybeHead args
+                  firstArgInstrs =
+                        Maybes.cases mFirstArg
+                          [Syntax.InstructionConst (Syntax.ConstValueI32 0)]
+                          (\_ -> Maybes.fromMaybe [] (Lists.maybeHead realArgInstrs))
+                  extraArgDropInstrs =
+                        Lists.concat (Lists.map (\ai -> Lists.concat2 ai [Syntax.InstructionDrop])
+                          (Lists.drop 1 realArgInstrs))
+                  memArg0 = Syntax.MemArg { Syntax.memArgOffset = 0, Syntax.memArgAlign = 2 }
+                  memArg4 = Syntax.MemArg { Syntax.memArgOffset = 4, Syntax.memArgAlign = 2 }
+                  loadEnv = [
+                        Syntax.InstructionLocalGet lname,
+                        Syntax.InstructionLoad (Syntax.MemoryInstruction {
+                          Syntax.memoryInstructionType = Syntax.ValTypeI32,
+                          Syntax.memoryInstructionMemArg = memArg4})]
+                  loadTableIdx = [
+                        Syntax.InstructionLocalGet lname,
+                        Syntax.InstructionLoad (Syntax.MemoryInstruction {
+                          Syntax.memoryInstructionType = Syntax.ValTypeI32,
+                          Syntax.memoryInstructionMemArg = memArg0})]
+                  callIndirectInstr = [
+                        Syntax.InstructionCallIndirect (Syntax.TypeUse {
+                          Syntax.typeUseIndex = (Just "__closure_1"),
+                          Syntax.typeUseParams = [],
+                          Syntax.typeUseResults = []})]
+              in Right (Lists.concat [extraArgDropInstrs, loadEnv, firstArgInstrs, loadTableIdx, callIndirectInstr])) (
               let mSig = Maps.lookup lname funcSigs
                   callerArgCount = Lists.length args
                   calleeParamCount = Maybes.maybe callerArgCount (\sig -> Lists.length (Pairs.first sig)) mSig
@@ -867,6 +888,19 @@ moduleToWasm mod defs cx g =
                     Syntax.ModuleFieldExport (Syntax.ExportDef {
                       Syntax.exportDefName = "__alloc",
                       Syntax.exportDefDesc = (Syntax.ExportDescFunc "__alloc")})
+            closureType =
+                    Syntax.ModuleFieldType (Syntax.TypeDef {
+                      Syntax.typeDefName = (Just "__closure_1"),
+                      Syntax.typeDefType = Syntax.FuncType {
+                        Syntax.funcTypeParams = [Syntax.ValTypeI32, Syntax.ValTypeI32],
+                        Syntax.funcTypeResults = [Syntax.ValTypeI32]}})
+            closureTable =
+                    Syntax.ModuleFieldTable (Syntax.TableDef {
+                      Syntax.tableDefName = (Just "__closure_table"),
+                      Syntax.tableDefRefType = Syntax.RefTypeFuncref,
+                      Syntax.tableDefLimits = Syntax.Limits {
+                        Syntax.limitsMin = 0,
+                        Syntax.limitsMax = Nothing}})
             funcExports =
                     Lists.map (\td ->
                       let ename = Formatting.convertCaseCamelToLowerSnake (Core.unName (Packaging.termDefinitionName td))
@@ -910,13 +944,15 @@ moduleToWasm mod defs cx g =
                       Syntax.moduleFields = (Lists.concat [
                         importFields,
                         [
+                          closureType,
                           memField,
                           memExport,
                           dataField,
                           bumpGlobal,
                           bumpExport,
                           allocFunc,
-                          allocExport],
+                          allocExport,
+                          closureTable],
                         funcExports,
                         allFields])}
             code = Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr wasmMod))

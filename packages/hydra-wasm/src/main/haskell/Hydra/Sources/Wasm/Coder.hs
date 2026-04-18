@@ -278,14 +278,56 @@ encodeApplication = def "encodeApplication" $
        "rawName" <~ Core.unName (var "name") $
        "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ var "rawName") $
        Logic.ifElse (Lists.null (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeTail (Strings.splitOn (string ".") (var "rawName")))))
-         -- Local variable head: the local holds a function value (closure / funcref).
-         -- No real call possible without closures; drop args and return a placeholder.
-         (right (Lists.concat (list [
-           var "droppedArgInstrs",
-           list [inject W._Instruction W._Instruction_localGet (var "lname"),
-                 inject W._Instruction W._Instruction_drop unit,
-                 inject W._Instruction W._Instruction_const $
-                   inject W._ConstValue W._ConstValue_i32 (int32 0)]])))
+         -- Local variable head: the local holds a closure value — a pointer into
+         -- linear memory to an 8-byte record {table_idx:i32 at 0, env:i32 at 4}.
+         -- Dispatch by loading env + table_idx, pushing env + (first) real arg,
+         -- then call_indirect through $__closure_table using the $__closure_1
+         -- signature. The closure callee is (env:i32, arg:i32) -> i32.
+         --
+         -- Multi-arg closures are not yet supported (M4b is single-arg). If the
+         -- call site provides zero args, push a placeholder i32.const 0 as the
+         -- arg; if it provides more than one, drop the extras after the first.
+         -- Table index 0 is reserved for unlifted / placeholder closures; calling
+         -- through it will trap at runtime, which is distinguishable from a
+         -- correctly-constructed closure dispatch.
+         ("mFirstArg" <~ Lists.maybeHead (var "args") $
+          "firstArgInstrs" <~ Maybes.cases (var "mFirstArg")
+            -- Zero-arg closure call: push placeholder. Real zero-arg closures
+            -- need a separate signature (to come).
+            (list [inject W._Instruction W._Instruction_const $
+              inject W._ConstValue W._ConstValue_i32 (int32 0)])
+            (lambda "_a" $ Maybes.fromMaybe (list ([] :: [TTerm W.Instruction])) (Lists.maybeHead (var "realArgInstrs"))) $
+          -- Drop extra args beyond the first (M4b: single-arg closures only).
+          "extraArgDropInstrs" <~ Lists.concat (Lists.map
+            (lambda "ai" $ Lists.concat2 (var "ai")
+              (list [inject W._Instruction W._Instruction_drop unit]))
+            (Lists.drop (int32 1) (var "realArgInstrs"))) $
+          right (Lists.concat (list [
+            var "extraArgDropInstrs",
+            -- Push env (offset 4 of the closure record)
+            list [inject W._Instruction W._Instruction_localGet (var "lname"),
+                  inject W._Instruction W._Instruction_load $
+                    record W._MemoryInstruction [
+                      W._MemoryInstruction_type>>: inject W._ValType W._ValType_i32 unit,
+                      W._MemoryInstruction_memArg>>: record W._MemArg [
+                        W._MemArg_offset>>: int32 4,
+                        W._MemArg_align>>: int32 2]]],
+            -- Push real arg (first only; others already dropped)
+            var "firstArgInstrs",
+            -- Push table index (offset 0)
+            list [inject W._Instruction W._Instruction_localGet (var "lname"),
+                  inject W._Instruction W._Instruction_load $
+                    record W._MemoryInstruction [
+                      W._MemoryInstruction_type>>: inject W._ValType W._ValType_i32 unit,
+                      W._MemoryInstruction_memArg>>: record W._MemArg [
+                        W._MemArg_offset>>: int32 0,
+                        W._MemArg_align>>: int32 2]],
+                  -- call_indirect via $__closure_1 signature
+                  inject W._Instruction W._Instruction_callIndirect $
+                    record W._TypeUse [
+                      W._TypeUse_index>>: just (string "__closure_1"),
+                      W._TypeUse_params>>: list ([] :: [TTerm W.Param]),
+                      W._TypeUse_results>>: list ([] :: [TTerm W.ValType])]]])))
          -- Cross-module or primitive call: push real args, emit call.
          -- The callee's Wasm signature has exactly `n` i32 params where `n` is the
          -- Hydra arity derived from funcSigs. If the call-site provides fewer args
@@ -1614,6 +1656,27 @@ moduleToWasm = def "moduleToWasm" $
       record W._ExportDef [
         W._ExportDef_name>>: string "__alloc",
         W._ExportDef_desc>>: inject W._ExportDesc W._ExportDesc_func (string "__alloc")]) $
+    -- Closure infrastructure (M4b): one type signature for 1-arg closures plus an
+    -- empty function table. Later milestones grow the table as lambdas get lifted
+    -- into it; closures carry a stable table index that call_indirect dispatches on.
+    -- Signature is uniform `(env:i32, arg:i32) -> i32`; multi-arg closures are
+    -- future work (additional signatures, one per arity).
+    "closureType" <~ (inject W._ModuleField W._ModuleField_type $
+      record W._TypeDef [
+        W._TypeDef_name>>: just (string "__closure_1"),
+        W._TypeDef_type>>: record W._FuncType [
+          W._FuncType_params>>: list [
+            inject W._ValType W._ValType_i32 unit,
+            inject W._ValType W._ValType_i32 unit],
+          W._FuncType_results>>: list [
+            inject W._ValType W._ValType_i32 unit]]]) $
+    "closureTable" <~ (inject W._ModuleField W._ModuleField_table $
+      record W._TableDef [
+        W._TableDef_name>>: just (string "__closure_table"),
+        W._TableDef_refType>>: inject W._RefType W._RefType_funcref unit,
+        W._TableDef_limits>>: record W._Limits [
+          W._Limits_min>>: int32 0,
+          W._Limits_max>>: nothing]]) $
     -- Build function exports for each term definition
     "funcExports" <~ Lists.map
       (lambda "td" $
@@ -1671,9 +1734,9 @@ moduleToWasm = def "moduleToWasm" $
       W._Module_name>>: nothing,
       W._Module_fields>>: Lists.concat (list [
         var "importFields",
-        list [var "memField", var "memExport", var "dataField",
+        list [var "closureType", var "memField", var "memExport", var "dataField",
               var "bumpGlobal", var "bumpExport", var "allocFunc",
-              var "allocExport"],
+              var "allocExport", var "closureTable"],
         var "funcExports",
         var "allFields"])]) $
     "code" <~ (SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (WasmSerdeSource.moduleToExpr @@ var "wasmMod"))) $
