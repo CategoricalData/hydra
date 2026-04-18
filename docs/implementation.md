@@ -1190,6 +1190,23 @@ ensures the Haskell compiler picks up the newly generated source files.
 For detailed context on encoder/decoder modules, see
 [Issue #47: Per-Type Term Coders](https://github.com/CategoricalData/hydra/blob/main/docs/work/issues/issue-47-per-type-term-coders.md).
 
+### Incremental inference
+
+`inferModulesGiven` (in `Hydra.Codegen`) takes a universe and a target set
+and re-infers only the relevant subset. Bindings in the target modules or
+in the transitive term-dependency closure that lack a pre-attached
+`TypeScheme` are fed to `inferGraphTypes`; clean non-target bindings are
+left untouched, and their cached schemes are consulted during inference
+via `graphBoundTypes`. Equivalent to `inferModules` when nothing in the
+universe carries a scheme, which is today's default path.
+
+A content-hash cache (`Hydra.Digest`) sits on top: `writeModulesJson`
+computes SHA-256 hashes of kernel DSL source files and short-circuits
+inference and writes entirely if every hash matches the stored digest and
+every target JSON file exists. Digest files are checked in at
+`dist/json/<pkg>/src/<main|test>/digest.json` and
+`dist/json/digest.main.json`. See [issue #247](https://github.com/CategoricalData/hydra/issues/247).
+
 ### The bootstrap challenge
 
 ```
