@@ -552,9 +552,20 @@ main = do
           exists <- SD.doesFileExist fullPath
           CM.when exists $ SD.removeFile fullPath
 
+  -- Only expand to transitive deps + prune when the caller scoped to a
+  -- single package via --package. In that mode the transitive closure
+  -- is needed for generateSourceFiles's internal schemaMods walk, and
+  -- we prune the stray output files afterward.
+  -- When --package is NOT set, the caller gave us the exact set to
+  -- generate; expansion + prune would add stray output in the wrong
+  -- paths (prune uses Haskell conventions and can't clean up Java/etc.).
+  let useExpansion = case optPackage opts of
+        Just _  -> True
+        Nothing -> False
+
   let genForDir :: FilePath -> [Module] -> IO Int
       genForDir dir mods =
-        let expanded = expandForSchemaContext mods
+        let modsForGen = if useExpansion then expandForSchemaContext mods else mods
             gen ms = case target of
               "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False dir allModsFinal' ms
               "java"    -> generateSources moduleToJava    javaLanguage    False True False True   dir allModsFinal' ms
@@ -566,22 +577,21 @@ main = do
                 putStrLn $ "Unknown target: " ++ target
                 exitFailure
         in do
-          _ <- gen expanded
-          -- If expansion added modules beyond the requested set, remove
-          -- their output files from this dir; they belong to other
-          -- packages and were only generated to satisfy schema context.
-          pruneExtraFiles dir mods expanded
-          -- Count actual files remaining under dir.
-          countFiles dir ("." ++ case target of
-            "haskell" -> "hs"
-            "java" -> "java"
-            "python" -> "py"
-            "scala" -> "scala"
-            "clojure" -> "clj"
-            "scheme" -> "scm"
-            "common-lisp" -> "lisp"
-            "emacs-lisp" -> "el"
-            _ -> "")
+          count <- gen modsForGen
+          if useExpansion
+            then do
+              pruneExtraFiles dir mods modsForGen
+              countFiles dir ("." ++ case target of
+                "haskell" -> "hs"
+                "java" -> "java"
+                "python" -> "py"
+                "scala" -> "scala"
+                "clojure" -> "clj"
+                "scheme" -> "scm"
+                "common-lisp" -> "lisp"
+                "emacs-lisp" -> "el"
+                _ -> "")
+            else return count
 
   mainFileCount <- if optPackageSplit opts
     then do
