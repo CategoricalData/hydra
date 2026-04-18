@@ -22,9 +22,7 @@
 --   --kernel-only          Only generate kernel modules (exclude ext coder modules)
 --   --types-only           Only generate type-defining modules
 --   --ext-only             Only generate hydraExtDemoModules from ext manifest
---   --ext-java-only        Legacy alias for --ext-only
---   --json-dir <dir>       Override kernel JSON directory
---   --ext-json-dir <dir>   Override ext JSON directory (for --include-coders)
+--   --dist-json-root <dir> Override JSON root directory
 
 {-# LANGUAGE ScopedTypeVariables #-}
 module Main where
@@ -94,7 +92,6 @@ data Options = Options
   , optIncludeDsls        :: Bool
   , optIncludeExt         :: Bool
   , optIncludeTests       :: Bool
-  , optIncludeGenTests    :: Bool  -- deprecated; ignored
   , optKernelOnly         :: Bool
   , optTypesOnly          :: Bool
   , optExtOnly            :: Bool
@@ -111,7 +108,6 @@ defaultOptions = Options
   , optIncludeDsls        = False
   , optIncludeExt         = False
   , optIncludeTests       = False
-  , optIncludeGenTests    = False
   , optKernelOnly         = False
   , optTypesOnly          = False
   , optExtOnly            = False
@@ -119,16 +115,6 @@ defaultOptions = Options
   , optDistJsonRoot       = Nothing
   , optPackage            = Nothing
   }
-
--- | Map a legacy --json-dir value (e.g. "../../dist/json/hydra-kernel/src/main/json")
--- to a dist-json root (e.g. "../../dist/json"). If the path does not match
--- the expected shape, returned unchanged.
-legacyJsonDirToRoot :: FilePath -> FilePath
-legacyJsonDirToRoot d =
-    let parts = FP.splitDirectories d
-    in case reverse parts of
-      ("json" : "main" : "src" : _pkg : rest) -> FP.joinPath (reverse rest)
-      _                                        -> d
 
 parseArgs :: [String] -> Either String Options
 parseArgs = go defaultOptions
@@ -142,15 +128,11 @@ parseArgs = go defaultOptions
     go opts ("--include-dsls" : rest) = go (opts { optIncludeDsls = True }) rest
     go opts ("--include-ext" : rest) = go (opts { optIncludeExt = True }) rest
     go opts ("--include-tests" : rest) = go (opts { optIncludeTests = True }) rest
-    go opts ("--include-gentests" : rest) = go (opts { optIncludeGenTests = True }) rest
     go opts ("--kernel-only" : rest) = go (opts { optKernelOnly = True }) rest
     go opts ("--types-only" : rest) = go (opts { optTypesOnly = True }) rest
     go opts ("--ext-only" : rest) = go (opts { optExtOnly = True }) rest
-    go opts ("--ext-java-only" : rest) = go (opts { optExtOnly = True }) rest  -- legacy alias
     go opts ("--synthesize-sources" : rest) = go (opts { optSynthesizeSources = True }) rest
     go opts ("--dist-json-root" : d : rest) = go (opts { optDistJsonRoot = Just d }) rest
-    go opts ("--json-dir" : d : rest) = go (opts { optDistJsonRoot = Just (legacyJsonDirToRoot d) }) rest  -- legacy alias; strips trailing "<pkg>/src/main/json" if present
-    go opts ("--ext-json-dir" : _ : rest) = go opts rest  -- legacy flag, ignored under per-package split
     go opts ("--package" : p : rest) = go (opts { optPackage = Just p }) rest
     go _ (arg : _) = Left $ "Unknown argument: " ++ arg
 
@@ -165,11 +147,9 @@ usage = unlines
   , "  --include-ext            Also load long-tail ext packages (hydra-coq,"
   , "                           hydra-javascript, hydra-ext)"
   , "  --include-tests          Also generate kernel test modules"
-  , "  --include-gentests       (deprecated, ignored)"
   , "  --kernel-only            Only generate kernel modules (exclude coder packages)"
   , "  --types-only             Only generate type-defining modules"
   , "  --ext-only               Only generate ext demo modules from hydra-pg / hydra-rdf"
-  , "  --ext-java-only          Legacy alias for --ext-only"
   , "  --synthesize-sources     Also synthesize decoder/encoder DSL source modules"
   , "                           (Hydra.Sources.Decode.*, Hydra.Sources.Encode.*) from"
   , "                           the loaded kernel type modules."
@@ -177,8 +157,6 @@ usage = unlines
   , "                           ../../dist/json). The tool walks"
   , "                           <root>/<package>/src/main/json/ for each package it"
   , "                           needs to load, in dependency order."
-  , "  --json-dir <dir>         Legacy alias for --dist-json-root."
-  , "  --ext-json-dir <dir>     Legacy flag; ignored under per-package layout."
   , "  --package <pkg>          Narrow generation to modules owned by <pkg>."
   , "                           The full universe is still loaded so cross-"
   , "                           package type references resolve."
@@ -268,7 +246,6 @@ main = do
   putStrLn $ "  Include DSLs:      " ++ show (optIncludeDsls opts)
   putStrLn $ "  Include ext:       " ++ show (optIncludeExt opts)
   putStrLn $ "  Include tests:     " ++ show (optIncludeTests opts)
-  putStrLn $ "  Include gen tests: " ++ show (optIncludeGenTests opts)
   putStrLn ""
 
   -- Load a single package's mainModules + evalLibModules from its per-package
@@ -426,9 +403,9 @@ main = do
       return inferred
     else return []
 
-  -- When --ext-only (or legacy --ext-java-only) is used, load the ext demo
-  -- packages (hydra-pg, hydra-rdf) and generate only those, using allMainMods
-  -- plus the loaded ext demo modules as the universe for type resolution.
+  -- When --ext-only is used, load the ext demo packages (hydra-pg, hydra-rdf)
+  -- and generate only those, using allMainMods plus the loaded ext demo
+  -- modules as the universe for type resolution.
   (modsToGenerate, allModsFinal) <- if optExtOnly opts
     then do
       putStrLn "Loading ext demo packages from JSON..."
