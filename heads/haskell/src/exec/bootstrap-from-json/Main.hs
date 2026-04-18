@@ -145,7 +145,7 @@ usage = unlines
   , "  --include-coders         Also load coder packages (hydra-java/python/scala/lisp)"
   , "  --include-dsls           Also load DSL wrapper modules"
   , "  --include-ext            Also load long-tail ext packages (hydra-coq,"
-  , "                           hydra-javascript, hydra-ext)"
+  , "                           hydra-javascript, hydra-ext, hydra-wasm)"
   , "  --include-tests          Also generate kernel test modules"
   , "  --kernel-only            Only generate kernel modules (exclude coder packages)"
   , "  --types-only             Only generate type-defining modules"
@@ -223,7 +223,7 @@ main = do
   -- Long-tail ext packages are loaded with --include-ext.
   let coderPackages   = ["hydra-java", "hydra-python", "hydra-scala", "hydra-lisp"]
   let extDemoPackages = ["hydra-pg", "hydra-rdf"]
-  let extPackages     = ["hydra-coq", "hydra-javascript", "hydra-ext"]
+  let extPackages     = ["hydra-coq", "hydra-javascript", "hydra-ext", "hydra-wasm"]
 
   let targetCap = case target of
         "haskell"     -> "Haskell"

@@ -187,30 +187,32 @@ encodeApplication cx g stringOffsets fieldOffsets variantIndexes funcSigs term =
             in (Logic.ifElse (Lists.null (Maybes.fromMaybe [] (Lists.maybeTail (Strings.splitOn "." rawName)))) (
               let mFirstArg = Lists.maybeHead args
                   firstArgInstrs =
-                        Maybes.cases mFirstArg
-                          [Syntax.InstructionConst (Syntax.ConstValueI32 0)]
-                          (\_ -> Maybes.fromMaybe [] (Lists.maybeHead realArgInstrs))
+                          Maybes.cases mFirstArg [
+                            Syntax.InstructionConst (Syntax.ConstValueI32 0)] (\_a -> Maybes.fromMaybe [] (Lists.maybeHead realArgInstrs))
                   extraArgDropInstrs =
-                        Lists.concat (Lists.map (\ai -> Lists.concat2 ai [Syntax.InstructionDrop])
-                          (Lists.drop 1 realArgInstrs))
-                  memArg0 = Syntax.MemArg { Syntax.memArgOffset = 0, Syntax.memArgAlign = 2 }
-                  memArg4 = Syntax.MemArg { Syntax.memArgOffset = 4, Syntax.memArgAlign = 2 }
-                  loadEnv = [
-                        Syntax.InstructionLocalGet lname,
-                        Syntax.InstructionLoad (Syntax.MemoryInstruction {
-                          Syntax.memoryInstructionType = Syntax.ValTypeI32,
-                          Syntax.memoryInstructionMemArg = memArg4})]
-                  loadTableIdx = [
-                        Syntax.InstructionLocalGet lname,
-                        Syntax.InstructionLoad (Syntax.MemoryInstruction {
-                          Syntax.memoryInstructionType = Syntax.ValTypeI32,
-                          Syntax.memoryInstructionMemArg = memArg0})]
-                  callIndirectInstr = [
-                        Syntax.InstructionCallIndirect (Syntax.TypeUse {
-                          Syntax.typeUseIndex = (Just "__closure_1"),
-                          Syntax.typeUseParams = [],
-                          Syntax.typeUseResults = []})]
-              in Right (Lists.concat [extraArgDropInstrs, loadEnv, firstArgInstrs, loadTableIdx, callIndirectInstr])) (
+                          Lists.concat (Lists.map (\ai -> Lists.concat2 ai [
+                            Syntax.InstructionDrop]) (Lists.drop 1 realArgInstrs))
+              in (Right (Lists.concat [
+                extraArgDropInstrs,
+                [
+                  Syntax.InstructionLocalGet lname,
+                  (Syntax.InstructionLoad (Syntax.MemoryInstruction {
+                    Syntax.memoryInstructionType = Syntax.ValTypeI32,
+                    Syntax.memoryInstructionMemArg = Syntax.MemArg {
+                      Syntax.memArgOffset = 4,
+                      Syntax.memArgAlign = 2}}))],
+                firstArgInstrs,
+                [
+                  Syntax.InstructionLocalGet lname,
+                  (Syntax.InstructionLoad (Syntax.MemoryInstruction {
+                    Syntax.memoryInstructionType = Syntax.ValTypeI32,
+                    Syntax.memoryInstructionMemArg = Syntax.MemArg {
+                      Syntax.memArgOffset = 0,
+                      Syntax.memArgAlign = 2}})),
+                  (Syntax.InstructionCallIndirect (Syntax.TypeUse {
+                    Syntax.typeUseIndex = (Just "__closure_1"),
+                    Syntax.typeUseParams = [],
+                    Syntax.typeUseResults = []}))]]))) (
               let mSig = Maps.lookup lname funcSigs
                   callerArgCount = Lists.length args
                   calleeParamCount = Maybes.maybe callerArgCount (\sig -> Lists.length (Pairs.first sig)) mSig
@@ -232,17 +234,18 @@ encodeApplication cx g stringOffsets fieldOffsets variantIndexes funcSigs term =
                 paramNames = Pairs.first peeled
                 innerBody = Pairs.second peeled
                 bindInstrs =
-                      Lists.concat (Lists.map (\np ->
-                        let pname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Pairs.first np))
-                            argInstrs = Pairs.second np
-                        in Lists.concat2 argInstrs [Syntax.InstructionLocalSet pname])
-                        (Lists.zip paramNames realArgInstrs))
+                        Lists.concat (Lists.map (\np ->
+                          let pname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Pairs.first np))
+                              argInstrs = Pairs.second np
+                          in (Lists.concat2 argInstrs [
+                            Syntax.InstructionLocalSet pname])) (Lists.zip paramNames realArgInstrs))
                 extraArgInstrs =
-                      Lists.concat (Lists.map (\ai ->
-                        Lists.concat2 ai [Syntax.InstructionDrop])
-                        (Lists.drop (Lists.length paramNames) realArgInstrs))
-            in Eithers.bind (encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs innerBody) (\bodyInstrs ->
-              Right (Lists.concat [bindInstrs, extraArgInstrs, bodyInstrs]))
+                        Lists.concat (Lists.map (\ai -> Lists.concat2 ai [
+                          Syntax.InstructionDrop]) (Lists.drop (Lists.length paramNames) realArgInstrs))
+            in (Eithers.bind (encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs innerBody) (\bodyInstrs -> Right (Lists.concat [
+              bindInstrs,
+              extraArgInstrs,
+              bodyInstrs])))
           _ -> Eithers.bind (encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs fun) (\funInstrs -> Right (Lists.concat [
             droppedArgInstrs,
             funInstrs,
@@ -284,50 +287,44 @@ encodeCases cx g stringOffsets fieldOffsets variantIndexes funcSigs cs scrutinee
           Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))) (\armBody -> Right (cfname, armBody)))) caseFields) (\explicitArms ->
         let defaultArmLabel = "_default"
             mDefault = Core.caseStatementDefault cs
-        in (Eithers.bind
-          (Maybes.cases mDefault
-            (Right [Syntax.InstructionConst (Syntax.ConstValueI32 0)])
-            (\defTerm -> encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs defTerm))
-          (\defaultArmBody ->
-        let arms = Lists.concat2 explicitArms [(defaultArmLabel, defaultArmBody)]
-            explicitLabelForName fname =
-              Maybes.fromMaybe defaultArmLabel
-                (Maybes.map Pairs.first
-                  (Lists.find (\arm -> Equality.equal (Pairs.first arm) fname) explicitArms))
-            typeName = Core.caseStatementTypeName cs
-            mUnionVariants = Maps.lookup typeName variantIndexes
-            brTableLabels =
-              Maybes.cases mUnionVariants
-                (Lists.map Pairs.first explicitArms)
-                (\variantPairs ->
-                  let sorted = Lists.sortOn Pairs.second variantPairs
-                  in Lists.map (\np ->
-                       let fieldName = Formatting.convertCaseCamelToLowerSnake (Core.unName (Pairs.first np))
-                       in explicitLabelForName fieldName) sorted)
-            endLabel = Strings.cat2 "end_" tname
-            innerDispatch =
-                    Lists.concat2 prologue [
-                      Syntax.InstructionBrTable (Syntax.BrTableArgs {
-                        Syntax.brTableArgsLabels = brTableLabels,
-                        Syntax.brTableArgsDefault = defaultArmLabel})]
-            dispatch =
-                    Lists.foldl (\acc -> \arm ->
-                      let label = Pairs.first arm
-                          body = Pairs.second arm
-                      in (Lists.concat [
-                        [
-                          Syntax.InstructionBlock (Syntax.BlockInstruction {
-                            Syntax.blockInstructionLabel = (Just label),
-                            Syntax.blockInstructionBlockType = Syntax.BlockTypeEmpty,
-                            Syntax.blockInstructionBody = acc})],
-                        body,
-                        [
-                          Syntax.InstructionBr endLabel]])) innerDispatch arms
-        in Right [
-          Syntax.InstructionBlock (Syntax.BlockInstruction {
-            Syntax.blockInstructionLabel = (Just endLabel),
-            Syntax.blockInstructionBlockType = (Syntax.BlockTypeValue Syntax.ValTypeI32),
-            Syntax.blockInstructionBody = dispatch})]))))
+        in (Eithers.bind (Maybes.cases mDefault (Right [
+          Syntax.InstructionConst (Syntax.ConstValueI32 0)]) (\defTerm -> encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs defTerm)) (\defaultArmBody ->
+          let arms = Lists.concat2 explicitArms [
+                (defaultArmLabel, defaultArmBody)]
+              explicitLabelForName =
+                      \fname -> Maybes.fromMaybe defaultArmLabel (Maybes.map Pairs.first (Lists.find (\arm -> Equality.equal (Pairs.first arm) fname) explicitArms))
+              typeName = Core.caseStatementTypeName cs
+              mUnionVariants = Maps.lookup typeName variantIndexes
+              brTableLabels =
+                      Maybes.cases mUnionVariants (Lists.map Pairs.first explicitArms) (\variantPairs ->
+                        let sorted = Lists.sortOn Pairs.second variantPairs
+                        in (Lists.map (\np ->
+                          let fieldName = Formatting.convertCaseCamelToLowerSnake (Core.unName (Pairs.first np))
+                          in (explicitLabelForName fieldName)) sorted))
+              endLabel = Strings.cat2 "end_" tname
+              innerDispatch =
+                      Lists.concat2 prologue [
+                        Syntax.InstructionBrTable (Syntax.BrTableArgs {
+                          Syntax.brTableArgsLabels = brTableLabels,
+                          Syntax.brTableArgsDefault = defaultArmLabel})]
+              dispatch =
+                      Lists.foldl (\acc -> \arm ->
+                        let label = Pairs.first arm
+                            body = Pairs.second arm
+                        in (Lists.concat [
+                          [
+                            Syntax.InstructionBlock (Syntax.BlockInstruction {
+                              Syntax.blockInstructionLabel = (Just label),
+                              Syntax.blockInstructionBlockType = Syntax.BlockTypeEmpty,
+                              Syntax.blockInstructionBody = acc})],
+                          body,
+                          [
+                            Syntax.InstructionBr endLabel]])) innerDispatch arms
+          in (Right [
+            Syntax.InstructionBlock (Syntax.BlockInstruction {
+              Syntax.blockInstructionLabel = (Just endLabel),
+              Syntax.blockInstructionBlockType = (Syntax.BlockTypeValue Syntax.ValTypeI32),
+              Syntax.blockInstructionBody = dispatch})])))))
 
 encodeLiteral :: Core.Literal -> Syntax.Instruction
 encodeLiteral lit =
@@ -684,16 +681,17 @@ encodeTermDefinition cx g stringOffsets fieldOffsets variantIndexes funcSigs tde
       in (Eithers.bind (extractParamTypes cx g typ) (\typeParams ->
         let typeParamCount = Lists.length typeParams
             lambdaParamCount = Lists.length lambdaParamNameStrs
-            syntheticCount = if typeParamCount > lambdaParamCount then typeParamCount - lambdaParamCount else 0
-            syntheticParamNames = Lists.map (\i -> Strings.cat2 "arg_synth_" (Literals.showInt32 i)) [0..syntheticCount - 1]
+            syntheticCount = Logic.ifElse (Equality.gt typeParamCount lambdaParamCount) (Math.sub typeParamCount lambdaParamCount) 0
+            syntheticParamNames = Logic.ifElse (Equality.gt syntheticCount 0) (Lists.map (\i -> Strings.cat2 "arg_synth_" (Literals.showInt32 i)) (Math.range 0 (Math.sub syntheticCount 1))) []
             paramNameStrs = Lists.concat2 lambdaParamNameStrs syntheticParamNames
             wasmParams =
                     Lists.map (\pn -> Syntax.Param {
                       Syntax.paramName = (Just pn),
                       Syntax.paramType = Syntax.ValTypeI32}) paramNameStrs
-            initPrologue = Lists.concat (Lists.map (\sn -> [
-                    Syntax.InstructionLocalGet sn,
-                    Syntax.InstructionDrop]) syntheticParamNames)
+            initPrologue =
+                    Lists.concat (Lists.map (\sn -> [
+                      Syntax.InstructionLocalGet sn,
+                      Syntax.InstructionDrop]) syntheticParamNames)
             resultTypes = [
                   Syntax.ValTypeI32]
             dBody = Strip.deannotateTerm innerBody
@@ -764,21 +762,6 @@ encodeValType cx g t =
         Core.TypeVoid -> Right Syntax.ValTypeI32
         Core.TypeForall v0 -> encodeValType cx g (Core.forallTypeBody v0)
         _ -> Right Syntax.ValTypeI32
-
-peelLambdaApp :: Core.Term -> [Core.Term] -> ([Core.Name], Core.Term)
-peelLambdaApp term args =
-    if Lists.null args
-      then ([], term)
-      else
-        let stripped = Strip.deannotateTerm term
-        in case stripped of
-          Core.TermLambda v0 ->
-            let paramName = Core.lambdaParameter v0
-                body = Core.lambdaBody v0
-                restArgs = Maybes.fromMaybe [] (Lists.maybeTail args)
-                inner = peelLambdaApp body restArgs
-            in (Lists.cons paramName (Pairs.first inner), Pairs.second inner)
-          _ -> ([], term)
 
 extractLambdaParams :: Core.Term -> ([Core.Name], Core.Term)
 extractLambdaParams term =
@@ -892,8 +875,11 @@ moduleToWasm mod defs cx g =
                     Syntax.ModuleFieldType (Syntax.TypeDef {
                       Syntax.typeDefName = (Just "__closure_1"),
                       Syntax.typeDefType = Syntax.FuncType {
-                        Syntax.funcTypeParams = [Syntax.ValTypeI32, Syntax.ValTypeI32],
-                        Syntax.funcTypeResults = [Syntax.ValTypeI32]}})
+                        Syntax.funcTypeParams = [
+                          Syntax.ValTypeI32,
+                          Syntax.ValTypeI32],
+                        Syntax.funcTypeResults = [
+                          Syntax.ValTypeI32]}})
             closureTable =
                     Syntax.ModuleFieldTable (Syntax.TableDef {
                       Syntax.tableDefName = (Just "__closure_table"),
@@ -959,6 +945,19 @@ moduleToWasm mod defs cx g =
             filePath =
                     Names.namespaceToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "wat") (Packaging.moduleNamespace mod)
         in (Right (Maps.singleton filePath code)))))
+
+peelLambdaApp :: Core.Term -> [t0] -> ([Core.Name], Core.Term)
+peelLambdaApp term args =
+    Logic.ifElse (Lists.null args) ([], term) (
+      let stripped = Strip.deannotateTerm term
+      in case stripped of
+        Core.TermLambda v0 ->
+          let paramName = Core.lambdaParameter v0
+              body = Core.lambdaBody v0
+              restArgs = Maybes.fromMaybe [] (Lists.maybeTail args)
+              inner = peelLambdaApp body restArgs
+          in (Lists.cons paramName (Pairs.first inner), (Pairs.second inner))
+        _ -> ([], term))
 
 stringDataSegment :: Ord t0 => (M.Map String t0 -> Syntax.ModuleField)
 stringDataSegment offsets =

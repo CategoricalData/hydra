@@ -71,9 +71,9 @@ case "$PACKAGE" in
     hydra-java|hydra-python|hydra-scala|hydra-lisp)
         LOAD_FLAGS="--include-coders"
         ;;
-    hydra-pg|hydra-rdf|hydra-coq|hydra-javascript|hydra-ext)
-        # --include-ext loads hydra-coq + hydra-javascript + hydra-ext plus
-        # their type-resolution deps (hydra-pg, hydra-rdf). --include-coders
+    hydra-pg|hydra-rdf|hydra-coq|hydra-javascript|hydra-ext|hydra-wasm)
+        # --include-ext loads hydra-coq + hydra-javascript + hydra-ext + hydra-wasm
+        # plus their type-resolution deps (hydra-pg, hydra-rdf). --include-coders
         # is also needed because ext modules reference coder-package types.
         # Using --include-ext (not --ext-only) so that allMainMods contains
         # hydra-pg modules, which --synthesize-sources needs to see in order
