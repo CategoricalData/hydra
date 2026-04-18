@@ -917,10 +917,10 @@ encodeCases = def "encodeCases" $
             W._MemoryInstruction_memArg>>: record W._MemArg [
               W._MemArg_offset>>: int32 0,
               W._MemArg_align>>: int32 2]]]]) $
-    -- Encode each case branch body. Each arm is still synthesized as
+    -- Encode each explicit case arm body. Each arm is synthesized as
     -- `apply (cfterm) (termVariable "v")` — encodeTerm will resolve `v` to `local.get $v`,
     -- which is now initialized to the loaded payload before any arm runs.
-    "arms" <<~ (Eithers.mapList
+    "explicitArms" <<~ (Eithers.mapList
       (lambda "cf" $
         "cfname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.fieldName (var "cf"))) $
         "cfterm" <~ Core.fieldTerm (var "cf") $
@@ -929,17 +929,55 @@ encodeCases = def "encodeCases" $
             (Core.termVariable (wrap _Name (string "v")))))) $
           right (pair (var "cfname") (var "armBody")))
       (var "caseFields")) $
+    -- Encode the optional default arm. When present, its body is a Term that does
+    -- NOT reference $v (the payload is irrelevant for a default). When absent, we
+    -- still synthesize a default label so that uncovered tags have somewhere to
+    -- branch to; its body is an `i32.const 0` placeholder.
+    "defaultArmLabel" <~ (string "_default") $
+    "mDefault" <~ Core.caseStatementDefault (var "cs") $
+    "defaultArmBody" <<~ Maybes.cases (var "mDefault")
+      (right (list [inject W._Instruction W._Instruction_const $
+        inject W._ConstValue W._ConstValue_i32 (int32 0)]))
+      (lambda "defTerm" $
+        encodeTerm @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@ var "defTerm") $
+    "arms" <~ Lists.concat2 (var "explicitArms") (list [pair (var "defaultArmLabel") (var "defaultArmBody")]) $
+    -- Build the br_table label array. Each entry at index i gets the label of
+    -- the arm handling tag i — either an explicit arm matching the union's
+    -- variant-name-at-index-i, or the default arm's label. The lookup uses the
+    -- universe-wide variantIndexes map keyed by the union's type name; if the
+    -- type isn't found (e.g. dispatching on a locally-defined union not visible
+    -- to the coder), every tag routes to the default.
+    "explicitLabelForName" <~ (lambda "fname" $
+      Maybes.fromMaybe (var "defaultArmLabel")
+        (Maybes.map
+          (unaryFunction Pairs.first)
+          (Lists.find
+            (lambda "arm" $ Equality.equal (Pairs.first (var "arm")) (var "fname"))
+            (var "explicitArms")))) $
+    "typeName" <~ Core.caseStatementTypeName (var "cs") $
+    "mUnionVariants" <~ Maps.lookup (var "typeName") (var "variantIndexes") $
+    "brTableLabels" <~ Maybes.cases (var "mUnionVariants")
+      -- Fallback: no variant info for this type. Use the explicit-arm labels
+      -- at positions 0..len-1 (preserving pre-fix behavior); tags beyond the
+      -- explicit arms hit the default.
+      (Lists.map (unaryFunction Pairs.first) (var "explicitArms"))
+      (lambda "variantPairs" $
+        -- variantPairs :: [(Name, Int)]. Sort by index, emit label per index.
+        "sorted" <~ Lists.sortOn (unaryFunction Pairs.second) (var "variantPairs") $
+        Lists.map
+          (lambda "np" $
+            "fieldName" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Pairs.first (var "np"))) $
+            var "explicitLabelForName" @@ var "fieldName")
+          (var "sorted")) $
     -- Block-based union dispatch: nested empty dispatch blocks, innermost holds the
-    -- prologue + br_table, outer blocks wrap each arm body.
-    "armLabels" <~ Lists.map (unaryFunction Pairs.first) (var "arms") $
+    -- prologue + br_table, outer blocks wrap each arm body (explicit + default).
     "endLabel" <~ (Strings.cat2 (string "end_") (var "tname")) $
-    "defaultLabel" <~ Maybes.fromMaybe (var "endLabel") (Lists.maybeLast (var "armLabels")) $
     "innerDispatch" <~ Lists.concat2
       (var "prologue")
       (list [inject W._Instruction W._Instruction_brTable $
         record W._BrTableArgs [
-          W._BrTableArgs_labels>>: var "armLabels",
-          W._BrTableArgs_default>>: var "defaultLabel"]]) $
+          W._BrTableArgs_labels>>: var "brTableLabels",
+          W._BrTableArgs_default>>: var "defaultArmLabel"]]) $
     "dispatch" <~ Lists.foldl
       (lambda "acc" $ lambda "arm" $
         "label" <~ Pairs.first (var "arm") $
@@ -954,21 +992,14 @@ encodeCases = def "encodeCases" $
             list [inject W._Instruction W._Instruction_br (var "endLabel")]]))
       (var "innerDispatch")
       (var "arms") $
-      -- Short-circuit empty-cases: with zero arms, the prologue still runs (reading
-      -- the scrutinee for side effects and dropping the tag+payload), then we push
-      -- an i32.const 0 placeholder as the block's result.
-      Logic.ifElse (Lists.null (var "arms"))
-        (right (Lists.concat (list [
-          var "scrutineeInstrs",
-          list [inject W._Instruction W._Instruction_drop unit],
-          list [inject W._Instruction W._Instruction_const $
-            inject W._ConstValue W._ConstValue_i32 (int32 0)]])))
-        -- Wrap everything in the outermost end block with result type
-        (right (list [inject W._Instruction W._Instruction_block $
-          record W._BlockInstruction [
-            W._BlockInstruction_label>>: just (var "endLabel"),
-            W._BlockInstruction_blockType>>: inject W._BlockType W._BlockType_value (inject W._ValType W._ValType_i32 unit),
-            W._BlockInstruction_body>>: var "dispatch"]]))
+      -- Wrap everything in the outermost end block with result type.
+      -- Even with zero explicit arms, the default arm always exists, so arms is
+      -- never empty — no need to short-circuit.
+      right (list [inject W._Instruction W._Instruction_block $
+        record W._BlockInstruction [
+          W._BlockInstruction_label>>: just (var "endLabel"),
+          W._BlockInstruction_blockType>>: inject W._BlockType W._BlockType_value (inject W._ValType W._ValType_i32 unit),
+          W._BlockInstruction_body>>: var "dispatch"]])
 
 
 -- =============================================================================

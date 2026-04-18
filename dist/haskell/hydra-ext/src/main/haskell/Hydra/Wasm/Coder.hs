@@ -245,15 +245,35 @@ encodeCases cx g stringOffsets fieldOffsets variantIndexes funcSigs cs scrutinee
             cfterm = Core.fieldTerm cf
         in (Eithers.bind (encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs (Core.TermApplication (Core.Application {
           Core.applicationFunction = cfterm,
-          Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))) (\armBody -> Right (cfname, armBody)))) caseFields) (\arms ->
-        let armLabels = Lists.map Pairs.first arms
+          Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))) (\armBody -> Right (cfname, armBody)))) caseFields) (\explicitArms ->
+        let defaultArmLabel = "_default"
+            mDefault = Core.caseStatementDefault cs
+        in (Eithers.bind
+          (Maybes.cases mDefault
+            (Right [Syntax.InstructionConst (Syntax.ConstValueI32 0)])
+            (\defTerm -> encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs defTerm))
+          (\defaultArmBody ->
+        let arms = Lists.concat2 explicitArms [(defaultArmLabel, defaultArmBody)]
+            explicitLabelForName fname =
+              Maybes.fromMaybe defaultArmLabel
+                (Maybes.map Pairs.first
+                  (Lists.find (\arm -> Equality.equal (Pairs.first arm) fname) explicitArms))
+            typeName = Core.caseStatementTypeName cs
+            mUnionVariants = Maps.lookup typeName variantIndexes
+            brTableLabels =
+              Maybes.cases mUnionVariants
+                (Lists.map Pairs.first explicitArms)
+                (\variantPairs ->
+                  let sorted = Lists.sortOn Pairs.second variantPairs
+                  in Lists.map (\np ->
+                       let fieldName = Formatting.convertCaseCamelToLowerSnake (Core.unName (Pairs.first np))
+                       in explicitLabelForName fieldName) sorted)
             endLabel = Strings.cat2 "end_" tname
-            defaultLabel = Maybes.fromMaybe endLabel (Lists.maybeLast armLabels)
             innerDispatch =
                     Lists.concat2 prologue [
                       Syntax.InstructionBrTable (Syntax.BrTableArgs {
-                        Syntax.brTableArgsLabels = armLabels,
-                        Syntax.brTableArgsDefault = defaultLabel})]
+                        Syntax.brTableArgsLabels = brTableLabels,
+                        Syntax.brTableArgsDefault = defaultArmLabel})]
             dispatch =
                     Lists.foldl (\acc -> \arm ->
                       let label = Pairs.first arm
@@ -267,12 +287,7 @@ encodeCases cx g stringOffsets fieldOffsets variantIndexes funcSigs cs scrutinee
                         body,
                         [
                           Syntax.InstructionBr endLabel]])) innerDispatch arms
-        in (Logic.ifElse (Lists.null arms) (Right (Lists.concat [
-          scrutineeInstrs,
-          [
-            Syntax.InstructionDrop],
-          [
-            Syntax.InstructionConst (Syntax.ConstValueI32 0)]])) (Right [
+        in Right [
           Syntax.InstructionBlock (Syntax.BlockInstruction {
             Syntax.blockInstructionLabel = (Just endLabel),
             Syntax.blockInstructionBlockType = (Syntax.BlockTypeValue Syntax.ValTypeI32),
