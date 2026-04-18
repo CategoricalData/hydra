@@ -496,7 +496,7 @@ public interface Codegen {
   }
 
   static hydra.util.Either<hydra.errors.Error_, String> inferAndGenerateLexicon(hydra.context.Context cx, hydra.graph.Graph bsGraph, java.util.List<hydra.packaging.Module> kernelModules) {
-    hydra.util.Lazy<java.util.List<hydra.core.Binding>> allElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
+    hydra.util.Lazy<java.util.List<hydra.core.Binding>> dataElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.packaging.Module, java.util.List<hydra.core.Binding>>) (m -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.packaging.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.packaging.Definition.PartialVisitor<>() {
           @Override
@@ -515,13 +515,10 @@ public interface Codegen {
       bsGraph,
       kernelModules,
       kernelModules);
-    hydra.util.Lazy<java.util.List<hydra.core.Binding>> untypedElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
-      (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.maybes.IsNothing.apply((b).type)),
-      allElements.get()));
     return hydra.lib.eithers.Bind.apply(
       hydra.Inference.inferGraphTypes(
         cx,
-        untypedElements.get(),
+        dataElements.get(),
         g0),
       (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.graph.Graph, java.util.List<hydra.core.Binding>>, hydra.context.Context>, hydra.util.Either<hydra.errors.Error_, String>>) (inferResultWithCx -> {
         hydra.util.Lazy<hydra.graph.Graph> g1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(hydra.lib.pairs.First.apply(inferResultWithCx)));
@@ -530,23 +527,7 @@ public interface Codegen {
   }
 
   static hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.packaging.Module>> inferModules(hydra.context.Context cx, hydra.graph.Graph bsGraph, java.util.List<hydra.packaging.Module> universeMods, java.util.List<hydra.packaging.Module> targetMods) {
-    return hydra.Codegen.inferModulesImpl(
-      cx,
-      bsGraph,
-      universeMods,
-      targetMods);
-  }
-
-  static hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.packaging.Module>> inferModulesGiven(hydra.context.Context cx, hydra.graph.Graph bsGraph, java.util.List<hydra.packaging.Module> universeMods, java.util.List<hydra.packaging.Module> targetMods) {
-    return hydra.Codegen.inferModulesImpl(
-      cx,
-      bsGraph,
-      universeMods,
-      targetMods);
-  }
-
-  static hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.packaging.Module>> inferModulesImpl(hydra.context.Context cx, hydra.graph.Graph bsGraph, java.util.List<hydra.packaging.Module> universeMods, java.util.List<hydra.packaging.Module> targetMods) {
-    hydra.util.Lazy<java.util.List<hydra.core.Binding>> allElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
+    hydra.util.Lazy<java.util.List<hydra.core.Binding>> dataElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.packaging.Module, java.util.List<hydra.core.Binding>>) (m -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.packaging.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.packaging.Definition.PartialVisitor<>() {
           @Override
@@ -565,26 +546,102 @@ public interface Codegen {
       bsGraph,
       universeMods,
       universeMods);
-    hydra.util.Lazy<java.util.List<hydra.core.Binding>> typedElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
-      (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.maybes.IsJust.apply((b).type)),
-      allElements.get()));
-    hydra.util.Lazy<java.util.List<hydra.core.Binding>> untypedElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
-      (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.maybes.IsNothing.apply((b).type)),
-      allElements.get()));
     return hydra.lib.eithers.Bind.apply(
       hydra.Inference.inferGraphTypes(
         cx,
-        untypedElements.get(),
+        dataElements.get(),
         g0),
       (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.graph.Graph, java.util.List<hydra.core.Binding>>, hydra.context.Context>, hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.packaging.Module>>>) (inferResultWithCx -> {
         hydra.util.Lazy<hydra.util.Pair<hydra.graph.Graph, java.util.List<hydra.core.Binding>>> inferResult = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(inferResultWithCx));
-        hydra.util.Lazy<java.util.List<hydra.core.Binding>> newlyInferredElements = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(inferResult.get()));
-        hydra.util.Lazy<java.util.List<hydra.core.Binding>> allInferredElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
-          newlyInferredElements.get(),
-          typedElements.get()));
+        hydra.util.Lazy<java.util.List<hydra.core.Binding>> inferredElements = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(inferResult.get()));
         return hydra.util.Either.<hydra.errors.Error_, java.util.List<hydra.packaging.Module>>right(hydra.lib.lists.Map.apply(
           (java.util.function.Function<hydra.packaging.Module, hydra.packaging.Module>) (v1 -> hydra.Codegen.refreshModule(
-            allInferredElements.get(),
+            inferredElements.get(),
+            v1)),
+          targetMods));
+      }));
+  }
+
+  static hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.packaging.Module>> inferModulesGiven(hydra.context.Context cx, hydra.graph.Graph bsGraph, java.util.List<hydra.packaging.Module> universeMods, java.util.List<hydra.packaging.Module> targetMods) {
+    hydra.util.Lazy<java.util.Map<hydra.packaging.Namespace, hydra.packaging.Module>> nsMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.packaging.Module, hydra.util.Pair<hydra.packaging.Namespace, hydra.packaging.Module>>) (m -> (hydra.util.Pair<hydra.packaging.Namespace, hydra.packaging.Module>) ((hydra.util.Pair<hydra.packaging.Namespace, hydra.packaging.Module>) (new hydra.util.Pair<hydra.packaging.Namespace, hydra.packaging.Module>((m).namespace, m)))),
+      universeMods)));
+    java.util.List<hydra.packaging.Module> closureMods = hydra.Codegen.moduleTermDepsTransitive(
+      nsMap.get(),
+      targetMods);
+    hydra.util.Lazy<java.util.Set<hydra.packaging.Namespace>> targetNamespaces = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
+      projected -> projected.namespace,
+      targetMods)));
+    hydra.util.Lazy<java.util.List<hydra.core.Binding>> bindingsToInfer = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.packaging.Module, java.util.List<hydra.core.Binding>>) (m -> {
+        hydra.util.Lazy<java.util.List<hydra.core.Binding>> bs = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+          (java.util.function.Function<hydra.packaging.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.packaging.Definition.PartialVisitor<>() {
+            @Override
+            public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.packaging.Definition instance) {
+              return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
+            }
+
+            @Override
+            public hydra.util.Maybe<hydra.core.Binding> visit(hydra.packaging.Definition.Term td) {
+              return hydra.util.Maybe.just(new hydra.core.Binding((td).value.name, (td).value.term, (td).value.type));
+            }
+          })),
+          (m).definitions)));
+        hydra.util.Lazy<Boolean> isTarget = new hydra.util.Lazy<>(() -> hydra.lib.sets.Member.apply(
+          (m).namespace,
+          targetNamespaces.get()));
+        return hydra.lib.logic.IfElse.lazy(
+          isTarget.get(),
+          () -> bs.get(),
+          () -> hydra.lib.lists.Filter.apply(
+            (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.maybes.IsNothing.apply((b).type)),
+            bs.get()));
+      }),
+      closureMods)));
+    hydra.graph.Graph g0 = hydra.Codegen.modulesToGraph(
+      bsGraph,
+      universeMods,
+      universeMods);
+    hydra.util.Lazy<java.util.List<hydra.core.Binding>> untouchedTypedBindings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.packaging.Module, java.util.List<hydra.core.Binding>>) (m -> {
+        hydra.util.Lazy<java.util.List<hydra.core.Binding>> bs = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+          (java.util.function.Function<hydra.packaging.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.packaging.Definition.PartialVisitor<>() {
+            @Override
+            public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.packaging.Definition instance) {
+              return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
+            }
+
+            @Override
+            public hydra.util.Maybe<hydra.core.Binding> visit(hydra.packaging.Definition.Term td) {
+              return hydra.util.Maybe.just(new hydra.core.Binding((td).value.name, (td).value.term, (td).value.type));
+            }
+          })),
+          (m).definitions)));
+        hydra.util.Lazy<Boolean> isTarget = new hydra.util.Lazy<>(() -> hydra.lib.sets.Member.apply(
+          (m).namespace,
+          targetNamespaces.get()));
+        return hydra.lib.logic.IfElse.lazy(
+          isTarget.get(),
+          () -> (java.util.List<hydra.core.Binding>) (java.util.Collections.<hydra.core.Binding>emptyList()),
+          () -> hydra.lib.lists.Filter.apply(
+            (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.maybes.IsJust.apply((b).type)),
+            bs.get()));
+      }),
+      closureMods)));
+    return hydra.lib.eithers.Bind.apply(
+      hydra.Inference.inferGraphTypes(
+        cx,
+        bindingsToInfer.get(),
+        g0),
+      (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.graph.Graph, java.util.List<hydra.core.Binding>>, hydra.context.Context>, hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.packaging.Module>>>) (inferResultWithCx -> {
+        hydra.util.Lazy<hydra.util.Pair<hydra.graph.Graph, java.util.List<hydra.core.Binding>>> inferResult = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(inferResultWithCx));
+        hydra.util.Lazy<java.util.List<hydra.core.Binding>> newlyInferredBindings = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(inferResult.get()));
+        hydra.util.Lazy<java.util.List<hydra.core.Binding>> allInferredBindings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+          newlyInferredBindings.get(),
+          untouchedTypedBindings.get()));
+        return hydra.util.Either.<hydra.errors.Error_, java.util.List<hydra.packaging.Module>>right(hydra.lib.lists.Map.apply(
+          (java.util.function.Function<hydra.packaging.Module, hydra.packaging.Module>) (v1 -> hydra.Codegen.refreshModule(
+            allInferredBindings.get(),
             v1)),
           targetMods));
       }));
