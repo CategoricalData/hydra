@@ -10,7 +10,7 @@ set -euo pipefail
 #   4. Ext Java modules (PG model, decoders, encoders, etc.) into hydra-ext
 #
 # Prerequisites:
-#   - JSON modules must be up to date (run sync-haskell.sh and sync-ext.sh first)
+#   - JSON modules must be up to date (run sync-haskell.sh first)
 #   - Run from the hydra-ext directory
 #
 # Usage:
