@@ -39,10 +39,9 @@ fi
 # -----------------------------------------------------------------------
 
 # Packages that go through the JSON pipeline (i.e., have Layer 1 transforms).
-# Long-tail ext packages (hydra-coq, hydra-javascript, hydra-ext) are Haskell-
-# only today; they're handled by sync-ext.sh and are NOT synced by this
-# orchestrator. Adding them requires extending the JSON pipeline first.
-ALL_PACKAGES="hydra-kernel hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp hydra-pg hydra-rdf"
+# Includes hydra-coq, hydra-javascript, and hydra-ext (historically handled
+# only by sync-ext.sh); these are generation-only for non-Haskell targets.
+ALL_PACKAGES="hydra-kernel hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp hydra-pg hydra-rdf hydra-coq hydra-javascript hydra-ext"
 
 # Valid target languages.
 ALL_TARGETS="haskell java python scala clojure scheme common-lisp emacs-lisp"

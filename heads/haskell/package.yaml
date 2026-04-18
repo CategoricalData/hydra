@@ -40,11 +40,17 @@ library:
     - src/main/haskell
     - ../../demos/src/main/haskell
     - ../../dist/haskell/hydra-kernel/src/main/haskell
+    - ../../dist/haskell/hydra-haskell/src/main/haskell
+    - ../../dist/haskell/hydra-coq/src/main/haskell
+    - ../../dist/haskell/hydra-javascript/src/main/haskell
+    - ../../dist/haskell/hydra-java/src/main/haskell
+    - ../../dist/haskell/hydra-python/src/main/haskell
+    - ../../dist/haskell/hydra-scala/src/main/haskell
+    - ../../dist/haskell/hydra-lisp/src/main/haskell
     - ../../dist/haskell/hydra-ext/src/main/haskell
     - ../../dist/haskell/hydra-pg/src/main/haskell
     - ../../packages/hydra-coq/src/main/haskell
     - ../../packages/hydra-haskell/src/main/haskell
-    - ../../dist/haskell/hydra-haskell/src/main/haskell
     - ../../packages/hydra-java/src/main/haskell
     - ../../packages/hydra-javascript/src/main/haskell
     - ../../packages/hydra-kernel/src/main/haskell
