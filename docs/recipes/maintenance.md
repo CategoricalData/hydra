@@ -725,6 +725,131 @@ For each document, perform three passes:
 
 ---
 
+## Logical code review
+
+Code written or extended by an LLM tends to accumulate cruft over time
+if not aggressively pruned:
+unused features, one-call-site abstractions, duplicated helpers, obsolete flags,
+comments justifying workarounds that should have been fixed at the source,
+and defensive error handling for scenarios that cannot happen.
+This review looks critically at source files and scripts and surfaces candidates for pruning or simplification.
+
+The review is **report-first**: write findings to a dated file under `docs/reviews/`,
+then discuss with the user before acting.
+Do not edit code as part of the review pass itself.
+
+### Scope and sampling
+
+A full-repo pass is impractical for a single session.
+Pick a slice of roughly 40–60 files / ~5,000–7,000 lines per run.
+
+- **When the user specifies a slice, use it.**
+  Examples: "review `bin/` scripts," "review the Python coder."
+- **When the slice is up to you**, sample evenly across the repo
+  (`packages/`, `heads/`, `bin/`, `demos/`), with modest bias toward high-traffic code
+  (kernel DSL sources, essential scripts like `bin/sync-all.sh`, registration files like
+  `Libraries.hs` / `Libraries.java` / `libraries.py`).
+  Check `docs/reviews/` for what's been covered recently and prefer unseen files.
+
+Exclude from every pass:
+- Generated files (anything under `dist/`, and any file whose header is
+  "Note: this is an automatically generated file. Do not edit.").
+  Review findings against generated files are really generator findings —
+  route them to the generator source.
+- Files the user has explicitly excluded.
+
+### What to flag
+
+Review against these patterns explicitly.
+If you're uncertain whether something is drift, flag it with a note — the user decides.
+
+| Pattern | What to look for |
+|---------|------------------|
+| Dead CLI flags / options | Parsed and stored but never consulted; aliases whose callers no longer exist |
+| Unused top-level definitions | Functions, types, or constants with no call sites (cross-check `packages/` and `heads/haskell/src/main/`; a Haskell function called only from those trees is not dead) |
+| One-call-site abstractions | Helpers with a single caller where inlining would be clearer |
+| Duplicate helpers | Near-identical functions in different files with cosmetic renames; shared ANSI constants, regexes, sort keys |
+| Error swallowing | `|| warn`, `|| true`, `|| echo` in sync scripts (violates "Never proceed with failures"); try/except that logs and continues |
+| Post-generation patches | `sed_inplace` or other edits against files under `dist/` (violates "No post-generation patches") |
+| Defensive code for impossible scenarios | `case _ of` branches that can't be reached; null checks for internal invariants |
+| Stale comments | Comments describing code that no longer exists; obsolete TODOs; "workaround for X" comments where X is fixed |
+| Baroque control flow | Nested conditionals that flatten; sentinel values (`""` as "unset") where `Maybe`/`Optional` exists |
+
+**Cross-reference [CLAUDE.md](../../CLAUDE.md) "Critical pitfalls" as review criteria.**
+Any violation of a pitfall is a finding regardless of how plausible the surrounding comment sounds.
+
+### Be adversarial toward justifying comments
+
+A comment like "note: this is a workaround for the Java generator" is a finding, not a dismissal.
+The workaround may be real, but it's a symptom of drift in either the generator or the review scope.
+Flag it with the justification quoted verbatim so the user can decide whether to address the root cause.
+
+### Detect cross-file duplication
+
+Single-file review misses duplication.
+For each slice, also:
+
+- Grep for identical identifiers across the slice (regexes, constants, helper names).
+- Compare scripts with parallel purposes (e.g., `sync-java.sh` vs `sync-python.sh`;
+  `benchmark-dashboard.py` vs `bootstrapping-dashboard.py`).
+- Look for copy-pasted blocks that differ only by cosmetic renames.
+
+### Output format
+
+Write findings to `docs/reviews/YYYY-MM-DD-<slice-name>.md`.
+The `docs/reviews/` tree is gitignored; reports are a local working record, not a checked-in artifact.
+Structure:
+
+```
+# Logical code review: <slice>
+
+**Date:** YYYY-MM-DD
+**Scope:** <file list or description, line count>
+
+## Summary
+
+<2–4 bullets highlighting the most important findings>
+
+## Safe to remove
+
+<Each finding: file:line(s), one-line description, one-line reason>
+
+## Worth discussing
+
+<Each finding: file:line(s), description, trade-off, why it's worth surfacing>
+
+## False-positive candidates
+
+<Things that look like drift but are load-bearing; document so future passes don't re-flag>
+
+## What this slice says about the codebase
+
+<Optional: patterns that suggest follow-up work beyond the slice>
+```
+
+Keep entries terse — one or two lines per finding.
+The user will read the file, so don't re-explain context that's obvious from a click-through.
+
+### What to avoid
+
+- Do not edit code during the review pass.
+- Do not flag code as drift just because it's complex;
+  complexity is fine when it reflects the problem.
+- Do not mark findings "intentional" on the basis of a nearby comment alone;
+  verify against the rule the comment is justifying.
+- Do not try to cover the whole repo in one pass;
+  sampling across sessions over time is the point.
+
+### Delegation
+
+Do not delegate the full review to an Explore agent.
+In practice, single-pass agents tend to mark too many findings "intentional" and miss
+cross-file duplication.
+An agent can help read files in parallel if the reviewer reads the reports critically,
+but the reviewer (main session) owns the triage.
+
+---
+
 ## Full maintenance pass
 
 To run all checks in sequence (invoked via `/maintenance()` in CLAUDE.md):
@@ -740,6 +865,8 @@ To run all checks in sequence (invoked via `/maintenance()` in CLAUDE.md):
 7. Verify JSON kernel freshness via `heads/haskell/bin/verify-json-kernel.sh`.
 8. Check Python `__init__.py` freshness.
 9. Review user documentation for accuracy, broken links, and small improvements.
+10. Do a logical code review pass on a sampled slice (report-first, no edits);
+    discuss findings with the user before acting.
 
 After all checks, present a summary of findings and changes to the user.
 If any changes affect Source modules (e.g., definition reordering),
@@ -764,3 +891,4 @@ If no changes affect generated files or tests, skip the sync.
 | JSON kernel freshness | After kernel changes |
 | Python `__init__.py` | After sync-python |
 | User documentation review | Periodically, before releases, after major refactoring |
+| Logical code review | Periodically; one slice per session; after extended LLM-driven edits to a region |
