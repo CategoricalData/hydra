@@ -71,8 +71,7 @@ step 2 $TOTAL_STEPS "Generating Python main modules and tests from JSON"
 echo ""
 # --output ../../dist/python: routing fans modules out into dist/python/<pkg>/
 # based on namespace (kernel classes -> hydra-kernel, ext -> hydra-ext, etc.).
-stack exec bootstrap-from-json -- --target python --output "../../dist/python" --include-coders --include-ext --include-dsls --include-tests $RTS_FLAGS || \
-    warn "Python test generation had errors (some polymorphic types not supported). Continuing..."
+stack exec bootstrap-from-json -- --target python --output "../../dist/python" --include-coders --include-ext --include-dsls --include-tests $RTS_FLAGS
 
 # Copy hand-written test_env.py from heads/ into dist/. The patched test_graph.py
 # below imports `hydra.test.test_env`, which must resolve under the dist tree at

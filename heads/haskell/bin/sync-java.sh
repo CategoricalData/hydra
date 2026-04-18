@@ -74,8 +74,7 @@ step 2 $TOTAL_STEPS "Generating Java main modules and tests from JSON"
 echo ""
 # --output ../../dist/java: routing fans modules out into dist/java/<pkg>/
 # based on namespace (kernel classes -> hydra-kernel, ext -> hydra-ext, etc.).
-stack exec bootstrap-from-json -- --target java --output "../../dist/java" --include-coders --include-ext --include-dsls --include-tests $RTS_FLAGS || \
-    warn "Java test generation had errors (some polymorphic types not supported). Continuing..."
+stack exec bootstrap-from-json -- --target java --output "../../dist/java" --include-coders --include-ext --include-dsls --include-tests $RTS_FLAGS
 
 # Patch TestGraph.java to use TestEnv (real graph with primitives) instead of emptyGraph
 TESTGRAPH="../../dist/java/hydra-kernel/src/test/java/hydra/test/TestGraph.java"
@@ -107,10 +106,8 @@ if [ "$QUICK_MODE" = false ]; then
     cd "$HYDRA_ROOT_DIR"
 
     ./gradlew :hydra-java:compileJava
-    ./gradlew :hydra-java:compileTestJava || \
-        warn "Java test compilation had errors. Continuing..."
-    ./gradlew :hydra-java:test || \
-        warn "Some Java tests failed. Continuing..."
+    ./gradlew :hydra-java:compileTestJava
+    ./gradlew :hydra-java:test
 
     cd "$HYDRA_EXT_DIR"
 else
