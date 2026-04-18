@@ -58,6 +58,10 @@ debug_*.clj
 # Working documents (local only)
 docs/work/
 
+# Package distributions
+dist/coq/
+dist/wasm/
+
 # Other
 *.log
 *.swp
