@@ -1170,17 +1170,41 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "innerBody" <~ Pairs.second (var "extracted") $
     -- Real n-ary calling convention: one Wasm param per Hydra lambda param, all i32.
     -- Each param is named after the Hydra param (snake-cased).
-    "paramNameStrs" <~ Lists.map
+    "lambdaParamNameStrs" <~ Lists.map
       (lambda "pn" $ Formatting.convertCaseCamelToLowerSnake @@ Core.unName (var "pn"))
       (var "paramNames") $
+    -- Align the Wasm signature with funcSigs: if the term is eta-contracted (e.g.
+    -- sanitizeHaskellName = sanitizeWithUnderscores @@ reservedWords has 0 lambda
+    -- params but type `String -> String`), callers push one real arg and expect
+    -- the callee to consume it. Without padding, the call site leaves an extra
+    -- value on the stack and the function fails wat2wasm's end-of-function
+    -- stack-size check. The padding synthesizes `$arg_synth_<i>` Wasm params
+    -- and drops each at body start, preserving the "body produces exactly 1 i32"
+    -- invariant. Semantics are placeholder: the synthetic args are discarded,
+    -- matching the existing placeholder behavior for eta-contracted bodies.
+    "typeParams" <<~ (extractParamTypes @@ var "cx" @@ var "g" @@ var "typ") $
+    "typeParamCount" <~ Lists.length (var "typeParams") $
+    "lambdaParamCount" <~ Lists.length (var "lambdaParamNameStrs") $
+    "syntheticCount" <~ Logic.ifElse (Equality.gt (var "typeParamCount") (var "lambdaParamCount"))
+      (Math.sub (var "typeParamCount") (var "lambdaParamCount"))
+      (int32 0) $
+    "syntheticParamNames" <~ Lists.map
+      (lambda "i" $ Strings.cat2 (string "arg_synth_") (Literals.showInt32 (var "i")))
+      (Math.range (int32 0) (var "syntheticCount")) $
+    "paramNameStrs" <~ Lists.concat2 (var "lambdaParamNameStrs") (var "syntheticParamNames") $
     "wasmParams" <~ Lists.map
       (lambda "pn" $ record W._Param [
         W._Param_name>>: just (var "pn"),
         W._Param_type>>: inject W._ValType W._ValType_i32 unit])
       (var "paramNameStrs") $
-    -- No initialization prologue needed: params are real Wasm params, directly accessible
-    -- via local.get by their names. No copying from a synthetic $arg_0.
-    "initPrologue" <~ (list ([] :: [TTerm W.Instruction])) $
+    -- Prologue: drop each synthetic arg so the body still produces exactly 1 i32.
+    -- Real params extracted from Hydra lambdas are accessed by the body directly
+    -- via local.get by name; no copy from a synthetic $arg_0 is needed.
+    "initPrologue" <~ Lists.concat (Lists.map
+      (lambda "sn" $ list [
+        inject W._Instruction W._Instruction_localGet (var "sn"),
+        inject W._Instruction W._Instruction_drop unit])
+      (var "syntheticParamNames")) $
     -- Every function returns a single i32 (the body encoding still produces one i32 per term).
     "resultTypes" <~ list [inject W._ValType W._ValType_i32 unit] $
     -- Encode body: for bare eliminations (detected by extractLambdaParams producing synthetic

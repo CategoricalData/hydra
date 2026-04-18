@@ -43,6 +43,7 @@ import qualified Hydra.Sources.Pg.Manifest as PgManifest
 import qualified Hydra.Sources.Python.Manifest as PythonManifest
 import qualified Hydra.Sources.Rdf.Manifest as RdfManifest
 import qualified Hydra.Sources.Scala.Manifest as ScalaManifest
+import qualified Hydra.Sources.Wasm.Manifest as WasmManifest
 
 -- Overrides: second-order meta-sources living under dist/haskell/hydra-pg/.
 import qualified Hydra.Sources.Decode.Pg.Mapping as DecodePgMapping
@@ -108,6 +109,9 @@ hydraRdfModules = RdfManifest.mainModules
 
 hydraScalaModules :: [Module]
 hydraScalaModules = ScalaManifest.mainModules
+
+hydraWasmModules :: [Module]
+hydraWasmModules = WasmManifest.mainModules
 
 -- ----------------------------------------------------------------------
 -- Overrides for second-order and demo-only modules
