@@ -56,7 +56,12 @@ debug_*.hs
 debug_*.clj
 
 # Working documents (local only)
+docs/reviews/
 docs/work/
+
+# Package distributions
+dist/coq/
+dist/wasm/
 
 # Other
 *.log
