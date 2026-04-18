@@ -139,7 +139,9 @@ if [ "$QUICK_MODE" = false ]; then
         echo ""
         echo "All tests passed!"
     else
-        warn "Some tests failed (exit code $TEST_RESULT). See $TEST_LOG"
+        echo ""
+        echo "ERROR: stack test exited $TEST_RESULT. See $TEST_LOG" >&2
+        exit $TEST_RESULT
     fi
 else
     step 6 $TOTAL_STEPS "Skipped (--quick mode)"
