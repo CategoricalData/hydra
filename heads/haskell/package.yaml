@@ -111,22 +111,6 @@ executables:
     dependencies:
       - hydra
 
-  update-haskell-ext-main:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-haskell-ext-main
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra
-
-  update-ext-sources:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-ext-sources
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra
-
   diag-module:
     main: Main.hs
     source-dirs:

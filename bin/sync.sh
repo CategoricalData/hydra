@@ -39,8 +39,7 @@ fi
 # -----------------------------------------------------------------------
 
 # Packages that go through the JSON pipeline (i.e., have Layer 1 transforms).
-# Includes hydra-coq, hydra-javascript, and hydra-ext (historically handled
-# only by sync-ext.sh); these are generation-only for non-Haskell targets.
+# All packages are now handled uniformly; no package-specific carveouts.
 ALL_PACKAGES="hydra-kernel hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp hydra-pg hydra-rdf hydra-coq hydra-javascript hydra-ext"
 
 # Valid target languages.
