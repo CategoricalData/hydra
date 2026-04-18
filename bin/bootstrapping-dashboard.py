@@ -29,31 +29,23 @@ benchmark files like haskell-to-java.benchmark.json (or _N.benchmark.json for re
 import argparse
 import glob
 import json
-import re
 import statistics
+import sys
 from pathlib import Path
 
-# ANSI colour helpers
-_RED = "\033[91m"
-_GREEN = "\033[92m"
-_GRAY = "\033[90m"
-_BOLD = "\033[1m"
-_RESET = "\033[0m"
-
-_RUN_DIR_RE = re.compile(r"^run_(\d{4}-\d{2}-\d{2}_\d{6}_\d{3})(_.+)?$")
-_ANSI_RE = re.compile(r"\033\[[0-9;]*m")
+sys.path.insert(0, str(Path(__file__).resolve().parent / "lib"))
+from dashboard_common import (  # noqa: E402
+    BOLD as _BOLD,
+    BRIGHT_GREEN as _GREEN,
+    BRIGHT_RED as _RED,
+    GRAY as _GRAY,
+    RESET as _RESET,
+    run_sort_key as _run_sort_key,
+    visible_len,
+)
 
 HOSTS = ["haskell", "java", "scala", "python"]
 TARGETS = ["haskell", "java", "scala", "python", "clojure", "common-lisp", "emacs-lisp", "scheme"]
-
-
-def visible_len(s):
-    return len(_ANSI_RE.sub("", s))
-
-
-def _run_sort_key(dirname):
-    m = _RUN_DIR_RE.match(dirname)
-    return m.group(1) if m else dirname
 
 
 def find_run_dirs(runs_dir):

@@ -331,7 +331,7 @@ See [docs/recipes/index.md](docs/recipes/index.md) for the full list. Key recipe
 | [Code generation](docs/recipes/code-generation.md) | End-to-end guide: DSL/JSON sources, writeXxx functions, sync scripts |
 | [Refactoring](docs/recipes/refactoring.md) | Create, rename, move, delete kernel elements and modules |
 | [Refactoring namespaces](docs/recipes/refactoring-namespaces.md) | Rename/move a Hydra namespace across all implementations |
-| [Repository maintenance](docs/recipes/maintenance.md) | Periodic checks: non-source files, stale artifacts, definition ordering |
+| [Repository maintenance](docs/recipes/maintenance.md) | Periodic checks: non-source files, stale artifacts, definition ordering, logical code review |
 | [JSON kernel](docs/recipes/json-kernel.md) | Export Hydra modules to JSON for cross-language access |
 | [New implementation](docs/recipes/new-implementation.md) | Implement Hydra in a new language (11 steps) |
 | [Syncing Python](docs/recipes/syncing-python.md) | Regenerate Python from Haskell |
