@@ -83,6 +83,7 @@ module_ = Module ns definitions
       toDefinition encodeTypeDefinition,
       toDefinition encodeValType,
       toDefinition extractLambdaParams,
+      toDefinition peelLambdaApp,
       toDefinition extractParamTypes,
       toDefinition extractSignature,
       toDefinition hexEscapeString,
@@ -328,11 +329,33 @@ encodeApplication = def "encodeApplication" $
          (lambda "firstArg" $
           "firstArgInstrs" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@ var "firstArg") $
           encodeCases @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@ var "cs" @@ var "firstArgInstrs"),
-     -- Lambda applied to args: drop args, encode the body.
+     -- Lambda applied to args: beta-reduce by binding each arg to its lambda
+     -- parameter's local, then encode the inner body. Peels N outer lambdas
+     -- where N is the number of args supplied; any leftover args or lambdas
+     -- fall through as placeholders (closures, needed for partial application,
+     -- are M4+ work).
      _Term_lambda>>: lambda "lam" $
-       Eithers.bind (encodeTerm @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@ Core.lambdaBody (var "lam"))
-         (lambda "bodyInstrs" $
-           right (Lists.concat2 (var "droppedArgInstrs") (var "bodyInstrs")))]
+       "peeled" <~ (peelLambdaApp @@ (Core.termLambda (var "lam")) @@ var "args") $
+       "paramNames" <~ Pairs.first (var "peeled") $
+       "innerBody" <~ Pairs.second (var "peeled") $
+       -- For each bound (param, arg-instrs) pair, emit `<arg-instrs> local.set $param`.
+       "bindInstrs" <~ Lists.concat (Lists.map
+         (lambda "np" $
+           "pname" <~ Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Pairs.first (var "np")) $
+           "argInstrs" <~ Pairs.second (var "np") $
+             Lists.concat2 (var "argInstrs")
+               (list [inject W._Instruction W._Instruction_localSet (var "pname")]))
+         (Lists.zip (var "paramNames") (var "realArgInstrs"))) $
+       -- Drop any extra args past the number of bound params (arity mismatch).
+       "extraArgInstrs" <~ Lists.concat (Lists.map
+         (lambda "ai" $ Lists.concat2 (var "ai")
+           (list [inject W._Instruction W._Instruction_drop unit]))
+         (Lists.drop (Lists.length (var "paramNames")) (var "realArgInstrs"))) $
+       "bodyInstrs" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@ var "innerBody") $
+         right (Lists.concat (list [
+           var "bindInstrs",
+           var "extraArgInstrs",
+           var "bodyInstrs"]))]
 
 
 -- =============================================================================
@@ -1036,6 +1059,27 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
 -- Term definition encoding
 -- =============================================================================
 
+-- | Peel up to N outer lambdas from `term`, where N = length of `args`. Returns
+-- (peeledParamNames, innerBody). If `term` has fewer nested lambdas than there
+-- are args, the extra args are not peeled (they remain for the caller to drop
+-- or ignore). Used by encodeApplication's `_Term_lambda` case to beta-reduce
+-- `(\x -> \y -> body) @@ argX @@ argY` by binding each arg to its param's local.
+peelLambdaApp :: TTermDefinition (Term -> [Term] -> ([Name], Term))
+peelLambdaApp = def "peelLambdaApp" $
+  lambda "term" $ lambda "args" $
+    Logic.ifElse (Lists.null (var "args"))
+      (pair (list ([] :: [TTerm Name])) (var "term"))
+      ("stripped" <~ (Strip.deannotateTerm @@ var "term") $
+       cases _Term (var "stripped") (Just $ pair (list ([] :: [TTerm Name])) (var "term")) [
+         _Term_lambda>>: lambda "lam" $
+           "paramName" <~ Core.lambdaParameter (var "lam") $
+           "body" <~ Core.lambdaBody (var "lam") $
+           "restArgs" <~ Maybes.fromMaybe (list ([] :: [TTerm Term])) (Lists.maybeTail (var "args")) $
+           "inner" <~ (peelLambdaApp @@ var "body" @@ var "restArgs") $
+             pair
+               (Lists.cons (var "paramName") (Pairs.first (var "inner")))
+               (Pairs.second (var "inner"))])
+
 -- | Extract parameter names from nested lambdas, returning (params, innerBody)
 extractLambdaParams :: TTermDefinition (Term -> ([Name], Term))
 extractLambdaParams = def "extractLambdaParams" $
@@ -1564,6 +1608,12 @@ moduleToWasm = def "moduleToWasm" $
       record W._ExportDef [
         W._ExportDef_name>>: string "__bump_ptr",
         W._ExportDef_desc>>: inject W._ExportDesc W._ExportDesc_global (string "__bump_ptr")]) $
+    -- Export the bump allocator helper so the JS host can build kernel values
+    -- (records, tagged unions, strings) in the module's linear memory from outside.
+    "allocExport" <~ (inject W._ModuleField W._ModuleField_export $
+      record W._ExportDef [
+        W._ExportDef_name>>: string "__alloc",
+        W._ExportDef_desc>>: inject W._ExportDesc W._ExportDesc_func (string "__alloc")]) $
     -- Build function exports for each term definition
     "funcExports" <~ Lists.map
       (lambda "td" $
@@ -1622,7 +1672,8 @@ moduleToWasm = def "moduleToWasm" $
       W._Module_fields>>: Lists.concat (list [
         var "importFields",
         list [var "memField", var "memExport", var "dataField",
-              var "bumpGlobal", var "bumpExport", var "allocFunc"],
+              var "bumpGlobal", var "bumpExport", var "allocFunc",
+              var "allocExport"],
         var "funcExports",
         var "allFields"])]) $
     "code" <~ (SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (WasmSerdeSource.moduleToExpr @@ var "wasmMod"))) $
