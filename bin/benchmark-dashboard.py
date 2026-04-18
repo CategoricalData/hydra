@@ -35,28 +35,18 @@ without the run_ prefix, or substring matches (e.g. just 'baseline').
 import argparse
 import json
 import math
-import re
 import statistics
 import sys
 from pathlib import Path
 
-
-# Pattern for run directory names: run_YYYY-MM-DD_HHMMSS_mmm[_tag]
-# The timestamp portion (YYYY-MM-DD_HHMMSS_mmm) is used for chronological sorting.
-_RUN_DIR_RE = re.compile(r"^run_(\d{4}-\d{2}-\d{2}_\d{6}_\d{3})(_.+)?$")
-
-
-def _run_sort_key(dirname):
-    """Extract the timestamp portion of a run directory name for sorting.
-
-    Supports optional human-readable tags after the timestamp, e.g.
-    run_2026-02-26_063120_353_baseline.  Falls back to the full name
-    so that unrecognised directories still sort deterministically.
-    """
-    m = _RUN_DIR_RE.match(dirname)
-    if m:
-        return m.group(1)
-    return dirname
+sys.path.insert(0, str(Path(__file__).resolve().parent / "lib"))
+from dashboard_common import (  # noqa: E402
+    GRAY,
+    GREEN,
+    RED,
+    RESET,
+    run_sort_key as _run_sort_key,
+)
 
 
 def load_runs(runs_dir):
@@ -212,11 +202,6 @@ def fmt_val(x):
     return f"{x:.2f}"
 
 
-# ANSI color codes
-RED = "\033[31m"
-GREEN = "\033[32m"
-GRAY = "\033[90m"
-RESET = "\033[0m"
 
 
 def fmt_counts(passed, failed, skipped):
