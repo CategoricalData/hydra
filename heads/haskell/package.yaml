@@ -40,11 +40,18 @@ library:
     - src/main/haskell
     - ../../demos/src/main/haskell
     - ../../dist/haskell/hydra-kernel/src/main/haskell
+    - ../../dist/haskell/hydra-haskell/src/main/haskell
+    - ../../dist/haskell/hydra-coq/src/main/haskell
+    - ../../dist/haskell/hydra-javascript/src/main/haskell
+    - ../../dist/haskell/hydra-java/src/main/haskell
+    - ../../dist/haskell/hydra-python/src/main/haskell
+    - ../../dist/haskell/hydra-scala/src/main/haskell
+    - ../../dist/haskell/hydra-lisp/src/main/haskell
     - ../../dist/haskell/hydra-ext/src/main/haskell
     - ../../dist/haskell/hydra-pg/src/main/haskell
+    - ../../dist/haskell/hydra-rdf/src/main/haskell
     - ../../packages/hydra-coq/src/main/haskell
     - ../../packages/hydra-haskell/src/main/haskell
-    - ../../dist/haskell/hydra-haskell/src/main/haskell
     - ../../packages/hydra-java/src/main/haskell
     - ../../packages/hydra-javascript/src/main/haskell
     - ../../packages/hydra-kernel/src/main/haskell
@@ -102,22 +109,6 @@ executables:
     main: Main.hs
     source-dirs:
       - src/exec/verify-json-kernel
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra
-
-  update-haskell-ext-main:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-haskell-ext-main
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra
-
-  update-ext-sources:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-ext-sources
     ghc-options: [-rtsopts]
     dependencies:
       - hydra

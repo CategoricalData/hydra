@@ -73,6 +73,7 @@ step 2 $TOTAL_STEPS "Generating Scala from JSON"
 echo ""
 stack exec bootstrap-from-json -- \
     --target scala \
+    --output "../../dist/scala" \
     --include-coders \
     --include-tests \
     $RTS_FLAGS

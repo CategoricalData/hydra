@@ -12,6 +12,11 @@ The format is inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0
 
 ## [0.15.0] - in progress
 
+### Added
+
+- **Incremental type inference with content-hash cache** (#247).
+  See [Incremental inference](docs/implementation.md#incremental-inference).
+
 ### Removed
 
 - **13 unsafe (partial) primitives removed from the standard library** (#201).

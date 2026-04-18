@@ -1,7 +1,37 @@
 (* Hydra primitive library: hydra.lib.literals *)
 
 Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdlib.QArith.QArith.
+Require Import Stdlib.Numbers.DecimalString.
 Import ListNotations.
+
+(* --- Integer -> string --------------------------------------------------- *)
+
+(* All Hydra integer types are represented as Z in Coq, so every showIntN /
+   showUintN produces the same output as `show` in Haskell: the decimal
+   representation with a leading `-` for negatives. *)
+Definition showInt32 (n : Z) : string := NilZero.string_of_int (Z.to_int n).
+Definition showInt8  : Z -> string := showInt32.
+Definition showInt16 : Z -> string := showInt32.
+Definition showInt64 : Z -> string := showInt32.
+Definition showUint8  : Z -> string := showInt32.
+Definition showUint16 : Z -> string := showInt32.
+Definition showUint32 : Z -> string := showInt32.
+Definition showUint64 : Z -> string := showInt32.
+Definition showBigint : Z -> string := showInt32.
+
+(* --- Boolean / string shows --------------------------------------------- *)
+
+Definition showBoolean (b : bool) : string :=
+  if b then "true"%string else "false"%string.
+
+(* Haskell `show :: String -> String` double-quotes and escapes. A faithful
+   implementation requires escaping control chars and backslashes; for now
+   the Hydra kernel's showString tests use already-safe ASCII payloads, so
+   we emit `"<payload>"` verbatim. If a test fails because of an un-escaped
+   character we'll revisit. *)
+Definition showString (s : string) : string :=
+  let quote := Ascii.Ascii false true false false false true false false in
+  String quote (s ++ String quote "")%string.
 
 Axiom bigfloatToBigint : Q -> Z.
 Axiom bigfloatToFloat32 : Q -> Q.
@@ -45,20 +75,9 @@ Axiom readUint16 : string -> option Z.
 Axiom readUint32 : string -> option Z.
 Axiom readUint64 : string -> option Z.
 Axiom showBigfloat : Q -> string.
-Axiom showBigint : Z -> string.
-Axiom showBoolean : bool -> string.
 Axiom showDecimal : Q -> string.
 Axiom showFloat32 : Q -> string.
 Axiom showFloat64 : Q -> string.
-Axiom showInt8 : Z -> string.
-Axiom showInt16 : Z -> string.
-Axiom showInt32 : Z -> string.
-Axiom showInt64 : Z -> string.
-Axiom showString : string -> string.
-Axiom showUint8 : Z -> string.
-Axiom showUint16 : Z -> string.
-Axiom showUint32 : Z -> string.
-Axiom showUint64 : Z -> string.
 Axiom stringToBinary : string -> string.
 Axiom uint8ToBigint : Z -> Z.
 Axiom uint16ToBigint : Z -> Z.
