@@ -568,9 +568,18 @@ main = do
   -- Partition modules by owning package and generate each group to its own dir.
   -- Routing via PackageRouting.groupByPackage is unconditional: every module
   -- lands at <output>/<pkg>/src/main/<lang>/... based on its namespace.
+  --
+  -- When --package <scoped> is set, we only generate the scoped package's
+  -- group (and rely on the transitive-closure expansion inside genForDir to
+  -- include cross-package deps as schemaMods context, then prune their
+  -- output from the scoped package's dir). Other packages' dirs are not
+  -- touched.
   mainFileCount <- do
     let groups = groupByPackage modsToGenerate'
-    counts <- CM.forM groups $ \(pkg, pkgMods) -> do
+    let scopedGroups = case optPackage opts of
+          Nothing     -> groups
+          Just pkgArg -> Prelude.filter (\(pkg, _) -> pkg == pkgArg) groups
+    counts <- CM.forM scopedGroups $ \(pkg, pkgMods) -> do
       let dir = packageOutMain pkg
       putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules → " ++ dir
       genForDir dir pkgMods
@@ -640,7 +649,10 @@ main = do
       testStart <- getCurrentTime
       count <- do
         let groups = groupByPackage testMods
-        counts <- CM.forM groups $ \(pkg, pkgMods) -> do
+        let scopedGroups = case optPackage opts of
+              Nothing     -> groups
+              Just pkgArg -> Prelude.filter (\(pkg, _) -> pkg == pkgArg) groups
+        counts <- CM.forM scopedGroups $ \(pkg, pkgMods) -> do
           let dir = packageOutTest pkg
           putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " test modules → " ++ dir
           genTestForDir dir pkgMods
