@@ -30,7 +30,7 @@ import Hydra.Sources.Ext (
   kernelModules, haskellModules, jsonModules, otherModules,
   hydraCoqModules, hydraJavaModules, hydraJavaScriptModules,
   hydraPythonModules, hydraScalaModules, hydraLispModules,
-  hydraPgModules, hydraRdfModules,
+  hydraPgModules, hydraRdfModules, hydraWasmModules,
   hydraExtPackageModules,
   hydraExtDecodingModules, hydraExtEncodingModules)
 import Hydra.Sources.Eval.Lib.All (evalLibModules)
@@ -76,6 +76,7 @@ fullMainUniverse = dedupByNamespace $ L.concat
   , hydraLispModules
   , hydraPgModules
   , hydraRdfModules
+  , hydraWasmModules
   , hydraExtPackageModules
   , hydraExtDecodingModules
   , hydraExtEncodingModules
@@ -120,7 +121,8 @@ usage = unlines
   , "                           hydra-kernel, hydra-haskell, hydra-java,"
   , "                           hydra-python, hydra-scala, hydra-lisp,"
   , "                           hydra-coq, hydra-javascript,"
-  , "                           hydra-pg, hydra-rdf, hydra-ext."
+  , "                           hydra-pg, hydra-rdf, hydra-ext,"
+  , "                           hydra-wasm."
   , "  --source-set <main|test> Source set to transform (default: main)."
   , "                           'test' is only non-empty for hydra-kernel today."
   , "  --dist-json-root <dir>   Output root (default: ../../dist/json)."
