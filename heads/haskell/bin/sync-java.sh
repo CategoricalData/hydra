@@ -72,7 +72,9 @@ stack build hydra:exe:bootstrap-from-json
 
 step 2 $TOTAL_STEPS "Generating Java main modules and tests from JSON"
 echo ""
-stack exec bootstrap-from-json -- --target java --include-coders --include-dsls --include-tests $RTS_FLAGS || \
+# --output ../../dist/java: routing fans modules out into dist/java/<pkg>/
+# based on namespace (kernel classes -> hydra-kernel, ext -> hydra-ext, etc.).
+stack exec bootstrap-from-json -- --target java --output "../../dist/java" --include-coders --include-ext --include-dsls --include-tests $RTS_FLAGS || \
     warn "Java test generation had errors (some polymorphic types not supported). Continuing..."
 
 # Patch TestGraph.java to use TestEnv (real graph with primitives) instead of emptyGraph
@@ -83,12 +85,15 @@ if [ -f "$TESTGRAPH" ]; then
     sed_inplace 's/return hydra.Lexical.emptyContext();/return hydra.test.TestEnv.testContext();/' "$TESTGRAPH"
 fi
 
-step 3 $TOTAL_STEPS "Generating ext Java modules into dist/java/hydra-ext from JSON"
+step 3 $TOTAL_STEPS "Generating hydra-pg and hydra-rdf Java modules from JSON"
 echo ""
-stack exec bootstrap-from-json -- --target java --output "../../dist/java/hydra-ext" --include-coders --ext-only $RTS_FLAGS
+# The pg and rdf packages are loaded via --ext-only; with routing, their
+# content lands under dist/java/hydra-pg/ and dist/java/hydra-rdf/ instead
+# of piling into a single dist/java/hydra-ext/ tree.
+stack exec bootstrap-from-json -- --target java --output "../../dist/java" --include-coders --ext-only $RTS_FLAGS
 
 # Patch Lisp Coder.java for PartialVisitor type inference issue in encodeTermDefinition
-LISPCODER="../../dist/java/hydra-ext/src/main/java/hydra/lisp/Coder.java"
+LISPCODER="../../dist/java/hydra-lisp/src/main/java/hydra/lisp/Coder.java"
 if [ -f "$LISPCODER" ]; then
     echo "  Post-processing: patching Lisp Coder.java..."
     sed_inplace 's/Either<hydra.lisp.syntax.TopLevelFormWithComments, hydra.lisp.syntax.TopLevelFormWithComments> otherwise/Either<T2, hydra.lisp.syntax.TopLevelFormWithComments> otherwise/' "$LISPCODER"

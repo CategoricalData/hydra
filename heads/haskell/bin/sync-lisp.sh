@@ -111,6 +111,7 @@ for dialect in "${DIALECT_LIST[@]}"; do
     echo "  --- $dialect ---"
     stack exec bootstrap-from-json -- \
         --target "$dialect" \
+        --output "../../dist/$dialect" \
         --include-coders \
         --include-tests \
         $RTS_FLAGS
