@@ -206,7 +206,22 @@ encodeApplication cx g stringOffsets fieldOffsets variantIndexes funcSigs term =
             Syntax.InstructionConst (Syntax.ConstValueI32 0)]) (\firstArg -> Eithers.bind (encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs firstArg) (\firstArgInstrs -> encodeProjection cx g fieldOffsets v0 firstArgInstrs))
           Core.TermCases v0 -> Maybes.cases (Lists.maybeHead args) (Right [
             Syntax.InstructionConst (Syntax.ConstValueI32 0)]) (\firstArg -> Eithers.bind (encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs firstArg) (\firstArgInstrs -> encodeCases cx g stringOffsets fieldOffsets variantIndexes funcSigs v0 firstArgInstrs))
-          Core.TermLambda v0 -> Eithers.bind (encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs (Core.lambdaBody v0)) (\bodyInstrs -> Right (Lists.concat2 droppedArgInstrs bodyInstrs))
+          Core.TermLambda v0 ->
+            let peeled = peelLambdaApp (Core.TermLambda v0) args
+                paramNames = Pairs.first peeled
+                innerBody = Pairs.second peeled
+                bindInstrs =
+                      Lists.concat (Lists.map (\np ->
+                        let pname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Pairs.first np))
+                            argInstrs = Pairs.second np
+                        in Lists.concat2 argInstrs [Syntax.InstructionLocalSet pname])
+                        (Lists.zip paramNames realArgInstrs))
+                extraArgInstrs =
+                      Lists.concat (Lists.map (\ai ->
+                        Lists.concat2 ai [Syntax.InstructionDrop])
+                        (Lists.drop (Lists.length paramNames) realArgInstrs))
+            in Eithers.bind (encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs innerBody) (\bodyInstrs ->
+              Right (Lists.concat [bindInstrs, extraArgInstrs, bodyInstrs]))
           _ -> Eithers.bind (encodeTerm cx g stringOffsets fieldOffsets variantIndexes funcSigs fun) (\funInstrs -> Right (Lists.concat [
             droppedArgInstrs,
             funInstrs,
@@ -729,6 +744,21 @@ encodeValType cx g t =
         Core.TypeForall v0 -> encodeValType cx g (Core.forallTypeBody v0)
         _ -> Right Syntax.ValTypeI32
 
+peelLambdaApp :: Core.Term -> [Core.Term] -> ([Core.Name], Core.Term)
+peelLambdaApp term args =
+    if Lists.null args
+      then ([], term)
+      else
+        let stripped = Strip.deannotateTerm term
+        in case stripped of
+          Core.TermLambda v0 ->
+            let paramName = Core.lambdaParameter v0
+                body = Core.lambdaBody v0
+                restArgs = Maybes.fromMaybe [] (Lists.maybeTail args)
+                inner = peelLambdaApp body restArgs
+            in (Lists.cons paramName (Pairs.first inner), Pairs.second inner)
+          _ -> ([], term)
+
 extractLambdaParams :: Core.Term -> ([Core.Name], Core.Term)
 extractLambdaParams term =
 
@@ -833,6 +863,10 @@ moduleToWasm mod defs cx g =
                     Syntax.ModuleFieldExport (Syntax.ExportDef {
                       Syntax.exportDefName = "__bump_ptr",
                       Syntax.exportDefDesc = (Syntax.ExportDescGlobal "__bump_ptr")})
+            allocExport =
+                    Syntax.ModuleFieldExport (Syntax.ExportDef {
+                      Syntax.exportDefName = "__alloc",
+                      Syntax.exportDefDesc = (Syntax.ExportDescFunc "__alloc")})
             funcExports =
                     Lists.map (\td ->
                       let ename = Formatting.convertCaseCamelToLowerSnake (Core.unName (Packaging.termDefinitionName td))
@@ -881,7 +915,8 @@ moduleToWasm mod defs cx g =
                           dataField,
                           bumpGlobal,
                           bumpExport,
-                          allocFunc],
+                          allocFunc,
+                          allocExport],
                         funcExports,
                         allFields])}
             code = Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr wasmMod))

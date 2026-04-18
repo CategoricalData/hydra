@@ -49,12 +49,48 @@ export function readString(memory, ptr) {
   return new TextDecoder("utf-8").decode(bytes);
 }
 
+// Write an i32 at `ptr` in linear memory (little-endian).
+export function writeI32(memory, ptr, value) {
+  new DataView(memory.buffer).setInt32(ptr, value, /*littleEndian*/ true);
+}
+
+// Allocate `size` bytes via the module's __alloc export. Returns the base pointer.
+export function alloc(instance, size) {
+  const fn = instance.exports.__alloc;
+  if (typeof fn !== "function") {
+    throw new Error("module does not export __alloc");
+  }
+  return fn(size);
+}
+
+// Construct a tagged-union value { tag, payload } in linear memory.
+// Layout: [tag:i32 at offset 0][payload:i32 at offset 4]. Returns pointer.
+export function allocVariant(instance, memory, tag, payloadPtr) {
+  const p = alloc(instance, 8);
+  writeI32(memory, p, tag);
+  writeI32(memory, p + 4, payloadPtr);
+  return p;
+}
+
+// Construct a record with field values at consecutive 4-byte offsets.
+// values[i] becomes the i32 at offset 4*i. Returns pointer.
+export function allocRecord(instance, memory, values) {
+  const p = alloc(instance, 4 * values.length);
+  for (let i = 0; i < values.length; i++) {
+    writeI32(memory, p + 4 * i, values[i] | 0);
+  }
+  return p;
+}
+
 // -----------------------------------------------------------------------
 // Test harness (M1)
 // -----------------------------------------------------------------------
 
 // A test case is:
-//   { name: string, export: string, kind: "i32" | "string", expected: any }
+//   { name: string, export: string, kind: "i32" | "string",
+//     args?: (ctx) => number[],  // optional fn building i32 args from ctx
+//     expected: any }
+// where ctx = { instance, memory, alloc, allocVariant, allocRecord, writeI32 }.
 // Runs one test and returns { name, pass, actual, expected, error? }.
 export function runTest(instance, memory, test) {
   try {
@@ -66,7 +102,16 @@ export function runTest(instance, memory, test) {
         error: `export not found: ${test.export}`,
       };
     }
-    const raw = fn();
+    const ctx = {
+      instance,
+      memory,
+      alloc: (sz) => alloc(instance, sz),
+      allocVariant: (tag, payload) => allocVariant(instance, memory, tag, payload),
+      allocRecord: (vals) => allocRecord(instance, memory, vals),
+      writeI32: (ptr, v) => writeI32(memory, ptr, v),
+    };
+    const args = test.args ? test.args(ctx) : [];
+    const raw = fn(...args);
     let actual;
     if (test.kind === "i32") {
       actual = raw | 0;
