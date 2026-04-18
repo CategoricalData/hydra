@@ -3436,151 +3436,475 @@
                                                                                   "let": {
                                                                                     "bindings": [
                                                                                       {
-                                                                                        "name": "armLabels",
-                                                                                        "term": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "arms"},
-                                                                                            "function": {
-                                                                                              "application": {
-                                                                                                "argument": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"variable": "hydra.lib.pairs.first"},
-                                                                                                        "type": {"literal": {"string": {}}}}},
-                                                                                                    "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
-                                                                                                "function": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"variable": "hydra.lib.lists.map"},
-                                                                                                        "type": {
-                                                                                                          "pair": {
-                                                                                                            "first": {"literal": {"string": {}}},
-                                                                                                            "second": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}},
-                                                                                                    "type": {"literal": {"string": {}}}}}}}}},
-                                                                                        "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                                                                                        "name": "defaultArmLabel",
+                                                                                        "term": {"literal": {"string": "_default"}},
+                                                                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
                                                                                     "body": {
                                                                                       "let": {
                                                                                         "bindings": [
                                                                                           {
-                                                                                            "name": "endLabel",
+                                                                                            "name": "mDefault",
                                                                                             "term": {
                                                                                               "application": {
-                                                                                                "argument": {"variable": "tname"},
+                                                                                                "argument": {"variable": "cs"},
                                                                                                 "function": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"literal": {"string": "end_"}},
-                                                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                                            "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                                                                                  "project": {"field": "default", "typeName": "hydra.core.CaseStatement"}}}},
+                                                                                            "type": {"type": {"maybe": {"variable": "hydra.core.Term"}}, "variables": []}}],
                                                                                         "body": {
-                                                                                          "let": {
-                                                                                            "bindings": [
-                                                                                              {
-                                                                                                "name": "defaultLabel",
-                                                                                                "term": {
-                                                                                                  "application": {
-                                                                                                    "argument": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "armLabels"},
-                                                                                                        "function": {
-                                                                                                          "typeApplication": {
-                                                                                                            "body": {"variable": "hydra.lib.lists.maybeLast"},
-                                                                                                            "type": {"literal": {"string": {}}}}}}},
-                                                                                                    "function": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "endLabel"},
-                                                                                                        "function": {
-                                                                                                          "typeApplication": {
-                                                                                                            "body": {"variable": "hydra.lib.maybes.fromMaybe"},
-                                                                                                            "type": {"literal": {"string": {}}}}}}}}},
-                                                                                                "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
-                                                                                            "body": {
-                                                                                              "let": {
-                                                                                                "bindings": [
-                                                                                                  {
-                                                                                                    "name": "innerDispatch",
-                                                                                                    "term": {
-                                                                                                      "application": {
-                                                                                                        "argument": {
-                                                                                                          "list": [
-                                                                                                            {
-                                                                                                              "inject": {
-                                                                                                                "field": {
-                                                                                                                  "name": "brTable",
-                                                                                                                  "term": {
-                                                                                                                    "record": {
-                                                                                                                      "fields": [
-                                                                                                                        {"name": "labels", "term": {"variable": "armLabels"}},
-                                                                                                                        {"name": "default", "term": {"variable": "defaultLabel"}}],
-                                                                                                                      "typeName": "hydra.wasm.syntax.BrTableArgs"}}},
-                                                                                                                "typeName": "hydra.wasm.syntax.Instruction"}}]},
-                                                                                                        "function": {
-                                                                                                          "application": {
-                                                                                                            "argument": {"variable": "prologue"},
-                                                                                                            "function": {
-                                                                                                              "typeApplication": {
-                                                                                                                "body": {"variable": "hydra.lib.lists.concat2"},
-                                                                                                                "type": {"variable": "hydra.wasm.syntax.Instruction"}}}}}}},
-                                                                                                    "type": {
-                                                                                                      "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
-                                                                                                      "variables": []}}],
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "lambda": {
                                                                                                 "body": {
                                                                                                   "let": {
                                                                                                     "bindings": [
                                                                                                       {
-                                                                                                        "name": "dispatch",
+                                                                                                        "name": "arms",
                                                                                                         "term": {
                                                                                                           "application": {
-                                                                                                            "argument": {"variable": "arms"},
+                                                                                                            "argument": {
+                                                                                                              "list": [
+                                                                                                                {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {
+                                                                                                                          "pair": {
+                                                                                                                            "@first": {"variable": "defaultArmLabel"},
+                                                                                                                            "@second": {"variable": "defaultArmBody"}}},
+                                                                                                                        "type": {"literal": {"string": {}}}}},
+                                                                                                                    "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}]},
                                                                                                             "function": {
                                                                                                               "application": {
-                                                                                                                "argument": {"variable": "innerDispatch"},
+                                                                                                                "argument": {"variable": "explicitArms"},
                                                                                                                 "function": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {"variable": "hydra.lib.lists.concat2"},
+                                                                                                                    "type": {
+                                                                                                                      "pair": {
+                                                                                                                        "first": {"literal": {"string": {}}},
+                                                                                                                        "second": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}}}}}},
+                                                                                                        "type": {
+                                                                                                          "type": {
+                                                                                                            "list": {
+                                                                                                              "pair": {
+                                                                                                                "first": {"literal": {"string": {}}},
+                                                                                                                "second": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}},
+                                                                                                          "variables": []}}],
+                                                                                                    "body": {
+                                                                                                      "let": {
+                                                                                                        "bindings": [
+                                                                                                          {
+                                                                                                            "name": "explicitLabelForName",
+                                                                                                            "term": {
+                                                                                                              "lambda": {
+                                                                                                                "body": {
                                                                                                                   "application": {
                                                                                                                     "argument": {
-                                                                                                                      "lambda": {
-                                                                                                                        "body": {
-                                                                                                                          "lambda": {
-                                                                                                                            "body": {
-                                                                                                                              "let": {
-                                                                                                                                "bindings": [
-                                                                                                                                  {
-                                                                                                                                    "name": "label",
-                                                                                                                                    "term": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {"variable": "explicitArms"},
+                                                                                                                            "function": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {
+                                                                                                                                  "lambda": {
+                                                                                                                                    "body": {
                                                                                                                                       "application": {
-                                                                                                                                        "argument": {"variable": "arm"},
+                                                                                                                                        "argument": {"variable": "fname"},
                                                                                                                                         "function": {
+                                                                                                                                          "application": {
+                                                                                                                                            "argument": {
+                                                                                                                                              "application": {
+                                                                                                                                                "argument": {"variable": "arm"},
+                                                                                                                                                "function": {
+                                                                                                                                                  "typeApplication": {
+                                                                                                                                                    "body": {
+                                                                                                                                                      "typeApplication": {
+                                                                                                                                                        "body": {"variable": "hydra.lib.pairs.first"},
+                                                                                                                                                        "type": {"literal": {"string": {}}}}},
+                                                                                                                                                    "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}},
+                                                                                                                                            "function": {
+                                                                                                                                              "typeApplication": {
+                                                                                                                                                "body": {"variable": "hydra.lib.equality.equal"},
+                                                                                                                                                "type": {"literal": {"string": {}}}}}}}}},
+                                                                                                                                    "domain": {
+                                                                                                                                      "pair": {
+                                                                                                                                        "first": {"literal": {"string": {}}},
+                                                                                                                                        "second": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
+                                                                                                                                    "parameter": "arm"}},
+                                                                                                                                "function": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"variable": "hydra.lib.lists.find"},
+                                                                                                                                    "type": {
+                                                                                                                                      "pair": {
+                                                                                                                                        "first": {"literal": {"string": {}}},
+                                                                                                                                        "second": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}}}}}},
+                                                                                                                        "function": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"variable": "hydra.lib.pairs.first"},
+                                                                                                                                    "type": {"literal": {"string": {}}}}},
+                                                                                                                                "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
+                                                                                                                            "function": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"variable": "hydra.lib.maybes.map"},
+                                                                                                                                    "type": {
+                                                                                                                                      "pair": {
+                                                                                                                                        "first": {"literal": {"string": {}}},
+                                                                                                                                        "second": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}},
+                                                                                                                                "type": {"literal": {"string": {}}}}}}}}},
+                                                                                                                    "function": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {"variable": "defaultArmLabel"},
+                                                                                                                        "function": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {"variable": "hydra.lib.maybes.fromMaybe"},
+                                                                                                                            "type": {"literal": {"string": {}}}}}}}}},
+                                                                                                                "domain": {"literal": {"string": {}}},
+                                                                                                                "parameter": "fname"}},
+                                                                                                            "type": {
+                                                                                                              "type": {
+                                                                                                                "function": {
+                                                                                                                  "codomain": {"literal": {"string": {}}},
+                                                                                                                  "domain": {"literal": {"string": {}}}}},
+                                                                                                              "variables": []}}],
+                                                                                                        "body": {
+                                                                                                          "let": {
+                                                                                                            "bindings": [
+                                                                                                              {
+                                                                                                                "name": "typeName",
+                                                                                                                "term": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"variable": "cs"},
+                                                                                                                    "function": {
+                                                                                                                      "project": {"field": "typeName", "typeName": "hydra.core.CaseStatement"}}}},
+                                                                                                                "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}],
+                                                                                                            "body": {
+                                                                                                              "let": {
+                                                                                                                "bindings": [
+                                                                                                                  {
+                                                                                                                    "name": "mUnionVariants",
+                                                                                                                    "term": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {"variable": "variantIndexes"},
+                                                                                                                        "function": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {"variable": "typeName"},
+                                                                                                                            "function": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"variable": "hydra.lib.maps.lookup"},
+                                                                                                                                    "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                                "type": {
+                                                                                                                                  "list": {
+                                                                                                                                    "pair": {
+                                                                                                                                      "first": {"variable": "hydra.core.Name"},
+                                                                                                                                      "second": {"literal": {"integer": {"int32": {}}}}}}}}}}}}},
+                                                                                                                    "type": {
+                                                                                                                      "type": {
+                                                                                                                        "maybe": {
+                                                                                                                          "list": {
+                                                                                                                            "pair": {
+                                                                                                                              "first": {"variable": "hydra.core.Name"},
+                                                                                                                              "second": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                                                                      "variables": []}}],
+                                                                                                                "body": {
+                                                                                                                  "let": {
+                                                                                                                    "bindings": [
+                                                                                                                      {
+                                                                                                                        "name": "brTableLabels",
+                                                                                                                        "term": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {
+                                                                                                                              "lambda": {
+                                                                                                                                "body": {
+                                                                                                                                  "let": {
+                                                                                                                                    "bindings": [
+                                                                                                                                      {
+                                                                                                                                        "name": "sorted",
+                                                                                                                                        "term": {
+                                                                                                                                          "application": {
+                                                                                                                                            "argument": {"variable": "variantPairs"},
+                                                                                                                                            "function": {
+                                                                                                                                              "application": {
+                                                                                                                                                "argument": {
+                                                                                                                                                  "typeApplication": {
+                                                                                                                                                    "body": {
+                                                                                                                                                      "typeApplication": {
+                                                                                                                                                        "body": {"variable": "hydra.lib.pairs.second"},
+                                                                                                                                                        "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                                                                                "function": {
+                                                                                                                                                  "typeApplication": {
+                                                                                                                                                    "body": {
+                                                                                                                                                      "typeApplication": {
+                                                                                                                                                        "body": {"variable": "hydra.lib.lists.sortOn"},
+                                                                                                                                                        "type": {
+                                                                                                                                                          "pair": {
+                                                                                                                                                            "first": {"variable": "hydra.core.Name"},
+                                                                                                                                                            "second": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                                                                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                                                                        "type": {
+                                                                                                                                          "type": {
+                                                                                                                                            "list": {
+                                                                                                                                              "pair": {
+                                                                                                                                                "first": {"variable": "hydra.core.Name"},
+                                                                                                                                                "second": {"literal": {"integer": {"int32": {}}}}}}},
+                                                                                                                                          "variables": []}}],
+                                                                                                                                    "body": {
+                                                                                                                                      "application": {
+                                                                                                                                        "argument": {"variable": "sorted"},
+                                                                                                                                        "function": {
+                                                                                                                                          "application": {
+                                                                                                                                            "argument": {
+                                                                                                                                              "lambda": {
+                                                                                                                                                "body": {
+                                                                                                                                                  "let": {
+                                                                                                                                                    "bindings": [
+                                                                                                                                                      {
+                                                                                                                                                        "name": "fieldName",
+                                                                                                                                                        "term": {
+                                                                                                                                                          "application": {
+                                                                                                                                                            "argument": {
+                                                                                                                                                              "application": {
+                                                                                                                                                                "argument": {
+                                                                                                                                                                  "application": {
+                                                                                                                                                                    "argument": {"variable": "np"},
+                                                                                                                                                                    "function": {
+                                                                                                                                                                      "typeApplication": {
+                                                                                                                                                                        "body": {
+                                                                                                                                                                          "typeApplication": {
+                                                                                                                                                                            "body": {"variable": "hydra.lib.pairs.first"},
+                                                                                                                                                                            "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                                                                                                                "function": {"unwrap": "hydra.core.Name"}}},
+                                                                                                                                                            "function": {"variable": "hydra.formatting.convertCaseCamelToLowerSnake"}}},
+                                                                                                                                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                                                                                                                                    "body": {
+                                                                                                                                                      "application": {
+                                                                                                                                                        "argument": {"variable": "fieldName"},
+                                                                                                                                                        "function": {"variable": "explicitLabelForName"}}}}},
+                                                                                                                                                "domain": {
+                                                                                                                                                  "pair": {
+                                                                                                                                                    "first": {"variable": "hydra.core.Name"},
+                                                                                                                                                    "second": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                                                                                "parameter": "np"}},
+                                                                                                                                            "function": {
+                                                                                                                                              "typeApplication": {
+                                                                                                                                                "body": {
+                                                                                                                                                  "typeApplication": {
+                                                                                                                                                    "body": {"variable": "hydra.lib.lists.map"},
+                                                                                                                                                    "type": {
+                                                                                                                                                      "pair": {
+                                                                                                                                                        "first": {"variable": "hydra.core.Name"},
+                                                                                                                                                        "second": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                                                                                                "type": {"literal": {"string": {}}}}}}}}}}},
+                                                                                                                                "domain": {
+                                                                                                                                  "list": {
+                                                                                                                                    "pair": {
+                                                                                                                                      "first": {"variable": "hydra.core.Name"},
+                                                                                                                                      "second": {"literal": {"integer": {"int32": {}}}}}}},
+                                                                                                                                "parameter": "variantPairs"}},
+                                                                                                                            "function": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {
+                                                                                                                                  "application": {
+                                                                                                                                    "argument": {"variable": "explicitArms"},
+                                                                                                                                    "function": {
+                                                                                                                                      "application": {
+                                                                                                                                        "argument": {
                                                                                                                                           "typeApplication": {
                                                                                                                                             "body": {
                                                                                                                                               "typeApplication": {
                                                                                                                                                 "body": {"variable": "hydra.lib.pairs.first"},
                                                                                                                                                 "type": {"literal": {"string": {}}}}},
-                                                                                                                                            "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}},
-                                                                                                                                    "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
-                                                                                                                                "body": {
-                                                                                                                                  "let": {
-                                                                                                                                    "bindings": [
-                                                                                                                                      {
-                                                                                                                                        "name": "body",
-                                                                                                                                        "term": {
-                                                                                                                                          "application": {
-                                                                                                                                            "argument": {"variable": "arm"},
-                                                                                                                                            "function": {
+                                                                                                                                            "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
+                                                                                                                                        "function": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {
                                                                                                                                               "typeApplication": {
-                                                                                                                                                "body": {
-                                                                                                                                                  "typeApplication": {
-                                                                                                                                                    "body": {"variable": "hydra.lib.pairs.second"},
-                                                                                                                                                    "type": {"literal": {"string": {}}}}},
-                                                                                                                                                "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}},
-                                                                                                                                        "type": {
-                                                                                                                                          "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
-                                                                                                                                          "variables": []}}],
-                                                                                                                                    "body": {
+                                                                                                                                                "body": {"variable": "hydra.lib.lists.map"},
+                                                                                                                                                "type": {
+                                                                                                                                                  "pair": {
+                                                                                                                                                    "first": {"literal": {"string": {}}},
+                                                                                                                                                    "second": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}},
+                                                                                                                                            "type": {"literal": {"string": {}}}}}}}}},
+                                                                                                                                "function": {
+                                                                                                                                  "application": {
+                                                                                                                                    "argument": {"variable": "mUnionVariants"},
+                                                                                                                                    "function": {
+                                                                                                                                      "typeApplication": {
+                                                                                                                                        "body": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {"variable": "hydra.lib.maybes.cases"},
+                                                                                                                                            "type": {
+                                                                                                                                              "list": {
+                                                                                                                                                "pair": {
+                                                                                                                                                  "first": {"variable": "hydra.core.Name"},
+                                                                                                                                                  "second": {"literal": {"integer": {"int32": {}}}}}}}}},
+                                                                                                                                        "type": {"list": {"literal": {"string": {}}}}}}}}}}}},
+                                                                                                                        "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                                                                                                                    "body": {
+                                                                                                                      "let": {
+                                                                                                                        "bindings": [
+                                                                                                                          {
+                                                                                                                            "name": "endLabel",
+                                                                                                                            "term": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {"variable": "tname"},
+                                                                                                                                "function": {
+                                                                                                                                  "application": {
+                                                                                                                                    "argument": {"literal": {"string": "end_"}},
+                                                                                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                                                                                            "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                                                                                                        "body": {
+                                                                                                                          "let": {
+                                                                                                                            "bindings": [
+                                                                                                                              {
+                                                                                                                                "name": "innerDispatch",
+                                                                                                                                "term": {
+                                                                                                                                  "application": {
+                                                                                                                                    "argument": {
+                                                                                                                                      "list": [
+                                                                                                                                        {
+                                                                                                                                          "inject": {
+                                                                                                                                            "field": {
+                                                                                                                                              "name": "brTable",
+                                                                                                                                              "term": {
+                                                                                                                                                "record": {
+                                                                                                                                                  "fields": [
+                                                                                                                                                    {"name": "labels", "term": {"variable": "brTableLabels"}},
+                                                                                                                                                    {"name": "default", "term": {"variable": "defaultArmLabel"}}],
+                                                                                                                                                  "typeName": "hydra.wasm.syntax.BrTableArgs"}}},
+                                                                                                                                            "typeName": "hydra.wasm.syntax.Instruction"}}]},
+                                                                                                                                    "function": {
                                                                                                                                       "application": {
-                                                                                                                                        "argument": {
-                                                                                                                                          "list": [
-                                                                                                                                            {
+                                                                                                                                        "argument": {"variable": "prologue"},
+                                                                                                                                        "function": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {"variable": "hydra.lib.lists.concat2"},
+                                                                                                                                            "type": {"variable": "hydra.wasm.syntax.Instruction"}}}}}}},
+                                                                                                                                "type": {
+                                                                                                                                  "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
+                                                                                                                                  "variables": []}}],
+                                                                                                                            "body": {
+                                                                                                                              "let": {
+                                                                                                                                "bindings": [
+                                                                                                                                  {
+                                                                                                                                    "name": "dispatch",
+                                                                                                                                    "term": {
+                                                                                                                                      "application": {
+                                                                                                                                        "argument": {"variable": "arms"},
+                                                                                                                                        "function": {
+                                                                                                                                          "application": {
+                                                                                                                                            "argument": {"variable": "innerDispatch"},
+                                                                                                                                            "function": {
+                                                                                                                                              "application": {
+                                                                                                                                                "argument": {
+                                                                                                                                                  "lambda": {
+                                                                                                                                                    "body": {
+                                                                                                                                                      "lambda": {
+                                                                                                                                                        "body": {
+                                                                                                                                                          "let": {
+                                                                                                                                                            "bindings": [
+                                                                                                                                                              {
+                                                                                                                                                                "name": "label",
+                                                                                                                                                                "term": {
+                                                                                                                                                                  "application": {
+                                                                                                                                                                    "argument": {"variable": "arm"},
+                                                                                                                                                                    "function": {
+                                                                                                                                                                      "typeApplication": {
+                                                                                                                                                                        "body": {
+                                                                                                                                                                          "typeApplication": {
+                                                                                                                                                                            "body": {"variable": "hydra.lib.pairs.first"},
+                                                                                                                                                                            "type": {"literal": {"string": {}}}}},
+                                                                                                                                                                        "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}},
+                                                                                                                                                                "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                                                                                                                                            "body": {
+                                                                                                                                                              "let": {
+                                                                                                                                                                "bindings": [
+                                                                                                                                                                  {
+                                                                                                                                                                    "name": "body",
+                                                                                                                                                                    "term": {
+                                                                                                                                                                      "application": {
+                                                                                                                                                                        "argument": {"variable": "arm"},
+                                                                                                                                                                        "function": {
+                                                                                                                                                                          "typeApplication": {
+                                                                                                                                                                            "body": {
+                                                                                                                                                                              "typeApplication": {
+                                                                                                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
+                                                                                                                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                                                                                                            "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}},
+                                                                                                                                                                    "type": {
+                                                                                                                                                                      "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
+                                                                                                                                                                      "variables": []}}],
+                                                                                                                                                                "body": {
+                                                                                                                                                                  "application": {
+                                                                                                                                                                    "argument": {
+                                                                                                                                                                      "list": [
+                                                                                                                                                                        {
+                                                                                                                                                                          "list": [
+                                                                                                                                                                            {
+                                                                                                                                                                              "inject": {
+                                                                                                                                                                                "field": {
+                                                                                                                                                                                  "name": "block",
+                                                                                                                                                                                  "term": {
+                                                                                                                                                                                    "record": {
+                                                                                                                                                                                      "fields": [
+                                                                                                                                                                                        {"name": "label", "term": {"maybe": {"variable": "label"}}},
+                                                                                                                                                                                        {
+                                                                                                                                                                                          "name": "blockType",
+                                                                                                                                                                                          "term": {
+                                                                                                                                                                                            "inject": {
+                                                                                                                                                                                              "field": {"name": "empty", "term": {"unit": {}}},
+                                                                                                                                                                                              "typeName": "hydra.wasm.syntax.BlockType"}}},
+                                                                                                                                                                                        {"name": "body", "term": {"variable": "acc"}}],
+                                                                                                                                                                                      "typeName": "hydra.wasm.syntax.BlockInstruction"}}},
+                                                                                                                                                                                "typeName": "hydra.wasm.syntax.Instruction"}}]},
+                                                                                                                                                                        {"variable": "body"},
+                                                                                                                                                                        {
+                                                                                                                                                                          "list": [
+                                                                                                                                                                            {
+                                                                                                                                                                              "inject": {
+                                                                                                                                                                                "field": {"name": "br", "term": {"variable": "endLabel"}},
+                                                                                                                                                                                "typeName": "hydra.wasm.syntax.Instruction"}}]}]},
+                                                                                                                                                                    "function": {
+                                                                                                                                                                      "typeApplication": {
+                                                                                                                                                                        "body": {"variable": "hydra.lib.lists.concat"},
+                                                                                                                                                                        "type": {"variable": "hydra.wasm.syntax.Instruction"}}}}}}}}},
+                                                                                                                                                        "domain": {
+                                                                                                                                                          "pair": {
+                                                                                                                                                            "first": {"literal": {"string": {}}},
+                                                                                                                                                            "second": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
+                                                                                                                                                        "parameter": "arm"}},
+                                                                                                                                                    "domain": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
+                                                                                                                                                    "parameter": "acc"}},
+                                                                                                                                                "function": {
+                                                                                                                                                  "typeApplication": {
+                                                                                                                                                    "body": {
+                                                                                                                                                      "typeApplication": {
+                                                                                                                                                        "body": {"variable": "hydra.lib.lists.foldl"},
+                                                                                                                                                        "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
+                                                                                                                                                    "type": {
+                                                                                                                                                      "pair": {
+                                                                                                                                                        "first": {"literal": {"string": {}}},
+                                                                                                                                                        "second": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}}}}}}}},
+                                                                                                                                    "type": {
+                                                                                                                                      "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
+                                                                                                                                      "variables": []}}],
+                                                                                                                                "body": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {
+                                                                                                                                      "typeApplication": {
+                                                                                                                                        "body": {
+                                                                                                                                          "either": {
+                                                                                                                                            "@right": {
                                                                                                                                               "list": [
                                                                                                                                                 {
                                                                                                                                                   "inject": {
@@ -3589,48 +3913,68 @@
                                                                                                                                                       "term": {
                                                                                                                                                         "record": {
                                                                                                                                                           "fields": [
-                                                                                                                                                            {"name": "label", "term": {"maybe": {"variable": "label"}}},
+                                                                                                                                                            {"name": "label", "term": {"maybe": {"variable": "endLabel"}}},
                                                                                                                                                             {
                                                                                                                                                               "name": "blockType",
                                                                                                                                                               "term": {
                                                                                                                                                                 "inject": {
-                                                                                                                                                                  "field": {"name": "empty", "term": {"unit": {}}},
+                                                                                                                                                                  "field": {
+                                                                                                                                                                    "name": "value",
+                                                                                                                                                                    "term": {
+                                                                                                                                                                      "inject": {
+                                                                                                                                                                        "field": {"name": "i32", "term": {"unit": {}}},
+                                                                                                                                                                        "typeName": "hydra.wasm.syntax.ValType"}}},
                                                                                                                                                                   "typeName": "hydra.wasm.syntax.BlockType"}}},
-                                                                                                                                                            {"name": "body", "term": {"variable": "acc"}}],
+                                                                                                                                                            {"name": "body", "term": {"variable": "dispatch"}}],
                                                                                                                                                           "typeName": "hydra.wasm.syntax.BlockInstruction"}}},
-                                                                                                                                                    "typeName": "hydra.wasm.syntax.Instruction"}}]},
-                                                                                                                                            {"variable": "body"},
-                                                                                                                                            {
-                                                                                                                                              "list": [
-                                                                                                                                                {
-                                                                                                                                                  "inject": {
-                                                                                                                                                    "field": {"name": "br", "term": {"variable": "endLabel"}},
-                                                                                                                                                    "typeName": "hydra.wasm.syntax.Instruction"}}]}]},
-                                                                                                                                        "function": {
-                                                                                                                                          "typeApplication": {
-                                                                                                                                            "body": {"variable": "hydra.lib.lists.concat"},
-                                                                                                                                            "type": {"variable": "hydra.wasm.syntax.Instruction"}}}}}}}}},
-                                                                                                                            "domain": {
-                                                                                                                              "pair": {
-                                                                                                                                "first": {"literal": {"string": {}}},
-                                                                                                                                "second": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
-                                                                                                                            "parameter": "arm"}},
-                                                                                                                        "domain": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
-                                                                                                                        "parameter": "acc"}},
+                                                                                                                                                    "typeName": "hydra.wasm.syntax.Instruction"}}]}}},
+                                                                                                                                        "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                                    "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}}}}}}}}}}}}}}}},
+                                                                                                "domain": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
+                                                                                                "parameter": "defaultArmBody"}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "lambda": {
+                                                                                                        "body": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "defTerm"},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "funcSigs"},
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"variable": "variantIndexes"},
                                                                                                                     "function": {
-                                                                                                                      "typeApplication": {
-                                                                                                                        "body": {
-                                                                                                                          "typeApplication": {
-                                                                                                                            "body": {"variable": "hydra.lib.lists.foldl"},
-                                                                                                                            "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
-                                                                                                                        "type": {
-                                                                                                                          "pair": {
-                                                                                                                            "first": {"literal": {"string": {}}},
-                                                                                                                            "second": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}}}}}}}},
-                                                                                                        "type": {
-                                                                                                          "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}},
-                                                                                                          "variables": []}}],
-                                                                                                    "body": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {"variable": "fieldOffsets"},
+                                                                                                                        "function": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {"variable": "stringOffsets"},
+                                                                                                                            "function": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {"variable": "g"},
+                                                                                                                                "function": {
+                                                                                                                                  "application": {
+                                                                                                                                    "argument": {"variable": "cx"},
+                                                                                                                                    "function": {
+                                                                                                                                      "typeApplication": {
+                                                                                                                                        "body": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {
+                                                                                                                                              "typeApplication": {
+                                                                                                                                                "body": {
+                                                                                                                                                  "typeApplication": {
+                                                                                                                                                    "body": {"variable": "hydra.wasm.coder.encodeTerm"},
+                                                                                                                                                    "type": {"variable": "t0"}}},
+                                                                                                                                                "type": {"variable": "t1"}}},
+                                                                                                                                            "type": {"variable": "t2"}}},
+                                                                                                                                        "type": {"variable": "t3"}}}}}}}}}}}}}}}}},
+                                                                                                        "domain": {"variable": "hydra.core.Term"},
+                                                                                                        "parameter": "defTerm"}},
+                                                                                                    "function": {
                                                                                                       "application": {
                                                                                                         "argument": {
                                                                                                           "typeApplication": {
@@ -3643,88 +3987,43 @@
                                                                                                                         {
                                                                                                                           "inject": {
                                                                                                                             "field": {
-                                                                                                                              "name": "block",
+                                                                                                                              "name": "const",
                                                                                                                               "term": {
-                                                                                                                                "record": {
-                                                                                                                                  "fields": [
-                                                                                                                                    {"name": "label", "term": {"maybe": {"variable": "endLabel"}}},
-                                                                                                                                    {
-                                                                                                                                      "name": "blockType",
-                                                                                                                                      "term": {
-                                                                                                                                        "inject": {
-                                                                                                                                          "field": {
-                                                                                                                                            "name": "value",
-                                                                                                                                            "term": {
-                                                                                                                                              "inject": {
-                                                                                                                                                "field": {"name": "i32", "term": {"unit": {}}},
-                                                                                                                                                "typeName": "hydra.wasm.syntax.ValType"}}},
-                                                                                                                                          "typeName": "hydra.wasm.syntax.BlockType"}}},
-                                                                                                                                    {"name": "body", "term": {"variable": "dispatch"}}],
-                                                                                                                                  "typeName": "hydra.wasm.syntax.BlockInstruction"}}},
+                                                                                                                                "inject": {
+                                                                                                                                  "field": {"name": "i32", "term": {"literal": {"integer": {"int32": 0}}}},
+                                                                                                                                  "typeName": "hydra.wasm.syntax.ConstValue"}}},
                                                                                                                             "typeName": "hydra.wasm.syntax.Instruction"}}]}}},
                                                                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                                                                             "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
                                                                                                         "function": {
                                                                                                           "application": {
-                                                                                                            "argument": {
+                                                                                                            "argument": {"variable": "mDefault"},
+                                                                                                            "function": {
                                                                                                               "typeApplication": {
                                                                                                                 "body": {
                                                                                                                   "typeApplication": {
-                                                                                                                    "body": {
-                                                                                                                      "either": {
-                                                                                                                        "@right": {
-                                                                                                                          "application": {
-                                                                                                                            "argument": {
-                                                                                                                              "list": [
-                                                                                                                                {"variable": "scrutineeInstrs"},
-                                                                                                                                {
-                                                                                                                                  "list": [
-                                                                                                                                    {
-                                                                                                                                      "inject": {
-                                                                                                                                        "field": {"name": "drop", "term": {"unit": {}}},
-                                                                                                                                        "typeName": "hydra.wasm.syntax.Instruction"}}]},
-                                                                                                                                {
-                                                                                                                                  "list": [
-                                                                                                                                    {
-                                                                                                                                      "inject": {
-                                                                                                                                        "field": {
-                                                                                                                                          "name": "const",
-                                                                                                                                          "term": {
-                                                                                                                                            "inject": {
-                                                                                                                                              "field": {"name": "i32", "term": {"literal": {"integer": {"int32": 0}}}},
-                                                                                                                                              "typeName": "hydra.wasm.syntax.ConstValue"}}},
-                                                                                                                                        "typeName": "hydra.wasm.syntax.Instruction"}}]}]},
-                                                                                                                            "function": {
-                                                                                                                              "typeApplication": {
-                                                                                                                                "body": {"variable": "hydra.lib.lists.concat"},
-                                                                                                                                "type": {"variable": "hydra.wasm.syntax.Instruction"}}}}}}},
-                                                                                                                    "type": {"variable": "hydra.errors.Error"}}},
-                                                                                                                "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
-                                                                                                            "function": {
-                                                                                                              "application": {
-                                                                                                                "argument": {
-                                                                                                                  "application": {
-                                                                                                                    "argument": {"variable": "arms"},
-                                                                                                                    "function": {
-                                                                                                                      "typeApplication": {
-                                                                                                                        "body": {"variable": "hydra.lib.lists.null"},
-                                                                                                                        "type": {
-                                                                                                                          "pair": {
-                                                                                                                            "first": {"literal": {"string": {}}},
-                                                                                                                            "second": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}}}},
-                                                                                                                "function": {
-                                                                                                                  "typeApplication": {
-                                                                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                                                                    "type": {
-                                                                                                                      "either": {
-                                                                                                                        "left": {"variable": "hydra.errors.Error"},
-                                                                                                                        "right": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}}}}}}}}}}}}}}}}}},
+                                                                                                                    "body": {"variable": "hydra.lib.maybes.cases"},
+                                                                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                "type": {
+                                                                                                                  "either": {
+                                                                                                                    "left": {"variable": "hydra.errors.Error"},
+                                                                                                                    "right": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}}}}}}}},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"variable": "hydra.lib.eithers.bind"},
+                                                                                                            "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                        "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}},
+                                                                                                    "type": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}}}}}}}}},
                                                                                 "domain": {
                                                                                   "list": {
                                                                                     "pair": {
                                                                                       "first": {"literal": {"string": {}}},
                                                                                       "second": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}}}},
-                                                                                "parameter": "arms"}},
+                                                                                "parameter": "explicitArms"}},
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {
