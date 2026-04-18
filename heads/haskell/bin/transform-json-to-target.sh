@@ -62,6 +62,7 @@ stack build hydra:exe:bootstrap-from-json >/dev/null 2>&1
 #   - Baseline (hydra-kernel/hydra-haskell): always loaded.
 #   - Coder packages (hydra-java/python/scala/lisp): loaded via --include-coders.
 #   - Ext packages (hydra-pg/hydra-rdf):           loaded via --ext-only.
+#   - Long-tail ext (hydra-coq/hydra-javascript/hydra-ext): via --include-ext.
 # The --package <pkg> flag then narrows modsToGenerate to just that package.
 case "$PACKAGE" in
     hydra-kernel|hydra-haskell)
@@ -70,11 +71,14 @@ case "$PACKAGE" in
     hydra-java|hydra-python|hydra-scala|hydra-lisp)
         LOAD_FLAGS="--include-coders"
         ;;
-    hydra-pg|hydra-rdf)
-        # --ext-only loads the pg+rdf packages. --include-coders is also
-        # included so coder-package types (referenced by pg/rdf modules) are
-        # resolvable in the universe.
-        LOAD_FLAGS="--include-coders --ext-only"
+    hydra-pg|hydra-rdf|hydra-coq|hydra-javascript|hydra-ext)
+        # --include-ext loads hydra-coq + hydra-javascript + hydra-ext plus
+        # their type-resolution deps (hydra-pg, hydra-rdf). --include-coders
+        # is also needed because ext modules reference coder-package types.
+        # Using --include-ext (not --ext-only) so that allMainMods contains
+        # hydra-pg modules, which --synthesize-sources needs to see in order
+        # to emit the pg decode/encode source wrappers.
+        LOAD_FLAGS="--include-coders --include-ext"
         ;;
     *)
         echo "Warning: unknown package '$PACKAGE'; using default load flags." >&2
