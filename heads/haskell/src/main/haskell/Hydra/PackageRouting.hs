@@ -133,6 +133,8 @@ packagePrefixes =
   , ("hydra.validate.pg",           "hydra-pg")
   , ("hydra.decode.pg.",            "hydra-pg")
   , ("hydra.encode.pg.",            "hydra-pg")
+  , ("hydra.sources.decode.pg.",    "hydra-pg")
+  , ("hydra.sources.encode.pg.",    "hydra-pg")
   , ("hydra.demos.genpg.",          "hydra-pg")
   , ("openGql.grammar",             "hydra-pg")
   , ("com.gdblab.pathAlgebra.",     "hydra-pg")

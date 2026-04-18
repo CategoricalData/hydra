@@ -278,11 +278,11 @@ These are the standard developer entry point:
 bin/sync-all.sh
 
 # Individual phases
-heads/haskell/bin/sync-haskell.sh      # Regenerate Haskell kernel
-heads/haskell/bin/sync-ext.sh          # Regenerate ext modules and JSON exports
-heads/haskell/bin/sync-java.sh         # Regenerate Java from JSON
-heads/haskell/bin/sync-python.sh       # Regenerate Python from JSON
-heads/haskell/bin/sync-scala.sh        # Regenerate Scala
+heads/haskell/bin/sync-haskell.sh                           # Regenerate Haskell kernel
+heads/haskell/bin/assemble-distribution.sh <pkg>            # Per-package Haskell assembly (replaces sync-ext.sh)
+heads/haskell/bin/sync-java.sh                              # Regenerate Java from JSON
+heads/haskell/bin/sync-python.sh                            # Regenerate Python from JSON
+heads/haskell/bin/sync-scala.sh                             # Regenerate Scala
 
 # Quick mode (skip tests)
 bin/sync-all.sh --quick
