@@ -264,50 +264,45 @@ inferAndGenerateLexicon :: Context.Context -> Graph.Graph -> [Packaging.Module] 
 inferAndGenerateLexicon cx bsGraph kernelModules =
 
       let g0 = modulesToGraph bsGraph kernelModules kernelModules
-          dataElements =
+          allElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                       Core.bindingName = (Packaging.termDefinitionName v0),
                       Core.bindingTerm = (Packaging.termDefinitionTerm v0),
                       Core.bindingType = (Packaging.termDefinitionType v0)})
                     _ -> Nothing) (Packaging.moduleDefinitions m))) kernelModules)
-      in (Eithers.bind (Inference.inferGraphTypes cx dataElements g0) (\inferResultWithCx ->
+          untypedElements = Lists.filter (\b -> Maybes.isNothing (Core.bindingType b)) allElements
+      in (Eithers.bind (Inference.inferGraphTypes cx untypedElements g0) (\inferResultWithCx ->
         let g1 = Pairs.first (Pairs.first inferResultWithCx)
         in (generateLexicon g1)))
 
 -- | Perform type inference on modules and reconstruct with inferred types
 inferModules :: Context.Context -> Graph.Graph -> [Packaging.Module] -> [Packaging.Module] -> Either Errors.Error [Packaging.Module]
-inferModules cx bsGraph universeMods targetMods =
-
-      let g0 = modulesToGraph bsGraph universeMods universeMods
-          dataElements =
-                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
-                    Packaging.DefinitionTerm v0 -> Just (Core.Binding {
-                      Core.bindingName = (Packaging.termDefinitionName v0),
-                      Core.bindingTerm = (Packaging.termDefinitionTerm v0),
-                      Core.bindingType = (Packaging.termDefinitionType v0)})
-                    _ -> Nothing) (Packaging.moduleDefinitions m))) universeMods)
-      in (Eithers.bind (Inference.inferGraphTypes cx dataElements g0) (\inferResultWithCx ->
-        let inferResult = Pairs.first inferResultWithCx
-            inferredElements = Pairs.second inferResult
-        in (Right (Lists.map (refreshModule inferredElements) targetMods))))
+inferModules cx bsGraph universeMods targetMods = inferModulesImpl cx bsGraph universeMods targetMods
 
 -- | Infer types for target modules in the context of a typed universe
 inferModulesGiven :: Context.Context -> Graph.Graph -> [Packaging.Module] -> [Packaging.Module] -> Either Errors.Error [Packaging.Module]
-inferModulesGiven cx bsGraph universeMods targetMods =
+inferModulesGiven cx bsGraph universeMods targetMods = inferModulesImpl cx bsGraph universeMods targetMods
+
+-- | Partition universe bindings into pre-typed and untyped; infer the untyped set
+inferModulesImpl :: Context.Context -> Graph.Graph -> [Packaging.Module] -> [Packaging.Module] -> Either Errors.Error [Packaging.Module]
+inferModulesImpl cx bsGraph universeMods targetMods =
 
       let g0 = modulesToGraph bsGraph universeMods universeMods
-          dataElements =
+          allElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
                     Packaging.DefinitionTerm v0 -> Just (Core.Binding {
                       Core.bindingName = (Packaging.termDefinitionName v0),
                       Core.bindingTerm = (Packaging.termDefinitionTerm v0),
                       Core.bindingType = (Packaging.termDefinitionType v0)})
                     _ -> Nothing) (Packaging.moduleDefinitions m))) universeMods)
-      in (Eithers.bind (Inference.inferGraphTypes cx dataElements g0) (\inferResultWithCx ->
+          untypedElements = Lists.filter (\b -> Maybes.isNothing (Core.bindingType b)) allElements
+          typedElements = Lists.filter (\b -> Maybes.isJust (Core.bindingType b)) allElements
+      in (Eithers.bind (Inference.inferGraphTypes cx untypedElements g0) (\inferResultWithCx ->
         let inferResult = Pairs.first inferResultWithCx
-            inferredElements = Pairs.second inferResult
-        in (Right (Lists.map (refreshModule inferredElements) targetMods))))
+            newlyInferredElements = Pairs.second inferResult
+            allInferredElements = Lists.concat2 newlyInferredElements typedElements
+        in (Right (Lists.map (refreshModule allInferredElements) targetMods))))
 
 -- | Compute transitive closure of term dependencies for a set of modules
 moduleTermDepsTransitive :: M.Map Packaging.Namespace Packaging.Module -> [Packaging.Module] -> [Packaging.Module]
