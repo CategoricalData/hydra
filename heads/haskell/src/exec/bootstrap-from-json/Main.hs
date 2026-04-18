@@ -98,7 +98,6 @@ data Options = Options
   , optKernelOnly         :: Bool
   , optTypesOnly          :: Bool
   , optExtOnly            :: Bool
-  , optPackageSplit       :: Bool
   , optSynthesizeSources  :: Bool
   , optDistJsonRoot       :: Maybe FilePath
   , optPackage            :: Maybe String  -- Layer 1: narrow generation to one package
@@ -116,7 +115,6 @@ defaultOptions = Options
   , optKernelOnly         = False
   , optTypesOnly          = False
   , optExtOnly            = False
-  , optPackageSplit       = False
   , optSynthesizeSources  = False
   , optDistJsonRoot       = Nothing
   , optPackage            = Nothing
@@ -149,7 +147,6 @@ parseArgs = go defaultOptions
     go opts ("--types-only" : rest) = go (opts { optTypesOnly = True }) rest
     go opts ("--ext-only" : rest) = go (opts { optExtOnly = True }) rest
     go opts ("--ext-java-only" : rest) = go (opts { optExtOnly = True }) rest  -- legacy alias
-    go opts ("--package-split" : rest) = go (opts { optPackageSplit = True }) rest
     go opts ("--synthesize-sources" : rest) = go (opts { optSynthesizeSources = True }) rest
     go opts ("--dist-json-root" : d : rest) = go (opts { optDistJsonRoot = Just d }) rest
     go opts ("--json-dir" : d : rest) = go (opts { optDistJsonRoot = Just (legacyJsonDirToRoot d) }) rest  -- legacy alias; strips trailing "<pkg>/src/main/json" if present
@@ -173,8 +170,6 @@ usage = unlines
   , "  --types-only             Only generate type-defining modules"
   , "  --ext-only               Only generate ext demo modules from hydra-pg / hydra-rdf"
   , "  --ext-java-only          Legacy alias for --ext-only"
-  , "  --package-split          Route each module to <output>/<package>/src/main/<lang>/"
-  , "                           based on namespace prefix instead of a single output dir."
   , "  --synthesize-sources     Also synthesize decoder/encoder DSL source modules"
   , "                           (Hydra.Sources.Decode.*, Hydra.Sources.Encode.*) from"
   , "                           the loaded kernel type modules."
@@ -226,15 +221,15 @@ main = do
         "emacs-lisp"  -> "../../dist/emacs-lisp/hydra-kernel"
         _             -> "/tmp/hydra-bootstrapping-demo/haskell-to-" ++ target
   let outBase = maybe defaultOutput id (optOutput opts)
-  let outMain = outBase FP.</> ("src/main/" ++ target)
-  let outTest = outBase FP.</> ("src/test/" ++ target)
-
-  -- When --package-split is set, compute a per-package (main, test) output path.
-  -- Callers pass the parent directory of the package dirs as --output, e.g.
-  -- --output ../../dist/haskell, and each module is routed to
-  -- ../../dist/haskell/<package>/src/{main,test}/<lang>/.
+  -- Output path convention: callers pass the parent of per-package dirs as
+  -- --output (e.g. --output ../../dist/haskell), and each module is routed
+  -- to ../../dist/haskell/<package>/src/{main,test}/<lang>/.
   let packageOutMain pkg = outBase FP.</> pkg FP.</> ("src/main/" ++ target)
   let packageOutTest pkg = outBase FP.</> pkg FP.</> ("src/test/" ++ target)
+  -- Flat outMain / outTest are used by the few legacy writers (test-mode
+  -- ext injection below) that don't go through groupByPackage.
+  let outMain = outBase FP.</> ("src/main/" ++ target)
+  let outTest = outBase FP.</> ("src/test/" ++ target)
 
   -- Per-package JSON layout. Every package's main-side modules live at
   -- <root>/<pkg>/src/main/json/; the kernel's test modules live at
@@ -593,16 +588,16 @@ main = do
                 _ -> "")
             else return count
 
-  mainFileCount <- if optPackageSplit opts
-    then do
-      -- Partition modules by owning package and generate each group to its own dir.
-      let groups = groupByPackage modsToGenerate'
-      counts <- CM.forM groups $ \(pkg, pkgMods) -> do
-        let dir = packageOutMain pkg
-        putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules → " ++ dir
-        genForDir dir pkgMods
-      return (sum counts)
-    else genForDir outMain modsToGenerate'
+  -- Partition modules by owning package and generate each group to its own dir.
+  -- Routing via PackageRouting.groupByPackage is unconditional: every module
+  -- lands at <output>/<pkg>/src/main/<lang>/... based on its namespace.
+  mainFileCount <- do
+    let groups = groupByPackage modsToGenerate'
+    counts <- CM.forM groups $ \(pkg, pkgMods) -> do
+      let dir = packageOutMain pkg
+      putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules → " ++ dir
+      genForDir dir pkgMods
+    return (sum counts)
   genEnd <- getCurrentTime
 
   putStrLn $ "  Generated " ++ show mainFileCount ++ " files."
@@ -666,15 +661,13 @@ main = do
             _ -> return 0
 
       testStart <- getCurrentTime
-      count <- if optPackageSplit opts
-        then do
-          let groups = groupByPackage testMods
-          counts <- CM.forM groups $ \(pkg, pkgMods) -> do
-            let dir = packageOutTest pkg
-            putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " test modules → " ++ dir
-            genTestForDir dir pkgMods
-          return (sum counts)
-        else genTestForDir outTest testMods
+      count <- do
+        let groups = groupByPackage testMods
+        counts <- CM.forM groups $ \(pkg, pkgMods) -> do
+          let dir = packageOutTest pkg
+          putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " test modules → " ++ dir
+          genTestForDir dir pkgMods
+        return (sum counts)
       testEnd <- getCurrentTime
 
       putStrLn $ "  Generated " ++ show count ++ " test files."

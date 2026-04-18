@@ -52,9 +52,10 @@ echo "=== Assembling Haskell distribution: $PACKAGE ==="
 echo "  Output: $OUT_DIR"
 echo ""
 
-# Step 1: Main modules via Layer 1 transform. Uses --package-split under the
-# hood so that dependencies generate to their own package dirs too; the scope
-# filter selects just this package for generation.
+# Step 1: Main modules via Layer 1 transform. Routing is unconditional:
+# every module lands under <DIST_ROOT>/<owning-pkg>/ based on its namespace,
+# including transitive dependencies for this package. The output dir argument
+# is the parent of the per-package dirs.
 #
 # --synthesize-sources generates hand-equivalent Hydra.Sources.Decode.* and
 # Hydra.Sources.Encode.* modules from type definitions. The synthesis filter
@@ -70,7 +71,7 @@ esac
 
 echo "Step 1: Generating main Haskell modules..."
 "$SCRIPT_DIR/transform-json-to-haskell.sh" "$PACKAGE" main \
-    --output "$DIST_ROOT" --package-split --include-dsls $SYNTH_FLAG
+    --output "$DIST_ROOT" --include-dsls $SYNTH_FLAG
 
 # Step 2: Test modules (if the package has any).
 # Only hydra-kernel has tests today; the transform exits 0 cleanly if the
@@ -78,7 +79,7 @@ echo "Step 1: Generating main Haskell modules..."
 echo ""
 echo "Step 2: Generating test Haskell modules..."
 "$SCRIPT_DIR/transform-json-to-haskell.sh" "$PACKAGE" test \
-    --output "$DIST_ROOT" --package-split
+    --output "$DIST_ROOT"
 
 # Step 3: Package-specific post-processing.
 case "$PACKAGE" in
