@@ -392,12 +392,26 @@ Fix it at the generator level.
 These patches are currently in place and have open or implied issues tracking
 them as generator bugs:
 
-- `heads/haskell/bin/sync-java.sh`: patches `hydra/lisp/Coder.java` to rewrite
-  a `PartialVisitor` type parameter that the Java coder infers incorrectly.
-- `heads/haskell/bin/sync-python.sh`: patches `test_graph.py` to replace
-  empty `test_graph` / `test_context` assignments with a `__getattr__` shim
-  that lazily imports a hand-written `test_env.py`. This works around an
-  unsupported polymorphic type in the Python test generator.
+- `heads/haskell/bin/sync-haskell.sh` and
+  `heads/haskell/bin/assemble-distribution.sh`: both patch `TestGraph.hs` to
+  replace `emptyGraph` / `emptyContext` with `TestEnv.testGraph testTypes` /
+  `TestEnv.testContext`. The `Hydra.Test.TestEnv` module is hand-written and
+  checked in under `dist/haskell/hydra-kernel/src/test/haskell/`.
+
+Two patches that were previously applied by the now-retired
+`heads/haskell/bin/sync-java.sh` and `heads/haskell/bin/sync-python.sh`
+scripts are NOT currently re-applied anywhere:
+
+- Java Lisp `Coder.java`: a `PartialVisitor` type parameter that the Java
+  coder infers incorrectly. Surfaces when generating `hydra-lisp` into Java.
+- Python `test_graph.py`: empty `test_graph` / `test_context` assignments
+  needing a `__getattr__` shim to a hand-written `test_env.py`. Surfaces
+  when running Python kernel tests.
+
+These patches need to be re-added (probably to per-target assemblers or a
+post-processing step) before the affected combinations work again. The
+current bootstrapping-triad sync (haskell/java/python kernel + self-hosting)
+does not exercise either combination, so the patches are queued, not blocking.
 
 When adding a new accepted patch, document it here and open an issue against
 the generator.
