@@ -274,19 +274,28 @@ For regenerating Hydra's own implementations, the sync scripts automate the full
 These are the standard developer entry point:
 
 ```bash
-# Full sync: Haskell -> Ext -> Java -> Python -> Scala -> Lisp
-bin/sync-all.sh
+# Full sync: every language as both host and target (8 × 8 matrix)
+bin/sync.sh --hosts all --targets all
 
-# Individual phases
-heads/haskell/bin/sync-haskell.sh                           # Regenerate Haskell kernel
-heads/haskell/bin/assemble-distribution.sh <pkg>            # Per-package Haskell assembly (replaces sync-ext.sh)
-heads/haskell/bin/sync-java.sh                              # Regenerate Java from JSON
-heads/haskell/bin/sync-python.sh                            # Regenerate Python from JSON
-heads/haskell/bin/sync-scala.sh                             # Regenerate Scala
+# Bootstrapping triad shorthand (haskell, java, python)
+bin/sync-default.sh
 
-# Quick mode (skip tests)
-bin/sync-all.sh --quick
-heads/haskell/bin/sync-java.sh --quick
+# Single-language (host == target) wrappers
+bin/sync-java.sh
+bin/sync-python.sh
+bin/sync-scala.sh
+bin/sync-clojure.sh   # one of: clojure, common-lisp, emacs-lisp, scheme
+
+# Phase 1 alone (DSL -> JSON + Haskell kernel + stack test + lexicon)
+heads/haskell/bin/sync-haskell.sh
+
+# Per-package layered tool (one or more packages, optional --target)
+bin/sync-packages.sh <pkg> [--target <lang>]
+heads/haskell/bin/assemble-distribution.sh <pkg>            # Layer 2 assembler
+
+# Quick mode (skip target-language tests; Phase 1 stack test still runs)
+bin/sync.sh --quick
+bin/sync-java.sh --quick
 ```
 
 The sync scripts handle memory flags, build ordering, and test execution automatically.

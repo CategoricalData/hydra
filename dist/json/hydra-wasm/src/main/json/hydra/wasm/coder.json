@@ -9279,35 +9279,63 @@
                                                                                                                 "term": {
                                                                                                                   "application": {
                                                                                                                     "argument": {
-                                                                                                                      "application": {
-                                                                                                                        "argument": {"variable": "syntheticCount"},
-                                                                                                                        "function": {
-                                                                                                                          "application": {
-                                                                                                                            "argument": {"literal": {"integer": {"int32": 0}}},
-                                                                                                                            "function": {"variable": "hydra.lib.math.range"}}}}},
+                                                                                                                      "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}},
                                                                                                                     "function": {
                                                                                                                       "application": {
                                                                                                                         "argument": {
-                                                                                                                          "lambda": {
-                                                                                                                            "body": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {
                                                                                                                               "application": {
                                                                                                                                 "argument": {
                                                                                                                                   "application": {
-                                                                                                                                    "argument": {"variable": "i"},
-                                                                                                                                    "function": {"variable": "hydra.lib.literals.showInt32"}}},
+                                                                                                                                    "argument": {"literal": {"integer": {"int32": 1}}},
+                                                                                                                                    "function": {
+                                                                                                                                      "application": {
+                                                                                                                                        "argument": {"variable": "syntheticCount"},
+                                                                                                                                        "function": {"variable": "hydra.lib.math.sub"}}}}},
                                                                                                                                 "function": {
                                                                                                                                   "application": {
-                                                                                                                                    "argument": {"literal": {"string": "arg_synth_"}},
-                                                                                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                                                                            "domain": {"literal": {"integer": {"int32": {}}}},
-                                                                                                                            "parameter": "i"}},
+                                                                                                                                    "argument": {"literal": {"integer": {"int32": 0}}},
+                                                                                                                                    "function": {"variable": "hydra.lib.math.range"}}}}},
+                                                                                                                            "function": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {
+                                                                                                                                  "lambda": {
+                                                                                                                                    "body": {
+                                                                                                                                      "application": {
+                                                                                                                                        "argument": {
+                                                                                                                                          "application": {
+                                                                                                                                            "argument": {"variable": "i"},
+                                                                                                                                            "function": {"variable": "hydra.lib.literals.showInt32"}}},
+                                                                                                                                        "function": {
+                                                                                                                                          "application": {
+                                                                                                                                            "argument": {"literal": {"string": "arg_synth_"}},
+                                                                                                                                            "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                                                                                                    "domain": {"literal": {"integer": {"int32": {}}}},
+                                                                                                                                    "parameter": "i"}},
+                                                                                                                                "function": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {
+                                                                                                                                      "typeApplication": {
+                                                                                                                                        "body": {"variable": "hydra.lib.lists.map"},
+                                                                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                                                                    "type": {"literal": {"string": {}}}}}}}}},
                                                                                                                         "function": {
-                                                                                                                          "typeApplication": {
-                                                                                                                            "body": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {"literal": {"integer": {"int32": 0}}},
+                                                                                                                                "function": {
+                                                                                                                                  "application": {
+                                                                                                                                    "argument": {"variable": "syntheticCount"},
+                                                                                                                                    "function": {
+                                                                                                                                      "typeApplication": {
+                                                                                                                                        "body": {"variable": "hydra.lib.equality.gt"},
+                                                                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                                                            "function": {
                                                                                                                               "typeApplication": {
-                                                                                                                                "body": {"variable": "hydra.lib.lists.map"},
-                                                                                                                                "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                                                            "type": {"literal": {"string": {}}}}}}}}},
+                                                                                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                                                                "type": {"list": {"literal": {"string": {}}}}}}}}}}}},
                                                                                                                 "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                                                                                                             "body": {
                                                                                                               "let": {

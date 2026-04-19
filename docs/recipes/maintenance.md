@@ -273,7 +273,7 @@ rm -rf packages/hydra-*/.stack-work
 rm -rf heads/haskell/.stack-work/install
 
 # Re-sync everything
-bin/sync-all.sh --targets all
+bin/sync.sh --hosts all --targets all
 ```
 
 The first `rm -rf` only matters if you have leftover per-package `.stack-work` dirs
@@ -747,7 +747,7 @@ Pick a slice of roughly 40–60 files / ~5,000–7,000 lines per run.
   Examples: "review `bin/` scripts," "review the Python coder."
 - **When the slice is up to you**, sample evenly across the repo
   (`packages/`, `heads/`, `bin/`, `demos/`), with modest bias toward high-traffic code
-  (kernel DSL sources, essential scripts like `bin/sync-all.sh`, registration files like
+  (kernel DSL sources, essential scripts like `bin/sync.sh`, registration files like
   `Libraries.hs` / `Libraries.java` / `libraries.py`).
   Check `docs/reviews/` for what's been covered recently and prefer unseen files.
 
@@ -872,7 +872,7 @@ After all checks, present a summary of findings and changes to the user.
 If any changes affect Source modules (e.g., definition reordering),
 generated files (e.g., stale file deletion, `.cabal` fixes),
 or could affect test outcomes (e.g., primitive fixes),
-run `bin/sync-all.sh --targets all` and verify all tests pass.
+run `bin/sync.sh --hosts all --targets all` and verify all tests pass.
 If no changes affect generated files or tests, skip the sync.
 
 ---
