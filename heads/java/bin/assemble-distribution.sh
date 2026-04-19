@@ -40,12 +40,29 @@ while [ $# -gt 0 ]; do
 done
 
 OUT_DIR="$DIST_ROOT/$PACKAGE"
+INPUT_DIGEST="$HYDRA_ROOT_DIR/dist/json/$PACKAGE/digest.json"
+OUTPUT_DIGEST="$OUT_DIR/digest.json"
 
 echo "=== Assembling Java distribution: $PACKAGE ==="
 echo "  Output: $OUT_DIR"
 echo ""
 
 HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
+
+# Freshness check: skip the slow path when nothing has changed.
+# digest-check exits 0 on cache hit, 1 on miss. The 'fresh' subcommand
+# verifies the input digest matches what was recorded, every output
+# file exists with its recorded hash, and the generator stamp matches.
+if [ -f "$INPUT_DIGEST" ] && [ -f "$OUTPUT_DIGEST" ]; then
+    if (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
+        stack exec digest-check -- fresh \
+            --inputs "$INPUT_DIGEST" \
+            --output-digest "$OUTPUT_DIGEST" 2>/dev/null); then
+        echo "  Cache hit; skipping work."
+        echo "=== Done. $PACKAGE assembled under $OUT_DIR (cache hit) ==="
+        exit 0
+    fi
+fi
 
 # Step 1: Main modules via Layer 1 transform.
 # bootstrap-from-json appends <pkg>/src/main/<target> to --output, so we
@@ -91,4 +108,14 @@ case "$PACKAGE" in
 esac
 
 echo ""
+
+# Refresh the per-target digest so future fresh-checks short-circuit.
+if [ -f "$INPUT_DIGEST" ]; then
+    (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
+     stack exec digest-check -- refresh \
+        --inputs "$INPUT_DIGEST" \
+        --output-dir "$OUT_DIR" \
+        --output-digest "$OUTPUT_DIGEST")
+fi
+
 echo "=== Done. $PACKAGE assembled under $OUT_DIR ==="

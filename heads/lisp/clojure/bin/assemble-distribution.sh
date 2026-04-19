@@ -30,6 +30,21 @@ while [ $# -gt 0 ]; do
 done
 
 OUT_DIR="$DIST_ROOT/$PACKAGE"
+INPUT_DIGEST="$HYDRA_ROOT_DIR/dist/json/$PACKAGE/digest.json"
+OUTPUT_DIGEST="$OUT_DIR/digest.json"
+
+# Freshness check: skip the slow path when nothing has changed.
+if [ -f "$INPUT_DIGEST" ] && [ -f "$OUTPUT_DIGEST" ]; then
+    if (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
+        stack exec digest-check -- fresh \
+            --inputs "$INPUT_DIGEST" \
+            --output-digest "$OUTPUT_DIGEST" 2>/dev/null); then
+        echo "  Cache hit; skipping work."
+        echo "=== Done. $PACKAGE (cache hit) ==="
+        exit 0
+    fi
+fi
+
 
 echo "=== Assembling Clojure distribution: $PACKAGE ==="
 echo "  Output: $OUT_DIR"
@@ -95,4 +110,13 @@ CLJEOF
 esac
 
 echo ""
+# Refresh the per-target digest so future fresh-checks short-circuit.
+if [ -f "$INPUT_DIGEST" ]; then
+    (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
+     stack exec digest-check -- refresh \
+        --inputs "$INPUT_DIGEST" \
+        --output-dir "$OUT_DIR" \
+        --output-digest "$OUTPUT_DIGEST")
+fi
+
 echo "=== Done. $PACKAGE assembled under $OUT_DIR ==="
