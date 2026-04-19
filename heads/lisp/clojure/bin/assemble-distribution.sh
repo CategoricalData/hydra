@@ -39,12 +39,12 @@ HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 
 echo "Step 1: Generating main Clojure modules..."
 "$HASKELL_BIN/transform-json-to-lisp.sh" "$PACKAGE" clojure main \
-    --output "$OUT_DIR/src/main"
+    --output "$DIST_ROOT"
 
 echo ""
 echo "Step 2: Generating test Clojure modules..."
 "$HASKELL_BIN/transform-json-to-lisp.sh" "$PACKAGE" clojure test \
-    --output "$OUT_DIR/src/test"
+    --output "$DIST_ROOT"
 
 # Step 3: Package-specific post-processing.
 case "$PACKAGE" in

@@ -1452,7 +1452,7 @@ see [Hydra release process](https://github.com/CategoricalData/hydra/wiki/Releas
 
 | Script | Purpose |
 |--------|---------|
-| `sync-all.sh` | **Full sync.** Run all sync scripts in order (Haskell -> Ext -> Java -> Python). Supports `--quick`. |
+| `sync-all.sh` | **Full sync.** Run all sync scripts in order (Haskell -> Ext -> Java -> Python). Supports `--no-tests`. |
 | `verify-release.sh` | Cross-implementation pre-release verification |
 | `update-javadoc.sh` | Regenerate JavaDoc HTML for `hydra-java` |
 
@@ -1462,7 +1462,7 @@ Shell script wrappers live in `heads/haskell/bin/`. Executables without shell wr
 
 | Script / Executable | Purpose |
 |---------------------|---------|
-| `bin/sync-haskell.sh` | **Main sync script.** Regenerate all Haskell artifacts in the correct order and optionally run tests. Supports `--quick`. |
+| `bin/sync-haskell.sh` | **Main sync script.** Regenerate all Haskell artifacts in the correct order and optionally run tests. Supports `--no-tests`. |
 | `bin/update-kernel-tests.sh` | Regenerate test files (universal test cases) |
 | `bin/update-json-kernel.sh` | Export the kernel to JSON |
 | `bin/update-json-main.sh` | Export main (non-kernel) modules to JSON |
@@ -1478,8 +1478,8 @@ Shell script wrappers live in `heads/haskell/bin/`. Executables without shell wr
 
 | Script / Executable | Purpose |
 |---------------------|---------|
-| `bin/sync-haskell.sh` | **Haskell sync script (from JSON).** Regenerate Haskell test files from JSON. Supports `--quick`. |
-| `bin/sync-java.sh` | **Main Java sync script.** Regenerate all Java artifacts, compile, and optionally run tests. Supports `--quick`. |
-| `bin/sync-python.sh` | **Main Python sync script.** Regenerate all Python artifacts and optionally run tests. Supports `--quick`. |
+| `bin/sync-haskell.sh` | **Haskell sync script (from JSON).** Regenerate Haskell test files from JSON. Supports `--no-tests`. |
+| `bin/sync-java.sh` | **Main Java sync script.** Regenerate all Java artifacts, compile, and optionally run tests. Supports `--no-tests`. |
+| `bin/sync-python.sh` | **Main Python sync script.** Regenerate all Python artifacts and optionally run tests. Supports `--no-tests`. |
 | `bin/assemble-distribution.sh <pkg>` | **Layer 2 assembler.** Produce the Haskell distribution for one package via the JSON pipeline (replaces the retired `update-haskell-ext-main` and `update-ext-sources` execs / `sync-ext.sh` script). |
 | `bootstrap-from-json` | Bootstrap Hydra implementations from per-package JSON module exports (executable only, called by all sync scripts) |

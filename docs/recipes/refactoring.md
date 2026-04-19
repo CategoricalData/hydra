@@ -148,8 +148,8 @@ stack test
 ```bash
 # From heads/haskell
 cd ../heads/haskell
-./bin/sync-python.sh --quick
-./bin/sync-java.sh --quick
+./bin/sync-python.sh --no-tests
+./bin/sync-java.sh --no-tests
 ```
 
 ---
@@ -413,8 +413,8 @@ stack test
 
 # Regenerate Python and Java (from heads/haskell)
 cd ../heads/haskell
-./bin/sync-python.sh --quick
-./bin/sync-java.sh --quick
+./bin/sync-python.sh --no-tests
+./bin/sync-java.sh --no-tests
 
 # Clean up orphan Python files
 rm -f ../dist/python/hydra-kernel/src/main/python/hydra/foo.py
@@ -554,7 +554,7 @@ When renaming `hydra.foo` to `hydra.foo.bar`, the decoder/encoder modules also m
 ## The Sync Pipeline
 
 After making changes to Sources and rebuilding Haskell, regeneration must propagate through several stages.
-The `bin/sync.sh` script runs all of these in the correct order (use `--quick` to skip tests at each stage).
+The `bin/sync.sh` script runs all of these in the correct order (use `--no-tests` to skip tests at each stage).
 For the haskell/java/python bootstrapping triad, `bin/sync-default.sh` is a shorthand wrapper.
 However, it's useful to understand the individual stages, especially when debugging failures.
 
@@ -566,7 +566,7 @@ However, it's useful to understand the individual stages, especially when debugg
 Phase 1: heads/haskell/bin/sync-haskell.sh
     → DSL → JSON via update-json-{kernel,main,test,manifest}
     → JSON → Haskell for hydra-kernel + hydra-haskell
-    → stack test (unless --quick)
+    → stack test (unless --no-tests)
     → regenerate lexicon
 Phase 2: assemble-distribution.sh per coder package (Haskell from JSON)
     → one call per language in (hosts ∪ targets) \ {haskell}

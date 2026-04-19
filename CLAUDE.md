@@ -299,7 +299,7 @@ auto-delete archived files.
 
 After modifying Haskell sources, regenerate downstream implementations.
 Use `./bin/sync.sh --hosts <H1,H2,...> --targets <T1,T2,...>` (or
-`--quick` to skip target-language tests). For the haskell/java/python
+`--no-tests` to skip target-language tests). For the haskell/java/python
 bootstrapping triad, `./bin/sync-default.sh` is a shorthand. For a
 single language, the per-language wrappers (`bin/sync-java.sh`,
 `bin/sync-python.sh`, etc.) cover host == target.

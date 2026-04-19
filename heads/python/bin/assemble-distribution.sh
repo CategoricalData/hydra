@@ -51,15 +51,17 @@ echo ""
 HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 
 # Step 1: Main modules via Layer 1 transform.
+# bootstrap-from-json appends <pkg>/src/main/<target> to --output, so we
+# pass the dist-root directory (parent of per-package dirs).
 echo "Step 1: Generating main Python modules..."
 "$HASKELL_BIN/transform-json-to-python.sh" "$PACKAGE" main \
-    --output "$OUT_DIR/src/main" --include-dsls
+    --output "$DIST_ROOT" --include-dsls
 
 # Step 2: Test modules.
 echo ""
 echo "Step 2: Generating test Python modules..."
 "$HASKELL_BIN/transform-json-to-python.sh" "$PACKAGE" test \
-    --output "$OUT_DIR/src/test"
+    --output "$DIST_ROOT"
 
 # Step 3: Package-specific post-processing.
 case "$PACKAGE" in
