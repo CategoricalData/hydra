@@ -2,5 +2,6 @@
   "name": "hydra-pg",
   "description": "Property graph support for Hydra: PG model, coders, GraphSON, Cypher, GQL, TinkerPop",
   "sourceLanguage": "haskell",
+  "targetLanguages": ["haskell", "java", "python", "scala"],
   "dependencies": ["hydra-kernel", "hydra-rdf"]
 }
