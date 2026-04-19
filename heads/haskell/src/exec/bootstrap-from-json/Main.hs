@@ -30,6 +30,7 @@ module Main where
 import Hydra.Kernel
 import Hydra.Generation
 import Hydra.PackageRouting (groupByPackage, namespaceToPackage, packagePrefixes)
+import qualified Hydra.Digest as Digest
 import Hydra.Sources.All (kernelModules)
 import Hydra.ExtGeneration (moduleToLispDialect, wrapLongLinesInScalaTree)
 import Hydra.Haskell.Coder (moduleToHaskell)
@@ -48,8 +49,9 @@ import Control.Exception (catch, IOException)
 import Control.Monad (when, forM)
 import qualified Control.Monad as CM
 import qualified Data.Char as C
-import Data.List (isPrefixOf)
+import Data.List (isPrefixOf, partition)
 import qualified Data.List.Split as LS
+import qualified Data.Map as M
 import Data.Time.Clock (getCurrentTime, diffUTCTime, UTCTime)
 import System.Directory (listDirectory, doesFileExist)
 import qualified System.Directory as SD
@@ -436,13 +438,35 @@ main = do
       putStrLn ""
       return owned
 
+  -- Stage 7: per-module checksum skip. For each module M whose DSL source
+  -- hash matches the hash recorded in the per-target digest at
+  -- <outBase>/<owning-pkg>/digest.json's inputs section, exclude M from
+  -- modsToGenerate. The output already on disk reflects exactly the same
+  -- DSL source content, so regeneration would produce a byte-identical
+  -- result. Excluding before generation skips inference work entirely.
+  --
+  -- Only applied when --package is set (scoped mode). In unscoped mode
+  -- the per-module digest semantics get harder to reason about because
+  -- multiple packages share the same outBase tree.
+  modsToGenerateScopedFiltered <- case optPackage opts of
+    Nothing  -> return modsToGenerateScoped
+    Just pkg -> filterByTargetDigest outBase pkg modsToGenerateScoped
+
   -- Prepend synthesized source modules to modsToGenerate (deduping by namespace
   -- to keep ordering stable). They go into the same universe as the main modules.
-  let modsToGenerate' = modsToGenerateScoped ++ synthesizedSourceMods
+  let modsToGenerate' = modsToGenerateScopedFiltered ++ synthesizedSourceMods
   let allModsFinal'   = allModsFinal ++ synthesizedSourceMods
 
   -- Generate main modules
   let stepNum = if optIncludeCoders opts then "3" else "2"
+  -- Stage 7: if every module was filtered out as fresh (and there's
+  -- no synthesis to do), this is a no-op. The downstream loop over
+  -- groupByPackage modsToGenerate' will naturally iterate zero times,
+  -- but we log it for clarity.
+  CM.when (Prelude.null modsToGenerate' && not (Prelude.null modsToGenerateScoped)) $ do
+    putStrLn $ "Step " ++ stepNum ++ ": all "
+      ++ show (length modsToGenerateScoped) ++ " main modules fresh; skipping generation."
+
   putStrLn $ "Step " ++ stepNum ++ ": Mapping " ++ show (length modsToGenerate') ++ " modules to " ++ targetCap ++ "..."
 
   genStart <- getCurrentTime
@@ -689,4 +713,67 @@ main = do
 
 elapsed :: UTCTime -> UTCTime -> Double
 elapsed end start = realToFrac (diffUTCTime end start)
+
+-- | Stage 7: per-module target-side freshness filter.
+--
+-- For each module M in the input set, check whether its current DSL
+-- source hash matches the hash recorded in the per-target digest
+-- (<outBase>/<owning-pkg>/digest.json's "inputs" section). If so, the
+-- target output already on disk reflects exactly the same DSL content,
+-- so M can be skipped (no inference, no generation, no write).
+--
+-- The recorded digest is in v2 format (digest-check refresh writes it
+-- after a successful regen). The "inputs" map's keys are namespace
+-- strings (e.g. "hydra.core"); values are SHA-256 hex of the DSL
+-- source file as of the last successful regen.
+--
+-- Modules with no recorded entry are kept (treated as dirty).
+-- Modules with no current DSL source (synth modules etc.) are also
+-- kept — we can't verify staleness, so we don't risk a false skip.
+--
+-- The per-target digest is read from <outBase>/<pkg>/digest.json,
+-- where outBase is e.g. "../../dist/java" (the parent of the
+-- per-package target dirs).
+filterByTargetDigest :: FilePath -> String -> [Module] -> IO [Module]
+filterByTargetDigest outBase pkg mods = do
+  let digestPath = outBase FP.</> pkg FP.</> "digest.json"
+  exists <- SD.doesFileExist digestPath
+  if not exists
+    then do
+      putStrLn $ "  Per-module skip: no target digest at " ++ digestPath
+        ++ "; keeping all " ++ show (length mods) ++ " modules"
+      return mods
+    else do
+      stored <- Digest.readDigestV2 digestPath
+      let recordedInputs = Digest.digestInputs stored
+      if M.null recordedInputs
+        then do
+          putStrLn $ "  Per-module skip: target digest empty; keeping all "
+            ++ show (length mods) ++ " modules"
+          return mods
+        else do
+          -- Compute current DSL source hashes.
+          nsFiles <- Digest.discoverNamespaceFiles
+          currentDigest <- Digest.hashUniverse nsFiles mods
+          let isFresh m =
+                let nsStr = unNamespace (moduleNamespace m)
+                in case (M.lookup nsStr recordedInputs, M.lookup (Namespace nsStr) currentDigest) of
+                     (Just rec, Just cur) -> Digest.entryHash rec == cur
+                     _                    -> False
+              (fresh, dirty) = partition isFresh mods
+          if Prelude.null fresh
+            then do
+              putStrLn $ "  Per-module skip: 0 fresh / "
+                ++ show (length dirty) ++ " dirty; processing all"
+              return mods
+            else if Prelude.null dirty
+              then do
+                putStrLn $ "  Per-module skip: " ++ show (length fresh)
+                  ++ " fresh / 0 dirty; nothing to generate"
+                return []
+              else do
+                putStrLn $ "  Per-module skip: " ++ show (length fresh)
+                  ++ " fresh / " ++ show (length dirty)
+                  ++ " dirty; excluding fresh from generation"
+                return dirty
 
