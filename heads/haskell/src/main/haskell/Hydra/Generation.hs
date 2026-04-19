@@ -239,27 +239,72 @@ writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
       CM.when doInfer $ ensurePerPackageDigests distJsonRoot mods
     Nothing -> do
       -- Try the incremental path: partition modules into clean
-      -- (DSL hash unchanged, JSON output present) and dirty. Re-infer
-      -- only the dirty ones against a typed universe loaded from JSON.
-      -- Falls through to full inference if the incremental setup fails.
+      -- (DSL hash unchanged) and dirty. Re-infer only the dirty ones
+      -- against a typed universe loaded from JSON, and write JSON only
+      -- for the dirty subset. Falls through to full inference if
+      -- the incremental setup fails.
       result <- if doInfer
                   then tryIncrementalInference distJsonRoot universeMods mods
-                  else return (Just mods)
-      mods' <- case result of
-        Just m  -> return m
+                  else return (Just (IncrementalFull mods))
+      case result of
+        Just (IncrementalFull allMods) -> do
+          -- Full inference was needed; write JSON for every module.
+          writePackageSplitJson distJsonRoot universeMods allMods allMods
+          CM.when doInfer $ do
+            refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
+            refreshPerPackageDigests distJsonRoot universeMods allMods
+        Just (IncrementalPartial allMods dirtyMods) -> do
+          -- Incremental inference succeeded; only rewrite JSON for the
+          -- dirty modules. Clean modules' on-disk JSON is already
+          -- up-to-date (we loaded them from there to build the typed
+          -- universe).
+          putStrLn $ "  Writing JSON for " ++ show (length dirtyMods)
+            ++ " dirty modules (skipping " ++ show (length allMods - length dirtyMods)
+            ++ " clean)"
+          writePackageSplitJson distJsonRoot universeMods allMods dirtyMods
+          CM.when doInfer $ do
+            refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
+            refreshPerPackageDigests distJsonRoot universeMods allMods
         Nothing -> do
           putStrLn "  Incremental inference unavailable; running full inference."
-          inferModulesIO universeMods mods
-      let graph = modulesToGraph universeMods universeMods
-          schemaMap = buildSchemaMap graph
-          groups = groupByPackage mods'
-      CM.forM_ groups $ \(pkg, pkgMods) -> do
-        let pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
-        putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules -> " ++ pkgDir
-        mapM_ (writeModuleJson schemaMap pkgDir) pkgMods
-      CM.when doInfer $ do
-        refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
-        refreshPerPackageDigests distJsonRoot universeMods mods'
+          allMods <- inferModulesIO universeMods mods
+          writePackageSplitJson distJsonRoot universeMods allMods allMods
+          CM.when doInfer $ do
+            refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
+            refreshPerPackageDigests distJsonRoot universeMods allMods
+
+-- | Incremental inference result. 'IncrementalFull mods' means all
+-- modules need a fresh write; 'IncrementalPartial all dirty' means
+-- only the dirty subset needs writing (the clean modules' on-disk
+-- JSON is already correct).
+data IncrementalResult
+  = IncrementalFull [Module]
+  | IncrementalPartial [Module] [Module]
+  -- ^ IncrementalPartial all-modules dirty-modules
+
+-- | Shared writer: build the schemaMap from the full module universe
+-- and write the subset that needs to hit disk. 'universeForSchema' is
+-- the complete post-inference module set used to seed the schema's
+-- type-dependency closure; passing a narrow set (e.g. only DSL
+-- wrappers, which don't declare hydra.packaging as a type dep) produces
+-- a schemaMap missing hydra.packaging.Module and causes the encoder to
+-- mis-serialize outer module frames (e.g. Maybe String as nested Maybe).
+-- Callers should pass the full universe here for a complete schemaMap.
+-- 'toWrite' is the subset that actually needs its JSON rewritten
+-- (full set on a cache miss; dirty subset on an incremental hit).
+writePackageSplitJson :: FilePath -> [Module] -> [Module] -> [Module] -> IO ()
+writePackageSplitJson distJsonRoot universeMods universeForSchema toWrite = do
+  -- Seed the graph's schema with the broader of the two inputs so
+  -- hydra.packaging.Module (and every other universe type) is always
+  -- reachable from the schemaMap, even when 'toWrite' is a narrow set
+  -- like DSL wrappers whose declared type-deps omit packaging.
+  let graph = modulesToGraph universeMods (universeMods ++ universeForSchema)
+      schemaMap = buildSchemaMap graph
+      groups = groupByPackage toWrite
+  CM.forM_ groups $ \(pkg, pkgMods) -> do
+    let pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
+    putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules -> " ++ pkgDir
+    mapM_ (writeModuleJson schemaMap pkgDir) pkgMods
 
 -- | Digest file for 'writeModulesJsonPackageSplit'. Single well-known
 -- location shared across all packages the universe touches. Will be
@@ -325,7 +370,7 @@ ensurePerPackageDigests distJsonRoot mods = do
 --
 -- If anything goes wrong (no digest yet, JSON load failure, etc.),
 -- returns Nothing — caller falls back to full inferModulesIO.
-tryIncrementalInference :: FilePath -> [Module] -> [Module] -> IO (Maybe [Module])
+tryIncrementalInference :: FilePath -> [Module] -> [Module] -> IO (Maybe IncrementalResult)
 tryIncrementalInference distJsonRoot universeMods _targetMods = do
   -- Read the universe-wide digest to learn which sources were clean
   -- as of the last successful regen.
@@ -376,12 +421,12 @@ tryIncrementalInference distJsonRoot universeMods _targetMods = do
                 Right cleanLoaded -> do
                   let typedUniverse = cleanLoaded ++ dirtyMods
                   inferred <- inferModulesGivenIO typedUniverse dirtyMods
-                  -- Return the full module set: cleanLoaded ++ inferred.
-                  -- The caller writes JSON for all of them, but writing
-                  -- a clean module re-emits a byte-identical file (its
-                  -- type schemes are unchanged), so the cost is
-                  -- bounded by file I/O, not inference.
-                  return (Just (cleanLoaded ++ inferred))
+                  -- Return:
+                  --   * all modules (cleanLoaded ++ inferred), so the
+                  --     schemaMap can be built over the complete set.
+                  --   * dirty subset (inferred), so the caller writes
+                  --     JSON only for the modules that actually changed.
+                  return (Just (IncrementalPartial (cleanLoaded ++ inferred) inferred))
 
 -- | Load modules from per-package JSON paths. The dist-json-root
 -- layout is dist/json/<pkg>/src/main/json/<ns-path>.json; we route

@@ -52,12 +52,13 @@ data Options = Options
 usage :: String
 usage = unlines
   [ "Usage:"
-  , "  digest-check fresh   --inputs <file> --output-digest <file>"
+  , "  digest-check fresh   --inputs <file> --output-dir <dir> --output-digest <file>"
   , "  digest-check refresh --inputs <file> --output-dir <dir> --output-digest <file>"
   , ""
-  , "  fresh:    exit 0 if cache hit (skip work), exit 1 if miss (do work)"
+  , "  fresh:    exit 0 if cache hit (skip work), exit 1 if miss (do work)."
+  , "            Resolves recorded (relative) output paths against <output-dir>."
   , "  refresh:  walk <output-dir>, hash every file, write a new"
-  , "            <output-digest> referencing the recorded inputs."
+  , "            <output-digest> with paths stored relative to <output-dir>."
   ]
 
 parseArgs :: [String] -> Either String Options
@@ -71,8 +72,8 @@ parseArgs (cmd : rest) = do
   where
     go opts [] = if null (optInputDigest opts) || null (optOutputDigest opts)
       then Left "Missing required --inputs or --output-digest"
-      else if optMode opts == Refresh && optOutputDir opts == Nothing
-        then Left "refresh requires --output-dir"
+      else if optOutputDir opts == Nothing
+        then Left "--output-dir is required"
         else Right opts
     go opts ("--inputs" : v : xs)        = go (opts { optInputDigest  = v }) xs
     go opts ("--output-digest" : v : xs) = go (opts { optOutputDigest = v }) xs
@@ -141,8 +142,17 @@ doFresh opts = do
       exitFailure
     else return ()
 
-  -- Output files must all exist with matching hashes.
-  outputsOk <- verifyOutputsExist outputDigest
+  -- Output files must all exist with matching hashes. Paths recorded
+  -- in the digest are relative to outputDir (per 'refresh' below).
+  let outputDir = case optOutputDir opts of
+        Just d  -> d
+        Nothing -> error "doFresh called without output-dir (parseArgs bug)"
+  outputsOk <- fmap and $ forM (M.toList (digestOutputs outputDigest)) $ \(rel, entry) -> do
+    let abs_ = outputDir FP.</> rel
+    exists <- doesFileExist abs_
+    if not exists then return False else do
+      h <- Hydra.Digest.hashFile abs_
+      return (h == entryHash entry)
   if not outputsOk
     then do
       putStrLn $ "  digest-check: output files missing or modified; cache miss"
@@ -165,11 +175,20 @@ doRefresh opts = do
         | (Namespace k, v) <- M.toList inputDigest
         ]
 
-  -- Walk the output dir.
-  files <- listFilesRecursive outputDir
+  -- Walk the output dir. Paths are stored relative to outputDir for
+  -- portability (absolute paths would bake in the worktree location
+  -- and break across machines, CI runners, etc).
+  --
+  -- Exclude the output-digest file itself from the walk: we're about
+  -- to overwrite it, and hashing it here would (a) be a self-reference
+  -- that changes every run and (b) race with writeDigestV2 below.
+  allFiles <- listFilesRecursive outputDir
+  let digestPath = optOutputDigest opts
+      files = filter (/= digestPath) allFiles
   outputs <- fmap M.fromList $ forM files $ \fp -> do
     h <- Hydra.Digest.hashFile fp
-    return (fp, DigestEntry KindTargetFile h)
+    let rel = makeRelative' outputDir fp
+    return (rel, DigestEntry KindTargetFile h)
 
   gen <- generatorStamp
 
@@ -204,3 +223,13 @@ listFilesRecursive root = do
               else do
                 isFile <- doesFileExist p
                 return (if isFile then [p] else [])
+
+-- | Compute 'path' relative to 'base'. If 'path' isn't under 'base',
+-- returns 'path' unchanged (callers should guard against that, but the
+-- fallback keeps us from producing absolute paths accidentally).
+makeRelative' :: FilePath -> FilePath -> FilePath
+makeRelative' base path =
+  let prefix = if not (null base) && last base == '/' then base else base ++ "/"
+  in if prefix `isPrefixOf` path
+       then drop (length prefix) path
+       else path
