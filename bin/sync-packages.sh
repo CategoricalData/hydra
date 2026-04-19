@@ -388,10 +388,41 @@ stack exec update-json-manifest >/dev/null
 cd "$HYDRA_ROOT_DIR"
 echo ""
 
+# Returns 0 if $target is in the package's declared targetLanguages (or if
+# the package has no targetLanguages field, meaning it targets every host).
+# Returns 1 otherwise. The targetLanguages field is read from each
+# package's package.json; coder-only packages like hydra-coq,
+# hydra-javascript, and hydra-wasm list just ["haskell"] because their
+# coders are implemented only against the Haskell runtime.
+pkg_supports_target() {
+    local pkg="$1"
+    local target="$2"
+    local pkg_json="$HYDRA_ROOT_DIR/packages/$pkg/package.json"
+    if [ ! -f "$pkg_json" ]; then
+        return 0
+    fi
+    python3 -c "
+import json, sys
+try:
+    d = json.load(open('$pkg_json'))
+    tls = d.get('targetLanguages')
+    if tls is None:
+        sys.exit(0)
+    sys.exit(0 if '$target' in tls else 1)
+except Exception:
+    sys.exit(0)
+"
+}
+
 # Phase 2: Assemblers. For each (package, target), produce the distribution.
 echo "[Phase 2] Assembling distributions..."
 for target in $EFFECTIVE_TARGETS; do
     for pkg in $EFFECTIVE_PACKAGES; do
+        if ! pkg_supports_target "$pkg" "$target"; then
+            echo ""
+            echo "--- $pkg -> $target (skipped: not in targetLanguages) ---"
+            continue
+        fi
         echo ""
         echo "--- $pkg -> $target ---"
         invoke_assembler "$pkg" "$target" || {
