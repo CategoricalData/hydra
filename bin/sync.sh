@@ -223,10 +223,28 @@ echo ""
 # This refreshes dist/json/** (the source of truth consumed by every
 # downstream phase) and dist/haskell/{hydra-kernel,hydra-haskell}/.
 # It also runs stack test (unless --no-tests) and regenerates the lexicon.
+#
+# Shell-level shortcut: if every DSL source under packages/ matches
+# its recorded hash in dist/json/digest.main.json, skip Phase 1
+# entirely. This is sub-second and avoids ~30+ seconds of Haskell
+# startup when nothing has changed.
+#
+# When --no-tests is NOT set, we still run Phase 1 unconditionally so
+# 'stack test' executes — the JSON-side cache is independent of
+# whether the test suite has been run since last invocation.
 
-banner1 "Phase 1: DSL → JSON + Haskell kernel"
-echo ""
-"$HYDRA_HASKELL_DIR/bin/sync-haskell.sh" $NO_TESTS_FLAG
+DSL_FRESH_CHECK="$HYDRA_ROOT/bin/lib/check-dsl-fresh.py"
+DSL_DIGEST="$HYDRA_ROOT/dist/json/digest.main.json"
+
+if [ "$NO_TESTS" = true ] && [ -x "$DSL_FRESH_CHECK" ] \
+   && "$DSL_FRESH_CHECK" "$HYDRA_ROOT" "$DSL_DIGEST"; then
+    banner1 "Phase 1: DSL → JSON + Haskell kernel (skipped — DSL clean)"
+    echo ""
+else
+    banner1 "Phase 1: DSL → JSON + Haskell kernel"
+    echo ""
+    "$HYDRA_HASKELL_DIR/bin/sync-haskell.sh" $NO_TESTS_FLAG
+fi
 
 # ────────────────────────────────────────────────────────────────────
 # Phase 2: Each coder (hydra-<L> for L ∈ union) regenerated in Haskell.
