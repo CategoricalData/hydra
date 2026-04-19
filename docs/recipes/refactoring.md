@@ -115,8 +115,10 @@ kernelPrimaryTermsModules = [
 
 ### Step 4: Build and Regenerate
 
-The simplest approach is to run `bin/sync-all.sh` from the repo root,
-which handles all regeneration steps in the correct order. For incremental work, you can run the steps individually:
+The simplest approach is to run `bin/sync.sh` from the repo root
+(or `bin/sync-default.sh` for the haskell/java/python triad).
+The matrix tool handles all regeneration in dependency order. For
+incremental work, you can run the steps individually:
 
 ```bash
 cd packages/hydra-haskell
@@ -552,22 +554,26 @@ When renaming `hydra.foo` to `hydra.foo.bar`, the decoder/encoder modules also m
 ## The Sync Pipeline
 
 After making changes to Sources and rebuilding Haskell, regeneration must propagate through several stages.
-The `bin/sync-all.sh` script runs all of these in the correct order (use `--quick` to skip tests at each stage).
+The `bin/sync.sh` script runs all of these in the correct order (use `--quick` to skip tests at each stage).
+For the haskell/java/python bootstrapping triad, `bin/sync-default.sh` is a shorthand wrapper.
 However, it's useful to understand the individual stages, especially when debugging failures.
 
 ### Pipeline Order
 
-`bin/sync-all.sh` executes four phases:
+`bin/sync.sh` (with `--hosts`/`--targets` resolved from CLI flags) executes four phases:
 
 ```
-Phase 1: stack build + update-haskell-kernel + update-kernel-tests + ... (packages/hydra-haskell)
-    → Export and verify JSON
+Phase 1: heads/haskell/bin/sync-haskell.sh
+    → DSL → JSON via update-json-{kernel,main,test,manifest}
+    → JSON → Haskell for hydra-kernel + hydra-haskell
     → stack test (unless --quick)
-Phase 2: assemble-distribution.sh per ext / coder package (Haskell from JSON)
-Phase 3: sync-java.sh (Java from JSON)
-    → gradle test (unless --quick)
-Phase 4: sync-python.sh (Python from JSON)
-    → pytest (unless --quick)
+    → regenerate lexicon
+Phase 2: assemble-distribution.sh per coder package (Haskell from JSON)
+    → one call per language in (hosts ∪ targets) \ {haskell}
+Phase 3: hydra-kernel into each language in (hosts ∪ targets) \ {haskell}
+    → via transform-json-to-target.sh, both main and test
+Phase 4: cross-host coders for each (host, target) with host ≠ haskell
+    → hydra-<target> coder generated in host's language
 ```
 
 ### Diagnosing Failures at Each Stage

@@ -1,0 +1,112 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.coders;
+
+import java.io.Serializable;
+
+/**
+ * A two-level bidirectional encoder which adapts types to types and terms to terms
+ */
+public class Adapter<T1, T2, V1, V2> implements Serializable, Comparable<Adapter<T1, T2, V1, V2>> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.coders.Adapter");
+
+  public static final hydra.core.Name IS_LOSSY = new hydra.core.Name("isLossy");
+
+  public static final hydra.core.Name SOURCE = new hydra.core.Name("source");
+
+  public static final hydra.core.Name TARGET = new hydra.core.Name("target");
+
+  public static final hydra.core.Name CODER = new hydra.core.Name("coder");
+
+  /**
+   * Whether information may be lost in the course of this adaptation
+   */
+  public final Boolean isLossy;
+
+  /**
+   * The source type
+   */
+  public final T1 source;
+
+  /**
+   * The target type
+   */
+  public final T2 target;
+
+  /**
+   * The coder for transforming instances of the source type to instances of the target type
+   */
+  public final hydra.coders.Coder<V1, V2> coder;
+
+  public Adapter (Boolean isLossy, T1 source, T2 target, hydra.coders.Coder<V1, V2> coder) {
+    this.isLossy = isLossy;
+    this.source = source;
+    this.target = target;
+    this.coder = coder;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof Adapter)) {
+      return false;
+    }
+    Adapter o = (Adapter) other;
+    return java.util.Objects.equals(
+      this.isLossy,
+      o.isLossy) && java.util.Objects.equals(
+      this.source,
+      o.source) && java.util.Objects.equals(
+      this.target,
+      o.target) && java.util.Objects.equals(
+      this.coder,
+      o.coder);
+  }
+
+  @Override
+  public int hashCode() {
+    return 2 * java.util.Objects.hashCode(isLossy) + 3 * java.util.Objects.hashCode(source) + 5 * java.util.Objects.hashCode(target) + 7 * java.util.Objects.hashCode(coder);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Adapter other) {
+    int cmp = 0;
+    cmp = hydra.util.Comparing.compare(
+      isLossy,
+      other.isLossy);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = hydra.util.Comparing.compare(
+      source,
+      other.source);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = hydra.util.Comparing.compare(
+      target,
+      other.target);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return hydra.util.Comparing.compare(
+      coder,
+      other.coder);
+  }
+
+  public Adapter withIsLossy(Boolean isLossy) {
+    return new Adapter(isLossy, source, target, coder);
+  }
+
+  public Adapter withSource(T1 source) {
+    return new Adapter(isLossy, source, target, coder);
+  }
+
+  public Adapter withTarget(T2 target) {
+    return new Adapter(isLossy, source, target, coder);
+  }
+
+  public Adapter withCoder(hydra.coders.Coder<V1, V2> coder) {
+    return new Adapter(isLossy, source, target, coder);
+  }
+}

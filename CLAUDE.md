@@ -297,9 +297,12 @@ auto-delete archived files.
 
 ### Sync workflow
 
-After modifying Haskell sources, regenerate downstream implementations in order:
-**Haskell -> Ext -> Java, Python, Scala**. Use `./bin/sync-all.sh` (or `--quick`
-to skip tests), or run individual `sync-*.sh` scripts from `heads/haskell/bin/`.
+After modifying Haskell sources, regenerate downstream implementations.
+Use `./bin/sync.sh --hosts <H1,H2,...> --targets <T1,T2,...>` (or
+`--quick` to skip target-language tests). For the haskell/java/python
+bootstrapping triad, `./bin/sync-default.sh` is a shorthand. For a
+single language, the per-language wrappers (`bin/sync-java.sh`,
+`bin/sync-python.sh`, etc.) cover host == target.
 See [code-generation.md](docs/recipes/code-generation.md) for details.
 
 ---
@@ -396,7 +399,7 @@ Use this table to find the right doc for common tasks:
 
 ## Shorthand commands
 
-The user may issue these shorthand commands inline (e.g. "now /sync-all()").
+The user may issue these shorthand commands inline (e.g. "now /sync()").
 All commands use `/name()` syntax, with optional arguments inside the parentheses.
 All commands run from the worktree root (e.g. `hydra/worktrees/integration/`).
 If a command fails, investigate and fix the issue, then re-run the failing step
@@ -411,12 +414,14 @@ give the user a brief status update approximately every 10 minutes.
 | `/maintenance()` | Run all maintenance checks per the [full maintenance pass](docs/recipes/maintenance.md#full-maintenance-pass) procedure. |
 | `/save()` | Save status to the plan document. Session may terminate. |
 | `/squash()` | Squash WIP commits, per "Commit workflow" section. |
-| `/sync-all()` | Run `bin/sync-all.sh --targets all`, propagating changes into all generated artifacts. |
-| `/sync-haskell()` | Run `heads/haskell/bin/sync-haskell.sh`. |
-| `/sync-java()` | Run `heads/haskell/bin/sync-java.sh`. |
-| `/sync-lisp()` | Run `heads/haskell/bin/sync-lisp.sh`. Pass `--dialects <list>` to limit dialects. |
-| `/sync-python()` | Run `heads/haskell/bin/sync-python.sh`. |
-| `/sync-scala()` | Run `heads/haskell/bin/sync-scala.sh`. |
+| `/sync()` | Run `bin/sync.sh --hosts all --targets all`. Full matrix; mirrors the bootstrapping demo's all × all. |
+| `/sync(lang1,lang2[,...])` | Run `bin/sync.sh --hosts <list> --targets <list>` with the same languages on both sides. |
+| `/sync-default()` | Run `bin/sync-default.sh` (the haskell,java,python triad). |
+| `/sync-haskell()` | Run `heads/haskell/bin/sync-haskell.sh` (Phase 1 only: DSL → JSON + Haskell kernel + stack test + lexicon). |
+| `/sync-java()` | Run `bin/sync-java.sh` (--hosts java --targets java). |
+| `/sync-python()` | Run `bin/sync-python.sh`. |
+| `/sync-scala()` | Run `bin/sync-scala.sh`. |
+| `/sync-clojure()` etc. | Run `bin/sync-<dialect>.sh` for clojure / common-lisp / emacs-lisp / scheme. |
 
 ## Coding style (read the full guide!)
 

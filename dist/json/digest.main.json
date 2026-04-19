@@ -202,7 +202,7 @@
     "hydra.validate.packaging": "95c89596381bbe836a565e3b47a0efec4b564e51987844e83616c3eb66698f09",
     "hydra.variables": "dadfa5e815397126b0c598ac717657f22ce78b829c1ad5310959bc921682c83e",
     "hydra.variants": "475a88fce88f265be9205ae0f48373d47938cf55f3744d417aeb26dafe589891",
-    "hydra.wasm.coder": "1c5b48d03cdfa2b258c32d29f3090e93987f7ec6fd43ccc9475d69f65a5bab34",
+    "hydra.wasm.coder": "40f9e19c5c91478b92d6a56e2f01beaf65b49bd9efa18c3221ecc43d5b7cee46",
     "hydra.wasm.serde": "aa23021b5e7a03eab36ad2db2cad790e9c34a8218d57eaadc4d0ba001d209c68",
     "hydra.wasm.syntax": "7f30b482f505a5fea42fcbbdef2e85a45be9603df85b5b1a71186f86335171be",
     "hydra.workflow": "c06a059656a475c17cec13a5684486edcc81edec5be8df3de2cdf012b3809e44",
