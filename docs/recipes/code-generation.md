@@ -294,8 +294,8 @@ bin/sync-packages.sh <pkg> [--target <lang>]
 heads/haskell/bin/assemble-distribution.sh <pkg>            # Layer 2 assembler
 
 # Quick mode (skip target-language tests; Phase 1 stack test still runs)
-bin/sync.sh --quick
-bin/sync-java.sh --quick
+bin/sync.sh --no-tests
+bin/sync-java.sh --no-tests
 ```
 
 The sync scripts handle memory flags, build ordering, and test execution automatically.

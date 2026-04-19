@@ -136,11 +136,18 @@ All generation is driven from the Haskell head in [`heads/haskell/`](https://git
 
 ### Regenerate everything
 
-The simplest entry point is the top-level sync driver, which regenerates Haskell, Java,
-Python, Scala, Lisp, and all ext coders in order:
+The simplest entry point is the top-level sync driver. For the bootstrapping
+triad (haskell, java, python):
 
 ```bash
-./bin/sync-all.sh
+./bin/sync-default.sh
+```
+
+For a chosen (host, target) matrix:
+
+```bash
+./bin/sync.sh --hosts H1,H2 --targets T1,T2
+./bin/sync.sh --hosts all --targets all     # full matrix
 ```
 
 To regenerate just one target, invoke the corresponding per-language wrapper

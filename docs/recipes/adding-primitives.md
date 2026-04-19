@@ -470,8 +470,8 @@ charsIsAlphaNum = subgroup "isAlphaNum" [
 stack exec update-kernel-tests
 
 # From heads/haskell - regenerate Java and Python (including tests)
-./bin/sync-java.sh --quick
-./bin/sync-python.sh --quick
+./bin/sync-java.sh --no-tests
+./bin/sync-python.sh --no-tests
 ```
 
 5. Run tests in each language to verify the new test cases pass

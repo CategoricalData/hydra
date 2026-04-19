@@ -7,11 +7,11 @@ package hydra.test;
  */
 public interface TestGraph {
   static hydra.context.Context testContext() {
-    return hydra.Lexical.emptyContext();
+    return hydra.test.TestEnv.testContext();
   }
 
   static hydra.graph.Graph testGraph() {
-    return hydra.Lexical.emptyGraph();
+    return hydra.test.TestEnv.testGraph();
   }
 
   static hydra.packaging.Namespace testNamespace() {

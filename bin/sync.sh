@@ -254,7 +254,12 @@ done
 # ────────────────────────────────────────────────────────────────────
 # Phase 3: Kernel into every language in (hosts ∪ targets).
 # ────────────────────────────────────────────────────────────────────
-# Haskell kernel is already done by Phase 1.
+# Haskell kernel is already done by Phase 1. We dispatch through each
+# target's assemble-distribution.sh (Layer 2), which calls Layer 1 for
+# both main and test source sets and applies any per-target post-
+# processing (e.g. Java/Python TestGraph patches, Lisp Coder.java
+# PartialVisitor fix). Calling Layer 1 directly here would skip those
+# patches and break tests for the affected combinations.
 
 banner1 "Phase 3: hydra-kernel into each language"
 echo ""
@@ -262,12 +267,17 @@ for L in $LANG_UNION; do
     if [ "$L" = "haskell" ]; then continue; fi
     echo ""
     echo "--- hydra-kernel -> $L ---"
-    "$HYDRA_HASKELL_DIR/bin/transform-json-to-target.sh" "$L" hydra-kernel main \
-        --output "$HYDRA_ROOT/dist/$L"
-    echo ""
-    echo "--- hydra-kernel tests -> $L ---"
-    "$HYDRA_HASKELL_DIR/bin/transform-json-to-target.sh" "$L" hydra-kernel test \
-        --output "$HYDRA_ROOT/dist/$L"
+    case "$L" in
+        java|python|scala)
+            "$HYDRA_ROOT/heads/$L/bin/assemble-distribution.sh" hydra-kernel
+            ;;
+        clojure|scheme|common-lisp|emacs-lisp)
+            "$HYDRA_ROOT/heads/lisp/bin/assemble-distribution.sh" hydra-kernel "$L"
+            ;;
+        *)
+            die "Internal: no assembler for $L"
+            ;;
+    esac
 done
 
 # ────────────────────────────────────────────────────────────────────
@@ -291,9 +301,19 @@ for H in $HOSTS; do
         esac
         echo ""
         echo "--- $pkg -> $H ---"
-        "$HYDRA_HASKELL_DIR/bin/transform-json-to-target.sh" "$H" "$pkg" main \
-            --output "$HYDRA_ROOT/dist/$H"
+        # Dispatch to host H's assembler so post-processing patches apply.
+        case "$H" in
+            java|python|scala)
+                "$HYDRA_ROOT/heads/$H/bin/assemble-distribution.sh" "$pkg"
+                ;;
+            clojure|scheme|common-lisp|emacs-lisp)
+                "$HYDRA_ROOT/heads/lisp/bin/assemble-distribution.sh" "$pkg" "$H"
+                ;;
+            *)
+                die "Internal: no assembler for $H"
+                ;;
+        esac
     done
 done
 
-banner1_done "Sync-all complete!"
+banner1_done "Sync complete!"

@@ -14,8 +14,9 @@
 # Targets: haskell, java, python, scala, clojure, scheme, common-lisp,
 #          emacs-lisp. Default: all.
 #
-# This orchestrator replaces sync-all.sh and the per-target sync-*.sh
-# scripts. Work is dispatched through the three-layer stack:
+# Per-package layered tool. Sibling of bin/sync.sh (the symmetric
+# matrix tool, --hosts/--targets) and bin/sync-all.sh (exhaustive run
+# with tests). Work is dispatched through the three-layer stack:
 #
 #   Layer 1 (transforms) — bin wrappers in heads/haskell/bin/transform-*.sh
 #   Layer 2 (assemblers)  — bin wrappers in heads/<lang>/bin/assemble-*.sh

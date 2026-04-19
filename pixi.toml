@@ -255,7 +255,7 @@ cwd = "."
 
 # Sync tasks (run individual sync scripts from haskell environment)
 [feature.haskell.tasks._sync-all]
-cmd = "bash -c 'bash bin/sync-all.sh 2>&1 | tee sync-all.log'"
+cmd = "bash -c 'bash bin/sync.sh 2>&1 | tee sync.log'"
 cwd = "."
 
 [feature.haskell.tasks.sync-haskell]
@@ -263,11 +263,11 @@ cmd = "bash heads/haskell/bin/sync-haskell.sh"
 cwd = "."
 
 [feature.haskell.tasks.sync-java]
-cmd = "bash packages/hydra-ext/bin/sync-java.sh"
+cmd = "bash bin/sync-java.sh"
 cwd = "."
 
 [feature.haskell.tasks.sync-python]
-cmd = "bash packages/hydra-ext/bin/sync-python.sh"
+cmd = "bash bin/sync-python.sh"
 cwd = "."
 
 [feature.scala.dependencies]

@@ -41,7 +41,7 @@ The simplest way to synchronize the bootstrapping triad (Haskell, Java, Python)
 is using the top-level convenience wrapper:
 
 ```bash
-./bin/sync-default.sh          # from repo root; or --quick to skip tests
+./bin/sync-default.sh          # from repo root; or --no-tests to skip tests
 ```
 
 For the full all-languages × all-languages matrix:
@@ -53,7 +53,7 @@ For the full all-languages × all-languages matrix:
 To synchronize only Python (host == target == python):
 
 ```bash
-./bin/sync-python.sh           # or --quick to skip tests
+./bin/sync-python.sh           # or --no-tests to skip tests
 ```
 
 The `sync-python.sh` wrapper invokes
@@ -61,12 +61,12 @@ The `sync-python.sh` wrapper invokes
 1. Refreshes JSON sources via Phase 1 (DSL → JSON, stack test, lexicon)
 2. Generates the Python coder in Haskell, then kernel + the Python coder
    in Python
-3. Runs Python tests to verify (unless `--quick`)
+3. Runs Python tests to verify (unless `--no-tests`)
 
 For faster iteration during development, skip tests:
 
 ```bash
-./bin/sync-python.sh --quick
+./bin/sync-python.sh --no-tests
 ```
 
 ## Manual Sync (Step by Step)

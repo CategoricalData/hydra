@@ -39,12 +39,12 @@ HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 
 echo "Step 1: Generating main Common Lisp modules..."
 "$HASKELL_BIN/transform-json-to-lisp.sh" "$PACKAGE" common-lisp main \
-    --output "$OUT_DIR/src/main"
+    --output "$DIST_ROOT"
 
 echo ""
 echo "Step 2: Generating test Common Lisp modules..."
 "$HASKELL_BIN/transform-json-to-lisp.sh" "$PACKAGE" common-lisp test \
-    --output "$OUT_DIR/src/test"
+    --output "$DIST_ROOT"
 
 case "$PACKAGE" in
     hydra-kernel)
