@@ -204,15 +204,28 @@ writeModulesJson doInfer basePath universeMods mods = do
 -- construction happen once over the full universe, so each per-module write
 -- is as cheap as the single-directory version.
 --
--- The content-hash cache lives at <distJsonRoot>/digest.main.json, scoped
--- to this "main-universe" regeneration. See 'writeModulesJson' for the
--- caching semantics.
+-- Cache layout (after 2026-04-18 split):
+--
+--   * Per-package digest at dist/json/<pkg>/digest.json — covers the
+--     namespaces routed to <pkg>. Stage 3+ will exploit per-package
+--     freshness; for now it's recorded so callers can rely on it.
+--   * Universe-wide digest at <distJsonRoot>/digest.main.json — kept
+--     for backwards compatibility with the existing cache-hit semantics
+--     (universe-wide all-or-nothing). Removed once per-package
+--     freshness checks are wired in.
+--
+-- See 'writeModulesJson' for the (non-split) caching semantics.
 writeModulesJsonPackageSplit :: Bool -> FilePath -> [Module] -> [Module] -> IO ()
 writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
   hit <- if doInfer then tryCacheHitSplit distJsonRoot universeMods mods else return Nothing
   case hit of
-    Just _ ->
+    Just _ -> do
       putStrLn $ "  Cache hit (" ++ show (length universeMods) ++ " modules clean); skipping inference and writes."
+      -- Even on a cache hit, ensure per-package digests exist on disk
+      -- so downstream tools (Stage 3 per-target freshness checks) have
+      -- something to compare against. Cheap because hashing reads the
+      -- DSL files but skips inference + JSON writes.
+      CM.when doInfer $ ensurePerPackageDigests distJsonRoot mods
     Nothing -> do
       mods' <- if doInfer then inferModulesIO universeMods mods else return mods
       let graph = modulesToGraph universeMods universeMods
@@ -222,12 +235,56 @@ writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
         let pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
         putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules -> " ++ pkgDir
         mapM_ (writeModuleJson schemaMap pkgDir) pkgMods
-      CM.when doInfer $ refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
+      CM.when doInfer $ do
+        refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
+        refreshPerPackageDigests distJsonRoot universeMods mods'
 
 -- | Digest file for 'writeModulesJsonPackageSplit'. Single well-known
--- location shared across all packages the universe touches.
+-- location shared across all packages the universe touches. Will be
+-- removed once per-package freshness checks fully replace the
+-- universe-wide cache (Stage 3+).
 packageSplitDigestAnchor :: FilePath -> FilePath
 packageSplitDigestAnchor distJsonRoot = distJsonRoot FP.</> "digest.main.json"
+
+-- | Per-package digest path: dist/json/<pkg>/digest.json. The digest
+-- covers the DSL sources whose namespaces route to <pkg>.
+perPackageDigestPath :: FilePath -> String -> FilePath
+perPackageDigestPath distJsonRoot pkg =
+  distJsonRoot FP.</> pkg FP.</> "digest.json"
+
+-- | After a successful regen, write per-package digest files. Each
+-- package's digest hashes only its own DSL sources (the modules that
+-- route to that package), letting Stage 3+ check freshness per
+-- package without consulting the universe-wide digest.
+--
+-- 'targetMods' is the post-inference module set (from
+-- writeModulesJsonPackageSplit's mods'); we partition it by owning
+-- package and hash each package's modules.
+refreshPerPackageDigests :: FilePath -> [Module] -> [Module] -> IO ()
+refreshPerPackageDigests distJsonRoot _universeMods targetMods = do
+  nsFiles <- Digest.discoverNamespaceFiles
+  let groups = groupByPackage targetMods
+  CM.forM_ groups $ \(pkg, pkgMods) -> do
+    pkgDigest <- Digest.hashUniverse nsFiles pkgMods
+    -- Some packages (e.g. hydra-haskell with its synthesized coder
+    -- modules, hydra-coq with no DSL sources at all) won't have any
+    -- DSL files discoverable; skip writing an empty digest.
+    CM.when (not (M.null pkgDigest)) $ do
+      let dpath = perPackageDigestPath distJsonRoot pkg
+      Digest.writeDigest dpath pkgDigest
+      putStrLn $ "  Per-package digest: " ++ dpath
+        ++ " (" ++ show (M.size pkgDigest) ++ " entries)"
+
+-- | Ensure per-package digest files exist on disk. Called on cache
+-- hit so that Stage 3+ tooling has digests to read even when no
+-- regen ran. Compared to refreshPerPackageDigests, this is a no-op
+-- if every per-package digest already exists; cheap to call.
+ensurePerPackageDigests :: FilePath -> [Module] -> IO ()
+ensurePerPackageDigests distJsonRoot mods = do
+  let groups = groupByPackage mods
+      paths  = [ perPackageDigestPath distJsonRoot pkg | (pkg, _) <- groups ]
+  allExist <- fmap and (mapM SD.doesFileExist paths)
+  CM.unless allExist $ refreshPerPackageDigests distJsonRoot [] mods
 
 -- | If every universe module's DSL source hash matches the stored digest,
 -- and every target module's JSON file already exists, return the current
