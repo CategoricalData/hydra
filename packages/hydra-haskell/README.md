@@ -143,16 +143,22 @@ Python, Scala, Lisp, and all ext coders in order:
 ./bin/sync-all.sh
 ```
 
-To regenerate just one target, invoke the corresponding per-language script from
-`heads/haskell/bin/`:
+To regenerate just one target, invoke the corresponding per-language wrapper
+from the top-level `bin/`:
 
 ```bash
-heads/haskell/bin/sync-haskell.sh
-heads/haskell/bin/sync-java.sh
-heads/haskell/bin/sync-python.sh
-heads/haskell/bin/sync-scala.sh
-heads/haskell/bin/sync-lisp.sh
-heads/haskell/bin/sync-ext.sh
+heads/haskell/bin/sync-haskell.sh   # Phase 1 only: DSL → JSON + Haskell kernel
+                                    # + stack test + lexicon
+bin/sync-java.sh                    # equivalent to: bin/sync.sh --hosts java --targets java
+bin/sync-python.sh
+bin/sync-scala.sh
+bin/sync-clojure.sh                 # one of: clojure, common-lisp, emacs-lisp, scheme
+```
+
+Or for the full bootstrapping triad (haskell, java, python):
+
+```bash
+bin/sync-default.sh
 ```
 
 ### Run the generation driver interactively
