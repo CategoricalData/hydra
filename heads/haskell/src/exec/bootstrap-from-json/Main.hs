@@ -50,6 +50,7 @@ import Control.Monad (when, forM)
 import qualified Control.Monad as CM
 import qualified Data.Char as C
 import Data.List (isPrefixOf, partition)
+import qualified Data.List as L
 import qualified Data.List.Split as LS
 import qualified Data.Map as M
 import Data.Time.Clock (getCurrentTime, diffUTCTime, UTCTime)
@@ -511,42 +512,52 @@ main = do
              (\m -> unNamespace (moduleNamespace m) `elem` closed)
              allModsFinal'
 
-  -- Helper to filter the generated output down to just the originally-
-  -- requested modules, given the expanded set passed to generateSources.
-  -- Called when we needed the expansion for schema context but only want
-  -- files for the original scope on disk.
+  -- Walk 'dir' and delete every generated file that does not belong to
+  -- the scoped (wanted) module set. Determines membership by checking
+  -- whether the file's path-prefix corresponds to a wanted module's
+  -- namespace. Works across all targets without needing to reconstruct
+  -- the coder's exact namespace-to-path mapping, since we only care
+  -- about dir-prefix matches. Directories that become empty after
+  -- deletion are removed.
   let pruneExtraFiles :: FilePath -> [Module] -> [Module] -> IO ()
-      pruneExtraFiles dir wanted expanded = do
-        let wantedNs = fmap (unNamespace . moduleNamespace) wanted
-            extra = Prelude.filter
-              (\m -> unNamespace (moduleNamespace m) `notElem` wantedNs)
-              expanded
-            suffix = case target of
-              "haskell" -> "hs"
-              "java" -> "java"
-              "python" -> "py"
-              "scala" -> "scala"
-              "clojure" -> "clj"
-              "scheme" -> "scm"
-              "common-lisp" -> "lisp"
-              "emacs-lisp" -> "el"
-              _ -> ""
-        CM.forM_ extra $ \m -> do
-          -- Files are laid out per target-language convention under dir.
-          -- For Haskell: Hydra/Xxx/Yyy.hs from namespace hydra.xxx.yyy.
-          -- The namespace-to-path is handled by the coder; we just unlink
-          -- everything that shouldn't be present.
-          let nsStr = unNamespace (moduleNamespace m)
-              parts = LS.splitOn "." nsStr
-              -- Haskell-style path: first letter of each part uppercased.
-              capitalize (c:cs) = C.toUpper c : cs
-              capitalize []     = []
-              relPath = case target of
-                "haskell" -> FP.joinPath (fmap capitalize parts) ++ "." ++ suffix
-                _         -> FP.joinPath parts ++ "." ++ suffix
-              fullPath = dir FP.</> relPath
-          exists <- SD.doesFileExist fullPath
-          CM.when exists $ SD.removeFile fullPath
+      pruneExtraFiles dir wanted _expanded = do
+        let wantedNss = fmap (unNamespace . moduleNamespace) wanted
+            -- Per-target path prefixes the wanted namespaces would occupy.
+            -- Haskell capitalizes every segment; other targets leave the
+            -- namespace lowercased for directory segments. For Java/Scala,
+            -- the last namespace segment becomes a Capitalized filename,
+            -- but its enclosing directory is the lowercased prefix — so
+            -- the prefix match works for all targets without special
+            -- casing the last segment.
+            capitalize (c:cs) = C.toUpper c : cs
+            capitalize []     = []
+            prefixFor nsStr =
+              let parts = LS.splitOn "." nsStr
+              in case target of
+                   "haskell" -> FP.joinPath (fmap capitalize parts)
+                   _         -> FP.joinPath parts
+            wantedPrefixes = fmap prefixFor wantedNss
+            -- A file 'rel' belongs to the scope if:
+            --   * it sits directly at <prefix>.<ext> (module-per-file case), OR
+            --   * it sits under <prefix>/ (Java type-per-file fan-out).
+            isWanted rel = Prelude.any
+              (\p ->
+                 p == FP.dropExtension rel
+                 || (p ++ "/") `L.isPrefixOf` rel)
+              wantedPrefixes
+        exists <- SD.doesDirectoryExist dir
+        CM.when exists $ do
+          allFiles <- listFilesRecursive dir
+          CM.forM_ allFiles $ \fp -> do
+            let rel = if (dir ++ "/") `L.isPrefixOf` fp
+                        then Prelude.drop (length dir + 1) fp
+                        else fp
+            CM.when (not (isWanted rel)) $ do
+              isFile <- SD.doesFileExist fp
+              CM.when isFile $ SD.removeFile fp
+          -- Sweep empty directories bottom-up so pruneExtraFiles leaves
+          -- no empty hydra/packaging/ shells behind.
+          removeEmptyDirs dir
 
   -- Only expand to transitive deps + prune when the caller scoped to a
   -- single package via --package. In that mode the transitive closure
@@ -776,4 +787,40 @@ filterByTargetDigest outBase pkg mods = do
                   ++ " fresh / " ++ show (length dirty)
                   ++ " dirty; excluding fresh from generation"
                 return dirty
+
+-- | Recursively list every regular file under a directory. Skips
+-- dotfiles and dot-directories.
+listFilesRecursive :: FilePath -> IO [FilePath]
+listFilesRecursive root = do
+  exists <- SD.doesDirectoryExist root
+  if not exists then return [] else go root
+  where
+    go d = do
+      entries <- listDirectory d
+      fmap concat $ CM.forM entries $ \e ->
+        if "." `isPrefixOf` e
+          then return []
+          else do
+            let p = d FP.</> e
+            isDir <- SD.doesDirectoryExist p
+            if isDir
+              then go p
+              else do
+                isFile <- SD.doesFileExist p
+                return (if isFile then [p] else [])
+
+-- | Remove empty subdirectories of 'root' bottom-up. 'root' itself is
+-- not removed. Safe to call on non-existent paths.
+removeEmptyDirs :: FilePath -> IO ()
+removeEmptyDirs root = do
+  exists <- SD.doesDirectoryExist root
+  CM.when exists $ do
+    entries <- listDirectory root
+    CM.forM_ entries $ \e -> do
+      let p = root FP.</> e
+      isDir <- SD.doesDirectoryExist p
+      CM.when isDir $ do
+        removeEmptyDirs p
+        contents <- listDirectory p
+        CM.when (Prelude.null contents) $ SD.removeDirectory p
 
