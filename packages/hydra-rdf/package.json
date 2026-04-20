@@ -2,6 +2,6 @@
   "name": "hydra-rdf",
   "description": "RDF ecosystem support for Hydra: RDF, OWL, SHACL, ShEx, XML Schema",
   "sourceLanguage": "haskell",
-  "targetLanguages": ["haskell", "java", "python", "scala"],
+  "targetLanguages": ["haskell", "java", "python"],
   "dependencies": ["hydra-kernel"]
 }
