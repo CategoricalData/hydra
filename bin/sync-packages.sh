@@ -448,7 +448,8 @@ else
         echo ""
         echo "--- tests for $target (via $last_pkg) ---"
         invoke_tester "$last_pkg" "$target" || {
-            echo "WARNING: tests had errors for $target (see log above)" >&2
+            echo "ERROR: tests failed for $target (see log above)" >&2
+            exit 1
         }
     done
 fi
