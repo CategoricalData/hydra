@@ -503,20 +503,24 @@ main = do
   -- Routing via PackageRouting.groupByPackage is unconditional: every module
   -- lands at <output>/<pkg>/src/main/<lang>/... based on its namespace.
   --
-  -- When --package <scoped> is set, we only generate the scoped
-  -- package's group. Cross-package type references resolve via the
-  -- typing context (allModsFinal' is passed to generateSources as the
-  -- universe), so no expansion or pruning is needed.
-  mainFileCount <- do
-    let groups = groupByPackage modsToGenerate'
-    let scopedGroups = case optPackage opts of
-          Nothing     -> groups
-          Just pkgArg -> Prelude.filter (\(pkg, _) -> pkg == pkgArg) groups
-    counts <- CM.forM scopedGroups $ \(pkg, pkgMods) -> do
-      let dir = packageOutMain pkg
-      putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules → " ++ dir
-      genForDir dir pkgMods
-    return (sum counts)
+  -- When --package <scoped> is set, we generate only that package's
+  -- modules into its per-package dir. When unscoped (demo mode), we
+  -- generate every module to a single flat <outBase>/src/main/<target>/
+  -- tree — matching integration's sync-java/sync-python model where the
+  -- consumer's build expects a single source-dir rather than per-package
+  -- sub-trees.
+  mainFileCount <- case optPackage opts of
+    Just pkgArg -> do
+      let groups = groupByPackage modsToGenerate'
+      let scopedGroups = Prelude.filter (\(pkg, _) -> pkg == pkgArg) groups
+      counts <- CM.forM scopedGroups $ \(pkg, pkgMods) -> do
+        let dir = packageOutMain pkg
+        putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules → " ++ dir
+        genForDir dir pkgMods
+      return (sum counts)
+    Nothing -> do
+      putStrLn $ "  " ++ show (length modsToGenerate') ++ " modules → " ++ outMain
+      genForDir outMain modsToGenerate'
   genEnd <- getCurrentTime
 
   putStrLn $ "  Generated " ++ show mainFileCount ++ " files."
@@ -580,16 +584,18 @@ main = do
             _ -> return 0
 
       testStart <- getCurrentTime
-      count <- do
-        let groups = groupByPackage testMods
-        let scopedGroups = case optPackage opts of
-              Nothing     -> groups
-              Just pkgArg -> Prelude.filter (\(pkg, _) -> pkg == pkgArg) groups
-        counts <- CM.forM scopedGroups $ \(pkg, pkgMods) -> do
-          let dir = packageOutTest pkg
-          putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " test modules → " ++ dir
-          genTestForDir dir pkgMods
-        return (sum counts)
+      count <- case optPackage opts of
+        Just pkgArg -> do
+          let groups = groupByPackage testMods
+          let scopedGroups = Prelude.filter (\(pkg, _) -> pkg == pkgArg) groups
+          counts <- CM.forM scopedGroups $ \(pkg, pkgMods) -> do
+            let dir = packageOutTest pkg
+            putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " test modules → " ++ dir
+            genTestForDir dir pkgMods
+          return (sum counts)
+        Nothing -> do
+          putStrLn $ "  " ++ show (length testMods) ++ " test modules → " ++ outTest
+          genTestForDir outTest testMods
       testEnd <- getCurrentTime
 
       putStrLn $ "  Generated " ++ show count ++ " test files."
