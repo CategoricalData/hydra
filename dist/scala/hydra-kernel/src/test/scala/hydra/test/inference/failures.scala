@@ -6,6 +6,20 @@ import hydra.testing.*
 
 lazy val allTests: hydra.testing.TestGroup = hydra.testing.TestGroup("Expected failures",
    None, Seq(hydra.test.inference.failures.undefinedVariableTests, hydra.test.inference.failures.unificationFailureTests,
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    hydra.test.inference.failures.invalidApplicationTests, hydra.test.inference.failures.selfApplicationTests,
    hydra.test.inference.failures.arityMismatchTests, hydra.test.inference.failures.recursiveTypeTests,
    hydra.test.inference.failures.occurCheckTests, hydra.test.inference.failures.typeConstructorMisuseTests,
@@ -22,89 +36,369 @@ lazy val arityMismatchTests: hydra.testing.TestGroup = hydra.testing.TestGroup("
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.add"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(137))))),
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(999))))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.lambda(hydra.core.Lambda("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, hydra.core.Term.lambda(hydra.core.Lambda("y", None, hydra.core.Term.variable("x"))))),
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))), hydra.core.Term.literal(hydra.core.Literal.boolean(true)))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.lists.cons"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(137))))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.string("extra")))))), "FAIL")), None,
      Seq()))), hydra.testing.TestGroup("Wrong argument types with extra args", None,
      Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.strings.length"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.literal(hydra.core.Literal.string("extra")))))), "FAIL")), None,
      Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.logic.not"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.literal(hydra.core.Literal.boolean(true)))))), "FAIL")), None,
      Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.lambda(hydra.core.Lambda("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.literal(hydra.core.Literal.string("arg")))), hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(137))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.boolean(true)))))), "FAIL")), None,
      Seq())))), Seq())
 
 lazy val complexConstraintFailureTests: hydra.testing.TestGroup = hydra.testing.TestGroup("Complex constraint failures",
    None, Seq(hydra.testing.TestGroup("Multi-level constraint conflicts", None, Seq(),
    Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
    scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
    hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("f",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.lambda(hydra.core.Lambda("y",
      None, hydra.core.Term.pair(Tuple2(hydra.core.Term.variable("x"), hydra.core.Term.variable("y"))))))),
      None), hydra.core.Binding("g", hydra.core.Term.lambda(hydra.core.Lambda("a",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("a"))), hydra.core.Term.variable("a"))))), None), hydra.core.Binding("h",
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("g"),
      hydra.core.Term.lambda(hydra.core.Lambda("z", None, hydra.core.Term.variable("z"))))),
      None)), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("h"),
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("weird",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("f", None, hydra.core.Term.lambda(hydra.core.Lambda("x",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
      hydra.core.Term.variable("x"))))))))), None), hydra.core.Binding("bad", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("weird"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("y", None, hydra.core.Term.pair(Tuple2(hydra.core.Term.variable("y"),
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))))),
      None)), hydra.core.Term.variable("bad"))))), "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3",
@@ -115,38 +409,220 @@ lazy val complexConstraintFailureTests: hydra.testing.TestGroup = hydra.testing.
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("nested",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("f", None, hydra.core.Term.lambda(hydra.core.Lambda("g",
      None, hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("g"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("g"),
      hydra.core.Term.variable("x"))))))))))))))), None), hydra.core.Binding("int_f",
      hydra.core.Term.lambda(hydra.core.Lambda("n", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.add"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("n"))), hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(1))))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None), hydra.core.Binding("str_g", hydra.core.Term.lambda(hydra.core.Lambda("s",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.strings.cat"),
      hydra.core.Term.list(Seq(hydra.core.Term.variable("s"), hydra.core.Term.literal(hydra.core.Literal.string("!")))))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None), hydra.core.Binding("bad", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("nested"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("int_f"))), hydra.core.Term.variable("str_g"))), None)),
      hydra.core.Term.variable("bad"))))), "FAIL")), None, Seq()))), hydra.testing.TestGroup("Function composition failures",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("triple",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("f", None, hydra.core.Term.lambda(hydra.core.Lambda("x",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
      hydra.core.Term.variable("x"))))))))))), None), hydra.core.Binding("increment",
      hydra.core.Term.lambda(hydra.core.Lambda("n", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.add"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("n"))), hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(1))))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None), hydra.core.Binding("stringify", hydra.core.Term.lambda(hydra.core.Lambda("s",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.strings.cat"),
      hydra.core.Term.list(Seq(hydra.core.Term.variable("s"), hydra.core.Term.literal(hydra.core.Literal.string("!")))))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None), hydra.core.Binding("bad", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("triple"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("increment"))), hydra.core.Term.variable("stringify"))),
      None)), hydra.core.Term.variable("bad"))))), "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2",
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
@@ -156,103 +632,593 @@ lazy val complexConstraintFailureTests: hydra.testing.TestGroup = hydra.testing.
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("compose",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("f", None, hydra.core.Term.lambda(hydra.core.Lambda("g",
      None, hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("g"),
      hydra.core.Term.variable("x"))))))))))), None), hydra.core.Binding("reverse_compose",
      hydra.core.Term.lambda(hydra.core.Lambda("g", None, hydra.core.Term.lambda(hydra.core.Lambda("f",
      None, hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("g"),
      hydra.core.Term.variable("x"))))))))))), None), hydra.core.Binding("bad", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("compose"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("reverse_compose"))), hydra.core.Term.variable("hydra.lib.math.add"))),
      hydra.core.Term.variable("hydra.lib.strings.length"))), None)), hydra.core.Term.variable("bad"))))),
      "FAIL")), None, Seq())))), Seq())
 
 lazy val constraintSolverEdgeCaseTests: hydra.testing.TestGroup = hydra.testing.TestGroup("Constraint solver edge cases",
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    None, Seq(hydra.testing.TestGroup("Complex constraint propagation", None, Seq(),
    Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
    scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
    hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("complex",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("f", None, hydra.core.Term.lambda(hydra.core.Lambda("g",
      None, hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("g"),
      hydra.core.Term.variable("x"))))), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("g"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
      hydra.core.Term.variable("x"))))))))))))), None), hydra.core.Binding("bad", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("complex"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("a", None, hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("b", None, hydra.core.Term.literal(hydra.core.Literal.string("foo")))))),
      None)), hydra.core.Term.variable("bad"))))), "FAIL")), None, Seq()))), hydra.testing.TestGroup("Fixed point combinators",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("fix",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("f", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("f"))))), None), hydra.core.Binding("bad", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("fix"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("x"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("x"))))))), None)), hydra.core.Term.variable("bad"))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("y",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("f", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.lambda(hydra.core.Lambda("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("x"),
      hydra.core.Term.variable("x"))))))), hydra.core.Term.lambda(hydra.core.Lambda("x",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("x"),
      hydra.core.Term.variable("x"))))))))))), None), hydra.core.Binding("bad", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("y"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("rec", None, hydra.core.Term.lambda(hydra.core.Lambda("n",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("rec"),
      hydra.core.Term.variable("rec"))))))))), None)), hydra.core.Term.variable("bad"))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("omega",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("x"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("x"))))), None), hydra.core.Binding("bad", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("omega"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("omega"))), None)), hydra.core.Term.variable("bad"))))),
      "FAIL")), None, Seq()))), hydra.testing.TestGroup("Constraint cycles", None,
      Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("a",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("b"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("c"))), hydra.core.Term.variable("x"))))), None), hydra.core.Binding("b",
      hydra.core.Term.lambda(hydra.core.Lambda("y", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("c"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("a"))), hydra.core.Term.variable("y"))))), None), hydra.core.Binding("c",
      hydra.core.Term.lambda(hydra.core.Lambda("z", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("a"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("b"))), hydra.core.Term.variable("z"))))), None)), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("a"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("circular",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("f", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("circular"))), hydra.core.Term.variable("f"))))), None)),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("circular"),
      hydra.core.Term.variable("circular"))))))), "FAIL")), None, Seq())))), Seq())
 
 lazy val invalidApplicationTests: hydra.testing.TestGroup = hydra.testing.TestGroup("Invalid application",
    None, Seq(hydra.testing.TestGroup("Non-function application", None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1",
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
    Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
    scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
@@ -260,67 +1226,305 @@ lazy val invalidApplicationTests: hydra.testing.TestGroup = hydra.testing.TestGr
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(137))))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.literal(hydra.core.Literal.string("foo")),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.literal(hydra.core.Literal.boolean(true)),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.boolean(false)))))), "FAIL")), None,
      Seq()), hydra.testing.TestCaseWithMetadata("#4", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(3.14))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))),
      "FAIL")), None, Seq()))), hydra.testing.TestGroup("Collection application", None,
      Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.string("bar")))))), "FAIL")), None,
      Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.pair(Tuple2(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))), hydra.core.Term.literal(hydra.core.Literal.boolean(true)))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.list(Seq()),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#4", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.pair(Tuple2(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(1))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.pair(Tuple2(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(2))),
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(3))))))),
      hydra.core.Term.literal(hydra.core.Literal.string("index")))))), "FAIL")), None,
      Seq()))), hydra.testing.TestGroup("Primitive misapplication", None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
@@ -328,35 +1532,147 @@ lazy val invalidApplicationTests: hydra.testing.TestGroup = hydra.testing.TestGr
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.maps.empty"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))))), "FAIL")), None,
      Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.sets.empty"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.maybe(None),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.string("value")))))), "FAIL")), None,
      Seq()), hydra.testing.TestCaseWithMetadata("#4", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.list(Seq()),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.boolean(true)))))), "FAIL")), None,
      Seq())))), Seq())
 
 lazy val letBindingMismatchTests: hydra.testing.TestGroup = hydra.testing.TestGroup("Let binding type mismatches",
    None, Seq(hydra.testing.TestGroup("Application type mismatches", None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1",
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
    Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
    scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
@@ -364,40 +1680,180 @@ lazy val letBindingMismatchTests: hydra.testing.TestGroup = hydra.testing.TestGr
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))),
      None), hydra.core.Binding("y", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("x"),
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))), None)), hydra.core.Term.variable("y"))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("f",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.literal(hydra.core.Literal.string("result")))),
      None), hydra.core.Binding("g", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.literal(hydra.core.Literal.string("extra")))), None)), hydra.core.Term.variable("g"))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("num",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))),
      None), hydra.core.Binding("bad", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("num"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("num"))), None)), hydra.core.Term.variable("bad"))))),
      "FAIL")), None, Seq()))), hydra.testing.TestGroup("Collection type mismatches",
      None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("list1",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      None), hydra.core.Binding("list2", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.lists.cons"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))), hydra.core.Term.variable("list1"))),
      None)), hydra.core.Term.variable("list2"))))), "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2",
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
@@ -407,9 +1863,37 @@ lazy val letBindingMismatchTests: hydra.testing.TestGroup = hydra.testing.TestGr
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("nums",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(1))),
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(2))))),
      None), hydra.core.Binding("mixed", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.lists.cons"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.string("bad")))), hydra.core.Term.variable("nums"))),
      None)), hydra.core.Term.variable("mixed"))))), "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3",
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
@@ -419,23 +1903,121 @@ lazy val letBindingMismatchTests: hydra.testing.TestGroup = hydra.testing.TestGr
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("pair1",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.pair(Tuple2(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))),
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))), None), hydra.core.Binding("pair2",
      hydra.core.Term.pair(Tuple2(hydra.core.Term.literal(hydra.core.Literal.string("bar")),
      hydra.core.Term.variable("pair1"))), None)), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.add"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.pairs.first"),
      hydra.core.Term.variable("pair2"))))), hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(1))))))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      "FAIL")), None, Seq()))), hydra.testing.TestGroup("Function binding mismatches",
      None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("add",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("hydra.lib.math.add"), None), hydra.core.Binding("badCall",
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("add"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.string("not a number")))), hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None)), hydra.core.Term.variable("badCall"))))), "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2",
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
@@ -444,11 +2026,67 @@ lazy val letBindingMismatchTests: hydra.testing.TestGroup = hydra.testing.TestGr
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("f",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.lambda(hydra.core.Lambda("y",
      None, hydra.core.Term.variable("x"))))), None), hydra.core.Binding("g", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      None), hydra.core.Binding("bad", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("g"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))), hydra.core.Term.literal(hydra.core.Literal.boolean(true)))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None)), hydra.core.Term.variable("bad"))))), "FAIL")), None, Seq())))), Seq())
 
 lazy val occurCheckTests: hydra.testing.TestGroup = hydra.testing.TestGroup("Occur check failures",
@@ -460,51 +2098,261 @@ lazy val occurCheckTests: hydra.testing.TestGroup = hydra.testing.TestGroup("Occ
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("g",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("h", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("g"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("g"))), hydra.core.Term.variable("h"))))), None)), hydra.core.Term.variable("g"))))),
      "FAIL")), None, Seq()))), hydra.testing.TestGroup("Mutual occur checks", None,
      Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("f",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("g"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("f"))))), None), hydra.core.Binding("g", hydra.core.Term.lambda(hydra.core.Lambda("y",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
      hydra.core.Term.variable("g"))))), None)), hydra.core.Term.variable("f"))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("a",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("b"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("a"))), hydra.core.Term.variable("x"))))), None), hydra.core.Binding("b",
      hydra.core.Term.lambda(hydra.core.Lambda("y", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("a"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("b"))))), None)), hydra.core.Term.variable("a"))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("cycle1",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("cycle2"),
      hydra.core.Term.variable("cycle1"))), None), hydra.core.Binding("cycle2", hydra.core.Term.lambda(hydra.core.Lambda("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("cycle1"),
      hydra.core.Term.variable("x"))))), None)), hydra.core.Term.variable("cycle1"))))),
      "FAIL")), None, Seq()))), hydra.testing.TestGroup("Complex occur checks", None,
      Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("omega",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("x"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("x"))), hydra.core.Term.variable("omega"))))), None)),
      hydra.core.Term.variable("omega"))))), "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2",
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
@@ -514,8 +2362,36 @@ lazy val occurCheckTests: hydra.testing.TestGroup = hydra.testing.TestGroup("Occ
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("loop",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.lambda(hydra.core.Lambda("y",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("loop"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("x"),
      hydra.core.Term.variable("loop"))))), hydra.core.Term.variable("y"))))))), None)),
      hydra.core.Term.variable("loop"))))), "FAIL")), None, Seq())))), Seq())
@@ -523,63 +2399,259 @@ lazy val occurCheckTests: hydra.testing.TestGroup = hydra.testing.TestGroup("Occ
 lazy val polymorphismViolationTests: hydra.testing.TestGroup = hydra.testing.TestGroup("Polymorphism violations",
    None, Seq(hydra.testing.TestGroup("Identity function violations", None, Seq(),
    Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
    scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
    hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("id",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.variable("x"))),
      None)), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.add"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("id"),
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("id"),
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))))))))), "FAIL")),
      None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("id",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.variable("x"))),
      None)), hydra.core.Term.list(Seq(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("id"),
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("id"),
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))))))))), "FAIL")),
      None, Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("id",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.variable("x"))),
      None)), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.pair(Tuple2(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("id"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("id"),
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))))), hydra.core.Term.literal(hydra.core.Literal.boolean(true)))))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      "FAIL")), None, Seq()))), hydra.testing.TestGroup("Constrained polymorphism violations",
      None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("f",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.list(Seq(hydra.core.Term.variable("x"),
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))),
      None)), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))))))), "FAIL")), None,
      Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("g",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.pair(Tuple2(hydra.core.Term.variable("x"),
      hydra.core.Term.literal(hydra.core.Literal.string("constant")))))), None)), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.add"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.pairs.first"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("g"),
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))))),
@@ -587,47 +2659,201 @@ lazy val polymorphismViolationTests: hydra.testing.TestGroup = hydra.testing.Tes
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("g"),
      hydra.core.Term.literal(hydra.core.Literal.string("bad")))))))))))), "FAIL")),
      None, Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("h",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.lists.cons"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("x"))), hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(0))))))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None)), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("h"),
      hydra.core.Term.literal(hydra.core.Literal.string("incompatible")))))))), "FAIL")),
      None, Seq()))), hydra.testing.TestGroup("Higher-order polymorphism violations",
      None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.lambda(hydra.core.Lambda("f",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, hydra.core.Term.pair(Tuple2(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))))))))), "FAIL")),
      None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.lambda(hydra.core.Lambda("g",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, hydra.core.Term.list(Seq(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("g"),
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(1))))),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("g"),
      hydra.core.Term.literal(hydra.core.Literal.string("bad")))))))))), "FAIL")),
      None, Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.lambda(hydra.core.Lambda("h",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.add"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("h"),
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("h"),
@@ -643,103 +2869,523 @@ lazy val primitiveTypeErrorTests: hydra.testing.TestGroup = hydra.testing.TestGr
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.logic.ifElse"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.literal(hydra.core.Literal.boolean(true)))), hydra.core.Term.literal(hydra.core.Literal.boolean(false)))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.logic.ifElse"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.boolean(true)))), hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.boolean(false)))))), "FAIL")), None,
      Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.logic.and"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.literal(hydra.core.Literal.boolean(true)))))), "FAIL")), None,
      Seq()), hydra.testing.TestCaseWithMetadata("#4", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.logic.or"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.boolean(true)))), hydra.core.Term.literal(hydra.core.Literal.string("not boolean")))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      "FAIL")), None, Seq()))), hydra.testing.TestGroup("Collection primitive errors",
      None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.maps.lookup"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.literal(hydra.core.Literal.string("not a map")))))), "FAIL")),
      None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.sets.member"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.lists.maybeHead"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.string("not a list")))))), "FAIL")),
      None, Seq()), hydra.testing.TestCaseWithMetadata("#4", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.maybes.fromMaybe"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.literal(hydra.core.Literal.string("not optional")))))), "FAIL")),
      None, Seq()))), hydra.testing.TestGroup("Math primitive errors", None, Seq(),
      Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.add"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.string("not a number")))), hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.mul"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.boolean(true)))), hydra.core.Term.literal(hydra.core.Literal.boolean(false)))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.maybeDiv"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(2))))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#4", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.maybeMod"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.literal(hydra.core.Literal.string("not a number")))))), "FAIL")),
      None, Seq())))), Seq())
@@ -753,15 +3399,71 @@ lazy val recursiveTypeTests: hydra.testing.TestGroup = hydra.testing.TestGroup("
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.list(Seq(hydra.core.Term.variable("x"))), None)), hydra.core.Term.variable("x"))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.pair(Tuple2(hydra.core.Term.variable("x"), hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None)), hydra.core.Term.variable("x"))))), "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3",
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
@@ -770,15 +3472,71 @@ lazy val recursiveTypeTests: hydra.testing.TestGroup = hydra.testing.TestGroup("
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.pair(Tuple2(hydra.core.Term.variable("x"), hydra.core.Term.variable("x"))),
      None)), hydra.core.Term.variable("x"))))), "FAIL")), None, Seq()))), hydra.testing.TestGroup("Recursive function types",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("f",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.variable("f"))),
      None)), hydra.core.Term.variable("f"))))), "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2",
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
@@ -788,27 +3546,125 @@ lazy val recursiveTypeTests: hydra.testing.TestGroup = hydra.testing.TestGroup("
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("f",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.lambda(hydra.core.Lambda("y",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
      hydra.core.Term.variable("f"))))))), None)), hydra.core.Term.variable("f"))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("f",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.list(Seq(hydra.core.Term.variable("f"))))),
      None)), hydra.core.Term.variable("f"))))), "FAIL")), None, Seq()))), hydra.testing.TestGroup("Mutually recursive types",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.list(Seq(hydra.core.Term.variable("y"))), None), hydra.core.Binding("y",
      hydra.core.Term.pair(Tuple2(hydra.core.Term.variable("x"), hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None)), hydra.core.Term.variable("x"))))), "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2",
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
@@ -817,21 +3673,77 @@ lazy val recursiveTypeTests: hydra.testing.TestGroup = hydra.testing.TestGroup("
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("a",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.variable("b"))),
      None), hydra.core.Binding("b", hydra.core.Term.variable("a"), None)), hydra.core.Term.variable("a"))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("f",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.list(Seq(hydra.core.Term.variable("g"))), None), hydra.core.Binding("g",
      hydra.core.Term.pair(Tuple2(hydra.core.Term.variable("f"), hydra.core.Term.variable("f"))),
      None)), hydra.core.Term.variable("f"))))), "FAIL")), None, Seq())))), Seq())
 
 lazy val selfApplicationTests: hydra.testing.TestGroup = hydra.testing.TestGroup("Self-application",
    None, Seq(hydra.testing.TestGroup("Direct self-application", None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1",
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
    Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
    scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
@@ -839,6 +3751,20 @@ lazy val selfApplicationTests: hydra.testing.TestGroup = hydra.testing.TestGroup
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.lambda(hydra.core.Lambda("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("x"),
      hydra.core.Term.variable("x"))))))), "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2",
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
@@ -848,44 +3774,198 @@ lazy val selfApplicationTests: hydra.testing.TestGroup = hydra.testing.TestGroup
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("f",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
      hydra.core.Term.variable("f"))), None)), hydra.core.Term.variable("f"))))), "FAIL")),
      None, Seq()))), hydra.testing.TestGroup("Indirect self-application", None, Seq(),
      Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("f",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("g"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("f"))))), None), hydra.core.Binding("g", hydra.core.Term.lambda(hydra.core.Lambda("y",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("y"),
      hydra.core.Term.variable("y"))))), None)), hydra.core.Term.variable("f"))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("a",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("b"),
      hydra.core.Term.variable("a"))), None), hydra.core.Binding("b", hydra.core.Term.lambda(hydra.core.Lambda("x",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("x"),
      hydra.core.Term.variable("x"))))), None)), hydra.core.Term.variable("a"))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("cycle",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("f", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("cycle"))))), None)), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("cycle"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("cycle"))))))), "FAIL")), None, Seq())))), Seq())
 
 lazy val typeConstructorMisuseTests: hydra.testing.TestGroup = hydra.testing.TestGroup("Type constructor misuse",
    None, Seq(hydra.testing.TestGroup("List constructor errors", None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1",
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
    Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
    scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
@@ -893,104 +3973,496 @@ lazy val typeConstructorMisuseTests: hydra.testing.TestGroup = hydra.testing.Tes
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.lists.cons"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(137))))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.lists.length"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.lists.maybeHead"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.string("not a list")))))), "FAIL")),
      None, Seq()), hydra.testing.TestCaseWithMetadata("#4", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.lists.maybeTail"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))),
      "FAIL")), None, Seq()))), hydra.testing.TestGroup("String constructor errors",
      None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.strings.length"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.string("foo")))))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.strings.cat"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.strings.fromList"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.string("not a list")))))), "FAIL")),
      None, Seq()), hydra.testing.TestCaseWithMetadata("#4", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.strings.toList"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))),
      "FAIL")), None, Seq()))), hydra.testing.TestGroup("Math constructor errors",
      None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.add"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(137))))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.sub"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.string("not a number")))), hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.mul"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.literal(hydra.core.Literal.string("not a number")))))), "FAIL")),
      None, Seq()), hydra.testing.TestCaseWithMetadata("#4", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.maybeDiv"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.boolean(true)))), hydra.core.Term.literal(hydra.core.Literal.boolean(false)))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      "FAIL")), None, Seq())))), Seq())
 
 lazy val undefinedVariableTests: hydra.testing.TestGroup = hydra.testing.TestGroup("Undefined variable",
    None, Seq(hydra.testing.TestGroup("Basic unbound variables", None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1",
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
    Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
    scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
@@ -998,13 +4470,55 @@ lazy val undefinedVariableTests: hydra.testing.TestGroup = hydra.testing.TestGro
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.variable("x"))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.lambda(hydra.core.Lambda("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, hydra.core.Term.variable("y"))))), "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3",
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
@@ -1013,24 +4527,122 @@ lazy val undefinedVariableTests: hydra.testing.TestGroup = hydra.testing.TestGro
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))),
      None)), hydra.core.Term.variable("y"))))), "FAIL")), None, Seq()))), hydra.testing.TestGroup("Unbound in let expressions",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("y"), None)), hydra.core.Term.variable("x"))))), "FAIL")),
      None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("y"), None), hydra.core.Binding("z", hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None)), hydra.core.Term.variable("x"))))), "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3",
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
@@ -1039,16 +4651,72 @@ lazy val undefinedVariableTests: hydra.testing.TestGroup = hydra.testing.TestGro
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))),
      None), hydra.core.Binding("y", hydra.core.Term.variable("z"), None)), hydra.core.Term.pair(Tuple2(hydra.core.Term.variable("x"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("y"))))))), "FAIL")), None, Seq()))), hydra.testing.TestGroup("Shadowing scope errors",
      None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.lambda(hydra.core.Lambda("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("y", hydra.core.Term.variable("x"),
      None)), hydra.core.Term.variable("z"))))))), "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#2",
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
@@ -1058,6 +4726,20 @@ lazy val undefinedVariableTests: hydra.testing.TestGroup = hydra.testing.TestGro
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))),
      None)), hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("y", hydra.core.Term.variable("x"),
      None)), hydra.core.Term.variable("z"))))))), "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3",
@@ -1068,6 +4750,20 @@ lazy val undefinedVariableTests: hydra.testing.TestGroup = hydra.testing.TestGro
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("y", None, hydra.core.Term.variable("z"))),
      None)), hydra.core.Term.variable("x"))))), "FAIL")), None, Seq())))), Seq())
 
@@ -1080,129 +4776,619 @@ lazy val unificationFailureTests: hydra.testing.TestGroup = hydra.testing.TestGr
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.add"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))))), "FAIL")), None,
      Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))))), "FAIL")), None,
      Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.list(Seq(hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))))), "FAIL")), None,
      Seq()), hydra.testing.TestCaseWithMetadata("#4", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.pair(Tuple2(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))), hydra.core.Term.literal(hydra.core.Literal.string("bar")))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      "FAIL")), None, Seq()))), hydra.testing.TestGroup("Collection type mismatches",
      None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.lists.cons"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.literal(hydra.core.Literal.string("not a list")))))), "FAIL")),
      None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.string("foo")))))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.pair(Tuple2(hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.string("foo")))))),
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(137))))))),
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#4", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.lists.concat"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.list(Seq(hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.string("foo")))))))))),
      "FAIL")), None, Seq()))), hydra.testing.TestGroup("Conditional type mismatches",
      None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.logic.ifElse"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.boolean(true)))), hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))))), "FAIL")), None,
      Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.logic.ifElse"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.boolean(true)))), hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))))), "FAIL")), None,
      Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.logic.ifElse"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.boolean(true)))), hydra.core.Term.lambda(hydra.core.Lambda("x",
      None, hydra.core.Term.variable("x"))))), hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      "FAIL")), None, Seq()))), hydra.testing.TestGroup("Polymorphic instantiation conflicts",
      None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("#1", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("f",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.variable("x"))),
      None)), hydra.core.Term.list(Seq(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("f"),
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))))))))), "FAIL")),
      None, Seq()), hydra.testing.TestCaseWithMetadata("#2", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("id",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.lambda(hydra.core.Lambda("x", None, hydra.core.Term.variable("x"))),
      None)), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.pair(Tuple2(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("id"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("id"),
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))))), hydra.core.Term.literal(hydra.core.Literal.boolean(true)))))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      "FAIL")), None, Seq()), hydra.testing.TestCaseWithMetadata("#3", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "FAIL")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.lib.strings.cat2("unexpected: ")(hydra.show.core.typeScheme(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("cons",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("hydra.lib.lists.cons"), None)), hydra.core.Term.list(Seq(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("cons"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))))),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("cons"),
      hydra.core.Term.literal(hydra.core.Literal.string("foo")))))))))), "FAIL")),

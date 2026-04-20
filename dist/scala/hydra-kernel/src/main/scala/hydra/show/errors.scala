@@ -68,6 +68,20 @@ def typeArityMismatchError(e: hydra.error.checking.TypeArityMismatchError): scal
   lazy val actual: Int = (e.actualArity)
   lazy val args: Seq[hydra.core.Type] = (e.typeArguments)
   hydra.lib.strings.cat(Seq("type ", hydra.show.core.`type`(typ), " applied to the wrong number of type arguments (expected ",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.lib.literals.showInt32(expected), ", got ", hydra.lib.literals.showInt32(actual),
      "): ", hydra.formatting.showList(hydra.show.core.`type`)(args)))
 }
@@ -85,6 +99,20 @@ def unboundTypeVariablesError(e: hydra.error.checking.UnboundTypeVariablesError)
   lazy val vars: scala.collection.immutable.Set[hydra.core.Name] = (e.variables)
   lazy val typ: hydra.core.Type = (e.`type`)
   hydra.lib.strings.cat(Seq("unbound type variables: {", hydra.lib.strings.intercalate(", ")(hydra.lib.lists.map[hydra.core.Name,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      scala.Predef.String]((x) => x)(hydra.lib.sets.toList[hydra.core.Name](vars))),
      "} in type ", hydra.show.core.`type`(typ)))
 }

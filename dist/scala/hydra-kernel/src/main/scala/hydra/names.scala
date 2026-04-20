@@ -13,6 +13,20 @@ def compactName(namespaces: Map[hydra.packaging.Namespace, scala.Predef.String])
   lazy val local: scala.Predef.String = (qualName.local)
   hydra.lib.maybes.maybe[scala.Predef.String, hydra.packaging.Namespace](name)((ns: hydra.packaging.Namespace) =>
     hydra.lib.maybes.maybe[scala.Predef.String, scala.Predef.String](local)((pre: scala.Predef.String) => hydra.lib.strings.cat(Seq(pre,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        ":", local)))(hydra.lib.maps.lookup[hydra.packaging.Namespace, scala.Predef.String](ns)(namespaces)))(mns)
 }
 
@@ -81,7 +95,35 @@ def qualifyName(name: hydra.core.Name): hydra.packaging.QualifiedName =
       lazy val restReversed: Seq[scala.Predef.String] = hydra.lib.pairs.second[scala.Predef.String,
          Seq[scala.Predef.String]](uc)
       hydra.lib.logic.ifElse[hydra.packaging.QualifiedName](hydra.lib.lists.`null`[scala.Predef.String](restReversed))(hydra.packaging.QualifiedName(None,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          name))(hydra.packaging.QualifiedName(Some(hydra.lib.strings.intercalate(".")(hydra.lib.lists.reverse[scala.Predef.String](restReversed))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          localName))
     }
   })(hydra.lib.lists.uncons[scala.Predef.String](parts))

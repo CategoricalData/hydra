@@ -51,11 +51,39 @@ def parseResult[T0](a: (hydra.graph.Graph => hydra.core.Term => Either[hydra.err
        (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.parsing.ParseSuccess[T0], hydra.parsing.ParseResult[T0],
          hydra.errors.DecodingError]((t: hydra.parsing.ParseSuccess[T0]) => hydra.parsing.ParseResult.success(t))(hydra.decode.parsing.parseSuccess(a)(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("failure", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.parsing.ParseError, hydra.parsing.ParseResult[T0],
          hydra.errors.DecodingError]((t: hydra.parsing.ParseError) => hydra.parsing.ParseResult.failure(t))(hydra.decode.parsing.parseError(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.parsing.ParseResult[T0]],
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.parsing.ParseResult[T0]]](Left(hydra.lib.strings.cat(Seq("no such field ",
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.parsing.ParseResult[T0]])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name,
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.parsing.ParseResult[T0]]](fname)(variantMap))

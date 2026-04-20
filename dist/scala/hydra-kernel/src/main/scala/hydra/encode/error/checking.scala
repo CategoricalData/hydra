@@ -7,30 +7,212 @@ import hydra.error.checking.*
 def checkingError(v1: hydra.error.checking.CheckingError): hydra.core.Term =
   v1 match
   case hydra.error.checking.CheckingError.incorrectUnification(v_CheckingError_incorrectUnification_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.error.checking.CheckingError",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("incorrectUnification", hydra.encode.error.checking.incorrectUnificationError(v_CheckingError_incorrectUnification_y))))
   case hydra.error.checking.CheckingError.notAForallType(v_CheckingError_notAForallType_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.error.checking.CheckingError",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("notAForallType", hydra.encode.error.checking.notAForallTypeError(v_CheckingError_notAForallType_y))))
   case hydra.error.checking.CheckingError.notAFunctionType(v_CheckingError_notAFunctionType_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.error.checking.CheckingError",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("notAFunctionType", hydra.encode.error.checking.notAFunctionTypeError(v_CheckingError_notAFunctionType_y))))
   case hydra.error.checking.CheckingError.other(v_CheckingError_other_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.error.checking.CheckingError",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("other", hydra.encode.error.checking.otherCheckingError(v_CheckingError_other_y))))
   case hydra.error.checking.CheckingError.typeArityMismatch(v_CheckingError_typeArityMismatch_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.error.checking.CheckingError",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("typeArityMismatch", hydra.encode.error.checking.typeArityMismatchError(v_CheckingError_typeArityMismatch_y))))
   case hydra.error.checking.CheckingError.typeMismatch(v_CheckingError_typeMismatch_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.error.checking.CheckingError",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("typeMismatch", hydra.encode.error.checking.typeMismatchError(v_CheckingError_typeMismatch_y))))
   case hydra.error.checking.CheckingError.unboundTypeVariables(v_CheckingError_unboundTypeVariables_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.error.checking.CheckingError",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("unboundTypeVariables", hydra.encode.error.checking.unboundTypeVariablesError(v_CheckingError_unboundTypeVariables_y))))
   case hydra.error.checking.CheckingError.undefinedTermVariable(v_CheckingError_undefinedTermVariable_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.error.checking.CheckingError",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("undefinedTermVariable", hydra.encode.error.checking.undefinedTermVariableCheckingError(v_CheckingError_undefinedTermVariable_y))))
   case hydra.error.checking.CheckingError.unequalTypes(v_CheckingError_unequalTypes_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.error.checking.CheckingError",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("unequalTypes", hydra.encode.error.checking.unequalTypesError(v_CheckingError_unequalTypes_y))))
   case hydra.error.checking.CheckingError.unsupportedTermVariant(v_CheckingError_unsupportedTermVariant_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.error.checking.CheckingError",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("unsupportedTermVariant", hydra.encode.error.checking.unsupportedTermVariantError(v_CheckingError_unsupportedTermVariant_y))))
   case hydra.error.checking.CheckingError.untypedLambda(v_CheckingError_untypedLambda_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.error.checking.CheckingError",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("untypedLambda", hydra.encode.error.checking.untypedLambdaError(v_CheckingError_untypedLambda_y))))
   case hydra.error.checking.CheckingError.untypedLetBinding(v_CheckingError_untypedLetBinding_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.error.checking.CheckingError",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("untypedLetBinding", hydra.encode.error.checking.untypedLetBindingError(v_CheckingError_untypedLetBinding_y))))
   case hydra.error.checking.CheckingError.untypedTermVariable(v_CheckingError_untypedTermVariable_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.error.checking.CheckingError",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("untypedTermVariable", hydra.encode.error.checking.untypedTermVariableCheckingError(v_CheckingError_untypedTermVariable_y))))
 
 def incorrectUnificationError(x: hydra.error.checking.IncorrectUnificationError): hydra.core.Term =
@@ -56,6 +238,20 @@ def typeArityMismatchError(x: hydra.error.checking.TypeArityMismatchError): hydr
      Seq(hydra.core.Field("type", hydra.encode.core.`type`(x.`type`)), hydra.core.Field("expectedArity",
      hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(x.expectedArity)))),
      hydra.core.Field("actualArity", hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(x.actualArity)))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Field("typeArguments", hydra.core.Term.list(hydra.lib.lists.map[hydra.core.Type,
      hydra.core.Term](hydra.encode.core.`type`)(x.typeArguments))))))
 

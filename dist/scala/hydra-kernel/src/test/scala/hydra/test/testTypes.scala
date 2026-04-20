@@ -3,9 +3,37 @@ package hydra.test.testTypes
 import hydra.core.*
 
 lazy val compareStringsType: hydra.core.Type = hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.literal(hydra.core.LiteralType.string),
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    hydra.core.Type.literal(hydra.core.LiteralType.string)))
 
 lazy val concatType: hydra.core.Type = hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.literal(hydra.core.LiteralType.string),
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.literal(hydra.core.LiteralType.string),
    hydra.core.Type.literal(hydra.core.LiteralType.string)))))
 
@@ -16,6 +44,20 @@ lazy val eitherStringOrInt8Type: hydra.core.Type = hydra.core.Type.union(Seq(hyd
 lazy val eitherStringOrInt8TypeName: hydra.core.Name = "EitherStringOrInt8"
 
 lazy val exampleProjectionType: hydra.core.Type = hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.variable(hydra.test.testTypes.testTypePersonName),
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    hydra.core.Type.literal(hydra.core.LiteralType.string)))
 
 lazy val listOfInt16sType: hydra.core.Type = hydra.core.Type.list(hydra.core.Type.literal(hydra.core.LiteralType.integer(hydra.core.IntegerType.int16)))
@@ -29,6 +71,20 @@ lazy val listOfSetOfStringsType: hydra.core.Type = hydra.core.Type.list(hydra.co
 lazy val listOfStringsType: hydra.core.Type = hydra.core.Type.list(hydra.core.Type.literal(hydra.core.LiteralType.string))
 
 lazy val mapOfStringsToIntsType: hydra.core.Type = hydra.core.Type.map(hydra.core.MapType(hydra.core.Type.literal(hydra.core.LiteralType.string),
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    hydra.core.Type.literal(hydra.core.LiteralType.integer(hydra.core.IntegerType.int32))))
 
 lazy val optionalInt16Type: hydra.core.Type = hydra.core.Type.maybe(hydra.core.Type.literal(hydra.core.LiteralType.integer(hydra.core.IntegerType.int16)))
@@ -48,6 +104,20 @@ lazy val stringOrIntType: hydra.core.Type = hydra.core.Type.union(Seq(hydra.core
 lazy val testTypeBuddyListA: hydra.core.Type = hydra.core.Type.forall(hydra.core.ForallType("a",
    hydra.core.Type.record(Seq(hydra.core.FieldType("head", hydra.core.Type.variable("a")),
    hydra.core.FieldType("tail", hydra.core.Type.maybe(hydra.core.Type.application(hydra.core.ApplicationType(hydra.core.Type.variable(hydra.test.testTypes.testTypeBuddyListBName),
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    hydra.core.Type.variable("a")))))))))
 
 lazy val testTypeBuddyListAName: hydra.core.Name = "BuddyListA"
@@ -55,6 +125,20 @@ lazy val testTypeBuddyListAName: hydra.core.Name = "BuddyListA"
 lazy val testTypeBuddyListB: hydra.core.Type = hydra.core.Type.forall(hydra.core.ForallType("a",
    hydra.core.Type.record(Seq(hydra.core.FieldType("head", hydra.core.Type.variable("a")),
    hydra.core.FieldType("tail", hydra.core.Type.maybe(hydra.core.Type.application(hydra.core.ApplicationType(hydra.core.Type.variable(hydra.test.testTypes.testTypeBuddyListAName),
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    hydra.core.Type.variable("a")))))))))
 
 lazy val testTypeBuddyListBName: hydra.core.Name = "BuddyListB"
@@ -104,6 +188,20 @@ lazy val testTypeLatLonPolyName: hydra.core.Name = "LatLonPoly"
 lazy val testTypeList: hydra.core.Type = hydra.core.Type.forall(hydra.core.ForallType("a",
    hydra.core.Type.record(Seq(hydra.core.FieldType("head", hydra.core.Type.variable("a")),
    hydra.core.FieldType("tail", hydra.core.Type.maybe(hydra.core.Type.application(hydra.core.ApplicationType(hydra.core.Type.variable(hydra.test.testTypes.testTypeListName),
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    hydra.core.Type.variable("a")))))))))
 
 lazy val testTypeListName: hydra.core.Name = "List"
@@ -125,6 +223,20 @@ lazy val testTypePersonName: hydra.core.Name = "Person"
 
 lazy val testTypePersonOrSomething: hydra.core.Type = hydra.core.Type.forall(hydra.core.ForallType("a",
    hydra.core.Type.union(Seq(hydra.core.FieldType("person", hydra.core.Type.variable(hydra.test.testTypes.testTypePersonName)),
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    hydra.core.FieldType("other", hydra.core.Type.variable("a"))))))
 
 lazy val testTypePersonOrSomethingName: hydra.core.Name = "PersonOrSomething"
@@ -146,6 +258,20 @@ lazy val testTypeStringAliasName: hydra.core.Name = "StringAlias"
 
 lazy val testTypeSymmetricTriple: hydra.core.Type = hydra.core.Type.forall(hydra.core.ForallType("v",
    hydra.core.Type.forall(hydra.core.ForallType("e", hydra.core.Type.wrap(hydra.core.Type.application(hydra.core.ApplicationType(hydra.core.Type.application(hydra.core.ApplicationType(hydra.core.Type.application(hydra.core.ApplicationType(hydra.core.Type.variable(hydra.test.testTypes.testTypeTripleName),
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    hydra.core.Type.variable("v"))), hydra.core.Type.variable("e"))), hydra.core.Type.variable("v"))))))))
 
 lazy val testTypeSymmetricTripleName: hydra.core.Name = "SymmetricTriple"
@@ -175,6 +301,20 @@ lazy val testTypeUnionPolymorphicRecursive: hydra.core.Type = hydra.core.Type.fo
    hydra.core.Type.union(Seq(hydra.core.FieldType("bool", hydra.core.Type.literal(hydra.core.LiteralType.boolean)),
    hydra.core.FieldType("value", hydra.core.Type.variable("a")), hydra.core.FieldType("other",
    hydra.core.Type.application(hydra.core.ApplicationType(hydra.core.Type.variable(hydra.test.testTypes.testTypeUnionPolymorphicRecursiveName),
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    hydra.core.Type.variable("a"))))))))
 
 lazy val testTypeUnionPolymorphicRecursiveName: hydra.core.Name = "UnionPolymorphicRecursive"

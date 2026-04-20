@@ -7,32 +7,186 @@ import hydra.variants.*
 def eliminationVariant(v1: hydra.variants.EliminationVariant): hydra.core.Term =
   v1 match
   case hydra.variants.EliminationVariant.record => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.EliminationVariant",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("record", hydra.core.Term.unit)))
   case hydra.variants.EliminationVariant.union => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.EliminationVariant",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("union", hydra.core.Term.unit)))
   case hydra.variants.EliminationVariant.wrap => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.EliminationVariant",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("wrap", hydra.core.Term.unit)))
 
 def functionVariant(v1: hydra.variants.FunctionVariant): hydra.core.Term =
   v1 match
   case hydra.variants.FunctionVariant.elimination => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.FunctionVariant",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("elimination", hydra.core.Term.unit)))
   case hydra.variants.FunctionVariant.lambda => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.FunctionVariant",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("lambda", hydra.core.Term.unit)))
 
 def literalVariant(v1: hydra.variants.LiteralVariant): hydra.core.Term =
   v1 match
   case hydra.variants.LiteralVariant.binary => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.LiteralVariant",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("binary", hydra.core.Term.unit)))
   case hydra.variants.LiteralVariant.boolean => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.LiteralVariant",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("boolean", hydra.core.Term.unit)))
   case hydra.variants.LiteralVariant.decimal => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.LiteralVariant",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("decimal", hydra.core.Term.unit)))
   case hydra.variants.LiteralVariant.float => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.LiteralVariant",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("float", hydra.core.Term.unit)))
   case hydra.variants.LiteralVariant.integer => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.LiteralVariant",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("integer", hydra.core.Term.unit)))
   case hydra.variants.LiteralVariant.string => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.LiteralVariant",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("string", hydra.core.Term.unit)))
 
 def termVariant(v1: hydra.variants.TermVariant): hydra.core.Term =
@@ -40,6 +194,20 @@ def termVariant(v1: hydra.variants.TermVariant): hydra.core.Term =
   case hydra.variants.TermVariant.annotated => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.TermVariant",
      hydra.core.Field("annotated", hydra.core.Term.unit)))
   case hydra.variants.TermVariant.application => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.TermVariant",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("application", hydra.core.Term.unit)))
   case hydra.variants.TermVariant.cases => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.TermVariant",
      hydra.core.Field("cases", hydra.core.Term.unit)))
@@ -68,8 +236,36 @@ def termVariant(v1: hydra.variants.TermVariant): hydra.core.Term =
   case hydra.variants.TermVariant.set => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.TermVariant",
      hydra.core.Field("set", hydra.core.Term.unit)))
   case hydra.variants.TermVariant.typeApplication => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.TermVariant",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("typeApplication", hydra.core.Term.unit)))
   case hydra.variants.TermVariant.typeLambda => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.TermVariant",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("typeLambda", hydra.core.Term.unit)))
   case hydra.variants.TermVariant.unit => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.TermVariant",
      hydra.core.Field("unit", hydra.core.Term.unit)))
@@ -85,6 +281,20 @@ def typeVariant(v1: hydra.variants.TypeVariant): hydra.core.Term =
   case hydra.variants.TypeVariant.annotated => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.TypeVariant",
      hydra.core.Field("annotated", hydra.core.Term.unit)))
   case hydra.variants.TypeVariant.application => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.TypeVariant",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("application", hydra.core.Term.unit)))
   case hydra.variants.TypeVariant.either => hydra.core.Term.inject(hydra.core.Injection("hydra.variants.TypeVariant",
      hydra.core.Field("either", hydra.core.Term.unit)))

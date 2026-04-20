@@ -13,6 +13,20 @@ def columnName(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors
   stripped match
   case hydra.core.Term.wrap(v_Term_wrap_wrappedTerm) => hydra.lib.eithers.map[scala.Predef.String,
      hydra.relational.ColumnName, hydra.errors.DecodingError]((b: scala.Predef.String) => b)(hydra.lib.eithers.either[hydra.errors.DecodingError,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: hydra.errors.DecodingError) => Left(err))((stripped2: hydra.core.Term) =>
     stripped2 match
     case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
@@ -49,6 +63,20 @@ def foreignKey(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors
          hydra.relational.ColumnName], hydra.relational.ForeignKey](hydra.extract.core.requireField("keys")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.core.decodeMap(hydra.decode.relational.columnName)(hydra.decode.relational.columnName)(v1)(v2))(fieldMap)(cx))((field_keys: Map[hydra.relational.ColumnName,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.relational.ColumnName]) =>
       Right(hydra.relational.ForeignKey(field_foreignRelation, field_keys))))
   }
@@ -81,6 +109,20 @@ def relationName(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.erro
   stripped match
   case hydra.core.Term.wrap(v_Term_wrap_wrappedTerm) => hydra.lib.eithers.map[scala.Predef.String,
      hydra.relational.RelationName, hydra.errors.DecodingError]((b: scala.Predef.String) => b)(hydra.lib.eithers.either[hydra.errors.DecodingError,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: hydra.errors.DecodingError) => Left(err))((stripped2: hydra.core.Term) =>
     stripped2 match
     case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
@@ -123,7 +165,35 @@ def relationship[T0](v: (hydra.graph.Graph => hydra.core.Term => Either[hydra.er
      hydra.relational.Relationship[T0]]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.wrap(v_Term_wrap_wrappedTerm) => hydra.lib.eithers.map[scala.collection.immutable.Set[Map[hydra.relational.ColumnName,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      T0]], hydra.relational.Relationship[T0], hydra.errors.DecodingError]((b: scala.collection.immutable.Set[Map[hydra.relational.ColumnName,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      T0]]) => b)(hydra.extract.core.decodeSet((v1: hydra.graph.Graph) =>
     (v2: hydra.core.Term) =>
     hydra.extract.core.decodeMap(hydra.decode.relational.columnName)(v)(v1)(v2))(cx)(v_Term_wrap_wrappedTerm.body))

@@ -10,6 +10,20 @@ def definitionAsTypeApplicationTerm(el: hydra.core.Binding): Either[hydra.errors
    hydra.core.TypeApplicationTerm] =
   hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.core.TypeApplicationTerm],
      hydra.core.TypeScheme](Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("typed binding",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      "untyped binding")))))((ts: hydra.core.TypeScheme) => Right(hydra.core.TypeApplicationTerm(el.term,
      (ts.`type`))))(el.`type`)
 
@@ -43,6 +57,20 @@ def partitionDefinitions(defs: Seq[hydra.packaging.Definition]): Tuple2[Seq[hydr
     case hydra.packaging.Definition.term(v_Definition_term_td) => Some(v_Definition_term_td)
   Tuple2(hydra.lib.maybes.cat[hydra.packaging.TypeDefinition](hydra.lib.lists.map[hydra.packaging.Definition,
      Option[hydra.packaging.TypeDefinition]](getType)(defs)), hydra.lib.maybes.cat[hydra.packaging.TermDefinition](hydra.lib.lists.map[hydra.packaging.Definition,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Option[hydra.packaging.TermDefinition]](getTerm)(defs)))
 }
 
@@ -56,10 +84,52 @@ def reorderDefs(defs: Seq[hydra.packaging.Definition]): Seq[hydra.packaging.Defi
   lazy val nameRest: Seq[hydra.packaging.TypeDefinition] = hydra.lib.lists.filter[hydra.packaging.TypeDefinition]((td: hydra.packaging.TypeDefinition) =>
     hydra.lib.logic.not(hydra.lib.equality.equal[hydra.core.Name](td.name)("hydra.core.Name")))(typeDefsRaw)
   lazy val typeDefs: Seq[hydra.packaging.Definition] = hydra.lib.lists.concat[hydra.packaging.Definition](Seq(hydra.lib.lists.map[hydra.packaging.TypeDefinition,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.packaging.Definition]((td: hydra.packaging.TypeDefinition) => hydra.packaging.Definition.`type`(td))(nameFirst),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.lib.lists.map[hydra.packaging.TypeDefinition, hydra.packaging.Definition]((td: hydra.packaging.TypeDefinition) => hydra.packaging.Definition.`type`(td))(nameRest)))
   lazy val termDefsWrapped: Seq[hydra.packaging.Definition] = hydra.lib.lists.map[hydra.packaging.TermDefinition,
      hydra.packaging.Definition]((td: hydra.packaging.TermDefinition) => hydra.packaging.Definition.term(td))(hydra.lib.pairs.second[Seq[hydra.packaging.TypeDefinition],
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Seq[hydra.packaging.TermDefinition]](partitioned))
   lazy val sortedTermDefs: Seq[hydra.packaging.Definition] = hydra.lib.lists.concat[hydra.packaging.Definition](hydra.sorting.topologicalSortNodes((d: hydra.packaging.Definition) =>
     d match
@@ -90,9 +160,37 @@ def schemaGraphToTypingEnvironment(g: hydra.graph.Graph): Either[hydra.errors.Er
       term match
       case hydra.core.Term.record(v_Term_record_r) => hydra.lib.logic.ifElse[Either[hydra.errors.Error,
          Option[hydra.core.TypeScheme]]](hydra.lib.equality.equal[hydra.core.Name](v_Term_record_r.typeName)("hydra.core.TypeScheme"))(hydra.lib.eithers.map[hydra.core.TypeScheme,
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Option[hydra.core.TypeScheme], hydra.errors.Error](hydra.lib.maybes.pure[hydra.core.TypeScheme])(decodeTypeScheme(el.term)))(Right(None))
       case hydra.core.Term.inject(v_Term_inject_i) => hydra.lib.logic.ifElse[Either[hydra.errors.Error,
          Option[hydra.core.TypeScheme]]](hydra.lib.equality.equal[hydra.core.Name](v_Term_inject_i.typeName)("hydra.core.Type"))(hydra.lib.eithers.map[hydra.core.Type,
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Option[hydra.core.TypeScheme], hydra.errors.Error]((decoded: hydra.core.Type) => Some(toTypeScheme(Seq())(decoded)))(decodeType(el.term)))(Right(None))
       case _ => Right(None)
     hydra.lib.eithers.bind[hydra.errors.Error, Option[hydra.core.TypeScheme], Option[Tuple2[hydra.core.Name,
@@ -100,12 +198,68 @@ def schemaGraphToTypingEnvironment(g: hydra.graph.Graph): Either[hydra.errors.Er
        Option[hydra.core.TypeScheme]], hydra.core.TypeScheme](hydra.lib.eithers.map[hydra.core.Type,
        Option[hydra.core.TypeScheme], hydra.errors.Error]((typ: hydra.core.Type) => Some(hydra.scoping.fTypeToTypeScheme(typ)))(decodeType(el.term)))((ts: hydra.core.TypeScheme) =>
       hydra.lib.logic.ifElse[Either[hydra.errors.Error, Option[hydra.core.TypeScheme]]](hydra.lib.equality.equal[hydra.core.TypeScheme](ts)(hydra.core.TypeScheme(Seq(),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.core.Type.variable("hydra.core.TypeScheme"), None)))(hydra.lib.eithers.map[hydra.core.TypeScheme,
          Option[hydra.core.TypeScheme], hydra.errors.Error](hydra.lib.maybes.pure[hydra.core.TypeScheme])(decodeTypeScheme(el.term)))(hydra.lib.logic.ifElse[Either[hydra.errors.Error,
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Option[hydra.core.TypeScheme]]](hydra.lib.equality.equal[hydra.core.TypeScheme](ts)(hydra.core.TypeScheme(Seq(),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          hydra.core.Type.variable("hydra.core.Type"), None)))(hydra.lib.eithers.map[hydra.core.Type,
          Option[hydra.core.TypeScheme], hydra.errors.Error]((decoded: hydra.core.Type) => Some(toTypeScheme(Seq())(decoded)))(decodeType(el.term)))(forTerm(hydra.strip.deannotateTerm(el.term)))))(el.`type`))((mts: Option[hydra.core.TypeScheme]) =>
       Right(hydra.lib.maybes.map[hydra.core.TypeScheme, Tuple2[hydra.core.Name, hydra.core.TypeScheme]]((ts: hydra.core.TypeScheme) => Tuple2(el.name,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          ts))(mts)))
   }
   hydra.lib.eithers.map[Seq[Option[Tuple2[hydra.core.Name, hydra.core.TypeScheme]]],
@@ -130,6 +284,20 @@ def typesToDefinitions(typeMap: Map[hydra.core.Name, hydra.core.Type]): Seq[hydr
        hydra.core.Type](pair)), None)
   }
   hydra.lib.lists.map[Tuple2[hydra.core.Name, hydra.core.Type], hydra.core.Binding](toElement)(hydra.lib.maps.toList[hydra.core.Name,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Type](typeMap))
 }
 

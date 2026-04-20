@@ -5,6 +5,20 @@ import hydra.json.model.*
 import hydra.yaml.model.*
 
 def fromYaml(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)(typ: hydra.core.Type)(node: hydra.yaml.model.Node): Either[scala.Predef.String,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    hydra.core.Term] =
   {
   lazy val jsonResult: Either[scala.Predef.String, hydra.json.model.Value] = hydra.json.yaml.decode.yamlToJson(node)
@@ -56,6 +70,20 @@ def yamlToJson(node: hydra.yaml.model.Node): Either[scala.Predef.String, hydra.j
     case hydra.yaml.model.Scalar.str(v_Scalar_str_str) => Right(hydra.json.model.Value.string(v_Scalar_str_str))
   case hydra.yaml.model.Node.sequence(v_Node_sequence_nodes) => {
     lazy val results: Either[scala.Predef.String, Seq[hydra.json.model.Value]] = hydra.lib.eithers.mapList[hydra.yaml.model.Node,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.json.model.Value, scala.Predef.String]((n: hydra.yaml.model.Node) => hydra.json.yaml.decode.yamlToJson(n))(v_Node_sequence_nodes)
     hydra.lib.eithers.map[Seq[hydra.json.model.Value], hydra.json.model.Value, scala.Predef.String]((vs: Seq[hydra.json.model.Value]) => hydra.json.model.Value.array(vs))(results)
   }

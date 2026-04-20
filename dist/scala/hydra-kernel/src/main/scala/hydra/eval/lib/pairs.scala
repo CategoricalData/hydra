@@ -5,6 +5,20 @@ import hydra.core.*
 import hydra.errors.*
 
 def bimap[T0, T1](cx: T0)(g: T1)(firstFun: hydra.core.Term)(secondFun: hydra.core.Term)(pairTerm: hydra.core.Term): Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    hydra.core.Term] =
   pairTerm match
   case hydra.core.Term.pair(v_Term_pair_p) => {
@@ -16,6 +30,20 @@ def bimap[T0, T1](cx: T0)(g: T1)(firstFun: hydra.core.Term)(secondFun: hydra.cor
     }
   }
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("pair value",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.term(pairTerm)))))
 
 def first[T0, T1](cx: T0)(g: T1)(pairTerm: hydra.core.Term): Either[hydra.errors.Error, hydra.core.Term] =
@@ -23,6 +51,20 @@ def first[T0, T1](cx: T0)(g: T1)(pairTerm: hydra.core.Term): Either[hydra.errors
   case hydra.core.Term.pair(v_Term_pair_p) => Right(hydra.lib.pairs.first[hydra.core.Term,
      hydra.core.Term](v_Term_pair_p))
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("pair value",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.term(pairTerm)))))
 
 def second[T0, T1](cx: T0)(g: T1)(pairTerm: hydra.core.Term): Either[hydra.errors.Error, hydra.core.Term] =
@@ -30,4 +72,18 @@ def second[T0, T1](cx: T0)(g: T1)(pairTerm: hydra.core.Term): Either[hydra.error
   case hydra.core.Term.pair(v_Term_pair_p) => Right(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.Term](v_Term_pair_p))
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("pair value",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.term(pairTerm)))))

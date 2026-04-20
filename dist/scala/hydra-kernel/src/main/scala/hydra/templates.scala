@@ -5,6 +5,20 @@ import hydra.core.*
 import hydra.errors.*
 
 def graphToSchema[T0](cx: T0)(graph: hydra.graph.Graph)(els: Seq[hydra.core.Binding]): Either[hydra.errors.DecodingError,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    Map[hydra.core.Name, hydra.core.Type]] =
   {
   def toPair(el: hydra.core.Binding): Either[hydra.errors.DecodingError, Tuple2[hydra.core.Name, hydra.core.Type]] =
@@ -17,6 +31,20 @@ def graphToSchema[T0](cx: T0)(graph: hydra.graph.Graph)(els: Seq[hydra.core.Bind
   hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[Tuple2[hydra.core.Name, hydra.core.Type]],
      Map[hydra.core.Name, hydra.core.Type]](hydra.lib.eithers.mapList[hydra.core.Binding,
      Tuple2[hydra.core.Name, hydra.core.Type], hydra.errors.DecodingError](toPair)(els))((pairs: Seq[Tuple2[hydra.core.Name,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Type]]) =>
     Right(hydra.lib.maps.fromList[hydra.core.Name, hydra.core.Type](pairs)))
 }
@@ -28,6 +56,20 @@ def instantiateTemplate[T0](cx: T0)(minimal: Boolean)(schema: Map[hydra.core.Nam
   def inst(tn: hydra.core.Name)(v1: hydra.core.Type): Either[hydra.errors.Error, hydra.core.Term] = hydra.templates.instantiateTemplate(cx)(minimal)(schema)(tn)(v1)
   def noPoly[T1]: Either[hydra.errors.Error, T1] =
     Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("non-polymorphic type",
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        "polymorphic or function type"))))
   def forFloat(ft: hydra.core.FloatType): hydra.core.FloatValue =
     ft match
@@ -67,6 +109,20 @@ def instantiateTemplate[T0](cx: T0)(minimal: Boolean)(schema: Map[hydra.core.Nam
       {
         lazy val vt: hydra.core.Type = (v_Type_map_mt.values)
         hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.Term]](minimal)(Right(hydra.core.Term.map(hydra.lib.maps.empty[hydra.core.Term,
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
            hydra.core.Term])))(hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term,
            hydra.core.Term](inst(tname)(kt))((ke: hydra.core.Term) =>
           hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](inst(tname)(vt))((ve: hydra.core.Term) =>
@@ -79,18 +135,88 @@ def instantiateTemplate[T0](cx: T0)(minimal: Boolean)(schema: Map[hydra.core.Nam
     case hydra.core.Type.record(v_Type_record_rt) => {
       def toField(ft: hydra.core.FieldType): Either[hydra.errors.Error, hydra.core.Field] =
         hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Field](inst(tname)(ft.`type`))((e: hydra.core.Term) => Right(hydra.core.Field(ft.name,
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
            e)))
       hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.Field], hydra.core.Term](hydra.lib.eithers.mapList[hydra.core.FieldType,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.core.Field, hydra.errors.Error](toField)(v_Type_record_rt))((dfields: Seq[hydra.core.Field]) =>
         Right(hydra.core.Term.record(hydra.core.Record(tname, dfields))))
     }
     case hydra.core.Type.set(v_Type_set_et) => hydra.lib.logic.ifElse[Either[hydra.errors.Error,
        hydra.core.Term]](minimal)(Right(hydra.core.Term.set(hydra.lib.sets.empty[hydra.core.Term])))(hydra.lib.eithers.bind[hydra.errors.Error,
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        hydra.core.Term, hydra.core.Term](inst(tname)(v_Type_set_et))((e: hydra.core.Term) =>
       Right(hydra.core.Term.set(hydra.lib.sets.fromList[hydra.core.Term](Seq(e))))))
     case hydra.core.Type.variable(v_Type_variable_vname) => hydra.lib.maybes.maybe[Either[hydra.errors.Error,
        hydra.core.Term], hydra.core.Type](Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.unexpectedShape(hydra.errors.UnexpectedShapeError("bound type variable",
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        hydra.lib.strings.cat2("unbound variable ")(v_Type_variable_vname))))))((v1: hydra.core.Type) => inst(v_Type_variable_vname)(v1))(hydra.lib.maps.lookup[hydra.core.Name,
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        hydra.core.Type](v_Type_variable_vname)(schema))
     case hydra.core.Type.wrap(v_Type_wrap_wt) => hydra.lib.eithers.bind[hydra.errors.Error,
        hydra.core.Term, hydra.core.Term](inst(tname)(v_Type_wrap_wt))((e: hydra.core.Term) =>

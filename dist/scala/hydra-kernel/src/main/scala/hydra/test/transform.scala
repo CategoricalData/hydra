@@ -12,6 +12,20 @@ def addGenerationPrefix(`ns_`: hydra.packaging.Namespace): hydra.packaging.Names
 
 def buildConvertCaseCall(fromConv: hydra.util.CaseConvention)(toConv: hydra.util.CaseConvention)(`input_`: scala.Predef.String): hydra.core.Term =
   hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.formatting.convertCase"),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.test.transform.encodeCaseConvention(fromConv))), hydra.test.transform.encodeCaseConvention(toConv))),
      hydra.core.Term.literal(hydra.core.Literal.string(`input_`))))
 
@@ -21,16 +35,58 @@ def buildTopologicalSortCall(adjList: Seq[Tuple2[Int, Seq[Int]]]): hydra.core.Te
 
 def buildTopologicalSortSCCCall(adjList: Seq[Tuple2[Int, Seq[Int]]]): hydra.core.Term =
   hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.sorting.topologicalSortComponents"),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.test.transform.encodeAdjacencyList(adjList)))
 
 def collectTestCases(tg: hydra.testing.TestGroup): Seq[hydra.testing.TestCaseWithMetadata] =
   hydra.lib.lists.concat2[hydra.testing.TestCaseWithMetadata](tg.cases)(hydra.lib.lists.concat[hydra.testing.TestCaseWithMetadata](hydra.lib.lists.map[hydra.testing.TestGroup,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      Seq[hydra.testing.TestCaseWithMetadata]]((sg: hydra.testing.TestGroup) => hydra.test.transform.collectTestCases(sg))(tg.subgroups)))
 
 def encodeAdjacencyList(pairs: Seq[Tuple2[Int, Seq[Int]]]): hydra.core.Term =
   hydra.core.Term.list(hydra.lib.lists.map[Tuple2[Int, Seq[Int]], hydra.core.Term]((p: Tuple2[Int, Seq[Int]]) =>
   hydra.core.Term.pair(Tuple2(hydra.test.transform.encodeInt(hydra.lib.pairs.first[Int,
      Seq[Int]](p)), hydra.core.Term.list(hydra.lib.lists.map[Int, hydra.core.Term]((d: Int) => hydra.test.transform.encodeInt(d))(hydra.lib.pairs.second[Int,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Seq[Int]](p))))))(pairs))
 
 def encodeCaseConvention(conv: hydra.util.CaseConvention): hydra.core.Term =
@@ -66,9 +122,51 @@ def transformToCompiledTests(tg: hydra.testing.TestGroup): Option[hydra.testing.
   lazy val subgroups: Seq[hydra.testing.TestGroup] = (tg.subgroups)
   lazy val `cases_`: Seq[hydra.testing.TestCaseWithMetadata] = (tg.cases)
   lazy val transformedCases: Seq[hydra.testing.TestCaseWithMetadata] = hydra.lib.maybes.cat[hydra.testing.TestCaseWithMetadata](hydra.lib.lists.map[hydra.testing.TestCaseWithMetadata,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      Option[hydra.testing.TestCaseWithMetadata]]((tc: hydra.testing.TestCaseWithMetadata) => hydra.test.transform.transformTestCase(tc))(`cases_`))
   lazy val transformedSubgroups: Seq[hydra.testing.TestGroup] = hydra.lib.maybes.cat[hydra.testing.TestGroup](hydra.lib.lists.map[hydra.testing.TestGroup,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      Option[hydra.testing.TestGroup]]((sg: hydra.testing.TestGroup) => hydra.test.transform.transformToCompiledTests(sg))(subgroups))
   hydra.lib.logic.ifElse[Option[hydra.testing.TestGroup]](hydra.lib.logic.and(hydra.lib.lists.`null`[hydra.testing.TestCaseWithMetadata](transformedCases))(hydra.lib.lists.`null`[hydra.testing.TestGroup](transformedSubgroups)))(None)(Some(hydra.testing.TestGroup(`name_`,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      desc, transformedSubgroups, transformedCases)))
 }

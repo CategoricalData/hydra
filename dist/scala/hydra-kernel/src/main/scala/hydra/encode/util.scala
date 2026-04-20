@@ -29,4 +29,18 @@ def precision(v1: hydra.util.Precision): hydra.core.Term =
   case hydra.util.Precision.arbitrary => hydra.core.Term.inject(hydra.core.Injection("hydra.util.Precision",
      hydra.core.Field("arbitrary", hydra.core.Term.unit)))
   case hydra.util.Precision.bits(v_Precision_bits_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.util.Precision",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("bits", hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(v_Precision_bits_y))))))

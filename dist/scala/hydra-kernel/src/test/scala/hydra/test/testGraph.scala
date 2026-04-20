@@ -37,4 +37,18 @@ lazy val testTypes: Map[hydra.core.Name, hydra.core.Type] = hydra.lib.maps.fromL
    Tuple2(hydra.test.testTypes.testTypeTripleName, hydra.test.testTypes.testTypeTriple),
    Tuple2(hydra.test.testTypes.testTypeUnionMonomorphicName, hydra.test.testTypes.testTypeUnionMonomorphic),
    Tuple2(hydra.test.testTypes.testTypeUnionPolymorphicRecursiveName, hydra.test.testTypes.testTypeUnionPolymorphicRecursive),
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    Tuple2(hydra.test.testTypes.testTypeUnitName, hydra.test.testTypes.testTypeUnit)))

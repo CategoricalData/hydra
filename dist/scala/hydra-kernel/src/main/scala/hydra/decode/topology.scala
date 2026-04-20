@@ -42,6 +42,20 @@ def tarjanState(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
           case _ => Left("expected int32 value")
         case _ => Left("expected int32 literal")
       case _ => Left("expected literal"))(hydra.extract.core.stripWithDecodingError(cx2)(raw2)))(v1)(v2))(fieldMap)(cx))((field_indices: Map[Int,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Int]) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, Map[Int, Int], hydra.topology.TarjanState](hydra.extract.core.requireField("lowLinks")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
@@ -56,6 +70,20 @@ def tarjanState(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
           case _ => Left("expected int32 value")
         case _ => Left("expected int32 literal")
       case _ => Left("expected literal"))(hydra.extract.core.stripWithDecodingError(cx2)(raw2)))(v1)(v2))(fieldMap)(cx))((field_lowLinks: Map[Int,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Int]) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[Int], hydra.topology.TarjanState](hydra.extract.core.requireField("stack")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>

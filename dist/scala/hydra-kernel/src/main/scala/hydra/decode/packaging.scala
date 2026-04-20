@@ -17,14 +17,56 @@ def definition(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors
     lazy val fterm: hydra.core.Term = (field.term)
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.packaging.Definition])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        hydra.packaging.Definition]](Seq(Tuple2("term", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.packaging.TermDefinition, hydra.packaging.Definition,
          hydra.errors.DecodingError]((t: hydra.packaging.TermDefinition) => hydra.packaging.Definition.term(t))(hydra.decode.packaging.termDefinition(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("type", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.packaging.TypeDefinition, hydra.packaging.Definition,
          hydra.errors.DecodingError]((t: hydra.packaging.TypeDefinition) => hydra.packaging.Definition.`type`(t))(hydra.decode.packaging.typeDefinition(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.packaging.Definition],
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.packaging.Definition]](Left(hydra.lib.strings.cat(Seq("no such field ",
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.packaging.Definition])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name,
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.packaging.Definition]](fname)(variantMap))
@@ -38,6 +80,20 @@ def fileExtension(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.err
   stripped match
   case hydra.core.Term.wrap(v_Term_wrap_wrappedTerm) => hydra.lib.eithers.map[scala.Predef.String,
      hydra.packaging.FileExtension, hydra.errors.DecodingError]((b: scala.Predef.String) => b)(hydra.lib.eithers.either[hydra.errors.DecodingError,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: hydra.errors.DecodingError) => Left(err))((stripped2: hydra.core.Term) =>
     stripped2 match
     case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
@@ -90,6 +146,20 @@ def namespace(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.
   stripped match
   case hydra.core.Term.wrap(v_Term_wrap_wrappedTerm) => hydra.lib.eithers.map[scala.Predef.String,
      hydra.packaging.Namespace, hydra.errors.DecodingError]((b: scala.Predef.String) => b)(hydra.lib.eithers.either[hydra.errors.DecodingError,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: hydra.errors.DecodingError) => Left(err))((stripped2: hydra.core.Term) =>
     stripped2 match
     case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
@@ -110,11 +180,39 @@ def namespaces[T0](n: (hydra.graph.Graph => hydra.core.Term => Either[hydra.erro
        T0], hydra.packaging.Namespaces[T0]](hydra.extract.core.requireField("focus")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.core.decodePair(hydra.decode.packaging.namespace)(n)(v1)(v2))(fieldMap)(cx))((field_focus: Tuple2[hydra.packaging.Namespace,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          T0]) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, Map[hydra.packaging.Namespace,
          T0], hydra.packaging.Namespaces[T0]](hydra.extract.core.requireField("mapping")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.core.decodeMap(hydra.decode.packaging.namespace)(n)(v1)(v2))(fieldMap)(cx))((field_mapping: Map[hydra.packaging.Namespace,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          T0]) =>
       Right(hydra.packaging.Namespaces(field_focus, field_mapping))))
   }
@@ -160,6 +258,20 @@ def packageName(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
   stripped match
   case hydra.core.Term.wrap(v_Term_wrap_wrappedTerm) => hydra.lib.eithers.map[scala.Predef.String,
      hydra.packaging.PackageName, hydra.errors.DecodingError]((b: scala.Predef.String) => b)(hydra.lib.eithers.either[hydra.errors.DecodingError,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: hydra.errors.DecodingError) => Left(err))((stripped2: hydra.core.Term) =>
     stripped2 match
     case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match

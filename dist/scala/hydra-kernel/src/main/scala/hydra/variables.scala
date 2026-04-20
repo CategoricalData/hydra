@@ -18,6 +18,20 @@ def freeTypeVariablesInTerm(term0: hydra.core.Term): scala.collection.immutable.
     term match
       case hydra.core.Term.lambda(v_Term_lambda_l) => {
         lazy val domt: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.maybes.maybe[scala.collection.immutable.Set[hydra.core.Name],
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
            hydra.core.Type](hydra.lib.sets.empty[hydra.core.Name])((v1: hydra.core.Type) => tryType(vars)(v1))(v_Term_lambda_l.domain)
         hydra.lib.sets.union[hydra.core.Name](domt)(recurse(v_Term_lambda_l.body))
       }
@@ -25,9 +39,37 @@ def freeTypeVariablesInTerm(term0: hydra.core.Term): scala.collection.immutable.
         def forBinding(b: hydra.core.Binding): scala.collection.immutable.Set[hydra.core.Name] =
           {
           lazy val newVars: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.maybes.maybe[scala.collection.immutable.Set[hydra.core.Name],
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
              hydra.core.TypeScheme](vars)((ts: hydra.core.TypeScheme) =>
             hydra.lib.sets.union[hydra.core.Name](vars)(hydra.lib.sets.fromList[hydra.core.Name](ts.variables)))(b.`type`)
           hydra.lib.sets.union[hydra.core.Name](getAll(newVars)(b.term))(hydra.lib.maybes.maybe[scala.collection.immutable.Set[hydra.core.Name],
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
              hydra.core.TypeScheme](hydra.lib.sets.empty[hydra.core.Name])((ts: hydra.core.TypeScheme) => tryType(newVars)(ts.`type`))(b.`type`))
         }
         hydra.lib.sets.union[hydra.core.Name](allOf(hydra.lib.lists.map[hydra.core.Binding,
@@ -49,6 +91,20 @@ def freeVariablesInTerm(term: hydra.core.Term): scala.collection.immutable.Set[h
   term match
     case hydra.core.Term.lambda(v_Term_lambda_l) => hydra.lib.sets.delete[hydra.core.Name](v_Term_lambda_l.parameter)(hydra.variables.freeVariablesInTerm(v_Term_lambda_l.body))
     case hydra.core.Term.let(v_Term_let_l) => hydra.lib.sets.difference[hydra.core.Name](dfltVars(()))(hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.lists.map[hydra.core.Binding,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.core.Name]((x: hydra.core.Binding) => (x.name))(v_Term_let_l.bindings)))
     case hydra.core.Term.variable(v_Term_variable_v) => hydra.lib.sets.singleton[hydra.core.Name](v_Term_variable_v)
     case _ => dfltVars(())
@@ -57,6 +113,20 @@ def freeVariablesInTerm(term: hydra.core.Term): scala.collection.immutable.Set[h
 def freeVariablesInType(typ: hydra.core.Type): scala.collection.immutable.Set[hydra.core.Name] =
   {
   lazy val dfltVars: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.lists.foldl[scala.collection.immutable.Set[hydra.core.Name],
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Type]((s: scala.collection.immutable.Set[hydra.core.Name]) =>
     (t: hydra.core.Type) =>
     hydra.lib.sets.union[hydra.core.Name](s)(hydra.variables.freeVariablesInType(t)))(hydra.lib.sets.empty[hydra.core.Name])(hydra.rewriting.subtypes(typ))
@@ -119,6 +189,20 @@ def normalizeTypeVariablesInTerm(term: hydra.core.Term): hydra.core.Term =
      scala.collection.immutable.Set[hydra.core.Name]], Int])(term0: hydra.core.Term): hydra.core.Term =
     {
     lazy val sb: Tuple2[Map[hydra.core.Name, hydra.core.Name], scala.collection.immutable.Set[hydra.core.Name]] = hydra.lib.pairs.first[Tuple2[Map[hydra.core.Name,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.core.Name], scala.collection.immutable.Set[hydra.core.Name]], Int](state)
     lazy val next: Int = hydra.lib.pairs.second[Tuple2[Map[hydra.core.Name, hydra.core.Name],
        scala.collection.immutable.Set[hydra.core.Name]], Int](state)
@@ -142,6 +226,20 @@ def normalizeTypeVariablesInTerm(term: hydra.core.Term): hydra.core.Term =
             def step(acc: Seq[hydra.core.Binding])(bs: Seq[hydra.core.Binding]): Seq[hydra.core.Binding] =
               hydra.lib.maybes.maybe[Seq[hydra.core.Binding], Tuple2[hydra.core.Binding,
                  Seq[hydra.core.Binding]]](hydra.lib.lists.reverse[hydra.core.Binding](acc))((uc: Tuple2[hydra.core.Binding,
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
                  Seq[hydra.core.Binding]]) =>
               {
               lazy val b: hydra.core.Binding = hydra.lib.pairs.first[hydra.core.Binding, Seq[hydra.core.Binding]](uc)
@@ -184,6 +282,20 @@ def normalizeTypeVariablesInTerm(term: hydra.core.Term): hydra.core.Term =
                           lazy val meta: T0 = hydra.lib.pairs.second[hydra.core.Name, T0](p)
                           {
                             lazy val newName: hydra.core.Name = hydra.lib.maybes.fromMaybe[hydra.core.Name](oldName)(hydra.lib.maps.lookup[hydra.core.Name,
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
                                hydra.core.Name](oldName)(newSubst))
                             Tuple2(newName, meta)
                           }
@@ -191,6 +303,20 @@ def normalizeTypeVariablesInTerm(term: hydra.core.Term): hydra.core.Term =
                       })(hydra.lib.maps.toList[hydra.core.Name, T0](constraintMap)))
                       lazy val oldConstraints: Option[Map[hydra.core.Name, hydra.core.TypeVariableMetadata]] = (ts.constraints)
                       lazy val newConstraints: Option[Map[hydra.core.Name, hydra.core.TypeVariableMetadata]] = hydra.lib.maybes.map[Map[hydra.core.Name,
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
                          hydra.core.TypeVariableMetadata], Map[hydra.core.Name, hydra.core.TypeVariableMetadata]](renameConstraintKeys)(oldConstraints)
                       lazy val b1: hydra.core.Binding = hydra.core.Binding(b.name,
                          newVal, Some(hydra.core.TypeScheme(newVars, substType(newSubst)(typ),
@@ -211,8 +337,36 @@ def normalizeTypeVariablesInTerm(term: hydra.core.Term): hydra.core.Term =
         }
       }
       case hydra.core.Term.typeApplication(v_Term_typeApplication_tt) => hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(rewriteWithSubst(Tuple2(Tuple2(subst,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          boundVars), next))(v_Term_typeApplication_tt.body), substType(subst)(v_Term_typeApplication_tt.`type`)))
       case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => hydra.core.Term.typeLambda(hydra.core.TypeLambda(replaceName(subst)(v_Term_typeLambda_ta.parameter),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          rewriteWithSubst(Tuple2(Tuple2(subst, boundVars), next))(v_Term_typeLambda_ta.body)))
       case _ => recurse(term2)
     hydra.rewriting.rewriteTerm(rewrite)(term0)
@@ -239,6 +393,20 @@ def replaceFreeTypeVariable(v: hydra.core.Name)(rep: hydra.core.Type)(typ: hydra
   def mapExpr(recurse: (hydra.core.Type => hydra.core.Type))(t: hydra.core.Type): hydra.core.Type =
     t match
     case hydra.core.Type.forall(v_Type_forall_ft) => hydra.lib.logic.ifElse[hydra.core.Type](hydra.lib.equality.equal[hydra.core.Name](v)(v_Type_forall_ft.parameter))(t)(hydra.core.Type.forall(hydra.core.ForallType(v_Type_forall_ft.parameter,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        recurse(v_Type_forall_ft.body))))
     case hydra.core.Type.variable(v_Type_variable_v_) => hydra.lib.logic.ifElse[hydra.core.Type](hydra.lib.equality.equal[hydra.core.Name](v)(`v_Type_variable_v_`))(rep)(t)
     case _ => recurse(t)
@@ -250,6 +418,20 @@ def substituteTypeVariables(subst: Map[hydra.core.Name, hydra.core.Name])(typ: h
   def replace(recurse: (hydra.core.Type => hydra.core.Type))(typ2: hydra.core.Type): hydra.core.Type =
     typ2 match
     case hydra.core.Type.variable(v_Type_variable_n) => hydra.core.Type.variable(hydra.lib.maybes.fromMaybe[hydra.core.Name](v_Type_variable_n)(hydra.lib.maps.lookup[hydra.core.Name,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.core.Name](v_Type_variable_n)(subst)))
     case _ => recurse(typ2)
   hydra.rewriting.rewriteType(replace)(typ)
@@ -272,13 +454,69 @@ def substituteTypeVariablesInTerm(subst: Map[hydra.core.Name, hydra.core.Name])(
       def mapBinding(b: hydra.core.Binding): hydra.core.Binding = hydra.core.Binding(b.name,
          recurse(b.term), stSchemeOpt(b.`type`))
       hydra.core.Term.let(hydra.core.Let(hydra.lib.lists.map[hydra.core.Binding, hydra.core.Binding](mapBinding)(v_Term_let_lt.bindings),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          recurse(v_Term_let_lt.body)))
     }
     case hydra.core.Term.typeApplication(v_Term_typeApplication_tt) => hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(recurse(v_Term_typeApplication_tt.body),
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        st(v_Term_typeApplication_tt.`type`)))
     case hydra.core.Term.typeLambda(v_Term_typeLambda_tl) => hydra.core.Term.typeLambda(hydra.core.TypeLambda(hydra.lib.maybes.fromMaybe[hydra.core.Name](v_Term_typeLambda_tl.parameter)(hydra.lib.maps.lookup[hydra.core.Name,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.core.Name](v_Term_typeLambda_tl.parameter)(subst)), recurse(v_Term_typeLambda_tl.body)))
     case hydra.core.Term.annotated(v_Term_annotated_at) => hydra.core.Term.annotated(hydra.core.AnnotatedTerm(recurse(v_Term_annotated_at.body),
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        (v_Term_annotated_at.annotation)))
     case _ => recurse(t)
   hydra.rewriting.rewriteTerm(replace)(term)
@@ -299,6 +537,20 @@ def substituteVariables(subst: Map[hydra.core.Name, hydra.core.Name])(term: hydr
   def replace(recurse: (hydra.core.Term => hydra.core.Term))(term2: hydra.core.Term): hydra.core.Term =
     term2 match
     case hydra.core.Term.variable(v_Term_variable_n) => hydra.core.Term.variable(hydra.lib.maybes.fromMaybe[hydra.core.Name](v_Term_variable_n)(hydra.lib.maps.lookup[hydra.core.Name,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.core.Name](v_Term_variable_n)(subst)))
     case hydra.core.Term.lambda(v_Term_lambda_l) => hydra.lib.maybes.maybe[hydra.core.Term,
        hydra.core.Name](recurse(term2))((_x: hydra.core.Name) => term2)(hydra.lib.maps.lookup[hydra.core.Name,

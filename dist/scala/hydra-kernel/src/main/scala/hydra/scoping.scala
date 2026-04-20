@@ -10,6 +10,20 @@ def extendGraphForLambda(g: hydra.graph.Graph)(lam: hydra.core.Lambda): hydra.gr
   hydra.graph.Graph(g.boundTerms, hydra.lib.maybes.maybe[Map[hydra.core.Name, hydra.core.TypeScheme],
      hydra.core.Type](g.boundTypes)((dom: hydra.core.Type) =>
     hydra.lib.maps.insert[hydra.core.Name, hydra.core.TypeScheme](`var`)(hydra.scoping.fTypeToTypeScheme(dom))(g.boundTypes))(lam.domain),
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        (g.classConstraints), hydra.lib.sets.insert[hydra.core.Name](`var`)(g.lambdaVariables),
        hydra.lib.maps.delete[hydra.core.Name, hydra.core.Term](`var`)(g.metadata),
        (g.primitives), (g.schemaTypes), (g.typeVariables))
@@ -24,9 +38,51 @@ def extendGraphForLet(forBinding: (hydra.graph.Graph => hydra.core.Binding => Op
      hydra.core.Term]]((b: hydra.core.Binding) => Tuple2(b.name, (b.term)))(bindings)))(g.boundTerms),
      hydra.lib.maps.union[hydra.core.Name, hydra.core.TypeScheme](hydra.lib.maps.fromList[hydra.core.Name,
      hydra.core.TypeScheme](hydra.lib.maybes.cat[Tuple2[hydra.core.Name, hydra.core.TypeScheme]](hydra.lib.lists.map[hydra.core.Binding,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Option[Tuple2[hydra.core.Name, hydra.core.TypeScheme]]]((b: hydra.core.Binding) =>
     hydra.lib.maybes.map[hydra.core.TypeScheme, Tuple2[hydra.core.Name, hydra.core.TypeScheme]]((ts: hydra.core.TypeScheme) => Tuple2(b.name,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        ts))(b.`type`))(bindings))))(g.boundTypes), (g.classConstraints), hydra.lib.lists.foldl[scala.collection.immutable.Set[hydra.core.Name],
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        hydra.core.Binding]((s: scala.collection.immutable.Set[hydra.core.Name]) =>
     (b: hydra.core.Binding) => hydra.lib.sets.delete[hydra.core.Name](b.name)(s))(g.lambdaVariables)(bindings),
        (hydra.lib.lists.foldl[hydra.graph.Graph, hydra.core.Binding]((gAcc: hydra.graph.Graph) =>
@@ -58,8 +114,36 @@ def extendGraphWithBindings(bindings: Seq[hydra.core.Binding])(g: hydra.graph.Gr
      hydra.core.Term]]((b: hydra.core.Binding) => Tuple2(b.name, (b.term)))(bindings))
   lazy val newTypes: Map[hydra.core.Name, hydra.core.TypeScheme] = hydra.lib.maps.fromList[hydra.core.Name,
      hydra.core.TypeScheme](hydra.lib.maybes.cat[Tuple2[hydra.core.Name, hydra.core.TypeScheme]](hydra.lib.lists.map[hydra.core.Binding,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Option[Tuple2[hydra.core.Name, hydra.core.TypeScheme]]]((b: hydra.core.Binding) =>
     hydra.lib.maybes.map[hydra.core.TypeScheme, Tuple2[hydra.core.Name, hydra.core.TypeScheme]]((ts: hydra.core.TypeScheme) => Tuple2(b.name,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        ts))(b.`type`))(bindings)))
   hydra.graph.Graph(hydra.lib.maps.union[hydra.core.Name, hydra.core.Term](newTerms)(g.boundTerms),
      hydra.lib.maps.union[hydra.core.Name, hydra.core.TypeScheme](newTypes)(g.boundTypes),

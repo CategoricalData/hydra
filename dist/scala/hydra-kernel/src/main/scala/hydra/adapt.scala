@@ -11,6 +11,20 @@ import hydra.graph.*
 import hydra.packaging.*
 
 def adaptDataGraph[T0](constraints: hydra.coders.LanguageConstraints)(doExpand: Boolean)(els0: Seq[hydra.core.Binding])(cx: T0)(graph0: hydra.graph.Graph): Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    Tuple2[hydra.graph.Graph, Seq[hydra.core.Binding]]] =
   {
   def transformTerm(g: hydra.graph.Graph)(term: hydra.core.Term): hydra.core.Term =
@@ -26,6 +40,20 @@ def adaptDataGraph[T0](constraints: hydra.coders.LanguageConstraints)(doExpand: 
   lazy val prims0: Map[hydra.core.Name, hydra.graph.Primitive] = (graph0.primitives)
   lazy val schemaTypes0: Map[hydra.core.Name, hydra.core.TypeScheme] = (graph0.schemaTypes)
   lazy val schemaBindings: Seq[hydra.core.Binding] = hydra.environment.typesToDefinitions(hydra.lib.maps.map[hydra.core.TypeScheme,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Type, hydra.core.Name]((ts: hydra.core.TypeScheme) => hydra.scoping.typeSchemeToFType(ts))(schemaTypes0))
   hydra.lib.eithers.bind[hydra.errors.Error, Map[hydra.core.Name, hydra.core.TypeScheme],
      Tuple2[hydra.graph.Graph, Seq[hydra.core.Binding]]](hydra.lib.logic.ifElse[Either[hydra.errors.Error,
@@ -39,8 +67,36 @@ def adaptDataGraph[T0](constraints: hydra.coders.LanguageConstraints)(doExpand: 
      hydra.core.Type]) =>
     hydra.lib.eithers.bind[hydra.errors.Error, Map[hydra.core.Name, hydra.core.Type],
        Map[hydra.core.Name, hydra.core.TypeScheme]](hydra.adapt.adaptGraphSchema(constraints)(litmap)(tmap0))((tmap1: Map[hydra.core.Name,
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        hydra.core.Type]) =>
     Right(hydra.lib.maps.map[hydra.core.Type, hydra.core.TypeScheme, hydra.core.Name]((t: hydra.core.Type) => hydra.resolution.typeToTypeScheme(t))(tmap1))))))((schemaResult: Map[hydra.core.Name,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.core.TypeScheme]) =>
     {
     lazy val adaptedSchemaTypes: Map[hydra.core.Name, hydra.core.TypeScheme] = schemaResult
@@ -49,6 +105,20 @@ def adaptDataGraph[T0](constraints: hydra.coders.LanguageConstraints)(doExpand: 
         {
         lazy val transformed: hydra.core.Binding = transformBinding(graph0)(el)
         lazy val wrapped: hydra.core.Term = hydra.core.Term.let(hydra.core.Let(hydra.lib.lists.pure[hydra.core.Binding](transformed),
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
            hydra.core.Term.unit))
         hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](hydra.adapt.adaptTerm(constraints)(litmap)(cx)(graph0)(wrapped))((adapted: hydra.core.Term) =>
           hydra.rewriting.rewriteTermM((v1: (hydra.core.Term => Either[hydra.errors.Error, hydra.core.Term])) =>
@@ -59,35 +129,133 @@ def adaptDataGraph[T0](constraints: hydra.coders.LanguageConstraints)(doExpand: 
          hydra.errors.Error](adaptBinding)(els0))((adaptedTerms: Seq[hydra.core.Term]) =>
         {
         lazy val els1Raw: Seq[hydra.core.Binding] = hydra.lib.lists.concat[hydra.core.Binding](hydra.lib.lists.map[hydra.core.Term,
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
            Seq[hydra.core.Binding]](hydra.environment.termAsBindings)(adaptedTerms))
         {
           def processBinding(el: hydra.core.Binding): Either[hydra.errors.Error, hydra.core.Binding] =
             hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Binding](hydra.rewriting.rewriteTermM((v1: (hydra.core.Term => Either[hydra.errors.Error,
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
                hydra.core.Term])) =>
             (v2: hydra.core.Term) => hydra.adapt.adaptNestedTypes(constraints)(litmap)(v1)(v2))(el.term))((newTerm: hydra.core.Term) =>
             hydra.lib.eithers.bind[hydra.errors.Error, Option[hydra.core.TypeScheme],
                hydra.core.Binding](hydra.lib.maybes.maybe[Either[hydra.errors.Error,
                Option[hydra.core.TypeScheme]], hydra.core.TypeScheme](Right(None))((ts: hydra.core.TypeScheme) =>
             hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.TypeScheme, Option[hydra.core.TypeScheme]](hydra.adapt.adaptTypeScheme(constraints)(litmap)(ts))((ts1: hydra.core.TypeScheme) => Right(Some(ts1))))(el.`type`))((adaptedType: Option[hydra.core.TypeScheme]) => Right(hydra.core.Binding(el.name,
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
                newTerm, adaptedType))))
           hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.Binding], Tuple2[hydra.graph.Graph,
              Seq[hydra.core.Binding]]](hydra.lib.eithers.mapList[hydra.core.Binding,
              hydra.core.Binding, hydra.errors.Error](processBinding)(els1Raw))((els1: Seq[hydra.core.Binding]) =>
             hydra.lib.eithers.bind[hydra.errors.Error, Seq[Tuple2[hydra.core.Name,
                hydra.graph.Primitive]], Tuple2[hydra.graph.Graph, Seq[hydra.core.Binding]]](hydra.lib.eithers.mapList[Tuple2[hydra.core.Name,
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
                hydra.graph.Primitive], Tuple2[hydra.core.Name, hydra.graph.Primitive],
                hydra.errors.Error]((kv: Tuple2[hydra.core.Name, hydra.graph.Primitive]) =>
             hydra.lib.eithers.bind[hydra.errors.Error, hydra.graph.Primitive, Tuple2[hydra.core.Name,
                hydra.graph.Primitive]](hydra.adapt.adaptPrimitive(constraints)(litmap)(hydra.lib.pairs.second[hydra.core.Name,
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
                hydra.graph.Primitive](kv)))((prim1: hydra.graph.Primitive) =>
             Right(Tuple2(hydra.lib.pairs.first[hydra.core.Name, hydra.graph.Primitive](kv),
                prim1))))(hydra.lib.maps.toList[hydra.core.Name, hydra.graph.Primitive](prims0)))((primPairs: Seq[Tuple2[hydra.core.Name,
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
                hydra.graph.Primitive]]) =>
             {
             lazy val prims1: Map[hydra.core.Name, hydra.graph.Primitive] = hydra.lib.maps.fromList[hydra.core.Name,
                hydra.graph.Primitive](primPairs)
             {
               lazy val adaptedGraphRaw: hydra.graph.Graph = hydra.lexical.buildGraph(els1)(hydra.lib.maps.empty[hydra.core.Name,
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                  Option[hydra.core.Term]])(prims1)
               {
                 lazy val adaptedGraph: hydra.graph.Graph = hydra.graph.Graph(adaptedGraphRaw.boundTerms,
@@ -125,11 +293,39 @@ def adaptGraphSchema[T0](constraints: hydra.coders.LanguageConstraints)(litmap: 
     lazy val name: T1 = hydra.lib.pairs.first[T1, hydra.core.Type](pair)
     lazy val typ: hydra.core.Type = hydra.lib.pairs.second[T1, hydra.core.Type](pair)
     hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[T1, hydra.core.Type]](hydra.adapt.adaptType(constraints)(litmap)(typ))((typ1: hydra.core.Type) => Right(Tuple2(name,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        typ1)))
   }
   hydra.lib.eithers.bind[hydra.errors.Error, Seq[Tuple2[T0, hydra.core.Type]], Map[T0,
      hydra.core.Type]](hydra.lib.eithers.mapList[Tuple2[T0, hydra.core.Type], Tuple2[T0,
      hydra.core.Type], hydra.errors.Error](mapPair)(hydra.lib.maps.toList[T0, hydra.core.Type](types0)))((pairs: Seq[Tuple2[T0,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Type]]) => Right(hydra.lib.maps.fromList[T0, hydra.core.Type](pairs)))
 }
 
@@ -153,6 +349,20 @@ def adaptIntegerType(constraints: hydra.coders.LanguageConstraints)(it: hydra.co
 
 def adaptLambdaDomains[T0](constraints: hydra.coders.LanguageConstraints)(litmap: Map[hydra.core.LiteralType,
    hydra.core.LiteralType])(recurse: (T0 => Either[hydra.errors.Error, hydra.core.Term]))(term: T0): Either[hydra.errors.Error,
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    hydra.core.Term] =
   hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](recurse(term))((rewritten: hydra.core.Term) =>
   rewritten match
@@ -201,26 +411,110 @@ def adaptLiteralTypesMap(constraints: hydra.coders.LanguageConstraints): Map[hyd
        hydra.core.LiteralType](None)((lt2: hydra.core.LiteralType) => Some(Tuple2(lt,
        lt2)))(hydra.adapt.adaptLiteralType(constraints)(lt))
   hydra.lib.maps.fromList[hydra.core.LiteralType, hydra.core.LiteralType](hydra.lib.maybes.cat[Tuple2[hydra.core.LiteralType,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.LiteralType]](hydra.lib.lists.map[hydra.core.LiteralType, Option[Tuple2[hydra.core.LiteralType,
      hydra.core.LiteralType]]](tryType)(hydra.reflect.literalTypes)))
 }
 
 def adaptLiteralValue[T0](litmap: Map[T0, hydra.core.LiteralType])(lt: T0)(l: hydra.core.Literal): hydra.core.Literal =
   hydra.lib.maybes.maybe[hydra.core.Literal, hydra.core.LiteralType](hydra.core.Literal.string(hydra.show.core.literal(l)))((lt2: hydra.core.LiteralType) => hydra.adapt.adaptLiteral(lt2)(l))(hydra.lib.maps.lookup[T0,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.LiteralType](lt)(litmap))
 
 def adaptNestedTypes[T0](constraints: hydra.coders.LanguageConstraints)(litmap: Map[hydra.core.LiteralType,
    hydra.core.LiteralType])(recurse: (T0 => Either[hydra.errors.Error, hydra.core.Term]))(term: T0): Either[hydra.errors.Error,
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    hydra.core.Term] =
   hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](recurse(term))((rewritten: hydra.core.Term) =>
   rewritten match
   case hydra.core.Term.let(v_Term_let_lt) => {
     def adaptB(b: hydra.core.Binding): Either[hydra.errors.Error, hydra.core.Binding] =
       hydra.lib.eithers.bind[hydra.errors.Error, Option[hydra.core.TypeScheme], hydra.core.Binding](hydra.lib.maybes.maybe[Either[hydra.errors.Error,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Option[hydra.core.TypeScheme]], hydra.core.TypeScheme](Right(None))((ts: hydra.core.TypeScheme) =>
       hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.TypeScheme, Option[hydra.core.TypeScheme]](hydra.adapt.adaptTypeScheme(constraints)(litmap)(ts))((ts1: hydra.core.TypeScheme) => Right(Some(ts1))))(b.`type`))((adaptedBType: Option[hydra.core.TypeScheme]) => Right(hydra.core.Binding(b.name,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          (b.term), adaptedBType)))
     hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.Binding], hydra.core.Term](hydra.lib.eithers.mapList[hydra.core.Binding,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.core.Binding, hydra.errors.Error](adaptB)(v_Term_let_lt.bindings))((adaptedBindings: Seq[hydra.core.Binding]) =>
       Right(hydra.core.Term.let(hydra.core.Let(adaptedBindings, (v_Term_let_lt.body)))))
   }
@@ -256,6 +550,20 @@ def adaptTerm[T0](constraints: hydra.coders.LanguageConstraints)(litmap: Map[hyd
            Tuple2[hydra.core.Term, Seq[hydra.core.Term]]](Right(None))((uc: Tuple2[hydra.core.Term,
            Seq[hydra.core.Term]]) =>
         hydra.lib.eithers.bind[hydra.errors.Error, Option[hydra.core.Term], Option[hydra.core.Term]](tryTerm(hydra.lib.pairs.first[hydra.core.Term,
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
            Seq[hydra.core.Term]](uc)))((mterm: Option[hydra.core.Term]) =>
         hydra.lib.maybes.maybe[Either[hydra.errors.Error, Option[hydra.core.Term]],
            hydra.core.Term](tryAlts(hydra.lib.pairs.second[hydra.core.Term, Seq[hydra.core.Term]](uc)))((t: hydra.core.Term) => Right(Some(t)))(mterm)))(hydra.lib.lists.uncons[hydra.core.Term](alts))
@@ -280,6 +588,20 @@ def adaptTerm[T0](constraints: hydra.coders.LanguageConstraints)(litmap: Map[hyd
 }
 
 def adaptTermForLanguage[T0](lang: hydra.coders.Language)(cx: T0)(g: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    hydra.core.Term] =
   {
   lazy val constraints: hydra.coders.LanguageConstraints = (lang.constraints)
@@ -293,13 +615,55 @@ def adaptType(constraints: hydra.coders.LanguageConstraints)(litmap: Map[hydra.c
   def forSupported(typ: hydra.core.Type): Option[hydra.core.Type] =
     typ match
     case hydra.core.Type.literal(v_Type_literal_lt) => hydra.lib.logic.ifElse[Option[hydra.core.Type]](hydra.adapt.literalTypeSupported(constraints)(v_Type_literal_lt))(Some(typ))(hydra.lib.maybes.maybe[Option[hydra.core.Type],
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.core.LiteralType](Some(hydra.core.Type.literal(hydra.core.LiteralType.string)))((lt2: hydra.core.LiteralType) => Some(hydra.core.Type.literal(lt2)))(hydra.lib.maps.lookup[hydra.core.LiteralType,
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        hydra.core.LiteralType](v_Type_literal_lt)(litmap)))
     case _ => Some(typ)
   def forUnsupported(typ: hydra.core.Type): Option[hydra.core.Type] =
     {
     def tryAlts(alts: Seq[hydra.core.Type]): Option[hydra.core.Type] =
       hydra.lib.maybes.bind[Tuple2[hydra.core.Type, Seq[hydra.core.Type]], hydra.core.Type](hydra.lib.lists.uncons[hydra.core.Type](alts))((uc: Tuple2[hydra.core.Type,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Seq[hydra.core.Type]]) =>
       hydra.lib.maybes.maybe[Option[hydra.core.Type], hydra.core.Type](tryAlts(hydra.lib.pairs.second[hydra.core.Type,
          Seq[hydra.core.Type]](uc)))((t: hydra.core.Type) => Some(t))(tryType(hydra.lib.pairs.first[hydra.core.Type,
@@ -313,6 +677,20 @@ def adaptType(constraints: hydra.coders.LanguageConstraints)(litmap: Map[hydra.c
     hydra.lib.logic.ifElse[Option[hydra.core.Type]](supportedVariant)(forSupported(typ))(forUnsupported(typ))
   }
   def rewrite(recurse: (hydra.core.Type => Either[hydra.errors.Error, hydra.core.Type]))(typ: hydra.core.Type): Either[hydra.errors.Error,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Type] =
     hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, hydra.core.Type](recurse(typ))((type1: hydra.core.Type) =>
     hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.core.Type], hydra.core.Type](Left(hydra.errors.Error.other(hydra.lib.strings.cat2("no alternatives for type: ")(hydra.show.core.`type`(typ)))))((type2: hydra.core.Type) => Right(type2))(tryType(type1)))
@@ -334,6 +712,20 @@ def adaptTypeScheme(constraints: hydra.coders.LanguageConstraints)(litmap: Map[h
   lazy val vars0: Seq[hydra.core.Name] = (ts0.variables)
   lazy val t0: hydra.core.Type = (ts0.`type`)
   hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, hydra.core.TypeScheme](hydra.adapt.adaptType(constraints)(litmap)(t0))((t1: hydra.core.Type) => Right(hydra.core.TypeScheme(vars0,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      t1, (ts0.constraints))))
 }
 
@@ -347,6 +739,20 @@ def composeCoders[T0, T1, T2](c1: hydra.coders.Coder[T0, T1])(c2: hydra.coders.C
   hydra.lib.eithers.bind[hydra.errors.Error, T1, T0](c2.decode(cx)(c))((b2: T1) => c1.decode(cx)(b2)))
 
 def dataGraphToDefinitions(constraints: hydra.coders.LanguageConstraints)(doInfer: Boolean)(doExpand: Boolean)(doHoistCaseStatements: Boolean)(doHoistPolymorphicLetBindings: Boolean)(originalBindings: Seq[hydra.core.Binding])(graph0: hydra.graph.Graph)(namespaces: Seq[hydra.packaging.Namespace])(cx: hydra.context.Context): Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    Tuple2[hydra.graph.Graph, Seq[Seq[hydra.packaging.TermDefinition]]]] =
   {
   lazy val namespacesSet: scala.collection.immutable.Set[hydra.packaging.Namespace] = hydra.lib.sets.fromList[hydra.packaging.Namespace](namespaces)
@@ -377,6 +783,20 @@ def dataGraphToDefinitions(constraints: hydra.coders.LanguageConstraints)(doInfe
        scala.Predef.String]((b: hydra.core.Binding) => (b.name))(hydra.lib.lists.filter[hydra.core.Binding]((b: hydra.core.Binding) =>
       hydra.lib.logic.not(hydra.lib.maybes.isJust[hydra.core.TypeScheme](b.`type`)))(bindings))
     hydra.lib.logic.ifElse[Either[hydra.errors.Error, Seq[hydra.core.Binding]]](hydra.lib.lists.`null`[scala.Predef.String](untypedBindings))(Right(bindings))(Left(hydra.errors.Error.other(hydra.lib.strings.cat(Seq("Found untyped bindings (",
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        debugLabel, "): ", hydra.lib.strings.intercalate(", ")(untypedBindings))))))
   }
   def normalizeBindings(bindings: Seq[hydra.core.Binding]): Seq[hydra.core.Binding] =
@@ -395,6 +815,20 @@ def dataGraphToDefinitions(constraints: hydra.coders.LanguageConstraints)(doInfe
      Seq[Seq[hydra.packaging.TermDefinition]]]](hydra.lib.logic.ifElse[Either[hydra.errors.Error,
      Seq[hydra.core.Binding]]](doInfer)(hydra.lib.eithers.map[Tuple2[Tuple2[hydra.graph.Graph,
      Seq[hydra.core.Binding]], hydra.context.Context], Seq[hydra.core.Binding], hydra.errors.Error]((result: Tuple2[Tuple2[hydra.graph.Graph,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Seq[hydra.core.Binding]], hydra.context.Context]) =>
     hydra.lib.pairs.second[hydra.graph.Graph, Seq[hydra.core.Binding]](hydra.lib.pairs.first[Tuple2[hydra.graph.Graph,
        Seq[hydra.core.Binding]], hydra.context.Context](result)))(hydra.inference.inferGraphTypes(cx)(bins1)(rebuildGraph(bins1))))(checkBindingsTyped("after case hoisting")(bins1)))((bins2: Seq[hydra.core.Binding]) =>
@@ -403,6 +837,20 @@ def dataGraphToDefinitions(constraints: hydra.coders.LanguageConstraints)(doInfe
        Seq[hydra.core.Binding]]](doHoistPolymorphicLetBindings)(checkBindingsTyped("after let hoisting")(hoistPoly(bins2)))(Right(bins2)))((bins3: Seq[hydra.core.Binding]) =>
     hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.graph.Graph, Seq[hydra.core.Binding]],
        Tuple2[hydra.graph.Graph, Seq[Seq[hydra.packaging.TermDefinition]]]](hydra.adapt.adaptDataGraph(constraints)(doExpand)(bins3)(cx)(rebuildGraph(bins3)))((adaptResult: Tuple2[hydra.graph.Graph,
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        Seq[hydra.core.Binding]]) =>
     {
     lazy val adapted: hydra.graph.Graph = hydra.lib.pairs.first[hydra.graph.Graph, Seq[hydra.core.Binding]](adaptResult)
@@ -416,6 +864,20 @@ def dataGraphToDefinitions(constraints: hydra.coders.LanguageConstraints)(doInfe
         {
           def toDef(el: hydra.core.Binding): Option[hydra.packaging.TermDefinition] =
             hydra.lib.maybes.map[hydra.core.TypeScheme, hydra.packaging.TermDefinition]((ts: hydra.core.TypeScheme) => hydra.packaging.TermDefinition(el.name,
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
                (el.term), Some(ts)))(el.`type`)
           {
             lazy val selectedElements: Seq[hydra.core.Binding] = hydra.lib.lists.filter[hydra.core.Binding]((el: hydra.core.Binding) =>
@@ -423,6 +885,20 @@ def dataGraphToDefinitions(constraints: hydra.coders.LanguageConstraints)(doInfe
               hydra.lib.sets.member[hydra.packaging.Namespace](ns)(namespacesSet))(hydra.names.namespaceOf(el.name)))(bins5)
             {
               lazy val elementsByNamespace: Map[hydra.packaging.Namespace, Seq[hydra.core.Binding]] = hydra.lib.lists.foldl[Map[hydra.packaging.Namespace,
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                  Seq[hydra.core.Binding]], hydra.core.Binding]((acc: Map[hydra.packaging.Namespace,
                  Seq[hydra.core.Binding]]) =>
                 (el: hydra.core.Binding) =>
@@ -431,16 +907,58 @@ def dataGraphToDefinitions(constraints: hydra.coders.LanguageConstraints)(doInfe
                 {
                 lazy val existing: Seq[hydra.core.Binding] = hydra.lib.maybes.maybe[Seq[hydra.core.Binding],
                    Seq[hydra.core.Binding]](Seq())(hydra.lib.equality.identity[Seq[hydra.core.Binding]])(hydra.lib.maps.lookup[hydra.packaging.Namespace,
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
                    Seq[hydra.core.Binding]](ns)(acc))
                 hydra.lib.maps.insert[hydra.packaging.Namespace, Seq[hydra.core.Binding]](ns)(hydra.lib.lists.concat2[hydra.core.Binding](existing)(Seq(el)))(acc)
               })(hydra.names.namespaceOf(el.name)))(hydra.lib.maps.empty[hydra.packaging.Namespace,
                  Seq[hydra.core.Binding]])(selectedElements)
               {
                 lazy val defsGrouped: Seq[Seq[hydra.packaging.TermDefinition]] = hydra.lib.lists.map[hydra.packaging.Namespace,
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
                    Seq[hydra.packaging.TermDefinition]]((ns: hydra.packaging.Namespace) =>
                   {
                   lazy val elsForNs: Seq[hydra.core.Binding] = hydra.lib.maybes.maybe[Seq[hydra.core.Binding],
                      Seq[hydra.core.Binding]](Seq())(hydra.lib.equality.identity[Seq[hydra.core.Binding]])(hydra.lib.maps.lookup[hydra.packaging.Namespace,
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
                      Seq[hydra.core.Binding]](ns)(elementsByNamespace))
                   hydra.lib.maybes.cat[hydra.packaging.TermDefinition](hydra.lib.lists.map[hydra.core.Binding,
                      Option[hydra.packaging.TermDefinition]](toDef)(elsForNs))
@@ -472,6 +990,20 @@ def literalTypeSupported(constraints: hydra.coders.LanguageConstraints)(lt: hydr
 }
 
 def prepareFloatType(ft: hydra.core.FloatType): Tuple2[hydra.core.FloatType, Tuple2[(hydra.core.FloatValue => hydra.core.FloatValue),
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    scala.collection.immutable.Set[scala.Predef.String]]] =
   ft match
   case hydra.core.FloatType.bigfloat => Tuple2(hydra.core.FloatType.float64, Tuple2((v: hydra.core.FloatValue) =>
@@ -520,8 +1052,36 @@ def prepareLiteralType(at: hydra.core.LiteralType): Tuple2[hydra.core.LiteralTyp
        Tuple2[(hydra.core.FloatValue) => hydra.core.FloatValue, scala.collection.immutable.Set[scala.Predef.String]]](result)
     def rep: (hydra.core.FloatValue => hydra.core.FloatValue) =
       hydra.lib.pairs.first[(hydra.core.FloatValue) => hydra.core.FloatValue, scala.collection.immutable.Set[scala.Predef.String]](hydra.lib.pairs.second[hydra.core.FloatType,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2[(hydra.core.FloatValue) => hydra.core.FloatValue, scala.collection.immutable.Set[scala.Predef.String]]](result))
     lazy val msgs: scala.collection.immutable.Set[scala.Predef.String] = hydra.lib.pairs.second[(hydra.core.FloatValue) => hydra.core.FloatValue,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        scala.collection.immutable.Set[scala.Predef.String]](hydra.lib.pairs.second[hydra.core.FloatType,
        Tuple2[(hydra.core.FloatValue) => hydra.core.FloatValue, scala.collection.immutable.Set[scala.Predef.String]]](result))
     Tuple2(hydra.core.LiteralType.float(rtyp), Tuple2((v: hydra.core.Literal) =>
@@ -539,6 +1099,20 @@ def prepareLiteralType(at: hydra.core.LiteralType): Tuple2[hydra.core.LiteralTyp
          scala.collection.immutable.Set[scala.Predef.String]](hydra.lib.pairs.second[hydra.core.IntegerType,
          Tuple2[(hydra.core.IntegerValue) => hydra.core.IntegerValue, scala.collection.immutable.Set[scala.Predef.String]]](result))
     lazy val msgs: scala.collection.immutable.Set[scala.Predef.String] = hydra.lib.pairs.second[(hydra.core.IntegerValue) => hydra.core.IntegerValue,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        scala.collection.immutable.Set[scala.Predef.String]](hydra.lib.pairs.second[hydra.core.IntegerType,
        Tuple2[(hydra.core.IntegerValue) => hydra.core.IntegerValue, scala.collection.immutable.Set[scala.Predef.String]]](result))
     Tuple2(hydra.core.LiteralType.integer(rtyp), Tuple2((v: hydra.core.Literal) =>
@@ -561,8 +1135,36 @@ def prepareType[T0](cx: T0)(typ: hydra.core.Type): Tuple2[hydra.core.Type, Tuple
        Tuple2[(hydra.core.Literal) => hydra.core.Literal, scala.collection.immutable.Set[scala.Predef.String]]](result)
     def rep: (hydra.core.Literal => hydra.core.Literal) =
       hydra.lib.pairs.first[(hydra.core.Literal) => hydra.core.Literal, scala.collection.immutable.Set[scala.Predef.String]](hydra.lib.pairs.second[hydra.core.LiteralType,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2[(hydra.core.Literal) => hydra.core.Literal, scala.collection.immutable.Set[scala.Predef.String]]](result))
     lazy val msgs: scala.collection.immutable.Set[scala.Predef.String] = hydra.lib.pairs.second[(hydra.core.Literal) => hydra.core.Literal,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        scala.collection.immutable.Set[scala.Predef.String]](hydra.lib.pairs.second[hydra.core.LiteralType,
        Tuple2[(hydra.core.Literal) => hydra.core.Literal, scala.collection.immutable.Set[scala.Predef.String]]](result))
     Tuple2(hydra.core.Type.literal(rtyp), Tuple2((v: hydra.core.Term) =>
@@ -577,8 +1179,36 @@ def pushTypeAppsInward(term: hydra.core.Term): hydra.core.Term =
   def push(body: hydra.core.Term)(typ: hydra.core.Type): hydra.core.Term =
     body match
     case hydra.core.Term.application(v_Term_application_a) => go(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(v_Term_application_a.function,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        typ)), (v_Term_application_a.argument))))
     case hydra.core.Term.lambda(v_Term_lambda_l) => go(hydra.core.Term.lambda(hydra.core.Lambda(v_Term_lambda_l.parameter,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        (v_Term_lambda_l.domain), hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(v_Term_lambda_l.body,
        typ)))))
     case hydra.core.Term.let(v_Term_let_lt) => go(hydra.core.Term.let(hydra.core.Let(v_Term_let_lt.bindings,
@@ -597,6 +1227,20 @@ def pushTypeAppsInward(term: hydra.core.Term): hydra.core.Term =
       {
       def forPair(p: Tuple2[hydra.core.Term, hydra.core.Term]): Tuple2[hydra.core.Term, hydra.core.Term] =
         Tuple2(go(hydra.lib.pairs.first[hydra.core.Term, hydra.core.Term](p)), go(hydra.lib.pairs.second[hydra.core.Term,
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
            hydra.core.Term](p)))
       hydra.lib.maps.fromList[hydra.core.Term, hydra.core.Term](hydra.lib.lists.map[Tuple2[hydra.core.Term,
          hydra.core.Term], Tuple2[hydra.core.Term, hydra.core.Term]](forPair)(hydra.lib.maps.toList[hydra.core.Term,
@@ -604,15 +1248,71 @@ def pushTypeAppsInward(term: hydra.core.Term): hydra.core.Term =
     }
     t match
       case hydra.core.Term.annotated(v_Term_annotated_at) => hydra.core.Term.annotated(hydra.core.AnnotatedTerm(go(v_Term_annotated_at.body),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          (v_Term_annotated_at.annotation)))
       case hydra.core.Term.application(v_Term_application_a) => hydra.core.Term.application(hydra.core.Application(go(v_Term_application_a.function),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          go(v_Term_application_a.argument)))
       case hydra.core.Term.cases(v_Term_cases_cs) => hydra.core.Term.cases(hydra.core.CaseStatement(v_Term_cases_cs.typeName,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.lib.maybes.map[hydra.core.Term, hydra.core.Term](go)(v_Term_cases_cs.default),
          hydra.lib.lists.map[hydra.core.Field, hydra.core.Field](forField)(v_Term_cases_cs.cases)))
       case hydra.core.Term.either(v_Term_either_e) => hydra.core.Term.either(hydra.lib.eithers.either[hydra.core.Term,
          hydra.core.Term, Either[hydra.core.Term, hydra.core.Term]]((l: hydra.core.Term) => Left(go(l)))((r: hydra.core.Term) => Right(go(r)))(v_Term_either_e))
       case hydra.core.Term.lambda(v_Term_lambda_l) => hydra.core.Term.lambda(hydra.core.Lambda(v_Term_lambda_l.parameter,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          (v_Term_lambda_l.domain), go(v_Term_lambda_l.body)))
       case hydra.core.Term.let(v_Term_let_lt) => hydra.core.Term.let(forLet(v_Term_let_lt))
       case hydra.core.Term.list(v_Term_list_els) => hydra.core.Term.list(hydra.lib.lists.map[hydra.core.Term,
@@ -628,14 +1328,56 @@ def pushTypeAppsInward(term: hydra.core.Term): hydra.core.Term =
       case hydra.core.Term.record(v_Term_record_r) => hydra.core.Term.record(hydra.core.Record(v_Term_record_r.typeName,
          hydra.lib.lists.map[hydra.core.Field, hydra.core.Field](forField)(v_Term_record_r.fields)))
       case hydra.core.Term.set(v_Term_set_s) => hydra.core.Term.set(hydra.lib.sets.fromList[hydra.core.Term](hydra.lib.lists.map[hydra.core.Term,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.core.Term](go)(hydra.lib.sets.toList[hydra.core.Term](v_Term_set_s))))
       case hydra.core.Term.typeApplication(v_Term_typeApplication_tt) => {
         lazy val body1: hydra.core.Term = go(v_Term_typeApplication_tt.body)
         push(body1)(v_Term_typeApplication_tt.`type`)
       }
       case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => hydra.core.Term.typeLambda(hydra.core.TypeLambda(v_Term_typeLambda_ta.parameter,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          go(v_Term_typeLambda_ta.body)))
       case hydra.core.Term.inject(v_Term_inject_i) => hydra.core.Term.inject(hydra.core.Injection(v_Term_inject_i.typeName,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          forField(v_Term_inject_i.field)))
       case hydra.core.Term.unit => hydra.core.Term.unit
       case hydra.core.Term.unwrap(v_Term_unwrap_n) => hydra.core.Term.unwrap(v_Term_unwrap_n)
@@ -647,17 +1389,73 @@ def pushTypeAppsInward(term: hydra.core.Term): hydra.core.Term =
 }
 
 def schemaGraphToDefinitions[T0](constraints: hydra.coders.LanguageConstraints)(graph: hydra.graph.Graph)(nameLists: Seq[Seq[hydra.core.Name]])(cx: T0): Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    Tuple2[Map[hydra.core.Name, hydra.core.Type], Seq[Seq[hydra.packaging.TypeDefinition]]]] =
   {
   lazy val litmap: Map[hydra.core.LiteralType, hydra.core.LiteralType] = hydra.adapt.adaptLiteralTypesMap(constraints)
   hydra.lib.eithers.bind[hydra.errors.Error, Map[hydra.core.Name, hydra.core.Type],
      Tuple2[Map[hydra.core.Name, hydra.core.Type], Seq[Seq[hydra.packaging.TypeDefinition]]]](hydra.lib.eithers.bimap[hydra.errors.DecodingError,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Map[hydra.core.Name, hydra.core.Type], hydra.errors.Error, Map[hydra.core.Name,
      hydra.core.Type]]((e: hydra.errors.DecodingError) => hydra.errors.Error.decoding(e))((x: Map[hydra.core.Name,
      hydra.core.Type]) => x)(hydra.environment.graphAsTypes(graph)(hydra.lexical.graphToBindings(graph))))((tmap0: Map[hydra.core.Name,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Type]) =>
     hydra.lib.eithers.bind[hydra.errors.Error, Map[hydra.core.Name, hydra.core.Type],
        Tuple2[Map[hydra.core.Name, hydra.core.Type], Seq[Seq[hydra.packaging.TypeDefinition]]]](hydra.adapt.adaptGraphSchema(constraints)(litmap)(tmap0))((tmap1: Map[hydra.core.Name,
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        hydra.core.Type]) =>
     {
     def toDef(pair: Tuple2[hydra.core.Name, hydra.core.Type]): hydra.packaging.TypeDefinition =
@@ -666,6 +1464,20 @@ def schemaGraphToDefinitions[T0](constraints: hydra.coders.LanguageConstraints)(
          None))
     Right(Tuple2(tmap1, hydra.lib.lists.map[Seq[hydra.core.Name], Seq[hydra.packaging.TypeDefinition]]((names: Seq[hydra.core.Name]) =>
       hydra.lib.lists.map[Tuple2[hydra.core.Name, hydra.core.Type], hydra.packaging.TypeDefinition](toDef)(hydra.lib.maybes.mapMaybe[hydra.core.Name,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2[hydra.core.Name, hydra.core.Type]]((n: hydra.core.Name) =>
       hydra.lib.maybes.map[hydra.core.Type, Tuple2[hydra.core.Name, hydra.core.Type]]((t: hydra.core.Type) => Tuple2(n,
          t))(hydra.lib.maps.lookup[hydra.core.Name, hydra.core.Type](n)(tmap1)))(names)))(nameLists)))
@@ -673,6 +1485,20 @@ def schemaGraphToDefinitions[T0](constraints: hydra.coders.LanguageConstraints)(
 }
 
 def simpleLanguageAdapter[T0](lang: hydra.coders.Language)(cx: T0)(g: hydra.graph.Graph)(typ: hydra.core.Type): Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    hydra.coders.Adapter[hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]] =
   {
   lazy val constraints: hydra.coders.LanguageConstraints = (lang.constraints)
@@ -692,6 +1518,20 @@ def termAlternatives[T0](cx: T0)(graph: hydra.graph.Graph)(term: hydra.core.Term
     Right(Seq(term2))
   }
   case hydra.core.Term.maybe(v_Term_maybe_ot) => Right(Seq(hydra.core.Term.list(hydra.lib.maybes.maybe[Seq[hydra.core.Term],
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Term](Seq())((term2: hydra.core.Term) => Seq(term2))(v_Term_maybe_ot))))
   case hydra.core.Term.typeLambda(v_Term_typeLambda_abs) => {
     lazy val term2: hydra.core.Term = (v_Term_typeLambda_abs.body)

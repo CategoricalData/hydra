@@ -19,10 +19,38 @@ def foreignKey(x: hydra.relational.ForeignKey): hydra.core.Term =
 
 def primaryKey(x: hydra.relational.PrimaryKey): hydra.core.Term =
   hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.relational.PrimaryKey", hydra.core.Term.list(hydra.lib.lists.map[hydra.relational.ColumnName,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Term](hydra.encode.relational.columnName)(x))))
 
 def relation[T0](v: (T0 => hydra.core.Term))(x: hydra.relational.Relation[T0]): hydra.core.Term =
   hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.relational.Relation", hydra.core.Term.list(hydra.lib.lists.map[hydra.relational.Row[T0],
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Term]((v1: hydra.relational.Row[T0]) => hydra.encode.relational.row(v)(v1))(x))))
 
 def relationName(x: hydra.relational.RelationName): hydra.core.Term =
@@ -31,13 +59,55 @@ def relationName(x: hydra.relational.RelationName): hydra.core.Term =
 def relationSchema[T0](t: (T0 => hydra.core.Term))(x: hydra.relational.RelationSchema[T0]): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.relational.RelationSchema", Seq(hydra.core.Field("name",
      hydra.encode.relational.relationName(x.name)), hydra.core.Field("columns", hydra.core.Term.list(hydra.lib.lists.map[hydra.relational.ColumnSchema[T0],
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term]((v1: hydra.relational.ColumnSchema[T0]) => hydra.encode.relational.columnSchema(t)(v1))(x.columns))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Field("primaryKeys", hydra.core.Term.list(hydra.lib.lists.map[hydra.relational.PrimaryKey,
      hydra.core.Term](hydra.encode.relational.primaryKey)(x.primaryKeys))), hydra.core.Field("foreignKeys",
      hydra.core.Term.list(hydra.lib.lists.map[hydra.relational.ForeignKey, hydra.core.Term](hydra.encode.relational.foreignKey)(x.foreignKeys))))))
 
 def relationship[T0](v: (T0 => hydra.core.Term))(x: hydra.relational.Relationship[T0]): hydra.core.Term =
   hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.relational.Relationship", hydra.core.Term.set(hydra.lib.sets.map[Map[hydra.relational.ColumnName,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      T0], hydra.core.Term]((m: Map[hydra.relational.ColumnName, T0]) =>
   hydra.core.Term.map(hydra.lib.maps.bimap[hydra.relational.ColumnName, hydra.core.Term,
      T0, hydra.core.Term](hydra.encode.relational.columnName)(v)(m)))(x))))

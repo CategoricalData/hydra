@@ -12,6 +12,20 @@ def bigfloatValue(v: hydra.core.FloatValue): Either[hydra.errors.Error, BigDecim
   v match
   case hydra.core.FloatValue.bigfloat(v_FloatValue_bigfloat_f) => Right(v_FloatValue_bigfloat_f)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("bigfloat",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.float(v)))))
 
 def bigint(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.errors.Error, BigInt] =
@@ -22,6 +36,20 @@ def bigintValue(v: hydra.core.IntegerValue): Either[hydra.errors.Error, BigInt] 
   v match
   case hydra.core.IntegerValue.bigint(v_IntegerValue_bigint_i) => Right(v_IntegerValue_bigint_i)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("bigint",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.integer(v)))))
 
 def binary(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.errors.Error, scala.Predef.String] =
@@ -31,6 +59,20 @@ def binaryLiteral(v: hydra.core.Literal): Either[hydra.errors.Error, scala.Prede
   v match
   case hydra.core.Literal.binary(v_Literal_binary_b) => Right(v_Literal_binary_b)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("binary",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.literal(v)))))
 
 def boolean(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.errors.Error, Boolean] =
@@ -40,9 +82,37 @@ def booleanLiteral(v: hydra.core.Literal): Either[hydra.errors.Error, Boolean] =
   v match
   case hydra.core.Literal.boolean(v_Literal_boolean_b) => Right(v_Literal_boolean_b)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("boolean",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.literal(v)))))
 
 def caseField(name: hydra.core.Name)(n: scala.Predef.String)(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    hydra.core.Field] =
   {
   lazy val fieldName: hydra.core.Name = n
@@ -51,6 +121,20 @@ def caseField(name: hydra.core.Name)(n: scala.Predef.String)(graph: hydra.graph.
     lazy val matching: Option[hydra.core.Field] = hydra.lib.lists.find[hydra.core.Field]((f: hydra.core.Field) =>
       hydra.lib.equality.equal[scala.Predef.String](f.name)(fieldName))(cs.cases)
     hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.core.Field], hydra.core.Field](Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("matching case",
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        "no matching case")))))((mf: hydra.core.Field) => Right(mf))(matching)
   })
 }
@@ -61,8 +145,36 @@ def cases(name: hydra.core.Name)(graph: hydra.graph.Graph)(term0: hydra.core.Ter
   term match
   case hydra.core.Term.cases(v_Term_cases_cs) => hydra.lib.logic.ifElse[Either[hydra.errors.Error,
      hydra.core.CaseStatement]](hydra.lib.equality.equal[scala.Predef.String](v_Term_cases_cs.typeName)(name))(Right(v_Term_cases_cs))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2("case statement for type ")(name),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.show.core.term(term))))))
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("case statement",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.term(term))))))
 
 def decimal(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.errors.Error, BigDecimal] =
@@ -72,6 +184,20 @@ def decimalLiteral(v: hydra.core.Literal): Either[hydra.errors.Error, BigDecimal
   v match
   case hydra.core.Literal.decimal(v_Literal_decimal_d) => Right(v_Literal_decimal_d)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("decimal",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.literal(v)))))
 
 def decodeEither[T0, T1](leftDecoder: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError,
@@ -103,12 +229,54 @@ def decodeMap[T0, T1](keyDecoder: (hydra.graph.Graph => hydra.core.Term => Eithe
   stripped match
   case hydra.core.Term.map(v_Term_map_m) => hydra.lib.eithers.map[Seq[Tuple2[T0, T1]],
      Map[T0, T1], hydra.errors.DecodingError](hydra.lib.maps.fromList[T0, T1])(hydra.lib.eithers.mapList[Tuple2[hydra.core.Term,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term], Tuple2[T0, T1], hydra.errors.DecodingError]((kv: Tuple2[hydra.core.Term,
      hydra.core.Term]) =>
     hydra.lib.eithers.bind[hydra.errors.DecodingError, T0, Tuple2[T0, T1]](keyDecoder(g)(hydra.lib.pairs.first[hydra.core.Term,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.core.Term](kv)))((k: T0) =>
     hydra.lib.eithers.map[T1, Tuple2[T0, T1], hydra.errors.DecodingError]((v: T1) => Tuple2(k,
        v))(valDecoder(g)(hydra.lib.pairs.second[hydra.core.Term, hydra.core.Term](kv)))))(hydra.lib.maps.toList[hydra.core.Term,
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        hydra.core.Term](v_Term_map_m)))
   case _ => Left("expected map"))
 
@@ -158,6 +326,20 @@ def decodeWrapped[T0](bodyDecoder: (hydra.graph.Graph => hydra.core.Term => Eith
   case _ => Left("expected wrapped value"))
 
 def eitherTerm[T0, T1](leftFun: (hydra.core.Term => Either[hydra.errors.Error, T0]))(rightFun: (hydra.core.Term => Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    T1]))(graph: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.errors.Error,
    Either[T0, T1]] =
   hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, Either[T0, T1]](hydra.lexical.stripAndDereferenceTerm(graph)(term0))((term: hydra.core.Term) =>
@@ -167,6 +349,20 @@ def eitherTerm[T0, T1](leftFun: (hydra.core.Term => Either[hydra.errors.Error, T
     hydra.lib.eithers.map[T0, Either[T0, T1], hydra.errors.Error]((x: T0) => Left(x))(leftFun(l)))((r: hydra.core.Term) =>
     hydra.lib.eithers.map[T1, Either[T0, T1], hydra.errors.Error]((x: T1) => Right(x))(rightFun(r)))(v_Term_either_et)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("either value",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.term(term))))))
 
 def eitherType(typ: hydra.core.Type): Either[hydra.errors.Error, hydra.core.EitherType] =
@@ -175,6 +371,20 @@ def eitherType(typ: hydra.core.Type): Either[hydra.errors.Error, hydra.core.Eith
   stripped match
     case hydra.core.Type.either(v_Type_either_et) => Right(v_Type_either_et)
     case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("either type",
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.show.core.`type`(typ)))))
 }
 
@@ -185,11 +395,67 @@ def field[T0](fname: hydra.core.Name)(mapping: (hydra.core.Term => Either[hydra.
   lazy val matchingFields: Seq[hydra.core.Field] = hydra.lib.lists.filter[hydra.core.Field]((f: hydra.core.Field) => hydra.lib.equality.equal[scala.Predef.String](f.name)(fname))(fields)
   def noMatchErr[T1]: Either[hydra.errors.Error, T1] =
     Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2("field ")(fname),
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        "no matching field"))))
   hydra.lib.logic.ifElse[Either[hydra.errors.Error, T0]](hydra.lib.lists.`null`[hydra.core.Field](matchingFields))(noMatchErr)(hydra.lib.logic.ifElse[Either[hydra.errors.Error,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      T0]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Field](matchingFields))(1))(hydra.lib.maybes.maybe[Either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      T0], hydra.core.Field](noMatchErr)((mf: hydra.core.Field) =>
     hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, T0](hydra.lexical.stripAndDereferenceTerm(graph)(mf.term))((stripped: hydra.core.Term) => mapping(stripped)))(hydra.lib.lists.maybeHead[hydra.core.Field](matchingFields)))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("single field",
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.lib.strings.cat2("multiple fields named ")(fname)))))))
 }
 
@@ -201,6 +467,20 @@ def float32Value(v: hydra.core.FloatValue): Either[hydra.errors.Error, Float] =
   v match
   case hydra.core.FloatValue.float32(v_FloatValue_float32_f) => Right(v_FloatValue_float32_f)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("float32",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.float(v)))))
 
 def float64(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.errors.Error, Double] =
@@ -211,12 +491,40 @@ def float64Value(v: hydra.core.FloatValue): Either[hydra.errors.Error, Double] =
   v match
   case hydra.core.FloatValue.float64(v_FloatValue_float64_f) => Right(v_FloatValue_float64_f)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("float64",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.float(v)))))
 
 def floatLiteral(lit: hydra.core.Literal): Either[hydra.errors.Error, hydra.core.FloatValue] =
   lit match
   case hydra.core.Literal.float(v_Literal_float_v) => Right(v_Literal_float_v)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("floating-point value",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.literal(lit)))))
 
 def floatValue(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.errors.Error, hydra.core.FloatValue] =
@@ -228,6 +536,20 @@ def functionType(typ: hydra.core.Type): Either[hydra.errors.Error, hydra.core.Fu
   stripped match
     case hydra.core.Type.function(v_Type_function_ft) => Right(v_Type_function_ft)
     case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("function type",
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.show.core.`type`(typ)))))
 }
 
@@ -237,8 +559,36 @@ def injection(expected: hydra.core.Name)(graph: hydra.graph.Graph)(term0: hydra.
   term match
   case hydra.core.Term.inject(v_Term_inject_injection) => hydra.lib.logic.ifElse[Either[hydra.errors.Error,
      hydra.core.Field]](hydra.lib.equality.equal[scala.Predef.String](v_Term_inject_injection.typeName)(expected))(Right(v_Term_inject_injection.field))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2("injection of type ")(expected),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      (v_Term_inject_injection.typeName))))))
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("injection",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.term(term))))))
 
 def int16(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.errors.Error, Short] =
@@ -249,6 +599,20 @@ def int16Value(v: hydra.core.IntegerValue): Either[hydra.errors.Error, Short] =
   v match
   case hydra.core.IntegerValue.int16(v_IntegerValue_int16_i) => Right(v_IntegerValue_int16_i)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("int16",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.integer(v)))))
 
 def int32(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.errors.Error, Int] =
@@ -259,6 +623,20 @@ def int32Value(v: hydra.core.IntegerValue): Either[hydra.errors.Error, Int] =
   v match
   case hydra.core.IntegerValue.int32(v_IntegerValue_int32_i) => Right(v_IntegerValue_int32_i)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("int32",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.integer(v)))))
 
 def int64(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.errors.Error, Long] =
@@ -269,6 +647,20 @@ def int64Value(v: hydra.core.IntegerValue): Either[hydra.errors.Error, Long] =
   v match
   case hydra.core.IntegerValue.int64(v_IntegerValue_int64_i) => Right(v_IntegerValue_int64_i)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("int64",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.integer(v)))))
 
 def int8(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.errors.Error, Byte] =
@@ -279,12 +671,40 @@ def int8Value(v: hydra.core.IntegerValue): Either[hydra.errors.Error, Byte] =
   v match
   case hydra.core.IntegerValue.int8(v_IntegerValue_int8_i) => Right(v_IntegerValue_int8_i)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("int8",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.integer(v)))))
 
 def integerLiteral(lit: hydra.core.Literal): Either[hydra.errors.Error, hydra.core.IntegerValue] =
   lit match
   case hydra.core.Literal.integer(v_Literal_integer_v) => Right(v_Literal_integer_v)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("integer value",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.literal(lit)))))
 
 def integerValue(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.errors.Error, hydra.core.IntegerValue] =
@@ -295,6 +715,20 @@ def lambda(graph: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.error
   term match
   case hydra.core.Term.lambda(v_Term_lambda_l) => Right(v_Term_lambda_l)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("lambda",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.term(term))))))
 
 def lambdaBody(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.Error, hydra.core.Term] =
@@ -305,6 +739,20 @@ def let(graph: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.errors.E
   term match
   case hydra.core.Term.let(v_Term_let_lt) => Right(v_Term_let_lt)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("let term",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.term(term))))))
 
 def letBinding(n: scala.Predef.String)(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.Error,
@@ -318,7 +766,35 @@ def letBinding(n: scala.Predef.String)(graph: hydra.graph.Graph)(term: hydra.cor
       def noBindingErr[T0]: Either[hydra.errors.Error, T0] =
         Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.noSuchBinding(hydra.errors.NoSuchBindingError(name))))
       hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.Term]](hydra.lib.lists.`null`[hydra.core.Binding](matchingBindings))(noBindingErr)(hydra.lib.logic.ifElse[Either[hydra.errors.Error,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.core.Term]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Binding](matchingBindings))(1))(hydra.lib.maybes.maybe[Either[hydra.errors.Error,
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          hydra.core.Term], hydra.core.Binding](noBindingErr)((b: hydra.core.Binding) => Right(b.term))(hydra.lib.lists.maybeHead[hydra.core.Binding](matchingBindings)))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.multipleBindings(hydra.errors.MultipleBindingsError(name))))))
     }
   })
@@ -329,14 +805,56 @@ def list(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.E
   stripped match
   case hydra.core.Term.list(v_Term_list_l) => Right(v_Term_list_l)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("list",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.term(stripped))))))
 
 def listHead(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.Error, hydra.core.Term] =
   hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.Term], hydra.core.Term](hydra.extract.core.list(graph)(term))((l: Seq[hydra.core.Term]) =>
   hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.core.Term], hydra.core.Term](Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("non-empty list",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      "empty list")))))((h: hydra.core.Term) => Right(h))(hydra.lib.lists.maybeHead[hydra.core.Term](l)))
 
 def listOf[T0](f: (hydra.core.Term => Either[hydra.errors.Error, T0]))(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    Seq[T0]] =
   hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.Term], Seq[T0]](hydra.extract.core.list(graph)(term))((els: Seq[hydra.core.Term]) =>
   hydra.lib.eithers.mapList[hydra.core.Term, T0, hydra.errors.Error](f)(els))
@@ -347,6 +865,20 @@ def listType(typ: hydra.core.Type): Either[hydra.errors.Error, hydra.core.Type] 
   stripped match
     case hydra.core.Type.list(v_Type_list_t) => Right(v_Type_list_t)
     case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("list type",
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.show.core.`type`(typ)))))
 }
 
@@ -355,9 +887,37 @@ def literal(graph: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.erro
   term match
   case hydra.core.Term.literal(v_Term_literal_lit) => Right(v_Term_literal_lit)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("literal",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.term(term))))))
 
 def map[T0, T1](fk: (hydra.core.Term => Either[hydra.errors.Error, T0]))(fv: (hydra.core.Term => Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    T1]))(graph: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.errors.Error,
    Map[T0, T1]] =
   {
@@ -373,9 +933,37 @@ def map[T0, T1](fk: (hydra.core.Term => Either[hydra.errors.Error, T0]))(fv: (hy
     term match
     case hydra.core.Term.map(v_Term_map_m) => hydra.lib.eithers.map[Seq[Tuple2[T0,
        T1]], Map[T0, T1], hydra.errors.Error](hydra.lib.maps.fromList[T0, T1])(hydra.lib.eithers.mapList[Tuple2[hydra.core.Term,
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        hydra.core.Term], Tuple2[T0, T1], hydra.errors.Error](pair)(hydra.lib.maps.toList[hydra.core.Term,
        hydra.core.Term](v_Term_map_m)))
     case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("map",
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.show.core.term(term))))))
 }
 
@@ -385,10 +973,38 @@ def mapType(typ: hydra.core.Type): Either[hydra.errors.Error, hydra.core.MapType
   stripped match
     case hydra.core.Type.map(v_Type_map_mt) => Right(v_Type_map_mt)
     case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("map type",
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.show.core.`type`(typ)))))
 }
 
 def maybeTerm[T0](f: (hydra.core.Term => Either[hydra.errors.Error, T0]))(graph: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    Option[T0]] =
   hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, Option[T0]](hydra.lexical.stripAndDereferenceTerm(graph)(term0))((term: hydra.core.Term) =>
   term match
@@ -396,6 +1012,20 @@ def maybeTerm[T0](f: (hydra.core.Term => Either[hydra.errors.Error, T0]))(graph:
      Option[T0]], hydra.core.Term](Right(None))((t: hydra.core.Term) =>
     hydra.lib.eithers.map[T0, Option[T0], hydra.errors.Error](hydra.lib.maybes.pure[T0])(f(t)))(v_Term_maybe_mt)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("maybe value",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.term(term))))))
 
 def maybeType(typ: hydra.core.Type): Either[hydra.errors.Error, hydra.core.Type] =
@@ -404,14 +1034,56 @@ def maybeType(typ: hydra.core.Type): Either[hydra.errors.Error, hydra.core.Type]
   stripped match
     case hydra.core.Type.maybe(v_Type_maybe_t) => Right(v_Type_maybe_t)
     case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("maybe type",
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.show.core.`type`(typ)))))
 }
 
 def nArgs[T0](name: hydra.core.Name)(n: Int)(args: Seq[T0]): Either[hydra.errors.Error, Unit] =
   hydra.lib.logic.ifElse[Either[hydra.errors.Error, Unit]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[T0](args))(n))(Right(()))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat(Seq(hydra.lib.literals.showInt32(n),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      " arguments to primitive ", hydra.lib.literals.showString(name))), hydra.lib.literals.showInt32(hydra.lib.lists.length[T0](args)))))))
 
 def pair[T0, T1](kf: (hydra.core.Term => Either[hydra.errors.Error, T0]))(vf: (hydra.core.Term => Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    T1]))(graph: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.errors.Error,
    Tuple2[T0, T1]] =
   hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, Tuple2[T0, T1]](hydra.lexical.stripAndDereferenceTerm(graph)(term0))((term: hydra.core.Term) =>
@@ -421,12 +1093,40 @@ def pair[T0, T1](kf: (hydra.core.Term => Either[hydra.errors.Error, T0]))(vf: (h
     hydra.lib.eithers.bind[hydra.errors.Error, T1, Tuple2[T0, T1]](vf(hydra.lib.pairs.second[hydra.core.Term,
        hydra.core.Term](v_Term_pair_p)))((vVal: T1) => Right(Tuple2(kVal, vVal))))
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("pair",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.term(term))))))
 
 def record(expected: hydra.core.Name)(graph: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.errors.Error,
    Seq[hydra.core.Field]] =
   hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Record, Seq[hydra.core.Field]](hydra.extract.core.termRecord(graph)(term0))((record: hydra.core.Record) =>
   hydra.lib.logic.ifElse[Either[hydra.errors.Error, Seq[hydra.core.Field]]](hydra.lib.equality.equal[hydra.core.Name](record.typeName)(expected))(Right(record.fields))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2("record of type ")(expected),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      (record.typeName)))))))
 
 def recordType[T0](ename: T0)(typ: hydra.core.Type): Either[hydra.errors.Error, Seq[hydra.core.FieldType]] =
@@ -435,6 +1135,20 @@ def recordType[T0](ename: T0)(typ: hydra.core.Type): Either[hydra.errors.Error, 
   stripped match
     case hydra.core.Type.record(v_Type_record_fields) => Right(v_Type_record_fields)
     case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("record type",
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.show.core.`type`(typ)))))
 }
 
@@ -451,9 +1165,37 @@ def set(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.Er
   stripped match
   case hydra.core.Term.set(v_Term_set_s) => Right(v_Term_set_s)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("set",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.term(stripped))))))
 
 def setOf[T0](f: (hydra.core.Term => Either[hydra.errors.Error, T0]))(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    scala.collection.immutable.Set[T0]] =
   hydra.lib.eithers.bind[hydra.errors.Error, scala.collection.immutable.Set[hydra.core.Term],
      scala.collection.immutable.Set[T0]](hydra.extract.core.set(graph)(term))((els: scala.collection.immutable.Set[hydra.core.Term]) =>
@@ -465,6 +1207,20 @@ def setType(typ: hydra.core.Type): Either[hydra.errors.Error, hydra.core.Type] =
   stripped match
     case hydra.core.Type.set(v_Type_set_t) => Right(v_Type_set_t)
     case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("set type",
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.show.core.`type`(typ)))))
 }
 
@@ -475,6 +1231,20 @@ def stringLiteral(v: hydra.core.Literal): Either[hydra.errors.Error, scala.Prede
   v match
   case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("string",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.literal(v)))))
 
 def stripWithDecodingError(g: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.DecodingError,
@@ -487,6 +1257,20 @@ def termRecord(graph: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.e
   term match
   case hydra.core.Term.record(v_Term_record_record) => Right(v_Term_record_record)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("record",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.term(term))))))
 
 def toFieldMap(record: hydra.core.Record): Map[hydra.core.Name, hydra.core.Term] =
@@ -502,6 +1286,20 @@ def uint16Value(v: hydra.core.IntegerValue): Either[hydra.errors.Error, Int] =
   v match
   case hydra.core.IntegerValue.uint16(v_IntegerValue_uint16_i) => Right(v_IntegerValue_uint16_i)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("uint16",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.integer(v)))))
 
 def uint32(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.errors.Error, Long] =
@@ -512,6 +1310,20 @@ def uint32Value(v: hydra.core.IntegerValue): Either[hydra.errors.Error, Long] =
   v match
   case hydra.core.IntegerValue.uint32(v_IntegerValue_uint32_i) => Right(v_IntegerValue_uint32_i)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("uint32",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.integer(v)))))
 
 def uint64(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.errors.Error, BigInt] =
@@ -522,6 +1334,20 @@ def uint64Value(v: hydra.core.IntegerValue): Either[hydra.errors.Error, BigInt] 
   v match
   case hydra.core.IntegerValue.uint64(v_IntegerValue_uint64_i) => Right(v_IntegerValue_uint64_i)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("uint64",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.integer(v)))))
 
 def uint8(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.errors.Error, Byte] =
@@ -532,6 +1358,20 @@ def uint8Value(v: hydra.core.IntegerValue): Either[hydra.errors.Error, Byte] =
   v match
   case hydra.core.IntegerValue.uint8(v_IntegerValue_uint8_i) => Right(v_IntegerValue_uint8_i)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("uint8",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.integer(v)))))
 
 def unionType[T0](ename: T0)(typ: hydra.core.Type): Either[hydra.errors.Error, Seq[hydra.core.FieldType]] =
@@ -540,6 +1380,20 @@ def unionType[T0](ename: T0)(typ: hydra.core.Type): Either[hydra.errors.Error, S
   stripped match
     case hydra.core.Type.union(v_Type_union_fields) => Right(v_Type_union_fields)
     case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("union type",
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.show.core.`type`(typ)))))
 }
 
@@ -547,6 +1401,20 @@ def unit(term: hydra.core.Term): Either[hydra.errors.Error, Unit] =
   term match
   case hydra.core.Term.unit => Right(())
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("unit",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.term(term)))))
 
 def unitVariant(tname: hydra.core.Name)(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.Error,
@@ -560,8 +1428,36 @@ def wrap(expected: hydra.core.Name)(graph: hydra.graph.Graph)(term0: hydra.core.
   term match
   case hydra.core.Term.wrap(v_Term_wrap_wrappedTerm) => hydra.lib.logic.ifElse[Either[hydra.errors.Error,
      hydra.core.Term]](hydra.lib.equality.equal[scala.Predef.String](v_Term_wrap_wrappedTerm.typeName)(expected))(Right(v_Term_wrap_wrappedTerm.body))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2("wrapper of type ")(expected),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      (v_Term_wrap_wrappedTerm.typeName))))))
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2(hydra.lib.strings.cat2("wrap(")(expected))(")"),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.show.core.term(term))))))
 
 def wrappedType[T0](ename: T0)(typ: hydra.core.Type): Either[hydra.errors.Error, hydra.core.Type] =
@@ -570,5 +1466,19 @@ def wrappedType[T0](ename: T0)(typ: hydra.core.Type): Either[hydra.errors.Error,
   stripped match
     case hydra.core.Type.wrap(v_Type_wrap_innerType) => Right(v_Type_wrap_innerType)
     case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("wrapped type",
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.show.core.`type`(typ)))))
 }

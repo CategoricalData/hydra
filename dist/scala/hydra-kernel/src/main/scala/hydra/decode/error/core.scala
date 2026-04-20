@@ -213,81 +213,403 @@ def invalidTermError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.error.core.InvalidTermError])] = hydra.lib.maps.fromList[hydra.core.Name,
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.error.core.InvalidTermError]](Seq(Tuple2("constantCondition",
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.ConstantConditionError, hydra.error.core.InvalidTermError,
          hydra.errors.DecodingError]((t: hydra.error.core.ConstantConditionError) => hydra.error.core.InvalidTermError.constantCondition(t))(hydra.decode.error.core.constantConditionError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("duplicateBinding", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.DuplicateBindingError, hydra.error.core.InvalidTermError,
          hydra.errors.DecodingError]((t: hydra.error.core.DuplicateBindingError) => hydra.error.core.InvalidTermError.duplicateBinding(t))(hydra.decode.error.core.duplicateBindingError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("duplicateField", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.DuplicateFieldError, hydra.error.core.InvalidTermError,
          hydra.errors.DecodingError]((t: hydra.error.core.DuplicateFieldError) => hydra.error.core.InvalidTermError.duplicateField(t))(hydra.decode.error.core.duplicateFieldError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("emptyCaseStatement", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.EmptyCaseStatementError, hydra.error.core.InvalidTermError,
          hydra.errors.DecodingError]((t: hydra.error.core.EmptyCaseStatementError) => hydra.error.core.InvalidTermError.emptyCaseStatement(t))(hydra.decode.error.core.emptyCaseStatementError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("emptyLetBindings", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.EmptyLetBindingsError, hydra.error.core.InvalidTermError,
          hydra.errors.DecodingError]((t: hydra.error.core.EmptyLetBindingsError) => hydra.error.core.InvalidTermError.emptyLetBindings(t))(hydra.decode.error.core.emptyLetBindingsError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("emptyTermAnnotation", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.EmptyTermAnnotationError, hydra.error.core.InvalidTermError,
          hydra.errors.DecodingError]((t: hydra.error.core.EmptyTermAnnotationError) => hydra.error.core.InvalidTermError.emptyTermAnnotation(t))(hydra.decode.error.core.emptyTermAnnotationError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("emptyTypeNameInTerm", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.EmptyTypeNameInTermError, hydra.error.core.InvalidTermError,
          hydra.errors.DecodingError]((t: hydra.error.core.EmptyTypeNameInTermError) => hydra.error.core.InvalidTermError.emptyTypeNameInTerm(t))(hydra.decode.error.core.emptyTypeNameInTermError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("invalidLambdaParameterName", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.InvalidLambdaParameterNameError, hydra.error.core.InvalidTermError,
          hydra.errors.DecodingError]((t: hydra.error.core.InvalidLambdaParameterNameError) =>
       hydra.error.core.InvalidTermError.invalidLambdaParameterName(t))(hydra.decode.error.core.invalidLambdaParameterNameError(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("invalidLetBindingName", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.InvalidLetBindingNameError, hydra.error.core.InvalidTermError,
          hydra.errors.DecodingError]((t: hydra.error.core.InvalidLetBindingNameError) => hydra.error.core.InvalidTermError.invalidLetBindingName(t))(hydra.decode.error.core.invalidLetBindingNameError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("invalidTypeLambdaParameterName", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.InvalidTypeLambdaParameterNameError,
          hydra.error.core.InvalidTermError, hydra.errors.DecodingError]((t: hydra.error.core.InvalidTypeLambdaParameterNameError) =>
       hydra.error.core.InvalidTermError.invalidTypeLambdaParameterName(t))(hydra.decode.error.core.invalidTypeLambdaParameterNameError(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("nestedTermAnnotation", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.NestedTermAnnotationError, hydra.error.core.InvalidTermError,
          hydra.errors.DecodingError]((t: hydra.error.core.NestedTermAnnotationError) => hydra.error.core.InvalidTermError.nestedTermAnnotation(t))(hydra.decode.error.core.nestedTermAnnotationError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("redundantWrapUnwrap", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.RedundantWrapUnwrapError, hydra.error.core.InvalidTermError,
          hydra.errors.DecodingError]((t: hydra.error.core.RedundantWrapUnwrapError) => hydra.error.core.InvalidTermError.redundantWrapUnwrap(t))(hydra.decode.error.core.redundantWrapUnwrapError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("selfApplication", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.SelfApplicationError, hydra.error.core.InvalidTermError,
          hydra.errors.DecodingError]((t: hydra.error.core.SelfApplicationError) => hydra.error.core.InvalidTermError.selfApplication(t))(hydra.decode.error.core.selfApplicationError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("termVariableShadowing", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.TermVariableShadowingError, hydra.error.core.InvalidTermError,
          hydra.errors.DecodingError]((t: hydra.error.core.TermVariableShadowingError) => hydra.error.core.InvalidTermError.termVariableShadowing(t))(hydra.decode.error.core.termVariableShadowingError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("typeVariableShadowingInTypeLambda", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.TypeVariableShadowingInTypeLambdaError,
          hydra.error.core.InvalidTermError, hydra.errors.DecodingError]((t: hydra.error.core.TypeVariableShadowingInTypeLambdaError) =>
       hydra.error.core.InvalidTermError.typeVariableShadowingInTypeLambda(t))(hydra.decode.error.core.typeVariableShadowingInTypeLambdaError(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("undefinedTermVariable", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.UndefinedTermVariableError, hydra.error.core.InvalidTermError,
          hydra.errors.DecodingError]((t: hydra.error.core.UndefinedTermVariableError) => hydra.error.core.InvalidTermError.undefinedTermVariable(t))(hydra.decode.error.core.undefinedTermVariableError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("undefinedTypeVariableInBindingType", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.UndefinedTypeVariableInBindingTypeError,
          hydra.error.core.InvalidTermError, hydra.errors.DecodingError]((t: hydra.error.core.UndefinedTypeVariableInBindingTypeError) =>
       hydra.error.core.InvalidTermError.undefinedTypeVariableInBindingType(t))(hydra.decode.error.core.undefinedTypeVariableInBindingTypeError(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("undefinedTypeVariableInLambdaDomain", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.UndefinedTypeVariableInLambdaDomainError,
          hydra.error.core.InvalidTermError, hydra.errors.DecodingError]((t: hydra.error.core.UndefinedTypeVariableInLambdaDomainError) =>
       hydra.error.core.InvalidTermError.undefinedTypeVariableInLambdaDomain(t))(hydra.decode.error.core.undefinedTypeVariableInLambdaDomainError(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("undefinedTypeVariableInTypeApplication", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.UndefinedTypeVariableInTypeApplicationError,
          hydra.error.core.InvalidTermError, hydra.errors.DecodingError]((t: hydra.error.core.UndefinedTypeVariableInTypeApplicationError) =>
       hydra.error.core.InvalidTermError.undefinedTypeVariableInTypeApplication(t))(hydra.decode.error.core.undefinedTypeVariableInTypeApplicationError(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("unknownPrimitiveName", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.UnknownPrimitiveNameError, hydra.error.core.InvalidTermError,
          hydra.errors.DecodingError]((t: hydra.error.core.UnknownPrimitiveNameError) => hydra.error.core.InvalidTermError.unknownPrimitiveName(t))(hydra.decode.error.core.unknownPrimitiveNameError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("unnecessaryIdentityApplication", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.UnnecessaryIdentityApplicationError,
          hydra.error.core.InvalidTermError, hydra.errors.DecodingError]((t: hydra.error.core.UnnecessaryIdentityApplicationError) =>
       hydra.error.core.InvalidTermError.unnecessaryIdentityApplication(t))(hydra.decode.error.core.unnecessaryIdentityApplicationError(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("untypedTermVariable", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.UntypedTermVariableError, hydra.error.core.InvalidTermError,
          hydra.errors.DecodingError]((t: hydra.error.core.UntypedTermVariableError) => hydra.error.core.InvalidTermError.untypedTermVariable(t))(hydra.decode.error.core.untypedTermVariableError(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.error.core.InvalidTermError],
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.error.core.InvalidTermError]](Left(hydra.lib.strings.cat(Seq("no such field ",
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.error.core.InvalidTermError])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name,
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.error.core.InvalidTermError]](fname)(variantMap))
@@ -306,56 +628,266 @@ def invalidTypeError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.error.core.InvalidTypeError])] = hydra.lib.maps.fromList[hydra.core.Name,
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.error.core.InvalidTypeError]](Seq(Tuple2("duplicateRecordTypeFieldNames",
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.DuplicateRecordTypeFieldNamesError, hydra.error.core.InvalidTypeError,
          hydra.errors.DecodingError]((t: hydra.error.core.DuplicateRecordTypeFieldNamesError) =>
       hydra.error.core.InvalidTypeError.duplicateRecordTypeFieldNames(t))(hydra.decode.error.core.duplicateRecordTypeFieldNamesError(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("duplicateUnionTypeFieldNames", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.DuplicateUnionTypeFieldNamesError, hydra.error.core.InvalidTypeError,
          hydra.errors.DecodingError]((t: hydra.error.core.DuplicateUnionTypeFieldNamesError) =>
       hydra.error.core.InvalidTypeError.duplicateUnionTypeFieldNames(t))(hydra.decode.error.core.duplicateUnionTypeFieldNamesError(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("emptyRecordType", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.EmptyRecordTypeError, hydra.error.core.InvalidTypeError,
          hydra.errors.DecodingError]((t: hydra.error.core.EmptyRecordTypeError) => hydra.error.core.InvalidTypeError.emptyRecordType(t))(hydra.decode.error.core.emptyRecordTypeError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("emptyTypeAnnotation", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.EmptyTypeAnnotationError, hydra.error.core.InvalidTypeError,
          hydra.errors.DecodingError]((t: hydra.error.core.EmptyTypeAnnotationError) => hydra.error.core.InvalidTypeError.emptyTypeAnnotation(t))(hydra.decode.error.core.emptyTypeAnnotationError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("emptyUnionType", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.EmptyUnionTypeError, hydra.error.core.InvalidTypeError,
          hydra.errors.DecodingError]((t: hydra.error.core.EmptyUnionTypeError) => hydra.error.core.InvalidTypeError.emptyUnionType(t))(hydra.decode.error.core.emptyUnionTypeError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("invalidForallParameterName", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.InvalidForallParameterNameError, hydra.error.core.InvalidTypeError,
          hydra.errors.DecodingError]((t: hydra.error.core.InvalidForallParameterNameError) =>
       hydra.error.core.InvalidTypeError.invalidForallParameterName(t))(hydra.decode.error.core.invalidForallParameterNameError(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("invalidTypeSchemeVariableName", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.InvalidTypeSchemeVariableNameError, hydra.error.core.InvalidTypeError,
          hydra.errors.DecodingError]((t: hydra.error.core.InvalidTypeSchemeVariableNameError) =>
       hydra.error.core.InvalidTypeError.invalidTypeSchemeVariableName(t))(hydra.decode.error.core.invalidTypeSchemeVariableNameError(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("nestedTypeAnnotation", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.NestedTypeAnnotationError, hydra.error.core.InvalidTypeError,
          hydra.errors.DecodingError]((t: hydra.error.core.NestedTypeAnnotationError) => hydra.error.core.InvalidTypeError.nestedTypeAnnotation(t))(hydra.decode.error.core.nestedTypeAnnotationError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("nonComparableMapKeyType", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.NonComparableMapKeyTypeError, hydra.error.core.InvalidTypeError,
          hydra.errors.DecodingError]((t: hydra.error.core.NonComparableMapKeyTypeError) => hydra.error.core.InvalidTypeError.nonComparableMapKeyType(t))(hydra.decode.error.core.nonComparableMapKeyTypeError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("nonComparableSetElementType", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.NonComparableSetElementTypeError, hydra.error.core.InvalidTypeError,
          hydra.errors.DecodingError]((t: hydra.error.core.NonComparableSetElementTypeError) =>
       hydra.error.core.InvalidTypeError.nonComparableSetElementType(t))(hydra.decode.error.core.nonComparableSetElementTypeError(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("singleVariantUnion", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.SingleVariantUnionError, hydra.error.core.InvalidTypeError,
          hydra.errors.DecodingError]((t: hydra.error.core.SingleVariantUnionError) => hydra.error.core.InvalidTypeError.singleVariantUnion(t))(hydra.decode.error.core.singleVariantUnionError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("typeVariableShadowingInForall", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.TypeVariableShadowingInForallError, hydra.error.core.InvalidTypeError,
          hydra.errors.DecodingError]((t: hydra.error.core.TypeVariableShadowingInForallError) =>
       hydra.error.core.InvalidTypeError.typeVariableShadowingInForall(t))(hydra.decode.error.core.typeVariableShadowingInForallError(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("undefinedTypeVariable", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.UndefinedTypeVariableError, hydra.error.core.InvalidTypeError,
          hydra.errors.DecodingError]((t: hydra.error.core.UndefinedTypeVariableError) => hydra.error.core.InvalidTypeError.undefinedTypeVariable(t))(hydra.decode.error.core.undefinedTypeVariableError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("voidInNonBottomPosition", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.core.VoidInNonBottomPositionError, hydra.error.core.InvalidTypeError,
          hydra.errors.DecodingError]((t: hydra.error.core.VoidInNonBottomPositionError) => hydra.error.core.InvalidTypeError.voidInNonBottomPosition(t))(hydra.decode.error.core.voidInNonBottomPositionError(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.error.core.InvalidTypeError],
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.error.core.InvalidTypeError]](Left(hydra.lib.strings.cat(Seq("no such field ",
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.error.core.InvalidTypeError])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name,
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.error.core.InvalidTypeError]](fname)(variantMap))
@@ -504,6 +1036,20 @@ def typeVariableShadowingInForallError(cx: hydra.graph.Graph)(raw: hydra.core.Te
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
 def typeVariableShadowingInTypeLambdaError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    hydra.error.core.TypeVariableShadowingInTypeLambdaError] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.error.core.TypeVariableShadowingInTypeLambdaError]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
@@ -556,6 +1102,20 @@ def undefinedTypeVariableError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Eit
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
 def undefinedTypeVariableInBindingTypeError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    hydra.error.core.UndefinedTypeVariableInBindingTypeError] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.error.core.UndefinedTypeVariableInBindingTypeError]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
@@ -569,6 +1129,20 @@ def undefinedTypeVariableInBindingTypeError(cx: hydra.graph.Graph)(raw: hydra.co
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
 def undefinedTypeVariableInLambdaDomainError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    hydra.error.core.UndefinedTypeVariableInLambdaDomainError] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.error.core.UndefinedTypeVariableInLambdaDomainError]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
@@ -582,6 +1156,20 @@ def undefinedTypeVariableInLambdaDomainError(cx: hydra.graph.Graph)(raw: hydra.c
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
 def undefinedTypeVariableInTypeApplicationError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    hydra.error.core.UndefinedTypeVariableInTypeApplicationError] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.error.core.UndefinedTypeVariableInTypeApplicationError]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>

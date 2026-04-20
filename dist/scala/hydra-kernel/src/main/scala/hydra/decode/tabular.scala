@@ -16,6 +16,20 @@ def columnType(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors
     hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.relational.ColumnName,
        hydra.tabular.ColumnType](hydra.extract.core.requireField("name")(hydra.decode.relational.columnName)(fieldMap)(cx))((field_name: hydra.relational.ColumnName) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Type, hydra.tabular.ColumnType](hydra.extract.core.requireField("type")(hydra.decode.core.`type`)(fieldMap)(cx))((field_type: hydra.core.Type) => Right(hydra.tabular.ColumnType(field_name,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          field_type))))
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
@@ -65,6 +79,20 @@ def table[T0](v: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.De
       (v2: hydra.core.Term) =>
       hydra.extract.core.decodeList((v12: hydra.graph.Graph) =>
       (v22: hydra.core.Term) => hydra.decode.tabular.dataRow(v)(v12)(v22))(v1)(v2))(fieldMap)(cx))((field_data: Seq[hydra.tabular.DataRow[T0]]) => Right(hydra.tabular.Table(field_header,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          field_data))))
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
@@ -82,6 +110,20 @@ def tableType(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.
          hydra.tabular.TableType](hydra.extract.core.requireField("columns")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.core.decodeList(hydra.decode.tabular.columnType)(v1)(v2))(fieldMap)(cx))((field_columns: Seq[hydra.tabular.ColumnType]) => Right(hydra.tabular.TableType(field_name,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          field_columns))))
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
