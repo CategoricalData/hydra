@@ -39,6 +39,20 @@ def printJson(value: hydra.json.model.Value): scala.Predef.String = hydra.serial
 def valueToExpr(value: hydra.json.model.Value): hydra.ast.Expr =
   value match
   case hydra.json.model.Value.array(v_Value_array_arr) => hydra.serialization.bracketListAdaptive(hydra.lib.lists.map[hydra.json.model.Value,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.ast.Expr](hydra.json.writer.valueToExpr)(v_Value_array_arr))
   case hydra.json.model.Value.boolean(v_Value_boolean_b) => hydra.serialization.cst(hydra.lib.logic.ifElse[scala.Predef.String](v_Value_boolean_b)("true")("false"))
   case hydra.json.model.Value.`null` => hydra.serialization.cst("null")
@@ -56,6 +70,34 @@ def valueToExpr(value: hydra.json.model.Value): hydra.ast.Expr =
     }
   }
   case hydra.json.model.Value.`object`(v_Value_object_obj) => hydra.serialization.bracesListAdaptive(hydra.lib.lists.map[Tuple2[scala.Predef.String,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.json.model.Value], hydra.ast.Expr](hydra.json.writer.keyValueToExpr)(hydra.lib.maps.toList[scala.Predef.String,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.json.model.Value](v_Value_object_obj)))
   case hydra.json.model.Value.string(v_Value_string_s) => hydra.serialization.cst(hydra.json.writer.jsonString(v_Value_string_s))

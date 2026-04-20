@@ -12,18 +12,130 @@ lazy val annotatedTermsTests: hydra.testing.TestGroup = hydra.testing.TestGroup(
    hydra.test.checking.advanced.annotationsInComplexContextsTests), Seq())
 
 lazy val annotationsInComplexContextsTests: hydra.testing.TestGroup = hydra.testing.TestGroup("Annotations in complex contexts",
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("annotated let binding", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
    scala.Predef.String]((e: hydra.errors.Error) => "<<inference error>>")((result: Tuple2[Tuple2[hydra.core.Term,
    hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.show.core.`type`(hydra.scoping.typeSchemeToFType(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(5))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Map())), None), hydra.core.Binding("y", hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.string("world")),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Map())), None)), hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.pair(Tuple2(hydra.core.Term.variable("x"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("y"))), Map())))))), hydra.show.core.`type`(hydra.core.Type.pair(hydra.core.PairType(hydra.core.Type.literal(hydra.core.LiteralType.integer(hydra.core.IntegerType.int32)),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Type.literal(hydra.core.LiteralType.string)))))), None, Seq()), hydra.testing.TestCaseWithMetadata("annotated record fields",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "<<inference error>>")((result: Tuple2[Tuple2[hydra.core.Term,
@@ -31,9 +143,65 @@ lazy val annotationsInComplexContextsTests: hydra.testing.TestGroup = hydra.test
   hydra.show.core.`type`(hydra.scoping.typeSchemeToFType(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.record(hydra.core.Record(hydra.test.testTypes.testTypePersonName,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Seq(hydra.core.Field("firstName", hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.string("Alice")),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Map()))), hydra.core.Field("lastName", hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.string("Smith")),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Map()))), hydra.core.Field("age", hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(30))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Map())))))))), hydra.show.core.`type`(hydra.core.Type.variable(hydra.test.testTypes.testTypePersonName)))),
      None, Seq()), hydra.testing.TestCaseWithMetadata("annotated function in application",
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
@@ -43,11 +211,81 @@ lazy val annotationsInComplexContextsTests: hydra.testing.TestGroup = hydra.test
   hydra.show.core.`type`(hydra.scoping.typeSchemeToFType(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("add",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.variable("hydra.lib.math.add"),
      Map())), None)), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("add"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(10))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Map())))), hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(20))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Map())))))))), hydra.show.core.`type`(hydra.core.Type.literal(hydra.core.LiteralType.integer(hydra.core.IntegerType.int32))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, Seq())))
 
 lazy val nestedAnnotationsTests: hydra.testing.TestGroup = hydra.testing.TestGroup("Nested annotations",
@@ -59,7 +297,35 @@ lazy val nestedAnnotationsTests: hydra.testing.TestGroup = hydra.testing.TestGro
   hydra.show.core.`type`(hydra.scoping.typeSchemeToFType(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(100))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Map())), Map())))), hydra.show.core.`type`(hydra.core.Type.literal(hydra.core.LiteralType.integer(hydra.core.IntegerType.int32))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, Seq()), hydra.testing.TestCaseWithMetadata("annotated terms in tuple",
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
@@ -68,9 +334,65 @@ lazy val nestedAnnotationsTests: hydra.testing.TestGroup = hydra.testing.TestGro
   hydra.show.core.`type`(hydra.scoping.typeSchemeToFType(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.pair(Tuple2(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(1))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Map())), hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.string("hello")),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Map())))))), hydra.show.core.`type`(hydra.core.Type.pair(hydra.core.PairType(hydra.core.Type.literal(hydra.core.LiteralType.integer(hydra.core.IntegerType.int32)),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Type.literal(hydra.core.LiteralType.string)))))), None, Seq()), hydra.testing.TestCaseWithMetadata("annotated term in function application",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "<<inference error>>")((result: Tuple2[Tuple2[hydra.core.Term,
@@ -78,45 +400,241 @@ lazy val nestedAnnotationsTests: hydra.testing.TestGroup = hydra.testing.TestGro
   hydra.show.core.`type`(hydra.scoping.typeSchemeToFType(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.lambda(hydra.core.Lambda("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, hydra.core.Term.variable("x"))), Map())), hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Map())))))), hydra.show.core.`type`(hydra.core.Type.literal(hydra.core.LiteralType.integer(hydra.core.IntegerType.int32))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, Seq())))
 
 lazy val topLevelAnnotationsTests: hydra.testing.TestGroup = hydra.testing.TestGroup("Top-level annotations",
    None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("annotated literal", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
    scala.Predef.String]((e: hydra.errors.Error) => "<<inference error>>")((result: Tuple2[Tuple2[hydra.core.Term,
    hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.show.core.`type`(hydra.scoping.typeSchemeToFType(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(42))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Map())))), hydra.show.core.`type`(hydra.core.Type.literal(hydra.core.LiteralType.integer(hydra.core.IntegerType.int32))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, Seq()), hydra.testing.TestCaseWithMetadata("annotated list", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "<<inference error>>")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.show.core.`type`(hydra.scoping.typeSchemeToFType(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.string("a")),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.literal(hydra.core.Literal.string("b")))), Map())))), hydra.show.core.`type`(hydra.core.Type.list(hydra.core.Type.literal(hydra.core.LiteralType.string))))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, Seq()), hydra.testing.TestCaseWithMetadata("annotated record", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "<<inference error>>")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.show.core.`type`(hydra.scoping.typeSchemeToFType(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.record(hydra.core.Record(hydra.test.testTypes.testTypePersonName,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Seq(hydra.core.Field("firstName", hydra.core.Term.literal(hydra.core.Literal.string("John"))),
      hydra.core.Field("lastName", hydra.core.Term.literal(hydra.core.Literal.string("Doe"))),
      hydra.core.Field("age", hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(25))))))),
      Map())))), hydra.show.core.`type`(hydra.core.Type.variable(hydra.test.testTypes.testTypePersonName)))),
      None, Seq()), hydra.testing.TestCaseWithMetadata("annotated lambda", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context],
      scala.Predef.String]((e: hydra.errors.Error) => "<<inference error>>")((result: Tuple2[Tuple2[hydra.core.Term,
      hydra.core.TypeScheme], hydra.context.Context]) =>
   hydra.show.core.`type`(hydra.scoping.typeSchemeToFType(hydra.lib.pairs.second[hydra.core.Term,
      hydra.core.TypeScheme](hydra.lib.pairs.first[Tuple2[hydra.core.Term, hydra.core.TypeScheme],
      hydra.context.Context](result)))))(hydra.inference.inferTypeOf(hydra.test.testGraph.testContext)(hydra.test.testGraph.testGraph)(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.core.Term.lambda(hydra.core.Lambda("x",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      None, hydra.core.Term.variable("x"))), Map())))), hydra.show.core.`type`(hydra.core.Type.forall(hydra.core.ForallType("t0",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.variable("t0"),
      hydra.core.Type.variable("t0")))))))), None, Seq())))

@@ -18,7 +18,35 @@ def associativity(v1: hydra.ast.Associativity): hydra.core.Term =
 def blockStyle(x: hydra.ast.BlockStyle): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.ast.BlockStyle", Seq(hydra.core.Field("indent",
      hydra.core.Term.maybe(hydra.lib.maybes.map[scala.Predef.String, hydra.core.Term]((x2: scala.Predef.String) => hydra.core.Term.literal(hydra.core.Literal.string(x2)))(x.indent))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Field("newlineBeforeContent", hydra.core.Term.literal(hydra.core.Literal.boolean(x.newlineBeforeContent))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Field("newlineAfterContent", hydra.core.Term.literal(hydra.core.Literal.boolean(x.newlineAfterContent))))))
 
 def bracketExpr(x: hydra.ast.BracketExpr): hydra.core.Term =
@@ -46,8 +74,36 @@ def expr(v1: hydra.ast.Expr): hydra.core.Term =
 def indentStyle(v1: hydra.ast.IndentStyle): hydra.core.Term =
   v1 match
   case hydra.ast.IndentStyle.allLines(v_IndentStyle_allLines_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.ast.IndentStyle",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("allLines", hydra.core.Term.literal(hydra.core.Literal.string(v_IndentStyle_allLines_y)))))
   case hydra.ast.IndentStyle.subsequentLines(v_IndentStyle_subsequentLines_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.ast.IndentStyle",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("subsequentLines", hydra.core.Term.literal(hydra.core.Literal.string(v_IndentStyle_subsequentLines_y)))))
 
 def indentedExpression(x: hydra.ast.IndentedExpression): hydra.core.Term =

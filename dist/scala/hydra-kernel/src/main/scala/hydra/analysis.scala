@@ -13,24 +13,94 @@ import hydra.typing.*
 def addNamesToNamespaces[T0](encodeNamespace: (hydra.packaging.Namespace => T0))(names: scala.collection.immutable.Set[hydra.core.Name])(ns0: hydra.packaging.Namespaces[T0]): hydra.packaging.Namespaces[T0] =
   {
   lazy val nss: scala.collection.immutable.Set[hydra.packaging.Namespace] = hydra.lib.sets.fromList[hydra.packaging.Namespace](hydra.lib.maybes.cat[hydra.packaging.Namespace](hydra.lib.lists.map[hydra.core.Name,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      Option[hydra.packaging.Namespace]](hydra.names.namespaceOf)(hydra.lib.sets.toList[hydra.core.Name](names))))
   def toPair(ns: hydra.packaging.Namespace): Tuple2[hydra.packaging.Namespace, T0] = Tuple2(ns, encodeNamespace(ns))
   hydra.packaging.Namespaces(ns0.focus, hydra.lib.maps.union[hydra.packaging.Namespace,
      T0](ns0.mapping)(hydra.lib.maps.fromList[hydra.packaging.Namespace, T0](hydra.lib.lists.map[hydra.packaging.Namespace,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Tuple2[hydra.packaging.Namespace, T0]](toPair)(hydra.lib.sets.toList[hydra.packaging.Namespace](nss)))))
 }
 
 def analyzeFunctionTerm[T0, T1](cx: hydra.context.Context)(getTC: (T0 => hydra.graph.Graph))(setTC: (hydra.graph.Graph => T0 => T0))(env: T0)(term: hydra.core.Term): Either[T1,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    hydra.typing.FunctionStructure[T0]] =
   hydra.analysis.analyzeFunctionTermWith(cx)((g: hydra.graph.Graph) =>
   (b: hydra.core.Binding) =>
   hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.predicates.isComplexBinding(g)(b))(Some(hydra.core.Term.literal(hydra.core.Literal.boolean(true))))(None))(getTC)(setTC)(env)(term)
 
 def analyzeFunctionTermWith[T0, T1](cx: hydra.context.Context)(forBinding: (hydra.graph.Graph => hydra.core.Binding => Option[hydra.core.Term]))(getTC: (T0 => hydra.graph.Graph))(setTC: (hydra.graph.Graph => T0 => T0))(env: T0)(term: hydra.core.Term): Either[T1,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    hydra.typing.FunctionStructure[T0]] =
   hydra.analysis.analyzeFunctionTermWith_gather(cx)(forBinding)(getTC)(setTC)(true)(env)(Seq())(Seq())(Seq())(Seq())(Seq())(term)
 
 def analyzeFunctionTermWith_finish[T0, T1](cx: hydra.context.Context)(getTC: (T0 => hydra.graph.Graph))(fEnv: T0)(tparams: Seq[hydra.core.Name])(args: Seq[hydra.core.Name])(bindings: Seq[hydra.core.Binding])(doms: Seq[hydra.core.Type])(tapps: Seq[hydra.core.Type])(body: hydra.core.Term): Either[T1,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    hydra.typing.FunctionStructure[T0]] =
   {
   lazy val bodyWithTapps: hydra.core.Term = hydra.lib.lists.foldl[hydra.core.Term,
@@ -41,10 +111,38 @@ def analyzeFunctionTermWith_finish[T0, T1](cx: hydra.context.Context)(getTC: (T0
      hydra.core.Type, Option[hydra.core.Type]]((_x: hydra.errors.Error) => None)((c: hydra.core.Type) => Some(c))(hydra.checking.typeOfTerm(cx)(getTC(fEnv))(bodyWithTapps))
   Right(hydra.typing.FunctionStructure(hydra.lib.lists.reverse[hydra.core.Name](tparams),
      hydra.lib.lists.reverse[hydra.core.Name](args), bindings, bodyWithTapps, hydra.lib.lists.reverse[hydra.core.Type](doms),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      mcod, fEnv))
 }
 
 def analyzeFunctionTermWith_gather[T0, T1](cx: hydra.context.Context)(forBinding: (hydra.graph.Graph => hydra.core.Binding => Option[hydra.core.Term]))(getTC: (T0 => hydra.graph.Graph))(setTC: (hydra.graph.Graph => T0 => T0))(argMode: Boolean)(gEnv: T0)(tparams: Seq[hydra.core.Name])(args: Seq[hydra.core.Name])(bindings: Seq[hydra.core.Binding])(doms: Seq[hydra.core.Type])(tapps: Seq[hydra.core.Type])(t: hydra.core.Term): Either[T1,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    hydra.typing.FunctionStructure[T0]] =
   hydra.strip.deannotateTerm(t) match
   case hydra.core.Term.lambda(v_Term_lambda_lam) => hydra.lib.logic.ifElse[Either[T1,
@@ -97,12 +195,54 @@ def definitionDependencyNamespaces(defs: Seq[hydra.packaging.Definition]): scala
     case hydra.packaging.Definition.`type`(v_Definition_type_typeDef) => hydra.dependencies.typeDependencyNames(true)(v_Definition_type_typeDef.`type`.`type`)
     case hydra.packaging.Definition.term(v_Definition_term_termDef) => hydra.dependencies.termDependencyNames(true)(true)(true)(v_Definition_term_termDef.term)
   lazy val allNames: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.unions[hydra.core.Name](hydra.lib.lists.map[hydra.packaging.Definition,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      scala.collection.immutable.Set[hydra.core.Name]](defNames)(defs))
   hydra.lib.sets.fromList[hydra.packaging.Namespace](hydra.lib.maybes.cat[hydra.packaging.Namespace](hydra.lib.lists.map[hydra.core.Name,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      Option[hydra.packaging.Namespace]](hydra.names.namespaceOf)(hydra.lib.sets.toList[hydra.core.Name](allNames))))
 }
 
 def dependencyNamespaces[T0](cx: T0)(graph: hydra.graph.Graph)(binds: Boolean)(withPrims: Boolean)(withNoms: Boolean)(withSchema: Boolean)(els: Seq[hydra.core.Binding]): Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    scala.collection.immutable.Set[hydra.packaging.Namespace]] =
   {
   def depNames(el: hydra.core.Binding): Either[hydra.errors.Error, scala.collection.immutable.Set[hydra.core.Name]] =
@@ -111,21 +251,161 @@ def dependencyNamespaces[T0](cx: T0)(graph: hydra.graph.Graph)(binds: Boolean)(w
     lazy val deannotatedTerm: hydra.core.Term = hydra.strip.deannotateTerm(term)
     lazy val dataNames: scala.collection.immutable.Set[hydra.core.Name] = hydra.dependencies.termDependencyNames(binds)(withPrims)(withNoms)(term)
     lazy val schemaNames: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.logic.ifElse[scala.collection.immutable.Set[hydra.core.Name]](withSchema)(hydra.lib.maybes.maybe[scala.collection.immutable.Set[hydra.core.Name],
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.core.TypeScheme](hydra.lib.sets.empty[hydra.core.Name])((ts: hydra.core.TypeScheme) => hydra.dependencies.typeDependencyNames(true)(ts.`type`))(el.`type`))(hydra.lib.sets.empty[hydra.core.Name])
     hydra.lib.logic.ifElse[Either[hydra.errors.Error, scala.collection.immutable.Set[hydra.core.Name]]](hydra.predicates.isEncodedType(deannotatedTerm))(hydra.lib.eithers.map[hydra.core.Type,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        scala.collection.immutable.Set[hydra.core.Name], hydra.errors.Error]((typ: hydra.core.Type) =>
       hydra.lib.sets.unions[hydra.core.Name](Seq(dataNames, schemaNames, hydra.dependencies.typeDependencyNames(true)(typ))))(hydra.lib.eithers.bimap[hydra.errors.DecodingError,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.core.Type, hydra.errors.Error, hydra.core.Type]((_e: hydra.errors.DecodingError) => hydra.errors.Error.decoding(_e))((_a: hydra.core.Type) => _a)(hydra.decode.core.`type`(graph)(term))))(hydra.lib.logic.ifElse[Either[hydra.errors.Error,
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          scala.collection.immutable.Set[hydra.core.Name]]](hydra.predicates.isEncodedTerm(deannotatedTerm))(hydra.lib.eithers.map[hydra.core.Term,
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          scala.collection.immutable.Set[hydra.core.Name], hydra.errors.Error]((decodedTerm: hydra.core.Term) =>
       hydra.lib.sets.unions[hydra.core.Name](Seq(dataNames, schemaNames, hydra.dependencies.termDependencyNames(binds)(withPrims)(withNoms)(decodedTerm))))(hydra.lib.eithers.bimap[hydra.errors.DecodingError,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.core.Term, hydra.errors.Error, hydra.core.Term]((_e: hydra.errors.DecodingError) => hydra.errors.Error.decoding(_e))((_a: hydra.core.Term) => _a)(hydra.decode.core.term(graph)(term))))(Right(hydra.lib.sets.unions[hydra.core.Name](Seq(dataNames,
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          schemaNames)))))
   }
   hydra.lib.eithers.map[Seq[scala.collection.immutable.Set[hydra.core.Name]], scala.collection.immutable.Set[hydra.packaging.Namespace],
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.errors.Error]((namesList: Seq[scala.collection.immutable.Set[hydra.core.Name]]) =>
     hydra.lib.sets.fromList[hydra.packaging.Namespace](hydra.lib.maybes.cat[hydra.packaging.Namespace](hydra.lib.lists.map[hydra.core.Name,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        Option[hydra.packaging.Namespace]](hydra.names.namespaceOf)(hydra.lib.sets.toList[hydra.core.Name](hydra.lib.sets.unions[hydra.core.Name](namesList))))))(hydra.lib.eithers.mapList[hydra.core.Binding,
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        scala.collection.immutable.Set[hydra.core.Name], hydra.errors.Error](depNames)(els))
 }
 
@@ -164,6 +444,20 @@ def gatherArgs(term: hydra.core.Term)(args: Seq[hydra.core.Term]): Tuple2[hydra.
   case _ => Tuple2(term, args)
 
 def gatherArgsWithTypeApps(term: hydra.core.Term)(args: Seq[hydra.core.Term])(tyArgs: Seq[hydra.core.Type]): Tuple2[hydra.core.Term,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    Tuple2[Seq[hydra.core.Term], Seq[hydra.core.Type]]] =
   hydra.strip.deannotateTerm(term) match
   case hydra.core.Term.application(v_Term_application_app) => {
@@ -284,6 +578,20 @@ def moduleContainsBinaryLiterals(mod: hydra.packaging.Module): Boolean =
   def termContainsBinary(term: hydra.core.Term): Boolean =
     hydra.rewriting.foldOverTerm(hydra.coders.TraversalOrder.pre)(checkTerm)(false)(term)
   lazy val defTerms: Seq[hydra.core.Term] = hydra.lib.maybes.cat[hydra.core.Term](hydra.lib.lists.map[hydra.packaging.Definition,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      Option[hydra.core.Term]]((d: hydra.packaging.Definition) =>
     d match
     case hydra.packaging.Definition.term(v_Definition_term_td) => Some(v_Definition_term_td.term)
@@ -303,6 +611,20 @@ def moduleContainsDecimalLiterals(mod: hydra.packaging.Module): Boolean =
   def termContainsDecimal(term: hydra.core.Term): Boolean =
     hydra.rewriting.foldOverTerm(hydra.coders.TraversalOrder.pre)(checkTerm)(false)(term)
   lazy val defTerms: Seq[hydra.core.Term] = hydra.lib.maybes.cat[hydra.core.Term](hydra.lib.lists.map[hydra.packaging.Definition,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      Option[hydra.core.Term]]((d: hydra.packaging.Definition) =>
     d match
     case hydra.packaging.Definition.term(v_Definition_term_td) => Some(v_Definition_term_td.term)
@@ -312,15 +634,57 @@ def moduleContainsDecimalLiterals(mod: hydra.packaging.Module): Boolean =
 }
 
 def moduleDependencyNamespaces[T0](cx: T0)(graph: hydra.graph.Graph)(binds: Boolean)(withPrims: Boolean)(withNoms: Boolean)(withSchema: Boolean)(mod: hydra.packaging.Module): Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    scala.collection.immutable.Set[hydra.packaging.Namespace]] =
   {
   lazy val allBindings: Seq[hydra.core.Binding] = hydra.lib.maybes.cat[hydra.core.Binding](hydra.lib.lists.map[hydra.packaging.Definition,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      Option[hydra.core.Binding]]((d: hydra.packaging.Definition) =>
     d match
     case hydra.packaging.Definition.`type`(v_Definition_type_td) => Some({
       lazy val schemaTerm: hydra.core.Term = hydra.core.Term.variable("hydra.core.Type")
       {
         lazy val dataTerm: hydra.core.Term = hydra.annotations.normalizeTermAnnotations(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.encode.core.`type`(v_Definition_type_td.`type`.`type`),
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
            hydra.lib.maps.fromList[hydra.core.Name, hydra.core.Term](Seq(Tuple2(hydra.constants.key_type,
            schemaTerm))))))
         hydra.core.Binding(v_Definition_type_td.name, dataTerm, Some(hydra.core.TypeScheme(Seq(),

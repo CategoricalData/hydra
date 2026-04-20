@@ -18,7 +18,35 @@ def tarjanState(x: hydra.topology.TarjanState): hydra.core.Term =
      Int, hydra.core.Term](hydra.encode.topology.vertex)((x2: Int) =>
   hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(x2))))(x.lowLinks))),
      hydra.core.Field("stack", hydra.core.Term.list(hydra.lib.lists.map[Int, hydra.core.Term](hydra.encode.topology.vertex)(x.stack))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Field("onStack", hydra.core.Term.set(hydra.lib.sets.map[Int, hydra.core.Term](hydra.encode.topology.vertex)(x.onStack))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Field("sccs", hydra.core.Term.list(hydra.lib.lists.map[Seq[Int], hydra.core.Term]((xs2: Seq[Int]) =>
   hydra.core.Term.list(hydra.lib.lists.map[Int, hydra.core.Term](hydra.encode.topology.vertex)(xs2)))(x.sccs))))))
 

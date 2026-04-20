@@ -10,6 +10,20 @@ def functionStructure[T0](env: (T0 => hydra.core.Term))(x: hydra.typing.Function
      hydra.core.Field("params", hydra.core.Term.list(hydra.lib.lists.map[hydra.core.Name,
      hydra.core.Term](hydra.encode.core.name)(x.params))), hydra.core.Field("bindings",
      hydra.core.Term.list(hydra.lib.lists.map[hydra.core.Binding, hydra.core.Term](hydra.encode.core.binding)(x.bindings))),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Field("body", hydra.encode.core.term(x.body)), hydra.core.Field("domains",
      hydra.core.Term.list(hydra.lib.lists.map[hydra.core.Type, hydra.core.Term](hydra.encode.core.`type`)(x.domains))),
      hydra.core.Field("codomain", hydra.core.Term.maybe(hydra.lib.maybes.map[hydra.core.Type,
@@ -26,6 +40,20 @@ def inferenceResult(x: hydra.typing.InferenceResult): hydra.core.Term =
 
 def termSubst(x: hydra.typing.TermSubst): hydra.core.Term =
   hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.typing.TermSubst", hydra.core.Term.map(hydra.lib.maps.bimap[hydra.core.Name,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Term, hydra.core.Term, hydra.core.Term](hydra.encode.core.name)(hydra.encode.core.term)(x))))
 
 def typeConstraint(x: hydra.typing.TypeConstraint): hydra.core.Term =
@@ -35,4 +63,18 @@ def typeConstraint(x: hydra.typing.TypeConstraint): hydra.core.Term =
 
 def typeSubst(x: hydra.typing.TypeSubst): hydra.core.Term =
   hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.typing.TypeSubst", hydra.core.Term.map(hydra.lib.maps.bimap[hydra.core.Name,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Term, hydra.core.Type, hydra.core.Term](hydra.encode.core.name)(hydra.encode.core.`type`)(x))))

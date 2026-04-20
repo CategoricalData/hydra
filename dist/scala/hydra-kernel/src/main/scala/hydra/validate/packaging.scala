@@ -9,6 +9,20 @@ import hydra.packaging.*
 def checkConflictingModuleNamespaces(pkg: hydra.packaging.Package): Option[hydra.error.packaging.InvalidPackageError] =
   {
   lazy val result: Tuple2[Map[scala.Predef.String, hydra.packaging.Namespace], Option[hydra.error.packaging.InvalidPackageError]] = hydra.lib.lists.foldl[Tuple2[Map[scala.Predef.String,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.packaging.Namespace], Option[hydra.error.packaging.InvalidPackageError]],
      hydra.packaging.Module]((acc: Tuple2[Map[scala.Predef.String, hydra.packaging.Namespace],
      Option[hydra.error.packaging.InvalidPackageError]]) =>
@@ -29,8 +43,36 @@ def checkConflictingModuleNamespaces(pkg: hydra.packaging.Package): Option[hydra
                hydra.packaging.Namespace](key)(seen)
             hydra.lib.maybes.cases[hydra.packaging.Namespace, Tuple2[Map[scala.Predef.String,
                hydra.packaging.Namespace], Option[hydra.error.packaging.InvalidPackageError]]](existing)(Tuple2(hydra.lib.maps.insert[scala.Predef.String,
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
                hydra.packaging.Namespace](key)(ns)(seen), None))((first: hydra.packaging.Namespace) =>
               Tuple2(seen, Some(hydra.error.packaging.InvalidPackageError.conflictingModuleNamespace(hydra.error.packaging.ConflictingModuleNamespaceError(first,
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                  ns)))))
           }
         }
@@ -45,6 +87,20 @@ def checkConflictingVariantNames(mod: hydra.packaging.Module): Option[hydra.erro
   lazy val ns: hydra.packaging.Namespace = (mod.namespace)
   lazy val defs: Seq[hydra.packaging.Definition] = (mod.definitions)
   lazy val defNames: scala.collection.immutable.Set[scala.Predef.String] = hydra.lib.lists.foldl[scala.collection.immutable.Set[scala.Predef.String],
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.packaging.Definition]((acc: scala.collection.immutable.Set[scala.Predef.String]) =>
     (`def`: hydra.packaging.Definition) =>
     hydra.lib.sets.insert[scala.Predef.String](hydra.names.localNameOf(hydra.validate.packaging.definitionName(`def`)))(acc))(hydra.lib.sets.empty[scala.Predef.String])(defs)
@@ -59,6 +115,20 @@ def checkConflictingVariantNames(mod: hydra.packaging.Module): Option[hydra.erro
           lazy val typ: hydra.core.Type = (v_Definition_type_td.`type`.`type`)
           typ match
             case hydra.core.Type.union(v_Type_union_fields) => hydra.lib.lists.foldl[Option[hydra.error.packaging.InvalidModuleError],
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
                hydra.core.FieldType]((innerAcc: Option[hydra.error.packaging.InvalidModuleError]) =>
               (field: hydra.core.FieldType) =>
               hydra.lib.maybes.cases[hydra.error.packaging.InvalidModuleError, Option[hydra.error.packaging.InvalidModuleError]](innerAcc)({
@@ -68,6 +138,20 @@ def checkConflictingVariantNames(mod: hydra.packaging.Module): Option[hydra.erro
                 {
                   lazy val constructorName: scala.Predef.String = hydra.lib.strings.cat2(hydra.formatting.capitalize(localTypeName))(hydra.formatting.capitalize(localFieldName))
                   hydra.lib.logic.ifElse[Option[hydra.error.packaging.InvalidModuleError]](hydra.lib.sets.member[scala.Predef.String](constructorName)(defNames))(Some(hydra.error.packaging.InvalidModuleError.conflictingVariantName(hydra.error.packaging.ConflictingVariantNameError(ns,
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                      typeName, fieldName, constructorName))))(None)
                 }
               }
@@ -93,6 +177,20 @@ def checkDefinitionNamespaces(mod: hydra.packaging.Module): Option[hydra.error.p
       {
         lazy val namePrefix: Seq[Int] = hydra.lib.lists.take[Int](prefixLen)(hydra.lib.strings.toList(nameStr))
         hydra.lib.logic.ifElse[Option[hydra.error.packaging.InvalidModuleError]](hydra.lib.equality.equal[scala.Predef.String](hydra.lib.strings.fromList(namePrefix))(prefix))(None)(Some(hydra.error.packaging.InvalidModuleError.definitionNotInModuleNamespace(hydra.error.packaging.DefinitionNotInModuleNamespaceError(ns,
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
            name))))
       }
     }
@@ -103,21 +201,119 @@ def checkDuplicateDefinitionNames(mod: hydra.packaging.Module): Option[hydra.err
   {
   lazy val ns: hydra.packaging.Namespace = (mod.namespace)
   lazy val result: Tuple2[scala.collection.immutable.Set[hydra.core.Name], Option[hydra.error.packaging.InvalidModuleError]] = hydra.lib.lists.foldl[Tuple2[scala.collection.immutable.Set[hydra.core.Name],
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      Option[hydra.error.packaging.InvalidModuleError]], hydra.packaging.Definition]((acc: Tuple2[scala.collection.immutable.Set[hydra.core.Name],
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Option[hydra.error.packaging.InvalidModuleError]]) =>
     (`def`: hydra.packaging.Definition) =>
     {
     lazy val seen: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.pairs.first[scala.collection.immutable.Set[hydra.core.Name],
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        Option[hydra.error.packaging.InvalidModuleError]](acc)
     {
       lazy val err: Option[hydra.error.packaging.InvalidModuleError] = hydra.lib.pairs.second[scala.collection.immutable.Set[hydra.core.Name],
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Option[hydra.error.packaging.InvalidModuleError]](acc)
       hydra.lib.maybes.cases[hydra.error.packaging.InvalidModuleError, Tuple2[scala.collection.immutable.Set[hydra.core.Name],
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Option[hydra.error.packaging.InvalidModuleError]]](err)({
         lazy val name: hydra.core.Name = hydra.validate.packaging.definitionName(`def`)
         hydra.lib.logic.ifElse[Tuple2[scala.collection.immutable.Set[hydra.core.Name],
            Option[hydra.error.packaging.InvalidModuleError]]](hydra.lib.sets.member[hydra.core.Name](name)(seen))(Tuple2(seen,
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
            Some(hydra.error.packaging.InvalidModuleError.duplicateDefinitionName(hydra.error.packaging.DuplicateDefinitionNameError(ns,
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
            name)))))(Tuple2(hydra.lib.sets.insert[hydra.core.Name](name)(seen), None))
       })((_x: hydra.error.packaging.InvalidModuleError) => acc)
     }
@@ -129,21 +325,119 @@ def checkDuplicateModuleNamespaces(pkg: hydra.packaging.Package): Option[hydra.e
   {
   lazy val result: Tuple2[scala.collection.immutable.Set[hydra.packaging.Namespace],
      Option[hydra.error.packaging.InvalidPackageError]] = hydra.lib.lists.foldl[Tuple2[scala.collection.immutable.Set[hydra.packaging.Namespace],
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Option[hydra.error.packaging.InvalidPackageError]], hydra.packaging.Module]((acc: Tuple2[scala.collection.immutable.Set[hydra.packaging.Namespace],
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Option[hydra.error.packaging.InvalidPackageError]]) =>
     (mod: hydra.packaging.Module) =>
     {
     lazy val seen: scala.collection.immutable.Set[hydra.packaging.Namespace] = hydra.lib.pairs.first[scala.collection.immutable.Set[hydra.packaging.Namespace],
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        Option[hydra.error.packaging.InvalidPackageError]](acc)
     {
       lazy val err: Option[hydra.error.packaging.InvalidPackageError] = hydra.lib.pairs.second[scala.collection.immutable.Set[hydra.packaging.Namespace],
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Option[hydra.error.packaging.InvalidPackageError]](acc)
       hydra.lib.maybes.cases[hydra.error.packaging.InvalidPackageError, Tuple2[scala.collection.immutable.Set[hydra.packaging.Namespace],
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Option[hydra.error.packaging.InvalidPackageError]]](err)({
         lazy val ns: hydra.packaging.Namespace = (mod.namespace)
         hydra.lib.logic.ifElse[Tuple2[scala.collection.immutable.Set[hydra.packaging.Namespace],
            Option[hydra.error.packaging.InvalidPackageError]]](hydra.lib.sets.member[hydra.packaging.Namespace](ns)(seen))(Tuple2(seen,
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
            Some(hydra.error.packaging.InvalidPackageError.duplicateModuleNamespace(hydra.error.packaging.DuplicateModuleNamespaceError(ns)))))(Tuple2(hydra.lib.sets.insert[hydra.packaging.Namespace](ns)(seen),
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
            None))
       })((_x: hydra.error.packaging.InvalidPackageError) => acc)
     }
@@ -172,9 +466,37 @@ def `package`(pkg: hydra.packaging.Package): Option[hydra.error.packaging.Invali
   hydra.lib.maybes.cases[hydra.error.packaging.InvalidPackageError, Option[hydra.error.packaging.InvalidPackageError]](r1)({
     lazy val r2: Option[hydra.error.packaging.InvalidPackageError] = hydra.validate.packaging.checkConflictingModuleNamespaces(pkg)
     hydra.lib.maybes.cases[hydra.error.packaging.InvalidPackageError, Option[hydra.error.packaging.InvalidPackageError]](r2)(hydra.lib.lists.foldl[Option[hydra.error.packaging.InvalidPackageError],
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.packaging.Module]((acc: Option[hydra.error.packaging.InvalidPackageError]) =>
       (mod: hydra.packaging.Module) =>
       hydra.lib.maybes.cases[hydra.error.packaging.InvalidPackageError, Option[hydra.error.packaging.InvalidPackageError]](acc)(hydra.lib.maybes.map[hydra.error.packaging.InvalidModuleError,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.error.packaging.InvalidPackageError]((err: hydra.error.packaging.InvalidModuleError) => hydra.error.packaging.InvalidPackageError.invalidModule(err))(hydra.validate.packaging.module(mod)))((_x: hydra.error.packaging.InvalidPackageError) => acc))(None)(pkg.modules))((_x: hydra.error.packaging.InvalidPackageError) => r2)
   })((_x: hydra.error.packaging.InvalidPackageError) => r1)
 }

@@ -14,6 +14,20 @@ def dereferenceType[T0](cx: T0)(graph: hydra.graph.Graph)(name: hydra.core.Name)
   lazy val mel: Option[hydra.core.Binding] = hydra.lexical.lookupBinding(graph)(name)
   hydra.lib.maybes.maybe[Either[hydra.errors.Error, Option[hydra.core.Type]], hydra.core.Binding](Right(None))((el: hydra.core.Binding) =>
     hydra.lib.eithers.map[hydra.core.Type, Option[hydra.core.Type], hydra.errors.Error](hydra.lib.maybes.pure[hydra.core.Type])(hydra.lib.eithers.bimap[hydra.errors.DecodingError,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.core.Type, hydra.errors.Error, hydra.core.Type]((_e: hydra.errors.DecodingError) =>
     hydra.errors.Error.resolution(hydra.errors.ResolutionError.unexpectedShape(hydra.errors.UnexpectedShapeError("type",
        _e))))((_a: hydra.core.Type) => _a)(hydra.decode.core.`type`(graph)(el.term))))(mel)
@@ -57,9 +71,51 @@ def fieldTypes[T0](cx: T0)(graph: hydra.graph.Graph)(t: hydra.core.Type): Either
          hydra.core.Type]](hydra.lib.eithers.bimap[hydra.errors.DecodingError, hydra.core.Type,
          hydra.errors.Error, hydra.core.Type]((_e: hydra.errors.DecodingError) =>
       hydra.errors.Error.resolution(hydra.errors.ResolutionError.unexpectedShape(hydra.errors.UnexpectedShapeError("type",
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          _e))))((_a: hydra.core.Type) => _a)(hydra.decode.core.`type`(graph)(el.term)))((decodedType: hydra.core.Type) => hydra.resolution.fieldTypes(cx)(graph)(decodedType))))((ts: hydra.core.TypeScheme) => hydra.resolution.fieldTypes(cx)(graph)(ts.`type`))(hydra.lib.maps.lookup[hydra.core.Name,
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          hydra.core.TypeScheme](v_Type_variable_name)(graph.schemaTypes))
     case _ => Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.unexpectedShape(hydra.errors.UnexpectedShapeError("record or union type",
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.show.core.`type`(t)))))
 }
 
@@ -71,7 +127,35 @@ def findFieldType[T0](cx: T0)(fname: hydra.core.Name)(fields: Seq[hydra.core.Fie
   def noMatch[T1]: Either[hydra.errors.Error, T1] =
     Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noMatchingField(hydra.errors.NoMatchingFieldError(fname))))
   hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.Type]](hydra.lib.lists.`null`[hydra.core.FieldType](matchingFields))(noMatch)(hydra.lib.logic.ifElse[Either[hydra.errors.Error,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Type]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.FieldType](matchingFields))(1))(hydra.lib.maybes.maybe[Either[hydra.errors.Error,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Type], hydra.core.FieldType](noMatch)((ft: hydra.core.FieldType) => Right(ft.`type`))(hydra.lib.lists.maybeHead[hydra.core.FieldType](matchingFields)))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.multipleFields(hydra.errors.MultipleFieldsError(fname))))))
 }
 
@@ -89,6 +173,20 @@ def fullyStripAndNormalizeType(typ: hydra.core.Type): hydra.core.Type =
     }
     case _ => Tuple2(subst, t)
   lazy val result: Tuple2[Map[hydra.core.Name, hydra.core.Name], hydra.core.Type] = go(0)(hydra.lib.maps.empty[hydra.core.Name,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Name])(typ)
   lazy val subst: Map[hydra.core.Name, hydra.core.Name] = hydra.lib.pairs.first[Map[hydra.core.Name,
      hydra.core.Name], hydra.core.Type](result)
@@ -119,19 +217,103 @@ def instantiateTypeScheme(cx: hydra.context.Context)(scheme: hydra.core.TypeSche
   lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[Seq[hydra.core.Name], hydra.context.Context](result)
   lazy val subst: hydra.typing.TypeSubst = hydra.lib.maps.fromList[hydra.core.Name,
      hydra.core.Type](hydra.lib.lists.zip[hydra.core.Name, hydra.core.Type](oldVars)(hydra.lib.lists.map[hydra.core.Name,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Type]((x: hydra.core.Name) => hydra.core.Type.variable(x))(newVars)))
   lazy val nameSubst: Map[hydra.core.Name, hydra.core.Name] = hydra.lib.maps.fromList[hydra.core.Name,
      hydra.core.Name](hydra.lib.lists.zip[hydra.core.Name, hydra.core.Name](oldVars)(newVars))
   lazy val renamedConstraints: Option[Map[hydra.core.Name, hydra.core.TypeVariableMetadata]] = hydra.lib.maybes.map[Map[hydra.core.Name,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.TypeVariableMetadata], Map[hydra.core.Name, hydra.core.TypeVariableMetadata]]((oldConstraints: Map[hydra.core.Name,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.TypeVariableMetadata]) =>
     hydra.lib.maps.fromList[hydra.core.Name, hydra.core.TypeVariableMetadata](hydra.lib.lists.map[Tuple2[hydra.core.Name,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.core.TypeVariableMetadata], Tuple2[hydra.core.Name, hydra.core.TypeVariableMetadata]]((kv: Tuple2[hydra.core.Name,
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        hydra.core.TypeVariableMetadata]) =>
     Tuple2(hydra.lib.maybes.fromMaybe[hydra.core.Name](hydra.lib.pairs.first[hydra.core.Name,
        hydra.core.TypeVariableMetadata](kv))(hydra.lib.maps.lookup[hydra.core.Name,
        hydra.core.Name](hydra.lib.pairs.first[hydra.core.Name, hydra.core.TypeVariableMetadata](kv))(nameSubst)),
        hydra.lib.pairs.second[hydra.core.Name, hydra.core.TypeVariableMetadata](kv)))(hydra.lib.maps.toList[hydra.core.Name,
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        hydra.core.TypeVariableMetadata](oldConstraints))))(scheme.constraints)
   Tuple2(hydra.core.TypeScheme(newVars, hydra.substitution.substInType(subst)(scheme.`type`), renamedConstraints), cx2)
 }
@@ -152,6 +334,20 @@ def requireRecordType[T0](cx: T0)(graph: hydra.graph.Graph)(name: hydra.core.Nam
 }
 
 def requireRowType[T0, T1](cx: T0)(label: scala.Predef.String)(getter: (hydra.core.Type => Option[T1]))(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    T1] =
   {
   def rawType(t: hydra.core.Type): hydra.core.Type =
@@ -161,24 +357,122 @@ def requireRowType[T0, T1](cx: T0)(label: scala.Predef.String)(getter: (hydra.co
     case _ => t
   hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, T1](hydra.resolution.requireType(cx)(graph)(name))((t: hydra.core.Type) =>
     hydra.lib.maybes.maybe[Either[hydra.errors.Error, T1], T1](Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.unexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2(label)(" type"),
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.lib.strings.cat2(name)(hydra.lib.strings.cat2(": ")(hydra.show.core.`type`(t))))))))((x: T1) => Right(x))(getter(rawType(t))))
 }
 
 def requireSchemaType(cx: hydra.context.Context)(types: Map[hydra.core.Name, hydra.core.TypeScheme])(tname: hydra.core.Name): Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    Tuple2[hydra.core.TypeScheme, hydra.context.Context]] =
   hydra.lib.maybes.maybe[Either[hydra.errors.Error, Tuple2[hydra.core.TypeScheme,
      hydra.context.Context]], hydra.core.TypeScheme](Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noSuchBinding(hydra.errors.NoSuchBindingError(tname)))))((ts: hydra.core.TypeScheme) =>
   Right(hydra.resolution.instantiateTypeScheme(cx)(hydra.strip.deannotateTypeSchemeRecursive(ts))))(hydra.lib.maps.lookup[hydra.core.Name,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.TypeScheme](tname)(types))
 
 def requireType[T0](cx: T0)(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.errors.Error,
    hydra.core.Type] =
   hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.core.Type], hydra.core.TypeScheme](hydra.lib.maybes.maybe[Either[hydra.errors.Error,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Type], hydra.core.TypeScheme](Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noSuchBinding(hydra.errors.NoSuchBindingError(name)))))((ts: hydra.core.TypeScheme) => Right(hydra.scoping.typeSchemeToFType(ts)))(hydra.lib.maps.lookup[hydra.core.Name,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.TypeScheme](name)(graph.boundTypes)))((ts: hydra.core.TypeScheme) => Right(hydra.scoping.typeSchemeToFType(ts)))(hydra.lib.maps.lookup[hydra.core.Name,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.TypeScheme](name)(graph.schemaTypes))
 
 def requireUnionField[T0](cx: T0)(graph: hydra.graph.Graph)(tname: hydra.core.Name)(fname: hydra.core.Name): Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    hydra.core.Type] =
   {
   def withRowType(rt: Seq[hydra.core.FieldType]): Either[hydra.errors.Error, hydra.core.Type] =
@@ -204,7 +498,35 @@ def resolveType(graph: hydra.graph.Graph)(typ: hydra.core.Type): Option[hydra.co
   hydra.strip.deannotateType(typ) match
   case hydra.core.Type.variable(v_Type_variable_name) => hydra.lib.maybes.maybe[Option[hydra.core.Type],
      hydra.core.TypeScheme](hydra.lib.maybes.map[hydra.core.TypeScheme, hydra.core.Type]((ts: hydra.core.TypeScheme) => hydra.scoping.typeSchemeToFType(ts))(hydra.lib.maps.lookup[hydra.core.Name,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.TypeScheme](v_Type_variable_name)(graph.boundTypes)))((ts: hydra.core.TypeScheme) => Some(hydra.scoping.typeSchemeToFType(ts)))(hydra.lib.maps.lookup[hydra.core.Name,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.TypeScheme](v_Type_variable_name)(graph.schemaTypes))
   case _ => Some(typ)
 

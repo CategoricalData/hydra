@@ -37,6 +37,20 @@ def subtermGraph(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.erro
          hydra.paths.SubtermGraph](hydra.extract.core.requireField("edges")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.core.decodeList(hydra.decode.paths.subtermEdge)(v1)(v2))(fieldMap)(cx))((field_edges: Seq[hydra.paths.SubtermEdge]) => Right(hydra.paths.SubtermGraph(field_nodes,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          field_edges))))
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
@@ -91,24 +105,164 @@ def subtermStep(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
     lazy val fterm: hydra.core.Term = (field.term)
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.paths.SubtermStep])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        hydra.paths.SubtermStep]](Seq(Tuple2("annotatedBody", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtermStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtermStep.annotatedBody)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("applicationFunction", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtermStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtermStep.applicationFunction)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("applicationArgument", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtermStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtermStep.applicationArgument)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("lambdaBody", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtermStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtermStep.lambdaBody)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("unionCasesDefault", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtermStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtermStep.unionCasesDefault)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("unionCasesBranch", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.core.Name, hydra.paths.SubtermStep, hydra.errors.DecodingError]((t: hydra.core.Name) => hydra.paths.SubtermStep.unionCasesBranch(t))(hydra.decode.core.name(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("letBody", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtermStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtermStep.letBody)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("letBinding", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.core.Name, hydra.paths.SubtermStep, hydra.errors.DecodingError]((t: hydra.core.Name) => hydra.paths.SubtermStep.letBinding(t))(hydra.decode.core.name(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("listElement", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Int, hydra.paths.SubtermStep, hydra.errors.DecodingError]((t: Int) => hydra.paths.SubtermStep.listElement(t))(hydra.lib.eithers.either[hydra.errors.DecodingError,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: hydra.errors.DecodingError) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
@@ -119,6 +273,20 @@ def subtermStep(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
       case _ => Left("expected literal"))(hydra.extract.core.stripWithDecodingError(cx)(input)))),
          Tuple2("mapKey", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Int, hydra.paths.SubtermStep, hydra.errors.DecodingError]((t: Int) => hydra.paths.SubtermStep.mapKey(t))(hydra.lib.eithers.either[hydra.errors.DecodingError,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: hydra.errors.DecodingError) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
@@ -129,6 +297,20 @@ def subtermStep(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
       case _ => Left("expected literal"))(hydra.extract.core.stripWithDecodingError(cx)(input)))),
          Tuple2("mapValue", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Int, hydra.paths.SubtermStep, hydra.errors.DecodingError]((t: Int) => hydra.paths.SubtermStep.mapValue(t))(hydra.lib.eithers.either[hydra.errors.DecodingError,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: hydra.errors.DecodingError) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
@@ -139,8 +321,36 @@ def subtermStep(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
       case _ => Left("expected literal"))(hydra.extract.core.stripWithDecodingError(cx)(input)))),
          Tuple2("maybeTerm", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtermStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtermStep.maybeTerm)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("productTerm", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Int, hydra.paths.SubtermStep, hydra.errors.DecodingError]((t: Int) => hydra.paths.SubtermStep.productTerm(t))(hydra.lib.eithers.either[hydra.errors.DecodingError,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: hydra.errors.DecodingError) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
@@ -151,8 +361,36 @@ def subtermStep(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
       case _ => Left("expected literal"))(hydra.extract.core.stripWithDecodingError(cx)(input)))),
          Tuple2("recordField", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.core.Name, hydra.paths.SubtermStep, hydra.errors.DecodingError]((t: hydra.core.Name) => hydra.paths.SubtermStep.recordField(t))(hydra.decode.core.name(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("setElement", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Int, hydra.paths.SubtermStep, hydra.errors.DecodingError]((t: Int) => hydra.paths.SubtermStep.setElement(t))(hydra.lib.eithers.either[hydra.errors.DecodingError,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: hydra.errors.DecodingError) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
@@ -163,16 +401,86 @@ def subtermStep(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
       case _ => Left("expected literal"))(hydra.extract.core.stripWithDecodingError(cx)(input)))),
          Tuple2("sumTerm", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtermStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtermStep.sumTerm)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("typeLambdaBody", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtermStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtermStep.typeLambdaBody)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("typeApplicationTerm", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtermStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtermStep.typeApplicationTerm)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("injectionTerm", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtermStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtermStep.injectionTerm)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("wrappedTerm", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtermStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtermStep.wrappedTerm)(hydra.extract.core.decodeUnit(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.paths.SubtermStep],
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.paths.SubtermStep]](Left(hydra.lib.strings.cat(Seq("no such field ",
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.paths.SubtermStep])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name,
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.paths.SubtermStep]](fname)(variantMap))
@@ -210,6 +518,20 @@ def subtypeGraph(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.erro
          hydra.paths.SubtypeGraph](hydra.extract.core.requireField("edges")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.core.decodeList(hydra.decode.paths.subtypeEdge)(v1)(v2))(fieldMap)(cx))((field_edges: Seq[hydra.paths.SubtypeEdge]) => Right(hydra.paths.SubtypeGraph(field_nodes,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          field_edges))))
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
@@ -264,44 +586,310 @@ def subtypeStep(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
     lazy val fterm: hydra.core.Term = (field.term)
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.paths.SubtypeStep])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        hydra.paths.SubtypeStep]](Seq(Tuple2("annotatedBody", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtypeStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtypeStep.annotatedBody)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("applicationFunction", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtypeStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtypeStep.applicationFunction)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("applicationArgument", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtypeStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtypeStep.applicationArgument)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("eitherLeft", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtypeStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtypeStep.eitherLeft)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("eitherRight", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtypeStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtypeStep.eitherRight)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("forallBody", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtypeStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtypeStep.forallBody)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("functionDomain", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtypeStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtypeStep.functionDomain)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("functionCodomain", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtypeStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtypeStep.functionCodomain)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("listElement", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtypeStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtypeStep.listElement)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("mapKeys", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtypeStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtypeStep.mapKeys)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("mapValues", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtypeStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtypeStep.mapValues)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("maybeElement", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtypeStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtypeStep.maybeElement)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("pairFirst", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtypeStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtypeStep.pairFirst)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("pairSecond", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtypeStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtypeStep.pairSecond)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("recordField", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.core.Name, hydra.paths.SubtypeStep, hydra.errors.DecodingError]((t: hydra.core.Name) => hydra.paths.SubtypeStep.recordField(t))(hydra.decode.core.name(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("setElement", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtypeStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtypeStep.setElement)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("unionField", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.core.Name, hydra.paths.SubtypeStep, hydra.errors.DecodingError]((t: hydra.core.Name) => hydra.paths.SubtypeStep.unionField(t))(hydra.decode.core.name(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("wrappedType", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.paths.SubtypeStep, hydra.errors.DecodingError]((t: Unit) => hydra.paths.SubtypeStep.wrappedType)(hydra.extract.core.decodeUnit(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.paths.SubtypeStep],
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.paths.SubtypeStep]](Left(hydra.lib.strings.cat(Seq("no such field ",
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.paths.SubtypeStep])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name,
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.paths.SubtypeStep]](fname)(variantMap))

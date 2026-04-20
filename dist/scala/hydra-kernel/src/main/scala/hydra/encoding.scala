@@ -19,6 +19,20 @@ def encodeBindingName(n: hydra.core.Name): hydra.core.Name =
   lazy val localResult: hydra.core.Name = localPart
   hydra.lib.maybes.maybe[hydra.core.Name, Seq[scala.Predef.String]](localResult)((nsParts: Seq[scala.Predef.String]) =>
     hydra.lib.maybes.maybe[hydra.core.Name, Tuple2[scala.Predef.String, Seq[scala.Predef.String]]](localResult)((nsUc: Tuple2[scala.Predef.String,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        Seq[scala.Predef.String]]) =>
     {
     lazy val tail: Seq[scala.Predef.String] = hydra.lib.pairs.second[scala.Predef.String,
@@ -31,12 +45,40 @@ def encodeBindingName(n: hydra.core.Name): hydra.core.Name =
 def encodeEitherType(et: hydra.core.EitherType): hydra.core.Term =
   hydra.core.Term.lambda(hydra.core.Lambda("e", None, hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("either", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.eithers.bimap"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.encoding.encodeType(et.left))), hydra.encoding.encodeType(et.right))),
      hydra.core.Term.variable("e"))))))))
 
 def encodeFieldValue(typeName: hydra.core.Name)(fieldName: hydra.core.Name)(fieldType: hydra.core.Type): hydra.core.Term =
   hydra.core.Term.lambda(hydra.core.Lambda("y", None, hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("inject", hydra.encoding.encodeInjection(typeName)(fieldName)(hydra.core.Term.application(hydra.core.Application(hydra.encoding.encodeType(fieldType),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.variable("y")))))))))
 
 def encodeFloatValue(floatType: hydra.core.FloatType)(valTerm: hydra.core.Term): hydra.core.Term =
@@ -52,6 +94,20 @@ def encodeForallType(ft: hydra.core.ForallType): hydra.core.Term =
 def encodeInjection(typeName: hydra.core.Name)(fieldName: hydra.core.Name)(fieldTerm: hydra.core.Term): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.core.Injection", Seq(hydra.core.Field("typeName",
      hydra.encoding.encodeName(typeName)), hydra.core.Field("field", hydra.core.Term.record(hydra.core.Record("hydra.core.Field",
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      Seq(hydra.core.Field("name", hydra.encoding.encodeName(fieldName)), hydra.core.Field("term",
      fieldTerm))))))))
 
@@ -70,6 +126,20 @@ def encodeIntegerValue(intType: hydra.core.IntegerType)(valTerm: hydra.core.Term
 def encodeListType(elemType: hydra.core.Type): hydra.core.Term =
   hydra.core.Term.lambda(hydra.core.Lambda("xs", None, hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("list", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.lists.map"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.encoding.encodeType(elemType))), hydra.core.Term.variable("xs"))))))))
 
 def encodeLiteralType(v1: hydra.core.LiteralType): hydra.core.Term =
@@ -103,18 +173,74 @@ def encodeLiteralType(v1: hydra.core.LiteralType): hydra.core.Term =
 def encodeMapType(mt: hydra.core.MapType): hydra.core.Term =
   hydra.core.Term.lambda(hydra.core.Lambda("m", None, hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("map", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.maps.bimap"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.encoding.encodeType(mt.keys))), hydra.encoding.encodeType(mt.values))),
      hydra.core.Term.variable("m"))))))))
 
 def encodeModule(cx: hydra.context.Context)(graph: hydra.graph.Graph)(mod: hydra.packaging.Module): Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    Option[hydra.packaging.Module]] =
   hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.Binding], Option[hydra.packaging.Module]](hydra.encoding.filterTypeBindings(cx)(graph)(hydra.lib.maybes.cat[hydra.core.Binding](hydra.lib.lists.map[hydra.packaging.Definition,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      Option[hydra.core.Binding]]((d: hydra.packaging.Definition) =>
   d match
   case hydra.packaging.Definition.`type`(v_Definition_type_td) => Some({
     lazy val schemaTerm: hydra.core.Term = hydra.core.Term.variable("hydra.core.Type")
     {
       lazy val dataTerm: hydra.core.Term = hydra.annotations.normalizeTermAnnotations(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.encode.core.`type`(v_Definition_type_td.`type`.`type`),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.lib.maps.fromList[hydra.core.Name, hydra.core.Term](Seq(Tuple2(hydra.constants.key_type,
          schemaTerm))))))
       hydra.core.Binding(v_Definition_type_td.name, dataTerm, Some(hydra.core.TypeScheme(Seq(),
@@ -123,6 +249,20 @@ def encodeModule(cx: hydra.context.Context)(graph: hydra.graph.Graph)(mod: hydra
   })
   case _ => None)(mod.definitions))))((typeBindings: Seq[hydra.core.Binding]) =>
   hydra.lib.logic.ifElse[Either[hydra.errors.Error, Option[hydra.packaging.Module]]](hydra.lib.lists.`null`[hydra.core.Binding](typeBindings))(Right(None))(hydra.lib.eithers.bind[hydra.errors.Error,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      Seq[hydra.core.Binding], Option[hydra.packaging.Module]](hydra.lib.eithers.mapList[hydra.core.Binding,
      hydra.core.Binding, hydra.errors.Error]((b: hydra.core.Binding) =>
   hydra.lib.eithers.bimap[hydra.errors.DecodingError, hydra.core.Binding, hydra.errors.Error,
@@ -131,7 +271,35 @@ def encodeModule(cx: hydra.context.Context)(graph: hydra.graph.Graph)(mod: hydra
      hydra.lib.lists.map[hydra.core.Binding, hydra.packaging.Definition]((b: hydra.core.Binding) =>
   hydra.packaging.Definition.term(hydra.packaging.TermDefinition(b.name, (b.term),
      (b.`type`))))(encodedBindings), hydra.lib.lists.nub[hydra.packaging.Namespace](hydra.lib.lists.concat2[hydra.packaging.Namespace](hydra.lib.lists.map[hydra.packaging.Namespace,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.packaging.Namespace](hydra.encoding.encodeNamespace)(mod.typeDependencies))(hydra.lib.lists.map[hydra.packaging.Namespace,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.packaging.Namespace](hydra.encoding.encodeNamespace)(mod.termDependencies))),
      Seq(mod.namespace), Some(hydra.lib.strings.cat(Seq("Term encoders for ", (mod.namespace))))))))))
 
@@ -143,19 +311,75 @@ def encodeNamespace(ns: hydra.packaging.Namespace): hydra.packaging.Namespace =
   lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(ns)
   lazy val fallback: hydra.packaging.Namespace = ns
   hydra.lib.maybes.maybe[hydra.packaging.Namespace, Tuple2[scala.Predef.String, Seq[scala.Predef.String]]](fallback)((uc: Tuple2[scala.Predef.String,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      Seq[scala.Predef.String]]) =>
     hydra.lib.strings.cat(Seq("hydra.encode.", hydra.lib.strings.intercalate(".")(hydra.lib.pairs.second[scala.Predef.String,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        Seq[scala.Predef.String]](uc)))))(hydra.lib.lists.uncons[scala.Predef.String](parts))
 }
 
 def encodeOptionalType(elemType: hydra.core.Type): hydra.core.Term =
   hydra.core.Term.lambda(hydra.core.Lambda("opt", None, hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("maybe", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.maybes.map"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.encoding.encodeType(elemType))), hydra.core.Term.variable("opt"))))))))
 
 def encodePairType(pt: hydra.core.PairType): hydra.core.Term =
   hydra.core.Term.lambda(hydra.core.Lambda("p", None, hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("pair", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.pairs.bimap"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.encoding.encodeType(pt.first))), hydra.encoding.encodeType(pt.second))),
      hydra.core.Term.variable("p"))))))))
 
@@ -168,18 +392,60 @@ def encodeRecordTypeNamed(ename: hydra.core.Name)(rt: Seq[hydra.core.FieldType])
      hydra.core.Term.list(hydra.lib.lists.map[hydra.core.FieldType, hydra.core.Term]((ft: hydra.core.FieldType) =>
   hydra.core.Term.record(hydra.core.Record("hydra.core.Field", Seq(hydra.core.Field("name",
      hydra.encoding.encodeName(ft.name)), hydra.core.Field("term", hydra.core.Term.application(hydra.core.Application(hydra.encoding.encodeType(ft.`type`),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.project(hydra.core.Projection(ename,
      (ft.name))), hydra.core.Term.variable("x"))))))))))(rt)))))))))))
 
 def encodeSetType(elemType: hydra.core.Type): hydra.core.Term =
   hydra.core.Term.lambda(hydra.core.Lambda("s", None, hydra.core.Term.inject(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("set", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.sets.map"),
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.encoding.encodeType(elemType))), hydra.core.Term.variable("s"))))))))
 
 def encodeType(v1: hydra.core.Type): hydra.core.Term =
   v1 match
   case hydra.core.Type.annotated(v_Type_annotated_at) => hydra.encoding.encodeType(v_Type_annotated_at.body)
   case hydra.core.Type.application(v_Type_application_appType) => hydra.core.Term.application(hydra.core.Application(hydra.encoding.encodeType(v_Type_application_appType.function),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.encoding.encodeType(v_Type_application_appType.argument)))
   case hydra.core.Type.either(v_Type_either_et) => hydra.encoding.encodeEitherType(v_Type_either_et)
   case hydra.core.Type.forall(v_Type_forall_ft) => hydra.encoding.encodeForallType(v_Type_forall_ft)
@@ -207,9 +473,37 @@ def encodeTypeNamed(ename: hydra.core.Name)(typ: hydra.core.Type): hydra.core.Te
   typ match
   case hydra.core.Type.annotated(v_Type_annotated_at) => hydra.encoding.encodeTypeNamed(ename)(v_Type_annotated_at.body)
   case hydra.core.Type.application(v_Type_application_appType) => hydra.core.Term.application(hydra.core.Application(hydra.encoding.encodeType(v_Type_application_appType.function),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.encoding.encodeType(v_Type_application_appType.argument)))
   case hydra.core.Type.either(v_Type_either_et) => hydra.encoding.encodeEitherType(v_Type_either_et)
   case hydra.core.Type.forall(v_Type_forall_ft) => hydra.core.Term.lambda(hydra.core.Lambda(hydra.encoding.encodeBindingName(v_Type_forall_ft.parameter),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      None, hydra.encoding.encodeTypeNamed(ename)(v_Type_forall_ft.body)))
   case hydra.core.Type.function(v_Type_function__) => hydra.core.Term.lambda(hydra.core.Lambda("x",
      None, hydra.core.Term.variable("x")))
@@ -262,13 +556,55 @@ def encoderCollectOrdVars(typ: hydra.core.Type): Seq[hydra.core.Name] =
   case hydra.core.Type.forall(v_Type_forall_ft) => hydra.encoding.encoderCollectOrdVars(v_Type_forall_ft.body)
   case hydra.core.Type.list(v_Type_list_elemType) => hydra.encoding.encoderCollectOrdVars(v_Type_list_elemType)
   case hydra.core.Type.map(v_Type_map_mt) => hydra.lib.lists.concat[hydra.core.Name](Seq(hydra.encoding.encoderCollectTypeVarsFromType(v_Type_map_mt.keys),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.encoding.encoderCollectOrdVars(v_Type_map_mt.keys), hydra.encoding.encoderCollectOrdVars(v_Type_map_mt.values)))
   case hydra.core.Type.maybe(v_Type_maybe_elemType) => hydra.encoding.encoderCollectOrdVars(v_Type_maybe_elemType)
   case hydra.core.Type.pair(v_Type_pair_pt) => hydra.lib.lists.concat2[hydra.core.Name](hydra.encoding.encoderCollectOrdVars(v_Type_pair_pt.first))(hydra.encoding.encoderCollectOrdVars(v_Type_pair_pt.second))
   case hydra.core.Type.record(v_Type_record_rt) => hydra.lib.lists.concat[hydra.core.Name](hydra.lib.lists.map[hydra.core.FieldType,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      Seq[hydra.core.Name]]((ft: hydra.core.FieldType) => hydra.encoding.encoderCollectOrdVars(ft.`type`))(v_Type_record_rt))
   case hydra.core.Type.set(v_Type_set_elemType) => hydra.lib.lists.concat2[hydra.core.Name](hydra.encoding.encoderCollectTypeVarsFromType(v_Type_set_elemType))(hydra.encoding.encoderCollectOrdVars(v_Type_set_elemType))
   case hydra.core.Type.union(v_Type_union_rt) => hydra.lib.lists.concat[hydra.core.Name](hydra.lib.lists.map[hydra.core.FieldType,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      Seq[hydra.core.Name]]((ft: hydra.core.FieldType) => hydra.encoding.encoderCollectOrdVars(ft.`type`))(v_Type_union_rt))
   case hydra.core.Type.wrap(v_Type_wrap_wt) => hydra.encoding.encoderCollectOrdVars(v_Type_wrap_wt)
   case _ => Seq()
@@ -283,9 +619,37 @@ def encoderCollectTypeVarsFromType(typ: hydra.core.Type): Seq[hydra.core.Name] =
   case hydra.core.Type.maybe(v_Type_maybe_elemType) => hydra.encoding.encoderCollectTypeVarsFromType(v_Type_maybe_elemType)
   case hydra.core.Type.pair(v_Type_pair_pt) => hydra.lib.lists.concat2[hydra.core.Name](hydra.encoding.encoderCollectTypeVarsFromType(v_Type_pair_pt.first))(hydra.encoding.encoderCollectTypeVarsFromType(v_Type_pair_pt.second))
   case hydra.core.Type.record(v_Type_record_rt) => hydra.lib.lists.concat[hydra.core.Name](hydra.lib.lists.map[hydra.core.FieldType,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      Seq[hydra.core.Name]]((ft: hydra.core.FieldType) => hydra.encoding.encoderCollectTypeVarsFromType(ft.`type`))(v_Type_record_rt))
   case hydra.core.Type.set(v_Type_set_elemType) => hydra.encoding.encoderCollectTypeVarsFromType(v_Type_set_elemType)
   case hydra.core.Type.union(v_Type_union_rt) => hydra.lib.lists.concat[hydra.core.Name](hydra.lib.lists.map[hydra.core.FieldType,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      Seq[hydra.core.Name]]((ft: hydra.core.FieldType) => hydra.encoding.encoderCollectTypeVarsFromType(ft.`type`))(v_Type_union_rt))
   case hydra.core.Type.variable(v_Type_variable_name) => Seq(v_Type_variable_name)
   case hydra.core.Type.wrap(v_Type_wrap_wt) => hydra.encoding.encoderCollectTypeVarsFromType(v_Type_wrap_wt)
@@ -295,17 +659,87 @@ def encoderFullResultType(typ: hydra.core.Type): hydra.core.Type =
   typ match
   case hydra.core.Type.annotated(v_Type_annotated_at) => hydra.encoding.encoderFullResultType(v_Type_annotated_at.body)
   case hydra.core.Type.application(v_Type_application_appType) => hydra.core.Type.application(hydra.core.ApplicationType(hydra.encoding.encoderFullResultType(v_Type_application_appType.function),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      (v_Type_application_appType.argument)))
   case hydra.core.Type.either(v_Type_either_et) => hydra.core.Type.either(hydra.core.EitherType(hydra.encoding.encoderFullResultType(v_Type_either_et.left),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.encoding.encoderFullResultType(v_Type_either_et.right)))
   case hydra.core.Type.forall(v_Type_forall_ft) => hydra.core.Type.application(hydra.core.ApplicationType(hydra.encoding.encoderFullResultType(v_Type_forall_ft.body),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Type.variable(v_Type_forall_ft.parameter)))
   case hydra.core.Type.list(v_Type_list_elemType) => hydra.core.Type.list(hydra.encoding.encoderFullResultType(v_Type_list_elemType))
   case hydra.core.Type.literal(v_Type_literal__) => hydra.core.Type.variable("hydra.core.Literal")
   case hydra.core.Type.map(v_Type_map_mt) => hydra.core.Type.map(hydra.core.MapType(hydra.encoding.encoderFullResultType(v_Type_map_mt.keys),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.encoding.encoderFullResultType(v_Type_map_mt.values)))
   case hydra.core.Type.maybe(v_Type_maybe_elemType) => hydra.core.Type.maybe(hydra.encoding.encoderFullResultType(v_Type_maybe_elemType))
   case hydra.core.Type.pair(v_Type_pair_pt) => hydra.core.Type.pair(hydra.core.PairType(hydra.encoding.encoderFullResultType(v_Type_pair_pt.first),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.encoding.encoderFullResultType(v_Type_pair_pt.second)))
   case hydra.core.Type.record(v_Type_record__) => hydra.core.Type.variable("hydra.core.Term")
   case hydra.core.Type.set(v_Type_set_elemType) => hydra.core.Type.set(hydra.encoding.encoderFullResultType(v_Type_set_elemType))
@@ -320,17 +754,87 @@ def encoderFullResultTypeNamed(ename: hydra.core.Name)(typ: hydra.core.Type): hy
   typ match
   case hydra.core.Type.annotated(v_Type_annotated_at) => hydra.encoding.encoderFullResultTypeNamed(ename)(v_Type_annotated_at.body)
   case hydra.core.Type.application(v_Type_application_appType) => hydra.core.Type.application(hydra.core.ApplicationType(hydra.encoding.encoderFullResultType(v_Type_application_appType.function),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      (v_Type_application_appType.argument)))
   case hydra.core.Type.either(v_Type_either_et) => hydra.core.Type.either(hydra.core.EitherType(hydra.encoding.encoderFullResultType(v_Type_either_et.left),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.encoding.encoderFullResultType(v_Type_either_et.right)))
   case hydra.core.Type.forall(v_Type_forall_ft) => hydra.core.Type.application(hydra.core.ApplicationType(hydra.encoding.encoderFullResultTypeNamed(ename)(v_Type_forall_ft.body),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Type.variable(v_Type_forall_ft.parameter)))
   case hydra.core.Type.list(v_Type_list_elemType) => hydra.core.Type.list(hydra.encoding.encoderFullResultType(v_Type_list_elemType))
   case hydra.core.Type.literal(v_Type_literal__) => hydra.core.Type.variable("hydra.core.Literal")
   case hydra.core.Type.map(v_Type_map_mt) => hydra.core.Type.map(hydra.core.MapType(hydra.encoding.encoderFullResultType(v_Type_map_mt.keys),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.encoding.encoderFullResultType(v_Type_map_mt.values)))
   case hydra.core.Type.maybe(v_Type_maybe_elemType) => hydra.core.Type.maybe(hydra.encoding.encoderFullResultType(v_Type_maybe_elemType))
   case hydra.core.Type.pair(v_Type_pair_pt) => hydra.core.Type.pair(hydra.core.PairType(hydra.encoding.encoderFullResultType(v_Type_pair_pt.first),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.encoding.encoderFullResultType(v_Type_pair_pt.second)))
   case hydra.core.Type.record(v_Type_record__) => hydra.core.Type.variable(ename)
   case hydra.core.Type.set(v_Type_set_elemType) => hydra.core.Type.set(hydra.encoding.encoderFullResultType(v_Type_set_elemType))
@@ -364,7 +868,35 @@ def encoderTypeScheme(typ: hydra.core.Type): hydra.core.TypeScheme =
   lazy val allOrdVars: Seq[hydra.core.Name] = hydra.encoding.encoderCollectOrdVars(typ)
   lazy val ordVars: Seq[hydra.core.Name] = hydra.lib.lists.filter[hydra.core.Name]((v: hydra.core.Name) => hydra.lib.lists.elem[hydra.core.Name](v)(typeVars))(allOrdVars)
   lazy val constraints: Option[Map[hydra.core.Name, hydra.core.TypeVariableMetadata]] = hydra.lib.logic.ifElse[Option[Map[hydra.core.Name,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.TypeVariableMetadata]]](hydra.lib.lists.`null`[hydra.core.Name](ordVars))(None)(Some(hydra.lib.maps.fromList[hydra.core.Name,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.TypeVariableMetadata](hydra.lib.lists.map[hydra.core.Name, Tuple2[hydra.core.Name,
      hydra.core.TypeVariableMetadata]]((v: hydra.core.Name) =>
     Tuple2(v, hydra.core.TypeVariableMetadata(hydra.lib.sets.singleton[hydra.core.Name]("ordering"))))(ordVars))))
@@ -378,7 +910,35 @@ def encoderTypeSchemeNamed(ename: hydra.core.Name)(typ: hydra.core.Type): hydra.
   lazy val allOrdVars: Seq[hydra.core.Name] = hydra.encoding.encoderCollectOrdVars(typ)
   lazy val ordVars: Seq[hydra.core.Name] = hydra.lib.lists.filter[hydra.core.Name]((v: hydra.core.Name) => hydra.lib.lists.elem[hydra.core.Name](v)(typeVars))(allOrdVars)
   lazy val constraints: Option[Map[hydra.core.Name, hydra.core.TypeVariableMetadata]] = hydra.lib.logic.ifElse[Option[Map[hydra.core.Name,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.TypeVariableMetadata]]](hydra.lib.lists.`null`[hydra.core.Name](ordVars))(None)(Some(hydra.lib.maps.fromList[hydra.core.Name,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.TypeVariableMetadata](hydra.lib.lists.map[hydra.core.Name, Tuple2[hydra.core.Name,
      hydra.core.TypeVariableMetadata]]((v: hydra.core.Name) =>
     Tuple2(v, hydra.core.TypeVariableMetadata(hydra.lib.sets.singleton[hydra.core.Name]("ordering"))))(ordVars))))
@@ -386,12 +946,40 @@ def encoderTypeSchemeNamed(ename: hydra.core.Name)(typ: hydra.core.Type): hydra.
 }
 
 def filterTypeBindings(cx: hydra.context.Context)(graph: hydra.graph.Graph)(bindings: Seq[hydra.core.Binding]): Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    Seq[hydra.core.Binding]] =
   hydra.lib.eithers.map[Seq[Option[hydra.core.Binding]], Seq[hydra.core.Binding],
      hydra.errors.Error](hydra.lib.maybes.cat[hydra.core.Binding])(hydra.lib.eithers.mapList[hydra.core.Binding,
      Option[hydra.core.Binding], hydra.errors.Error]((v1: hydra.core.Binding) => hydra.encoding.isEncodableBinding(cx)(graph)(v1))(hydra.lib.lists.filter[hydra.core.Binding](hydra.annotations.isNativeType)(bindings)))
 
 def isEncodableBinding(cx: hydra.context.Context)(graph: hydra.graph.Graph)(b: hydra.core.Binding): Either[hydra.errors.Error,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    Option[hydra.core.Binding]] =
   hydra.lib.eithers.bind[hydra.errors.Error, Boolean, Option[hydra.core.Binding]](hydra.predicates.isSerializableByName(cx)(graph)(b.name))((serializable: Boolean) =>
   Right(hydra.lib.logic.ifElse[Option[hydra.core.Binding]](serializable)(Some(b))(None)))
@@ -405,5 +993,19 @@ def prependForallEncoders(baseType: hydra.core.Type)(typ: hydra.core.Type): hydr
   typ match
   case hydra.core.Type.annotated(v_Type_annotated_at) => hydra.encoding.prependForallEncoders(baseType)(v_Type_annotated_at.body)
   case hydra.core.Type.forall(v_Type_forall_ft) => hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.variable(v_Type_forall_ft.parameter),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Type.variable("hydra.core.Term"))), hydra.encoding.prependForallEncoders(baseType)(v_Type_forall_ft.body)))
   case _ => baseType

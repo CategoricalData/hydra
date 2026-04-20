@@ -27,9 +27,37 @@ def inferTestGroupTerms[T0, T1](g: T0)(tg: hydra.testing.TestGroup): Either[T1, 
   lazy val subgroups: Seq[hydra.testing.TestGroup] = (tg.subgroups)
   lazy val `cases_`: Seq[hydra.testing.TestCaseWithMetadata] = (tg.cases)
   hydra.lib.eithers.bind[T1, Seq[hydra.testing.TestGroup], hydra.testing.TestGroup](hydra.lib.eithers.mapList[hydra.testing.TestGroup,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.testing.TestGroup, T1]((sg: hydra.testing.TestGroup) => hydra.test.utils.inferTestGroupTerms(g)(sg))(subgroups))((inferredSubgroups: Seq[hydra.testing.TestGroup]) =>
     hydra.lib.eithers.map[Seq[hydra.testing.TestCaseWithMetadata], hydra.testing.TestGroup,
        T1]((inferredCases: Seq[hydra.testing.TestCaseWithMetadata]) =>
     hydra.testing.TestGroup(`name_`, desc, inferredSubgroups, inferredCases))(hydra.lib.eithers.mapList[hydra.testing.TestCaseWithMetadata,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.testing.TestCaseWithMetadata, T1]((tc: hydra.testing.TestCaseWithMetadata) => hydra.test.utils.inferTestCase(g)(tc))(`cases_`)))
 }

@@ -41,7 +41,35 @@ case class Language(name: hydra.coders.LanguageName, constraints: hydra.coders.L
 case class LanguageConstraints(eliminationVariants: scala.collection.immutable.Set[hydra.variants.EliminationVariant],
    literalVariants: scala.collection.immutable.Set[hydra.variants.LiteralVariant],
    floatTypes: scala.collection.immutable.Set[hydra.core.FloatType], functionVariants: scala.collection.immutable.Set[hydra.variants.FunctionVariant],
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    integerTypes: scala.collection.immutable.Set[hydra.core.IntegerType], termVariants: scala.collection.immutable.Set[hydra.variants.TermVariant],
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
    typeVariants: scala.collection.immutable.Set[hydra.variants.TypeVariant], types: (hydra.core.Type => Boolean))
 
 type LanguageName = scala.Predef.String

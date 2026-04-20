@@ -27,6 +27,20 @@ def composeTypeSubstNonEmpty(s1: hydra.typing.TypeSubst)(s2: hydra.typing.TypeSu
 lazy val idTypeSubst: hydra.typing.TypeSubst = hydra.lib.maps.empty[hydra.core.Name, hydra.core.Type]
 
 def singletonTypeSubst(v: hydra.core.Name)(t: hydra.core.Type): hydra.typing.TypeSubst = hydra.lib.maps.singleton[hydra.core.Name,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    hydra.core.Type](v)(t)
 
 def substInClassConstraints(subst: hydra.typing.TypeSubst)(constraints: Map[hydra.core.Name,
@@ -36,6 +50,20 @@ def substInClassConstraints(subst: hydra.typing.TypeSubst)(constraints: Map[hydr
   def insertOrMerge[T0](varName: T0)(metadata: hydra.core.TypeVariableMetadata)(acc: Map[T0,
      hydra.core.TypeVariableMetadata]): Map[T0, hydra.core.TypeVariableMetadata] =
     hydra.lib.maybes.maybe[Map[T0, hydra.core.TypeVariableMetadata], hydra.core.TypeVariableMetadata](hydra.lib.maps.insert[T0,
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        hydra.core.TypeVariableMetadata](varName)(metadata)(acc))((existing: hydra.core.TypeVariableMetadata) =>
     {
     lazy val merged: hydra.core.TypeVariableMetadata = hydra.core.TypeVariableMetadata(hydra.lib.sets.union[hydra.core.Name](existing.classes)(metadata.classes))
@@ -84,6 +112,20 @@ def substInTypeNonEmpty(subst: hydra.typing.TypeSubst)(typ0: hydra.core.Type): h
     case hydra.core.Type.forall(v_Type_forall_lt) => hydra.lib.maybes.maybe[hydra.core.Type,
        hydra.core.Type](recurse(typ))((styp: hydra.core.Type) =>
       hydra.core.Type.forall(hydra.core.ForallType(v_Type_forall_lt.parameter, hydra.substitution.substInType(removeVar(v_Type_forall_lt.parameter))(v_Type_forall_lt.body))))(hydra.lib.maps.lookup[hydra.core.Name,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.core.Type](v_Type_forall_lt.parameter)(subst))
     case hydra.core.Type.variable(v_Type_variable_v) => hydra.lib.maybes.maybe[hydra.core.Type,
        hydra.core.Type](typ)((styp: hydra.core.Type) => styp)(hydra.lib.maps.lookup[hydra.core.Name,
@@ -114,10 +156,38 @@ def substTypesInTerm(subst: hydra.typing.TypeSubst)(term0: hydra.core.Term): hyd
         hydra.core.Binding(b.name, hydra.substitution.substTypesInTerm(subst)(b.term),
            hydra.lib.maybes.map[hydra.core.TypeScheme, hydra.core.TypeScheme]((v1: hydra.core.TypeScheme) => hydra.substitution.substInTypeScheme(subst)(v1))(b.`type`))
       hydra.core.Term.let(hydra.core.Let(hydra.lib.lists.map[hydra.core.Binding, hydra.core.Binding](rewriteBinding)(l.bindings),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.substitution.substTypesInTerm(subst)(l.body)))
     }
     def forTypeApplication(tt: hydra.core.TypeApplicationTerm): hydra.core.Term =
       hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(hydra.substitution.substTypesInTerm(subst)(tt.body),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.substitution.substInType(subst)(tt.`type`)))
     def forTypeLambda(ta: hydra.core.TypeLambda): hydra.core.Term =
       {
@@ -140,6 +210,20 @@ def substituteInBinding(subst: hydra.typing.TermSubst)(b: hydra.core.Binding): h
 
 def substituteInConstraint(subst: hydra.typing.TypeSubst)(c: hydra.typing.TypeConstraint): hydra.typing.TypeConstraint =
   hydra.typing.TypeConstraint(hydra.substitution.substInType(subst)(c.left), hydra.substitution.substInType(subst)(c.right),
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      (c.comment))
 
 def substituteInConstraints(subst: hydra.typing.TypeSubst)(cs: Seq[hydra.typing.TypeConstraint]): Seq[hydra.typing.TypeConstraint] =
@@ -160,6 +244,20 @@ def substituteInTerm(subst: hydra.typing.TermSubst)(term0: hydra.core.Term): hyd
       {
       lazy val bindings: Seq[hydra.core.Binding] = (lt.bindings)
       lazy val names: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.lists.map[hydra.core.Binding,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.core.Name]((x: hydra.core.Binding) => (x.name))(bindings))
       lazy val subst2: hydra.typing.TermSubst = hydra.lib.maps.filterWithKey[hydra.core.Name,
          hydra.core.Term]((k: hydra.core.Name) =>
@@ -168,6 +266,20 @@ def substituteInTerm(subst: hydra.typing.TermSubst)(term0: hydra.core.Term): hyd
       def rewriteBinding(b: hydra.core.Binding): hydra.core.Binding =
         hydra.core.Binding(b.name, hydra.substitution.substituteInTerm(subst2)(b.term), (b.`type`))
       hydra.core.Term.let(hydra.core.Let(hydra.lib.lists.map[hydra.core.Binding, hydra.core.Binding](rewriteBinding)(bindings),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.substitution.substituteInTerm(subst2)(lt.body)))
     }
     term match

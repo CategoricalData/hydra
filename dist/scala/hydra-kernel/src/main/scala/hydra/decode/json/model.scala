@@ -16,10 +16,52 @@ def value(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.Deco
     lazy val fterm: hydra.core.Term = (field.term)
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.json.model.Value])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        hydra.json.model.Value]](Seq(Tuple2("array", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Seq[hydra.json.model.Value], hydra.json.model.Value, hydra.errors.DecodingError]((t: Seq[hydra.json.model.Value]) => hydra.json.model.Value.array(t))(hydra.extract.core.decodeList(hydra.decode.json.model.value)(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("boolean", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Boolean, hydra.json.model.Value, hydra.errors.DecodingError]((t: Boolean) => hydra.json.model.Value.boolean(t))(hydra.lib.eithers.either[hydra.errors.DecodingError,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.core.Term, Either[hydra.errors.DecodingError, Boolean]]((err: hydra.errors.DecodingError) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
@@ -28,8 +70,36 @@ def value(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.Deco
       case _ => Left("expected literal"))(hydra.extract.core.stripWithDecodingError(cx)(input)))),
          Tuple2("null", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.json.model.Value, hydra.errors.DecodingError]((t: Unit) => hydra.json.model.Value.`null`)(hydra.extract.core.decodeUnit(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("number", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[BigDecimal, hydra.json.model.Value, hydra.errors.DecodingError]((t: BigDecimal) => hydra.json.model.Value.number(t))(hydra.lib.eithers.either[hydra.errors.DecodingError,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.core.Term, Either[hydra.errors.DecodingError, BigDecimal]]((err: hydra.errors.DecodingError) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
@@ -47,8 +117,36 @@ def value(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.Deco
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
         case _ => Left("expected string literal")
       case _ => Left("expected literal"))(hydra.extract.core.stripWithDecodingError(cx2)(raw2)))(hydra.decode.json.model.value)(cx)(input))),
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Tuple2("string", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[scala.Predef.String, hydra.json.model.Value, hydra.errors.DecodingError]((t: scala.Predef.String) => hydra.json.model.Value.string(t))(hydra.lib.eithers.either[hydra.errors.DecodingError,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: hydra.errors.DecodingError) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
@@ -57,6 +155,20 @@ def value(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.Deco
       case _ => Left("expected literal"))(hydra.extract.core.stripWithDecodingError(cx)(input))))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.json.model.Value],
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.json.model.Value]](Left(hydra.lib.strings.cat(Seq("no such field ",
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.json.model.Value])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name,
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.json.model.Value]](fname)(variantMap))

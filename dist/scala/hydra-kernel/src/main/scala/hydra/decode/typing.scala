@@ -52,6 +52,20 @@ def inferenceResult(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.e
          hydra.typing.InferenceResult](hydra.extract.core.requireField("classConstraints")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.core.decodeMap(hydra.decode.core.name)(hydra.decode.core.typeVariableMetadata)(v1)(v2))(fieldMap)(cx))((field_classConstraints: Map[hydra.core.Name,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.core.TypeVariableMetadata]) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.context.Context, hydra.typing.InferenceResult](hydra.extract.core.requireField("context")(hydra.decode.context.context)(fieldMap)(cx))((field_context: hydra.context.Context) =>
       Right(hydra.typing.InferenceResult(field_term, field_type, field_subst, field_classConstraints,

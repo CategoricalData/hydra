@@ -12,6 +12,20 @@ def tag(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.Decodi
   stripped match
   case hydra.core.Term.wrap(v_Term_wrap_wrappedTerm) => hydra.lib.eithers.map[scala.Predef.String,
      hydra.testing.Tag, hydra.errors.DecodingError]((b: scala.Predef.String) => b)(hydra.lib.eithers.either[hydra.errors.DecodingError,
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
      hydra.core.Term, Either[hydra.errors.DecodingError, scala.Predef.String]]((err: hydra.errors.DecodingError) => Left(err))((stripped2: hydra.core.Term) =>
     stripped2 match
     case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
@@ -30,11 +44,39 @@ def testCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.D
     lazy val fterm: hydra.core.Term = (field.term)
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.testing.TestCase])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        hydra.testing.TestCase]](Seq(Tuple2("universal", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.testing.UniversalTestCase, hydra.testing.TestCase,
          hydra.errors.DecodingError]((t: hydra.testing.UniversalTestCase) => hydra.testing.TestCase.universal(t))(hydra.decode.testing.universalTestCase(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.testing.TestCase],
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.TestCase]](Left(hydra.lib.strings.cat(Seq("no such field ",
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.testing.TestCase])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name,
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.TestCase]](fname)(variantMap))

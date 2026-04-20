@@ -20,6 +20,20 @@ def decodeFloat(ft: hydra.core.FloatType)(value: hydra.json.model.Value): Either
       {
       lazy val parsed: Option[Float] = hydra.lib.literals.readFloat32(s)
       hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], Float](Left(hydra.lib.strings.cat(Seq("invalid float32: ",
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          s))))((v: Float) =>
         Right(hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float32(v)))))(parsed)
     })(strResult)
@@ -42,6 +56,20 @@ def decodeInteger(it: hydra.core.IntegerType)(value: hydra.json.model.Value): Ei
       {
       lazy val parsed: Option[BigInt] = hydra.lib.literals.readBigint(s)
       hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], BigInt](Left(hydra.lib.strings.cat(Seq("invalid bigint: ",
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          s))))((v: BigInt) =>
         Right(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.bigint(v)))))(parsed)
     })(strResult)
@@ -53,6 +81,20 @@ def decodeInteger(it: hydra.core.IntegerType)(value: hydra.json.model.Value): Ei
       {
       lazy val parsed: Option[Long] = hydra.lib.literals.readInt64(s)
       hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], Long](Left(hydra.lib.strings.cat(Seq("invalid int64: ",
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          s))))((v: Long) =>
         Right(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int64(v)))))(parsed)
     })(strResult)
@@ -64,6 +106,20 @@ def decodeInteger(it: hydra.core.IntegerType)(value: hydra.json.model.Value): Ei
       {
       lazy val parsed: Option[Long] = hydra.lib.literals.readUint32(s)
       hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], Long](Left(hydra.lib.strings.cat(Seq("invalid uint32: ",
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          s))))((v: Long) =>
         Right(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint32(v)))))(parsed)
     })(strResult)
@@ -75,6 +131,20 @@ def decodeInteger(it: hydra.core.IntegerType)(value: hydra.json.model.Value): Ei
       {
       lazy val parsed: Option[BigInt] = hydra.lib.literals.readUint64(s)
       hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], BigInt](Left(hydra.lib.strings.cat(Seq("invalid uint64: ",
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          s))))((v: BigInt) =>
         Right(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.uint64(v)))))(parsed)
     })(strResult)
@@ -148,6 +218,20 @@ def expectString(value: hydra.json.model.Value): Either[scala.Predef.String, sca
   case _ => Left("expected string")
 
 def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)(typ: hydra.core.Type)(value: hydra.json.model.Value): Either[scala.Predef.String,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    hydra.core.Term] =
   {
   lazy val stripped: hydra.core.Type = hydra.strip.deannotateType(typ)
@@ -161,6 +245,20 @@ def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Nam
            Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((arr: Seq[hydra.json.model.Value]) =>
           {
           lazy val decoded: Either[scala.Predef.String, Seq[hydra.core.Term]] = hydra.lib.eithers.mapList[hydra.json.model.Value,
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
              hydra.core.Term, scala.Predef.String](decodeElem)(arr)
           hydra.lib.eithers.map[Seq[hydra.core.Term], hydra.core.Term, scala.Predef.String]((ts: Seq[hydra.core.Term]) => hydra.core.Term.list(ts))(decoded)
         })(arrResult)
@@ -174,6 +272,20 @@ def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Nam
            Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((arr: Seq[hydra.json.model.Value]) =>
           {
           lazy val decoded: Either[scala.Predef.String, Seq[hydra.core.Term]] = hydra.lib.eithers.mapList[hydra.json.model.Value,
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
              hydra.core.Term, scala.Predef.String](decodeElem)(arr)
           hydra.lib.eithers.map[Seq[hydra.core.Term], hydra.core.Term, scala.Predef.String]((elems: Seq[hydra.core.Term]) =>
             hydra.core.Term.set(hydra.lib.sets.fromList[hydra.core.Term](elems)))(decoded)
@@ -195,6 +307,20 @@ def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Nam
               {
               lazy val len: Int = hydra.lib.lists.length[hydra.json.model.Value](arr)
               hydra.lib.logic.ifElse[Either[scala.Predef.String, hydra.core.Term]](hydra.lib.equality.equal[Int](len)(0))(Right(hydra.core.Term.maybe(None)))(hydra.lib.logic.ifElse[Either[scala.Predef.String,
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                  hydra.core.Term]](hydra.lib.equality.equal[Int](len)(1))(decodeJust(arr))(Left("expected single-element array for Just")))
             }
             value match
@@ -211,6 +337,20 @@ def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Nam
       lazy val objResult: Either[scala.Predef.String, Map[scala.Predef.String, hydra.json.model.Value]] = hydra.json.decode.expectObject(value)
       hydra.lib.eithers.either[scala.Predef.String, Map[scala.Predef.String, hydra.json.model.Value],
          Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((obj: Map[scala.Predef.String,
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          hydra.json.model.Value]) =>
         {
         def decodeField(ft: hydra.core.FieldType): Either[scala.Predef.String, hydra.core.Field] =
@@ -223,18 +363,74 @@ def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Nam
           lazy val jsonVal: hydra.json.model.Value = hydra.lib.maybes.fromMaybe[hydra.json.model.Value](defaultVal)(mval)
           lazy val decoded: Either[scala.Predef.String, hydra.core.Term] = hydra.json.decode.fromJson(types)(tname)(ftype)(jsonVal)
           hydra.lib.eithers.map[hydra.core.Term, hydra.core.Field, scala.Predef.String]((v: hydra.core.Term) => hydra.core.Field(fname,
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
              v))(decoded)
         }
         {
           lazy val decodedFields: Either[scala.Predef.String, Seq[hydra.core.Field]] = hydra.lib.eithers.mapList[hydra.core.FieldType,
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
              hydra.core.Field, scala.Predef.String](decodeField)(v_Type_record_rt)
           hydra.lib.eithers.map[Seq[hydra.core.Field], hydra.core.Term, scala.Predef.String]((fs: Seq[hydra.core.Field]) => hydra.core.Term.record(hydra.core.Record(tname,
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
              fs)))(decodedFields)
         }
       })(objResult)
     }
     case hydra.core.Type.union(v_Type_union_rt) => {
       def decodeVariant(key: scala.Predef.String)(`val`: Option[hydra.json.model.Value])(ftype: hydra.core.Type): Either[scala.Predef.String,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          hydra.core.Term] =
         {
         lazy val jsonVal: hydra.json.model.Value = hydra.lib.maybes.fromMaybe[hydra.json.model.Value](hydra.json.model.Value.`null`)(`val`)
@@ -244,25 +440,95 @@ def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Nam
       }
       {
         def findAndDecode(key: scala.Predef.String)(`val`: Option[hydra.json.model.Value])(fts: Seq[hydra.core.FieldType]): Either[scala.Predef.String,
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
            hydra.core.Term] =
           hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], hydra.core.FieldType](Left(hydra.lib.strings.cat(Seq("unknown variant: ",
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
              key))))((ft: hydra.core.FieldType) => decodeVariant(key)(`val`)(ft.`type`))(hydra.lib.lists.find[hydra.core.FieldType]((ft: hydra.core.FieldType) => hydra.lib.equality.equal[scala.Predef.String](ft.name)(key))(fts))
         {
           def decodeSingleKey(obj: Map[scala.Predef.String, hydra.json.model.Value]): Either[scala.Predef.String,
              hydra.core.Term] =
             hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], scala.Predef.String](Left("expected single-key object for union"))((k: scala.Predef.String) =>
             findAndDecode(k)(hydra.lib.maps.lookup[scala.Predef.String, hydra.json.model.Value](k)(obj))(v_Type_union_rt))(hydra.lib.lists.maybeHead[scala.Predef.String](hydra.lib.maps.keys[scala.Predef.String,
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
                hydra.json.model.Value](obj)))
           {
             def processUnion(obj: Map[scala.Predef.String, hydra.json.model.Value]): Either[scala.Predef.String,
                hydra.core.Term] =
               hydra.lib.logic.ifElse[Either[scala.Predef.String, hydra.core.Term]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[scala.Predef.String](hydra.lib.maps.keys[scala.Predef.String,
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                  hydra.json.model.Value](obj)))(1))(decodeSingleKey(obj))(Left("expected single-key object for union"))
             {
               lazy val objResult: Either[scala.Predef.String, Map[scala.Predef.String,
                  hydra.json.model.Value]] = hydra.json.decode.expectObject(value)
               hydra.lib.eithers.either[scala.Predef.String, Map[scala.Predef.String,
                  hydra.json.model.Value], Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((obj: Map[scala.Predef.String,
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
                  hydra.json.model.Value]) => processUnion(obj))(objResult)
             }
           }
@@ -277,6 +543,20 @@ def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Nam
     case hydra.core.Type.wrap(v_Type_wrap_wn) => {
       lazy val decoded: Either[scala.Predef.String, hydra.core.Term] = hydra.json.decode.fromJson(types)(tname)(v_Type_wrap_wn)(value)
       hydra.lib.eithers.map[hydra.core.Term, hydra.core.Term, scala.Predef.String]((v: hydra.core.Term) => hydra.core.Term.wrap(hydra.core.WrappedTerm(tname,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          v)))(decoded)
     }
     case hydra.core.Type.map(v_Type_map_mt) => {
@@ -343,6 +623,20 @@ def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Nam
              hydra.json.model.Value]] = hydra.json.decode.expectObject(value)
           hydra.lib.eithers.either[scala.Predef.String, Map[scala.Predef.String, hydra.json.model.Value],
              Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((obj: Map[scala.Predef.String,
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
              hydra.json.model.Value]) =>
             {
             lazy val firstJson: Option[hydra.json.model.Value] = hydra.lib.maps.lookup[scala.Predef.String,
@@ -361,6 +655,20 @@ def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Nam
                   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[scala.Predef.String,
                      hydra.core.Term]]((err: scala.Predef.String) => Left(err))((f: hydra.core.Term) =>
                     hydra.lib.eithers.map[hydra.core.Term, hydra.core.Term, scala.Predef.String]((s: hydra.core.Term) => hydra.core.Term.pair(Tuple2(f,
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
                        s)))(decodedSecond))(decodedFirst)
                 }
               })(secondJson))(firstJson)
@@ -378,6 +686,20 @@ def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Nam
              hydra.json.model.Value]] = hydra.json.decode.expectObject(value)
           hydra.lib.eithers.either[scala.Predef.String, Map[scala.Predef.String, hydra.json.model.Value],
              Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((obj: Map[scala.Predef.String,
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
              hydra.json.model.Value]) =>
             {
             lazy val leftJson: Option[hydra.json.model.Value] = hydra.lib.maps.lookup[scala.Predef.String,
@@ -405,6 +727,20 @@ def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Nam
       lazy val lookedUp: Option[hydra.core.Type] = hydra.lib.maps.lookup[hydra.core.Name,
          hydra.core.Type](v_Type_variable_name)(types)
       hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], hydra.core.Type](Left(hydra.lib.strings.cat(Seq("unknown type variable: ",
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          v_Type_variable_name))))((resolvedType: hydra.core.Type) =>
         hydra.json.decode.fromJson(types)(v_Type_variable_name)(resolvedType)(value))(lookedUp)
     }

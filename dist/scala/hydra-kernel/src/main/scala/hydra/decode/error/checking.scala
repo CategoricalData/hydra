@@ -18,47 +18,243 @@ def checkingError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.err
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.error.checking.CheckingError])] = hydra.lib.maps.fromList[hydra.core.Name,
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.error.checking.CheckingError]](Seq(Tuple2("incorrectUnification",
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.checking.IncorrectUnificationError, hydra.error.checking.CheckingError,
          hydra.errors.DecodingError]((t: hydra.error.checking.IncorrectUnificationError) => hydra.error.checking.CheckingError.incorrectUnification(t))(hydra.decode.error.checking.incorrectUnificationError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("notAForallType", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.checking.NotAForallTypeError, hydra.error.checking.CheckingError,
          hydra.errors.DecodingError]((t: hydra.error.checking.NotAForallTypeError) => hydra.error.checking.CheckingError.notAForallType(t))(hydra.decode.error.checking.notAForallTypeError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("notAFunctionType", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.checking.NotAFunctionTypeError, hydra.error.checking.CheckingError,
          hydra.errors.DecodingError]((t: hydra.error.checking.NotAFunctionTypeError) => hydra.error.checking.CheckingError.notAFunctionType(t))(hydra.decode.error.checking.notAFunctionTypeError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("other", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.checking.OtherCheckingError, hydra.error.checking.CheckingError,
          hydra.errors.DecodingError]((t: hydra.error.checking.OtherCheckingError) => hydra.error.checking.CheckingError.other(t))(hydra.decode.error.checking.otherCheckingError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("typeArityMismatch", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.checking.TypeArityMismatchError, hydra.error.checking.CheckingError,
          hydra.errors.DecodingError]((t: hydra.error.checking.TypeArityMismatchError) => hydra.error.checking.CheckingError.typeArityMismatch(t))(hydra.decode.error.checking.typeArityMismatchError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("typeMismatch", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.checking.TypeMismatchError, hydra.error.checking.CheckingError,
          hydra.errors.DecodingError]((t: hydra.error.checking.TypeMismatchError) => hydra.error.checking.CheckingError.typeMismatch(t))(hydra.decode.error.checking.typeMismatchError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("unboundTypeVariables", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.checking.UnboundTypeVariablesError, hydra.error.checking.CheckingError,
          hydra.errors.DecodingError]((t: hydra.error.checking.UnboundTypeVariablesError) => hydra.error.checking.CheckingError.unboundTypeVariables(t))(hydra.decode.error.checking.unboundTypeVariablesError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("undefinedTermVariable", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.checking.UndefinedTermVariableCheckingError,
          hydra.error.checking.CheckingError, hydra.errors.DecodingError]((t: hydra.error.checking.UndefinedTermVariableCheckingError) => hydra.error.checking.CheckingError.undefinedTermVariable(t))(hydra.decode.error.checking.undefinedTermVariableCheckingError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("unequalTypes", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.checking.UnequalTypesError, hydra.error.checking.CheckingError,
          hydra.errors.DecodingError]((t: hydra.error.checking.UnequalTypesError) => hydra.error.checking.CheckingError.unequalTypes(t))(hydra.decode.error.checking.unequalTypesError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("unsupportedTermVariant", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.checking.UnsupportedTermVariantError, hydra.error.checking.CheckingError,
          hydra.errors.DecodingError]((t: hydra.error.checking.UnsupportedTermVariantError) => hydra.error.checking.CheckingError.unsupportedTermVariant(t))(hydra.decode.error.checking.unsupportedTermVariantError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("untypedLambda", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.checking.UntypedLambdaError, hydra.error.checking.CheckingError,
          hydra.errors.DecodingError]((t: hydra.error.checking.UntypedLambdaError) => hydra.error.checking.CheckingError.untypedLambda(t))(hydra.decode.error.checking.untypedLambdaError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("untypedLetBinding", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.checking.UntypedLetBindingError, hydra.error.checking.CheckingError,
          hydra.errors.DecodingError]((t: hydra.error.checking.UntypedLetBindingError) => hydra.error.checking.CheckingError.untypedLetBinding(t))(hydra.decode.error.checking.untypedLetBindingError(cx)(input))),
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
          Tuple2("untypedTermVariable", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.checking.UntypedTermVariableCheckingError,
          hydra.error.checking.CheckingError, hydra.errors.DecodingError]((t: hydra.error.checking.UntypedTermVariableCheckingError) => hydra.error.checking.CheckingError.untypedTermVariable(t))(hydra.decode.error.checking.untypedTermVariableCheckingError(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.error.checking.CheckingError],
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.error.checking.CheckingError]](Left(hydra.lib.strings.cat(Seq("no such field ",
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
        fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.error.checking.CheckingError])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name,
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.error.checking.CheckingError]](fname)(variantMap))

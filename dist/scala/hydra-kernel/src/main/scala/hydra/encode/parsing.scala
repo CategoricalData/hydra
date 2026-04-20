@@ -12,8 +12,36 @@ def parseError(x: hydra.parsing.ParseError): hydra.core.Term =
 def parseResult[T0](a: (T0 => hydra.core.Term))(v1: hydra.parsing.ParseResult[T0]): hydra.core.Term =
   v1 match
   case hydra.parsing.ParseResult.success(v_ParseResult_success_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.parsing.ParseResult",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("success", hydra.encode.parsing.parseSuccess(a)(v_ParseResult_success_y))))
   case hydra.parsing.ParseResult.failure(v_ParseResult_failure_y) => hydra.core.Term.inject(hydra.core.Injection("hydra.parsing.ParseResult",
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      hydra.core.Field("failure", hydra.encode.parsing.parseError(v_ParseResult_failure_y))))
 
 def parseSuccess[T0](a: (T0 => hydra.core.Term))(x: hydra.parsing.ParseSuccess[T0]): hydra.core.Term =

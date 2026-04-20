@@ -11,6 +11,20 @@ def adjacencyListToMap[T0, T1](pairs: Seq[Tuple2[T0, Seq[T1]]]): Map[T0, Seq[T1]
     lazy val vs: Seq[T1] = hydra.lib.pairs.second[T0, Seq[T1]](p)
     {
       lazy val existing: Seq[T1] = hydra.lib.maybes.maybe[Seq[T1], Seq[T1]](Seq())(hydra.lib.equality.identity[Seq[T1]])(hydra.lib.maps.lookup[T0,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Seq[T1]](k)(mp))
       hydra.lib.maps.insert[T0, Seq[T1]](k)(hydra.lib.lists.concat2[T1](existing)(vs))(mp)
     }
@@ -89,6 +103,20 @@ def findReachableNodes[T0](adj: (T0 => scala.collection.immutable.Set[T0]))(root
     {
     lazy val toVisit: scala.collection.immutable.Set[T0] = hydra.lib.sets.difference[T0](adj(node))(visited)
     hydra.lib.logic.ifElse[scala.collection.immutable.Set[T0]](hydra.lib.sets.`null`[T0](toVisit))(visited)(hydra.lib.lists.foldl[scala.collection.immutable.Set[T0],
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
        T0]((v: scala.collection.immutable.Set[T0]) => (n: T0) => visit(hydra.lib.sets.insert[T0](n)(v))(n))(visited)(hydra.lib.sets.toList[T0](toVisit)))
   }
   visit(hydra.lib.sets.singleton[T0](root))(root)
@@ -118,6 +146,20 @@ def popStackUntil(v: Int)(st0: hydra.topology.TarjanState): Tuple2[Seq[Int], hyd
           {
             lazy val `acc_`: Seq[Int] = hydra.lib.lists.cons[Int](x)(acc)
             hydra.lib.logic.ifElse[Tuple2[Seq[Int], hydra.topology.TarjanState]](hydra.lib.equality.equal[Int](x)(v))(Tuple2(hydra.lib.lists.reverse[Int](`acc_`),
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
                newSt2))(go(`acc_`)(newSt2))
           }
         }
@@ -134,15 +176,57 @@ def propagateTags[T0, T1](edges: Seq[Tuple2[T0, Seq[T0]]])(nodeTags: Seq[Tuple2[
   lazy val tagMap: Map[T0, scala.collection.immutable.Set[T1]] = hydra.lib.maps.map[Seq[T1],
      scala.collection.immutable.Set[T1], T0](hydra.lib.sets.fromList[T1])(hydra.sorting.adjacencyListToMap(nodeTags))
   lazy val allNodes: Seq[T0] = hydra.lib.sets.toList[T0](hydra.lib.sets.fromList[T0](hydra.lib.lists.concat2[T0](hydra.lib.lists.map[Tuple2[T0,
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
      Seq[T0]], T0](hydra.lib.pairs.first[T0, Seq[T0]])(edges))(hydra.lib.lists.map[Tuple2[T0,
      Seq[T1]], T0](hydra.lib.pairs.first[T0, Seq[T1]])(nodeTags))))
   def getTagsForNode(node: T0): scala.collection.immutable.Set[T1] =
     {
     lazy val reachable: scala.collection.immutable.Set[T0] = hydra.sorting.findReachableNodes((n: T0) =>
       hydra.lib.sets.fromList[T0](hydra.lib.maybes.maybe[Seq[T0], Seq[T0]](Seq())(hydra.lib.equality.identity[Seq[T0]])(hydra.lib.maps.lookup[T0,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          Seq[T0]](n)(adjMap))))(node)
     hydra.lib.sets.unions[T1](hydra.lib.lists.map[T0, scala.collection.immutable.Set[T1]]((n: T0) =>
       hydra.lib.maybes.maybe[scala.collection.immutable.Set[T1], scala.collection.immutable.Set[T1]](hydra.lib.sets.empty[T1])(hydra.lib.equality.identity[scala.collection.immutable.Set[T1]])(hydra.lib.maps.lookup[T0,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
          scala.collection.immutable.Set[T1]](n)(tagMap)))(hydra.lib.sets.toList[T0](reachable)))
   }
   hydra.lib.lists.map[T0, Tuple2[T0, scala.collection.immutable.Set[T1]]]((n: T0) => Tuple2(n,

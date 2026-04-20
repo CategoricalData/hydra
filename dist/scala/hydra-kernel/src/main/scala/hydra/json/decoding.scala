@@ -15,6 +15,20 @@ def decodeBoolean(v1: hydra.json.model.Value): Either[scala.Predef.String, Boole
   case _ => Left("expected a boolean")
 
 def decodeField[T0, T1](decodeValue: (T0 => Either[scala.Predef.String, T1]))(name: scala.Predef.String)(m: Map[scala.Predef.String,
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
    T0]): Either[scala.Predef.String, T1] =
   hydra.lib.eithers.bind[scala.Predef.String, Option[T1], T1](hydra.json.decoding.decodeOptionalField(decodeValue)(name)(m))((v1) =>
   hydra.lib.maybes.maybe[Either[scala.Predef.String, T1], T1](Left(hydra.lib.strings.cat2("missing field: ")(name)))((f: T1) => Right(f))(v1))
