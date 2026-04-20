@@ -372,15 +372,26 @@ echo "  Tests:    $([ "$NO_TEST" = true ] && echo "skipped (--no-tests)" || echo
 echo "=========================================="
 echo ""
 
-# Phase 1: JSON sources. Run transform-haskell-dsl-to-json for each package,
-# in dependency order. This is shared by every target language.
+# Phase 1: JSON sources. When operating on every package, invoke the
+# transform in batch mode (single Haskell-universe load writing
+# per-package JSON via namespaceToPackage). When scoped to a subset,
+# fall back to per-package invocation so we don't rewrite JSON for
+# packages the caller didn't ask about.
 HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 
 echo "[Phase 1] Regenerating JSON sources for each package..."
-for pkg in $EFFECTIVE_PACKAGES; do
-    "$HASKELL_BIN/transform-haskell-dsl-to-json.sh" "$pkg" main
-    "$HASKELL_BIN/transform-haskell-dsl-to-json.sh" "$pkg" test
-done
+# Normalize both lists to sorted space-joined strings for comparison.
+effective_sorted=$(echo $EFFECTIVE_PACKAGES | tr ' ' '\n' | sort | tr '\n' ' ')
+all_sorted=$(echo $ALL_PACKAGES | tr ' ' '\n' | sort | tr '\n' ' ')
+if [ "$effective_sorted" = "$all_sorted" ]; then
+    "$HASKELL_BIN/transform-haskell-dsl-to-json.sh" --all main
+    "$HASKELL_BIN/transform-haskell-dsl-to-json.sh" --all test
+else
+    for pkg in $EFFECTIVE_PACKAGES; do
+        "$HASKELL_BIN/transform-haskell-dsl-to-json.sh" "$pkg" main
+        "$HASKELL_BIN/transform-haskell-dsl-to-json.sh" "$pkg" test
+    done
+fi
 # Also regenerate per-package manifests so readers see the updated module list.
 cd "$HYDRA_ROOT_DIR/heads/haskell"
 stack build hydra:exe:update-json-manifest >/dev/null 2>&1
@@ -414,22 +425,46 @@ except Exception:
 "
 }
 
-# Phase 2: Assemblers. For each (package, target), produce the distribution.
+# Phase 2: Assemblers. When generating every package for a target and
+# the head has a batch assembler (assemble-all.sh), invoke it once per
+# target — one Haskell universe load per target instead of one per
+# (package, target). Falls back to per-package invocation for scoped
+# package sets or targets lacking a batch assembler.
 echo "[Phase 2] Assembling distributions..."
+batch_assembler_for() {
+    local target="$1"
+    case "$target" in
+        haskell) echo "$HYDRA_ROOT_DIR/heads/haskell/bin/assemble-all.sh" ;;
+        java)    echo "$HYDRA_ROOT_DIR/heads/java/bin/assemble-all.sh" ;;
+        python)  echo "$HYDRA_ROOT_DIR/heads/python/bin/assemble-all.sh" ;;
+        scala)   echo "$HYDRA_ROOT_DIR/heads/scala/bin/assemble-all.sh" ;;
+        *) echo "" ;;
+    esac
+}
 for target in $EFFECTIVE_TARGETS; do
-    for pkg in $EFFECTIVE_PACKAGES; do
-        if ! pkg_supports_target "$pkg" "$target"; then
-            echo ""
-            echo "--- $pkg -> $target (skipped: not in targetLanguages) ---"
-            continue
-        fi
+    batch_script=$(batch_assembler_for "$target")
+    if [ "$effective_sorted" = "$all_sorted" ] && [ -n "$batch_script" ] && [ -x "$batch_script" ]; then
         echo ""
-        echo "--- $pkg -> $target ---"
-        invoke_assembler "$pkg" "$target" || {
-            echo "ERROR: assembly failed for $pkg / $target" >&2
+        echo "--- all packages -> $target (batch mode) ---"
+        "$batch_script" || {
+            echo "ERROR: batch assembly failed for $target" >&2
             exit 1
         }
-    done
+    else
+        for pkg in $EFFECTIVE_PACKAGES; do
+            if ! pkg_supports_target "$pkg" "$target"; then
+                echo ""
+                echo "--- $pkg -> $target (skipped: not in targetLanguages) ---"
+                continue
+            fi
+            echo ""
+            echo "--- $pkg -> $target ---"
+            invoke_assembler "$pkg" "$target" || {
+                echo "ERROR: assembly failed for $pkg / $target" >&2
+                exit 1
+            }
+        done
+    fi
 done
 echo ""
 

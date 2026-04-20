@@ -101,6 +101,7 @@ data Options = Options
   , optSynthesizeSources  :: Bool
   , optDistJsonRoot       :: Maybe FilePath
   , optPackage            :: Maybe String  -- Layer 1: narrow generation to one package
+  , optAllPackages        :: Bool          -- Batch mode: generate every package in one run
   }
 
 defaultOptions :: Options
@@ -117,6 +118,7 @@ defaultOptions = Options
   , optSynthesizeSources  = False
   , optDistJsonRoot       = Nothing
   , optPackage            = Nothing
+  , optAllPackages        = False
   }
 
 parseArgs :: [String] -> Either String Options
@@ -137,6 +139,7 @@ parseArgs = go defaultOptions
     go opts ("--synthesize-sources" : rest) = go (opts { optSynthesizeSources = True }) rest
     go opts ("--dist-json-root" : d : rest) = go (opts { optDistJsonRoot = Just d }) rest
     go opts ("--package" : p : rest) = go (opts { optPackage = Just p }) rest
+    go opts ("--all-packages" : rest) = go (opts { optAllPackages = True }) rest
     go _ (arg : _) = Left $ "Unknown argument: " ++ arg
 
 usage :: String
@@ -503,14 +506,12 @@ main = do
   -- Routing via PackageRouting.groupByPackage is unconditional: every module
   -- lands at <output>/<pkg>/src/main/<lang>/... based on its namespace.
   --
-  -- When --package <scoped> is set, we generate only that package's
-  -- modules into its per-package dir. When unscoped (demo mode), we
-  -- generate every module to a single flat <outBase>/src/main/<target>/
-  -- tree — matching integration's sync-java/sync-python model where the
-  -- consumer's build expects a single source-dir rather than per-package
-  -- sub-trees.
-  mainFileCount <- case optPackage opts of
-    Just pkgArg -> do
+  -- Three routing modes:
+  --   --package <pkg>   : one package, per-package dir (scoped sync path)
+  --   --all-packages    : every package, per-package dirs (batch sync path)
+  --   (neither)         : flat <outBase>/src/main/<target>/ (demo path)
+  mainFileCount <- case (optPackage opts, optAllPackages opts) of
+    (Just pkgArg, _) -> do
       let groups = groupByPackage modsToGenerate'
       let scopedGroups = Prelude.filter (\(pkg, _) -> pkg == pkgArg) groups
       counts <- CM.forM scopedGroups $ \(pkg, pkgMods) -> do
@@ -518,7 +519,14 @@ main = do
         putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules → " ++ dir
         genForDir dir pkgMods
       return (sum counts)
-    Nothing -> do
+    (Nothing, True) -> do
+      let groups = groupByPackage modsToGenerate'
+      counts <- CM.forM groups $ \(pkg, pkgMods) -> do
+        let dir = packageOutMain pkg
+        putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules → " ++ dir
+        genForDir dir pkgMods
+      return (sum counts)
+    (Nothing, False) -> do
       putStrLn $ "  " ++ show (length modsToGenerate') ++ " modules → " ++ outMain
       genForDir outMain modsToGenerate'
   genEnd <- getCurrentTime
@@ -584,8 +592,8 @@ main = do
             _ -> return 0
 
       testStart <- getCurrentTime
-      count <- case optPackage opts of
-        Just pkgArg -> do
+      count <- case (optPackage opts, optAllPackages opts) of
+        (Just pkgArg, _) -> do
           let groups = groupByPackage testMods
           let scopedGroups = Prelude.filter (\(pkg, _) -> pkg == pkgArg) groups
           counts <- CM.forM scopedGroups $ \(pkg, pkgMods) -> do
@@ -593,7 +601,14 @@ main = do
             putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " test modules → " ++ dir
             genTestForDir dir pkgMods
           return (sum counts)
-        Nothing -> do
+        (Nothing, True) -> do
+          let groups = groupByPackage testMods
+          counts <- CM.forM groups $ \(pkg, pkgMods) -> do
+            let dir = packageOutTest pkg
+            putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " test modules → " ++ dir
+            genTestForDir dir pkgMods
+          return (sum counts)
+        (Nothing, False) -> do
           putStrLn $ "  " ++ show (length testMods) ++ " test modules → " ++ outTest
           genTestForDir outTest testMods
       testEnd <- getCurrentTime
