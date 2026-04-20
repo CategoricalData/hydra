@@ -63,40 +63,45 @@ for f in ReductionTest.java VisitorTest.java TestSuiteRunner.java TestEnv.java; 
 done
 
 # Copy coder packages from baseline.
-# Generation.java imports hydra.{java,python,haskell,lisp,scala}.{coder,language,syntax} which
-# are generated coder modules in the kernel dist baseline. The bootstrap target only
-# generates the SELECTED target language's kernel; we need to bring in the OTHER languages'
-# coder packages so Generation.java compiles. Only copy the coder-specific subdirectories
-# (java, python, haskell, lisp, scala) to avoid duplicate-class collisions with the
-# target-language generated kernel code.
+# Generation.java imports hydra.{java,python,haskell,lisp,scala}.{Coder,Language,Syntax}
+# which are generated in each coder package's own per-package dist dir now. The
+# bootstrap target only generates the SELECTED target language's kernel; we pull in
+# the OTHER coder packages' Java output from dist/java/hydra-<lang>/src/main/java/
+# so Generation.java compiles.
 echo "  Copying coder packages from baseline..."
 JAVA_GEN="$OUTPUT_DIR/src/main/java"
-JAVA_KERNEL_BASELINE="$HYDRA_ROOT/dist/java/hydra-kernel/src/main/java"
-JAVA_EXT_BASELINE="$HYDRA_ROOT/dist/java/hydra-ext/src/main/java"
-if [ -d "$JAVA_KERNEL_BASELINE/hydra" ]; then
-    mkdir -p "$JAVA_GEN/hydra"
-    for name in java python haskell lisp scala; do
-        if [ -d "$JAVA_KERNEL_BASELINE/hydra/$name" ] && [ ! -e "$JAVA_GEN/hydra/$name" ]; then
-            cp -r "$JAVA_KERNEL_BASELINE/hydra/$name" "$JAVA_GEN/hydra/"
-        fi
-    done
-    echo "    Copied coder packages from hydra-kernel baseline"
-fi
-# Copy ext/domain modules (pg, rdf, cypher, tinkerpop, etc.) - these don't collide with
-# the target-language generated kernel because the kernel generation doesn't produce them.
-# Note: use "$d/" -> "$JAVA_GEN/hydra/$name" (not "$JAVA_GEN/hydra/") to avoid BSD cp's
-# behavior of copying dir contents when source has a trailing slash.
-if [ -d "$JAVA_EXT_BASELINE/hydra" ]; then
-    mkdir -p "$JAVA_GEN/hydra"
-    for name in $(ls "$JAVA_EXT_BASELINE/hydra"); do
-        d="$JAVA_EXT_BASELINE/hydra/$name"
-        [ -d "$d" ] || continue
-        if [ ! -e "$JAVA_GEN/hydra/$name" ]; then
-            cp -r "$d" "$JAVA_GEN/hydra/$name"
-        fi
-    done
-    echo "    Copied ext/domain packages from hydra-ext baseline"
-fi
+mkdir -p "$JAVA_GEN/hydra"
+for coder_pkg in hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp; do
+    coder_base="$HYDRA_ROOT/dist/java/$coder_pkg/src/main/java"
+    if [ -d "$coder_base/hydra" ]; then
+        for ns in $(ls "$coder_base/hydra"); do
+            src="$coder_base/hydra/$ns"
+            dst="$JAVA_GEN/hydra/$ns"
+            [ -d "$src" ] || continue
+            if [ ! -e "$dst" ]; then
+                cp -r "$src" "$dst"
+            fi
+        done
+        echo "    Copied $coder_pkg coder packages"
+    fi
+done
+# Copy ext/domain modules (pg, rdf, cypher, tinkerpop, etc.) from hydra-pg and hydra-rdf.
+# These don't collide with the target-language generated kernel because the kernel
+# generation doesn't produce them.
+for ext_pkg in hydra-pg hydra-rdf; do
+    ext_base="$HYDRA_ROOT/dist/java/$ext_pkg/src/main/java"
+    if [ -d "$ext_base/hydra" ]; then
+        for ns in $(ls "$ext_base/hydra"); do
+            src="$ext_base/hydra/$ns"
+            dst="$JAVA_GEN/hydra/$ns"
+            [ -d "$src" ] || continue
+            if [ ! -e "$dst" ]; then
+                cp -r "$src" "$dst"
+            fi
+        done
+        echo "    Copied $ext_pkg ext/domain packages"
+    fi
+done
 
 # Create symlink to hydra-kernel so that relative paths (../hydra-kernel/...)
 # used by TestSuiteRunner.java to find JSON modules resolve correctly.
