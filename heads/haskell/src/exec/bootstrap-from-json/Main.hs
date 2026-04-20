@@ -456,6 +456,10 @@ main = do
   -- Prepend synthesized source modules to modsToGenerate (deduping by namespace
   -- to keep ordering stable). They go into the same universe as the main modules.
   let modsToGenerate' = modsToGenerateScopedFiltered ++ synthesizedSourceMods
+  -- For prune purposes we use the PRE-Stage 7 scoped set; otherwise files
+  -- that were filtered out as fresh would be wrongly deleted. Stage 7
+  -- means "skip regeneration", not "remove from disk".
+  let modsForPrune    = modsToGenerateScoped ++ synthesizedSourceMods
   let allModsFinal'   = allModsFinal ++ synthesizedSourceMods
 
   -- Generate main modules
@@ -585,8 +589,11 @@ main = do
         Just _  -> True
         Nothing -> False
 
-  let genForDir :: FilePath -> [Module] -> IO Int
-      genForDir dir mods =
+  -- 'mods' is the post-Stage 7 (dirty) subset that needs regeneration.
+  -- 'modsKeep' is the pre-Stage 7 set the package owns; prune treats
+  -- everything in modsKeep as wanted-on-disk so fresh files survive.
+  let genForDir :: FilePath -> [Module] -> [Module] -> IO Int
+      genForDir dir mods modsKeep =
         let modsForGen = if useExpansion then expandForSchemaContext mods else mods
             gen ms = case target of
               "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False dir allModsFinal' ms
@@ -602,7 +609,7 @@ main = do
           count <- gen modsForGen
           if useExpansion
             then do
-              pruneExtraFiles dir mods modsForGen
+              pruneExtraFiles dir modsKeep modsForGen
               countFiles dir ("." ++ case target of
                 "haskell" -> "hs"
                 "java" -> "java"
@@ -626,13 +633,15 @@ main = do
   -- touched.
   mainFileCount <- do
     let groups = groupByPackage modsToGenerate'
+    let pruneGroups = M.fromList (groupByPackage modsForPrune)
     let scopedGroups = case optPackage opts of
           Nothing     -> groups
           Just pkgArg -> Prelude.filter (\(pkg, _) -> pkg == pkgArg) groups
     counts <- CM.forM scopedGroups $ \(pkg, pkgMods) -> do
       let dir = packageOutMain pkg
+      let pkgKeep = M.findWithDefault pkgMods pkg pruneGroups
       putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules → " ++ dir
-      genForDir dir pkgMods
+      genForDir dir pkgMods pkgKeep
     return (sum counts)
   genEnd <- getCurrentTime
 

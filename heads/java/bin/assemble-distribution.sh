@@ -57,12 +57,19 @@ if [ -f "$INPUT_DIGEST" ] && [ -f "$OUTPUT_DIGEST" ]; then
     if (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
         stack exec digest-check -- fresh \
             --inputs "$INPUT_DIGEST" \
+            --output-dir "$OUT_DIR" \
             --output-digest "$OUTPUT_DIGEST" 2>/dev/null); then
         echo "  Cache hit; skipping work."
         echo "=== Done. $PACKAGE assembled under $OUT_DIR (cache hit) ==="
         exit 0
     fi
 fi
+
+# Cache miss: invalidate the per-target digest so Stage 7's per-module
+# freshness filter inside bootstrap-from-json can't trust stale records
+# (output files may be missing/modified, so DSL-hash-only freshness is
+# unreliable).
+rm -f "$OUTPUT_DIGEST"
 
 # Step 1: Main modules via Layer 1 transform.
 # bootstrap-from-json appends <pkg>/src/main/<target> to --output, so we
