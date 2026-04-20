@@ -38,12 +38,16 @@ if [ -f "$INPUT_DIGEST" ] && [ -f "$OUTPUT_DIGEST" ]; then
     if (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
         stack exec digest-check -- fresh \
             --inputs "$INPUT_DIGEST" \
+            --output-dir "$OUT_DIR" \
             --output-digest "$OUTPUT_DIGEST" 2>/dev/null); then
         echo "  Cache hit; skipping work."
         echo "=== Done. $PACKAGE (cache hit) ==="
         exit 0
     fi
 fi
+
+# Cache miss: invalidate the per-target digest so Stage 7 can't trust stale records.
+rm -f "$OUTPUT_DIGEST"
 
 
 echo "=== Assembling Common Lisp distribution: $PACKAGE ==="
