@@ -15,7 +15,6 @@ lazy val root = project
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-python" / "src" / "main" / "scala",
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-scala" / "src" / "main" / "scala",
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-lisp" / "src" / "main" / "scala",
-      baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-pg" / "src" / "main" / "scala",
       baseDirectory.value / ".." / ".." / "heads" / "scala" / "src" / "main" / "scala",
     ),
 
