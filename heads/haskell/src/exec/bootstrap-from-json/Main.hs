@@ -456,10 +456,6 @@ main = do
   -- Prepend synthesized source modules to modsToGenerate (deduping by namespace
   -- to keep ordering stable). They go into the same universe as the main modules.
   let modsToGenerate' = modsToGenerateScopedFiltered ++ synthesizedSourceMods
-  -- For prune purposes we use the PRE-Stage 7 scoped set; otherwise files
-  -- that were filtered out as fresh would be wrongly deleted. Stage 7
-  -- means "skip regeneration", not "remove from disk".
-  let modsForPrune    = modsToGenerateScoped ++ synthesizedSourceMods
   let allModsFinal'   = allModsFinal ++ synthesizedSourceMods
 
   -- Generate main modules
@@ -486,162 +482,40 @@ main = do
         Just (dialect, lispExt) -> Just (moduleToLispDialect dialect lispExt)
         Nothing -> Nothing
 
-  -- Dispatch to the appropriate coder + language bindings.
-  -- Expand a set of target modules to the transitive closure over their
-  -- declared term and type dependencies, within the loaded universe.
-  -- generateSourceFiles's internal schemaMods walk needs this expansion to
-  -- resolve cross-module references when generating a subset of the
-  -- universe; the DSL-direct path gets it for free by generating the full
-  -- ext bag.
-  let expandForSchemaContext :: [Module] -> [Module]
-      expandForSchemaContext mods =
-        let nsMap = Prelude.foldr
-              (\m acc -> (unNamespace (moduleNamespace m), m) : acc)
-              []
-              allModsFinal'
-            lookupMod nsv = lookup nsv nsMap
-            stepDeps m =
-              (fmap unNamespace (moduleTermDependencies m))
-              ++ (fmap unNamespace (moduleTypeDependencies m))
-            closeNs :: [String] -> [String] -> [String]
-            closeNs visited [] = visited
-            closeNs visited (n : rest)
-              | n `elem` visited = closeNs visited rest
-              | otherwise = case lookupMod n of
-                  Nothing -> closeNs (n : visited) rest
-                  Just m  -> closeNs (n : visited) (stepDeps m ++ rest)
-            seed = fmap (unNamespace . moduleNamespace) mods
-            closed = closeNs [] seed
-        in Prelude.filter
-             (\m -> unNamespace (moduleNamespace m) `elem` closed)
-             allModsFinal'
-
-  -- Walk 'dir' and delete every generated file that does not belong to
-  -- the scoped (wanted) module set. Determines membership by checking
-  -- whether the file's path-prefix corresponds to a wanted module's
-  -- namespace. Works across all targets without needing to reconstruct
-  -- the coder's exact namespace-to-path mapping, since we only care
-  -- about dir-prefix matches. Directories that become empty after
-  -- deletion are removed.
-  let pruneExtraFiles :: FilePath -> [Module] -> [Module] -> IO ()
-      pruneExtraFiles dir wanted _expanded = do
-        let wantedNss = fmap (unNamespace . moduleNamespace) wanted
-            -- Per-target path prefixes the wanted namespaces would occupy.
-            -- Haskell capitalizes every segment; other targets leave the
-            -- namespace lowercased for directory segments. For Java/Scala,
-            -- the last namespace segment becomes a Capitalized filename,
-            -- but its enclosing directory is the lowercased prefix — so
-            -- the prefix match works for all targets without special
-            -- casing the last segment.
-            capitalize (c:cs) = C.toUpper c : cs
-            capitalize []     = []
-            prefixFor nsStr =
-              let parts = LS.splitOn "." nsStr
-              in case target of
-                   "haskell" -> FP.joinPath (fmap capitalize parts)
-                   _         -> FP.joinPath parts
-            wantedPrefixes = fmap prefixFor wantedNss
-            -- A file 'rel' belongs to the scope if:
-            --   * it sits directly at <prefix>.<ext> (Haskell-style:
-            --     namespace and filename match exactly), OR
-            --   * it sits at <parent-of-prefix>/<Capitalized-last>.<ext>
-            --     (Java/Scala: dir is lowercased namespace, file is
-            --     Capitalized last segment), OR
-            --   * it sits under <prefix>/ (type-per-file fan-out).
-            lowerFirst (c:cs) = C.toLower c : cs
-            lowerFirst []     = []
-            normalizeStem stem =
-              let parts = LS.splitOn "/" stem
-              in case Prelude.reverse parts of
-                   []     -> stem
-                   (l:rs) -> FP.joinPath (Prelude.reverse rs ++ [lowerFirst l])
-            isWanted rel =
-              let stem = FP.dropExtension rel
-                  normStem = normalizeStem stem
-              in Prelude.any
-                   (\p ->
-                      p == stem
-                      || p == normStem
-                      || (p ++ "/") `L.isPrefixOf` rel)
-                   wantedPrefixes
-        exists <- SD.doesDirectoryExist dir
-        CM.when exists $ do
-          allFiles <- listFilesRecursive dir
-          CM.forM_ allFiles $ \fp -> do
-            let rel = if (dir ++ "/") `L.isPrefixOf` fp
-                        then Prelude.drop (length dir + 1) fp
-                        else fp
-            CM.when (not (isWanted rel)) $ do
-              isFile <- SD.doesFileExist fp
-              CM.when isFile $ SD.removeFile fp
-          -- Sweep empty directories bottom-up so pruneExtraFiles leaves
-          -- no empty hydra/packaging/ shells behind.
-          removeEmptyDirs dir
-
-  -- Only expand to transitive deps + prune when the caller scoped to a
-  -- single package via --package. In that mode the transitive closure
-  -- is needed for generateSourceFiles's internal schemaMods walk, and
-  -- we prune the stray output files afterward.
-  -- When --package is NOT set, the caller gave us the exact set to
-  -- generate; expansion + prune would add stray output in the wrong
-  -- paths (prune uses Haskell conventions and can't clean up Java/etc.).
-  let useExpansion = case optPackage opts of
-        Just _  -> True
-        Nothing -> False
-
-  -- 'mods' is the post-Stage 7 (dirty) subset that needs regeneration.
-  -- 'modsKeep' is the pre-Stage 7 set the package owns; prune treats
-  -- everything in modsKeep as wanted-on-disk so fresh files survive.
-  let genForDir :: FilePath -> [Module] -> [Module] -> IO Int
-      genForDir dir mods modsKeep =
-        let modsForGen = if useExpansion then expandForSchemaContext mods else mods
-            gen ms = case target of
-              "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False dir allModsFinal' ms
-              "java"    -> generateSources moduleToJava    javaLanguage    False True False True   dir allModsFinal' ms
-              "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   dir allModsFinal' ms
-              "scala"   -> generateSources moduleToScala   scalaLanguage   False True False False  dir allModsFinal' ms
-              _ | Just g <- lispGenerator ->
-                    generateSources g lispLanguage True False False False dir allModsFinal' ms
-              _ -> do
-                putStrLn $ "Unknown target: " ++ target
-                exitFailure
-        in do
-          count <- gen modsForGen
-          if useExpansion
-            then do
-              pruneExtraFiles dir modsKeep modsForGen
-              countFiles dir ("." ++ case target of
-                "haskell" -> "hs"
-                "java" -> "java"
-                "python" -> "py"
-                "scala" -> "scala"
-                "clojure" -> "clj"
-                "scheme" -> "scm"
-                "common-lisp" -> "lisp"
-                "emacs-lisp" -> "el"
-                _ -> "")
-            else return count
+  -- 'mods' is the set this scoped package wants written. The full
+  -- universe is passed for typing context only; generateSourceFiles
+  -- emits files only for the modsToGenerate argument (per the existing
+  -- typeModulesToGenerate / termModulesToGenerate filters in
+  -- Hydra.Codegen). No expansion, no prune.
+  let genForDir :: FilePath -> [Module] -> IO Int
+      genForDir dir mods = case target of
+        "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False dir allModsFinal' mods
+        "java"    -> generateSources moduleToJava    javaLanguage    False True False True   dir allModsFinal' mods
+        "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   dir allModsFinal' mods
+        "scala"   -> generateSources moduleToScala   scalaLanguage   False True False False  dir allModsFinal' mods
+        _ | Just g <- lispGenerator ->
+              generateSources g lispLanguage True False False False dir allModsFinal' mods
+        _ -> do
+          putStrLn $ "Unknown target: " ++ target
+          exitFailure
 
   -- Partition modules by owning package and generate each group to its own dir.
   -- Routing via PackageRouting.groupByPackage is unconditional: every module
   -- lands at <output>/<pkg>/src/main/<lang>/... based on its namespace.
   --
-  -- When --package <scoped> is set, we only generate the scoped package's
-  -- group (and rely on the transitive-closure expansion inside genForDir to
-  -- include cross-package deps as schemaMods context, then prune their
-  -- output from the scoped package's dir). Other packages' dirs are not
-  -- touched.
+  -- When --package <scoped> is set, we only generate the scoped
+  -- package's group. Cross-package type references resolve via the
+  -- typing context (allModsFinal' is passed to generateSources as the
+  -- universe), so no expansion or pruning is needed.
   mainFileCount <- do
     let groups = groupByPackage modsToGenerate'
-    let pruneGroups = M.fromList (groupByPackage modsForPrune)
     let scopedGroups = case optPackage opts of
           Nothing     -> groups
           Just pkgArg -> Prelude.filter (\(pkg, _) -> pkg == pkgArg) groups
     counts <- CM.forM scopedGroups $ \(pkg, pkgMods) -> do
       let dir = packageOutMain pkg
-      let pkgKeep = M.findWithDefault pkgMods pkg pruneGroups
       putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules → " ++ dir
-      genForDir dir pkgMods pkgKeep
+      genForDir dir pkgMods
     return (sum counts)
   genEnd <- getCurrentTime
 
@@ -811,40 +685,4 @@ filterByTargetDigest outBase pkg mods = do
                   ++ " fresh / " ++ show (length dirty)
                   ++ " dirty; excluding fresh from generation"
                 return dirty
-
--- | Recursively list every regular file under a directory. Skips
--- dotfiles and dot-directories.
-listFilesRecursive :: FilePath -> IO [FilePath]
-listFilesRecursive root = do
-  exists <- SD.doesDirectoryExist root
-  if not exists then return [] else go root
-  where
-    go d = do
-      entries <- listDirectory d
-      fmap concat $ CM.forM entries $ \e ->
-        if "." `isPrefixOf` e
-          then return []
-          else do
-            let p = d FP.</> e
-            isDir <- SD.doesDirectoryExist p
-            if isDir
-              then go p
-              else do
-                isFile <- SD.doesFileExist p
-                return (if isFile then [p] else [])
-
--- | Remove empty subdirectories of 'root' bottom-up. 'root' itself is
--- not removed. Safe to call on non-existent paths.
-removeEmptyDirs :: FilePath -> IO ()
-removeEmptyDirs root = do
-  exists <- SD.doesDirectoryExist root
-  CM.when exists $ do
-    entries <- listDirectory root
-    CM.forM_ entries $ \e -> do
-      let p = root FP.</> e
-      isDir <- SD.doesDirectoryExist p
-      CM.when isDir $ do
-        removeEmptyDirs p
-        contents <- listDirectory p
-        CM.when (Prelude.null contents) $ SD.removeDirectory p
 
