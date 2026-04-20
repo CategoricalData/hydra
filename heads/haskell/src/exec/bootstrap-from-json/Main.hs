@@ -538,13 +538,28 @@ main = do
                    _         -> FP.joinPath parts
             wantedPrefixes = fmap prefixFor wantedNss
             -- A file 'rel' belongs to the scope if:
-            --   * it sits directly at <prefix>.<ext> (module-per-file case), OR
-            --   * it sits under <prefix>/ (Java type-per-file fan-out).
-            isWanted rel = Prelude.any
-              (\p ->
-                 p == FP.dropExtension rel
-                 || (p ++ "/") `L.isPrefixOf` rel)
-              wantedPrefixes
+            --   * it sits directly at <prefix>.<ext> (Haskell-style:
+            --     namespace and filename match exactly), OR
+            --   * it sits at <parent-of-prefix>/<Capitalized-last>.<ext>
+            --     (Java/Scala: dir is lowercased namespace, file is
+            --     Capitalized last segment), OR
+            --   * it sits under <prefix>/ (type-per-file fan-out).
+            lowerFirst (c:cs) = C.toLower c : cs
+            lowerFirst []     = []
+            normalizeStem stem =
+              let parts = LS.splitOn "/" stem
+              in case Prelude.reverse parts of
+                   []     -> stem
+                   (l:rs) -> FP.joinPath (Prelude.reverse rs ++ [lowerFirst l])
+            isWanted rel =
+              let stem = FP.dropExtension rel
+                  normStem = normalizeStem stem
+              in Prelude.any
+                   (\p ->
+                      p == stem
+                      || p == normStem
+                      || (p ++ "/") `L.isPrefixOf` rel)
+                   wantedPrefixes
         exists <- SD.doesDirectoryExist dir
         CM.when exists $ do
           allFiles <- listFilesRecursive dir
