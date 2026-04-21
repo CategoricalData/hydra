@@ -178,9 +178,20 @@ writeModuleJson schemaMap basePath mod = do
       Left err -> fail $ "Failed to convert module to JSON: " ++ unNamespace (moduleNamespace mod) ++ ": " ++ showError err
       Right jsonStr -> do
         let filePath = basePath FP.</> CodeGeneration.namespaceToPath (moduleNamespace mod) ++ ".json"
+            newContent = jsonStr ++ "\n"
         SD.createDirectoryIfMissing True $ FP.takeDirectory filePath
-        writeFile filePath (jsonStr ++ "\n")
-        putStrLn $ "Wrote: " ++ filePath
+        -- Skip the write (and the putStrLn spam) when the on-disk content
+        -- is byte-identical. Important for DSL-wrapper generation, which
+        -- runs unconditionally after a cache-hit main pass; without this,
+        -- warm runs rewrite ~25 DSL-wrapper JSON files every time.
+        exists <- SD.doesFileExist filePath
+        skip <- if exists
+                  then do old <- readFile filePath
+                          old `seq` return (old == newContent)
+                  else return False
+        CM.unless skip $ do
+          writeFile filePath newContent
+          putStrLn $ "Wrote: " ++ filePath
 
 -- | Write multiple modules to JSON files.
 -- Each module is written to basePath/<namespace-path>.json
