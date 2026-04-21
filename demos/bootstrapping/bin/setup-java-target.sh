@@ -62,6 +62,22 @@ for f in ReductionTest.java VisitorTest.java TestSuiteRunner.java TestEnv.java; 
     fi
 done
 
+# Ensure every coder package Generation.java references has a Java distribution.
+# Generation.java imports hydra.{java,python,haskell,lisp,scala}.{Coder,Language,Syntax};
+# its writeLispDialect references require hydra-lisp's Java output, and its
+# scala dispatch references require hydra-scala's Java output. sync-default()
+# does not generate these (since lisp/scala aren't in its target set), so on a
+# clean checkout they can be missing. Assemble them on demand — warm-cache
+# short-circuits in seconds.
+echo "  Ensuring Java coder packages are present (warm cache: seconds)..."
+for coder_pkg in hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp; do
+    coder_base="$HYDRA_ROOT/dist/java/$coder_pkg/src/main/java"
+    if [ ! -d "$coder_base/hydra" ]; then
+        echo "    $coder_pkg not present; generating into Java..."
+        (cd "$HYDRA_ROOT" && heads/java/bin/assemble-distribution.sh "$coder_pkg")
+    fi
+done
+
 # Copy coder packages from baseline.
 # Generation.java imports hydra.{java,python,haskell,lisp,scala}.{Coder,Language,Syntax}
 # which are generated in each coder package's own per-package dist dir now. The
