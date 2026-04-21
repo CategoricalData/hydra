@@ -261,3 +261,128 @@ Step numbering matches `docs/recipes/new-implementation.md` as of this branch.
 `packages/hydra-javascript/implementation-plan-and-status.md` and replaced
 with this rewrite; the misplaced document is being `git rm`'d from `integration`
 as part of the companion cleanup commit.
+
+**2026-04-15**: Major coder overhaul session (gap analysis plan implementation).
+Work completed and current status below.
+
+### Completed this session
+
+**Tier 1: TypeScript Coder (Haskell-side) — the critical blocker**
+
+All four sub-items completed:
+
+- **Tier 1a – Import generation**: Rewrote `generateImports` in the bootstrap
+  coder (`dist/haskell/hydra-ext/src/main/haskell/Hydra/TypeScript/Coder.hs`)
+  to emit proper ES module `import * as Alias from "./relative/path.js";`
+  statements. Uses `Analysis.definitionDependencyNamespaces` plus
+  `Packaging.moduleTermDependencies` / `moduleTypeDependencies` to gather all
+  cross-module references. Computes correct relative paths between any two
+  namespace levels. Alias naming: capitalize segments after `hydra.`
+  (e.g., `hydra.lib.lists` → `LibLists`, `hydra.decode.core` → `DecodeCore`).
+
+- **Tier 1b – Missing term variants**: Extended `encodeTermExpr` from ~10 to
+  all ~20 `Core.Term` constructors. Added: `TermCases` (switch statement with
+  case application optimization), `TermEither` (left/right discriminated union
+  literals), `TermLet` (IIFE wrapping), `TermMap` (`new Map([...])`),
+  `TermSet` (`new Set([...])`), `TermProject` (field accessor lambda),
+  `TermUnwrap`/`TermWrap` (identity/passthrough), `TermTypeApplication`/
+  `TermTypeLambda` (type erasure). **Unsupported-term count: 27,069 → 0.**
+
+- **Tier 1c – Type improvements**: Added `resolveQualifiedName` for namespace-
+  aware name resolution (self-references → local name, cross-references →
+  `Alias.LocalName`). Fixed `TypeApplication` chaining (`Coder<t0><t1>` →
+  `Coder<t0, t1>`) via `collectTypeArgs` helper. Added `sanitizeTsVar` for
+  reserved-word escaping (`var` → `var_`, `import` → `import_`, `let` → `let_`,
+  etc.) applied to variable/parameter/binding names but NOT property names
+  (TypeScript allows reserved words as property names). Added `sanitizeTsName`
+  for prime-character cleanup (`term'` → `term_`). Added `encodeTypeParams`
+  for generic type parameters on type definitions. Added `stripTypeAbstractions`
+  to peel `TermTypeLambda` wrappers from top-level function definitions.
+
+- **Tier 1d – tsc iteration**: Iterated until **zero TS1xxx (parse/syntax)
+  errors** remain. Key fixes: parenthesized object literals after `=>` to
+  prevent block-vs-object ambiguity (`({...})` instead of `{...}`), reserved-
+  word escaping, type application flattening. Remaining errors are all TS2xxx
+  (type errors) and TS7xxx (implicit any) — these are semantic issues caused
+  by the Tier 4 integration gap (missing modules, type mismatches between
+  hand-written and generated type definitions), not syntax problems.
+
+**Tier 4: Package integration — partial**
+
+- Updated `sync-typescript.sh` with a new step 4 that copies hand-written
+  runtime files from `heads/typescript/` into `dist/typescript/hydra-kernel/`
+  (lib primitives, compute.ts, libraries.ts, dsl/, tools/, index.ts).
+  Only non-conflicting files are copied (generated versions take precedence).
+- Added `package.json` and `tsconfig.json` to `dist/typescript/hydra-kernel/`
+  for standalone type-checking.
+- After copying, import resolution errors (TS2307) drop from 639 to ~0, but
+  ~22k type errors remain due to type incompatibility between the hand-written
+  bootstrap types and the generated kernel types.
+
+**Other**
+
+- All 55 hand-written tests in `heads/typescript/` continue to pass.
+- `stack build` in `heads/haskell/` passes cleanly.
+- Generation produces 173 main + 52 test files with zero unsupported terms.
+
+### Not completed — remaining work
+
+**Tier 4 (continued): Type alignment between hand-written and generated code**
+
+The hand-written runtime (`heads/typescript/`) was built against a bootstrap
+type system (`core.ts` with generic `Either<X,Y>`, `Maybe<T>`, etc.) that
+differs from the generated kernel types (branded `Name`, interface-based
+records, discriminated unions without generic parameters). The ~22k type
+errors are cascading from this mismatch. Options:
+1. Update hand-written runtime to work against generated types (correct long-term)
+2. Create adapter shims
+3. Relax type-checking temporarily and fix incrementally
+
+**Tier 2: Bootstrap and generation modules**
+
+- `generation.ts` — not started. Needs: `bootstrapSchemaMap()`,
+  `bootstrapGraph()`, `loadModulesFromJson()`, `generateSources()`,
+  `writeHaskell()`, `writeTypeScript()`, etc.
+- `bootstrap.ts` CLI entry point — not started.
+- Blocked on Tier 4 completion (generated kernel must be importable).
+
+**Tier 3: Test suite runner**
+
+- `test_suite_runner.ts` — not started. Needs Vitest integration, test graph
+  setup, `TestGroup` walking, `UniversalTestCase` execution.
+- Blocked on Tier 4 (generated test modules must compile).
+
+**Tier 5: DSL completeness**
+
+- Missing: `annotations.ts`, host utilities, `tools.ts`, meta-DSL.
+- Independent of other tiers; lower priority.
+
+**Tier 6: Sync pipeline hardening**
+
+- `sync-typescript.sh` still has `warn ... Continuing...` instead of failing
+  on generation errors. Should be changed once the coder produces clean output.
+
+**Tier 7: Bootstrapping demo**
+
+- TypeScript not yet in the bootstrapping demo matrix.
+- Requires Tier 2 completion.
+
+### Files modified this session
+
+- `dist/haskell/hydra-ext/src/main/haskell/Hydra/TypeScript/Coder.hs` — major rewrite (bootstrap patch)
+- `heads/haskell/bin/sync-typescript.sh` — added hand-written file copy step
+- `dist/typescript/hydra-kernel/package.json` — new (for standalone tsc)
+- `dist/typescript/hydra-kernel/tsconfig.json` — new (for standalone tsc)
+
+### Recommended next steps
+
+1. **Align hand-written types with generated types** — the biggest remaining
+   blocker. Update `heads/typescript/src/main/typescript/hydra/core.ts` to
+   re-export from the generated types, or rewrite the lib primitives to work
+   against the generated type definitions.
+2. **Iterate on type errors** — once types are aligned, the TS2xxx errors
+   should collapse rapidly.
+3. **Write test suite runner** (Tier 3) — can begin once the generated kernel
+   compiles.
+4. **Write bootstrap/generation** (Tier 2) — can begin once the kernel is
+   importable.

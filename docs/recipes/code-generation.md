@@ -263,6 +263,7 @@ heads/haskell/bin/sync-ext.sh          # Regenerate ext modules and JSON exports
 heads/haskell/bin/sync-java.sh         # Regenerate Java from JSON
 heads/haskell/bin/sync-python.sh       # Regenerate Python from JSON
 heads/haskell/bin/sync-scala.sh        # Regenerate Scala
+heads/haskell/bin/sync-typescript.sh   # Regenerate TypeScript from JSON
 
 # Quick mode (skip tests)
 bin/sync-all.sh --quick

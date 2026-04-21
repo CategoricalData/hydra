@@ -1,6 +1,6 @@
 -- Note: this is an automatically generated file. Do not edit.
 
--- | Language constraints and reserved words for JavaScript (ECMAScript 2024)
+-- | Language constraints and reserved words for TypeScript 5.x
 
 module Hydra.TypeScript.Language where
 
@@ -12,11 +12,11 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Set as S
 
--- | Language constraints for JavaScript (ECMAScript 2024)
-javaScriptLanguage :: Coders.Language
-javaScriptLanguage =
+-- | Language constraints for TypeScript 5.x
+typeScriptLanguage :: Coders.Language
+typeScriptLanguage =
     Coders.Language {
-      Coders.languageName = (Coders.LanguageName "hydra.javaScript"),
+      Coders.languageName = (Coders.LanguageName "hydra.typeScript"),
       Coders.languageConstraints = Coders.LanguageConstraints {
         Coders.languageConstraintsEliminationVariants = eliminationVariants,
         Coders.languageConstraintsLiteralVariants = literalVariants,
@@ -93,15 +93,15 @@ javaScriptLanguage =
           Variants.TypeVariantWrap]
     typePredicate = \_ -> True
 
--- | A set of reserved words in JavaScript
-javaScriptReservedWords :: S.Set String
-javaScriptReservedWords =
+-- | A set of reserved words in TypeScript
+typeScriptReservedWords :: S.Set String
+typeScriptReservedWords =
     Sets.fromList (Lists.concat [
       keywords,
       futureReserved,
       strictModeReserved,
       builtIns,
-      hydraJavaScriptKeywords])
+      hydraTypeScriptKeywords])
   where
     keywords =
         [
@@ -207,7 +207,7 @@ javaScriptReservedWords =
           "process",
           "require",
           "window"]
-    hydraJavaScriptKeywords =
+    hydraTypeScriptKeywords =
         [
           "Name",
           "FrozenMap",

@@ -1,0 +1,9 @@
+{
+  "name": "hydra-kernel-generated",
+  "version": "0.15.0",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "typescript": "^5.4"
+  }
+}

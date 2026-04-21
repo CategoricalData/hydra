@@ -39,6 +39,8 @@ import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Names as Names
 import qualified Hydra.Util as Util
 import Hydra.Scala.Coder (moduleToScala)
+import Hydra.TypeScript.Coder (moduleToTypeScript)
+import Hydra.TypeScript.Language (typeScriptLanguage)
 import Hydra.Coq.Generate (moduleToCoq, globalFieldMapping, globalConstructorCounts, globalAmbiguousNames, globalSanitizedAccessors)
 import Hydra.Coq.Language (coqLanguage)
 
@@ -138,6 +140,13 @@ writePython = generateSources moduleToPython pythonLanguage True True True False
 -- Third argument: modules to transform and generate
 writeRust :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writeRust = generateSources moduleToRust rustLanguage True False False False
+
+-- | Generate TypeScript source files from modules.
+-- First argument: output directory
+-- Second argument: universe modules (all modules for type/term resolution)
+-- Third argument: modules to transform and generate
+writeTypeScript :: FP.FilePath -> [Module] -> [Module] -> IO Int
+writeTypeScript = generateSources moduleToTypeScript typeScriptLanguage True True False False
 
 -- | Generate Coq (.v) source files from modules.
 -- First argument: output directory

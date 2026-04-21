@@ -33,14 +33,14 @@ set -euo pipefail
 #   ./bin/sync-all.sh --help                                 # Show this help
 #
 # Targets covered by --targets all:
-#   hydra, java, python, scala, clojure, common-lisp, emacs-lisp, scheme
+#   hydra, java, python, scala, typescript, clojure, common-lisp, emacs-lisp, scheme
 #
 # Targets that exist as DSL sources but are NOT part of --targets all:
-#   coq, typescript, rust
+#   coq, rust
 # These languages have generation-only support (DSL sources in packages/hydra-coq,
-# packages/hydra-typescript, etc.) but no full runtime implementation, no test
-# suite, and no dedicated sync-<lang>.sh script. They will silently drift unless
-# regenerated manually via the appropriate Stack exec.
+# etc.) but no full runtime implementation, no test suite, and no dedicated
+# sync-<lang>.sh script. They will silently drift unless regenerated manually
+# via the appropriate Stack exec.
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
@@ -76,6 +76,7 @@ while [ $# -gt 0 ]; do
             echo "  java        Java code generation"
             echo "  python      Python code generation"
             echo "  scala       Scala code generation"
+            echo "  typescript  TypeScript code generation"
             echo "  clojure     Clojure code generation"
             echo "  common-lisp Common Lisp code generation"
             echo "  emacs-lisp  Emacs Lisp code generation"
@@ -101,7 +102,7 @@ done
 
 # Expand special target names
 case "$TARGETS" in
-    all) TARGETS="hydra,java,python,scala,clojure,common-lisp,emacs-lisp,scheme" ;;
+    all) TARGETS="hydra,java,python,scala,typescript,clojure,common-lisp,emacs-lisp,scheme" ;;
 esac
 
 # Parse targets into flags
@@ -109,6 +110,7 @@ TARGET_HYDRA=false
 TARGET_JAVA=false
 TARGET_PYTHON=false
 TARGET_SCALA=false
+TARGET_TYPESCRIPT=false
 LISP_DIALECTS=()
 
 IFS=',' read -ra TARGET_LIST <<< "$TARGETS"
@@ -118,13 +120,14 @@ for t in "${TARGET_LIST[@]}"; do
         java)        TARGET_JAVA=true ;;
         python)      TARGET_PYTHON=true ;;
         scala)       TARGET_SCALA=true ;;
+        typescript)  TARGET_TYPESCRIPT=true ;;
         lisp)        LISP_DIALECTS+=(clojure common-lisp emacs-lisp scheme) ;;
         clojure)     LISP_DIALECTS+=(clojure) ;;
         common-lisp) LISP_DIALECTS+=(common-lisp) ;;
         emacs-lisp)  LISP_DIALECTS+=(emacs-lisp) ;;
         scheme)      LISP_DIALECTS+=(scheme) ;;
         *)
-            die "Unknown target '$t'. Valid targets: hydra, java, python, scala, lisp, clojure, common-lisp, emacs-lisp, scheme, all"
+            die "Unknown target '$t'. Valid targets: hydra, java, python, scala, typescript, lisp, clojure, common-lisp, emacs-lisp, scheme, all"
             ;;
     esac
 done
@@ -141,7 +144,7 @@ fi
 
 # Phase 2 (ext) is needed if any target depends on it
 NEED_EXT=false
-if $TARGET_HYDRA || $TARGET_JAVA || $TARGET_PYTHON || $TARGET_SCALA || $HAS_LISP; then
+if $TARGET_HYDRA || $TARGET_JAVA || $TARGET_PYTHON || $TARGET_SCALA || $TARGET_TYPESCRIPT || $HAS_LISP; then
     NEED_EXT=true
 fi
 
@@ -182,6 +185,7 @@ if $NEED_EXT; then TOTAL_PHASES=$((TOTAL_PHASES + 1)); fi
 if $TARGET_JAVA; then TOTAL_PHASES=$((TOTAL_PHASES + 1)); fi
 if $TARGET_PYTHON; then TOTAL_PHASES=$((TOTAL_PHASES + 1)); fi
 if $TARGET_SCALA; then TOTAL_PHASES=$((TOTAL_PHASES + 1)); fi
+if $TARGET_TYPESCRIPT; then TOTAL_PHASES=$((TOTAL_PHASES + 1)); fi
 if $HAS_LISP; then TOTAL_PHASES=$((TOTAL_PHASES + 1)); fi
 CURRENT_PHASE=0
 
@@ -243,6 +247,15 @@ fi
 if $TARGET_SCALA; then
     phase_banner "Synchronizing Scala"
     "$HYDRA_EXT_DIR/bin/sync-scala.sh" $QUICK_FLAG
+fi
+
+# ──────────────────────────────────────────────────
+# Phase: Sync TypeScript from JSON
+# ──────────────────────────────────────────────────
+
+if $TARGET_TYPESCRIPT; then
+    phase_banner "Synchronizing TypeScript (from JSON)"
+    "$HYDRA_EXT_DIR/bin/sync-typescript.sh" $QUICK_FLAG
 fi
 
 # ──────────────────────────────────────────────────

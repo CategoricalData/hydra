@@ -124,7 +124,7 @@ worktrees/<branch>/
     hydra-rdf/        # RDF/SHACL model DSL sources
     hydra-ext/        # Miscellaneous extension DSL sources (Avro, Protobuf, GraphQL, ...)
     hydra-coq/        # Coq coder DSL sources
-    hydra-javascript/ # JavaScript coder DSL sources
+    hydra-typescript/ # TypeScript coder DSL sources + hand-written runtime
   heads/              # Per-host build infrastructure: primitives, DSL runtime, generation
     haskell/          # Stack package ("hydra"), exec binaries, Hydra.Dsl/Lib/Generation
     java/             # Hand-written Java primitives, DSL, utils; gradle source-set crossover
@@ -137,6 +137,7 @@ worktrees/<branch>/
     java/             # Generated Java kernel
     python/           # Generated Python kernel
     scala/            # Generated Scala kernel
+    typescript/       # Generated TypeScript kernel
     clojure/          # Generated Clojure kernel
     common-lisp/      # Generated Common Lisp kernel
     emacs-lisp/       # Generated Emacs Lisp kernel
@@ -235,6 +236,8 @@ Each has build/test commands and code organization details:
 | [packages/hydra-haskell/README.md](packages/hydra-haskell/README.md) | Haskell coder, DSL overview, self-hosting demo |
 | [packages/hydra-java/README.md](packages/hydra-java/README.md) | Gradle build, visitor pattern, benchmark runner |
 | [packages/hydra-python/README.md](packages/hydra-python/README.md) | uv setup, pytest, ruff, pyright |
+| [packages/hydra-typescript/README.md](packages/hydra-typescript/README.md) | TypeScript coder DSL sources |
+| [heads/typescript/README.md](heads/typescript/README.md) | pnpm setup, vitest, tsc strict |
 | [packages/hydra-scala/README.md](packages/hydra-scala/README.md) | sbt build, bootstrapping host |
 | [packages/hydra-lisp/README.md](packages/hydra-lisp/README.md) | Four Lisp dialects, shared coder, per-dialect test runners |
 
@@ -308,6 +311,7 @@ give the user a brief status update approximately every 10 minutes.
 | `/sync-lisp()` | Run `heads/haskell/bin/sync-lisp.sh`. Pass `--dialects <list>` to limit dialects. |
 | `/sync-python()` | Run `heads/haskell/bin/sync-python.sh`. |
 | `/sync-scala()` | Run `heads/haskell/bin/sync-scala.sh`. |
+| `/sync-typescript()` | Run `heads/haskell/bin/sync-typescript.sh`. |
 
 ## Coding style (read the full guide!)
 
