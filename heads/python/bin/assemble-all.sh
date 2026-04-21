@@ -22,6 +22,14 @@ echo "=== Assembling python distributions (batch mode, all packages) ==="
 echo "  Output root: $DIST_ROOT"
 echo ""
 
+# Warm-cache short-circuit: skip BEFORE any stack invocation.
+source "$HYDRA_ROOT_DIR/bin/lib/batch-cache.sh"
+if batch_cache_fresh "$DIST_ROOT" "$HYDRA_ROOT_DIR/dist/json"; then
+    echo "  Cache hit: every per-package digest fresh; skipping batch."
+    echo "=== Done (cache hit). ==="
+    exit 0
+fi
+
 cd "$HYDRA_ROOT_DIR/heads/haskell"
 stack build hydra:exe:bootstrap-from-json >/dev/null 2>&1
 

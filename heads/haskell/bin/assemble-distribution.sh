@@ -54,6 +54,27 @@ echo "=== Assembling Haskell distribution: $PACKAGE ==="
 echo "  Output: $OUT_DIR"
 echo ""
 
+# Cheap Python pre-check: compare input digest hashes to recorded
+# output digest inputs. Avoids stack-exec startup for warm runs.
+if [ -f "$INPUT_DIGEST" ] && [ -f "$OUTPUT_DIGEST" ]; then
+    if python3 -c "
+import json, sys
+try:
+    out = json.load(open('$OUTPUT_DIGEST'))
+    inp = json.load(open('$INPUT_DIGEST'))
+    recorded = {k: (v.get('hash') if isinstance(v, dict) else v)
+                for k, v in out.get('inputs', {}).items()}
+    current = inp.get('hashes', inp)
+    sys.exit(0 if recorded == current else 1)
+except Exception:
+    sys.exit(1)
+" 2>/dev/null; then
+        echo "  Cache hit; skipping work."
+        echo "=== Done. $PACKAGE (cache hit) ==="
+        exit 0
+    fi
+fi
+
 # Freshness check: skip the slow path when nothing has changed.
 if [ -f "$INPUT_DIGEST" ] && [ -f "$OUTPUT_DIGEST" ]; then
     if (cd "$HYDRA_HASKELL_DIR" && \
