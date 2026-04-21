@@ -325,7 +325,7 @@ All four sub-items completed:
 - `stack build` in `heads/haskell/` passes cleanly.
 - Generation produces 173 main + 52 test files with zero unsupported terms.
 
-### Not completed — remaining work
+### Not completed (2026-04-15) — remaining work
 
 **Tier 4 (continued): Type alignment between hand-written and generated code**
 
@@ -333,56 +333,168 @@ The hand-written runtime (`heads/typescript/`) was built against a bootstrap
 type system (`core.ts` with generic `Either<X,Y>`, `Maybe<T>`, etc.) that
 differs from the generated kernel types (branded `Name`, interface-based
 records, discriminated unions without generic parameters). The ~22k type
-errors are cascading from this mismatch. Options:
-1. Update hand-written runtime to work against generated types (correct long-term)
-2. Create adapter shims
-3. Relax type-checking temporarily and fix incrementally
+errors are cascading from this mismatch.
 
-**Tier 2: Bootstrap and generation modules**
+**Tiers 2, 3, 5–7**: Unchanged — blocked on Tier 4 / remaining type errors.
 
-- `generation.ts` — not started. Needs: `bootstrapSchemaMap()`,
-  `bootstrapGraph()`, `loadModulesFromJson()`, `generateSources()`,
-  `writeHaskell()`, `writeTypeScript()`, etc.
-- `bootstrap.ts` CLI entry point — not started.
-- Blocked on Tier 4 completion (generated kernel must be importable).
-
-**Tier 3: Test suite runner**
-
-- `test_suite_runner.ts` — not started. Needs Vitest integration, test graph
-  setup, `TestGroup` walking, `UniversalTestCase` execution.
-- Blocked on Tier 4 (generated test modules must compile).
-
-**Tier 5: DSL completeness**
-
-- Missing: `annotations.ts`, host utilities, `tools.ts`, meta-DSL.
-- Independent of other tiers; lower priority.
-
-**Tier 6: Sync pipeline hardening**
-
-- `sync-typescript.sh` still has `warn ... Continuing...` instead of failing
-  on generation errors. Should be changed once the coder produces clean output.
-
-**Tier 7: Bootstrapping demo**
-
-- TypeScript not yet in the bootstrapping demo matrix.
-- Requires Tier 2 completion.
-
-### Files modified this session
+### Files modified 2026-04-15
 
 - `dist/haskell/hydra-ext/src/main/haskell/Hydra/TypeScript/Coder.hs` — major rewrite (bootstrap patch)
 - `heads/haskell/bin/sync-typescript.sh` — added hand-written file copy step
 - `dist/typescript/hydra-kernel/package.json` — new (for standalone tsc)
 - `dist/typescript/hydra-kernel/tsconfig.json` — new (for standalone tsc)
 
+---
+
+**2026-04-16**: Coder type-system fixes and lib function currying.
+Reduced tsc errors from ~25k → ~7.2k (71% reduction).
+
+### Completed this session (2026-04-16)
+
+**Coder fixes (`Coder.hs` bootstrap patch)**
+
+Four fixes to the TypeScript coder, all in the bootstrap file
+`dist/haskell/hydra-ext/src/main/haskell/Hydra/TypeScript/Coder.hs`:
+
+1. **Return type annotation fix**: `encodeTermDefinition` was emitting the
+   *full* function type (including the first parameter) as the return type
+   annotation on generated functions. For a definition with type `A -> B -> C`,
+   the generated function `f(x: A): (x: A) => (x: B) => C` had an extra
+   parameter level in the return type. Added `stripOneFunctionType` to peel
+   one function type layer (skipping foralls) before encoding the return type.
+   This alone fixed ~5k cascading TS2345/TS2322 errors.
+
+2. **Generic type parameters on functions**: `encodeTermDefinition` now
+   extracts `typeSchemeVariables` from the definition's type scheme and emits
+   them as `<t0, t1, ...>` on the function declaration. Fixes ~1.8k TS2304
+   "Cannot find name 't0'" errors (180 → 137 after further fixes).
+
+3. **Generic type parameters on type definitions**: `encodeTypeDefinition`
+   now collects `forall` wrappers from the type body via `collectForallParams`
+   and emits them as generic parameters on the type. Fixes TS2315 "Type 'Coder'
+   is not generic" (206 → 0). Types like `Coder<v1, v2>`, `Adapter<t1, t2, v1, v2>`,
+   `Bicoder`, `FunctionStructure`, `Namespaces` now have correct generic params.
+
+4. **Namespace scanning for type annotations**: Added `typeRefNamespaces` to
+   recursively scan all type references (function domains/codomains, list/map/set
+   element types, record/union field types, forall bodies, etc.) for qualified
+   namespace references. These are now included in the import dependency set
+   alongside the existing term-body and module-declared dependencies. Fixes
+   TS2503 "Cannot find namespace 'hydra'" (406 → 66).
+
+5. **Reserved word escaping for cross-namespace property access**: Changed
+   `resolveQualifiedName` to use `sanitizeTsVar` (which appends `_` to
+   reserved words) for cross-namespace property names, matching the escaping
+   applied at definition sites. Fixes `Maps.null` → `Maps.null_`, etc.
+
+**Hand-written lib functions converted to curried style**
+
+All 13 lib primitive files in `heads/typescript/src/main/typescript/hydra/lib/`
+converted from uncurried multi-argument functions to curried single-argument
+functions returning closures. This matches the generated calling convention
+(the Haskell kernel uses curried application, so generated code emits
+`LibLists.map(f)(xs)` not `LibLists.map(f, xs)`).
+
+Files changed: `lists.ts`, `maps.ts`, `logic.ts`, `maybes.ts`, `eithers.ts`,
+`strings.ts`, `math.ts`, `pairs.ts`, `sets.ts`, `equality.ts`, `regex.ts`.
+Unchanged (already single-arg): `chars.ts`, `literals.ts`.
+
+Callback types in higher-order functions were also curried to match:
+e.g., `foldl`'s `f` parameter changed from `(acc: B, a: A) => B` to
+`(acc: B) => (a: A) => B`, with the implementation bridging to JavaScript's
+`reduce` via `f(acc)(a)`.
+
+**Error reduction summary**
+
+| Milestone | tsc errors | Δ |
+|-----------|-----------|---|
+| Starting point (pre-session) | ~25,261 | — |
+| After return type + generic params fix | ~15,965 | −9,296 |
+| After lib currying | ~7,753 | −8,212 |
+| After forall params + namespace scanning | ~7,199 | −554 |
+
+**Error breakdown at ~7,199**
+
+| Code | Count | Description |
+|------|-------|-------------|
+| TS2345 | 3,545 | Argument type mismatch |
+| TS2322 | 1,753 | Type assignment mismatch |
+| TS2349 | 904 | Expression not callable |
+| TS7024 | 521 | Implicit any return type |
+| TS2304 | 137 | Cannot find name |
+| TS2503 | 66 | Cannot find namespace |
+| Other | 273 | Various (TS2721, TS18046, TS2305, TS2693, etc.) |
+
+### Files modified 2026-04-16
+
+- `dist/haskell/hydra-ext/src/main/haskell/Hydra/TypeScript/Coder.hs` — 5 fixes (bootstrap patch)
+- `heads/typescript/src/main/typescript/hydra/lib/lists.ts` — curried
+- `heads/typescript/src/main/typescript/hydra/lib/maps.ts` — curried
+- `heads/typescript/src/main/typescript/hydra/lib/logic.ts` — curried
+- `heads/typescript/src/main/typescript/hydra/lib/maybes.ts` — curried
+- `heads/typescript/src/main/typescript/hydra/lib/eithers.ts` — curried
+- `heads/typescript/src/main/typescript/hydra/lib/strings.ts` — curried
+- `heads/typescript/src/main/typescript/hydra/lib/math.ts` — curried
+- `heads/typescript/src/main/typescript/hydra/lib/pairs.ts` — curried
+- `heads/typescript/src/main/typescript/hydra/lib/sets.ts` — curried
+- `heads/typescript/src/main/typescript/hydra/lib/equality.ts` — curried
+- `heads/typescript/src/main/typescript/hydra/lib/regex.ts` — curried
+
+### Not completed — remaining work
+
+**Tier 4 (continued): Remaining ~7.2k type errors**
+
+The remaining errors fall into several categories:
+
+1. **Maybe/Either representation mismatch (~2–3k errors)**:
+   The coder maps `Maybe T` → `T | null` and `Either L R` → `L | R`, but
+   the hand-written lib functions return discriminated union `Maybe<T>` and
+   `Either<L,R>` types from `core.ts`. This causes type mismatches wherever
+   generated code calls lib functions that return or accept Maybe/Either.
+   Options:
+   - Change the coder to emit `Maybe<T>` / `Either<L,R>` and provide a
+     hand-written `prelude.ts` with these types (cleaner, more type-safe).
+   - Change the lib functions to use `T | null` (simpler but loses type info
+     for Either).
+
+2. **"Not callable" errors (904)**: Generated code calls results of functions
+   whose return types resolve to non-function types due to cascading from
+   other type errors. Many will resolve once the Maybe/Either mismatch is fixed.
+
+3. **Implicit any return type (521)**: Functions whose return type can't be
+   inferred due to circular references or cascading type errors.
+
+4. **Remaining namespace/name resolution (66 + 137)**: A few namespaces still
+   missing from the import scan; some type variable names unresolved.
+
+5. **Hand-written test suite needs updating**: The existing 55 tests in
+   `heads/typescript/src/test/` call lib functions in uncurried style and
+   will need to be updated for the curried API.
+
+**Tier 2: Bootstrap and generation modules** — not started, blocked on Tier 4.
+
+**Tier 3: Test suite runner** — not started, blocked on Tier 4.
+
+**Tier 5: DSL completeness** — not started, lower priority.
+
+**Tier 6: Sync pipeline hardening** — `sync-typescript.sh` still has
+`warn ... Continuing...` instead of failing on generation errors.
+
+**Tier 7: Bootstrapping demo** — not started, requires Tier 2.
+
 ### Recommended next steps
 
-1. **Align hand-written types with generated types** — the biggest remaining
-   blocker. Update `heads/typescript/src/main/typescript/hydra/core.ts` to
-   re-export from the generated types, or rewrite the lib primitives to work
-   against the generated type definitions.
-2. **Iterate on type errors** — once types are aligned, the TS2xxx errors
-   should collapse rapidly.
-3. **Write test suite runner** (Tier 3) — can begin once the generated kernel
-   compiles.
-4. **Write bootstrap/generation** (Tier 2) — can begin once the kernel is
-   importable.
+1. **Fix Maybe/Either representation** — the single biggest remaining blocker.
+   Best approach: change the coder to emit `Maybe<T>` / `Either<L,R>`
+   discriminated union types (matching what the lib functions return), and
+   provide a hand-written `prelude.ts` that defines these types + constructors.
+   This requires:
+   - Adding `import * as Prelude from "./prelude.js"` to generated imports
+   - Changing `encodeTypeRef` for `TypeMaybe` and `TypeEither`
+   - Changing `encodeTermExpr` for `TermMaybe` and `TermEither`
+   - Writing `prelude.ts` and updating the sync script to always copy it
+2. **Iterate on remaining type errors** — once Maybe/Either aligns, many
+   TS2345/TS2322/TS2349 errors will cascade away.
+3. **Update hand-written tests** for the curried lib API.
+4. **Write test suite runner** (Tier 3) once errors are below ~500.
+5. **Write bootstrap/generation** (Tier 2) once the kernel is importable.
