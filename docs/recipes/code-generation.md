@@ -5,29 +5,54 @@ A guide to generating source code in target languages from Hydra module definiti
 ## Prerequisites
 
 - Familiarity with Hydra's module system (see [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts))
-- A working build environment for at least one host language (see [build
-  instructions](../../CLAUDE.md#build-and-test-commands))
+- A working build environment for at least one host language (see the per-package READMEs under `packages/`)
 
 ## Overview
 
-Hydra modules can be defined in any host language's DSL (Haskell, Java, Python, Scala, Lisp) and generated into
-any target language. There are two source representations for modules:
+Hydra modules can be defined in any host language's DSL (today: Haskell)
+and generated into any target language (Haskell, Java, Python, Scala,
+Lisp dialects, plus schema-only targets like Coq, Rust, GraphQL, etc.).
+There are two source representations for modules:
 
-- **DSL modules** are human-authored source code, designed for readability and maintainability.
-  They are written in a host language's DSL and consumed directly by the `writeXxx` functions.
-- **JSON modules** are a language-neutral interchange format, exported from DSL modules.
-  They allow any host language to load modules and generate code without depending on the
-  original authoring language. The bootstrap CLI consumes these.
+- **DSL modules** are human-authored source code, designed for readability
+  and maintainability. They live under `packages/<pkg>/src/main/haskell/Hydra/Sources/`
+  and are consumed directly by the `writeXxx` functions.
+- **JSON modules** are a language-neutral interchange format, exported
+  from DSL modules. They live under `dist/json/<pkg>/src/main/json/`
+  and allow any host language to load modules and generate code
+  without depending on the original authoring language. The
+  `bootstrap-from-json` CLI consumes these.
 
 The typical workflow is:
 
 ```
-DSL modules  ---(export)--->  JSON modules  ---(bootstrap)--->  generated code
-(human-authored)              (interchange)                      (any target language)
+DSL modules  ---(Phase 1)--->  JSON modules  ---(Phase 2)--->  generated code
+(packages/)                    (dist/json/)                    (dist/<lang>/)
 ```
 
-For Hydra's own kernel, the DSL modules are in Haskell, but this is not a requirement.
-Any host language's DSL can be the source of truth for a given set of modules.
+For Hydra's own kernel, the DSL modules are in Haskell, but this is not
+a requirement. Any host language's DSL can be the source of truth for a
+given set of modules.
+
+## Per-package layout
+
+Generated code is partitioned across per-package `dist/<lang>/<pkg>/`
+trees rather than a single flat `dist/<lang>/` directory. Each package
+(hydra-kernel, hydra-haskell, hydra-java, hydra-python, hydra-scala,
+hydra-lisp, hydra-pg, hydra-rdf, hydra-coq, hydra-javascript, hydra-wasm,
+hydra-ext) owns a range of namespaces, and the generated output for
+those namespaces lands under that package's directory.
+
+Each package's `package.json` may declare a `targetLanguages` field
+restricting which target languages the package is regenerated to. For
+example, `hydra-coq` and `hydra-javascript` are coder libraries
+implemented only against the Haskell runtime, so their
+`targetLanguages` is `["haskell"]`.
+
+`dist/json/` is the tracked source of truth. `dist/haskell/` is tracked
+through the 0.15 release to support bootstrapping from a fresh clone.
+All other `dist/<lang>/` trees are regenerated from `dist/json/` and
+are not checked in.
 
 ## The writeXxx functions
 
@@ -38,28 +63,16 @@ writeXxx(outputDir, universeModules, modulesToGenerate) -> filesWritten
 ```
 
 - **outputDir**: The base directory where generated files are written.
-- **universeModules**: All modules needed for type and term resolution. This is the
-  dependency context -- it must include all transitive dependencies of the modules being
-  generated, even if those dependencies are not themselves being generated.
-- **modulesToGenerate**: The subset of modules that actually get written to files.
+- **universeModules**: All modules needed for type and term resolution.
+  This is the dependency context -- it must include all transitive
+  dependencies of the modules being generated, even if those dependencies
+  are not themselves being generated.
+- **modulesToGenerate**: The subset of modules that actually get written
+  to files.
 
-The universe and generate lists are often the same, but they differ when you generate
-a subset of modules that depend on others:
-
-```haskell
--- Generate kernel, using kernel as its own universe (no external dependencies)
-writeHaskell "../../dist/haskell/hydra-kernel/src/main/haskell" kernelModules kernelModules
-
--- Generate test modules, which depend on main modules.
--- Universe includes both; only tests are generated.
-let allMods = mainModules ++ testModules
-writeJava "../../dist/java/hydra-kernel/src/test/java" allMods testModules
-
--- Generate PG modules, using main + pg as universe
-writeJava "../../dist/java/hydra-pg/src/main/java" (mainModules ++ pgModules) pgModules
-```
-
-If the universe is missing a transitive dependency, generation may fail with
+The universe and generate lists are often the same, but they differ
+when you generate a subset of modules that depend on others. If the
+universe is missing a transitive dependency, generation may fail with
 unresolved type references or produce incomplete output.
 
 ### Available targets
@@ -97,12 +110,101 @@ Generated files follow language-specific naming conventions:
 | Haskell | `Namespace/Module.hs` | `Hydra/Core.hs` |
 | Java | `namespace/module/Module.java` | `hydra/core/Core.java` |
 | Python | `namespace/module/module.py` | `hydra/core/core.py` |
-| Scala | `namespace/module/Module.scala` | `hydra/core/Core.scala` |
+| Scala | `namespace/module.scala` | `hydra/core.scala` |
 
-## Path 1: generating from DSL modules
+## The sync scripts
 
-When you have direct access to DSL-defined modules (e.g., in a GHCi session, a Java program,
-or a Python script), call the `writeXxx` functions directly.
+For regenerating Hydra's own implementations, sync scripts automate the
+full pipeline. These are the standard developer entry point.
+
+### The three-layer script stack
+
+The sync infrastructure is organized as three layers, with a small set
+of orchestrators above them:
+
+| Layer | Script | Role |
+|-------|--------|------|
+| 1 (transform) | `heads/haskell/bin/transform-haskell-dsl-to-json.sh` | DSL → JSON for one package or `--all` packages |
+| 1 (transform) | `heads/haskell/bin/transform-json-to-<lang>.sh` | JSON → target language for one package |
+| 2 (assemble) | `heads/<lang>/bin/assemble-distribution.sh <pkg>` | Produce `dist/<lang>/<pkg>/` (calls Layer 1 + post-processing) |
+| 2 (assemble) | `heads/<lang>/bin/assemble-all.sh` | Batch: produce every `dist/<lang>/<pkg>/` in one universe load |
+| 2.5 (test) | `heads/<lang>/bin/test-distribution.sh` | Run the target's test suite |
+| 3 (orchestrate) | `bin/sync-packages.sh` | Phase 1 → Phase 2 → Phase 3 for one or more packages |
+| 3 (orchestrate) | `bin/sync.sh` | Matrix tool (`--hosts H,...`, `--targets T,...`) |
+| 3 (orchestrate) | `bin/sync-all.sh` | Exhaustive run (every package × every target, with tests) |
+
+Every-day tasks:
+
+```bash
+# Full regen with tests (8 target languages × every package, fails fast)
+bin/sync-all.sh
+
+# Matrix prep before a bootstrapping-demo run
+bin/sync.sh --hosts haskell,java,python --targets haskell,java,python
+
+# Bootstrapping triad shorthand (host == target == {haskell, java, python})
+bin/sync-default.sh
+
+# Single-language wrappers (host == target)
+bin/sync-java.sh
+bin/sync-python.sh
+bin/sync-scala.sh
+bin/sync-clojure.sh        # or common-lisp, emacs-lisp, scheme
+
+# Just one package, any target
+bin/sync-packages.sh hydra-pg --target java
+
+# Skip target-language tests (Phase 3)
+bin/sync-all.sh --no-tests
+```
+
+### Phases
+
+Each `sync-packages.sh` (and therefore each `sync-all.sh`) invocation
+runs three phases in order:
+
+1. **Phase 1 — DSL → JSON.** Runs
+   `transform-haskell-dsl-to-json --all main` and `--all test` in a
+   single Haskell-universe load. Produces (or updates) `dist/json/`.
+   Idempotent.
+
+2. **Phase 2 — assemble.** For each target language, either
+   - calls `heads/<lang>/bin/assemble-all.sh` once when every package
+     is in scope (batch mode: one `bootstrap-from-json` invocation
+     handles all packages), or
+   - loops per-package over `heads/<lang>/bin/assemble-distribution.sh <pkg>`
+     for scoped runs.
+   Skips any (package, target) combination outside the package's
+   declared `targetLanguages`. Produces `dist/<lang>/<pkg>/`.
+
+3. **Phase 3 — test.** For each target, invokes
+   `heads/<lang>/bin/test-distribution.sh`. Fails fast on the first
+   failing target.
+
+### Warm-cache caching
+
+Each phase has a freshness cache. When nothing has changed relative to
+the last successful run, every step short-circuits and `sync-all` completes
+in a few seconds.
+
+| Phase | Cache | Skip condition |
+|-------|-------|----------------|
+| Phase 1 | `bin/lib/check-dsl-fresh.py` | Every DSL source file's hash matches the recorded digest at `dist/json/digest.main.json`. Skips stack startup + JSON regeneration entirely. |
+| Phase 2 (batch) | `bin/lib/batch-cache.sh` | Every `dist/<lang>/<pkg>/digest.json`'s recorded input hashes match the current `dist/json/<pkg>/digest.json`. Skips stack startup + `bootstrap-from-json`. |
+| Phase 2 (per-pkg) | `heads/haskell/bin/digest-check fresh` + Python pre-check | Per-package input hashes match and every recorded output file exists with its recorded hash. |
+| Phase 2 (generator) | Stage 7 per-module DSL-hash skip inside `bootstrap-from-json` | Modules with unchanged DSL-source hashes are excluded from regeneration even when overall cache missed. |
+| Phase 3 | `bin/lib/test-cache.sh` (`dist/<lang>/test-cache.json`) | Every generated source under `dist/<lang>/*` plus every hand-written test helper under `heads/<lang>/src/test/*` plus the runner script are byte-identical since the last successful run. Skips `stack test` / `gradle test` / `pytest` / `sbt test` / lisp runners entirely. |
+
+Any single file change invalidates the relevant cache. For example,
+editing a DSL source invalidates Phase 1 (regenerates JSON), which
+invalidates Phase 2 for whichever packages own the changed namespace,
+which invalidates Phase 3 for whichever targets consume those packages.
+Targets not reached by the chain stay cached.
+
+## Generating from DSL modules directly
+
+When you have direct access to DSL-defined modules (e.g., in a GHCi
+session or a Java program), call the `writeXxx` functions directly.
 
 ### Haskell example
 
@@ -124,7 +226,7 @@ writePython "../../dist/python/hydra-kernel/src/main/python" kernelModules kerne
 writeGraphql "/tmp/graphql" mainModules [myCustomModule]
 ```
 
-Module lists are Haskell values from `Hydra.Sources.All` and `Hydra.Sources.All`:
+Module lists are Haskell values from `Hydra.Sources.All`:
 
 | Constant | Contents |
 |----------|----------|
@@ -133,26 +235,10 @@ Module lists are Haskell values from `Hydra.Sources.All` and `Hydra.Sources.All`
 | `testModules` | Common test suite modules |
 | `hydraExtModules` | All ext modules (coders, domain models) |
 
-### Python example
-
-```python
-from hydra.generation import write_java, load_modules_from_json, read_manifest_field
-
-# Load modules from JSON (see Path 2 below for details)
-namespaces = read_manifest_field("path/to/json", "mainModules")
-modules = load_modules_from_json(False, "path/to/json", namespaces)
-
-# Generate Java
-write_java("output/java", modules, modules)
-```
-
-The Python functions have the same arguments: `write_xxx(base_path, universe, mods)`.
-
 ### Coq
 
 Coq output is generated via dedicated executables rather than GHCi.
-Unlike other target languages, `dist/coq/` is **not checked into git** —
-it is fully recreatable:
+`dist/coq/` is **not checked into git** — it is fully recreatable:
 
 ```bash
 cd heads/haskell
@@ -162,18 +248,14 @@ stack exec generate-coq-tests   # common test suite .v files
 
 `generate-coq` writes to `dist/coq/hydra-kernel/src/main/coq/` and
 `generate-coq-tests` writes to `dist/coq/hydra-kernel/src/test/coq/`.
-The hand-written primitive library implementations (axiom stubs with
+Hand-written primitive library implementations (axiom stubs with
 `Definition`/`Fixpoint` bodies) live under `heads/haskell/src/main/coq/hydra/lib/`
 and are copied into `dist/coq/` by `generate-coq`.
 
-Extra memory is typically needed for large module sets. The sync scripts handle this
-automatically; for manual invocation, use `+RTS -K256M -A32M -RTS` (Haskell) or ensure
-adequate stack size.
+## Generating from JSON modules
 
-## Path 2: generating from JSON modules
-
-When you don't have the DSL source (or prefer a language-independent workflow), load
-modules from their JSON representation and generate from there. This is how the
+When you don't have the DSL source (or prefer a language-independent
+workflow), load modules from their JSON representation. This is how the
 bootstrapping demo works and how non-Haskell hosts generate code.
 
 ### JSON directory layout
@@ -189,130 +271,92 @@ JSON modules are exported per package under `dist/json/`:
 | `dist/json/hydra-python/src/main/json/` | Python coder modules |
 | `dist/json/hydra-scala/src/main/json/` | Scala coder modules |
 | `dist/json/hydra-lisp/src/main/json/` | Lisp coder modules |
-| `dist/json/hydra-pg/src/main/json/` | Property graph, TinkerPop, Cypher, GraphSON, etc. |
+| `dist/json/hydra-pg/src/main/json/` | Property graph, TinkerPop, Cypher, GraphSON |
 | `dist/json/hydra-rdf/src/main/json/` | RDF, OWL, SHACL, ShEx, XML Schema |
+| `dist/json/hydra-coq/src/main/json/` | Coq coder modules |
+| `dist/json/hydra-javascript/src/main/json/` | JavaScript coder modules |
+| `dist/json/hydra-wasm/src/main/json/` | WebAssembly coder modules |
+| `dist/json/hydra-ext/src/main/json/` | Avro, Protobuf, GraphQL, Pegasus, etc. |
 
-Each package directory contains a `manifest.json` listing its modules.
+Each package directory contains a `manifest.json` listing its modules
+and a `digest.json` recording content hashes for the freshness cache.
 
-**Kernel manifest** (`dist/json/hydra-kernel/src/main/json/manifest.json`):
+### The bootstrap-from-json CLI
 
-| Field | Contents |
-|-------|----------|
-| `kernelModules` | Core kernel modules |
-| `mainModules` | Kernel + standard libraries |
-| `evalLibModules` | Higher-order primitive eval elements |
-| `dslModules` | DSL generator output modules |
-| `testModules` | Test suite modules |
-
-**Per-package manifests** (e.g. `dist/json/hydra-java/src/main/json/manifest.json`):
-
-| Field | Contents |
-|-------|----------|
-| `mainModules` | The package's modules |
-
-### Bootstrap CLI
-
-The Haskell bootstrap CLI (`bootstrap-from-json`) loads JSON modules from
-per-package directories and generates code:
+The Haskell bootstrap CLI generates code for a target language,
+consuming the JSON modules under `dist/json/`. It has three modes:
 
 ```bash
-# Generate Java from all packages
-stack exec bootstrap-from-json -- \
-  --target java \
-  --json-dir ../../dist/json \
-  --output /tmp/hydra-gen
+cd heads/haskell
+stack build hydra:exe:bootstrap-from-json
 
-# Generate Python, kernel modules only
+# Scoped: generate just one package's modules
 stack exec bootstrap-from-json -- \
-  --target python \
-  --json-dir ../../dist/json \
-  --kernel-only \
-  --output /tmp/hydra-gen
+    --target java \
+    --package hydra-pg \
+    --include-coders \
+    --output ../../dist/java
 
-# Generate Haskell, including tests
+# Batch: generate every package, routed per-package via namespaceToPackage
 stack exec bootstrap-from-json -- \
-  --target haskell \
-  --json-dir ../../dist/json \
-  --include-tests \
-  --output /tmp/hydra-gen
+    --target java \
+    --all-packages \
+    --include-coders --include-dsls \
+    --output ../../dist/java
+
+# Flat (demo): every module to a single src/main/<target>/ tree
+# (Used by the bootstrapping demo; integration-style layout.)
+stack exec bootstrap-from-json -- \
+    --target python \
+    --include-coders --include-dsls --include-tests \
+    --output /tmp/hydra-bootstrap-out
 ```
 
-The `--json-dir` flag points to the `dist/json/` root.
-The CLI walks per-package subdirectories in dependency order
-(kernel -> haskell -> coders -> pg/rdf).
-
-**CLI options:**
+Key options:
 
 | Option | Description |
 |--------|-------------|
 | `--target` | Target language: `haskell`, `java`, `python`, `scala`, `clojure`, `scheme`, `common-lisp`, `emacs-lisp` |
-| `--json-dir` | Root of the per-package JSON directories (`dist/json/`) |
-| `--output` | Output base directory (default: `/tmp/hydra-bootstrapping-demo`) |
+| `--package <pkg>` | Scope to one package's modules (per-package dist layout) |
+| `--all-packages` | Batch: iterate every package (per-package dist layout, one universe load) |
+| (neither) | Flat layout: everything to `<output>/src/main/<target>/` |
+| `--output` | Output base directory |
+| `--include-coders` | Also load coder packages (hydra-java/python/scala/lisp) |
+| `--include-dsls` | Also load DSL wrapper modules |
+| `--include-ext` | Also load long-tail ext packages |
 | `--include-tests` | Also generate test modules |
 | `--kernel-only` | Only generate kernel modules |
 | `--types-only` | Only generate type-defining modules |
+| `--synthesize-sources` | Derive `Hydra.Sources.Decode.*` and `Hydra.Sources.Encode.*` from kernel + pg types |
+| `--dist-json-root <dir>` | JSON root (default: `../../dist/json`) |
 
-> **Note:** The `--ext-json-dir` and `--include-coders` flags are legacy and ignored.
-> Coder modules are now loaded automatically from their per-package directories.
+For non-Haskell hosts, each implementation has its own bootstrap
+driver (e.g. `hydra.bootstrap` in Python, `hydra.Bootstrap` in Java).
+These are invoked by `demos/bootstrapping/bin/invoke-<host>-host.sh`.
 
-The Python and Scala bootstraps still use the old `--json-dir` + `--ext-json-dir`
-interface and have not yet been updated for the per-package layout.
-See issue #290 Phase 1c.
+### Phase 2 batch generation
 
-### How the bootstrap CLI works
-
-1. Walks `--json-dir` for per-package subdirectories in dependency order
-2. Reads each package's `manifest.json` to discover its modules
-3. Loads modules from JSON, accumulating a growing universe of dependencies
-4. Applies filters (`--kernel-only`, `--types-only`)
-5. Calls `write_xxx` with all loaded modules as universe and the filtered set as modules to generate
-6. If `--include-tests`, loads and generates test modules separately
-
-## Using the sync scripts
-
-For regenerating Hydra's own implementations, the sync scripts automate the full workflow.
-These are the standard developer entry point:
+Full-universe regeneration for a single target language is most
+efficient via the batch assembler:
 
 ```bash
-# Full sync: every language as both host and target (8 × 8 matrix)
-bin/sync.sh --hosts all --targets all
+# Batch-regenerate every Haskell dist, with hydra-kernel TestGraph patch
+heads/haskell/bin/assemble-all.sh
 
-# Bootstrapping triad shorthand (haskell, java, python)
-bin/sync-default.sh
-
-# Single-language (host == target) wrappers
-bin/sync-java.sh
-bin/sync-python.sh
-bin/sync-scala.sh
-bin/sync-clojure.sh   # one of: clojure, common-lisp, emacs-lisp, scheme
-
-# Phase 1 alone (DSL -> JSON + Haskell kernel + stack test + lexicon)
-heads/haskell/bin/sync-haskell.sh
-
-# Per-package layered tool (one or more packages, optional --target)
-bin/sync-packages.sh <pkg> [--target <lang>]
-heads/haskell/bin/assemble-distribution.sh <pkg>            # Layer 2 assembler
-
-# Quick mode (skip target-language tests; Phase 1 stack test still runs)
-bin/sync.sh --no-tests
-bin/sync-java.sh --no-tests
+# Same for java / python / scala
+heads/java/bin/assemble-all.sh
+heads/python/bin/assemble-all.sh
+heads/scala/bin/assemble-all.sh
 ```
 
-The sync scripts handle memory flags, build ordering, and test execution automatically.
+These do one `stack exec bootstrap-from-json --all-packages` per
+target and then apply per-package post-processing (hydra-kernel's
+`TestGraph` patch, hydra-lisp's `Coder.java` fix, etc.).
+`sync-packages.sh` dispatches to them automatically when every
+package is in scope.
 
-## Exporting DSL modules to JSON
-
-To make DSL-defined modules available for JSON-based generation, export them:
-
-```bash
-cd heads/haskell
-./bin/update-json-main.sh      # Export all packages (kernel + coders + pg + rdf)
-./bin/update-json-test.sh      # Export test modules
-./bin/verify-json-kernel.sh    # Verify round-trip consistency
-```
-
-See [Exporting modules to JSON](json-kernel.md) for details on the JSON format and
-verification process.
+Lisp dialects don't have a batch assembler yet; their Phase 2 loops
+per-package.
 
 ## Troubleshooting
 
@@ -321,38 +365,43 @@ verification process.
 Large module sets require extra memory:
 
 ```bash
-# Haskell
 stack ghci --ghci-options='+RTS -K256M -A32M -RTS'
-
-# The sync scripts handle this automatically
 ```
+
+The sync scripts and execs handle this automatically.
 
 ### Unresolved type references
 
-The universe modules are missing a transitive dependency. Ensure the universe includes
-all modules that the generated modules depend on, even indirectly.
+The universe modules are missing a transitive dependency. Ensure the
+universe includes all modules that the generated modules depend on,
+even indirectly. DSL-source-declared `moduleTermDependencies` and
+`moduleTypeDependencies` must list every cross-module reference; missing
+a dep here can cause `untyped term variable` or `no such element`
+failures during generation.
 
 ### "file not found" for JSON modules
 
-Check that `--json-dir` points to the correct directory. The path is relative to the
-current working directory:
+Check that `--dist-json-root` points to the correct directory. The path
+is relative to `heads/haskell/`:
 
 ```bash
-# From the repo root:
-python -m hydra.bootstrap --json-dir dist/json/hydra-kernel/src/main/json ...
+# Default: ../../dist/json (resolves to <worktree>/dist/json/ from heads/haskell/)
+stack exec bootstrap-from-json -- --target java --all-packages --output /tmp/out
 
-# From heads/haskell/:
-python -m hydra.bootstrap --json-dir ../../dist/json/hydra-kernel/src/main/json ...
+# Explicit override
+stack exec bootstrap-from-json -- --target java --all-packages \
+    --dist-json-root /other/path/dist/json --output /tmp/out
 ```
 
 ### Generated files don't compile
 
-Ensure the universe is complete. If generating ext modules, the universe must include
-main modules as dependencies. If generating tests, the universe must include both main
-and test dependencies.
+Ensure the universe is complete. If generating hydra-ext modules, the
+universe must include main modules as dependencies. If generating
+tests, the universe must include both main and test dependencies.
+Also check that `--include-coders` / `--include-ext` / `--include-dsls`
+flags match what the target generation actually references.
 
 ## Related documentation
 
 - [Exporting modules to JSON](json-kernel.md) -- JSON format, export scripts, verification
-- [Synchronizing Hydra-Python](syncing-python.md) -- Python-specific sync workflow
 - [Creating a new implementation](new-implementation.md) -- Using code generation for a new target language
