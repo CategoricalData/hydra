@@ -1,7 +1,0 @@
-(ns hydra.yaml.language
-  (:require [hydra.coders :refer :all] [hydra.core :refer :all] [hydra.lib.sets :refer :all] [hydra.strip :refer :all] [hydra.variants :refer :all]
-))
-
-(declare hydra_yaml_language_yaml_language)
-
-(def hydra_yaml_language_yaml_language (let [elimination_variants hydra_lib_sets_empty float_types (hydra_lib_sets_from_list (list (list :bigfloat nil))) function_variants hydra_lib_sets_empty integer_types (hydra_lib_sets_from_list (list (list :bigint nil))) literal_variants (hydra_lib_sets_from_list (list (list :boolean nil) (list :float nil) (list :integer nil) (list :string nil))) term_variants (hydra_lib_sets_from_list (list (list :literal nil) (list :list nil) (list :map nil) (list :maybe nil) (list :record nil) (list :unit nil))) type_predicate (fn [typ] ((fn [match_target] ((fn [match_value] (cond (= (first match_target) :maybe) ((fn [inner_type] ((fn [match_target] ((fn [match_value] (cond (= (first match_target) :maybe) ((fn [_] false) match_value) :else true)) (second match_target))) inner_type)) match_value) :else true)) (second match_target))) (hydra_strip_deannotate_type typ))) type_variants (hydra_lib_sets_from_list (list (list :literal nil) (list :list nil) (list :map nil) (list :maybe nil) (list :record nil) (list :unit nil) (list :void nil)))] (->hydra_coders_language "hydra.yaml" (->hydra_coders_language_constraints elimination_variants literal_variants float_types function_variants integer_types term_variants type_variants type_predicate))))

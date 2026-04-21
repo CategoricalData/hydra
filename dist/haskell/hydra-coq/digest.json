@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "generator": "v0-unstamped",
+  "inputs": {
+    "hydra.coq.coder": { "kind": "Other", "hash": "830860a3517c1775b88e98650fc4383266e12e86a83ecd1ec283911baf90b7a9" },
+    "hydra.coq.environment": { "kind": "Other", "hash": "021848dff40fe3f6f5ffd37727b85fecdd830f8a0fcf218ea235c6f9c19ca974" },
+    "hydra.coq.generate": { "kind": "Other", "hash": "4f1274ad4047558066bce8193c0c4e194b452a76206bcc21c92a3cf24e3e4a35" },
+    "hydra.coq.language": { "kind": "Other", "hash": "6eef7c861eb46c8d8bcd5acaf44c133188dd6f96e157329987036340cba8989a" },
+    "hydra.coq.serde": { "kind": "Other", "hash": "2608886c127bb60ec95190a1cb470bb998e8c84a82781142007e710c832225bd" },
+    "hydra.coq.syntax": { "kind": "Other", "hash": "89adfd609b675a4fe02f9cd19f14056c84fa8c25d4ecdfe5128d1c9b283cd2c3" },
+    "hydra.coq.utils": { "kind": "Other", "hash": "d34eb9936118dc22c4eec77af40ffc00ebc372ae871660e7fcb29517484d8d1f" }
+  },
+  "outputs": {
+    "src/main/haskell/Hydra/Coq/Coder.hs": { "kind": "TargetFile", "hash": "12cb96f8510f901e164ab8cf28a492d7e6a69f06fb17d95b19beba09e8440d6c" },
+    "src/main/haskell/Hydra/Coq/Environment.hs": { "kind": "TargetFile", "hash": "8c332b42c6b4a9d5c7b15244adadfb0a955c3e946a7465a3d7bd5867cc3dbb56" },
+    "src/main/haskell/Hydra/Coq/Generate.hs": { "kind": "TargetFile", "hash": "3bdb12d7e415ebf8113e1708c449e9b664c3ca2b0428a5cf1fa0b84160aafd93" },
+    "src/main/haskell/Hydra/Coq/Language.hs": { "kind": "TargetFile", "hash": "3513edbbb5dd7e7518e8d5d3985121e1ae28a8eba01ad7bd9be2a459c9b07892" },
+    "src/main/haskell/Hydra/Coq/Serde.hs": { "kind": "TargetFile", "hash": "56f2a9b2b4606da7486097aa2f0237ae6aab485d7be7fd3bf3b0f54dda7598ad" },
+    "src/main/haskell/Hydra/Coq/Syntax.hs": { "kind": "TargetFile", "hash": "373af726b486d5d089a93987c801d11b69d34966dd771e47fc439bcb75c87d64" },
+    "src/main/haskell/Hydra/Coq/Utils.hs": { "kind": "TargetFile", "hash": "8981f8d73e4aeb5bc998e684945d7c3f9f139990f12d1e3bef1b73abf4103ba4" },
+    "src/main/haskell/Hydra/Dsl/Coq/Environment.hs": { "kind": "TargetFile", "hash": "35404909e4155d37a76356118f242da2138b9c7861458a792015988dcd4c8e29" },
+    "src/main/haskell/Hydra/Dsl/Coq/Syntax.hs": { "kind": "TargetFile", "hash": "249240cb16988b8e3c293ee8b76171cdd72571a73e648fa841456c9346d39f6d" }
+  }
+}
