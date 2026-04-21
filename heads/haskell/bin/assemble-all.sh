@@ -29,10 +29,13 @@ stack build hydra:exe:bootstrap-from-json >/dev/null 2>&1
 rm -f "$DIST_ROOT"/*/digest.json
 
 echo "Step 1: Generating main haskell modules for every package..."
+# --include-ext is omitted: hydra-ext has targetLanguages:[] so its
+# modules aren't regen targets, and loading them triggers a pre-existing
+# hydra.xml.schema.DateTime resolution error during batch generation.
 stack exec bootstrap-from-json -- \
     --target haskell \
     --all-packages \
-    --include-coders --include-ext --include-dsls --synthesize-sources \
+    --include-coders --include-dsls --synthesize-sources \
     --output "$DIST_ROOT"
 
 echo ""
@@ -40,7 +43,7 @@ echo "Step 2: Generating test haskell modules..."
 stack exec bootstrap-from-json -- \
     --target haskell \
     --all-packages \
-    --include-coders --include-ext --include-dsls --include-tests \
+    --include-coders --include-dsls --include-tests \
     --output "$DIST_ROOT"
 
 # Per-package post-processing for hydra-kernel: TestGraph.hs patch.

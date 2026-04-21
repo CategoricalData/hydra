@@ -425,26 +425,46 @@ except Exception:
 "
 }
 
-# Phase 2: Assemblers. For each (package, target), produce the distribution.
-# Batch assemblers (assemble-all.sh) exist per target but are disabled here
-# while a pre-existing "resolution error" in the Haskell generator's batch
-# path is investigated. Reverting to per-package invocation keeps Phase 2
-# correct; the batch speed-up is preserved in Phase 1 where it's safe.
+# Phase 2: Assemblers. When generating every package for a target and
+# the head has a batch assembler (assemble-all.sh), invoke it once per
+# target — one Haskell universe load per target instead of one per
+# (package, target). Falls back to per-package invocation for scoped
+# package sets or targets lacking a batch assembler.
 echo "[Phase 2] Assembling distributions..."
+batch_assembler_for() {
+    local target="$1"
+    case "$target" in
+        haskell) echo "$HYDRA_ROOT_DIR/heads/haskell/bin/assemble-all.sh" ;;
+        java)    echo "$HYDRA_ROOT_DIR/heads/java/bin/assemble-all.sh" ;;
+        python)  echo "$HYDRA_ROOT_DIR/heads/python/bin/assemble-all.sh" ;;
+        scala)   echo "$HYDRA_ROOT_DIR/heads/scala/bin/assemble-all.sh" ;;
+        *) echo "" ;;
+    esac
+}
 for target in $EFFECTIVE_TARGETS; do
-    for pkg in $EFFECTIVE_PACKAGES; do
-        if ! pkg_supports_target "$pkg" "$target"; then
-            echo ""
-            echo "--- $pkg -> $target (skipped: not in targetLanguages) ---"
-            continue
-        fi
+    batch_script=$(batch_assembler_for "$target")
+    if [ "$effective_sorted" = "$all_sorted" ] && [ -n "$batch_script" ] && [ -x "$batch_script" ]; then
         echo ""
-        echo "--- $pkg -> $target ---"
-        invoke_assembler "$pkg" "$target" || {
-            echo "ERROR: assembly failed for $pkg / $target" >&2
+        echo "--- all packages -> $target (batch mode) ---"
+        "$batch_script" || {
+            echo "ERROR: batch assembly failed for $target" >&2
             exit 1
         }
-    done
+    else
+        for pkg in $EFFECTIVE_PACKAGES; do
+            if ! pkg_supports_target "$pkg" "$target"; then
+                echo ""
+                echo "--- $pkg -> $target (skipped: not in targetLanguages) ---"
+                continue
+            fi
+            echo ""
+            echo "--- $pkg -> $target ---"
+            invoke_assembler "$pkg" "$target" || {
+                echo "ERROR: assembly failed for $pkg / $target" >&2
+                exit 1
+            }
+        done
+    fi
 done
 echo ""
 
