@@ -58,12 +58,14 @@ fi
 for pkg_dir in "$DIST_ROOT"/*/; do
     pkg=$(basename "$pkg_dir")
     input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/digest.json"
-    output_digest="$pkg_dir/digest.json"
+    # Strip trailing slash so the digest path is stable.
+    pkg_dir_trim="${pkg_dir%/}"
+    output_digest="$pkg_dir_trim/digest.json"
     if [ -f "$input_digest" ]; then
         (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
          stack exec digest-check -- refresh \
             --inputs "$input_digest" \
-            --output-dir "$pkg_dir" \
+            --output-dir "$pkg_dir_trim" \
             --output-digest "$output_digest")
     fi
 done

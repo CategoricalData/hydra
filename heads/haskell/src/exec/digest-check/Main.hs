@@ -183,8 +183,11 @@ doRefresh opts = do
   -- to overwrite it, and hashing it here would (a) be a self-reference
   -- that changes every run and (b) race with writeDigestV2 below.
   allFiles <- listFilesRecursive outputDir
-  let digestPath = optOutputDigest opts
-      files = filter (/= digestPath) allFiles
+  -- Normalize both sides so "dir//digest.json" (double slash from a
+  -- pkg_dir with trailing /) compares equal to "dir/digest.json" as
+  -- emitted by listFilesRecursive.
+  let digestPath = FP.normalise (optOutputDigest opts)
+      files = filter (\fp -> FP.normalise fp /= digestPath) allFiles
   outputs <- fmap M.fromList $ forM files $ \fp -> do
     h <- Hydra.Digest.hashFile fp
     let rel = makeRelative' outputDir fp
