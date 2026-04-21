@@ -43,23 +43,67 @@ done
 OUT_DIR="$DIST_ROOT/$PACKAGE"
 OUT_MAIN="$OUT_DIR/src/main/python"
 OUT_TEST="$OUT_DIR/src/test/python"
+INPUT_DIGEST="$HYDRA_ROOT_DIR/dist/json/$PACKAGE/digest.json"
+OUTPUT_DIGEST="$OUT_DIR/digest.json"
 
 echo "=== Assembling Python distribution: $PACKAGE ==="
 echo "  Output: $OUT_DIR"
 echo ""
 
+# Cheap Python pre-check: compare input digest hashes to recorded
+# output digest inputs. Avoids stack-exec startup for warm runs.
+if [ -f "$INPUT_DIGEST" ] && [ -f "$OUTPUT_DIGEST" ]; then
+    if python3 -c "
+import json, sys
+try:
+    out = json.load(open('$OUTPUT_DIGEST'))
+    inp = json.load(open('$INPUT_DIGEST'))
+    recorded = {k: (v.get('hash') if isinstance(v, dict) else v)
+                for k, v in out.get('inputs', {}).items()}
+    current = inp.get('hashes', inp)
+    sys.exit(0 if recorded == current else 1)
+except Exception:
+    sys.exit(1)
+" 2>/dev/null; then
+        echo "  Cache hit; skipping work."
+        echo "=== Done. $PACKAGE (cache hit) ==="
+        exit 0
+    fi
+fi
+
+# Freshness check: skip the slow path when nothing has changed.
+if [ -f "$INPUT_DIGEST" ] && [ -f "$OUTPUT_DIGEST" ]; then
+    if (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
+        stack exec digest-check -- fresh \
+            --inputs "$INPUT_DIGEST" \
+            --output-dir "$OUT_DIR" \
+            --output-digest "$OUTPUT_DIGEST" 2>/dev/null); then
+        echo "  Cache hit; skipping work."
+        echo "=== Done. $PACKAGE assembled under $OUT_DIR (cache hit) ==="
+        exit 0
+    fi
+fi
+
+# Cache miss: invalidate the per-target digest so Stage 7's per-module
+# freshness filter inside bootstrap-from-json can't trust stale records
+# (output files may be missing/modified, so DSL-hash-only freshness is
+# unreliable).
+rm -f "$OUTPUT_DIGEST"
+
 HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 
 # Step 1: Main modules via Layer 1 transform.
+# bootstrap-from-json appends <pkg>/src/main/<target> to --output, so we
+# pass the dist-root directory (parent of per-package dirs).
 echo "Step 1: Generating main Python modules..."
 "$HASKELL_BIN/transform-json-to-python.sh" "$PACKAGE" main \
-    --output "$OUT_DIR/src/main" --include-dsls
+    --output "$DIST_ROOT" --include-dsls
 
 # Step 2: Test modules.
 echo ""
 echo "Step 2: Generating test Python modules..."
 "$HASKELL_BIN/transform-json-to-python.sh" "$PACKAGE" test \
-    --output "$OUT_DIR/src/test"
+    --output "$DIST_ROOT"
 
 # Step 3: Package-specific post-processing.
 case "$PACKAGE" in
@@ -112,4 +156,14 @@ PYEOF
 esac
 
 echo ""
+
+# Refresh the per-target digest so future fresh-checks short-circuit.
+if [ -f "$INPUT_DIGEST" ]; then
+    (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
+     stack exec digest-check -- refresh \
+        --inputs "$INPUT_DIGEST" \
+        --output-dir "$OUT_DIR" \
+        --output-digest "$OUTPUT_DIGEST")
+fi
+
 echo "=== Done. $PACKAGE assembled under $OUT_DIR ==="

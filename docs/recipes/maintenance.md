@@ -273,7 +273,7 @@ rm -rf packages/hydra-*/.stack-work
 rm -rf heads/haskell/.stack-work/install
 
 # Re-sync everything
-bin/sync-all.sh --targets all
+bin/sync.sh --hosts all --targets all
 ```
 
 The first `rm -rf` only matters if you have leftover per-package `.stack-work` dirs
@@ -392,12 +392,25 @@ Fix it at the generator level.
 These patches are currently in place and have open or implied issues tracking
 them as generator bugs:
 
-- `heads/haskell/bin/sync-java.sh`: patches `hydra/lisp/Coder.java` to rewrite
-  a `PartialVisitor` type parameter that the Java coder infers incorrectly.
-- `heads/haskell/bin/sync-python.sh`: patches `test_graph.py` to replace
-  empty `test_graph` / `test_context` assignments with a `__getattr__` shim
-  that lazily imports a hand-written `test_env.py`. This works around an
-  unsupported polymorphic type in the Python test generator.
+- `heads/haskell/bin/sync-haskell.sh` and
+  `heads/haskell/bin/assemble-distribution.sh`: both patch `TestGraph.hs` to
+  replace `emptyGraph` / `emptyContext` with `TestEnv.testGraph testTypes` /
+  `TestEnv.testContext`. The `Hydra.Test.TestEnv` module is hand-written and
+  checked in under `dist/haskell/hydra-kernel/src/test/haskell/`.
+
+Two patches that were previously applied by the now-retired per-language
+sync scripts under `heads/haskell/bin/` are NOT currently re-applied anywhere:
+
+- Java Lisp `Coder.java`: a `PartialVisitor` type parameter that the Java
+  coder infers incorrectly. Surfaces when generating `hydra-lisp` into Java.
+- Python `test_graph.py`: empty `test_graph` / `test_context` assignments
+  needing a `__getattr__` shim to a hand-written `test_env.py`. Surfaces
+  when running Python kernel tests.
+
+These patches need to be re-added (probably to per-target assemblers or a
+post-processing step) before the affected combinations work again. The
+current bootstrapping-triad sync (haskell/java/python kernel + self-hosting)
+does not exercise either combination, so the patches are queued, not blocking.
 
 When adding a new accepted patch, document it here and open an issue against
 the generator.
@@ -747,7 +760,7 @@ Pick a slice of roughly 40–60 files / ~5,000–7,000 lines per run.
   Examples: "review `bin/` scripts," "review the Python coder."
 - **When the slice is up to you**, sample evenly across the repo
   (`packages/`, `heads/`, `bin/`, `demos/`), with modest bias toward high-traffic code
-  (kernel DSL sources, essential scripts like `bin/sync-all.sh`, registration files like
+  (kernel DSL sources, essential scripts like `bin/sync.sh`, registration files like
   `Libraries.hs` / `Libraries.java` / `libraries.py`).
   Check `docs/reviews/` for what's been covered recently and prefer unseen files.
 
@@ -872,7 +885,7 @@ After all checks, present a summary of findings and changes to the user.
 If any changes affect Source modules (e.g., definition reordering),
 generated files (e.g., stale file deletion, `.cabal` fixes),
 or could affect test outcomes (e.g., primitive fixes),
-run `bin/sync-all.sh --targets all` and verify all tests pass.
+run `bin/sync.sh --hosts all --targets all` and verify all tests pass.
 If no changes affect generated files or tests, skip the sync.
 
 ---

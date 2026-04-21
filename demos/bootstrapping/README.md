@@ -144,8 +144,9 @@ for more details.
 - If you have made local changes to Sources or other DSL code, run the
   top-level sync script before running the bootstrapping verification:
   ```bash
-  ./bin/sync-all.sh    # from repo root; or --quick to skip tests
+  ./bin/sync-default.sh    # from repo root; or --no-tests to skip tests
   ```
+  (or `./bin/sync.sh --hosts H,... --targets T,...` for a chosen matrix.)
 
 ## Usage
 

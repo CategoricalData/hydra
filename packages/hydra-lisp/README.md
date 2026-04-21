@@ -51,13 +51,24 @@ Set `HYDRA_BENCHMARK_OUTPUT` to a file path to produce benchmark JSON output.
 Lisp code is generated from the Haskell head. To regenerate all four dialects:
 
 ```bash
-heads/haskell/bin/sync-lisp.sh
+bin/sync.sh --hosts lisp --targets lisp
+```
+
+(`lisp` is an alias for `clojure,common-lisp,emacs-lisp,scheme`.)
+
+To regenerate a single dialect:
+
+```bash
+bin/sync-clojure.sh
+bin/sync-common-lisp.sh
+bin/sync-emacs-lisp.sh
+bin/sync-scheme.sh
 ```
 
 To regenerate only some dialects:
 
 ```bash
-heads/haskell/bin/sync-lisp.sh --dialects clojure,scheme
+bin/sync.sh --hosts clojure,scheme --targets clojure,scheme
 ```
 
 ## Architecture

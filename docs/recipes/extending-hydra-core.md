@@ -655,11 +655,10 @@ Add the type variant if you added a new type constructor:
 
 #### 11.5.2: Regenerate Python Code
 
-From `heads/haskell`:
+From the worktree root:
 
 ```bash
-cd heads/haskell
-./bin/sync-python.sh
+bin/sync-python.sh
 ```
 
 Or use the REPL:
@@ -920,7 +919,7 @@ stack test
   - [ ] Add to `typeVariants` list (if applicable)
 
 - [ ] Regenerate Python code
-  - [ ] Run `./bin/sync-python.sh` from heads/haskell
+  - [ ] Run `bin/sync-python.sh` from the worktree root
   - [ ] Verify `dist/python/hydra-kernel/src/main/python/hydra/core.py`
   - [ ] Verify `dist/python/hydra-kernel/src/main/python/hydra/meta.py`
   - [ ] Verify `dist/python/hydra-kernel/src/main/python/hydra/util.py`

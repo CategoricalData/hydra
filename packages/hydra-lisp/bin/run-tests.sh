@@ -67,7 +67,7 @@ case "$DIALECT" in
         # Run from GEN_TEST so that guile's (include "annotation_bindings.scm")
         # inside the (define-library (hydra test test_graph) ...) body resolves
         # to "hydra/test/annotation_bindings.scm" relative to CWD — i.e. the copy
-        # placed by sync-lisp.sh alongside the generated test_graph.scm.
+        # placed by the assemble step alongside the generated test_graph.scm.
         cd "$GEN_TEST"
         if command -v guile > /dev/null 2>&1; then
             guile --no-auto-compile -L "$GEN_MAIN" -L "$GEN_TEST" -L "$HEAD_DIR/src/main/scheme" -s "$HEAD_DIR/run-tests.scm"

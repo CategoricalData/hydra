@@ -18,5 +18,14 @@ echo "=== Testing Scala distribution: $PACKAGE ==="
 echo "  (Note: sbt project is monolithic today — running the full test suite)"
 echo ""
 
+source "$HYDRA_ROOT_DIR/bin/lib/test-cache.sh"
+if test_cache_check scala "$HYDRA_ROOT_DIR/dist/scala" "$HYDRA_ROOT_DIR/heads/scala/src/test" "${BASH_SOURCE[0]}"; then
+    echo "  Cache hit: no changes since last successful Scala test run; skipping."
+    echo "=== Done (cache hit). ==="
+    exit 0
+fi
+
 cd "$HYDRA_SCALA_PROJ"
 sbt test
+
+test_cache_record scala "$HYDRA_ROOT_DIR/dist/scala" "$HYDRA_ROOT_DIR/heads/scala/src/test" "${BASH_SOURCE[0]}"

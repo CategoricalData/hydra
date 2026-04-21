@@ -113,6 +113,14 @@ executables:
     dependencies:
       - hydra
 
+  digest-check:
+    main: Main.hs
+    source-dirs:
+      - src/exec/digest-check
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
   diag-module:
     main: Main.hs
     source-dirs:

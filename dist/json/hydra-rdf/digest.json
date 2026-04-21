@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "hashes": {
+    "hydra.owl.syntax": "037b50a3414e7e631533ed10f37ffb05e8cf0c26a27e002847bdb219acdf824d",
+    "hydra.rdf.serde": "13da9219cf9020b431f92ec79ebb9b9603be1474b9d34eb2551b3f647e12e765",
+    "hydra.rdf.syntax": "fe35ec7953d43711cdfc718aca374d7a976708da031dfda7075f67218f06d682",
+    "hydra.rdf.utils": "a088349ba31f0aed1cbc1974fe8665b9abffd839efd9792a793e06855276aa02",
+    "hydra.shacl.coder": "0dd357b94a824a18460e741f06d3d0ff480774922630030413f0fdec3adb636e",
+    "hydra.shacl.model": "943701318a18aa23f6792b33b4f67502dfc5a85dba3c9fad4de8c8509c4daf3c",
+    "hydra.shex.syntax": "c821165328747d6670c94d5065fcc819613cda4cd49c2bf8cfd90406e593ed12",
+    "hydra.xml.schema": "2b4f9e194c8133c2beeff045fb83e410e2d118c7d466c548d9550fe28814daf6"
+  }
+}

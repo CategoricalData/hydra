@@ -3529,7 +3529,7 @@
           "variables": []}}}],
   "description": "Serialization functions for converting Scala AST to abstract expressions",
   "namespace": "hydra.scala.serde",
-  "termDependencies": ["hydra.serialization"],
+  "termDependencies": ["hydra.serialization", "hydra.java.serde"],
   "typeDependencies": [
     "hydra.scala.syntax",
     "hydra.paths",

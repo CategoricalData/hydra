@@ -92,4 +92,4 @@ java -cp "packages/hydra-java/build/libs/*.jar" \
 - Java 11+
 - Stack (for the Haskell driver)
 - Python 3.12+
-- Generated ext demo modules (run `heads/haskell/bin/sync-python.sh` if needed)
+- Generated ext demo modules (run `bin/sync-python.sh` if needed)

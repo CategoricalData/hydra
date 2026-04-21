@@ -255,7 +255,7 @@ Renaming a namespace requires updating all of these, plus any code that imports 
    From the heads/haskell directory:
    ```bash
    cd heads/haskell
-   ./bin/sync-python.sh --quick
+   ./bin/sync-python.sh --no-tests
    ```
 
 2. **Verify the new module structure**

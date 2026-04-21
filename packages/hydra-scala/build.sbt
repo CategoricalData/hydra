@@ -8,12 +8,21 @@ lazy val root = project
 
     scalaVersion := scala3Version,
 
-    Compile / unmanagedSourceDirectories += baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-kernel" / "src" / "main" / "scala",
-    Compile / unmanagedSourceDirectories += baseDirectory.value / ".." / ".." / "heads" / "scala" / "src" / "main" / "scala",
+    Compile / unmanagedSourceDirectories ++= Seq(
+      baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-kernel" / "src" / "main" / "scala",
+      baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-haskell" / "src" / "main" / "scala",
+      baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-java" / "src" / "main" / "scala",
+      baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-python" / "src" / "main" / "scala",
+      baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-scala" / "src" / "main" / "scala",
+      baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-lisp" / "src" / "main" / "scala",
+      baseDirectory.value / ".." / ".." / "heads" / "scala" / "src" / "main" / "scala",
+    ),
 
     // Test sources include generated tests
-    Test / unmanagedSourceDirectories += baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-kernel" / "src" / "test" / "scala",
-    Test / unmanagedSourceDirectories += baseDirectory.value / ".." / ".." / "heads" / "scala" / "src" / "test" / "scala",
+    Test / unmanagedSourceDirectories ++= Seq(
+      baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-kernel" / "src" / "test" / "scala",
+      baseDirectory.value / ".." / ".." / "heads" / "scala" / "src" / "test" / "scala",
+    ),
 
     // Exclude generation tests (Scala coder output tests) which require Array[Byte] binary support
     Test / unmanagedSources / excludeFilter := HiddenFileFilter || new SimpleFileFilter(

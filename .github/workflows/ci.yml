@@ -6,9 +6,27 @@ on:
   pull_request:
     branches: [main]
 
+# CI model, per feature_290_packaging:
+#
+#   * The Haskell job is the "JSON build". It regenerates dist/json/ from
+#     DSL sources, regenerates dist/haskell/ from the JSON, runs stack
+#     test, and fails if the regenerated tree differs from what's
+#     committed. This is the only job that exercises DSL -> JSON
+#     inference and Haskell code generation.
+#
+#   * Every other target job assumes dist/json/ is canonical (committed
+#     in the repo). They run the target's assemble-distribution plus
+#     test-distribution scripts against the committed JSON. They do not
+#     run Phase 1 (DSL -> JSON) themselves; that's the Haskell job's
+#     responsibility.
+#
+# This matches integration's de-facto CI topology: one expensive job
+# producing JSON + checking consistency; cheap jobs consuming JSON and
+# running target-language tests.
+
 jobs:
   haskell:
-    name: Haskell tests
+    name: Haskell tests (JSON build + consistency check)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,11 +39,27 @@ jobs:
           path: ~/.stack
           key: stack-${{ hashFiles('heads/haskell/stack.yaml', 'heads/haskell/package.yaml') }}
           restore-keys: stack-
-      - run: stack test --install-ghc
+      # Regenerate dist/json/ from DSL sources (Phase 1, batch mode) and
+      # dist/haskell/ from the JSON (Phase 2 haskell target, per-package).
+      # Any drift from the committed tree fails the job.
+      - name: Regenerate JSON and Haskell from DSL sources
+        run: |
+          bin/sync.sh --hosts haskell --targets haskell --no-tests
+      - name: Fail if generated files differ from committed
+        run: |
+          if ! git diff --quiet dist/json/ dist/haskell/; then
+            echo "::error::Generated files (dist/json/ and/or dist/haskell/) differ from the committed tree."
+            echo "::error::Run bin/sync.sh --hosts haskell --targets haskell locally and commit the result."
+            git diff --stat dist/json/ dist/haskell/
+            exit 1
+          fi
+      - name: Stack tests
+        run: stack test
         working-directory: heads/haskell
 
   java:
     name: Java tests
+    needs: haskell
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -44,6 +78,7 @@ jobs:
 
   python:
     name: Python tests
+    needs: haskell
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -58,6 +93,7 @@ jobs:
 
   clojure:
     name: Clojure tests
+    needs: haskell
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -73,6 +109,7 @@ jobs:
 
   scala:
     name: Scala tests
+    needs: haskell
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -98,6 +135,7 @@ jobs:
 
   common-lisp:
     name: Common Lisp tests
+    needs: haskell
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -109,6 +147,7 @@ jobs:
 
   scheme:
     name: Scheme tests
+    needs: haskell
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

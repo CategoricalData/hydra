@@ -466,12 +466,12 @@ charsIsAlphaNum = subgroup "isAlphaNum" [
 
 4. **Regenerate the test suite for all implementations** (this step is required!):
 ```bash
-# From hydra-haskell - regenerate test files (universal test cases)
-stack exec update-kernel-tests
+# Regenerate test files (universal test cases)
+cd heads/haskell && stack exec update-kernel-tests && cd -
 
-# From heads/haskell - regenerate Java and Python (including tests)
-./bin/sync-java.sh --quick
-./bin/sync-python.sh --quick
+# Regenerate Java and Python (from the worktree root)
+bin/sync-java.sh --no-tests
+bin/sync-python.sh --no-tests
 ```
 
 5. Run tests in each language to verify the new test cases pass

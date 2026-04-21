@@ -142,8 +142,10 @@ for background on code generation.
 The recommended way to regenerate all Python code is the sync script (from the repo root):
 
 ```bash
-heads/haskell/bin/sync-python.sh
+bin/sync-python.sh
 ```
+
+(equivalent to `bin/sync.sh --hosts python --targets python`)
 
 This will:
 1. Generate the kernel modules into `dist/python/hydra-kernel/src/main/python`

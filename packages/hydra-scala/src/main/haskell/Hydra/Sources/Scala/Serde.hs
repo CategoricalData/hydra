@@ -92,7 +92,7 @@ ns = Namespace "hydra.scala.serde"
 
 module_ :: Module
 module_ = Module ns definitions
-    [Serialization.ns]
+    [Serialization.ns, JavaSerdeSource.ns]
     (ScalaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Serialization functions for converting Scala AST to abstract expressions"
   where
