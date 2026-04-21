@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "generator": "v0-unstamped",
+  "inputs": {
+    "hydra.wasm.coder": { "kind": "Other", "hash": "40f9e19c5c91478b92d6a56e2f01beaf65b49bd9efa18c3221ecc43d5b7cee46" },
+    "hydra.wasm.serde": { "kind": "Other", "hash": "aa23021b5e7a03eab36ad2db2cad790e9c34a8218d57eaadc4d0ba001d209c68" },
+    "hydra.wasm.syntax": { "kind": "Other", "hash": "7f30b482f505a5fea42fcbbdef2e85a45be9603df85b5b1a71186f86335171be" }
+  },
+  "outputs": {
+    "src/main/haskell/Hydra/Wasm/Coder.hs": { "kind": "TargetFile", "hash": "06014229993cb7416f28be220ed42ada2c0c84848edc48b901e218094bc3810e" },
+    "src/main/haskell/Hydra/Wasm/Language.hs": { "kind": "TargetFile", "hash": "0061ac93ccf464fb6d050005ac30bddd492b9f29b0d8edd4b859ec444f76cd7a" },
+    "src/main/haskell/Hydra/Wasm/Serde.hs": { "kind": "TargetFile", "hash": "f8d0cdde2d0d22d85d8dc9e2abd76f4f09a0a42a0cab84c46d2a6f5b79c8a48e" },
+    "src/main/haskell/Hydra/Wasm/Syntax.hs": { "kind": "TargetFile", "hash": "1977267f440dad10391426b7729504f8ec19d402478fa44c2c9eaa0bbbcb4710" }
+  }
+}

@@ -1,9 +1,0 @@
-(ns hydra.graphql.language
-  (:require [hydra.coders :refer :all] [hydra.core :refer :all] [hydra.lib.sets :refer :all] [hydra.strip :refer :all] [hydra.variants :refer :all]
-))
-
-(declare hydra_graphql_language_graphql_language hydra_graphql_language_graphql_reserved_words)
-
-(def hydra_graphql_language_graphql_language (let [elimination_variants hydra_lib_sets_empty float_types (hydra_lib_sets_from_list (list (list :float64 nil))) function_variants hydra_lib_sets_empty integer_types (hydra_lib_sets_from_list (list (list :int32 nil))) literal_variants (hydra_lib_sets_from_list (list (list :boolean nil) (list :float nil) (list :integer nil) (list :string nil))) term_variants (hydra_lib_sets_from_list (list (list :list nil) (list :literal nil) (list :maybe nil) (list :record nil) (list :inject nil))) type_predicate (fn [typ] ((fn [match_target] ((fn [match_value] (cond (= (first match_target) :maybe) ((fn [inner] ((fn [match_target] ((fn [match_value] (cond (= (first match_target) :maybe) ((fn [_] false) match_value) :else true)) (second match_target))) (hydra_strip_deannotate_type inner))) match_value) :else true)) (second match_target))) (hydra_strip_deannotate_type typ))) type_variants (hydra_lib_sets_from_list (list (list :application nil) (list :either nil) (list :forall nil) (list :function nil) (list :list nil) (list :literal nil) (list :map nil) (list :pair nil) (list :set nil) (list :unit nil) (list :wrap nil) (list :maybe nil) (list :record nil) (list :union nil) (list :variable nil)))] (->hydra_coders_language "hydra.graphql" (->hydra_coders_language_constraints elimination_variants literal_variants float_types function_variants integer_types term_variants type_variants type_predicate))))
-
-(def hydra_graphql_language_graphql_reserved_words (hydra_lib_sets_from_list (list "true" "false")))

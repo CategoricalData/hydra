@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "generator": "v0-unstamped",
+  "inputs": {
+    "hydra.javaScript.operators": { "kind": "Other", "hash": "a073f2b533ceed744223eb21e32d8e34026a87cf67c3dba91369562dd70e6737" },
+    "hydra.javaScript.serde": { "kind": "Other", "hash": "28cf35b20944c057fd81d336d186aad680d4112f3379ff2bf666b7555850d756" },
+    "hydra.javaScript.syntax": { "kind": "Other", "hash": "081105d283977bf9cab3db995653c431a644136ccf6dc8895dd75da5d9cba42e" }
+  },
+  "outputs": {
+    "src/main/haskell/Hydra/Dsl/JavaScript/Syntax.hs": { "kind": "TargetFile", "hash": "e2dbfe0a1b712896705c4990ed3d5f3a7bf6cf5277a1dd733340d3d1a15a436f" },
+    "src/main/haskell/Hydra/JavaScript/Language.hs": { "kind": "TargetFile", "hash": "2dd6eadd1e658d03dd9c34453a22fa10b87542aab5799b2de8171dc0ca4a218f" },
+    "src/main/haskell/Hydra/JavaScript/Operators.hs": { "kind": "TargetFile", "hash": "d6bb9952ce3b17f589ba9cb5353d25d00f9eb40f39de5c5507a6e089624e58b2" },
+    "src/main/haskell/Hydra/JavaScript/Serde.hs": { "kind": "TargetFile", "hash": "02e4854a3e13a9dcd9700d4e923e0a5ac63e27abf0995050ef7c18267a76a4c2" },
+    "src/main/haskell/Hydra/JavaScript/Syntax.hs": { "kind": "TargetFile", "hash": "41fcae3be19d8ad2a0f0a46d41e76fd0150ac70a17547aaef7afd7a4579c8ca4" }
+  }
+}
