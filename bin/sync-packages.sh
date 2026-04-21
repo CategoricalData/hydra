@@ -386,7 +386,9 @@ all_sorted=$(echo $ALL_PACKAGES | tr ' ' '\n' | sort | tr '\n' ' ')
 # Warm-cache short-circuit: check DSL hashes vs recorded digests.
 # Sub-second; skips 20+ seconds of Haskell startup + JSON writes when
 # nothing has changed.
-if python3 "$HYDRA_ROOT_DIR/bin/lib/check-dsl-fresh.py" >/dev/null 2>&1; then
+if python3 "$HYDRA_ROOT_DIR/bin/lib/check-dsl-fresh.py" \
+        "$HYDRA_ROOT_DIR" \
+        "$HYDRA_ROOT_DIR/dist/json/digest.main.json" >/dev/null 2>&1; then
     echo "  Cache hit: every DSL source fresh; skipping Phase 1."
 else
     if [ "$effective_sorted" = "$all_sorted" ]; then
