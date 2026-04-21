@@ -67,6 +67,19 @@ if [ -d "$PY_BASELINE/hydra" ]; then
     find "$PY_GEN/hydra" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
     echo "    Copied hydra/ generated kernel modules from dist baseline"
 fi
+# Ensure every coder package the Python bootstrap driver references has a
+# Python distribution. bootstrap.py / generation.py import
+# hydra.{java,python,haskell,lisp,scala}.coder to dispatch on target language;
+# sync-default() doesn't generate hydra-lisp/hydra-scala into Python, so on a
+# clean checkout they can be missing. Assemble them on demand — warm-cache
+# short-circuits in seconds.
+for coder_pkg in hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp; do
+    coder_base="$HYDRA_ROOT/dist/python/$coder_pkg/src/main/python"
+    if [ ! -d "$coder_base/hydra" ]; then
+        echo "    $coder_pkg not present; generating into Python..."
+        (cd "$HYDRA_ROOT" && heads/python/bin/assemble-distribution.sh "$coder_pkg")
+    fi
+done
 # Overlay coder packages from per-package dist dirs. The Python bootstrap
 # driver (bootstrap.py / generation.py) imports hydra.{java,python,haskell,
 # lisp,scala}.coder to dispatch on target language.
