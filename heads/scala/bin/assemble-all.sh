@@ -32,7 +32,7 @@ echo "Step 1: Generating main scala modules for every package..."
 stack exec bootstrap-from-json -- \
     --target scala \
     --all-packages \
-    --include-coders --include-ext --include-dsls \
+    --include-coders --include-dsls \
     --output "$DIST_ROOT"
 
 echo ""
@@ -40,7 +40,7 @@ echo "Step 2: Generating test scala modules..."
 stack exec bootstrap-from-json -- \
     --target scala \
     --all-packages \
-    --include-coders --include-ext --include-dsls --include-tests \
+    --include-coders --include-dsls --include-tests \
     --output "$DIST_ROOT"
 
 cd "$HYDRA_ROOT_DIR"

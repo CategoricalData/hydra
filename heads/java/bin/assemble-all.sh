@@ -42,7 +42,7 @@ stack build hydra:exe:bootstrap-from-json >/dev/null 2>&1
 stack exec bootstrap-from-json -- \
     --target java \
     --all-packages \
-    --include-coders --include-ext --include-dsls \
+    --include-coders --include-dsls \
     --output "$DIST_ROOT"
 
 echo ""
@@ -50,7 +50,7 @@ echo "Step 2: Generating test Java modules..."
 stack exec bootstrap-from-json -- \
     --target java \
     --all-packages \
-    --include-coders --include-ext --include-dsls --include-tests \
+    --include-coders --include-dsls --include-tests \
     --output "$DIST_ROOT"
 
 cd "$HYDRA_ROOT_DIR"
