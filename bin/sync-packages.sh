@@ -383,20 +383,27 @@ echo "[Phase 1] Regenerating JSON sources for each package..."
 # Normalize both lists to sorted space-joined strings for comparison.
 effective_sorted=$(echo $EFFECTIVE_PACKAGES | tr ' ' '\n' | sort | tr '\n' ' ')
 all_sorted=$(echo $ALL_PACKAGES | tr ' ' '\n' | sort | tr '\n' ' ')
-if [ "$effective_sorted" = "$all_sorted" ]; then
-    "$HASKELL_BIN/transform-haskell-dsl-to-json.sh" --all main
-    "$HASKELL_BIN/transform-haskell-dsl-to-json.sh" --all test
+# Warm-cache short-circuit: check DSL hashes vs recorded digests.
+# Sub-second; skips 20+ seconds of Haskell startup + JSON writes when
+# nothing has changed.
+if python3 "$HYDRA_ROOT_DIR/bin/lib/check-dsl-fresh.py" >/dev/null 2>&1; then
+    echo "  Cache hit: every DSL source fresh; skipping Phase 1."
 else
-    for pkg in $EFFECTIVE_PACKAGES; do
-        "$HASKELL_BIN/transform-haskell-dsl-to-json.sh" "$pkg" main
-        "$HASKELL_BIN/transform-haskell-dsl-to-json.sh" "$pkg" test
-    done
+    if [ "$effective_sorted" = "$all_sorted" ]; then
+        "$HASKELL_BIN/transform-haskell-dsl-to-json.sh" --all main
+        "$HASKELL_BIN/transform-haskell-dsl-to-json.sh" --all test
+    else
+        for pkg in $EFFECTIVE_PACKAGES; do
+            "$HASKELL_BIN/transform-haskell-dsl-to-json.sh" "$pkg" main
+            "$HASKELL_BIN/transform-haskell-dsl-to-json.sh" "$pkg" test
+        done
+    fi
+    # Also regenerate per-package manifests so readers see the updated module list.
+    cd "$HYDRA_ROOT_DIR/heads/haskell"
+    stack build hydra:exe:update-json-manifest >/dev/null 2>&1
+    stack exec update-json-manifest >/dev/null
+    cd "$HYDRA_ROOT_DIR"
 fi
-# Also regenerate per-package manifests so readers see the updated module list.
-cd "$HYDRA_ROOT_DIR/heads/haskell"
-stack build hydra:exe:update-json-manifest >/dev/null 2>&1
-stack exec update-json-manifest >/dev/null
-cd "$HYDRA_ROOT_DIR"
 echo ""
 
 # Returns 0 if $target is in the package's declared targetLanguages (or if

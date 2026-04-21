@@ -49,6 +49,27 @@ echo ""
 
 HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 
+# Cheap Python pre-check: compare input digest hashes to recorded
+# output digest inputs. Avoids stack-exec startup for warm runs.
+if [ -f "$INPUT_DIGEST" ] && [ -f "$OUTPUT_DIGEST" ]; then
+    if python3 -c "
+import json, sys
+try:
+    out = json.load(open('$OUTPUT_DIGEST'))
+    inp = json.load(open('$INPUT_DIGEST'))
+    recorded = {k: (v.get('hash') if isinstance(v, dict) else v)
+                for k, v in out.get('inputs', {}).items()}
+    current = inp.get('hashes', inp)
+    sys.exit(0 if recorded == current else 1)
+except Exception:
+    sys.exit(1)
+" 2>/dev/null; then
+        echo "  Cache hit; skipping work."
+        echo "=== Done. $PACKAGE (cache hit) ==="
+        exit 0
+    fi
+fi
+
 # Freshness check: skip the slow path when nothing has changed.
 # digest-check exits 0 on cache hit, 1 on miss. The 'fresh' subcommand
 # verifies the input digest matches what was recorded, every output

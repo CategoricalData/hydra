@@ -32,6 +32,14 @@ echo ""
 
 HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 
+# Warm-cache short-circuit: skip BEFORE any stack invocation or digest wipe.
+source "$HYDRA_ROOT_DIR/bin/lib/batch-cache.sh"
+if batch_cache_fresh "$DIST_ROOT" "$HYDRA_ROOT_DIR/dist/json"; then
+    echo "  Cache hit: every per-package digest fresh; skipping batch."
+    echo "=== Done (cache hit). ==="
+    exit 0
+fi
+
 # Invalidate per-target digests so Stage 7 per-module freshness filter
 # cannot trust records against potentially-missing output files.
 rm -f "$DIST_ROOT"/*/digest.json
