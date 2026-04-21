@@ -32,7 +32,10 @@ fi
 echo "Python: $($PYTHON --version 2>&1)"
 echo ""
 
-PYTHONPATH="$HYDRA_PYTHON_DIR/src/main/python:$HYDRA_ROOT/dist/python/hydra-kernel/src/main/python:$HYDRA_ROOT/dist/python/hydra-ext/src/main/python"
+PYTHONPATH="$HYDRA_PYTHON_DIR/src/main/python"
+for pkg in hydra-kernel hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp hydra-pg hydra-rdf hydra-ext; do
+    PYTHONPATH="$PYTHONPATH:$HYDRA_ROOT/dist/python/$pkg/src/main/python"
+done
 export PYTHONPATH
 export HYDRA_JSON_DIR="$HYDRA_ROOT/dist/json"
 

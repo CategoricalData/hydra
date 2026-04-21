@@ -7,7 +7,7 @@ module Hydra.Generation (
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
-import Hydra.PackageRouting (groupByPackage)
+import Hydra.PackageRouting (groupByPackage, namespaceToPackage)
 import Hydra.Packaging (_Module)
 import Hydra.Testing (TestGroup(..))
 import qualified Hydra.Json.Model as Json
@@ -23,6 +23,7 @@ import qualified Hydra.Show.Errors as ShowError
 import qualified Hydra.Sources.Eval.Lib.All as EvalLib
 import qualified Hydra.Codegen as CodeGeneration
 
+import qualified Control.Exception as E
 import qualified Control.Monad as CM
 import qualified Data.Aeson as A
 import qualified Data.Aeson.KeyMap as AKM
@@ -146,6 +147,16 @@ inferModulesIO universeMods targetMods = do
     Left err -> fail $ "Type inference failed: " ++ showError err
     Right mods -> return mods
 
+-- | IO wrapper for inferModulesGiven (incremental inference). The
+-- universe modules already carry inferred TypeSchemes on their term
+-- bindings (loaded from JSON); only the target modules are re-inferred,
+-- using the typed universe as context.
+inferModulesGivenIO :: [Module] -> [Module] -> IO [Module]
+inferModulesGivenIO universeMods targetMods = do
+  case CodeGeneration.inferModulesGiven (Context [] [] M.empty) bootstrapGraph universeMods targetMods of
+    Left err -> fail $ "Incremental type inference failed: " ++ showError err
+    Right mods -> return mods
+
 ----------------------------------------
 -- JSON Module Export
 ----------------------------------------
@@ -167,9 +178,20 @@ writeModuleJson schemaMap basePath mod = do
       Left err -> fail $ "Failed to convert module to JSON: " ++ unNamespace (moduleNamespace mod) ++ ": " ++ showError err
       Right jsonStr -> do
         let filePath = basePath FP.</> CodeGeneration.namespaceToPath (moduleNamespace mod) ++ ".json"
+            newContent = jsonStr ++ "\n"
         SD.createDirectoryIfMissing True $ FP.takeDirectory filePath
-        writeFile filePath (jsonStr ++ "\n")
-        putStrLn $ "Wrote: " ++ filePath
+        -- Skip the write (and the putStrLn spam) when the on-disk content
+        -- is byte-identical. Important for DSL-wrapper generation, which
+        -- runs unconditionally after a cache-hit main pass; without this,
+        -- warm runs rewrite ~25 DSL-wrapper JSON files every time.
+        exists <- SD.doesFileExist filePath
+        skip <- if exists
+                  then do old <- readFile filePath
+                          old `seq` return (old == newContent)
+                  else return False
+        CM.unless skip $ do
+          writeFile filePath newContent
+          putStrLn $ "Wrote: " ++ filePath
 
 -- | Write multiple modules to JSON files.
 -- Each module is written to basePath/<namespace-path>.json
@@ -204,30 +226,237 @@ writeModulesJson doInfer basePath universeMods mods = do
 -- construction happen once over the full universe, so each per-module write
 -- is as cheap as the single-directory version.
 --
--- The content-hash cache lives at <distJsonRoot>/digest.main.json, scoped
--- to this "main-universe" regeneration. See 'writeModulesJson' for the
--- caching semantics.
+-- Cache layout (after 2026-04-18 split):
+--
+--   * Per-package digest at dist/json/<pkg>/digest.json — covers the
+--     namespaces routed to <pkg>. Stage 3+ will exploit per-package
+--     freshness; for now it's recorded so callers can rely on it.
+--   * Universe-wide digest at <distJsonRoot>/digest.main.json — kept
+--     for backwards compatibility with the existing cache-hit semantics
+--     (universe-wide all-or-nothing). Removed once per-package
+--     freshness checks are wired in.
+--
+-- See 'writeModulesJson' for the (non-split) caching semantics.
 writeModulesJsonPackageSplit :: Bool -> FilePath -> [Module] -> [Module] -> IO ()
 writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
   hit <- if doInfer then tryCacheHitSplit distJsonRoot universeMods mods else return Nothing
   case hit of
-    Just _ ->
+    Just _ -> do
       putStrLn $ "  Cache hit (" ++ show (length universeMods) ++ " modules clean); skipping inference and writes."
+      -- Even on a cache hit, ensure per-package digests exist on disk
+      -- so downstream tools (Stage 3 per-target freshness checks) have
+      -- something to compare against. Cheap because hashing reads the
+      -- DSL files but skips inference + JSON writes.
+      CM.when doInfer $ ensurePerPackageDigests distJsonRoot mods
     Nothing -> do
-      mods' <- if doInfer then inferModulesIO universeMods mods else return mods
-      let graph = modulesToGraph universeMods universeMods
-          schemaMap = buildSchemaMap graph
-          groups = groupByPackage mods'
-      CM.forM_ groups $ \(pkg, pkgMods) -> do
-        let pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
-        putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules -> " ++ pkgDir
-        mapM_ (writeModuleJson schemaMap pkgDir) pkgMods
-      CM.when doInfer $ refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
+      -- Try the incremental path: partition modules into clean
+      -- (DSL hash unchanged) and dirty. Re-infer only the dirty ones
+      -- against a typed universe loaded from JSON, and write JSON only
+      -- for the dirty subset. Falls through to full inference if
+      -- the incremental setup fails.
+      result <- if doInfer
+                  then tryIncrementalInference distJsonRoot universeMods mods
+                  else return (Just (IncrementalFull mods))
+      case result of
+        Just (IncrementalFull allMods) -> do
+          -- Full inference was needed; write JSON for every module.
+          writePackageSplitJson distJsonRoot universeMods allMods allMods
+          CM.when doInfer $ do
+            refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
+            refreshPerPackageDigests distJsonRoot universeMods allMods
+        Just (IncrementalPartial allMods dirtyMods) -> do
+          -- Incremental inference succeeded; only rewrite JSON for the
+          -- dirty modules. Clean modules' on-disk JSON is already
+          -- up-to-date (we loaded them from there to build the typed
+          -- universe).
+          putStrLn $ "  Writing JSON for " ++ show (length dirtyMods)
+            ++ " dirty modules (skipping " ++ show (length allMods - length dirtyMods)
+            ++ " clean)"
+          writePackageSplitJson distJsonRoot universeMods allMods dirtyMods
+          CM.when doInfer $ do
+            refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
+            refreshPerPackageDigests distJsonRoot universeMods allMods
+        Nothing -> do
+          putStrLn "  Incremental inference unavailable; running full inference."
+          allMods <- inferModulesIO universeMods mods
+          writePackageSplitJson distJsonRoot universeMods allMods allMods
+          CM.when doInfer $ do
+            refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
+            refreshPerPackageDigests distJsonRoot universeMods allMods
+
+-- | Incremental inference result. 'IncrementalFull mods' means all
+-- modules need a fresh write; 'IncrementalPartial all dirty' means
+-- only the dirty subset needs writing (the clean modules' on-disk
+-- JSON is already correct).
+data IncrementalResult
+  = IncrementalFull [Module]
+  | IncrementalPartial [Module] [Module]
+  -- ^ IncrementalPartial all-modules dirty-modules
+
+-- | Shared writer: build the schemaMap from the full module universe
+-- and write the subset that needs to hit disk. 'universeForSchema' is
+-- the complete post-inference module set used to seed the schema's
+-- type-dependency closure; passing a narrow set (e.g. only DSL
+-- wrappers, which don't declare hydra.packaging as a type dep) produces
+-- a schemaMap missing hydra.packaging.Module and causes the encoder to
+-- mis-serialize outer module frames (e.g. Maybe String as nested Maybe).
+-- Callers should pass the full universe here for a complete schemaMap.
+-- 'toWrite' is the subset that actually needs its JSON rewritten
+-- (full set on a cache miss; dirty subset on an incremental hit).
+writePackageSplitJson :: FilePath -> [Module] -> [Module] -> [Module] -> IO ()
+writePackageSplitJson distJsonRoot universeMods universeForSchema toWrite = do
+  -- Seed the graph's schema with the broader of the two inputs so
+  -- hydra.packaging.Module (and every other universe type) is always
+  -- reachable from the schemaMap, even when 'toWrite' is a narrow set
+  -- like DSL wrappers whose declared type-deps omit packaging.
+  let graph = modulesToGraph universeMods (universeMods ++ universeForSchema)
+      schemaMap = buildSchemaMap graph
+      groups = groupByPackage toWrite
+  CM.forM_ groups $ \(pkg, pkgMods) -> do
+    let pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
+    putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules -> " ++ pkgDir
+    mapM_ (writeModuleJson schemaMap pkgDir) pkgMods
 
 -- | Digest file for 'writeModulesJsonPackageSplit'. Single well-known
--- location shared across all packages the universe touches.
+-- location shared across all packages the universe touches. Will be
+-- removed once per-package freshness checks fully replace the
+-- universe-wide cache (Stage 3+).
 packageSplitDigestAnchor :: FilePath -> FilePath
 packageSplitDigestAnchor distJsonRoot = distJsonRoot FP.</> "digest.main.json"
+
+-- | Per-package digest path: dist/json/<pkg>/digest.json. The digest
+-- covers the DSL sources whose namespaces route to <pkg>.
+perPackageDigestPath :: FilePath -> String -> FilePath
+perPackageDigestPath distJsonRoot pkg =
+  distJsonRoot FP.</> pkg FP.</> "digest.json"
+
+-- | After a successful regen, write per-package digest files. Each
+-- package's digest hashes only its own DSL sources (the modules that
+-- route to that package), letting Stage 3+ check freshness per
+-- package without consulting the universe-wide digest.
+--
+-- 'targetMods' is the post-inference module set (from
+-- writeModulesJsonPackageSplit's mods'); we partition it by owning
+-- package and hash each package's modules.
+refreshPerPackageDigests :: FilePath -> [Module] -> [Module] -> IO ()
+refreshPerPackageDigests distJsonRoot _universeMods targetMods = do
+  nsFiles <- Digest.discoverNamespaceFiles
+  let groups = groupByPackage targetMods
+  CM.forM_ groups $ \(pkg, pkgMods) -> do
+    pkgDigest <- Digest.hashUniverse nsFiles pkgMods
+    -- Some packages (e.g. hydra-haskell with its synthesized coder
+    -- modules, hydra-coq with no DSL sources at all) won't have any
+    -- DSL files discoverable; skip writing an empty digest.
+    CM.when (not (M.null pkgDigest)) $ do
+      let dpath = perPackageDigestPath distJsonRoot pkg
+      Digest.writeDigest dpath pkgDigest
+      putStrLn $ "  Per-package digest: " ++ dpath
+        ++ " (" ++ show (M.size pkgDigest) ++ " entries)"
+
+-- | Ensure per-package digest files exist on disk. Called on cache
+-- hit so that Stage 3+ tooling has digests to read even when no
+-- regen ran. Compared to refreshPerPackageDigests, this is a no-op
+-- if every per-package digest already exists; cheap to call.
+ensurePerPackageDigests :: FilePath -> [Module] -> IO ()
+ensurePerPackageDigests distJsonRoot mods = do
+  let groups = groupByPackage mods
+      paths  = [ perPackageDigestPath distJsonRoot pkg | (pkg, _) <- groups ]
+  allExist <- fmap and (mapM SD.doesFileExist paths)
+  CM.unless allExist $ refreshPerPackageDigests distJsonRoot [] mods
+
+-- | Try the incremental inference path: partition universeMods into
+--   * cleanMods — DSL hash matches recorded digest AND existing JSON
+--                 file is loadable (carries inferred TypeSchemes).
+--   * dirtyMods — DSL hash mismatch OR no recorded hash OR JSON
+--                 missing/unloadable.
+--
+-- If dirtyMods is empty, returns the loaded clean universe (no
+-- inference needed; caller still writes JSON because we got here
+-- via a cache miss on the universe-wide digest, meaning at least
+-- one module's JSON is newer than the digest).
+--
+-- If dirtyMods is non-empty AND clean modules loaded successfully,
+-- runs inferModulesGiven on (cleanLoaded ++ dirtyMods) targeting
+-- dirtyMods, returns the full universe with refreshed dirty mods.
+--
+-- If anything goes wrong (no digest yet, JSON load failure, etc.),
+-- returns Nothing — caller falls back to full inferModulesIO.
+tryIncrementalInference :: FilePath -> [Module] -> [Module] -> IO (Maybe IncrementalResult)
+tryIncrementalInference distJsonRoot universeMods _targetMods = do
+  -- Read the universe-wide digest to learn which sources were clean
+  -- as of the last successful regen.
+  let digestFile = packageSplitDigestAnchor distJsonRoot
+  stored <- Digest.readDigest digestFile
+  if M.null stored
+    then return Nothing
+    else do
+      nsFiles <- Digest.discoverNamespaceFiles
+      currentDigest <- Digest.hashUniverse nsFiles universeMods
+      if M.null currentDigest
+        then return Nothing
+        else do
+          -- Partition: a module is "clean" if its current DSL source
+          -- hash matches the stored hash for its namespace. Modules
+          -- without a discoverable DSL source (e.g. demos under
+          -- demos/src/, modules from heads/haskell/src/) are treated
+          -- as clean — their definition is determined by code we
+          -- don't have direct access to here, but if they aren't
+          -- in stored AND aren't in currentDigest, no source change
+          -- is detectable so they're effectively unchanged.
+          let isClean m =
+                let ns = moduleNamespace m
+                in case (M.lookup ns currentDigest, M.lookup ns stored) of
+                     (Just c, Just s) -> c == s
+                     (Nothing, Nothing) -> True
+                     _                -> False
+              (cleanMods, dirtyMods) = L.partition isClean universeMods
+
+          if Prelude.null dirtyMods
+            then do
+              -- Everything is clean per the digest, but tryCacheHitSplit
+              -- said miss. That means a JSON file is missing or the
+              -- digest is stale. Fall through to full inference.
+              return Nothing
+            else do
+              putStrLn $ "  Incremental inference: "
+                ++ show (length dirtyMods) ++ " dirty / "
+                ++ show (length cleanMods) ++ " clean"
+              -- Load clean modules from JSON (they carry inferred types).
+              let cleanNs = fmap moduleNamespace cleanMods
+              loaded <- E.try (loadCleanFromJson distJsonRoot universeMods cleanNs)
+                        :: IO (Either E.SomeException [Module])
+              case loaded of
+                Left e -> do
+                  putStrLn $ "  Incremental load failed: " ++ show e
+                  return Nothing
+                Right cleanLoaded -> do
+                  let typedUniverse = cleanLoaded ++ dirtyMods
+                  inferred <- inferModulesGivenIO typedUniverse dirtyMods
+                  -- Return:
+                  --   * all modules (cleanLoaded ++ inferred), so the
+                  --     schemaMap can be built over the complete set.
+                  --   * dirty subset (inferred), so the caller writes
+                  --     JSON only for the modules that actually changed.
+                  return (Just (IncrementalPartial (cleanLoaded ++ inferred) inferred))
+
+-- | Load modules from per-package JSON paths. The dist-json-root
+-- layout is dist/json/<pkg>/src/main/json/<ns-path>.json; we route
+-- each namespace through namespaceToPackage to find its package
+-- subdirectory.
+loadCleanFromJson :: FilePath -> [Module] -> [Namespace] -> IO [Module]
+loadCleanFromJson distJsonRoot universeModules namespaces =
+  CM.forM namespaces $ \ns -> do
+    let pkg = namespaceToPackage ns
+        pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
+        filePath = pkgDir FP.</> CodeGeneration.namespaceToPath ns ++ ".json"
+    parseResult <- parseJsonFile filePath
+    case parseResult of
+      Left err -> fail $ "Incremental: JSON parse error for "
+        ++ unNamespace ns ++ " at " ++ filePath ++ ": " ++ err
+      Right jsonVal -> case CodeGeneration.decodeModuleFromJson bootstrapGraph universeModules jsonVal of
+        Left err -> fail $ "Incremental: module decode error for "
+          ++ unNamespace ns ++ ": " ++ showError err
+        Right m  -> return m
 
 -- | If every universe module's DSL source hash matches the stored digest,
 -- and every target module's JSON file already exists, return the current

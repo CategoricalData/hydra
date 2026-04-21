@@ -599,10 +599,12 @@ exists, your implementation can participate in Hydra's bootstrapping demo as bot
 | Haskell | [Hydra/Generation.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Generation.hs) |
 
 **2. Wire the implementation into the sync workflow.**
-Add a `sync-<lang>.sh` script under `heads/haskell/bin/` that regenerates your implementation's
-content under `dist/<lang>/` from the DSL sources, and hook it into `bin/sync-all.sh` so a
-repo-wide sync keeps your implementation in step with the kernel. See
-[code-generation.md](code-generation.md) for the end-to-end shape these scripts follow.
+Add `<lang>` to the `ALL_LANGS` list in `bin/sync.sh` and to the per-target switch
+in `heads/haskell/bin/transform-json-to-target.sh` (and add a per-target wrapper
+`bin/sync-<lang>.sh` if you want a single-language convenience entry point). Once
+the language is in the matrix, `bin/sync.sh --hosts <lang> --targets <lang>`
+will regenerate it. See [code-generation.md](code-generation.md) for the
+end-to-end shape these scripts follow.
 
 **3. Demonstrate bootstrapping end-to-end.**
 Use `bin/run-bootstrapping-demo.sh` to confirm that your implementation can generate Hydra code

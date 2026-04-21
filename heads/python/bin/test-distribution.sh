@@ -19,10 +19,20 @@ PACKAGE="$1"
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_PYTHON_HEAD="$( cd "$SCRIPT_DIR/.." && pwd )"
+HYDRA_ROOT_DIR="$( cd "$HYDRA_PYTHON_HEAD/../.." && pwd )"
 
 echo "=== Testing Python distribution: $PACKAGE ==="
 echo "  (Note: pyproject.toml is monolithic today — running the full test suite)"
 echo ""
 
+source "$HYDRA_ROOT_DIR/bin/lib/test-cache.sh"
+if test_cache_check python "$HYDRA_ROOT_DIR/dist/python" "$HYDRA_PYTHON_HEAD/src/test" "${BASH_SOURCE[0]}"; then
+    echo "  Cache hit: no changes since last successful Python test run; skipping."
+    echo "=== Done (cache hit). ==="
+    exit 0
+fi
+
 cd "$HYDRA_PYTHON_HEAD"
 uv run pytest -q
+
+test_cache_record python "$HYDRA_ROOT_DIR/dist/python" "$HYDRA_PYTHON_HEAD/src/test" "${BASH_SOURCE[0]}"

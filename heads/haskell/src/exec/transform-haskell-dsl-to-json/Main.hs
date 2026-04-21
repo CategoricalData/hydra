@@ -102,9 +102,10 @@ parseArgs :: [String] -> Either String Options
 parseArgs = go defaultOptions
   where
     go opts [] = case optPackage opts of
-      Nothing -> Left "Missing --package"
+      Nothing -> Right opts  -- no --package means "all packages" (batch mode)
       Just _  -> Right opts
     go opts ("--package" : p : rest) = go (opts { optPackage = Just p }) rest
+    go opts ("--all" : rest) = go (opts { optPackage = Nothing }) rest
     go opts ("--source-set" : s : rest)
       | s == "main" || s == "test" = go (opts { optSourceSet = s }) rest
       | otherwise                  = Left $ "--source-set must be 'main' or 'test', got: " ++ s
@@ -114,18 +115,38 @@ parseArgs = go defaultOptions
 
 usage :: String
 usage = unlines
-  [ "Usage: transform-haskell-dsl-to-json --package <pkg> [OPTIONS]"
+  [ "Usage: transform-haskell-dsl-to-json [--package <pkg>] [OPTIONS]"
   , ""
   , "Options:"
-  , "  --package <pkg>          Package to transform (required). One of:"
-  , "                           hydra-kernel, hydra-haskell, hydra-java,"
-  , "                           hydra-python, hydra-scala, hydra-lisp,"
-  , "                           hydra-coq, hydra-javascript,"
-  , "                           hydra-pg, hydra-rdf, hydra-ext,"
-  , "                           hydra-wasm."
+  , "  --package <pkg>          Package to transform. If omitted (or --all"
+  , "                           is passed), every package is transformed in a"
+  , "                           single Haskell-universe load."
+  , "                           Packages: hydra-kernel, hydra-haskell,"
+  , "                           hydra-java, hydra-python, hydra-scala,"
+  , "                           hydra-lisp, hydra-coq, hydra-javascript,"
+  , "                           hydra-pg, hydra-rdf, hydra-ext, hydra-wasm."
+  , "  --all                    Batch mode: transform every package."
   , "  --source-set <main|test> Source set to transform (default: main)."
   , "                           'test' is only non-empty for hydra-kernel today."
   , "  --dist-json-root <dir>   Output root (default: ../../dist/json)."
+  ]
+
+
+-- | Every supported package (ordering matches hydra.json).
+allPackages :: [String]
+allPackages =
+  [ "hydra-kernel"
+  , "hydra-haskell"
+  , "hydra-java"
+  , "hydra-python"
+  , "hydra-scala"
+  , "hydra-lisp"
+  , "hydra-coq"
+  , "hydra-javascript"
+  , "hydra-wasm"
+  , "hydra-pg"
+  , "hydra-rdf"
+  , "hydra-ext"
   ]
 
 
@@ -160,25 +181,32 @@ main = do
       exitFailure
     Right o -> return o
 
-  let pkg       = maybe "" id (optPackage opts)
-      srcSet    = optSourceSet opts
+  let srcSet    = optSourceSet opts
       distRoot  = optDistJsonRoot opts
-      outDir    = distRoot FP.</> pkg FP.</> "src" FP.</> srcSet FP.</> "json"
 
+  case optPackage opts of
+    Just pkg -> runSinglePackage pkg srcSet distRoot
+    Nothing  -> runAllPackages      srcSet distRoot
+
+  putStrLn "=== Done. ==="
+
+-- | Transform a single package. Historical behaviour, kept for scoped
+-- callers that invoke one package at a time.
+runSinglePackage :: String -> String -> FilePath -> IO ()
+runSinglePackage pkg srcSet distRoot = do
+  let outDir = distRoot FP.</> pkg FP.</> "src" FP.</> srcSet FP.</> "json"
   putStrLn $ "=== Transform Haskell DSL -> JSON: " ++ pkg ++ " (" ++ srcSet ++ ") ==="
 
   let (mods, universe) = case srcSet of
         "main" ->
-          -- Select modules owned by this package from the full main universe.
           let owned = filter (\m -> namespaceToPackage (Kernel.moduleNamespace m) == pkg)
                              fullMainUniverse
           in (owned, fullMainUniverse)
         "test" ->
-          -- Test universe = full main universe + that package's test modules.
           let ts       = packageTestModules pkg
               testUniv = fullMainUniverse ++ ts
           in (ts, testUniv)
-        _ -> ([], fullMainUniverse)  -- unreachable: parseArgs rejects other values
+        _ -> ([], fullMainUniverse)
 
   when (null mods) $ do
     putStrLn $ "  (no modules in " ++ pkg ++ "/" ++ srcSet ++ "; skipping)"
@@ -186,23 +214,56 @@ main = do
 
   putStrLn $ "  Writing " ++ show (length mods) ++ " modules -> " ++ outDir
 
-  -- For main: use the package-split writer, which routes by namespace to the
-  -- right per-package main directory. For test: use the direct writer, since
-  -- test output always goes to <pkg>/src/test/json/ regardless of namespace.
   case srcSet of
     "main" -> do
       writeModulesJsonPackageSplit True distRoot universe mods
-      -- Second pass: generate DSL wrapper modules for the package's own
-      -- type-defining modules. Only kernel and hydra-haskell have DSL
-      -- wrappers today; other packages skip this pass.
       let dslInputs = packageDslInputModules pkg
       case dslInputs of
         [] -> return ()
         _  -> do
           putStrLn ""
-          putStrLn $ "  Generating DSL wrapper modules for " ++ show (length dslInputs) ++ " type modules..."
+          putStrLn $ "  Generating DSL wrapper modules for "
+            ++ show (length dslInputs) ++ " type modules..."
           writeDslJsonPackageSplit distRoot universe dslInputs
     "test" -> writeModulesJson True outDir universe mods
     _      -> return ()
 
-  putStrLn "=== Done. ==="
+-- | Batch mode: transform every package with one Haskell universe load.
+-- writeModulesJsonPackageSplit routes modules to their owning package's
+-- per-package JSON tree based on namespaceToPackage, so passing the whole
+-- universe produces the same on-disk layout as per-package calls — but
+-- we only pay the Haskell startup + DSL-compile cost once.
+runAllPackages :: String -> FilePath -> IO ()
+runAllPackages srcSet distRoot = do
+  putStrLn $ "=== Transform Haskell DSL -> JSON: all packages (" ++ srcSet ++ ") ==="
+
+  case srcSet of
+    "main" -> do
+      putStrLn $ "  Writing " ++ show (length fullMainUniverse)
+        ++ " main modules (routed per-package)..."
+      writeModulesJsonPackageSplit True distRoot fullMainUniverse fullMainUniverse
+      -- DSL wrappers: generate for every package that has type-defining
+      -- inputs. The routing is implicit — wrapper namespaces like
+      -- hydra.dsl.<pkg>.* resolve to their owning package via
+      -- packagePrefixes in PackageRouting.
+      let allDslInputs = concatMap packageDslInputModules allPackages
+      when (not (null allDslInputs)) $ do
+        putStrLn ""
+        putStrLn $ "  Generating DSL wrapper modules for "
+          ++ show (length allDslInputs) ++ " type modules..."
+        writeDslJsonPackageSplit distRoot fullMainUniverse allDslInputs
+    "test" -> do
+      let allTestMods = concatMap packageTestModules allPackages
+          testUniverse = fullMainUniverse ++ allTestMods
+      when (null allTestMods) $ do
+        putStrLn "  (no test modules in any package; skipping)"
+        exitSuccess
+      -- Today only hydra-kernel has tests, and its tests live at a flat
+      -- hydra-kernel/src/test/json/ location. writeModulesJson is the
+      -- direct (non-routing) writer.
+      let kernelTestDir = distRoot FP.</> "hydra-kernel" FP.</> "src"
+            FP.</> "test" FP.</> "json"
+      putStrLn $ "  Writing " ++ show (length allTestMods)
+        ++ " test modules -> " ++ kernelTestDir
+      writeModulesJson True kernelTestDir testUniverse allTestMods
+    _ -> return ()

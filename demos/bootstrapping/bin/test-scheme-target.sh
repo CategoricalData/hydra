@@ -15,7 +15,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 
 # Patch test_graph.scm to build a full graph with primitives and schema types
-# instead of using the empty graph. Same patching that sync-lisp.sh applies.
+# instead of using the empty graph. Same patching that the Scheme assembler applies.
 echo "Patching test_graph.scm..."
 SCHEME_TESTGRAPH="$OUTPUT_DIR/src/test/scheme/hydra/test/test_graph.scm"
 if [ -f "$SCHEME_TESTGRAPH" ]; then

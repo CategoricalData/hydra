@@ -136,23 +136,36 @@ All generation is driven from the Haskell head in [`heads/haskell/`](https://git
 
 ### Regenerate everything
 
-The simplest entry point is the top-level sync driver, which regenerates Haskell, Java,
-Python, Scala, Lisp, and all ext coders in order:
+The simplest entry point is the top-level sync driver. For the bootstrapping
+triad (haskell, java, python):
 
 ```bash
-./bin/sync-all.sh
+./bin/sync-default.sh
 ```
 
-To regenerate just one target, invoke the corresponding per-language script from
-`heads/haskell/bin/`:
+For a chosen (host, target) matrix:
 
 ```bash
-heads/haskell/bin/sync-haskell.sh
-heads/haskell/bin/sync-java.sh
-heads/haskell/bin/sync-python.sh
-heads/haskell/bin/sync-scala.sh
-heads/haskell/bin/sync-lisp.sh
-heads/haskell/bin/sync-ext.sh
+./bin/sync.sh --hosts H1,H2 --targets T1,T2
+./bin/sync.sh --hosts all --targets all     # full matrix
+```
+
+To regenerate just one target, invoke the corresponding per-language wrapper
+from the top-level `bin/`:
+
+```bash
+heads/haskell/bin/sync-haskell.sh   # Phase 1 only: DSL → JSON + Haskell kernel
+                                    # + stack test + lexicon
+bin/sync-java.sh                    # equivalent to: bin/sync.sh --hosts java --targets java
+bin/sync-python.sh
+bin/sync-scala.sh
+bin/sync-clojure.sh                 # one of: clojure, common-lisp, emacs-lisp, scheme
+```
+
+Or for the full bootstrapping triad (haskell, java, python):
+
+```bash
+bin/sync-default.sh
 ```
 
 ### Run the generation driver interactively

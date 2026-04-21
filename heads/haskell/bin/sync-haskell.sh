@@ -12,8 +12,8 @@ set -euo pipefail
 #   dist/json/hydra-kernel/src/test/json/.
 #
 # Stage 2 — JSON → Haskell:
-#   Runs bootstrap-from-json with --package-split, so that each loaded module
-#   is routed to dist/haskell/<package>/ based on its namespace prefix.
+#   Runs bootstrap-from-json; each loaded module is routed to
+#   dist/haskell/<package>/ based on its namespace prefix (via PackageRouting).
 #   Decoder/encoder source modules (Hydra.Sources.{Decode,Encode}.*) are
 #   synthesized from the loaded kernel type modules via --synthesize-sources.
 #
@@ -25,9 +25,9 @@ set -euo pipefail
 #   - Stack is installed and configured
 #
 # Usage:
-#   ./bin/sync-haskell.sh          # Full sync (all steps including tests)
-#   ./bin/sync-haskell.sh --quick  # Skip tests (for faster iteration)
-#   ./bin/sync-haskell.sh --help   # Show this help
+#   ./bin/sync-haskell.sh             # Full sync (all steps including tests)
+#   ./bin/sync-haskell.sh --no-tests  # Skip tests (for faster iteration)
+#   ./bin/sync-haskell.sh --help      # Show this help
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_HASKELL_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
@@ -35,12 +35,12 @@ HYDRA_ROOT_DIR="$( cd "$HYDRA_HASKELL_DIR/../.." && pwd )"
 
 source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 
-QUICK_MODE=false
+NO_TESTS=false
 
 for arg in "$@"; do
     case $arg in
-        --quick)
-            QUICK_MODE=true
+        --no-tests)
+            NO_TESTS=true
             shift
             ;;
         --help|-h)
@@ -49,8 +49,8 @@ for arg in "$@"; do
             echo "Regenerate hydra-kernel and hydra-haskell Haskell dist via DSL → JSON → Haskell."
             echo ""
             echo "Options:"
-            echo "  --quick    Skip running tests after generation"
-            echo "  --help     Show this help message"
+            echo "  --no-tests  Skip running tests after generation"
+            echo "  --help      Show this help message"
             echo ""
             echo "Steps performed:"
             echo "  1. Build required executables"
@@ -58,7 +58,7 @@ for arg in "$@"; do
             echo "  3. Verify JSON kernel + write manifest"
             echo "  4. Generate Haskell from JSON (JSON → Haskell)"
             echo "  5. Post-process generated files (TestGraph.hs patch)"
-            echo "  6. Run tests (unless --quick)"
+            echo "  6. Run tests (unless --no-tests)"
             echo "  7. Regenerate the lexicon"
             exit 0
             ;;
@@ -99,7 +99,6 @@ echo ""
 stack exec bootstrap-from-json -- \
     --target haskell \
     --output "../../dist/haskell" \
-    --package-split \
     --include-dsls \
     --include-tests \
     --synthesize-sources \
@@ -128,7 +127,7 @@ echo ""
 echo "  Rebuilding..."
 stack build
 
-if [ "$QUICK_MODE" = false ]; then
+if [ "$NO_TESTS" = false ]; then
     step 6 $TOTAL_STEPS "Running tests"
     echo ""
 
@@ -140,10 +139,12 @@ if [ "$QUICK_MODE" = false ]; then
         echo ""
         echo "All tests passed!"
     else
-        warn "Some tests failed (exit code $TEST_RESULT). See $TEST_LOG"
+        echo ""
+        echo "ERROR: stack test exited $TEST_RESULT. See $TEST_LOG" >&2
+        exit $TEST_RESULT
     fi
 else
-    step 6 $TOTAL_STEPS "Skipped (--quick mode)"
+    step 6 $TOTAL_STEPS "Skipped (--no-tests)"
 fi
 
 step 7 $TOTAL_STEPS "Regenerating lexicon"

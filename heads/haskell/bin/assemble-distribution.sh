@@ -47,14 +47,57 @@ while [ $# -gt 0 ]; do
 done
 
 OUT_DIR="$DIST_ROOT/$PACKAGE"
+INPUT_DIGEST="$HYDRA_ROOT_DIR/dist/json/$PACKAGE/digest.json"
+OUTPUT_DIGEST="$OUT_DIR/digest.json"
 
 echo "=== Assembling Haskell distribution: $PACKAGE ==="
 echo "  Output: $OUT_DIR"
 echo ""
 
-# Step 1: Main modules via Layer 1 transform. Uses --package-split under the
-# hood so that dependencies generate to their own package dirs too; the scope
-# filter selects just this package for generation.
+# Cheap Python pre-check: compare input digest hashes to recorded
+# output digest inputs. Avoids stack-exec startup for warm runs.
+if [ -f "$INPUT_DIGEST" ] && [ -f "$OUTPUT_DIGEST" ]; then
+    if python3 -c "
+import json, sys
+try:
+    out = json.load(open('$OUTPUT_DIGEST'))
+    inp = json.load(open('$INPUT_DIGEST'))
+    recorded = {k: (v.get('hash') if isinstance(v, dict) else v)
+                for k, v in out.get('inputs', {}).items()}
+    current = inp.get('hashes', inp)
+    sys.exit(0 if recorded == current else 1)
+except Exception:
+    sys.exit(1)
+" 2>/dev/null; then
+        echo "  Cache hit; skipping work."
+        echo "=== Done. $PACKAGE (cache hit) ==="
+        exit 0
+    fi
+fi
+
+# Freshness check: skip the slow path when nothing has changed.
+if [ -f "$INPUT_DIGEST" ] && [ -f "$OUTPUT_DIGEST" ]; then
+    if (cd "$HYDRA_HASKELL_DIR" && \
+        stack exec digest-check -- fresh \
+            --inputs "$INPUT_DIGEST" \
+            --output-dir "$OUT_DIR" \
+            --output-digest "$OUTPUT_DIGEST" 2>/dev/null); then
+        echo "  Cache hit; skipping work."
+        echo "=== Done. $PACKAGE assembled under $OUT_DIR (cache hit) ==="
+        exit 0
+    fi
+fi
+
+# Cache miss: invalidate the per-target digest so Stage 7's per-module
+# freshness filter inside bootstrap-from-json can't trust stale records
+# (output files may be missing/modified, so DSL-hash-only freshness is
+# unreliable).
+rm -f "$OUTPUT_DIGEST"
+
+# Step 1: Main modules via Layer 1 transform. Routing is unconditional:
+# every module lands under <DIST_ROOT>/<owning-pkg>/ based on its namespace,
+# including transitive dependencies for this package. The output dir argument
+# is the parent of the per-package dirs.
 #
 # --synthesize-sources generates hand-equivalent Hydra.Sources.Decode.* and
 # Hydra.Sources.Encode.* modules from type definitions. The synthesis filter
@@ -70,7 +113,7 @@ esac
 
 echo "Step 1: Generating main Haskell modules..."
 "$SCRIPT_DIR/transform-json-to-haskell.sh" "$PACKAGE" main \
-    --output "$DIST_ROOT" --package-split --include-dsls $SYNTH_FLAG
+    --output "$DIST_ROOT" --include-dsls $SYNTH_FLAG
 
 # Step 2: Test modules (if the package has any).
 # Only hydra-kernel has tests today; the transform exits 0 cleanly if the
@@ -78,7 +121,7 @@ echo "Step 1: Generating main Haskell modules..."
 echo ""
 echo "Step 2: Generating test Haskell modules..."
 "$SCRIPT_DIR/transform-json-to-haskell.sh" "$PACKAGE" test \
-    --output "$DIST_ROOT" --package-split
+    --output "$DIST_ROOT"
 
 # Step 3: Package-specific post-processing.
 case "$PACKAGE" in
@@ -106,4 +149,14 @@ case "$PACKAGE" in
 esac
 
 echo ""
+
+# Refresh the per-target digest so future fresh-checks short-circuit.
+if [ -f "$INPUT_DIGEST" ]; then
+    (cd "$HYDRA_HASKELL_DIR" && \
+     stack exec digest-check -- refresh \
+        --inputs "$INPUT_DIGEST" \
+        --output-dir "$OUT_DIR" \
+        --output-digest "$OUTPUT_DIGEST")
+fi
+
 echo "=== Done. $PACKAGE assembled under $OUT_DIR ==="

@@ -12,7 +12,7 @@ if [ -z "$OUTPUT_DIR" ]; then
 fi
 
 # Patch test_graph.lisp to build a full graph with primitives and schema types
-# instead of using the empty graph. Same patching that sync-lisp.sh applies.
+# instead of using the empty graph. Same patching that the Common Lisp assembler applies.
 echo "Patching test_graph.lisp..."
 CL_TESTGRAPH="$OUTPUT_DIR/src/test/common-lisp/hydra/test/test_graph.lisp"
 if [ -f "$CL_TESTGRAPH" ]; then

@@ -63,9 +63,26 @@ debug_*.clj
 docs/reviews/
 docs/work/
 
-# Package distributions
+# Package distributions.
+# dist/json/ is the source of truth (tracked). dist/haskell/ is tracked
+# through the 0.15 release to support bootstrapping from a fresh clone.
+# All other target-language trees are regenerated from dist/json/ and
+# not checked in.
+dist/clojure/
+dist/common-lisp/
 dist/coq/
+dist/emacs-lisp/
+dist/java/
+dist/python/
+dist/scala/
+dist/scheme/
 dist/wasm/
+
+# Test-cache artifacts written by Layer 2.5 testers. Per-target
+# digest.json files (dist/haskell/<pkg>/digest.json,
+# dist/json/<pkg>/digest.json) are tracked — they are the build's
+# source of truth for freshness checks.
+dist/haskell/test-cache.json
 
 # Other
 *.log

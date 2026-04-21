@@ -37,28 +37,36 @@ All Haskell tests must pass before proceeding.
 
 ## Quick sync (recommended)
 
-The simplest way to synchronize everything (Haskell, Ext, Java, Python, Scala, and Lisp) is using the top-level script:
+The simplest way to synchronize the bootstrapping triad (Haskell, Java, Python)
+is using the top-level convenience wrapper:
 
 ```bash
-./bin/sync-all.sh              # from repo root; or --quick to skip tests
+./bin/sync-default.sh          # from repo root; or --no-tests to skip tests
 ```
 
-To synchronize only Python:
+For the full all-languages × all-languages matrix:
 
 ```bash
-cd heads/haskell
-./bin/sync-python.sh           # or --quick to skip tests
+./bin/sync.sh --hosts all --targets all
 ```
 
-The `sync-python.sh` script:
-1. Builds the `bootstrap-from-json` executable
-2. Generates all Python artifacts (kernel modules, eval lib, coder modules, kernel tests, generation tests) from JSON
-3. Runs Python tests to verify (unless `--quick`)
+To synchronize only Python (host == target == python):
+
+```bash
+./bin/sync-python.sh           # or --no-tests to skip tests
+```
+
+The `sync-python.sh` wrapper invokes
+`bin/sync.sh --hosts python --targets python`, which:
+1. Refreshes JSON sources via Phase 1 (DSL → JSON, stack test, lexicon)
+2. Generates the Python coder in Haskell, then kernel + the Python coder
+   in Python
+3. Runs Python tests to verify (unless `--no-tests`)
 
 For faster iteration during development, skip tests:
 
 ```bash
-./bin/sync-python.sh --quick
+./bin/sync-python.sh --no-tests
 ```
 
 ## Manual Sync (Step by Step)

@@ -83,6 +83,7 @@ module_ = Module ns definitions
       toDefinition encodeTypeDefinition,
       toDefinition encodeValType,
       toDefinition extractLambdaParams,
+      toDefinition peelLambdaApp,
       toDefinition extractParamTypes,
       toDefinition extractSignature,
       toDefinition hexEscapeString,
@@ -277,14 +278,56 @@ encodeApplication = def "encodeApplication" $
        "rawName" <~ Core.unName (var "name") $
        "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ var "rawName") $
        Logic.ifElse (Lists.null (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeTail (Strings.splitOn (string ".") (var "rawName")))))
-         -- Local variable head: the local holds a function value (closure / funcref).
-         -- No real call possible without closures; drop args and return a placeholder.
-         (right (Lists.concat (list [
-           var "droppedArgInstrs",
-           list [inject W._Instruction W._Instruction_localGet (var "lname"),
-                 inject W._Instruction W._Instruction_drop unit,
-                 inject W._Instruction W._Instruction_const $
-                   inject W._ConstValue W._ConstValue_i32 (int32 0)]])))
+         -- Local variable head: the local holds a closure value — a pointer into
+         -- linear memory to an 8-byte record {table_idx:i32 at 0, env:i32 at 4}.
+         -- Dispatch by loading env + table_idx, pushing env + (first) real arg,
+         -- then call_indirect through $__closure_table using the $__closure_1
+         -- signature. The closure callee is (env:i32, arg:i32) -> i32.
+         --
+         -- Multi-arg closures are not yet supported (M4b is single-arg). If the
+         -- call site provides zero args, push a placeholder i32.const 0 as the
+         -- arg; if it provides more than one, drop the extras after the first.
+         -- Table index 0 is reserved for unlifted / placeholder closures; calling
+         -- through it will trap at runtime, which is distinguishable from a
+         -- correctly-constructed closure dispatch.
+         ("mFirstArg" <~ Lists.maybeHead (var "args") $
+          "firstArgInstrs" <~ Maybes.cases (var "mFirstArg")
+            -- Zero-arg closure call: push placeholder. Real zero-arg closures
+            -- need a separate signature (to come).
+            (list [inject W._Instruction W._Instruction_const $
+              inject W._ConstValue W._ConstValue_i32 (int32 0)])
+            (lambda "_a" $ Maybes.fromMaybe (list ([] :: [TTerm W.Instruction])) (Lists.maybeHead (var "realArgInstrs"))) $
+          -- Drop extra args beyond the first (M4b: single-arg closures only).
+          "extraArgDropInstrs" <~ Lists.concat (Lists.map
+            (lambda "ai" $ Lists.concat2 (var "ai")
+              (list [inject W._Instruction W._Instruction_drop unit]))
+            (Lists.drop (int32 1) (var "realArgInstrs"))) $
+          right (Lists.concat (list [
+            var "extraArgDropInstrs",
+            -- Push env (offset 4 of the closure record)
+            list [inject W._Instruction W._Instruction_localGet (var "lname"),
+                  inject W._Instruction W._Instruction_load $
+                    record W._MemoryInstruction [
+                      W._MemoryInstruction_type>>: inject W._ValType W._ValType_i32 unit,
+                      W._MemoryInstruction_memArg>>: record W._MemArg [
+                        W._MemArg_offset>>: int32 4,
+                        W._MemArg_align>>: int32 2]]],
+            -- Push real arg (first only; others already dropped)
+            var "firstArgInstrs",
+            -- Push table index (offset 0)
+            list [inject W._Instruction W._Instruction_localGet (var "lname"),
+                  inject W._Instruction W._Instruction_load $
+                    record W._MemoryInstruction [
+                      W._MemoryInstruction_type>>: inject W._ValType W._ValType_i32 unit,
+                      W._MemoryInstruction_memArg>>: record W._MemArg [
+                        W._MemArg_offset>>: int32 0,
+                        W._MemArg_align>>: int32 2]],
+                  -- call_indirect via $__closure_1 signature
+                  inject W._Instruction W._Instruction_callIndirect $
+                    record W._TypeUse [
+                      W._TypeUse_index>>: just (string "__closure_1"),
+                      W._TypeUse_params>>: list ([] :: [TTerm W.Param]),
+                      W._TypeUse_results>>: list ([] :: [TTerm W.ValType])]]])))
          -- Cross-module or primitive call: push real args, emit call.
          -- The callee's Wasm signature has exactly `n` i32 params where `n` is the
          -- Hydra arity derived from funcSigs. If the call-site provides fewer args
@@ -328,11 +371,33 @@ encodeApplication = def "encodeApplication" $
          (lambda "firstArg" $
           "firstArgInstrs" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@ var "firstArg") $
           encodeCases @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@ var "cs" @@ var "firstArgInstrs"),
-     -- Lambda applied to args: drop args, encode the body.
+     -- Lambda applied to args: beta-reduce by binding each arg to its lambda
+     -- parameter's local, then encode the inner body. Peels N outer lambdas
+     -- where N is the number of args supplied; any leftover args or lambdas
+     -- fall through as placeholders (closures, needed for partial application,
+     -- are M4+ work).
      _Term_lambda>>: lambda "lam" $
-       Eithers.bind (encodeTerm @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@ Core.lambdaBody (var "lam"))
-         (lambda "bodyInstrs" $
-           right (Lists.concat2 (var "droppedArgInstrs") (var "bodyInstrs")))]
+       "peeled" <~ (peelLambdaApp @@ (Core.termLambda (var "lam")) @@ var "args") $
+       "paramNames" <~ Pairs.first (var "peeled") $
+       "innerBody" <~ Pairs.second (var "peeled") $
+       -- For each bound (param, arg-instrs) pair, emit `<arg-instrs> local.set $param`.
+       "bindInstrs" <~ Lists.concat (Lists.map
+         (lambda "np" $
+           "pname" <~ Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Pairs.first (var "np")) $
+           "argInstrs" <~ Pairs.second (var "np") $
+             Lists.concat2 (var "argInstrs")
+               (list [inject W._Instruction W._Instruction_localSet (var "pname")]))
+         (Lists.zip (var "paramNames") (var "realArgInstrs"))) $
+       -- Drop any extra args past the number of bound params (arity mismatch).
+       "extraArgInstrs" <~ Lists.concat (Lists.map
+         (lambda "ai" $ Lists.concat2 (var "ai")
+           (list [inject W._Instruction W._Instruction_drop unit]))
+         (Lists.drop (Lists.length (var "paramNames")) (var "realArgInstrs"))) $
+       "bodyInstrs" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@ var "innerBody") $
+         right (Lists.concat (list [
+           var "bindInstrs",
+           var "extraArgInstrs",
+           var "bodyInstrs"]))]
 
 
 -- =============================================================================
@@ -917,10 +982,10 @@ encodeCases = def "encodeCases" $
             W._MemoryInstruction_memArg>>: record W._MemArg [
               W._MemArg_offset>>: int32 0,
               W._MemArg_align>>: int32 2]]]]) $
-    -- Encode each case branch body. Each arm is still synthesized as
+    -- Encode each explicit case arm body. Each arm is synthesized as
     -- `apply (cfterm) (termVariable "v")` — encodeTerm will resolve `v` to `local.get $v`,
     -- which is now initialized to the loaded payload before any arm runs.
-    "arms" <<~ (Eithers.mapList
+    "explicitArms" <<~ (Eithers.mapList
       (lambda "cf" $
         "cfname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.fieldName (var "cf"))) $
         "cfterm" <~ Core.fieldTerm (var "cf") $
@@ -929,17 +994,55 @@ encodeCases = def "encodeCases" $
             (Core.termVariable (wrap _Name (string "v")))))) $
           right (pair (var "cfname") (var "armBody")))
       (var "caseFields")) $
+    -- Encode the optional default arm. When present, its body is a Term that does
+    -- NOT reference $v (the payload is irrelevant for a default). When absent, we
+    -- still synthesize a default label so that uncovered tags have somewhere to
+    -- branch to; its body is an `i32.const 0` placeholder.
+    "defaultArmLabel" <~ (string "_default") $
+    "mDefault" <~ Core.caseStatementDefault (var "cs") $
+    "defaultArmBody" <<~ Maybes.cases (var "mDefault")
+      (right (list [inject W._Instruction W._Instruction_const $
+        inject W._ConstValue W._ConstValue_i32 (int32 0)]))
+      (lambda "defTerm" $
+        encodeTerm @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@ var "defTerm") $
+    "arms" <~ Lists.concat2 (var "explicitArms") (list [pair (var "defaultArmLabel") (var "defaultArmBody")]) $
+    -- Build the br_table label array. Each entry at index i gets the label of
+    -- the arm handling tag i — either an explicit arm matching the union's
+    -- variant-name-at-index-i, or the default arm's label. The lookup uses the
+    -- universe-wide variantIndexes map keyed by the union's type name; if the
+    -- type isn't found (e.g. dispatching on a locally-defined union not visible
+    -- to the coder), every tag routes to the default.
+    "explicitLabelForName" <~ (lambda "fname" $
+      Maybes.fromMaybe (var "defaultArmLabel")
+        (Maybes.map
+          (unaryFunction Pairs.first)
+          (Lists.find
+            (lambda "arm" $ Equality.equal (Pairs.first (var "arm")) (var "fname"))
+            (var "explicitArms")))) $
+    "typeName" <~ Core.caseStatementTypeName (var "cs") $
+    "mUnionVariants" <~ Maps.lookup (var "typeName") (var "variantIndexes") $
+    "brTableLabels" <~ Maybes.cases (var "mUnionVariants")
+      -- Fallback: no variant info for this type. Use the explicit-arm labels
+      -- at positions 0..len-1 (preserving pre-fix behavior); tags beyond the
+      -- explicit arms hit the default.
+      (Lists.map (unaryFunction Pairs.first) (var "explicitArms"))
+      (lambda "variantPairs" $
+        -- variantPairs :: [(Name, Int)]. Sort by index, emit label per index.
+        "sorted" <~ Lists.sortOn (unaryFunction Pairs.second) (var "variantPairs") $
+        Lists.map
+          (lambda "np" $
+            "fieldName" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Pairs.first (var "np"))) $
+            var "explicitLabelForName" @@ var "fieldName")
+          (var "sorted")) $
     -- Block-based union dispatch: nested empty dispatch blocks, innermost holds the
-    -- prologue + br_table, outer blocks wrap each arm body.
-    "armLabels" <~ Lists.map (unaryFunction Pairs.first) (var "arms") $
+    -- prologue + br_table, outer blocks wrap each arm body (explicit + default).
     "endLabel" <~ (Strings.cat2 (string "end_") (var "tname")) $
-    "defaultLabel" <~ Maybes.fromMaybe (var "endLabel") (Lists.maybeLast (var "armLabels")) $
     "innerDispatch" <~ Lists.concat2
       (var "prologue")
       (list [inject W._Instruction W._Instruction_brTable $
         record W._BrTableArgs [
-          W._BrTableArgs_labels>>: var "armLabels",
-          W._BrTableArgs_default>>: var "defaultLabel"]]) $
+          W._BrTableArgs_labels>>: var "brTableLabels",
+          W._BrTableArgs_default>>: var "defaultArmLabel"]]) $
     "dispatch" <~ Lists.foldl
       (lambda "acc" $ lambda "arm" $
         "label" <~ Pairs.first (var "arm") $
@@ -954,21 +1057,14 @@ encodeCases = def "encodeCases" $
             list [inject W._Instruction W._Instruction_br (var "endLabel")]]))
       (var "innerDispatch")
       (var "arms") $
-      -- Short-circuit empty-cases: with zero arms, the prologue still runs (reading
-      -- the scrutinee for side effects and dropping the tag+payload), then we push
-      -- an i32.const 0 placeholder as the block's result.
-      Logic.ifElse (Lists.null (var "arms"))
-        (right (Lists.concat (list [
-          var "scrutineeInstrs",
-          list [inject W._Instruction W._Instruction_drop unit],
-          list [inject W._Instruction W._Instruction_const $
-            inject W._ConstValue W._ConstValue_i32 (int32 0)]])))
-        -- Wrap everything in the outermost end block with result type
-        (right (list [inject W._Instruction W._Instruction_block $
-          record W._BlockInstruction [
-            W._BlockInstruction_label>>: just (var "endLabel"),
-            W._BlockInstruction_blockType>>: inject W._BlockType W._BlockType_value (inject W._ValType W._ValType_i32 unit),
-            W._BlockInstruction_body>>: var "dispatch"]]))
+      -- Wrap everything in the outermost end block with result type.
+      -- Even with zero explicit arms, the default arm always exists, so arms is
+      -- never empty — no need to short-circuit.
+      right (list [inject W._Instruction W._Instruction_block $
+        record W._BlockInstruction [
+          W._BlockInstruction_label>>: just (var "endLabel"),
+          W._BlockInstruction_blockType>>: inject W._BlockType W._BlockType_value (inject W._ValType W._ValType_i32 unit),
+          W._BlockInstruction_body>>: var "dispatch"]])
 
 
 -- =============================================================================
@@ -1004,6 +1100,27 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
 -- =============================================================================
 -- Term definition encoding
 -- =============================================================================
+
+-- | Peel up to N outer lambdas from `term`, where N = length of `args`. Returns
+-- (peeledParamNames, innerBody). If `term` has fewer nested lambdas than there
+-- are args, the extra args are not peeled (they remain for the caller to drop
+-- or ignore). Used by encodeApplication's `_Term_lambda` case to beta-reduce
+-- `(\x -> \y -> body) @@ argX @@ argY` by binding each arg to its param's local.
+peelLambdaApp :: TTermDefinition (Term -> [Term] -> ([Name], Term))
+peelLambdaApp = def "peelLambdaApp" $
+  lambda "term" $ lambda "args" $
+    Logic.ifElse (Lists.null (var "args"))
+      (pair (list ([] :: [TTerm Name])) (var "term"))
+      ("stripped" <~ (Strip.deannotateTerm @@ var "term") $
+       cases _Term (var "stripped") (Just $ pair (list ([] :: [TTerm Name])) (var "term")) [
+         _Term_lambda>>: lambda "lam" $
+           "paramName" <~ Core.lambdaParameter (var "lam") $
+           "body" <~ Core.lambdaBody (var "lam") $
+           "restArgs" <~ Maybes.fromMaybe (list ([] :: [TTerm Term])) (Lists.maybeTail (var "args")) $
+           "inner" <~ (peelLambdaApp @@ var "body" @@ var "restArgs") $
+             pair
+               (Lists.cons (var "paramName") (Pairs.first (var "inner")))
+               (Pairs.second (var "inner"))])
 
 -- | Extract parameter names from nested lambdas, returning (params, innerBody)
 extractLambdaParams :: TTermDefinition (Term -> ([Name], Term))
@@ -1188,9 +1305,14 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "syntheticCount" <~ Logic.ifElse (Equality.gt (var "typeParamCount") (var "lambdaParamCount"))
       (Math.sub (var "typeParamCount") (var "lambdaParamCount"))
       (int32 0) $
-    "syntheticParamNames" <~ Lists.map
-      (lambda "i" $ Strings.cat2 (string "arg_synth_") (Literals.showInt32 (var "i")))
-      (Math.range (int32 0) (var "syntheticCount")) $
+    -- Note: Math.range is INCLUSIVE of its upper bound (range 0 n = [0..n]),
+    -- so we map over [0 .. n-1] only when n > 0. When n == 0 we want the
+    -- empty list, not [0].
+    "syntheticParamNames" <~ Logic.ifElse (Equality.gt (var "syntheticCount") (int32 0))
+      (Lists.map
+        (lambda "i" $ Strings.cat2 (string "arg_synth_") (Literals.showInt32 (var "i")))
+        (Math.range (int32 0) (Math.sub (var "syntheticCount") (int32 1))))
+      (list ([] :: [TTerm String])) $
     "paramNameStrs" <~ Lists.concat2 (var "lambdaParamNameStrs") (var "syntheticParamNames") $
     "wasmParams" <~ Lists.map
       (lambda "pn" $ record W._Param [
@@ -1533,6 +1655,33 @@ moduleToWasm = def "moduleToWasm" $
       record W._ExportDef [
         W._ExportDef_name>>: string "__bump_ptr",
         W._ExportDef_desc>>: inject W._ExportDesc W._ExportDesc_global (string "__bump_ptr")]) $
+    -- Export the bump allocator helper so the JS host can build kernel values
+    -- (records, tagged unions, strings) in the module's linear memory from outside.
+    "allocExport" <~ (inject W._ModuleField W._ModuleField_export $
+      record W._ExportDef [
+        W._ExportDef_name>>: string "__alloc",
+        W._ExportDef_desc>>: inject W._ExportDesc W._ExportDesc_func (string "__alloc")]) $
+    -- Closure infrastructure (M4b): one type signature for 1-arg closures plus an
+    -- empty function table. Later milestones grow the table as lambdas get lifted
+    -- into it; closures carry a stable table index that call_indirect dispatches on.
+    -- Signature is uniform `(env:i32, arg:i32) -> i32`; multi-arg closures are
+    -- future work (additional signatures, one per arity).
+    "closureType" <~ (inject W._ModuleField W._ModuleField_type $
+      record W._TypeDef [
+        W._TypeDef_name>>: just (string "__closure_1"),
+        W._TypeDef_type>>: record W._FuncType [
+          W._FuncType_params>>: list [
+            inject W._ValType W._ValType_i32 unit,
+            inject W._ValType W._ValType_i32 unit],
+          W._FuncType_results>>: list [
+            inject W._ValType W._ValType_i32 unit]]]) $
+    "closureTable" <~ (inject W._ModuleField W._ModuleField_table $
+      record W._TableDef [
+        W._TableDef_name>>: just (string "__closure_table"),
+        W._TableDef_refType>>: inject W._RefType W._RefType_funcref unit,
+        W._TableDef_limits>>: record W._Limits [
+          W._Limits_min>>: int32 0,
+          W._Limits_max>>: nothing]]) $
     -- Build function exports for each term definition
     "funcExports" <~ Lists.map
       (lambda "td" $
@@ -1590,8 +1739,9 @@ moduleToWasm = def "moduleToWasm" $
       W._Module_name>>: nothing,
       W._Module_fields>>: Lists.concat (list [
         var "importFields",
-        list [var "memField", var "memExport", var "dataField",
-              var "bumpGlobal", var "bumpExport", var "allocFunc"],
+        list [var "closureType", var "memField", var "memExport", var "dataField",
+              var "bumpGlobal", var "bumpExport", var "allocFunc",
+              var "allocExport", var "closureTable"],
         var "funcExports",
         var "allFields"])]) $
     "code" <~ (SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (WasmSerdeSource.moduleToExpr @@ var "wasmMod"))) $
