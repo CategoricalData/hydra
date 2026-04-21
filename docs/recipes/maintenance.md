@@ -398,9 +398,8 @@ them as generator bugs:
   `TestEnv.testContext`. The `Hydra.Test.TestEnv` module is hand-written and
   checked in under `dist/haskell/hydra-kernel/src/test/haskell/`.
 
-Two patches that were previously applied by the now-retired
-`heads/haskell/bin/sync-java.sh` and `heads/haskell/bin/sync-python.sh`
-scripts are NOT currently re-applied anywhere:
+Two patches that were previously applied by the now-retired per-language
+sync scripts under `heads/haskell/bin/` are NOT currently re-applied anywhere:
 
 - Java Lisp `Coder.java`: a `PartialVisitor` type parameter that the Java
   coder infers incorrectly. Surfaces when generating `hydra-lisp` into Java.
