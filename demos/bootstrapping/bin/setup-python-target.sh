@@ -72,12 +72,17 @@ fi
 # hydra.{java,python,haskell,lisp,scala}.coder to dispatch on target language;
 # sync-default() doesn't generate hydra-lisp/hydra-scala into Python, so on a
 # clean checkout they can be missing. Assemble them on demand — warm-cache
-# short-circuits in seconds.
+# short-circuits in seconds. Redirect assembler output to a log file: it
+# prints its own "Done: N main..." line per package, which would otherwise
+# pollute the bootstrap-all log parser.
+ASSEMBLE_LOG="$OUTPUT_DIR/.coder-assembly.log"
+mkdir -p "$OUTPUT_DIR"
+: > "$ASSEMBLE_LOG"
 for coder_pkg in hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp; do
     coder_base="$HYDRA_ROOT/dist/python/$coder_pkg/src/main/python"
     if [ ! -d "$coder_base/hydra" ]; then
-        echo "    $coder_pkg not present; generating into Python..."
-        (cd "$HYDRA_ROOT" && heads/python/bin/assemble-distribution.sh "$coder_pkg")
+        echo "    $coder_pkg not present; generating into Python (see $ASSEMBLE_LOG)..."
+        (cd "$HYDRA_ROOT" && heads/python/bin/assemble-distribution.sh "$coder_pkg") >> "$ASSEMBLE_LOG" 2>&1
     fi
 done
 # Overlay coder packages from per-package dist dirs. The Python bootstrap
