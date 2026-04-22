@@ -70,11 +70,17 @@ done
 # clean checkout they can be missing. Assemble them on demand — warm-cache
 # short-circuits in seconds.
 echo "  Ensuring Java coder packages are present (warm cache: seconds)..."
+# Redirect assembler output to a log file: it prints its own "Done: N main..."
+# line per package, which would otherwise pollute the bootstrap-all log
+# parser (which extracts host fileCount/timing from "Done:" lines).
+ASSEMBLE_LOG="$OUTPUT_DIR/.coder-assembly.log"
+mkdir -p "$OUTPUT_DIR"
+: > "$ASSEMBLE_LOG"
 for coder_pkg in hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp; do
     coder_base="$HYDRA_ROOT/dist/java/$coder_pkg/src/main/java"
     if [ ! -d "$coder_base/hydra" ]; then
-        echo "    $coder_pkg not present; generating into Java..."
-        (cd "$HYDRA_ROOT" && heads/java/bin/assemble-distribution.sh "$coder_pkg")
+        echo "    $coder_pkg not present; generating into Java (see $ASSEMBLE_LOG)..."
+        (cd "$HYDRA_ROOT" && heads/java/bin/assemble-distribution.sh "$coder_pkg") >> "$ASSEMBLE_LOG" 2>&1
     fi
 done
 

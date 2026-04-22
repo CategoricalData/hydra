@@ -459,17 +459,23 @@ compare_output() {
 parse_bootstrap_log() {
     local logfile=$1
 
+    # The bootstrap log can contain multiple "Done: N main + M test files"
+    # lines: setup-{java,python}-target.sh now invokes the per-package
+    # assembler for missing coder packages, and each invocation prints its
+    # own "Done:" line. The host's actual bootstrap output is the LAST one.
+    # Take only that to avoid concatenating fileCounts across runs.
     local done_line
-    done_line=$(grep "Done:" "$logfile" 2>/dev/null || true)
+    done_line=$(grep "Done:" "$logfile" 2>/dev/null | tail -1 || true)
     local main_files test_files
     main_files=$(echo "$done_line" | sed -n 's/.*Done: *\([0-9]*\) main.*/\1/p')
     test_files=$(echo "$done_line" | sed -n 's/.*+ *\([0-9]*\) test.*/\1/p')
     main_files="${main_files:-0}"
     test_files="${test_files:-0}"
 
-    # Main gen time: "Generated N files." followed by "Time: Xs" on next line
+    # Main gen time: "Generated N files." followed by "Time: Xs" on next line.
+    # tail -1 mirrors the done_line fix: take the last (host's own) timing.
     local main_time_raw
-    main_time_raw=$(grep -A1 "Generated.*files" "$logfile" | grep -v "test" | grep -v "generation" | grep "Time:" | head -1 | sed 's/.*Time: *//')
+    main_time_raw=$(grep -A1 "Generated.*files" "$logfile" | grep -v "test" | grep -v "generation" | grep "Time:" | tail -1 | sed 's/.*Time: *//')
     local main_time_secs=""
     if [ -n "$main_time_raw" ]; then
         main_time_secs=$(parse_time_to_secs "$main_time_raw")
@@ -477,7 +483,7 @@ parse_bootstrap_log() {
 
     # Test gen time: "Generated N test files." followed by "Time: Xs" on next line
     local test_time_raw
-    test_time_raw=$(grep -A1 "Generated.*test files" "$logfile" | grep "Time:" | head -1 | sed 's/.*Time: *//')
+    test_time_raw=$(grep -A1 "Generated.*test files" "$logfile" | grep "Time:" | tail -1 | sed 's/.*Time: *//')
     local test_time_secs=""
     if [ -n "$test_time_raw" ]; then
         test_time_secs=$(parse_time_to_secs "$test_time_raw")
