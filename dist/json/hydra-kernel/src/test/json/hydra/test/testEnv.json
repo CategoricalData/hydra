@@ -1,0 +1,51 @@
+{
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.test.testEnv.testGraph",
+        "term": {
+          "typeLambda": {
+            "body": {
+              "lambda": {
+                "body": {"variable": "hydra.lexical.emptyGraph"},
+                "domain": {"variable": "t0"},
+                "parameter": "tys"}},
+            "parameter": "t0"}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.graph.Graph"},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0"]}}},
+    {
+      "term": {
+        "name": "hydra.test.testEnv.testContext",
+        "term": {"variable": "hydra.lexical.emptyContext"},
+        "type": {"type": {"variable": "hydra.context.Context"}, "variables": []}}}],
+  "description": "Type-level declarations for the hand-written Hydra.Test.TestEnv module.",
+  "namespace": "hydra.test.testEnv",
+  "termDependencies": ["hydra.lexical"],
+  "typeDependencies": [
+    "hydra.paths",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.context",
+    "hydra.core",
+    "hydra.error.checking",
+    "hydra.error.core",
+    "hydra.error.packaging",
+    "hydra.errors",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.packaging",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants"]}
