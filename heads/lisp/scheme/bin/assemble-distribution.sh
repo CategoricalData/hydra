@@ -90,11 +90,18 @@ echo "Step 2: Generating test Scheme modules..."
 case "$PACKAGE" in
     hydra-kernel)
         # Step 3a: Copy hand-written Scheme runtime library files
-        # (chars, eithers, lists, ...) from heads/lisp/scheme into
-        # dist/scheme. These implement the Scheme runtime for generated code.
-        # Skip maps.scm and sets.scm: the dist versions (alist-backed, portable)
-        # and the heads versions (vhash-backed, Guile-specific) are both
-        # checked in and must not be overwritten.
+        # (chars, eithers, lists, maps, sets, ...) from heads/lisp/scheme
+        # into dist/scheme. These implement the Scheme runtime for generated code.
+        #
+        # Historical note: maps.scm and sets.scm were previously skipped here
+        # because two implementations existed — an alist-backed portable version
+        # checked into dist/scheme/, and a vhash-backed Guile-specific version
+        # in heads/. The dist version was casualty of the dist/scheme/ untrack
+        # (commit 0a00d9166, "Stop tracking generated dist/ targets"), and CI
+        # only targets Guile, so we now copy the heads/ vhash version
+        # unconditionally. If portable Scheme support is needed later, restore
+        # the alist version from git history (0a00d9166^) and reintroduce the
+        # skip.
         SCHEME_LIB_SRC="$HYDRA_SCHEME_HEAD/src/main/scheme/hydra/lib"
         SCHEME_LIB_DST="$OUT_DIR/src/main/scheme/hydra/lib"
         echo ""
@@ -103,9 +110,6 @@ case "$PACKAGE" in
         for lib_file in "$SCHEME_LIB_SRC"/*.scm; do
             [ -e "$lib_file" ] || continue
             base=$(basename "$lib_file")
-            case "$base" in
-                maps.scm|sets.scm) continue ;;
-            esac
             cp "$lib_file" "$SCHEME_LIB_DST/$base"
         done
 
@@ -131,15 +135,22 @@ EOF
         cp "$HYDRA_SCHEME_HEAD/src/test/scheme/hydra/annotation_bindings.scm" \
            "$OUT_DIR/src/test/scheme/hydra/test/annotation_bindings.scm" 2>/dev/null || true
 
-        # Step 3d: Patch test_graph.scm — add imports, replace empty graph/
-        # context with a full graph built from primitives + schema types +
-        # annotation bindings.
+        # Step 3d: Patch test_graph.scm — replace the generated test_env
+        # references with a full graph built inline from primitives + schema
+        # types + annotation bindings. R7RS Scheme's lack of dynamic loading
+        # makes a clean handoff to a separate test_env.scm awkward (the inline
+        # build relies on annotation_bindings.scm, hydra_test_test_graph_terms,
+        # etc. — all in test_graph's scope). So Scheme keeps an inline patch
+        # while Haskell/Java/Python use the cleaner DSL→runtime handoff.
         SCHEME_TESTGRAPH="$OUT_DIR/src/test/scheme/hydra/test/test_graph.scm"
         if [ -f "$SCHEME_TESTGRAPH" ]; then
             echo "Step 3d: Patching test_graph.scm..."
-            sed -i.bak 's|(import (scheme base) (hydra core) (hydra lexical) (hydra lib maps) (hydra packaging) (hydra test test_terms) (hydra test test_types))|(import (scheme base) (hydra core) (hydra context) (hydra graph) (hydra lexical) (hydra lib libraries) (hydra lib maps) (hydra packaging) (hydra rewriting) (hydra scoping) (hydra json bootstrap) (hydra test test_terms) (hydra test test_types))|' "$SCHEME_TESTGRAPH"
-            sed -i.bak '/^(define hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$SCHEME_TESTGRAPH"
-            sed -i.bak '/^(define hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$SCHEME_TESTGRAPH"
+            # Replace the import block: drop the (hydra test test_env) entry
+            # the DSL now emits, and add the imports we need for the inline build.
+            sed -i.bak 's|(import (scheme base) (hydra core) (hydra lib maps) (hydra packaging) (hydra test test_env) (hydra test test_terms) (hydra test test_types))|(import (scheme base) (hydra core) (hydra context) (hydra graph) (hydra lexical) (hydra lib libraries) (hydra lib maps) (hydra packaging) (hydra rewriting) (hydra scoping) (hydra json bootstrap) (hydra test test_terms) (hydra test test_types))|' "$SCHEME_TESTGRAPH"
+            # Drop the generator's test_env-based defines; they'll be replaced.
+            sed -i.bak '/^(define hydra_test_test_graph_test_context hydra_test_test_env_test_context)/d' "$SCHEME_TESTGRAPH"
+            sed -i.bak '/^(define hydra_test_test_graph_test_graph (hydra_test_test_env_test_graph hydra_test_test_graph_test_types))/d' "$SCHEME_TESTGRAPH"
             # Remove trailing )) that closes begin and define-library; we'll re-add after appending.
             sed -i.bak '$ s/))$//' "$SCHEME_TESTGRAPH"
             rm -f "$SCHEME_TESTGRAPH.bak"
