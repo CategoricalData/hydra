@@ -235,8 +235,19 @@ echo ""
 
 DSL_FRESH_CHECK="$HYDRA_ROOT/bin/lib/check-dsl-fresh.py"
 DSL_DIGEST="$HYDRA_ROOT/dist/json/digest.main.json"
+PHASE1_FRESH_CHECK="$HYDRA_ROOT/bin/lib/check-phase1-fresh.py"
 
-if [ "$NO_TESTS" = true ] && [ -x "$DSL_FRESH_CHECK" ] \
+# Two-tier short-circuit. The phase1-fresh check covers everything that
+# affects Phase 1's outputs (DSL sources + heads/haskell runtime + test
+# infra + stack config), and is safe regardless of --no-tests because
+# the recorded hash was stamped only after a fully-green sync-haskell.sh
+# run. The narrower DSL-fresh check is the --no-tests fallback for when
+# only DSL hashes are recorded (e.g. fresh checkout, no prior sync).
+if [ -x "$PHASE1_FRESH_CHECK" ] \
+   && "$PHASE1_FRESH_CHECK" "$HYDRA_ROOT" >/dev/null 2>&1; then
+    banner1 "Phase 1: DSL → JSON + Haskell kernel (skipped — every input clean)"
+    echo ""
+elif [ "$NO_TESTS" = true ] && [ -x "$DSL_FRESH_CHECK" ] \
    && "$DSL_FRESH_CHECK" "$HYDRA_ROOT" "$DSL_DIGEST"; then
     banner1 "Phase 1: DSL → JSON + Haskell kernel (skipped — DSL clean)"
     echo ""

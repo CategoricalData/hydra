@@ -77,7 +77,22 @@ generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doH
     writePair (path, s) = do
         let fullPath = FP.combine basePath path
         SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
-        writeFile fullPath withNewline
+        -- Skip writes when content is byte-identical. Rewriting the file with
+        -- the same bytes bumps its mtime and triggers Stack (and every other
+        -- mtime-based incremental build tool) to invalidate downstream
+        -- artifacts, even though nothing actually changed. Hashing the file
+        -- and comparing would be stricter but reading + comparing is
+        -- adequate for generated source files under 1 MB.
+        exists <- SD.doesFileExist fullPath
+        skip <- if exists
+                  then do old <- readFile fullPath
+                          -- Force the whole string so the handle closes before
+                          -- the subsequent writeFile reopens the path.
+                          -- Comparing via == is lazy and can leave the handle
+                          -- open, causing resource-busy errors on rewrite.
+                          length old `seq` return (old == withNewline)
+                  else return False
+        CM.unless skip $ writeFile fullPath withNewline
       where
         cleaned = unlines $ map stripTrailingWhitespace $ lines s
         stripTrailingWhitespace line = reverse $ dropWhile (== ' ') $ reverse line
@@ -187,7 +202,9 @@ writeModuleJson schemaMap basePath mod = do
         exists <- SD.doesFileExist filePath
         skip <- if exists
                   then do old <- readFile filePath
-                          old `seq` return (old == newContent)
+                          -- Force the whole string so the handle closes
+                          -- before the subsequent writeFile reopens the path.
+                          length old `seq` return (old == newContent)
                   else return False
         CM.unless skip $ do
           writeFile filePath newContent
