@@ -1,6 +1,7 @@
 (define-library (hydra lib eithers)
   (import (scheme base)
-          (hydra lib equality))
+          (hydra lib equality)
+          (hydra lib sets))
   (export hydra_lib_eithers_bimap
           hydra_lib_eithers_bind
           hydra_lib_eithers_either
@@ -22,13 +23,6 @@
 
     (define (either-tag e) (car e))
     (define (either-val e) (cadr e))
-
-    (define (set-insert x s)
-      (cond
-        ((null? s) (list x))
-        ((= (generic-compare x (car s)) 0) s)
-        ((< (generic-compare x (car s)) 0) (cons x s))
-        (else (cons (car s) (set-insert x (cdr s))))))
 
     ;; bimap :: (a -> c) -> (b -> d) -> Either a b -> Either c d
     (define hydra_lib_eithers_bimap
@@ -128,15 +122,17 @@
                       (list 'right (list 'just (either-val result))))))))))
 
     ;; map_set :: (a -> Either e b) -> Set a -> Either e (Set b)
+    ;; Iterates the input set via the public sets API (vlist/vhash-aware) and
+    ;; rebuilds the result via from-list, so eithers stays representation-
+    ;; agnostic. Earlier versions had a private list-based set-insert that
+    ;; broke when the sets module switched to vlist-backed representation
+    ;; (see #290 Scheme runtime issue).
     (define hydra_lib_eithers_map_set
       (lambda (f)
         (lambda (s)
-          (let loop ((rest s) (acc '()))
+          (let loop ((rest (hydra_lib_sets_to_list s)) (acc '()))
             (if (null? rest)
-                (list 'right (let sort-loop ((remaining (reverse acc)) (result '()))
-                               (if (null? remaining)
-                                   result
-                                   (sort-loop (cdr remaining) (set-insert (car remaining) result)))))
+                (list 'right (hydra_lib_sets_from_list (reverse acc)))
                 (let ((result (f (car rest))))
                   (if (eq? (either-tag result) 'left)
                       result
