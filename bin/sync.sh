@@ -218,6 +218,28 @@ echo "  Union:   $LANG_UNION"
 echo ""
 
 # ────────────────────────────────────────────────────────────────────
+# Phase 0: Ensure essential Haskell executables are built.
+# ────────────────────────────────────────────────────────────────────
+# Every downstream phase invokes these via `stack exec`. The phase1-fresh
+# cache below can skip sync-haskell.sh entirely on warm runs, so we
+# cannot rely on sync-haskell.sh's own Step 1 build. On a fresh CI
+# checkout with .stack-work/ empty, skipping sync-haskell.sh means no
+# executables — and every subsequent `stack exec` fails.
+#
+# This stack build is a no-op on warm local trees (seconds to confirm)
+# and one-time cost on cold CI (amortized by actions/cache on ~/.stack).
+# Unconditional ensures correctness.
+
+(cd "$HYDRA_HASKELL_DIR" && stack build \
+    hydra:exe:update-json-main \
+    hydra:exe:update-json-test \
+    hydra:exe:update-json-manifest \
+    hydra:exe:verify-json-kernel \
+    hydra:exe:bootstrap-from-json \
+    hydra:exe:digest-check) || exit 1
+echo ""
+
+# ────────────────────────────────────────────────────────────────────
 # Phase 1: DSL → JSON + Haskell kernel / hydra-haskell regen + lexicon.
 # ────────────────────────────────────────────────────────────────────
 # This refreshes dist/json/** (the source of truth consumed by every
