@@ -82,7 +82,8 @@ stack build \
     hydra:exe:update-json-test \
     hydra:exe:update-json-manifest \
     hydra:exe:verify-json-kernel \
-    hydra:exe:bootstrap-from-json
+    hydra:exe:bootstrap-from-json \
+    hydra:exe:digest-check
 
 step 2 $TOTAL_STEPS "Exporting kernel + test modules to JSON"
 echo ""
