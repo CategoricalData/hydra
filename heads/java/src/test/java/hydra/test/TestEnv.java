@@ -1,33 +1,29 @@
 // Hand-written test environment for Java.
 // Provides a real graph with primitives and kernel bindings, mirroring Haskell's TestEnv.hs.
-// Referenced by the generated test data after post-generation patching.
+// Referenced directly by the generated TestGraph.java (no post-generation patching required).
 
 package hydra.test;
 
+import hydra.core.Name;
+import hydra.core.Type;
 import hydra.graph.Graph;
 import hydra.context.Context;
 import hydra.TestSuiteRunner;
 
-public class TestEnv {
-    // Public fields referenced by generated TestGraph.java
-    public static final Graph testGraph = buildTestGraph();
-    public static final Context testContext = buildTestContext();
+import java.util.Map;
 
+public class TestEnv {
     private static Graph cachedGraph;
     private static Context cachedContext;
 
-    private static Graph buildTestGraph() {
-        return TestSuiteRunner.buildTestGraph();
-    }
-
-    private static Context buildTestContext() {
-        return new Context(
-            hydra.util.ConsList.empty(),
-            hydra.util.ConsList.empty(),
-            hydra.util.PersistentMap.empty());
-    }
-
-    public static Graph testGraph() {
+    /**
+     * Returns the test graph. The testTypes argument is accepted for signature
+     * parity with the DSL declaration (Map Name Type -> Graph); the actual
+     * graph is built from the TestSuiteRunner and ignores the argument —
+     * primitives and kernel bindings are host-language specific and can't be
+     * expressed at the DSL level.
+     */
+    public static Graph testGraph(Map<Name, Type> testTypes) {
         if (cachedGraph == null) {
             cachedGraph = TestSuiteRunner.buildTestGraph();
         }

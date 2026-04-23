@@ -9,6 +9,7 @@ import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
+import qualified Hydra.Sources.Test.TestEnv as TestEnv
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Hydra.Dsl.Meta.Graph         as Graph
@@ -38,7 +39,7 @@ ns = Namespace "hydra.test.testGraph"
 
 module_ :: Module
 module_ = Module ns definitions
-    [TestTerms.ns, TestTypes.ns, Lexical.ns]
+    [TestTerms.ns, TestTypes.ns, TestEnv.ns, Lexical.ns]
     kernelTypesNamespaces $
     Just ("A module defining the graph used in the test suite.")
   where
@@ -61,11 +62,16 @@ testTerms = define "testTerms" $
 testNamespace :: TTermDefinition Namespace
 testNamespace = define "testNamespace" $ DPackaging.namespace $ Phantoms.string "testGraph"
 
+-- | The test graph. Emits a call to the hand-written
+-- Hydra.Test.TestEnv.testGraph (applied to testTypes).
 testGraph :: TTermDefinition Graph
-testGraph = define "testGraph" $ asTerm Lexical.emptyGraph
+testGraph = define "testGraph" $
+  TestEnv.testGraph Phantoms.@@ testTypes
 
+-- | The test context. Emits a reference to the hand-written
+-- Hydra.Test.TestEnv.testContext.
 testContext :: TTermDefinition Context
-testContext = define "testContext" $ asTerm Lexical.emptyContext
+testContext = define "testContext" $ asTerm TestEnv.testContext
 
 testTypes :: TTermDefinition (M.Map Name Type)
 testTypes = define "testTypes" $
