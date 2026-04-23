@@ -25,13 +25,12 @@ case "${1:-}" in
         echo ""
         echo "Files patched:"
         echo "  heads/haskell/package.yaml"
-        echo "  packages/hydra-ext/package.yaml"
-        echo "  packages/hydra-ext/demos/bootstrapping/resources/haskell/package.yaml"
+        echo "  demos/bootstrapping/resources/haskell/package.yaml"
         echo "  build.gradle"
-        echo "  packages/hydra-ext/demos/bootstrapping/resources/java/build.gradle"
+        echo "  demos/bootstrapping/resources/java/build.gradle"
         echo "  packages/hydra-scala/build.sbt"
-        echo "  packages/hydra-python/pyproject.toml"
-        echo "  packages/hydra-ext/demos/bootstrapping/resources/python/pyproject.toml"
+        echo "  heads/python/pyproject.toml"
+        echo "  demos/bootstrapping/resources/python/pyproject.toml"
         echo "  pixi.toml"
         echo "  README.md"
         exit 0
@@ -87,17 +86,14 @@ patch() {
 patch "$REPO_ROOT/heads/haskell/package.yaml" \
     "s/^version:.*$/version:      $VERSION/"
 
-patch "$REPO_ROOT/packages/hydra-ext/package.yaml" \
-    "s/^version:.*$/version:    $VERSION/"
-
-patch "$REPO_ROOT/packages/hydra-ext/demos/bootstrapping/resources/haskell/package.yaml" \
+patch "$REPO_ROOT/demos/bootstrapping/resources/haskell/package.yaml" \
     "s/^version:.*$/version:      $VERSION/"
 
 # Java (build.gradle): version = 'X.Y.Z'
 patch "$REPO_ROOT/build.gradle" \
     "s/version = '.*'/version = '$VERSION'/"
 
-patch "$REPO_ROOT/packages/hydra-ext/demos/bootstrapping/resources/java/build.gradle" \
+patch "$REPO_ROOT/demos/bootstrapping/resources/java/build.gradle" \
     "s/version = '.*'/version = '$VERSION'/"
 
 # Scala (build.sbt): version := "X.Y.Z"
@@ -105,10 +101,10 @@ patch "$REPO_ROOT/packages/hydra-scala/build.sbt" \
     "s/version := \".*\"/version := \"$VERSION\"/"
 
 # Python (pyproject.toml): version = "X.Y.Z"
-patch "$REPO_ROOT/packages/hydra-python/pyproject.toml" \
+patch "$REPO_ROOT/heads/python/pyproject.toml" \
     "s/^version = \".*\"/version = \"$VERSION\"/"
 
-patch "$REPO_ROOT/packages/hydra-ext/demos/bootstrapping/resources/python/pyproject.toml" \
+patch "$REPO_ROOT/demos/bootstrapping/resources/python/pyproject.toml" \
     "s/^version = \".*\"/version = \"$VERSION\"/"
 
 # Pixi (pixi.toml): version = "X.Y.Z"

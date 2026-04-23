@@ -411,13 +411,14 @@ give the user a brief status update approximately every 10 minutes.
 |---------|--------|
 | `/bootstrap()` | Run `bin/run-bootstrapping-demo.sh` with default hosts and targets. Capture full stdout+stderr to a temp file (do NOT pipe through grep/tail — the dashboard table will be lost). When done, show the script's dashboard output verbatim: the NxM results matrix, per-path timings, and total time. Do not reformat the table. |
 | `/bootstrap(lang1,lang2[,...])` | Run `bin/run-bootstrapping-demo.sh --hosts lang1,lang2[,...] --targets lang1,lang2[,...] --tag lang1_lang2[_...]`. Same output handling as `/bootstrap()`. |
+| `/lexicon()` | Run `bin/regenerate-lexicon.sh` to refresh `docs/hydra-lexicon.txt` from the current Haskell kernel. Run on demand and as part of the pre-release flow; not part of regular sync. |
 | `/maintenance()` | Run all maintenance checks per the [full maintenance pass](docs/recipes/maintenance.md#full-maintenance-pass) procedure. |
 | `/save()` | Save status to the plan document. Session may terminate. |
 | `/squash()` | Squash WIP commits, per "Commit workflow" section. |
 | `/sync()` | Run `bin/sync.sh --hosts all --targets all`. Full matrix; mirrors the bootstrapping demo's all × all. |
 | `/sync(lang1,lang2[,...])` | Run `bin/sync.sh --hosts <list> --targets <list>` with the same languages on both sides. |
 | `/sync-default()` | Run `bin/sync-default.sh` (the haskell,java,python triad). |
-| `/sync-haskell()` | Run `heads/haskell/bin/sync-haskell.sh` (Phase 1 only: DSL → JSON + Haskell kernel + stack test + lexicon). |
+| `/sync-haskell()` | Run `heads/haskell/bin/sync-haskell.sh` (Phase 1 only: DSL → JSON + Haskell kernel + stack test). The lexicon is no longer regenerated as part of sync; use `/lexicon()` to refresh it. |
 | `/sync-java()` | Run `bin/sync-java.sh` (--hosts java --targets java). |
 | `/sync-python()` | Run `bin/sync-python.sh`. |
 | `/sync-scala()` | Run `bin/sync-scala.sh`. |
@@ -459,11 +460,6 @@ These are hard-won lessons. Read the linked docs for full context.
    under `dist/` because a test imports it from there, put the canonical copy in `heads/`
    and copy it into `dist/` from a sync script. See [Checking for design
    violations](docs/recipes/maintenance.md#checking-for-design-violations).
-   One additional narrow exception: the sync-python patch that injects `testGraph`
-   into the generated test suite (via a `__getattr__` shim calling `test_env.py`)
-   solves a persistent test-bootstrapping problem, not a bad-generation problem.
-   It is intended to be removed once the underlying issue is solved; new patches
-   of this kind still require a clear justification and a tracking issue.
 
 3. **The bootstrap problem**: Extending core types creates a circular dependency.
    You must manually patch generated files, rebuild, then regenerate to overwrite patches.
