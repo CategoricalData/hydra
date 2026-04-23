@@ -18,9 +18,10 @@ import qualified Hydra.Strip as Strip
 
 import Control.Monad (forM, when)
 import System.Exit (exitFailure, exitSuccess)
-import System.Directory (doesFileExist)
-import System.FilePath ((</>))
+import System.Directory (doesFileExist, createDirectoryIfMissing)
+import System.FilePath ((</>), takeDirectory)
 import System.IO (hFlush, stdout)
+import qualified Hydra.Digest as Digest
 import qualified Data.Map as M
 import qualified Data.ByteString.Lazy as BS
 import qualified Data.Aeson as A
@@ -63,12 +64,64 @@ buildSchemaMap g = M.map extractType (graphSchemaTypes g)
     stripTypeAnnotationsTop (TypeAnnotated (AnnotatedType t _)) = stripTypeAnnotationsTop t
     stripTypeAnnotationsTop t = t
 
+-- | Path to the per-module verify cache. Content: a v1-style hash map
+-- mapping namespace → SHA-256 of the module's JSON file at the time of
+-- the last successful verification. On a later verify run, a module
+-- whose JSON hash matches its recorded entry is known-good and is
+-- skipped. Lives under .stack-work so it's gitignored and worktree-local.
+cachePath :: FilePath
+cachePath = "../../heads/haskell/.stack-work/verify-json-kernel-per-module-cache.json"
+
+-- | Load the per-module verify cache. Returns empty map on any error
+-- (missing file, malformed JSON, wrong schema). A cache miss just means
+-- we re-verify — safe in all cases.
+loadCache :: IO (M.Map String String)
+loadCache = do
+  exists <- doesFileExist cachePath
+  if not exists
+    then return M.empty
+    else do
+      bytes <- BS.readFile cachePath
+      case A.eitherDecode bytes of
+        Left _ -> return M.empty
+        Right v -> case v of
+          A.Object km -> case AKM.lookup (AK.fromString "hashes") km of
+            Just (A.Object hm) -> return $ M.fromList
+              [ (AK.toString k, T.unpack t)
+              | (k, A.String t) <- AKM.toList hm ]
+            _ -> return M.empty
+          _ -> return M.empty
+
+-- | Write the per-module verify cache. Output is deterministic (sorted
+-- keys). Failures in writing are non-fatal: a missed cache is just a
+-- re-verify next run.
+saveCache :: M.Map String String -> IO ()
+saveCache hashes = do
+  createDirectoryIfMissing True (takeDirectory cachePath)
+  let lns =
+        [ "{"
+        , "  \"hashes\": {"
+        ] ++ fmap entry (zip [0..] (M.toAscList hashes)) ++
+        [ "  }"
+        , "}"
+        ]
+      entry (i, (k, v)) =
+        "    \"" ++ k ++ "\": \"" ++ v ++ "\""
+        ++ (if i == M.size hashes - 1 then "" else ",")
+  writeFile cachePath (unlines lns)
+
 main :: IO ()
 main = do
   flushPut "=== Verify JSON Kernel ==="
   flushPut ""
 
   let basePath = "../../dist/json/hydra-kernel/src/main/json"
+
+  -- Load the per-module cache up front. On a no-op sync, every module's
+  -- JSON hash matches its recorded entry and the verify loop short-
+  -- circuits each module in microseconds (just a hash + map lookup).
+  recorded <- loadCache
+  flushPut $ "Per-module cache: " ++ show (M.size recorded) ++ " recorded entries."
 
   flushPut "Building graph from kernel modules..."
   -- Build the graph from all kernel modules - this provides the type info
@@ -87,67 +140,78 @@ main = do
   flushPut $ "Verifying " ++ show numModules ++ " kernel modules..."
   putStrLn ""
 
-  -- For each module, read JSON file, decode to Term, then to Module, and compare
+  -- For each module, read JSON file, decode to Term, then to Module, and compare.
+  -- Returns (ok, ns, newHashOrEmpty) — newHash is the current file's hash if
+  -- verification succeeded (so we can record it), empty string on failure or
+  -- file-not-found.
   results <- forM kernelModules $ \origMod -> do
     let ns = moduleNamespace origMod
         nsStr = unNamespace ns
         filePath = basePath </> namespaceToPath ns ++ ".json"
 
-    flushPut $ "  Processing: " ++ nsStr
-
     exists <- doesFileExist filePath
     if not exists
       then do
+        flushPut $ "  Processing: " ++ nsStr
         flushPut $ "  ✗ " ++ nsStr ++ " (file not found)"
-        return (False, nsStr ++ ": file not found")
+        return (False, nsStr ++ ": file not found", "")
       else do
-        -- Parse JSON using Aeson (fast!)
-        parseResult <- parseJsonFile filePath
-        case parseResult of
-          Left err -> do
-            flushPut $ "  ✗ " ++ nsStr ++ " (JSON parse error)"
-            flushPut $ "    " ++ err
-            return (False, nsStr ++ ": JSON parse error")
-          Right jsonVal -> do
-            flushPut $ "    JSON parsed successfully"
-
-            -- Decode JSON to Term using type-directed decoder with Module type
-            -- The schemaMap is used to resolve type variables
-            case JsonDecode.fromJson schemaMap _Module modType jsonVal of
+        currentHash <- Digest.hashFile filePath
+        case M.lookup nsStr recorded of
+          Just rec | rec == currentHash -> do
+            -- Silent cache hit — verification is deterministic, so a
+            -- matching hash means the verdict is still "pass".
+            return (True, nsStr, currentHash)
+          _ -> do
+            flushPut $ "  Processing: " ++ nsStr
+            parseResult <- parseJsonFile filePath
+            case parseResult of
               Left err -> do
-                flushPut $ "  ✗ " ++ nsStr ++ " (JSON decode error)"
+                flushPut $ "  ✗ " ++ nsStr ++ " (JSON parse error)"
                 flushPut $ "    " ++ err
-                return (False, nsStr ++ ": " ++ err)
-              Right term -> do
-                flushPut $ "    JSON decoded to Term"
-
-                -- Decode Term to Module
-                case DecodePackaging.module_ graph term of
-                  Left (DecodingError err) -> do
-                    flushPut $ "  ✗ " ++ nsStr ++ " (module decode error)"
+                return (False, nsStr ++ ": JSON parse error", "")
+              Right jsonVal -> do
+                flushPut $ "    JSON parsed successfully"
+                case JsonDecode.fromJson schemaMap _Module modType jsonVal of
+                  Left err -> do
+                    flushPut $ "  ✗ " ++ nsStr ++ " (JSON decode error)"
                     flushPut $ "    " ++ err
-                    return (False, nsStr ++ ": " ++ err)
-                  Right decodedMod ->
-                    let compareMod = if isTypeModule origMod then decodedMod else stripTypeAnnotations decodedMod
-                        compareOrig = if isTypeModule origMod then origMod else stripTypeAnnotations origMod
-                    in if compareMod == compareOrig
-                      then do
-                        flushPut $ "  ✓ " ++ nsStr
-                        return (True, nsStr)
-                      else do
-                        flushPut $ "  ✗ " ++ nsStr ++ " (content mismatch)"
-                        let diff = findDifference compareOrig compareMod
-                        flushPut $ "    " ++ diff
-                        return (False, nsStr ++ ": " ++ diff)
+                    return (False, nsStr ++ ": " ++ err, "")
+                  Right term -> do
+                    flushPut $ "    JSON decoded to Term"
+                    case DecodePackaging.module_ graph term of
+                      Left (DecodingError err) -> do
+                        flushPut $ "  ✗ " ++ nsStr ++ " (module decode error)"
+                        flushPut $ "    " ++ err
+                        return (False, nsStr ++ ": " ++ err, "")
+                      Right decodedMod ->
+                        let compareMod = if isTypeModule origMod then decodedMod else stripTypeAnnotations decodedMod
+                            compareOrig = if isTypeModule origMod then origMod else stripTypeAnnotations origMod
+                        in if compareMod == compareOrig
+                          then do
+                            flushPut $ "  ✓ " ++ nsStr
+                            return (True, nsStr, currentHash)
+                          else do
+                            flushPut $ "  ✗ " ++ nsStr ++ " (content mismatch)"
+                            let diff = findDifference compareOrig compareMod
+                            flushPut $ "    " ++ diff
+                            return (False, nsStr ++ ": " ++ diff, "")
 
-  let failures = filter (not . fst) results
-      successes = filter fst results
+  let failures = [(ok, msg) | (ok, msg, _) <- results, not ok]
+      successes = [(ok, msg) | (ok, msg, _) <- results, ok]
+      newHashes = M.fromList [(ns, h) | (True, ns, h) <- results, not (null h)]
+      cacheHits = M.size (M.intersectionWith (\a b -> if a == b then () else ()) recorded newHashes)
+
+  when (cacheHits > 0) $
+    flushPut $ "\nPer-module cache: " ++ show cacheHits
+        ++ " hits / " ++ show (length kernelModules) ++ " modules (skipped decode+compare)."
 
   putStrLn ""
   if null failures
     then do
       putStrLn "=== SUCCESS ==="
       putStrLn $ "All " ++ show (length successes) ++ " modules verified successfully!"
+      saveCache newHashes
       exitSuccess
     else do
       putStrLn "=== FAILED ==="
