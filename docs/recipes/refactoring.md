@@ -564,10 +564,11 @@ However, it's useful to understand the individual stages, especially when debugg
 
 ```
 Phase 1: heads/haskell/bin/sync-haskell.sh
-    → DSL → JSON via update-json-{kernel,main,test,manifest}
-    → JSON → Haskell for hydra-kernel + hydra-haskell
+    → DSL → JSON via update-json-{main,test,manifest}
+    → verify-json-kernel (round-trip check)
+    → JSON → Haskell for hydra-kernel + hydra-haskell via bootstrap-from-json
     → stack test (unless --no-tests)
-    → regenerate lexicon
+    (Lexicon regen was retired from sync; run bin/regenerate-lexicon.sh on demand.)
 Phase 2: assemble-distribution.sh per coder package (Haskell from JSON)
     → one call per language in (hosts ∪ targets) \ {haskell}
 Phase 3: hydra-kernel into each language in (hosts ∪ targets) \ {haskell}
