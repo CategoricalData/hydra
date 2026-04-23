@@ -106,18 +106,9 @@ echo "Step 2: Generating test Java modules..."
     --output "$DIST_ROOT"
 
 # Step 3: Package-specific post-processing.
+# (TestGraph.java post-generation patch eliminated: the DSL now emits
+# TestEnv refs directly. See task #25 in feature_290_packaging plan.)
 case "$PACKAGE" in
-    hydra-kernel)
-        # Patch TestGraph.java: replace empty graph/context with TestEnv versions.
-        TESTGRAPH="$OUT_DIR/src/test/java/hydra/test/TestGraph.java"
-        if [ -f "$TESTGRAPH" ]; then
-            echo ""
-            echo "Step 3: Patching TestGraph.java..."
-            sed -i.bak 's/return hydra.Lexical.emptyGraph();/return hydra.test.TestEnv.testGraph();/' "$TESTGRAPH"
-            sed -i.bak 's/return hydra.Lexical.emptyContext();/return hydra.test.TestEnv.testContext();/' "$TESTGRAPH"
-            rm -f "$TESTGRAPH.bak"
-        fi
-        ;;
     hydra-lisp)
         # Patch Lisp Coder.java: fix PartialVisitor type inference in
         # encodeTermDefinition.

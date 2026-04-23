@@ -293,16 +293,29 @@
     {
       "term": {
         "name": "hydra.test.testGraph.testGraph",
-        "term": {"variable": "hydra.lexical.emptyGraph"},
+        "term": {
+          "application": {
+            "argument": {"variable": "hydra.test.testGraph.testTypes"},
+            "function": {
+              "typeApplication": {
+                "body": {"variable": "hydra.test.testEnv.testGraph"},
+                "type": {
+                  "map": {
+                    "keys": {"variable": "hydra.core.Name"},
+                    "values": {"variable": "hydra.core.Type"}}}}}}},
         "type": {"type": {"variable": "hydra.graph.Graph"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testGraph.testContext",
-        "term": {"variable": "hydra.lexical.emptyContext"},
+        "term": {"variable": "hydra.test.testEnv.testContext"},
         "type": {"type": {"variable": "hydra.context.Context"}, "variables": []}}}],
   "description": "A module defining the graph used in the test suite.",
   "namespace": "hydra.test.testGraph",
-  "termDependencies": ["hydra.test.testTerms", "hydra.test.testTypes", "hydra.lexical"],
+  "termDependencies": [
+    "hydra.test.testTerms",
+    "hydra.test.testTypes",
+    "hydra.test.testEnv",
+    "hydra.lexical"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",

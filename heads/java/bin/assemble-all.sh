@@ -63,16 +63,9 @@ stack exec bootstrap-from-json -- \
 
 cd "$HYDRA_ROOT_DIR"
 
-# Per-package post-processing: hydra-kernel TestGraph, hydra-lisp Coder.
-TESTGRAPH="$DIST_ROOT/hydra-kernel/src/test/java/hydra/test/TestGraph.java"
-if [ -f "$TESTGRAPH" ]; then
-    echo ""
-    echo "Step 3a: Patching hydra-kernel TestGraph.java..."
-    sed -i.bak 's/return hydra.Lexical.emptyGraph();/return hydra.test.TestEnv.testGraph();/' "$TESTGRAPH"
-    sed -i.bak 's/return hydra.Lexical.emptyContext();/return hydra.test.TestEnv.testContext();/' "$TESTGRAPH"
-    rm -f "$TESTGRAPH.bak"
-fi
-
+# Per-package post-processing: hydra-lisp Coder.
+# (TestGraph.java post-generation patch has been eliminated: the DSL now
+# emits TestEnv refs directly. See task #25 in feature_290_packaging plan.)
 LISPCODER="$DIST_ROOT/hydra-lisp/src/main/java/hydra/lisp/Coder.java"
 if [ -f "$LISPCODER" ]; then
     echo "Step 3b: Patching hydra-lisp Coder.java (PartialVisitor type inference)..."
