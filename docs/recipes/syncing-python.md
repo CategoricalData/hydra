@@ -58,7 +58,7 @@ To synchronize only Python (host == target == python):
 
 The `sync-python.sh` wrapper invokes
 `bin/sync.sh --hosts python --targets python`, which:
-1. Refreshes JSON sources via Phase 1 (DSL → JSON, stack test, lexicon)
+1. Refreshes JSON sources via Phase 1 (DSL → JSON, stack test)
 2. Generates the Python coder in Haskell, then kernel + the Python coder
    in Python
 3. Runs Python tests to verify (unless `--no-tests`)
