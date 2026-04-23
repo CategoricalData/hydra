@@ -53,8 +53,11 @@ stack exec bootstrap-from-json -- \
 
 cd "$HYDRA_ROOT_DIR"
 
-# Per-package post-processing for hydra-kernel: copy test_env.py and patch
-# test_graph.py with a lazy __getattr__ shim.
+# Per-package post-processing for hydra-kernel: copy test_env.py.
+# (test_graph.py post-generation patch eliminated: the DSL now emits
+# test_graph = lambda: test_env.test_graph(test_types()) directly, via
+# the FQN stubs in Hydra.Sources.Test.TestEnv. See task #25 in the
+# feature_290_packaging plan.)
 TEST_ENV_SRC="$HEAD_DIR/src/test/python/hydra/test/test_env.py"
 TEST_ENV_DST="$DIST_ROOT/hydra-kernel/src/test/python/hydra/test/test_env.py"
 if [ -f "$TEST_ENV_SRC" ]; then
@@ -62,33 +65,6 @@ if [ -f "$TEST_ENV_SRC" ]; then
     echo "Step 3a: Copying test_env.py from heads/python/..."
     mkdir -p "$(dirname "$TEST_ENV_DST")"
     cp "$TEST_ENV_SRC" "$TEST_ENV_DST"
-fi
-
-TESTGRAPH="$DIST_ROOT/hydra-kernel/src/test/python/hydra/test/test_graph.py"
-if [ -f "$TESTGRAPH" ]; then
-    echo "Step 3b: Patching test_graph.py..."
-    sed -i.bak '/^test_context = /d' "$TESTGRAPH"
-    sed -i.bak '/^test_graph = /d' "$TESTGRAPH"
-    rm -f "$TESTGRAPH.bak"
-    cat >> "$TESTGRAPH" << 'PYEOF'
-
-_test_graph_cache = None
-_test_context_cache = None
-
-def __getattr__(name):
-    global _test_graph_cache, _test_context_cache
-    if name == "test_graph":
-        if _test_graph_cache is None:
-            import hydra.test.test_env as _test_env
-            _test_graph_cache = _test_env.test_graph()
-        return _test_graph_cache
-    elif name == "test_context":
-        if _test_context_cache is None:
-            import hydra.test.test_env as _test_env
-            _test_context_cache = _test_env.test_context()
-        return _test_context_cache
-    raise AttributeError(f"module 'hydra.test.test_graph' has no attribute {name!r}")
-PYEOF
 fi
 
 # Refresh per-target digests for fresh-check cache.

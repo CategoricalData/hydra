@@ -44,6 +44,7 @@ import Hydra.Scala.Language (scalaLanguage)
 import Hydra.Lisp.Language (lispLanguage)
 import qualified Hydra.Lisp.Syntax as LispSyntax
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
+import Hydra.Sources.Test.All (testSkipEmitNamespaces)
 
 import Control.Exception (catch, IOException)
 import Control.Monad (when, forM)
@@ -554,7 +555,13 @@ main = do
       -- Layer 1 per-package scoping for tests: if --package <pkg> is set,
       -- narrow testMods to modules owned by that package. The universe is
       -- unchanged so cross-package refs still resolve.
-      let testMods = case optPackage opts of
+      --
+      -- Additionally, filter out skip-emit namespaces (e.g. hydra.test.testEnv).
+      -- These are type-only stubs whose hand-written per-language
+      -- counterparts are the source of truth; emitting them would
+      -- overwrite hand-written code.
+      let notSkipEmit m = moduleNamespace m `notElem` testSkipEmitNamespaces
+      let testMods = Prelude.filter notSkipEmit $ case optPackage opts of
             Nothing  -> testModsAll
             Just pkg ->
               Prelude.filter

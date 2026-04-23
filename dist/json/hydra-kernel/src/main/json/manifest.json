@@ -169,6 +169,7 @@
     "hydra.dsls"],
   "package": "hydra-kernel",
   "testModules": [
+    "hydra.test.testEnv",
     "hydra.test.testGraph",
     "hydra.test.testTerms",
     "hydra.test.testTypes",
