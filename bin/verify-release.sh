@@ -5,12 +5,16 @@ set -euo pipefail
 #
 # Checks that all implementations are consistent and passing:
 #   1. Versions are synchronized across all implementation configs
-#   2. Haskell tests pass (hydra-haskell and hydra-ext)
+#   2. Haskell tests pass (the hydra-test Stack target covers hydra-kernel
+#      plus the hydra-ext content, since hydra-ext is a Hydra package
+#      shipped as part of the hydra Stack library after #290)
 #   3. Java tests pass
 #   4. Python tests pass
 #   5. Scala tests pass
 #   6. Lisp tests pass (Clojure, Common Lisp, Emacs Lisp, Scheme)
 #   7. JSON kernel is up to date and round-trips correctly
+#   8. Lexicon is up to date (docs/hydra-lexicon.txt matches the
+#      current Haskell kernel; release must not ship a stale lexicon)
 #
 # Prerequisites:
 #   - Stack, Java 11+, Python 3.12+, uv, sbt, Clojure, SBCL, Emacs, and Guile are installed
@@ -37,13 +41,13 @@ for arg in "$@"; do
             echo ""
             echo "Checks performed:"
             echo "  1. Version synchronization across all implementations"
-            echo "  2. Haskell tests (hydra-haskell)"
-            echo "  3. Haskell tests (hydra-ext)"
-            echo "  4. Java build and tests"
-            echo "  5. Python tests and code quality"
-            echo "  6. Scala build and tests"
-            echo "  7. Lisp tests (Clojure, Common Lisp, Emacs Lisp, Scheme)"
-            echo "  8. JSON kernel verification"
+            echo "  2. Haskell tests"
+            echo "  3. Java build and tests"
+            echo "  4. Python tests and code quality"
+            echo "  5. Scala build and tests"
+            echo "  6. Lisp tests (Clojure, Common Lisp, Emacs Lisp, Scheme)"
+            echo "  7. JSON kernel verification"
+            echo "  8. Lexicon freshness"
             echo ""
             echo "Logs are written to verify-logs/."
             exit 0
@@ -73,23 +77,23 @@ echo ""
 
 CANONICAL_VERSION=$(tr -d '[:space:]' < VERSION 2>/dev/null || echo "")
 HASKELL_VERSION=$(grep '^version:' heads/haskell/package.yaml | awk '{print $2}')
-EXT_VERSION=$(grep '^version:' packages/hydra-ext/package.yaml | awk '{print $2}')
-BOOT_HASKELL_VERSION=$(grep '^version:' packages/hydra-ext/demos/bootstrapping/resources/haskell/package.yaml | awk '{print $2}')
+BOOT_HASKELL_VERSION=$(grep '^version:' demos/bootstrapping/resources/haskell/package.yaml | awk '{print $2}')
 JAVA_VERSION=$(grep "version = " build.gradle | head -1 | sed "s/.*version = '\\(.*\\)'/\\1/")
-BOOT_JAVA_VERSION=$(grep "version = " packages/hydra-ext/demos/bootstrapping/resources/java/build.gradle | head -1 | sed "s/.*version = '\\(.*\\)'/\\1/")
-PYTHON_VERSION=$(grep '^version' packages/hydra-python/pyproject.toml | sed 's/.*"\(.*\)"/\1/')
-BOOT_PYTHON_VERSION=$(grep '^version' packages/hydra-ext/demos/bootstrapping/resources/python/pyproject.toml | sed 's/.*"\(.*\)"/\1/')
+BOOT_JAVA_VERSION=$(grep "version = " demos/bootstrapping/resources/java/build.gradle | head -1 | sed "s/.*version = '\\(.*\\)'/\\1/")
+PYTHON_VERSION=$(grep '^version' heads/python/pyproject.toml | sed 's/.*"\(.*\)"/\1/')
+BOOT_PYTHON_VERSION=$(grep '^version' demos/bootstrapping/resources/python/pyproject.toml | sed 's/.*"\(.*\)"/\1/')
 SCALA_VERSION=$(grep 'version :=' packages/hydra-scala/build.sbt | sed 's/.*"\(.*\)".*/\1/' 2>/dev/null || echo "")
+PIXI_VERSION=$(grep '^version' pixi.toml | sed 's/.*"\(.*\)"/\1/')
 
-echo "  VERSION:                     $CANONICAL_VERSION"
-echo "  heads/haskell/package.yaml:  $HASKELL_VERSION"
-echo "  packages/hydra-ext/package.yaml:      $EXT_VERSION"
-echo "  bootstrapping/haskell:       $BOOT_HASKELL_VERSION"
-echo "  build.gradle:                $JAVA_VERSION"
-echo "  bootstrapping/java:          $BOOT_JAVA_VERSION"
-echo "  packages/hydra-python/pyproject.toml: $PYTHON_VERSION"
-echo "  bootstrapping/python:        $BOOT_PYTHON_VERSION"
+echo "  VERSION:                              $CANONICAL_VERSION"
+echo "  heads/haskell/package.yaml:           $HASKELL_VERSION"
+echo "  demos/bootstrapping/.../haskell:      $BOOT_HASKELL_VERSION"
+echo "  build.gradle:                         $JAVA_VERSION"
+echo "  demos/bootstrapping/.../java:         $BOOT_JAVA_VERSION"
+echo "  heads/python/pyproject.toml:          $PYTHON_VERSION"
+echo "  demos/bootstrapping/.../python:       $BOOT_PYTHON_VERSION"
 echo "  packages/hydra-scala/build.sbt:       $SCALA_VERSION"
+echo "  pixi.toml:                            $PIXI_VERSION"
 echo ""
 
 EXPECTED="$CANONICAL_VERSION"
@@ -101,13 +105,13 @@ fi
 VERSION_MISMATCH=false
 for pair in \
     "heads/haskell/package.yaml:$HASKELL_VERSION" \
-    "packages/hydra-ext/package.yaml:$EXT_VERSION" \
-    "bootstrapping/haskell:$BOOT_HASKELL_VERSION" \
+    "demos/bootstrapping/.../haskell:$BOOT_HASKELL_VERSION" \
     "build.gradle:$JAVA_VERSION" \
-    "bootstrapping/java:$BOOT_JAVA_VERSION" \
-    "packages/hydra-python/pyproject.toml:$PYTHON_VERSION" \
-    "bootstrapping/python:$BOOT_PYTHON_VERSION" \
-    "packages/hydra-scala/build.sbt:$SCALA_VERSION"; do
+    "demos/bootstrapping/.../java:$BOOT_JAVA_VERSION" \
+    "heads/python/pyproject.toml:$PYTHON_VERSION" \
+    "demos/bootstrapping/.../python:$BOOT_PYTHON_VERSION" \
+    "packages/hydra-scala/build.sbt:$SCALA_VERSION" \
+    "pixi.toml:$PIXI_VERSION"; do
     file="${pair%%:*}"
     ver="${pair##*:}"
     if [ "$ver" != "$EXPECTED" ]; then
@@ -123,36 +127,26 @@ else
     echo "  OK: All versions are $EXPECTED"
 fi
 
-# --- Step 2: Haskell tests (hydra-haskell) ---
-step 2 $TOTAL_STEPS "Running Haskell tests (hydra-haskell)"
+# --- Step 2: Haskell tests ---
+# The hydra-test Stack target covers hydra-kernel and hydra-ext content.
+# Post-#290, hydra-ext is a frozen Hydra package whose generated Haskell
+# is part of the hydra Stack library; there is no separate hydra-ext
+# Stack package to test.
+step 2 $TOTAL_STEPS "Running Haskell tests"
 echo ""
 
 cd "$HYDRA_ROOT/heads/haskell"
 if stack test 2>&1 | tee "$LOG_DIR/haskell.log"; then
     echo ""
-    echo "  OK: hydra-haskell tests passed"
+    echo "  OK: Haskell tests passed"
 else
     echo ""
-    echo "  FAIL: hydra-haskell tests failed (see verify-logs/haskell.log)"
+    echo "  FAIL: Haskell tests failed (see verify-logs/haskell.log)"
     ERRORS=$((ERRORS + 1))
 fi
 
-# --- Step 3: Haskell tests (hydra-ext) ---
-step 3 $TOTAL_STEPS "Running Haskell tests (hydra-ext)"
-echo ""
-
-cd "$HYDRA_ROOT/packages/hydra-ext"
-if stack test 2>&1 | tee "$LOG_DIR/ext.log"; then
-    echo ""
-    echo "  OK: hydra-ext tests passed"
-else
-    echo ""
-    echo "  FAIL: hydra-ext tests failed (see verify-logs/ext.log)"
-    ERRORS=$((ERRORS + 1))
-fi
-
-# --- Step 4: Java build and tests ---
-step 4 $TOTAL_STEPS "Running Java build and tests"
+# --- Step 3: Java build and tests ---
+step 3 $TOTAL_STEPS "Running Java build and tests"
 echo ""
 
 cd "$HYDRA_ROOT"
@@ -165,11 +159,11 @@ else
     ERRORS=$((ERRORS + 1))
 fi
 
-# --- Step 5: Python tests and code quality ---
-step 5 $TOTAL_STEPS "Running Python tests and code quality checks"
+# --- Step 4: Python tests and code quality ---
+step 4 $TOTAL_STEPS "Running Python tests and code quality checks"
 echo ""
 
-cd "$HYDRA_ROOT/packages/hydra-python"
+cd "$HYDRA_ROOT/heads/python"
 
 if uv run pytest 2>&1 | tee "$LOG_DIR/python.log"; then
     echo ""
@@ -194,8 +188,8 @@ else
     WARNINGS=$((WARNINGS + 1))
 fi
 
-# --- Step 6: Scala build and tests ---
-step 6 $TOTAL_STEPS "Running Scala build and tests"
+# --- Step 5: Scala build and tests ---
+step 5 $TOTAL_STEPS "Running Scala build and tests"
 echo ""
 
 cd "$HYDRA_ROOT/packages/hydra-scala"
@@ -208,32 +202,28 @@ else
     ERRORS=$((ERRORS + 1))
 fi
 
-# --- Step 7: Lisp tests ---
-step 7 $TOTAL_STEPS "Running Lisp tests"
+# --- Step 6: Lisp tests ---
+# Each dialect runs through the unified packages/hydra-lisp/bin/run-tests.sh
+# runner. Per-dialect run-tests.sh scripts no longer exist post-#290.
+step 6 $TOTAL_STEPS "Running Lisp tests"
 echo ""
 
-LISP_DIR="$HYDRA_ROOT/packages/hydra-lisp"
+cd "$HYDRA_ROOT"
+LISP_RUNNER="$HYDRA_ROOT/packages/hydra-lisp/bin/run-tests.sh"
 
-for dialect_dir in hydra-clojure hydra-common-lisp hydra-emacs-lisp hydra-scheme; do
-    dialect_name="${dialect_dir#hydra-}"
-    DIR="$LISP_DIR/$dialect_dir"
-    if [ -f "$DIR/run-tests.sh" ]; then
-        echo "  Testing $dialect_name..."
-        if bash "$DIR/run-tests.sh" 2>&1 | tee "$LOG_DIR/${dialect_name}.log" | tail -3; then
-            echo "  OK: $dialect_name tests passed"
-        else
-            echo "  FAIL: $dialect_name tests failed (see verify-logs/${dialect_name}.log)"
-            ERRORS=$((ERRORS + 1))
-        fi
-        echo ""
+for dialect in clojure common-lisp emacs-lisp scheme; do
+    echo "  Testing $dialect..."
+    if bash "$LISP_RUNNER" "$dialect" 2>&1 | tee "$LOG_DIR/${dialect}.log" | tail -3; then
+        echo "  OK: $dialect tests passed"
     else
-        echo "  WARNING: No run-tests.sh found for $dialect_name"
-        WARNINGS=$((WARNINGS + 1))
+        echo "  FAIL: $dialect tests failed (see verify-logs/${dialect}.log)"
+        ERRORS=$((ERRORS + 1))
     fi
+    echo ""
 done
 
-# --- Step 8: JSON kernel verification ---
-step 8 $TOTAL_STEPS "Verifying JSON kernel"
+# --- Step 7: JSON kernel verification ---
+step 7 $TOTAL_STEPS "Verifying JSON kernel"
 echo ""
 
 cd "$HYDRA_ROOT/heads/haskell"
@@ -245,6 +235,33 @@ else
     echo "  FAIL: JSON kernel verification failed"
     ERRORS=$((ERRORS + 1))
 fi
+
+# --- Step 8: Lexicon freshness ---
+step 8 $TOTAL_STEPS "Verifying lexicon freshness"
+echo ""
+
+cd "$HYDRA_ROOT"
+LEXICON_PATH="$HYDRA_ROOT/docs/hydra-lexicon.txt"
+LEXICON_BACKUP=$(mktemp)
+if [ -f "$LEXICON_PATH" ]; then
+    cp "$LEXICON_PATH" "$LEXICON_BACKUP"
+else
+    : > "$LEXICON_BACKUP"
+fi
+
+if bash "$HYDRA_ROOT/bin/regenerate-lexicon.sh" 2>&1 | tee "$LOG_DIR/lexicon.log"; then
+    if diff -q "$LEXICON_BACKUP" "$LEXICON_PATH" >/dev/null 2>&1; then
+        echo "  OK: docs/hydra-lexicon.txt is up to date"
+    else
+        echo "  FAIL: docs/hydra-lexicon.txt is stale (regeneration produced a diff)"
+        echo "        Run bin/regenerate-lexicon.sh and commit the result before releasing."
+        ERRORS=$((ERRORS + 1))
+    fi
+else
+    echo "  FAIL: bin/regenerate-lexicon.sh exited non-zero (see verify-logs/lexicon.log)"
+    ERRORS=$((ERRORS + 1))
+fi
+rm -f "$LEXICON_BACKUP"
 
 # --- Summary ---
 echo ""
