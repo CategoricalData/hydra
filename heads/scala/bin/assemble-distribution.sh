@@ -93,17 +93,10 @@ echo "Step 2: Generating test Scala modules..."
     --output "$DIST_ROOT"
 
 # Step 3: Package-specific post-processing.
+# (testGraph.scala emptyGraph-to-buildTestGraph patch eliminated: the DSL now
+# emits `hydra.test.testEnv.testGraph(testTypes)` directly, and the hand-written
+# heads/scala testEnv.scala resolves the call to TestSuiteRunner.buildTestGraph.)
 case "$PACKAGE" in
-    hydra-kernel)
-        # Patch testGraph.scala: replace emptyGraph with populated test graph.
-        TESTGRAPH="$OUT_DIR/src/test/scala/hydra/test/testGraph.scala"
-        if [ -f "$TESTGRAPH" ]; then
-            echo ""
-            echo "Step 3: Patching testGraph.scala..."
-            sed -i.bak 's/hydra\.lexical\.emptyGraph/hydra.TestSuiteRunner.buildTestGraph()/g' "$TESTGRAPH"
-            rm -f "$TESTGRAPH.bak"
-        fi
-        ;;
     *)
         ;;
 esac
