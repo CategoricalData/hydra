@@ -218,8 +218,8 @@ A particularly insidious class of staleness has nothing to do with orphan files 
 the generated content itself is wrong because the executables that produced it were
 linked against an out-of-date kernel.
 
-The Haskell sync executables (`update-haskell-kernel`, `update-json-kernel`, `update-json-test`,
-`bootstrap-from-json`, etc.) are compiled by Stack and cached under
+The Haskell sync executables (`update-json-main`, `update-json-test`, `update-json-manifest`,
+`bootstrap-from-json`, `verify-json-kernel`, etc.) are compiled by Stack and cached under
 `heads/haskell/.stack-work/install/`.
 Each binary has constants, type names, namespace strings, and serialized term fragments
 **baked in at link time** from whatever the kernel looked like when the binary was built.
