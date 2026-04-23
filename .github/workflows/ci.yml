@@ -8,21 +8,26 @@ on:
 
 # CI model, per feature_290_packaging:
 #
-#   * The Haskell job is the "JSON build". It regenerates dist/json/ from
-#     DSL sources, regenerates dist/haskell/ from the JSON, runs stack
-#     test, and fails if the regenerated tree differs from what's
-#     committed. This is the only job that exercises DSL -> JSON
-#     inference and Haskell code generation.
+#   * The Haskell job is the "JSON build". It regenerates dist/json/
+#     from DSL sources, regenerates dist/<lang>/ for every target from
+#     the JSON, runs stack test, and fails if the regenerated dist/json/
+#     or dist/haskell/ differ from what's committed (those are the two
+#     trees tracked in git; other dist/<lang>/ trees are gitignored and
+#     only built for downstream consumption).
 #
-#   * Every other target job assumes dist/json/ is canonical (committed
-#     in the repo). They run the target's assemble-distribution plus
-#     test-distribution scripts against the committed JSON. They do not
-#     run Phase 1 (DSL -> JSON) themselves; that's the Haskell job's
-#     responsibility.
+#   * The regenerated dist/<lang>/ trees for java, python, scala, and
+#     each Lisp dialect are uploaded as build artifacts so the target
+#     jobs below can run tests against them without needing to install
+#     Stack + GHC or rebuild the Hydra library themselves.
+#
+#   * Every other target job downloads its dist artifact and runs its
+#     native test suite. They do not run Phase 1 (DSL -> JSON) or
+#     Phase 2 (JSON -> target source) themselves; that's the Haskell
+#     job's responsibility.
 #
 # This matches integration's de-facto CI topology: one expensive job
-# producing JSON + checking consistency; cheap jobs consuming JSON and
-# running target-language tests.
+# producing JSON + all target source trees; cheap jobs consuming those
+# and running target-language tests.
 
 jobs:
   haskell:
@@ -39,23 +44,77 @@ jobs:
           path: ~/.stack
           key: stack-${{ hashFiles('heads/haskell/stack.yaml', 'heads/haskell/package.yaml') }}
           restore-keys: stack-
-      # Regenerate dist/json/ from DSL sources (Phase 1, batch mode) and
-      # dist/haskell/ from the JSON (Phase 2 haskell target, per-package).
-      # Any drift from the committed tree fails the job.
-      - name: Regenerate JSON and Haskell from DSL sources
+      # Regenerate dist/json/ from DSL sources (Phase 1, batch mode)
+      # and dist/<lang>/ for every target from the JSON (Phase 2,
+      # per-package). Any drift from the committed dist/json/ or
+      # dist/haskell/ tree fails the job.
+      - name: Regenerate JSON and all target dists from DSL sources
         run: |
-          bin/sync.sh --hosts haskell --targets haskell --no-tests
-      - name: Fail if generated files differ from committed
+          bin/sync.sh --hosts all --targets all --no-tests
+      # The bootstrapping matrix above intentionally skips the "on-
+      # demand" packages (hydra-pg, hydra-rdf, hydra-ext). The Java
+      # host's checked-in sources (packages/hydra-java/src/main/java/
+      # hydra/pg/**, hydra/rdf/**) import from these dist/java subtrees,
+      # so the Java CI job below can't compile without them. Generate
+      # them into the target languages that need them. Python's
+      # pythonpath also references these trees, though Python silently
+      # skips missing entries; generating for hygiene.
+      - name: Regenerate on-demand packages (hydra-pg, hydra-rdf, hydra-ext)
+        run: |
+          for pkg in hydra-pg hydra-rdf hydra-ext; do
+            for tgt in java python; do
+              bin/sync-packages.sh "$pkg" --target "$tgt" --no-tests
+            done
+          done
+      - name: Fail if committed dist/json or dist/haskell differs from regenerated
         run: |
           if ! git diff --quiet dist/json/ dist/haskell/; then
             echo "::error::Generated files (dist/json/ and/or dist/haskell/) differ from the committed tree."
-            echo "::error::Run bin/sync.sh --hosts haskell --targets haskell locally and commit the result."
+            echo "::error::Run bin/sync.sh locally and commit the result."
             git diff --stat dist/json/ dist/haskell/
             exit 1
           fi
       - name: Stack tests
         run: stack test
         working-directory: heads/haskell
+      # Upload dist/<lang>/ trees for downstream target jobs. One
+      # artifact per target so each job only pays for its own download.
+      - name: Upload dist/java
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-java
+          path: dist/java/
+          retention-days: 1
+      - name: Upload dist/python
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-python
+          path: dist/python/
+          retention-days: 1
+      - name: Upload dist/scala
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-scala
+          path: dist/scala/
+          retention-days: 1
+      - name: Upload dist/clojure
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-clojure
+          path: dist/clojure/
+          retention-days: 1
+      - name: Upload dist/common-lisp
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-common-lisp
+          path: dist/common-lisp/
+          retention-days: 1
+      - name: Upload dist/scheme
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-scheme
+          path: dist/scheme/
+          retention-days: 1
 
   java:
     name: Java tests
@@ -74,6 +133,11 @@ jobs:
             ~/.gradle/wrapper
           key: gradle-${{ hashFiles('**/*.gradle', 'gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: gradle-
+      - name: Download dist/java built by Haskell job
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-java
+          path: dist/java/
       - run: ./gradlew :hydra-java:test
 
   python:
@@ -86,6 +150,11 @@ jobs:
         with:
           python-version: '3.12'
       - uses: astral-sh/setup-uv@v5
+      - name: Download dist/python built by Haskell job
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-python
+          path: dist/python/
       - run: uv sync
         working-directory: heads/python
       - run: uv run pytest
@@ -105,6 +174,11 @@ jobs:
           path: ~/.m2/repository
           key: clojure-${{ hashFiles('heads/lisp/clojure/deps.edn') }}
           restore-keys: clojure-
+      - name: Download dist/clojure built by Haskell job
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-clojure
+          path: dist/clojure/
       - run: packages/hydra-lisp/bin/run-tests.sh clojure
 
   scala:
@@ -130,6 +204,11 @@ jobs:
             ~/.cache/coursier
           key: sbt-${{ hashFiles('packages/hydra-scala/build.sbt', 'packages/hydra-scala/project/build.properties') }}
           restore-keys: sbt-
+      - name: Download dist/scala built by Haskell job
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-scala
+          path: dist/scala/
       - run: sbt test
         working-directory: packages/hydra-scala
 
@@ -143,6 +222,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y sbcl cl-ppcre
+      - name: Download dist/common-lisp built by Haskell job
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-common-lisp
+          path: dist/common-lisp/
       - run: packages/hydra-lisp/bin/run-tests.sh common-lisp
 
   scheme:
@@ -155,4 +239,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y guile-3.0
+      - name: Download dist/scheme built by Haskell job
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-scheme
+          path: dist/scheme/
       - run: packages/hydra-lisp/bin/run-tests.sh scheme
