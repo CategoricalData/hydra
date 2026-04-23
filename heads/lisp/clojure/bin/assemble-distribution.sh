@@ -77,14 +77,55 @@ echo ""
 
 HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 
-echo "Step 1: Generating main Clojure modules..."
-"$HASKELL_BIN/transform-json-to-lisp.sh" "$PACKAGE" clojure main \
-    --output "$DIST_ROOT"
+# Per-source-set caches: skip regeneration of main and test source sets
+# independently. See heads/java/bin/assemble-distribution.sh for the
+# pattern; same shape across every target language.
+MAIN_INPUT_HASH_FILE="$OUT_DIR/.main-input-hash.txt"
+TEST_INPUT_HASH_FILE="$OUT_DIR/.test-input-hash.txt"
+MAIN_JSON_DIR="$HYDRA_ROOT_DIR/dist/json/$PACKAGE/src/main/json"
+TEST_JSON_DIR="$HYDRA_ROOT_DIR/dist/json/$PACKAGE/src/test/json"
+hash_dir() {
+    local d="$1"
+    if [ -d "$d" ]; then
+        find "$d" -type f -name '*.json' 2>/dev/null \
+            | LC_ALL=C sort | xargs shasum -a 256 2>/dev/null \
+            | shasum -a 256 | awk '{print $1}'
+    else
+        echo ""
+    fi
+}
 
+# Step 1: Main modules.
+MAIN_HASH=$(hash_dir "$MAIN_JSON_DIR")
+RECORDED_MAIN=""
+[ -f "$MAIN_INPUT_HASH_FILE" ] && RECORDED_MAIN=$(cat "$MAIN_INPUT_HASH_FILE")
+if [ -n "$MAIN_HASH" ] && [ "$MAIN_HASH" = "$RECORDED_MAIN" ]; then
+    echo "Step 1: Main modules unchanged; skipping main regeneration."
+else
+    echo "Step 1: Generating main Clojure modules..."
+    "$HASKELL_BIN/transform-json-to-lisp.sh" "$PACKAGE" clojure main \
+        --output "$DIST_ROOT"
+    [ -n "$MAIN_HASH" ] && mkdir -p "$OUT_DIR" && echo "$MAIN_HASH" > "$MAIN_INPUT_HASH_FILE"
+fi
+
+# Step 2: Test modules. Any package can have a test source set; today
+# only hydra-kernel does, but the mechanism is uniform.
 echo ""
-echo "Step 2: Generating test Clojure modules..."
-"$HASKELL_BIN/transform-json-to-lisp.sh" "$PACKAGE" clojure test \
-    --output "$DIST_ROOT"
+if [ ! -d "$TEST_JSON_DIR" ]; then
+    echo "Step 2: No test sources for $PACKAGE; skipping."
+else
+    TEST_HASH=$(hash_dir "$TEST_JSON_DIR")
+    RECORDED_TEST=""
+    [ -f "$TEST_INPUT_HASH_FILE" ] && RECORDED_TEST=$(cat "$TEST_INPUT_HASH_FILE")
+    if [ "$TEST_HASH" = "$RECORDED_TEST" ]; then
+        echo "Step 2: Test modules unchanged; skipping test regeneration."
+    else
+        echo "Step 2: Generating test Clojure modules..."
+        "$HASKELL_BIN/transform-json-to-lisp.sh" "$PACKAGE" clojure test \
+            --output "$DIST_ROOT"
+        mkdir -p "$OUT_DIR" && echo "$TEST_HASH" > "$TEST_INPUT_HASH_FILE"
+    fi
+fi
 
 # Step 3: Package-specific post-processing.
 case "$PACKAGE" in
@@ -97,11 +138,17 @@ case "$PACKAGE" in
         if [ -f "$CLJ_TESTGRAPH" ]; then
             echo ""
             echo "Step 3: Patching testGraph.clj..."
-            # Add required imports
-            sed -i.bak 's|\[hydra.lexical :refer :all\]|[hydra.lexical :refer :all] [hydra.lib.libraries :refer :all] [hydra.rewriting :refer :all] [hydra.scoping :refer :all] [hydra.json.bootstrap :refer :all] [hydra.graph :refer :all] [hydra.context :refer :all] [hydra.annotation-bindings :refer [annotation-bindings]]|' "$CLJ_TESTGRAPH"
-            # Delete empty def lines; they'll be re-added at EOF.
-            sed -i.bak '/^(def hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$CLJ_TESTGRAPH"
-            sed -i.bak '/^(def hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$CLJ_TESTGRAPH"
+            # Drop the generator-emitted (hydra.test.testEnv :refer :all) entry
+            # — no testEnv.clj is emitted for Clojure; the inline rebuild below
+            # replaces its role. Then add imports needed by the inline rebuild.
+            sed -i.bak 's| \[hydra.test.testEnv :refer :all\]||' "$CLJ_TESTGRAPH"
+            sed -i.bak 's|\[hydra.packaging :refer :all\]|[hydra.packaging :refer :all] [hydra.lib.libraries :refer :all] [hydra.rewriting :refer :all] [hydra.scoping :refer :all] [hydra.json.bootstrap :refer :all] [hydra.graph :refer :all] [hydra.context :refer :all] [hydra.annotation-bindings :refer [annotation-bindings]]|' "$CLJ_TESTGRAPH"
+            # Delete the generator's test_env-based defs; they'll be replaced
+            # by the inline rebuild appended below.
+            sed -i.bak '/^(def hydra_test_test_graph_test_context hydra_test_test_env_test_context)/d' "$CLJ_TESTGRAPH"
+            sed -i.bak '/^(def hydra_test_test_graph_test_graph (hydra_test_test_env_test_graph hydra_test_test_graph_test_types))/d' "$CLJ_TESTGRAPH"
+            # Also drop test_env symbols from the (declare ...) form.
+            sed -i.bak 's| hydra_test_test_env_test_context||g; s| hydra_test_test_env_test_graph||g' "$CLJ_TESTGRAPH"
             rm -f "$CLJ_TESTGRAPH.bak"
             cat >> "$CLJ_TESTGRAPH" << 'CLJEOF'
 
