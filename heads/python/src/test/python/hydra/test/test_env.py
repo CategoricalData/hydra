@@ -12,7 +12,7 @@ import hydra.context
 _cached_graph = None
 _cached_context = None
 
-def test_graph():
+def test_graph(test_types=None):
     global _cached_graph
     if _cached_graph is None:
         from test_suite_runner import build_test_graph
