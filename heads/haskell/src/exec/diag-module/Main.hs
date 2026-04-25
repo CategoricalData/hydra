@@ -1,102 +1,200 @@
--- Diagnostic: trace where exactly it hangs
+-- Diagnostic: bisect the incremental-inference bug down to individual
+-- definitions.
+--
+-- Modes:
+--   stack exec diag-module -- <ns1,ns2,...>
+--     Use full modules as the dirty set; load the rest from dist/json.
+--
+--   stack exec diag-module -- --subset <ns> <defName1,defName2,...>
+--     Build a synthetic module containing only the named definitions
+--     of <ns>, use that as the single dirty module, load the rest of
+--     the universe (including the full version of <ns>) from dist/json.
+--     This lets us narrow the failure to a specific definition.
+--
+--   stack exec diag-module -- --list-defs <ns>
+--     Print the definition names of the module, one per line.
 module Main where
 
 import Hydra.Kernel
-import Hydra.Generation (modulesToGraph)
-import Hydra.Dsl.Bootstrap (bootstrapGraph)
-import Hydra.Codegen (moduleTermDepsTransitive, moduleTypeDepsTransitive, generateSourceFiles)
-import Hydra.Lexical (elementsToGraph, graphToBindings, buildGraph)
-import Hydra.Inference (inferGraphTypes)
-import Hydra.Adapt (dataGraphToDefinitions)
-import qualified Hydra.Environment as Environment
-import Hydra.Sources.All (mainModules)
-import Hydra.Sources.Ext (hydraExtModules)
-import Hydra.Sources.All
-import Hydra.Haskell.Language (haskellLanguage)
-import Hydra.Haskell.Coder (moduleToHaskell)
-import qualified Hydra.Coders as Coders
+import Hydra.Generation (inferModulesGivenIO)
+import qualified Hydra.Codegen as CodeGeneration
+import qualified Hydra.Sources.All as All
+import qualified Hydra.Sources.Ext as Ext
 import qualified Hydra.Show.Errors as ShowError
+import qualified Hydra.Json.Model as JsonModel
+import Hydra.Dsl.Bootstrap (bootstrapGraph)
+import qualified Hydra.PackageRouting as PackageRouting
 
-import qualified Hydra.Sources.Cpp.Names as CppNames
+import qualified Data.Aeson as A
+import qualified Data.ByteString.Lazy as BS
+import qualified Data.Aeson.KeyMap as AKM
+import qualified Data.Aeson.Key as AK
+import qualified Data.Vector as V
+import qualified Data.Text as T
 
 import qualified Data.Map as M
 import qualified Data.List as L
-import System.IO (hSetBuffering, stdout, BufferMode(..), hFlush)
+import qualified Control.Exception as E
+import qualified Control.Monad as CM
+import qualified System.Environment as Env
+import qualified System.FilePath as FP
+import qualified System.Directory as SD
+import System.IO (hSetBuffering, stdout, BufferMode(..))
+
+parseJsonFile :: FilePath -> IO (Either String JsonModel.Value)
+parseJsonFile path = do
+  bytes <- BS.readFile path
+  case A.eitherDecode bytes of
+    Left err -> return (Left err)
+    Right aesonVal -> return (Right (aesonToJsonModel aesonVal))
+
+aesonToJsonModel :: A.Value -> JsonModel.Value
+aesonToJsonModel v = case v of
+  A.Null -> JsonModel.ValueNull
+  A.Bool b -> JsonModel.ValueBoolean b
+  A.Number n -> JsonModel.ValueNumber n
+  A.String t -> JsonModel.ValueString (T.unpack t)
+  A.Array xs -> JsonModel.ValueArray (fmap aesonToJsonModel (V.toList xs))
+  A.Object o -> JsonModel.ValueObject (M.fromList [(T.unpack (AK.toText k), aesonToJsonModel x) | (k, x) <- AKM.toList o])
+
+loadModuleFromJson :: FilePath -> [Module] -> Namespace -> IO Module
+loadModuleFromJson distJsonRoot universe ns = do
+  let pkg = PackageRouting.namespaceToPackage ns
+      pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
+      filePath = pkgDir FP.</> CodeGeneration.namespaceToPath ns ++ ".json"
+  parseResult <- parseJsonFile filePath
+  case parseResult of
+    Left err -> fail $ "JSON parse error for " ++ unNamespace ns ++ " at " ++ filePath ++ ": " ++ err
+    Right jsonVal -> case CodeGeneration.decodeModuleFromJson bootstrapGraph universe jsonVal of
+      Left err -> fail $ "Module decode error for " ++ unNamespace ns ++ ": " ++ ShowError.error err
+      Right m -> return m
 
 main :: IO ()
 main = do
-  hSetBuffering stdout LineBuffering
-  let uni = mainModules ++ hydraExtModules
-  let modToGen = CppNames.module_
-  let cx = emptyContext
+  hSetBuffering stdout NoBuffering
+  args <- Env.getArgs
+  case args of
+    ["--list-defs", ns] -> listDefs ns
+    ["--subset", ns, defSpec] -> runSubset ns defSpec
+    [spec] -> runModules spec
+    _      -> fail "Usage: diag-module [--list-defs <ns>] [--subset <ns> <def1,def2,...>] [<ns1,ns2,...>]"
 
-  -- Step 1: Build namespace map
-  putStrLn "Step 1: Building namespace map..."
-  hFlush stdout
-  let namespaceMap = M.fromList [(moduleNamespace m, m) | m <- uni ++ [modToGen]]
-  putStrLn $ "  Namespace map size: " ++ show (M.size namespaceMap)
+listDefs :: String -> IO ()
+listDefs nsStr = do
+  let ns = Namespace nsStr
+      universe = All.mainModules ++ Ext.hydraExtModules
+  case L.find (\m -> moduleNamespace m == ns) universe of
+    Nothing -> fail $ "No such module: " ++ nsStr
+    Just m -> do
+      let defs = moduleDefinitions m
+      putStrLn $ "Definitions in " ++ nsStr ++ " (" ++ show (length defs) ++ " total):"
+      mapM_ putStrLn (definitionNames defs)
 
-  -- Step 2: Compute dependencies
-  putStrLn "Step 2: Computing dependencies..."
-  hFlush stdout
-  let termDeps = moduleTermDepsTransitive namespaceMap [modToGen]
-  putStrLn $ "  Term dep modules: " ++ show (length termDeps)
-  let dataElements = concatMap moduleBindings termDeps
-  putStrLn $ "  Data elements: " ++ show (length dataElements)
+definitionNames :: [Definition] -> [String]
+definitionNames ds = fmap definitionName ds
+  where
+    definitionName d = case d of
+      DefinitionTerm td -> unName (termDefinitionName td)
+      DefinitionType td -> unName (typeDefinitionName td)
 
-  let typeDeps = moduleTypeDepsTransitive namespaceMap [modToGen]
-  putStrLn $ "  Type dep modules: " ++ show (length typeDeps)
-  let schemaElements = filter isNativeType $ concatMap moduleBindings (typeDeps ++ [modToGen])
-  putStrLn $ "  Schema elements: " ++ show (length schemaElements)
+runModules :: String -> IO ()
+runModules spec = do
+  let universe = All.mainModules ++ Ext.hydraExtModules
+  putStrLn $ "Universe: " ++ show (length universe) ++ " modules"
+  let allKernelNss = [moduleNamespace m | m <- universe,
+                       let ns = unNamespace (moduleNamespace m),
+                       not ("hydra.test." `L.isPrefixOf` ns),
+                       not ("hydra.ext." `L.isPrefixOf` ns),
+                       not ("hydra.wasm." `L.isPrefixOf` ns),
+                       not ("hydra.coq." `L.isPrefixOf` ns),
+                       not ("hydra.javascript." `L.isPrefixOf` ns)]
+      half = length allKernelNss `div` 2
+      dirtyNss = case spec of
+        "ALL"   -> allKernelNss
+        "HALF1" -> take half allKernelNss
+        "HALF2" -> drop half allKernelNss
+        _ -> fmap Namespace (splitCommas spec)
+  putStrLn $ "Dirty set: " ++ show (length dirtyNss) ++ " modules"
+  CM.when (length dirtyNss <= 20) $
+    mapM_ (\ns -> putStrLn $ "  " ++ unNamespace ns) dirtyNss
+  let dirtySet = M.fromList [(ns, ()) | ns <- dirtyNss]
+      dirtyMods = [m | m <- universe, M.member (moduleNamespace m) dirtySet]
+      cleanMods = [m | m <- universe, not (M.member (moduleNamespace m) dirtySet)]
+  runWithCleanAndDirty cleanMods dirtyMods
 
-  -- Step 3: Build graphs
-  putStrLn "Step 3: Building graphs..."
-  hFlush stdout
-  let bsGraph = bootstrapGraph
-  putStrLn $ "  Bootstrap graph primitives: " ++ show (M.size $ graphPrimitives bsGraph)
-  let schemaGraph = elementsToGraph bsGraph M.empty schemaElements
-  let schemaTypes = case Environment.schemaGraphToTypingEnvironment schemaGraph of
-        Left _ -> M.empty
-        Right r -> r
-  putStrLn $ "  Schema types: " ++ show (M.size schemaTypes)
-  let dataGraph = elementsToGraph bsGraph schemaTypes dataElements
-  putStrLn $ "  Data graph built"
+-- Subset mode: build a dirty module at namespace "hydra.bisect" that
+-- contains CLONES of the named definitions from <ns>. The full <ns> stays
+-- in the clean universe, so cross-definition references in the clones
+-- resolve against it (i.e. clone of X calling Y sees clean X.Y). The
+-- cloned definition names are `hydra.bisect.<lastComponent>`, so there's
+-- no name collision with the clean universe.
+--
+-- This isolates whether a specific definition's term body / type
+-- annotation triggers the unification bug, without perturbing the rest
+-- of the universe.
+runSubset :: String -> String -> IO ()
+runSubset nsStr defSpec = do
+  let ns = Namespace nsStr
+      universe = All.mainModules ++ Ext.hydraExtModules
+      wanted = splitCommas defSpec
+      bisectNs = Namespace "hydra.bisect"
+  case L.find (\m -> moduleNamespace m == ns) universe of
+    Nothing -> fail $ "No such module: " ++ nsStr
+    Just fullMod -> do
+      let allDefs = moduleDefinitions fullMod
+          lastCompOf s = L.reverse (L.takeWhile (/= '.') (L.reverse s))
+          defMatches n d = case d of
+            DefinitionTerm td -> lastCompOf (unName (termDefinitionName td)) == n
+            DefinitionType td -> lastCompOf (unName (typeDefinitionName td)) == n
+          picked = [d | n <- wanted, d <- allDefs, defMatches n d]
+      let defName d = case d of
+            DefinitionTerm td -> unName (termDefinitionName td)
+            DefinitionType td -> unName (typeDefinitionName td)
+      CM.when (length picked /= length wanted) $ do
+        putStrLn "Warning: not all requested definitions were found."
+        let found = fmap defName picked
+            missing = filter (\n -> not (elem n found)) wanted
+        mapM_ (\m -> putStrLn $ "  missing: " ++ m) missing
+      let cloneDef d = case d of
+            DefinitionTerm td ->
+              DefinitionTerm td { termDefinitionName = rename (termDefinitionName td) }
+            DefinitionType td ->
+              DefinitionType td { typeDefinitionName = rename (typeDefinitionName td) }
+          rename (Name full) =
+            let simple = L.reverse (L.takeWhile (/= '.') (L.reverse full))
+            in Name ("hydra.bisect." ++ simple)
+          cloned = fmap cloneDef picked
+      let syntheticDirty = Module {
+            moduleNamespace = bisectNs,
+            moduleDefinitions = cloned,
+            moduleTermDependencies = [ns],
+            moduleTypeDependencies = [ns],
+            moduleDescription = Just "Bisection dummy module" }
+      putStrLn $ "Universe: " ++ show (length universe) ++ " kept intact; dirty is new hydra.bisect with " ++ show (length picked) ++ " cloned defs:"
+      mapM_ (\d -> putStrLn $ "  " ++ defName d ++ " → " ++ cloneName d) picked
+      runWithCleanAndDirty universe [syntheticDirty]
+  where
+    cloneName d = case d of
+      DefinitionTerm td -> "hydra.bisect." ++ lastComp (unName (termDefinitionName td))
+      DefinitionType td -> "hydra.bisect." ++ lastComp (unName (typeDefinitionName td))
+    lastComp s = L.reverse (L.takeWhile (/= '.') (L.reverse s))
 
-  -- Step 4: Get bindings
-  putStrLn "Step 4: Getting bindings..."
-  hFlush stdout
-  let bins0 = graphToBindings dataGraph
-  putStrLn $ "  Bindings: " ++ show (length bins0)
+runWithCleanAndDirty :: [Module] -> [Module] -> IO ()
+runWithCleanAndDirty cleanMods dirtyMods = do
+  putStrLn $ "Loading " ++ show (length cleanMods) ++ " clean modules from dist/json..."
+  distJsonRoot <- SD.makeAbsolute "../../dist/json"
+  cleanLoaded <- mapM (loadModuleFromJson distJsonRoot (cleanMods ++ dirtyMods) . moduleNamespace) cleanMods
+  putStrLn "Running inferModulesGiven..."
+  result <- E.try (inferModulesGivenIO (cleanLoaded ++ dirtyMods) dirtyMods) :: IO (Either E.SomeException [Module])
+  case result of
+    Left e -> do
+      putStrLn "FAILED"
+      putStrLn $ show e
+    Right _ -> putStrLn "OK"
 
-  -- Step 5: Rebuild graph (as dataGraphToDefinitions does)
-  putStrLn "Step 5: Rebuilding graph..."
-  hFlush stdout
-  let g0 = dataGraph
-  let rebuildGraph bindings = let bg = buildGraph bindings M.empty (graphPrimitives g0)
-                              in Graph {
-                                graphBoundTerms = graphBoundTerms bg,
-                                graphBoundTypes = graphBoundTypes bg,
-                                graphClassConstraints = graphClassConstraints bg,
-                                graphLambdaVariables = graphLambdaVariables bg,
-                                graphMetadata = graphMetadata bg,
-                                graphPrimitives = graphPrimitives bg,
-                                graphSchemaTypes = graphSchemaTypes g0,
-                                graphTypeVariables = graphTypeVariables bg
-                              }
-  let g1 = rebuildGraph bins0
-  putStrLn $ "  Rebuilt bound terms: " ++ show (M.size $ graphBoundTerms g1)
-  putStrLn $ "  Rebuilt primitives: " ++ show (M.size $ graphPrimitives g1)
-
-  -- Step 6: Inference
-  putStrLn "Step 6: Calling inferGraphTypes..."
-  hFlush stdout
-  case inferGraphTypes cx bins0 g1 of
-    Left err -> putStrLn $ "  ERROR: " ++ ShowError.error err
-    Right ((g2, bs), cx2) -> do
-      putStrLn $ "  OK: " ++ show (length bs) ++ " bindings"
-
-  -- Step 7: Full generateSourceFiles
-  putStrLn "Step 7: Calling generateSourceFiles..."
-  hFlush stdout
-  case generateSourceFiles moduleToHaskell haskellLanguage True False False False bootstrapGraph uni [modToGen] cx of
-    Left err -> putStrLn $ "  ERROR: " ++ ShowError.error err
+splitCommas :: String -> [String]
+splitCommas [] = []
+splitCommas s = let (h, t) = break (== ',') s
+                in h : case t of
+                     [] -> []
+                     _  -> splitCommas (drop 1 t)
