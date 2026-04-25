@@ -21,6 +21,7 @@ fi
 PACKAGE="$1"
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+THIS_SCRIPT="$SCRIPT_DIR/$(basename "${BASH_SOURCE[0]}")"
 HYDRA_HASKELL_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_ROOT_DIR="$( cd "$HYDRA_HASKELL_DIR/../.." && pwd )"
 
@@ -29,7 +30,7 @@ echo "  (Note: hydra.cabal is monolithic today — running the full test suite)"
 echo ""
 
 source "$HYDRA_ROOT_DIR/bin/lib/test-cache.sh"
-if test_cache_check haskell "$HYDRA_ROOT_DIR/dist/haskell" "$HYDRA_HASKELL_DIR/src/test" "${BASH_SOURCE[0]}"; then
+if test_cache_check haskell "$HYDRA_ROOT_DIR/dist/haskell" "$HYDRA_HASKELL_DIR/src/test" "$THIS_SCRIPT"; then
     echo "  Cache hit: no changes since last successful Haskell test run; skipping."
     echo "=== Done (cache hit). ==="
     exit 0
@@ -38,4 +39,4 @@ fi
 cd "$HYDRA_HASKELL_DIR"
 stack test
 
-test_cache_record haskell "$HYDRA_ROOT_DIR/dist/haskell" "$HYDRA_HASKELL_DIR/src/test" "${BASH_SOURCE[0]}"
+test_cache_record haskell "$HYDRA_ROOT_DIR/dist/haskell" "$HYDRA_HASKELL_DIR/src/test" "$THIS_SCRIPT"
