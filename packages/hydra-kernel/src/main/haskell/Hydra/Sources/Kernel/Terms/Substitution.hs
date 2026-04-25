@@ -256,12 +256,21 @@ substInTypeNonEmpty = define "substInTypeNonEmpty" $
 
 substInTypeScheme :: TTermDefinition (TypeSubst -> TypeScheme -> TypeScheme)
 substInTypeScheme = define "substInTypeScheme" $
-  doc "Apply a type substitution to a type scheme" $
-  lambdas ["subst", "ts"] $ Core.typeScheme
-    (Core.typeSchemeVariables $ var "ts")
-    (substInType @@ var "subst" @@ (Core.typeSchemeType $ var "ts"))
-    -- Also apply the substitution to the constraints
-    (Maybes.map (substInClassConstraints @@ var "subst") (Core.typeSchemeConstraints $ var "ts"))
+  doc ("Apply a type substitution to a type scheme. The scheme's quantifier"
+    <> " variables shadow the substitution: any name in typeSchemeVariables is"
+    <> " removed from subst before substituting into the body and constraints."
+    <> " Without this, a substitution like {t0 -> Foo} applied to"
+    <> " `forall [t0]. t0 -> t0` would incorrectly replace the bound t0.") $
+  lambdas ["subst", "ts"] $ lets [
+    "scopedSubst">: Typing.typeSubst $ Lists.foldl
+      (lambdas ["m", "v"] $ Maps.delete (var "v") (var "m"))
+      (Typing.unTypeSubst $ var "subst")
+      (Core.typeSchemeVariables $ var "ts")] $
+    Core.typeScheme
+      (Core.typeSchemeVariables $ var "ts")
+      (substInType @@ var "scopedSubst" @@ (Core.typeSchemeType $ var "ts"))
+      -- Also apply the substitution to the constraints
+      (Maybes.map (substInClassConstraints @@ var "scopedSubst") (Core.typeSchemeConstraints $ var "ts"))
 
 substTypesInTerm :: TTermDefinition (TypeSubst -> Term -> Term)
 substTypesInTerm = define "substTypesInTerm" $
