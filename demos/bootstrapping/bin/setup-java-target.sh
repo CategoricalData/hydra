@@ -61,6 +61,15 @@ for f in ReductionTest.java VisitorTest.java TestSuiteRunner.java TestEnv.java; 
         cp "$HYDRA_JAVA_DIR/src/test/java/hydra/$f" "$OUTPUT_DIR/src/test/java/hydra/"
     fi
 done
+# Also copy hydra/test/TestEnv.java — the generated TestGraph.java references
+# hydra.test.TestEnv (the package-qualified name), not hydra.TestEnv. The DSL
+# emits this reference directly (post-2026-04 TestEnv handoff change), and
+# bootstrap-from-json filters hydra.test.testEnv from generation so the
+# hand-written file is the source of truth.
+mkdir -p "$OUTPUT_DIR/src/test/java/hydra/test"
+if [ -f "$HYDRA_JAVA_DIR/src/test/java/hydra/test/TestEnv.java" ]; then
+    cp "$HYDRA_JAVA_DIR/src/test/java/hydra/test/TestEnv.java" "$OUTPUT_DIR/src/test/java/hydra/test/"
+fi
 
 # Ensure every coder package Generation.java references has a Java distribution.
 # Generation.java imports hydra.{java,python,haskell,lisp,scala}.{Coder,Language,Syntax};

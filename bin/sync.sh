@@ -303,7 +303,7 @@ for L in $LANG_UNION; do
 done
 
 # ────────────────────────────────────────────────────────────────────
-# Phase 3: Kernel into every language in (hosts ∪ targets).
+# Phase 3: hydra-kernel + hydra-pg + hydra-rdf into every language.
 # ────────────────────────────────────────────────────────────────────
 # Haskell kernel is already done by Phase 1. We dispatch through each
 # target's assemble-distribution.sh (Layer 2), which calls Layer 1 for
@@ -311,24 +311,32 @@ done
 # processing (e.g. Java/Python TestGraph patches, Lisp Coder.java
 # PartialVisitor fix). Calling Layer 1 directly here would skip those
 # patches and break tests for the affected combinations.
+#
+# hydra-pg and hydra-rdf are independent packages in 0.15 (they were
+# bundled into hydra-java/hydra-python via --include-ext in 0.14).
+# Hand-written host runtime under heads/java/src/main/java/hydra/rdf/
+# imports hydra.rdf.syntax.*, so dist/java/hydra-rdf/ must be populated
+# before the Java host compiles.
 
-banner1 "Phase 3: hydra-kernel into each language"
+banner1 "Phase 3: hydra-kernel + hydra-pg + hydra-rdf into each language"
 echo ""
 for L in $LANG_UNION; do
     if [ "$L" = "haskell" ]; then continue; fi
-    echo ""
-    echo "--- hydra-kernel -> $L ---"
-    case "$L" in
-        java|python|scala)
-            "$HYDRA_ROOT/heads/$L/bin/assemble-distribution.sh" hydra-kernel
-            ;;
-        clojure|scheme|common-lisp|emacs-lisp)
-            "$HYDRA_ROOT/heads/lisp/bin/assemble-distribution.sh" hydra-kernel "$L"
-            ;;
-        *)
-            die "Internal: no assembler for $L"
-            ;;
-    esac
+    for pkg in hydra-kernel hydra-pg hydra-rdf; do
+        echo ""
+        echo "--- $pkg -> $L ---"
+        case "$L" in
+            java|python|scala)
+                "$HYDRA_ROOT/heads/$L/bin/assemble-distribution.sh" "$pkg"
+                ;;
+            clojure|scheme|common-lisp|emacs-lisp)
+                "$HYDRA_ROOT/heads/lisp/bin/assemble-distribution.sh" "$pkg" "$L"
+                ;;
+            *)
+                die "Internal: no assembler for $L"
+                ;;
+        esac
+    done
 done
 
 # ────────────────────────────────────────────────────────────────────
