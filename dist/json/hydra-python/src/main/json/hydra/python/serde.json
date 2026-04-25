@@ -3913,6 +3913,44 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.python.serde.encodeNameOrAttribute",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {"literal": {"string": "Serialize a name or attribute"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {"variable": "noa"},
+                            "function": {"unwrap": "hydra.python.syntax.NameOrAttribute"}}},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "hydra.python.serde.encodeName"},
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.lib.lists.map"},
+                                    "type": {"variable": "hydra.python.syntax.Name"}}},
+                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                    "function": {"variable": "hydra.serialization.dotSep"}}},
+                "domain": {"variable": "hydra.python.syntax.NameOrAttribute"},
+                "parameter": "noa"}}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.python.syntax.NameOrAttribute"}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.python.serde.encodeNamedExpression",
         "term": {
           "annotated": {
@@ -3956,44 +3994,6 @@
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.python.syntax.NamedExpression"}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.python.serde.encodeNameOrAttribute",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize a name or attribute"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {"variable": "noa"},
-                            "function": {"unwrap": "hydra.python.syntax.NameOrAttribute"}}},
-                        "function": {
-                          "application": {
-                            "argument": {"variable": "hydra.python.serde.encodeName"},
-                            "function": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {
-                                    "body": {"variable": "hydra.lib.lists.map"},
-                                    "type": {"variable": "hydra.python.syntax.Name"}}},
-                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                    "function": {"variable": "hydra.serialization.dotSep"}}},
-                "domain": {"variable": "hydra.python.syntax.NameOrAttribute"},
-                "parameter": "noa"}}}},
-        "type": {
-          "type": {
-            "function": {
-              "codomain": {"variable": "hydra.ast.Expr"},
-              "domain": {"variable": "hydra.python.syntax.NameOrAttribute"}}},
           "variables": []}}},
     {
       "term": {
@@ -5695,41 +5695,6 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeStarredExpression",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize a starred expression"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {
-                      "list": [
-                        {
-                          "application": {
-                            "argument": {"literal": {"string": "*"}},
-                            "function": {"variable": "hydra.serialization.cst"}}},
-                        {
-                          "application": {
-                            "argument": {
-                              "application": {
-                                "argument": {"variable": "se"},
-                                "function": {"unwrap": "hydra.python.syntax.StarredExpression"}}},
-                            "function": {"variable": "hydra.python.serde.encodeExpression"}}}]},
-                    "function": {"variable": "hydra.serialization.noSep"}}},
-                "domain": {"variable": "hydra.python.syntax.StarredExpression"},
-                "parameter": "se"}}}},
-        "type": {
-          "type": {
-            "function": {
-              "codomain": {"variable": "hydra.ast.Expr"},
-              "domain": {"variable": "hydra.python.syntax.StarredExpression"}}},
-          "variables": []}}},
-    {
-      "term": {
         "name": "hydra.python.serde.encodeStarTarget",
         "term": {
           "annotated": {
@@ -5782,6 +5747,41 @@
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.python.syntax.StarTarget"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.python.serde.encodeStarredExpression",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {"literal": {"string": "Serialize a starred expression"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {
+                      "list": [
+                        {
+                          "application": {
+                            "argument": {"literal": {"string": "*"}},
+                            "function": {"variable": "hydra.serialization.cst"}}},
+                        {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"variable": "se"},
+                                "function": {"unwrap": "hydra.python.syntax.StarredExpression"}}},
+                            "function": {"variable": "hydra.python.serde.encodeExpression"}}}]},
+                    "function": {"variable": "hydra.serialization.noSep"}}},
+                "domain": {"variable": "hydra.python.syntax.StarredExpression"},
+                "parameter": "se"}}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.python.syntax.StarredExpression"}}},
           "variables": []}}},
     {
       "term": {
@@ -6027,88 +6027,6 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.encodeTargetWithStarAtom",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize a target with star atom"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {"variable": "t"},
-                    "function": {
-                      "cases": {
-                        "cases": [
-                          {
-                            "name": "atom",
-                            "term": {
-                              "lambda": {
-                                "body": {
-                                  "application": {
-                                    "argument": {"variable": "a"},
-                                    "function": {"variable": "hydra.python.serde.encodeStarAtom"}}},
-                                "domain": {"variable": "hydra.python.syntax.StarAtom"},
-                                "parameter": "a"}}},
-                          {
-                            "name": "project",
-                            "term": {
-                              "lambda": {
-                                "body": {
-                                  "application": {
-                                    "argument": {"variable": "pn"},
-                                    "function": {"variable": "hydra.python.serde.encodeTPrimaryAndName"}}},
-                                "domain": {"variable": "hydra.python.syntax.TPrimaryAndName"},
-                                "parameter": "pn"}}},
-                          {
-                            "name": "slices",
-                            "term": {
-                              "lambda": {
-                                "body": {
-                                  "application": {
-                                    "argument": {"literal": {"string": "..."}},
-                                    "function": {"variable": "hydra.serialization.cst"}}},
-                                "domain": {"variable": "hydra.python.syntax.TPrimaryAndSlices"},
-                                "parameter": "_"}}}],
-                        "typeName": "hydra.python.syntax.TargetWithStarAtom"}}}},
-                "domain": {"variable": "hydra.python.syntax.TargetWithStarAtom"},
-                "parameter": "t"}}}},
-        "type": {
-          "type": {
-            "function": {
-              "codomain": {"variable": "hydra.ast.Expr"},
-              "domain": {"variable": "hydra.python.syntax.TargetWithStarAtom"}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.python.serde.encodeTerm",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize a term expression"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "t"},
-                        "function": {"project": {"field": "rhs", "typeName": "hydra.python.syntax.Term"}}}},
-                    "function": {"variable": "hydra.python.serde.encodeFactor"}}},
-                "domain": {"variable": "hydra.python.syntax.Term"},
-                "parameter": "t"}}}},
-        "type": {
-          "type": {
-            "function": {
-              "codomain": {"variable": "hydra.ast.Expr"},
-              "domain": {"variable": "hydra.python.syntax.Term"}}},
-          "variables": []}}},
-    {
-      "term": {
         "name": "hydra.python.serde.encodeTPrimary",
         "term": {
           "annotated": {
@@ -6241,6 +6159,88 @@
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.python.syntax.TPrimaryAndName"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.python.serde.encodeTargetWithStarAtom",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {"literal": {"string": "Serialize a target with star atom"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "t"},
+                    "function": {
+                      "cases": {
+                        "cases": [
+                          {
+                            "name": "atom",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"variable": "a"},
+                                    "function": {"variable": "hydra.python.serde.encodeStarAtom"}}},
+                                "domain": {"variable": "hydra.python.syntax.StarAtom"},
+                                "parameter": "a"}}},
+                          {
+                            "name": "project",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"variable": "pn"},
+                                    "function": {"variable": "hydra.python.serde.encodeTPrimaryAndName"}}},
+                                "domain": {"variable": "hydra.python.syntax.TPrimaryAndName"},
+                                "parameter": "pn"}}},
+                          {
+                            "name": "slices",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"literal": {"string": "..."}},
+                                    "function": {"variable": "hydra.serialization.cst"}}},
+                                "domain": {"variable": "hydra.python.syntax.TPrimaryAndSlices"},
+                                "parameter": "_"}}}],
+                        "typeName": "hydra.python.syntax.TargetWithStarAtom"}}}},
+                "domain": {"variable": "hydra.python.syntax.TargetWithStarAtom"},
+                "parameter": "t"}}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.python.syntax.TargetWithStarAtom"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.python.serde.encodeTerm",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {"literal": {"string": "Serialize a term expression"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {
+                      "application": {
+                        "argument": {"variable": "t"},
+                        "function": {"project": {"field": "rhs", "typeName": "hydra.python.syntax.Term"}}}},
+                    "function": {"variable": "hydra.python.serde.encodeFactor"}}},
+                "domain": {"variable": "hydra.python.syntax.Term"},
+                "parameter": "t"}}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.python.syntax.Term"}}},
           "variables": []}}},
     {
       "term": {
@@ -6511,6 +6511,62 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.python.serde.encodeTypeParameter",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {"literal": {"string": "Serialize a type parameter"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "tp"},
+                    "function": {
+                      "cases": {
+                        "cases": [
+                          {
+                            "name": "simple",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"variable": "s"},
+                                    "function": {"variable": "hydra.python.serde.encodeSimpleTypeParameter"}}},
+                                "domain": {"variable": "hydra.python.syntax.SimpleTypeParameter"},
+                                "parameter": "s"}}},
+                          {
+                            "name": "star",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"literal": {"string": "*..."}},
+                                    "function": {"variable": "hydra.serialization.cst"}}},
+                                "domain": {"variable": "hydra.python.syntax.StarTypeParameter"},
+                                "parameter": "_"}}},
+                          {
+                            "name": "doubleStar",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"literal": {"string": "**..."}},
+                                    "function": {"variable": "hydra.serialization.cst"}}},
+                                "domain": {"variable": "hydra.python.syntax.DoubleStarTypeParameter"},
+                                "parameter": "_"}}}],
+                        "typeName": "hydra.python.syntax.TypeParameter"}}}},
+                "domain": {"variable": "hydra.python.syntax.TypeParameter"},
+                "parameter": "tp"}}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.python.syntax.TypeParameter"}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.python.serde.encodeTypedAssignment",
         "term": {
           "annotated": {
@@ -6603,62 +6659,6 @@
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.python.syntax.TypedAssignment"}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.python.serde.encodeTypeParameter",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "Serialize a type parameter"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {"variable": "tp"},
-                    "function": {
-                      "cases": {
-                        "cases": [
-                          {
-                            "name": "simple",
-                            "term": {
-                              "lambda": {
-                                "body": {
-                                  "application": {
-                                    "argument": {"variable": "s"},
-                                    "function": {"variable": "hydra.python.serde.encodeSimpleTypeParameter"}}},
-                                "domain": {"variable": "hydra.python.syntax.SimpleTypeParameter"},
-                                "parameter": "s"}}},
-                          {
-                            "name": "star",
-                            "term": {
-                              "lambda": {
-                                "body": {
-                                  "application": {
-                                    "argument": {"literal": {"string": "*..."}},
-                                    "function": {"variable": "hydra.serialization.cst"}}},
-                                "domain": {"variable": "hydra.python.syntax.StarTypeParameter"},
-                                "parameter": "_"}}},
-                          {
-                            "name": "doubleStar",
-                            "term": {
-                              "lambda": {
-                                "body": {
-                                  "application": {
-                                    "argument": {"literal": {"string": "**..."}},
-                                    "function": {"variable": "hydra.serialization.cst"}}},
-                                "domain": {"variable": "hydra.python.syntax.DoubleStarTypeParameter"},
-                                "parameter": "_"}}}],
-                        "typeName": "hydra.python.syntax.TypeParameter"}}}},
-                "domain": {"variable": "hydra.python.syntax.TypeParameter"},
-                "parameter": "tp"}}}},
-        "type": {
-          "type": {
-            "function": {
-              "codomain": {"variable": "hydra.ast.Expr"},
-              "domain": {"variable": "hydra.python.syntax.TypeParameter"}}},
           "variables": []}}},
     {
       "term": {
