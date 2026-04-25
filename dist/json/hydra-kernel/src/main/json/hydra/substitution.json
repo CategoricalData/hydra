@@ -1707,62 +1707,122 @@
             "annotation": [
               {
                 "@key": "description",
-                "@value": {"literal": {"string": "Apply a type substitution to a type scheme"}}}],
+                "@value": {
+                  "literal": {
+                    "string": "Apply a type substitution to a type scheme. The scheme's quantifier variables shadow the substitution: any name in typeSchemeVariables is removed from subst before substituting into the body and constraints. Without this, a substitution like {t0 -> Foo} applied to `forall [t0]. t0 -> t0` would incorrectly replace the bound t0."}}}],
             "body": {
               "lambda": {
                 "body": {
                   "lambda": {
                     "body": {
-                      "record": {
-                        "fields": [
+                      "let": {
+                        "bindings": [
                           {
-                            "name": "variables",
+                            "name": "scopedSubst",
                             "term": {
-                              "application": {
-                                "argument": {"variable": "ts"},
-                                "function": {
-                                  "project": {"field": "variables", "typeName": "hydra.core.TypeScheme"}}}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {"variable": "ts"},
-                                    "function": {"project": {"field": "type", "typeName": "hydra.core.TypeScheme"}}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "subst"},
-                                    "function": {"variable": "hydra.substitution.substInType"}}}}}},
-                          {
-                            "name": "constraints",
-                            "term": {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {"variable": "ts"},
-                                    "function": {
-                                      "project": {"field": "constraints", "typeName": "hydra.core.TypeScheme"}}}},
-                                "function": {
+                              "wrap": {
+                                "body": {
                                   "application": {
                                     "argument": {
                                       "application": {
-                                        "argument": {"variable": "subst"},
-                                        "function": {"variable": "hydra.substitution.substInClassConstraints"}}},
+                                        "argument": {"variable": "ts"},
+                                        "function": {
+                                          "project": {"field": "variables", "typeName": "hydra.core.TypeScheme"}}}},
                                     "function": {
-                                      "typeApplication": {
-                                        "body": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "subst"},
+                                            "function": {"unwrap": "hydra.typing.TypeSubst"}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "lambda": {
+                                                "body": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "application": {
+                                                        "argument": {"variable": "m"},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {"variable": "v"},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.maps.delete"},
+                                                                    "type": {"variable": "hydra.core.Name"}}},
+                                                                "type": {"variable": "hydra.core.Type"}}}}}}},
+                                                    "domain": {"variable": "hydra.core.Name"},
+                                                    "parameter": "v"}},
+                                                "domain": {
+                                                  "map": {
+                                                    "keys": {"variable": "hydra.core.Name"},
+                                                    "values": {"variable": "hydra.core.Type"}}},
+                                                "parameter": "m"}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.lists.foldl"},
+                                                    "type": {
+                                                      "map": {
+                                                        "keys": {"variable": "hydra.core.Name"},
+                                                        "values": {"variable": "hydra.core.Type"}}}}},
+                                                "type": {"variable": "hydra.core.Name"}}}}}}}}},
+                                "typeName": "hydra.typing.TypeSubst"}},
+                            "type": {"type": {"variable": "hydra.typing.TypeSubst"}, "variables": []}}],
+                        "body": {
+                          "record": {
+                            "fields": [
+                              {
+                                "name": "variables",
+                                "term": {
+                                  "application": {
+                                    "argument": {"variable": "ts"},
+                                    "function": {
+                                      "project": {"field": "variables", "typeName": "hydra.core.TypeScheme"}}}}},
+                              {
+                                "name": "type",
+                                "term": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "ts"},
+                                        "function": {"project": {"field": "type", "typeName": "hydra.core.TypeScheme"}}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "scopedSubst"},
+                                        "function": {"variable": "hydra.substitution.substInType"}}}}}},
+                              {
+                                "name": "constraints",
+                                "term": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "ts"},
+                                        "function": {
+                                          "project": {"field": "constraints", "typeName": "hydra.core.TypeScheme"}}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "scopedSubst"},
+                                            "function": {"variable": "hydra.substitution.substInClassConstraints"}}},
+                                        "function": {
                                           "typeApplication": {
-                                            "body": {"variable": "hydra.lib.maybes.map"},
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.maybes.map"},
+                                                "type": {
+                                                  "map": {
+                                                    "keys": {"variable": "hydra.core.Name"},
+                                                    "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
                                             "type": {
                                               "map": {
                                                 "keys": {"variable": "hydra.core.Name"},
-                                                "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
-                                        "type": {
-                                          "map": {
-                                            "keys": {"variable": "hydra.core.Name"},
-                                            "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}}}}}],
-                        "typeName": "hydra.core.TypeScheme"}},
+                                                "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}}}}}],
+                            "typeName": "hydra.core.TypeScheme"}}}},
                     "domain": {"variable": "hydra.core.TypeScheme"},
                     "parameter": "ts"}},
                 "domain": {"variable": "hydra.typing.TypeSubst"},
