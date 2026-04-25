@@ -42,7 +42,7 @@ fi
 
 # Invalidate per-target digests so Stage 7 per-module freshness filter
 # cannot trust records against potentially-missing output files.
-rm -f "$DIST_ROOT"/*/digest.json
+rm -f "$DIST_ROOT"/*/src/main/digest.json "$DIST_ROOT"/*/src/test/digest.json
 
 echo "Step 1: Generating main Java modules for every package..."
 cd "$HYDRA_ROOT_DIR/heads/haskell"
@@ -74,20 +74,24 @@ if [ -f "$LISPCODER" ]; then
     rm -f "$LISPCODER.bak"
 fi
 
-# Refresh per-target digests for fresh-check cache.
+# Refresh per-source-set digests for fresh-check cache. Each package
+# gets up to two digests: src/main/digest.json (always) and
+# src/test/digest.json (when test sources exist).
 for pkg_dir in "$DIST_ROOT"/*/; do
     pkg=$(basename "$pkg_dir")
-    input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/digest.json"
-    # Strip trailing slash so the digest path is stable.
     pkg_dir_trim="${pkg_dir%/}"
-    output_digest="$pkg_dir_trim/digest.json"
-    if [ -f "$input_digest" ]; then
-        (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
-         stack exec digest-check -- refresh \
-            --inputs "$input_digest" \
-            --output-dir "$pkg_dir_trim" \
-            --output-digest "$output_digest")
-    fi
+    for set_name in main test; do
+        input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/src/$set_name/digest.json"
+        out_set_dir="$pkg_dir_trim/src/$set_name/java"
+        out_digest="$pkg_dir_trim/src/$set_name/digest.json"
+        if [ -f "$input_digest" ] && [ -d "$out_set_dir" ]; then
+            (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
+             stack exec digest-check -- refresh \
+                --inputs "$input_digest" \
+                --output-dir "$out_set_dir" \
+                --output-digest "$out_digest")
+        fi
+    done
 done
 
 echo ""

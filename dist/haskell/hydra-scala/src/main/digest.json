@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "generator": "v0-unstamped",
+  "inputs": {
+    "hydra.scala.coder": { "kind": "Other", "hash": "e8b9031272d3826e22b32dca166de42f0825d95073754d08f5e9b957c8726fab" },
+    "hydra.scala.serde": { "kind": "Other", "hash": "4dd0e4c5b90377fea619a342e18cec725818a324159bd857345c1b6cd0259872" },
+    "hydra.scala.syntax": { "kind": "Other", "hash": "7ed16ddfe5d58017e79bd214b1e4d0ca6aa6be282951daa4c3992a5f72120af8" },
+    "hydra.scala.utils": { "kind": "Other", "hash": "ee77df573f69fc96afa7bee1cddf93d5d2b17cd9fc7eae0704f80972847b27c6" }
+  },
+  "outputs": {
+    "Hydra/Dsl/Scala/Syntax.hs": { "kind": "TargetFile", "hash": "686e450acae3161b9e4daff875d4a56687deb38b80fc2a10f86f6ca394df4133" },
+    "Hydra/Scala/Coder.hs": { "kind": "TargetFile", "hash": "7cfce8719f370ea97eaa7740d02d1846c3c829633a45b878ed5ef774dbdac0b3" },
+    "Hydra/Scala/Language.hs": { "kind": "TargetFile", "hash": "6b6fc4a651f10c350ca705f1ae706a10d7d75378d9884f0ae8795ffb45505257" },
+    "Hydra/Scala/Prepare.hs": { "kind": "TargetFile", "hash": "33d3e6a4d7621d81a614919bd6c3b6c008fade73058e279012009608ac8c0b23" },
+    "Hydra/Scala/Serde.hs": { "kind": "TargetFile", "hash": "cdce391b1d7e0de9749e1b6a9444c1109fae130e1d533db0729f037921d2d411" },
+    "Hydra/Scala/Syntax.hs": { "kind": "TargetFile", "hash": "e21339f2d5960b87d1022ba7d84dfdaf3561132a092335aaa4985fb74a559a70" },
+    "Hydra/Scala/Utils.hs": { "kind": "TargetFile", "hash": "91be09acfd0dc3cbbe03253e867ae4eb70817b0082a45ac7b58786d8cfd6bef6" }
+  }
+}
