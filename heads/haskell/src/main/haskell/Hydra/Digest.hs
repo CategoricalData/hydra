@@ -143,8 +143,17 @@ readDigest path = do
 
 
 -- | Write a digest file. Format: a minimal JSON object
--- { "version": 1, "hashes": { "<namespace>": "<hex>", ... } }
+-- { "formatVersion": 1, "version": 1, "hashes": { "<namespace>": "<hex>", ... } }
 -- Keys are written in sorted order for deterministic output.
+--
+-- The two version fields are deliberately distinct:
+--
+--   * "formatVersion" describes the JSON encoding of sibling module files
+--     (dist/json/<package>/.../*.json). See docs/json-format.md.
+--     Bumped only when a parser for version N would mis-parse version N+1.
+--   * "version" describes this digest file's own internal schema (v1 = simple
+--     hash map, v2 = inputs/outputs/generator). It is not meant for consumers
+--     gating on the module-JSON encoding.
 writeDigest :: FilePath -> DigestMap -> IO ()
 writeDigest path digest = do
     SD.createDirectoryIfMissing True (FP.takeDirectory path)
@@ -155,7 +164,7 @@ writeDigest path digest = do
 -- in aeson's full machinery here because the format is trivial and we want
 -- tolerant parsing (a malformed digest silently becomes an empty map).
 -- The regex only matches `"key": "quoted_value"` pairs, so it naturally
--- skips the `"version": 1` and `"hashes": { ... }` scaffolding.
+-- skips the `"formatVersion"`, `"version"`, and `"hashes": { ... }` scaffolding.
 parseDigest :: String -> DigestMap
 parseDigest s =
     let kvPattern = "\"([^\"]+)\"[[:space:]]*:[[:space:]]*\"([^\"]+)\"" :: String
@@ -166,6 +175,7 @@ parseDigest s =
 serializeDigest :: DigestMap -> String
 serializeDigest digest = unlines $
     ["{"
+    ,"  \"formatVersion\": 1,"
     ,"  \"version\": 1,"
     ,"  \"hashes\": {"]
     ++ hashLines ++
