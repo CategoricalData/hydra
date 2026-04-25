@@ -323,9 +323,12 @@ main = do
   --                    assemble-distribution.sh handles coder/ext packages
   --                    individually with --package <pkg>.
   let allExtPackages = extPackages ++ extDemoPackages
+  let packageDeps p = case p of
+        "hydra-pg" -> ["hydra-pg", "hydra-rdf"]
+        _          -> [p]
   let extPackagesToLoad
         | optExtOnly opts                           = extDemoPackages
-        | Just p <- optPackage opts, p `elem` allExtPackages = [p]
+        | Just p <- optPackage opts, p `elem` allExtPackages = packageDeps p
         | otherwise                                 = []
 
   dslMods <- if optIncludeDsls opts
