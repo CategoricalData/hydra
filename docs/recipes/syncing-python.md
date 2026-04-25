@@ -77,7 +77,7 @@ If you prefer to run steps individually, or need to regenerate only specific par
 
 ```bash
 cd heads/haskell
-stack build hydra-haskell:exe:bootstrap-from-json
+stack build hydra:exe:bootstrap-from-json
 ```
 
 ### Step 2: Generate all Python artifacts
@@ -114,7 +114,7 @@ For interactive generation, use:
 
 ```bash
 cd heads/haskell
-stack ghci hydra-haskell:lib hydra:hydra-test
+stack ghci hydra:lib hydra:hydra-test
 ```
 
 This loads both hydra-haskell (for `writePython`) and hydra-test (for `testModules`).
