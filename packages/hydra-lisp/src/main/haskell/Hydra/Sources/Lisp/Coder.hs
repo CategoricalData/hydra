@@ -65,6 +65,7 @@ module_ = Module ns definitions
     Just "Lisp code generator: converts Hydra type and term modules to Lisp AST"
   where
     definitions = [
+      toDefinition Environment.reorderDefs,
       toDefinition dialectCadr,
       toDefinition dialectCar,
       toDefinition dialectConstructorPrefix,
@@ -79,11 +80,11 @@ module_ = Module ns definitions
       toDefinition encodeProjectionElim,
       toDefinition encodeTerm,
       toDefinition encodeTermDefinition,
-      toDefinition encodeUnionElim,
-      toDefinition encodeUnwrapElim,
       toDefinition encodeType,
       toDefinition encodeTypeBody,
       toDefinition encodeTypeDefinition,
+      toDefinition encodeUnionElim,
+      toDefinition encodeUnwrapElim,
       toDefinition isCasesPrimitive,
       toDefinition isLazy2ArgPrimitive,
       toDefinition isLazy3ArgPrimitive,
@@ -104,7 +105,6 @@ module_ = Module ns definitions
       toDefinition moduleToLisp,
       toDefinition qualifiedSnakeName,
       toDefinition qualifiedTypeName,
-      toDefinition Environment.reorderDefs,
       toDefinition wrapInThunk]
 
 
@@ -214,92 +214,6 @@ encodeApplication = def "encodeApplication" $
                                    @@ list [var "eJ"]))
                   -- Not a special primitive — encode normally
                   (var "normal")))])]
-
--- | Encode a Hydra record projection as a Lisp expression.
--- Takes an optional argument for applied projections.
-encodeProjectionElim :: TTermDefinition (L.Dialect -> Context -> Graph -> Projection -> Maybe Term -> Either Error L.Expression)
-encodeProjectionElim = def "encodeProjectionElim" $
-  "dialect" ~> "cx" ~> "g" ~> lambda "proj" $ lambda "marg" $
-      -- Record projection: (:field record) or (record-type-field record)
-        "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionField (var "proj"))) $
-        "tname" <~ (qualifiedSnakeName @@ Core.projectionTypeName (var "proj")) $
-        Maybes.cases (var "marg")
-          -- Unapplied: (lambda (v) (record-type-field v))
-          (right (lispLambdaExpr @@ list [string "v"] @@
-            (inject L._Expression L._Expression_fieldAccess $
-              record L._FieldAccess [
-                L._FieldAccess_recordType>>: wrap L._Symbol (var "tname"),
-                L._FieldAccess_field>>: wrap L._Symbol (var "fname"),
-                L._FieldAccess_target>>: lispVar @@ string "v"])))
-          (lambda "arg" $
-            "sarg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg") $
-              right (inject L._Expression L._Expression_fieldAccess $
-                record L._FieldAccess [
-                  L._FieldAccess_recordType>>: wrap L._Symbol (var "tname"),
-                  L._FieldAccess_field>>: wrap L._Symbol (var "fname"),
-                  L._FieldAccess_target>>: var "sarg"]))
-
--- | Encode a Hydra case statement (union elimination) as a Lisp expression.
--- Takes an optional argument for applied case statements.
-encodeUnionElim :: TTermDefinition (L.Dialect -> Context -> Graph -> CaseStatement -> Maybe Term -> Either Error L.Expression)
-encodeUnionElim = def "encodeUnionElim" $
-  "dialect" ~> "cx" ~> "g" ~> lambda "cs" $ lambda "marg" $
-      -- Union elimination: cond dispatch on tagged values
-        "tname" <~ (Names.localNameOf @@ Core.caseStatementTypeName (var "cs")) $
-        "caseFields" <~ Core.caseStatementCases (var "cs") $
-        "defCase" <~ Core.caseStatementDefault (var "cs") $
-        -- Build cond clauses from each case field
-        "clauses" <<~ (Eithers.mapList
-          (lambda "cf" $
-            "cfname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.fieldName (var "cf"))) $
-            "cfterm" <~ Core.fieldTerm (var "cf") $
-            -- Each case applies the handler to the value: ((handler) v)
-            -- Condition: (equal? (car __m) :variantName) or (= (first __m) :variantName)
-            "condExpr" <~ (lispApp @@ (lispVar @@ (dialectEqual @@ var "dialect")) @@ list [
-              lispApp @@ (lispVar @@ (dialectCar @@ var "dialect")) @@ list [lispVar @@ string "match_target"],
-              lispKeyword @@ var "cfname"]) $
-            -- Body: apply handler to (cadr __m)
-            "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ (Core.termApplication (Core.application (var "cfterm") (Core.termVariable (wrap _Name (string "match_value")))))) $
-              right (record L._CondClause [
-                L._CondClause_condition>>: var "condExpr",
-                L._CondClause_body>>: var "bodyExpr"]))
-          (var "caseFields")) $
-        -- Default clause
-        -- Default is a direct result value, NOT a handler function.
-        -- The reducer returns the default as-is without applying it to the payload.
-        "defExpr" <<~ (Maybes.cases (var "defCase")
-          (right nothing)
-          (lambda "dt" $
-            "defBody" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "dt") $
-              right (just (var "defBody"))))  $
-        -- Build the cond expression wrapped in a lambda taking "v"
-        "condExpr" <~ (inject L._Expression L._Expression_cond $
-          record L._CondExpression [
-            L._CondExpression_clauses>>: var "clauses",
-            L._CondExpression_default>>: var "defExpr"]) $
-        -- Wrap in ((lambda (__mv) (cond ...)) (cadr __m)) or (second __m) for Clojure
-        "innerExpr" <~ (lispApp @@
-          (lispLambdaExpr @@ list [string "match_value"] @@ var "condExpr") @@
-          list [lispApp @@ (lispVar @@ (dialectCadr @@ var "dialect")) @@ list [lispVar @@ string "match_target"]]) $
-        Maybes.cases (var "marg")
-          -- Unapplied: (lambda (__m) ((lambda (__mv) (cond ...)) (second __m)))
-          (right (lispLambdaExpr @@ list [string "match_target"] @@ var "innerExpr"))
-          (lambda "arg" $
-            "sarg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg") $
-              -- Applied: ((lambda (__m) ((lambda (__mv) (cond ...)) (second __m))) sarg)
-              right (lispApp @@ (lispLambdaExpr @@ list [string "match_target"] @@ var "innerExpr") @@ list [var "sarg"]))
-
--- | Encode a Hydra wrap elimination (unwrap) as a Lisp expression.
--- Takes an optional argument for applied unwraps.
-encodeUnwrapElim :: TTermDefinition (L.Dialect -> Context -> Graph -> Name -> Maybe Term -> Either Error L.Expression)
-encodeUnwrapElim = def "encodeUnwrapElim" $
-  "dialect" ~> "cx" ~> "g" ~> lambda "name" $ lambda "marg" $
-      -- Wrap elimination: transparent unwrap
-        Maybes.cases (var "marg")
-          -- Unapplied: identity function
-          (right (lispLambdaExpr @@ list [string "v"] @@ (lispVar @@ string "v")))
-          (lambda "arg" $
-            encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg")
 
 -- | Encode a Hydra field type as a Lisp field definition
 encodeFieldDef :: TTermDefinition (FieldType -> L.FieldDefinition)
@@ -539,6 +453,30 @@ encodeLiteral = def "encodeLiteral" $
                     L._IntegerLiteral_value>>: Literals.int32ToBigint (var "bv"),
                     L._IntegerLiteral_bigint>>: boolean False])
               (var "byteValues")]]
+
+-- | Encode a Hydra record projection as a Lisp expression.
+-- Takes an optional argument for applied projections.
+encodeProjectionElim :: TTermDefinition (L.Dialect -> Context -> Graph -> Projection -> Maybe Term -> Either Error L.Expression)
+encodeProjectionElim = def "encodeProjectionElim" $
+  "dialect" ~> "cx" ~> "g" ~> lambda "proj" $ lambda "marg" $
+      -- Record projection: (:field record) or (record-type-field record)
+        "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionField (var "proj"))) $
+        "tname" <~ (qualifiedSnakeName @@ Core.projectionTypeName (var "proj")) $
+        Maybes.cases (var "marg")
+          -- Unapplied: (lambda (v) (record-type-field v))
+          (right (lispLambdaExpr @@ list [string "v"] @@
+            (inject L._Expression L._Expression_fieldAccess $
+              record L._FieldAccess [
+                L._FieldAccess_recordType>>: wrap L._Symbol (var "tname"),
+                L._FieldAccess_field>>: wrap L._Symbol (var "fname"),
+                L._FieldAccess_target>>: lispVar @@ string "v"])))
+          (lambda "arg" $
+            "sarg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg") $
+              right (inject L._Expression L._Expression_fieldAccess $
+                record L._FieldAccess [
+                  L._FieldAccess_recordType>>: wrap L._Symbol (var "tname"),
+                  L._FieldAccess_field>>: wrap L._Symbol (var "fname"),
+                  L._FieldAccess_target>>: var "sarg"]))
 
 -- | Encode a Hydra term as a Lisp expression
 encodeTerm :: TTermDefinition (L.Dialect -> Context -> Graph -> Term -> Either Error L.Expression)
@@ -829,6 +767,68 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
     "lname" <~ (qualifiedSnakeName @@ var "name") $
     "dtyp" <~ (Strip.deannotateType @@ var "typ") $
     encodeTypeBody @@ var "lname" @@ var "typ" @@ var "dtyp"
+
+-- | Encode a Hydra case statement (union elimination) as a Lisp expression.
+-- Takes an optional argument for applied case statements.
+encodeUnionElim :: TTermDefinition (L.Dialect -> Context -> Graph -> CaseStatement -> Maybe Term -> Either Error L.Expression)
+encodeUnionElim = def "encodeUnionElim" $
+  "dialect" ~> "cx" ~> "g" ~> lambda "cs" $ lambda "marg" $
+      -- Union elimination: cond dispatch on tagged values
+        "tname" <~ (Names.localNameOf @@ Core.caseStatementTypeName (var "cs")) $
+        "caseFields" <~ Core.caseStatementCases (var "cs") $
+        "defCase" <~ Core.caseStatementDefault (var "cs") $
+        -- Build cond clauses from each case field
+        "clauses" <<~ (Eithers.mapList
+          (lambda "cf" $
+            "cfname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.fieldName (var "cf"))) $
+            "cfterm" <~ Core.fieldTerm (var "cf") $
+            -- Each case applies the handler to the value: ((handler) v)
+            -- Condition: (equal? (car __m) :variantName) or (= (first __m) :variantName)
+            "condExpr" <~ (lispApp @@ (lispVar @@ (dialectEqual @@ var "dialect")) @@ list [
+              lispApp @@ (lispVar @@ (dialectCar @@ var "dialect")) @@ list [lispVar @@ string "match_target"],
+              lispKeyword @@ var "cfname"]) $
+            -- Body: apply handler to (cadr __m)
+            "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ (Core.termApplication (Core.application (var "cfterm") (Core.termVariable (wrap _Name (string "match_value")))))) $
+              right (record L._CondClause [
+                L._CondClause_condition>>: var "condExpr",
+                L._CondClause_body>>: var "bodyExpr"]))
+          (var "caseFields")) $
+        -- Default clause
+        -- Default is a direct result value, NOT a handler function.
+        -- The reducer returns the default as-is without applying it to the payload.
+        "defExpr" <<~ (Maybes.cases (var "defCase")
+          (right nothing)
+          (lambda "dt" $
+            "defBody" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "dt") $
+              right (just (var "defBody"))))  $
+        -- Build the cond expression wrapped in a lambda taking "v"
+        "condExpr" <~ (inject L._Expression L._Expression_cond $
+          record L._CondExpression [
+            L._CondExpression_clauses>>: var "clauses",
+            L._CondExpression_default>>: var "defExpr"]) $
+        -- Wrap in ((lambda (__mv) (cond ...)) (cadr __m)) or (second __m) for Clojure
+        "innerExpr" <~ (lispApp @@
+          (lispLambdaExpr @@ list [string "match_value"] @@ var "condExpr") @@
+          list [lispApp @@ (lispVar @@ (dialectCadr @@ var "dialect")) @@ list [lispVar @@ string "match_target"]]) $
+        Maybes.cases (var "marg")
+          -- Unapplied: (lambda (__m) ((lambda (__mv) (cond ...)) (second __m)))
+          (right (lispLambdaExpr @@ list [string "match_target"] @@ var "innerExpr"))
+          (lambda "arg" $
+            "sarg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg") $
+              -- Applied: ((lambda (__m) ((lambda (__mv) (cond ...)) (second __m))) sarg)
+              right (lispApp @@ (lispLambdaExpr @@ list [string "match_target"] @@ var "innerExpr") @@ list [var "sarg"]))
+
+-- | Encode a Hydra wrap elimination (unwrap) as a Lisp expression.
+-- Takes an optional argument for applied unwraps.
+encodeUnwrapElim :: TTermDefinition (L.Dialect -> Context -> Graph -> Name -> Maybe Term -> Either Error L.Expression)
+encodeUnwrapElim = def "encodeUnwrapElim" $
+  "dialect" ~> "cx" ~> "g" ~> lambda "name" $ lambda "marg" $
+      -- Wrap elimination: transparent unwrap
+        Maybes.cases (var "marg")
+          -- Unapplied: identity function
+          (right (lispLambdaExpr @@ list [string "v"] @@ (lispVar @@ string "v")))
+          (lambda "arg" $
+            encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg")
 
 -- | Check if a name is maybes.cases (3 args, arg 2 is lazy).
 isCasesPrimitive :: TTermDefinition (Name -> Bool)

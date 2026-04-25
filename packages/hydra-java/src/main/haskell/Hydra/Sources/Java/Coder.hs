@@ -117,11 +117,11 @@ module_ = Module ns definitions
       toDefinition buildTypeSubst_go,
       toDefinition buildTypeVarSubst,
       toDefinition buildTypeVarSubst_go,
+      toDefinition classModsPublic,
       toDefinition classifyDataReference,
       toDefinition classifyDataTerm,
       toDefinition classifyDataTerm_countLambdaParams,
       toDefinition classifyDataTerm_stripTypeLambdas,
-      toDefinition classModsPublic,
       toDefinition cmpDeclStatement,
       toDefinition cmpNotZeroExpr,
       toDefinition collectForallParams,
@@ -163,8 +163,9 @@ module_ = Module ns definitions
       toDefinition encodeFunction,
       toDefinition encodeFunctionFormTerm,
       toDefinition encodeFunctionPrimitiveByName,
-      toDefinition encodeNullaryPrimitiveByName,
       toDefinition encodeLiteral,
+      toDefinition encodeLiteralType,
+      toDefinition encodeLiteralType_simple,
       toDefinition encodeLiteral_encodeFloat,
       toDefinition encodeLiteral_encodeFloat32,
       toDefinition encodeLiteral_encodeFloat64,
@@ -173,17 +174,16 @@ module_ = Module ns definitions
       toDefinition encodeLiteral_javaSpecialFloatExpr,
       toDefinition encodeLiteral_litExp,
       toDefinition encodeLiteral_primCast,
-      toDefinition encodeLiteralType,
-      toDefinition encodeLiteralType_simple,
       toDefinition encodeNullaryConstant,
       toDefinition encodeNullaryConstant_typeArgsFromReturnType,
+      toDefinition encodeNullaryPrimitiveByName,
       toDefinition encodeTerm,
       toDefinition encodeTermDefinition,
       toDefinition encodeTermInternal,
       toDefinition encodeTermTCO,
       toDefinition encodeType,
-      toDefinition encodeType_resolveIfTypedef,
       toDefinition encodeTypeDefinition,
+      toDefinition encodeType_resolveIfTypedef,
       toDefinition encodeVariable,
       toDefinition encodeVariable_buildCurried,
       toDefinition encodeVariable_hoistedLambdaCase,
@@ -246,8 +246,8 @@ module_ = Module ns definitions
       toDefinition needsThunking,
       toDefinition noComment,
       toDefinition otherwiseBranch,
-      toDefinition peelDomainsAndCod,
       toDefinition peelDomainTypes,
+      toDefinition peelDomainsAndCod,
       toDefinition peelExpectedTypes,
       toDefinition propagateType,
       toDefinition propagateType_propagateIntoLambda,
@@ -287,6 +287,10 @@ module_ = Module ns definitions
       toDefinition withTypeLambda,
       toDefinition wrapInSupplierLambda,
       toDefinition wrapLazyArguments]
+
+-- | Helper: coerce bigint to int for javaInt/javaIntExpression TTermDefinition (phantom type mismatch workaround)
+bigintAsInt :: TTerm Integer -> TTerm Int
+bigintAsInt = coerce
 
 -- | Add a comment from a FieldType to a class body declaration
 addComment :: TTermDefinition (Java.ClassBodyDeclaration -> FieldType -> Context -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
@@ -408,10 +412,6 @@ applyOvergenSubstToTermAnnotations = def "applyOvergenSubstToTermAnnotations" $
   lambda "subst" $ lambda "term0" $
     "cx" ~> "g" ~>
     right (applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "g" @@ var "term0")
-
--- | Helper: coerce bigint to int for javaInt/javaIntExpression TTermDefinition (phantom type mismatch workaround)
-bigintAsInt :: TTerm Integer -> TTerm Int
-bigintAsInt = coerce
 
 -- | Recursive helper for applyOvergenSubstToTermAnnotations. Walks a term and applies
 -- a type substitution to all type annotations. Also updates lambda domains and type applications.
@@ -1031,6 +1031,10 @@ buildTypeVarSubst_go = def "buildTypeVarSubst_go" $
           _Type_forall>>: lambda "cfa" $
             var "goSub" @@ Core.forallTypeBody (var "ffa") @@ Core.forallTypeBody (var "cfa")]]
 
+classModsPublic :: TTermDefinition [Java.ClassModifier]
+classModsPublic = def "classModsPublic" $
+  list [inject Java._ClassModifier Java._ClassModifier_public unit]
+
 -- | Classify a data reference by looking up its element and classifying its term
 classifyDataReference :: TTermDefinition (Name -> Context -> Graph -> Either Error JavaHelpers.JavaSymbolClass)
 classifyDataReference = def "classifyDataReference" $
@@ -1089,10 +1093,6 @@ classifyDataTerm_stripTypeLambdas = def "classifyDataTerm_stripTypeLambdas" $
         classifyDataTerm_stripTypeLambdas @@ (project _TypeLambda _TypeLambda_body @@ var "tl")]
 
 -- | Classify a data reference by looking up its element and classifying its term
-
-classModsPublic :: TTermDefinition [Java.ClassModifier]
-classModsPublic = def "classModsPublic" $
-  list [inject Java._ClassModifier Java._ClassModifier_public unit]
 
 -- | Shared helper: int cmp = 0; declaration
 cmpDeclStatement :: TTermDefinition (JavaHelpers.Aliases -> Java.BlockStatement)
@@ -2089,62 +2089,6 @@ encodeElimination = def "encodeElimination" $
           -- With arg: field access
           (lambda "jarg" $ var "withArg" @@ var "jarg"))]
 
--- | Encode a primitive reference (by name) with function-type arity, as a method reference or curried wrapper.
-encodeFunctionPrimitiveByName :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Type -> Name -> Context -> Graph -> Either Error Java.Expression)
-encodeFunctionPrimitiveByName = def "encodeFunctionPrimitiveByName" $
-  lambda "env" $ lambda "dom" $ lambda "cod" $ lambda "name" $
-    "cx" ~> "g" ~>
-    "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
-    "classWithApply" <~ (JavaDsl.unIdentifier (elementJavaIdentifier @@ true @@ false @@ var "aliases" @@ var "name")) $
-    "suffix" <~ Strings.cat2 (string ".") (asTerm JavaNamesSource.applyMethodName) $
-    "className" <~ Strings.fromList (Lists.take
-      (Math.sub (Strings.length (var "classWithApply")) (Strings.length (var "suffix")))
-      (Strings.toList (var "classWithApply"))) $
-    "arity" <~ (Arity.typeArity @@ (inject _Type _Type_function (record _FunctionType [
-      _FunctionType_domain>>: var "dom",
-      _FunctionType_codomain>>: var "cod"]))) $
-    Logic.ifElse (Equality.lte (var "arity") (int32 1))
-      (right (JavaUtilsSource.javaIdentifierToJavaExpression @@
-        (JavaDsl.identifier (Strings.cat (list [var "className", string "::", asTerm JavaNamesSource.applyMethodName])))))
-      ("paramNames" <~ Lists.map
-        (lambda "i" $ wrap _Name (Strings.cat2 (string "p") (Literals.showInt32 (var "i"))))
-        (Math.range (int32 0) (Math.sub (var "arity") (int32 1))) $
-        "paramExprs" <~ Lists.map
-          (lambda "p" $ JavaUtilsSource.javaIdentifierToJavaExpression @@ (JavaUtilsSource.variableToJavaIdentifier @@ var "p"))
-          (var "paramNames") $
-        "classId" <~ JavaDsl.identifier (var "className") $
-        "call" <~ (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
-          (JavaUtilsSource.methodInvocationStatic @@ var "classId" @@ JavaDsl.identifier (asTerm JavaNamesSource.applyMethodName) @@ var "paramExprs")) $
-        "curried" <~ (buildCurriedLambda @@ var "paramNames" @@ var "call") $
-        "jtype" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ (inject _Type _Type_function (record _FunctionType [
-          _FunctionType_domain>>: var "dom",
-          _FunctionType_codomain>>: var "cod"])) @@ var "cx" @@ var "g") $
-        "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jtype" @@ var "cx") $
-        right (JavaUtilsSource.javaCastExpressionToJavaExpression @@
-          (JavaUtilsSource.javaCastExpression @@ var "rt" @@ (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "curried"))))
-
--- | Encode a nullary primitive reference (by name) as a Java expression.
-encodeNullaryPrimitiveByName :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Name -> Context -> Graph -> Either Error Java.Expression)
-encodeNullaryPrimitiveByName = def "encodeNullaryPrimitiveByName" $
-  lambda "env" $ lambda "typ" $ lambda "name" $
-    "cx" ~> "g" ~>
-    "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
-    "targs" <<~ (encodeNullaryConstant_typeArgsFromReturnType @@ var "aliases" @@ var "typ" @@ var "cx" @@ var "g") $
-    Logic.ifElse (Lists.null (var "targs"))
-      ("header" <~ (inject Java._MethodInvocation_Header Java._MethodInvocation_Header_simple
-        (wrap Java._MethodName
-          (elementJavaIdentifier @@ boolean True @@ boolean False @@ var "aliases" @@ var "name"))) $
-       right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
-         (record Java._MethodInvocation [
-           Java._MethodInvocation_header>>: var "header",
-           Java._MethodInvocation_arguments>>: list ([] :: [TTerm Java.Expression])])))
-      ("fullName" <~ (unwrap Java._Identifier @@ (elementJavaIdentifier @@ boolean True @@ boolean False @@ var "aliases" @@ var "name")) $
-       "parts" <~ Strings.splitOn (string ".") (var "fullName") $
-       "className" <~ JavaDsl.identifier (Strings.intercalate (string ".") (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts")))) $
-       "methodName" <~ JavaDsl.identifier (Maybes.fromMaybe (var "fullName") (Lists.maybeLast (var "parts"))) $
-       right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
-         (JavaUtilsSource.methodInvocationStaticWithTypeArgs @@ var "className" @@ var "methodName" @@ var "targs" @@ (list ([] :: [TTerm Java.Expression])))))
-
 -- | Encode a function-form term. The "funTerm" argument must be one of
 -- the function-form Term variants: lambda, project, cases, or unwrap.
 encodeFunction :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Type -> Term -> Context -> Graph -> Either Error Java.Expression)
@@ -2228,6 +2172,40 @@ encodeFunctionFormTerm = def "encodeFunctionFormTerm" $
       _Type_function>>: lambda "ft" $
         encodeFunction @@ var "env" @@ (Core.functionTypeDomain (var "ft")) @@ (Core.functionTypeCodomain (var "ft")) @@ var "term" @@ var "cx" @@ var "g"]
 
+-- | Encode a primitive reference (by name) with function-type arity, as a method reference or curried wrapper.
+encodeFunctionPrimitiveByName :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Type -> Name -> Context -> Graph -> Either Error Java.Expression)
+encodeFunctionPrimitiveByName = def "encodeFunctionPrimitiveByName" $
+  lambda "env" $ lambda "dom" $ lambda "cod" $ lambda "name" $
+    "cx" ~> "g" ~>
+    "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
+    "classWithApply" <~ (JavaDsl.unIdentifier (elementJavaIdentifier @@ true @@ false @@ var "aliases" @@ var "name")) $
+    "suffix" <~ Strings.cat2 (string ".") (asTerm JavaNamesSource.applyMethodName) $
+    "className" <~ Strings.fromList (Lists.take
+      (Math.sub (Strings.length (var "classWithApply")) (Strings.length (var "suffix")))
+      (Strings.toList (var "classWithApply"))) $
+    "arity" <~ (Arity.typeArity @@ (inject _Type _Type_function (record _FunctionType [
+      _FunctionType_domain>>: var "dom",
+      _FunctionType_codomain>>: var "cod"]))) $
+    Logic.ifElse (Equality.lte (var "arity") (int32 1))
+      (right (JavaUtilsSource.javaIdentifierToJavaExpression @@
+        (JavaDsl.identifier (Strings.cat (list [var "className", string "::", asTerm JavaNamesSource.applyMethodName])))))
+      ("paramNames" <~ Lists.map
+        (lambda "i" $ wrap _Name (Strings.cat2 (string "p") (Literals.showInt32 (var "i"))))
+        (Math.range (int32 0) (Math.sub (var "arity") (int32 1))) $
+        "paramExprs" <~ Lists.map
+          (lambda "p" $ JavaUtilsSource.javaIdentifierToJavaExpression @@ (JavaUtilsSource.variableToJavaIdentifier @@ var "p"))
+          (var "paramNames") $
+        "classId" <~ JavaDsl.identifier (var "className") $
+        "call" <~ (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
+          (JavaUtilsSource.methodInvocationStatic @@ var "classId" @@ JavaDsl.identifier (asTerm JavaNamesSource.applyMethodName) @@ var "paramExprs")) $
+        "curried" <~ (buildCurriedLambda @@ var "paramNames" @@ var "call") $
+        "jtype" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ (inject _Type _Type_function (record _FunctionType [
+          _FunctionType_domain>>: var "dom",
+          _FunctionType_codomain>>: var "cod"])) @@ var "cx" @@ var "g") $
+        "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jtype" @@ var "cx") $
+        right (JavaUtilsSource.javaCastExpressionToJavaExpression @@
+          (JavaUtilsSource.javaCastExpression @@ var "rt" @@ (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "curried"))))
+
 -- | Encode a literal value to a Java expression
 encodeLiteral :: TTermDefinition (Literal -> Java.Expression)
 encodeLiteral = def "encodeLiteral" $
@@ -2255,142 +2233,6 @@ encodeLiteral = def "encodeLiteral" $
       _Literal_integer>>: "i" ~> encodeLiteral_encodeInteger @@ var "i",
       _Literal_string>>: "s" ~>
         encodeLiteral_litExp @@ (JavaUtilsSource.javaString @@ var "s")]
-
--- | Encode a float value to a Java expression
-encodeLiteral_encodeFloat :: TTermDefinition (FloatValue -> Java.Expression)
-encodeLiteral_encodeFloat = def "encodeLiteral_encodeFloat" $
-  lambda "f" $
-    cases _FloatValue (var "f") Nothing [
-      _FloatValue_bigfloat>>: "v" ~>
-        JavaUtilsSource.javaConstructorCall @@
-          (JavaUtilsSource.javaConstructorName @@
-            (JavaDsl.identifier $ string "java.math.BigDecimal") @@ nothing) @@
-          list [encodeLiteral @@ inject _Literal _Literal_string (Literals.showBigfloat $ var "v")] @@
-          nothing,
-      _FloatValue_float32>>: "v" ~>
-        encodeLiteral_encodeFloat32 @@ var "v",
-      _FloatValue_float64>>: "v" ~>
-        encodeLiteral_encodeFloat64 @@ var "v"]
-
--- | Encode a float32 value, handling NaN and Infinity specially since BigDecimal cannot represent them.
-encodeLiteral_encodeFloat32 :: TTermDefinition (Float -> Java.Expression)
-encodeLiteral_encodeFloat32 = def "encodeLiteral_encodeFloat32" $
-  lambda "v" $ lets [
-    "s">: Literals.showFloat32 (var "v")] $
-    Logic.ifElse (Equality.equal (var "s") (string "NaN"))
-      (encodeLiteral_javaSpecialFloatExpr @@ string "Float" @@ string "NaN") $
-    Logic.ifElse (Equality.equal (var "s") (string "Infinity"))
-      (encodeLiteral_javaSpecialFloatExpr @@ string "Float" @@ string "POSITIVE_INFINITY") $
-    Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
-      (encodeLiteral_javaSpecialFloatExpr @@ string "Float" @@ string "NEGATIVE_INFINITY") $
-    encodeLiteral_primCast @@
-      (JavaDsl.primitiveTypeNumeric $ JavaDsl.numericTypeFloatingPoint JavaDsl.floatingPointTypeFloat) @@
-      (encodeLiteral_litExp @@
-        (JavaDsl.literalFloatingPoint $ JavaDsl.floatingPointLiteral $
-          Literals.float32ToBigfloat (var "v")))
-
--- | Encode a float64 value, handling NaN, Infinity, and negative zero specially.
--- BigDecimal (Java's bigfloat) cannot represent NaN, Infinity, or signed zero.
-encodeLiteral_encodeFloat64 :: TTermDefinition (Double -> Java.Expression)
-encodeLiteral_encodeFloat64 = def "encodeLiteral_encodeFloat64" $
-  lambda "v" $ lets [
-    "s">: Literals.showFloat64 (var "v")] $
-    Logic.ifElse (Equality.equal (var "s") (string "NaN"))
-      (encodeLiteral_javaSpecialFloatExpr @@ string "Double" @@ string "NaN") $
-    Logic.ifElse (Equality.equal (var "s") (string "Infinity"))
-      (encodeLiteral_javaSpecialFloatExpr @@ string "Double" @@ string "POSITIVE_INFINITY") $
-    Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
-      (encodeLiteral_javaSpecialFloatExpr @@ string "Double" @@ string "NEGATIVE_INFINITY") $
-    -- Negative zero must be emitted via Double.parseDouble("-0.0") because routing it
-    -- through Bigfloat (which on the Java host is BigDecimal) would strip the sign.
-    Logic.ifElse (Equality.equal (var "s") (string "-0.0"))
-      (encodeLiteral_javaParseDouble @@ string "-0.0") $
-    encodeLiteral_litExp @@
-      (JavaDsl.literalFloatingPoint $ JavaDsl.floatingPointLiteral $
-        Literals.float64ToBigfloat (var "v"))
-
--- | Emit a Java field access expression like Float.NaN or Double.POSITIVE_INFINITY.
-encodeLiteral_javaSpecialFloatExpr :: TTermDefinition (String -> String -> Java.Expression)
-encodeLiteral_javaSpecialFloatExpr = def "encodeLiteral_javaSpecialFloatExpr" $
-  lambda "className" $ lambda "fieldName" $
-    JavaUtilsSource.javaExpressionNameToJavaExpression @@
-      (JavaDsl.expressionName
-        (just (JavaDsl.ambiguousName (list [JavaDsl.identifier $ var "className"])))
-        (JavaDsl.identifier $ var "fieldName"))
-
--- | Emit a Java method call expression Double.parseDouble("<value>"). Used for
--- float64 values that cannot round-trip through Bigfloat (e.g., negative zero).
-encodeLiteral_javaParseDouble :: TTermDefinition (String -> Java.Expression)
-encodeLiteral_javaParseDouble = def "encodeLiteral_javaParseDouble" $
-  lambda "value" $
-    JavaUtilsSource.javaMethodInvocationToJavaExpression @@
-      (JavaUtilsSource.methodInvocationStatic
-        @@ JavaDsl.identifier (string "Double")
-        @@ JavaDsl.identifier (string "parseDouble")
-        @@ list [encodeLiteral @@ inject _Literal _Literal_string (var "value")])
-
--- | Encode an integer value to a Java expression
-encodeLiteral_encodeInteger :: TTermDefinition (IntegerValue -> Java.Expression)
-encodeLiteral_encodeInteger = def "encodeLiteral_encodeInteger" $
-  lambda "i" $
-    cases _IntegerValue (var "i") Nothing [
-      _IntegerValue_bigint>>: "v" ~>
-        JavaUtilsSource.javaConstructorCall @@
-          (JavaUtilsSource.javaConstructorName @@
-            (JavaDsl.identifier $ string "java.math.BigInteger") @@ nothing) @@
-          list [encodeLiteral @@ inject _Literal _Literal_string (Literals.showBigint $ var "v")] @@
-          nothing,
-      _IntegerValue_int8>>: "v" ~>
-        encodeLiteral_primCast @@
-          (JavaDsl.primitiveTypeNumeric $ JavaDsl.numericTypeIntegral JavaDsl.integralTypeByte) @@
-          (encodeLiteral_litExp @@
-            (JavaDsl.literalInteger $ JavaDsl.integerLiteral $ Literals.int8ToBigint (var "v"))),
-      _IntegerValue_int16>>: "v" ~>
-        encodeLiteral_primCast @@
-          (JavaDsl.primitiveTypeNumeric $ JavaDsl.numericTypeIntegral JavaDsl.integralTypeShort) @@
-          (encodeLiteral_litExp @@
-            (JavaDsl.literalInteger $ JavaDsl.integerLiteral $ Literals.int16ToBigint (var "v"))),
-      _IntegerValue_int32>>: "v" ~>
-        encodeLiteral_litExp @@
-          (JavaDsl.literalInteger $ JavaDsl.integerLiteral $ Literals.int32ToBigint (var "v")),
-      _IntegerValue_int64>>: "v" ~>
-        encodeLiteral_primCast @@
-          (JavaDsl.primitiveTypeNumeric $ JavaDsl.numericTypeIntegral JavaDsl.integralTypeLong) @@
-          (encodeLiteral_litExp @@
-            (JavaDsl.literalInteger $ JavaDsl.integerLiteral $ Literals.int64ToBigint (var "v"))),
-      _IntegerValue_uint8>>: "v" ~>
-        encodeLiteral_primCast @@
-          (JavaDsl.primitiveTypeNumeric $ JavaDsl.numericTypeIntegral JavaDsl.integralTypeShort) @@
-          (encodeLiteral_litExp @@
-            (JavaDsl.literalInteger $ JavaDsl.integerLiteral $ Literals.uint8ToBigint (var "v"))),
-      _IntegerValue_uint16>>: "v" ~>
-        encodeLiteral_litExp @@
-          (JavaDsl.literalCharacter $ var "v"),
-      _IntegerValue_uint32>>: "v" ~>
-        encodeLiteral_primCast @@
-          (JavaDsl.primitiveTypeNumeric $ JavaDsl.numericTypeIntegral JavaDsl.integralTypeLong) @@
-          (encodeLiteral_litExp @@
-            (JavaDsl.literalInteger $ JavaDsl.integerLiteral $ Literals.uint32ToBigint (var "v"))),
-      _IntegerValue_uint64>>: "v" ~>
-        JavaUtilsSource.javaConstructorCall @@
-          (JavaUtilsSource.javaConstructorName @@
-            (JavaDsl.identifier $ string "java.math.BigInteger") @@ nothing) @@
-          list [encodeLiteral @@ inject _Literal _Literal_string
-            (Literals.showBigint $ Literals.uint64ToBigint (var "v"))] @@
-          nothing]
-
--- | Helper: convert a Java literal to a Java expression
-encodeLiteral_litExp :: TTermDefinition (Java.Literal -> Java.Expression)
-encodeLiteral_litExp = def "encodeLiteral_litExp" $
-  lambda "l" $ JavaUtilsSource.javaLiteralToJavaExpression @@ var "l"
-
--- | Helper: cast an expression to a primitive type
-encodeLiteral_primCast :: TTermDefinition (Java.PrimitiveType -> Java.Expression -> Java.Expression)
-encodeLiteral_primCast = def "encodeLiteral_primCast" $
-  lambda "pt" $ lambda "expr" $
-    JavaUtilsSource.javaCastExpressionToJavaExpression @@
-      (JavaUtilsSource.javaCastPrimitive @@ var "pt" @@
-        (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "expr"))
 
 -- | Encode a Hydra literal type to a Java type
 encodeLiteralType :: TTermDefinition (LiteralType -> Context -> Graph -> Either Error Java.Type)
@@ -2464,6 +2306,142 @@ encodeLiteralType_simple = def "encodeLiteralType_simple" $
     @@ nothing
     @@ var "n")
 
+-- | Encode a float value to a Java expression
+encodeLiteral_encodeFloat :: TTermDefinition (FloatValue -> Java.Expression)
+encodeLiteral_encodeFloat = def "encodeLiteral_encodeFloat" $
+  lambda "f" $
+    cases _FloatValue (var "f") Nothing [
+      _FloatValue_bigfloat>>: "v" ~>
+        JavaUtilsSource.javaConstructorCall @@
+          (JavaUtilsSource.javaConstructorName @@
+            (JavaDsl.identifier $ string "java.math.BigDecimal") @@ nothing) @@
+          list [encodeLiteral @@ inject _Literal _Literal_string (Literals.showBigfloat $ var "v")] @@
+          nothing,
+      _FloatValue_float32>>: "v" ~>
+        encodeLiteral_encodeFloat32 @@ var "v",
+      _FloatValue_float64>>: "v" ~>
+        encodeLiteral_encodeFloat64 @@ var "v"]
+
+-- | Encode a float32 value, handling NaN and Infinity specially since BigDecimal cannot represent them.
+encodeLiteral_encodeFloat32 :: TTermDefinition (Float -> Java.Expression)
+encodeLiteral_encodeFloat32 = def "encodeLiteral_encodeFloat32" $
+  lambda "v" $ lets [
+    "s">: Literals.showFloat32 (var "v")] $
+    Logic.ifElse (Equality.equal (var "s") (string "NaN"))
+      (encodeLiteral_javaSpecialFloatExpr @@ string "Float" @@ string "NaN") $
+    Logic.ifElse (Equality.equal (var "s") (string "Infinity"))
+      (encodeLiteral_javaSpecialFloatExpr @@ string "Float" @@ string "POSITIVE_INFINITY") $
+    Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
+      (encodeLiteral_javaSpecialFloatExpr @@ string "Float" @@ string "NEGATIVE_INFINITY") $
+    encodeLiteral_primCast @@
+      (JavaDsl.primitiveTypeNumeric $ JavaDsl.numericTypeFloatingPoint JavaDsl.floatingPointTypeFloat) @@
+      (encodeLiteral_litExp @@
+        (JavaDsl.literalFloatingPoint $ JavaDsl.floatingPointLiteral $
+          Literals.float32ToBigfloat (var "v")))
+
+-- | Encode a float64 value, handling NaN, Infinity, and negative zero specially.
+-- BigDecimal (Java's bigfloat) cannot represent NaN, Infinity, or signed zero.
+encodeLiteral_encodeFloat64 :: TTermDefinition (Double -> Java.Expression)
+encodeLiteral_encodeFloat64 = def "encodeLiteral_encodeFloat64" $
+  lambda "v" $ lets [
+    "s">: Literals.showFloat64 (var "v")] $
+    Logic.ifElse (Equality.equal (var "s") (string "NaN"))
+      (encodeLiteral_javaSpecialFloatExpr @@ string "Double" @@ string "NaN") $
+    Logic.ifElse (Equality.equal (var "s") (string "Infinity"))
+      (encodeLiteral_javaSpecialFloatExpr @@ string "Double" @@ string "POSITIVE_INFINITY") $
+    Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
+      (encodeLiteral_javaSpecialFloatExpr @@ string "Double" @@ string "NEGATIVE_INFINITY") $
+    -- Negative zero must be emitted via Double.parseDouble("-0.0") because routing it
+    -- through Bigfloat (which on the Java host is BigDecimal) would strip the sign.
+    Logic.ifElse (Equality.equal (var "s") (string "-0.0"))
+      (encodeLiteral_javaParseDouble @@ string "-0.0") $
+    encodeLiteral_litExp @@
+      (JavaDsl.literalFloatingPoint $ JavaDsl.floatingPointLiteral $
+        Literals.float64ToBigfloat (var "v"))
+
+-- | Encode an integer value to a Java expression
+encodeLiteral_encodeInteger :: TTermDefinition (IntegerValue -> Java.Expression)
+encodeLiteral_encodeInteger = def "encodeLiteral_encodeInteger" $
+  lambda "i" $
+    cases _IntegerValue (var "i") Nothing [
+      _IntegerValue_bigint>>: "v" ~>
+        JavaUtilsSource.javaConstructorCall @@
+          (JavaUtilsSource.javaConstructorName @@
+            (JavaDsl.identifier $ string "java.math.BigInteger") @@ nothing) @@
+          list [encodeLiteral @@ inject _Literal _Literal_string (Literals.showBigint $ var "v")] @@
+          nothing,
+      _IntegerValue_int8>>: "v" ~>
+        encodeLiteral_primCast @@
+          (JavaDsl.primitiveTypeNumeric $ JavaDsl.numericTypeIntegral JavaDsl.integralTypeByte) @@
+          (encodeLiteral_litExp @@
+            (JavaDsl.literalInteger $ JavaDsl.integerLiteral $ Literals.int8ToBigint (var "v"))),
+      _IntegerValue_int16>>: "v" ~>
+        encodeLiteral_primCast @@
+          (JavaDsl.primitiveTypeNumeric $ JavaDsl.numericTypeIntegral JavaDsl.integralTypeShort) @@
+          (encodeLiteral_litExp @@
+            (JavaDsl.literalInteger $ JavaDsl.integerLiteral $ Literals.int16ToBigint (var "v"))),
+      _IntegerValue_int32>>: "v" ~>
+        encodeLiteral_litExp @@
+          (JavaDsl.literalInteger $ JavaDsl.integerLiteral $ Literals.int32ToBigint (var "v")),
+      _IntegerValue_int64>>: "v" ~>
+        encodeLiteral_primCast @@
+          (JavaDsl.primitiveTypeNumeric $ JavaDsl.numericTypeIntegral JavaDsl.integralTypeLong) @@
+          (encodeLiteral_litExp @@
+            (JavaDsl.literalInteger $ JavaDsl.integerLiteral $ Literals.int64ToBigint (var "v"))),
+      _IntegerValue_uint8>>: "v" ~>
+        encodeLiteral_primCast @@
+          (JavaDsl.primitiveTypeNumeric $ JavaDsl.numericTypeIntegral JavaDsl.integralTypeShort) @@
+          (encodeLiteral_litExp @@
+            (JavaDsl.literalInteger $ JavaDsl.integerLiteral $ Literals.uint8ToBigint (var "v"))),
+      _IntegerValue_uint16>>: "v" ~>
+        encodeLiteral_litExp @@
+          (JavaDsl.literalCharacter $ var "v"),
+      _IntegerValue_uint32>>: "v" ~>
+        encodeLiteral_primCast @@
+          (JavaDsl.primitiveTypeNumeric $ JavaDsl.numericTypeIntegral JavaDsl.integralTypeLong) @@
+          (encodeLiteral_litExp @@
+            (JavaDsl.literalInteger $ JavaDsl.integerLiteral $ Literals.uint32ToBigint (var "v"))),
+      _IntegerValue_uint64>>: "v" ~>
+        JavaUtilsSource.javaConstructorCall @@
+          (JavaUtilsSource.javaConstructorName @@
+            (JavaDsl.identifier $ string "java.math.BigInteger") @@ nothing) @@
+          list [encodeLiteral @@ inject _Literal _Literal_string
+            (Literals.showBigint $ Literals.uint64ToBigint (var "v"))] @@
+          nothing]
+
+-- | Emit a Java method call expression Double.parseDouble("<value>"). Used for
+-- float64 values that cannot round-trip through Bigfloat (e.g., negative zero).
+encodeLiteral_javaParseDouble :: TTermDefinition (String -> Java.Expression)
+encodeLiteral_javaParseDouble = def "encodeLiteral_javaParseDouble" $
+  lambda "value" $
+    JavaUtilsSource.javaMethodInvocationToJavaExpression @@
+      (JavaUtilsSource.methodInvocationStatic
+        @@ JavaDsl.identifier (string "Double")
+        @@ JavaDsl.identifier (string "parseDouble")
+        @@ list [encodeLiteral @@ inject _Literal _Literal_string (var "value")])
+
+-- | Emit a Java field access expression like Float.NaN or Double.POSITIVE_INFINITY.
+encodeLiteral_javaSpecialFloatExpr :: TTermDefinition (String -> String -> Java.Expression)
+encodeLiteral_javaSpecialFloatExpr = def "encodeLiteral_javaSpecialFloatExpr" $
+  lambda "className" $ lambda "fieldName" $
+    JavaUtilsSource.javaExpressionNameToJavaExpression @@
+      (JavaDsl.expressionName
+        (just (JavaDsl.ambiguousName (list [JavaDsl.identifier $ var "className"])))
+        (JavaDsl.identifier $ var "fieldName"))
+
+-- | Helper: convert a Java literal to a Java expression
+encodeLiteral_litExp :: TTermDefinition (Java.Literal -> Java.Expression)
+encodeLiteral_litExp = def "encodeLiteral_litExp" $
+  lambda "l" $ JavaUtilsSource.javaLiteralToJavaExpression @@ var "l"
+
+-- | Helper: cast an expression to a primitive type
+encodeLiteral_primCast :: TTermDefinition (Java.PrimitiveType -> Java.Expression -> Java.Expression)
+encodeLiteral_primCast = def "encodeLiteral_primCast" $
+  lambda "pt" $ lambda "expr" $
+    JavaUtilsSource.javaCastExpressionToJavaExpression @@
+      (JavaUtilsSource.javaCastPrimitive @@ var "pt" @@
+        (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "expr"))
+
 -- | Encode a nullary constant function as a Java expression
 encodeNullaryConstant :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Term -> Context -> Graph -> Either Error Java.Expression)
 encodeNullaryConstant = def "encodeNullaryConstant" $
@@ -2496,6 +2474,28 @@ encodeNullaryConstant_typeArgsFromReturnType = def "encodeNullaryConstant_typeAr
         "jvt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ (project _MapType _MapType_values @@ var "mp") @@ var "cx" @@ var "g") $
         "rv" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jvt" @@ var "cx") $
         right (list [JavaDsl.typeArgumentReference (var "rk"), JavaDsl.typeArgumentReference (var "rv")])]
+
+-- | Encode a nullary primitive reference (by name) as a Java expression.
+encodeNullaryPrimitiveByName :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Name -> Context -> Graph -> Either Error Java.Expression)
+encodeNullaryPrimitiveByName = def "encodeNullaryPrimitiveByName" $
+  lambda "env" $ lambda "typ" $ lambda "name" $
+    "cx" ~> "g" ~>
+    "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
+    "targs" <<~ (encodeNullaryConstant_typeArgsFromReturnType @@ var "aliases" @@ var "typ" @@ var "cx" @@ var "g") $
+    Logic.ifElse (Lists.null (var "targs"))
+      ("header" <~ (inject Java._MethodInvocation_Header Java._MethodInvocation_Header_simple
+        (wrap Java._MethodName
+          (elementJavaIdentifier @@ boolean True @@ boolean False @@ var "aliases" @@ var "name"))) $
+       right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
+         (record Java._MethodInvocation [
+           Java._MethodInvocation_header>>: var "header",
+           Java._MethodInvocation_arguments>>: list ([] :: [TTerm Java.Expression])])))
+      ("fullName" <~ (unwrap Java._Identifier @@ (elementJavaIdentifier @@ boolean True @@ boolean False @@ var "aliases" @@ var "name")) $
+       "parts" <~ Strings.splitOn (string ".") (var "fullName") $
+       "className" <~ JavaDsl.identifier (Strings.intercalate (string ".") (Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts")))) $
+       "methodName" <~ JavaDsl.identifier (Maybes.fromMaybe (var "fullName") (Lists.maybeLast (var "parts"))) $
+       right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
+         (JavaUtilsSource.methodInvocationStaticWithTypeArgs @@ var "className" @@ var "methodName" @@ var "targs" @@ (list ([] :: [TTerm Java.Expression])))))
 
 -- | Encode a Hydra term as a Java expression.
 -- Wrapper that calls encodeTermInternal with empty accumulators.
@@ -3416,27 +3416,6 @@ encodeType = def "encodeType" $
       _Type_wrap>>: lambda "_" $
         Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous wrap type")) (var "cx")]
 
--- | Resolve a TypeVariable name if it refers to a typedef (simple type alias)
-encodeType_resolveIfTypedef :: TTermDefinition (JavaHelpers.Aliases -> S.Set Name -> S.Set Name -> Name -> Context -> Graph -> Either Error (Maybe Type))
-encodeType_resolveIfTypedef = def "encodeType_resolveIfTypedef" $
-  lambda "aliases" $ lambda "boundVars" $ lambda "inScopeTypeParams" $ lambda "name" $
-    "cx" ~> "g" ~>
-    Logic.ifElse (Logic.or (Sets.member (var "name") (var "boundVars")) (Sets.member (var "name") (var "inScopeTypeParams")))
-      (right nothing)
-      (Logic.ifElse (isLambdaBoundVariable @@ var "name")
-        (right nothing)
-        ("schemaTypes" <~ Graph.graphSchemaTypes (var "g") $
-          Maybes.cases (Maps.lookup (var "name") (var "schemaTypes"))
-            (right nothing)
-            (lambda "ts" $
-              Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables (var "ts"))))
-                (right nothing)
-                (cases _Type (Strip.deannotateType @@ Core.typeSchemeType (var "ts"))
-                  (Just $ right (just (Core.typeSchemeType (var "ts")))) [
-                  _Type_record>>: lambda "_" $ right nothing,
-                  _Type_union>>: lambda "_" $ right nothing,
-                  _Type_wrap>>: lambda "_" $ right nothing]))))
-
 -- | Encode a type definition as a Java compilation unit.
 encodeTypeDefinition :: TTermDefinition (Java.PackageDeclaration -> JavaHelpers.Aliases -> TypeDefinition -> Context -> Graph -> Either Error (Name, Java.CompilationUnit))
 encodeTypeDefinition = def "encodeTypeDefinition" $
@@ -3462,6 +3441,27 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
         Java._OrdinaryCompilationUnit_package>>: just (var "pkg"),
         Java._OrdinaryCompilationUnit_imports>>: var "imports",
         Java._OrdinaryCompilationUnit_types>>: list [var "tdecl"]])))
+
+-- | Resolve a TypeVariable name if it refers to a typedef (simple type alias)
+encodeType_resolveIfTypedef :: TTermDefinition (JavaHelpers.Aliases -> S.Set Name -> S.Set Name -> Name -> Context -> Graph -> Either Error (Maybe Type))
+encodeType_resolveIfTypedef = def "encodeType_resolveIfTypedef" $
+  lambda "aliases" $ lambda "boundVars" $ lambda "inScopeTypeParams" $ lambda "name" $
+    "cx" ~> "g" ~>
+    Logic.ifElse (Logic.or (Sets.member (var "name") (var "boundVars")) (Sets.member (var "name") (var "inScopeTypeParams")))
+      (right nothing)
+      (Logic.ifElse (isLambdaBoundVariable @@ var "name")
+        (right nothing)
+        ("schemaTypes" <~ Graph.graphSchemaTypes (var "g") $
+          Maybes.cases (Maps.lookup (var "name") (var "schemaTypes"))
+            (right nothing)
+            (lambda "ts" $
+              Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables (var "ts"))))
+                (right nothing)
+                (cases _Type (Strip.deannotateType @@ Core.typeSchemeType (var "ts"))
+                  (Just $ right (just (Core.typeSchemeType (var "ts")))) [
+                  _Type_record>>: lambda "_" $ right nothing,
+                  _Type_union>>: lambda "_" $ right nothing,
+                  _Type_wrap>>: lambda "_" $ right nothing]))))
 
 -- | Encode a variable reference as a Java expression
 encodeVariable :: TTermDefinition (JavaHelpers.JavaEnvironment -> Name -> Context -> Graph -> Either Error Java.Expression)
@@ -4360,20 +4360,6 @@ otherwiseBranch = def "otherwiseBranch" $
     right (noComment @@ (JavaUtilsSource.methodDeclaration @@ var "mods" @@ list ([] :: [TTerm Java.TypeParameter]) @@ var "anns"
       @@ asTerm JavaNamesSource.otherwiseMethodName @@ list [var "param"] @@ var "result" @@ just (var "allStmts")))
 
--- | Peel domain types from a function type, returning the list of domains and the codomain.
--- Given a count n and a type, peels up to n function types off the front.
-peelDomainsAndCod :: TTermDefinition (Int -> Type -> ([Type], Type))
-peelDomainsAndCod = def "peelDomainsAndCod" $
-  lambda "n" $ lambda "t" $
-    Logic.ifElse (Equality.lte (var "n") (int32 0))
-      (pair (list ([] :: [TTerm Type])) (var "t"))
-      (cases _Type (Strip.deannotateType @@ var "t")
-        (Just $ pair (list ([] :: [TTerm Type])) (var "t")) [
-        _Type_function>>: lambda "ft" $
-          "rest" <~ (peelDomainsAndCod @@ Math.sub (var "n") (int32 1) @@ Core.functionTypeCodomain (var "ft")) $
-          pair (Lists.cons (Core.functionTypeDomain (var "ft")) (Pairs.first (var "rest")))
-            (Pairs.second (var "rest"))])
-
 -- | Peel N domain types from a function type, returning the domains and the final codomain.
 peelDomainTypes :: TTermDefinition (Int -> Type -> ([Type], Type))
 peelDomainTypes = def "peelDomainTypes" $
@@ -4387,6 +4373,20 @@ peelDomainTypes = def "peelDomainTypes" $
           "rest" <~ (peelDomainTypes @@ Math.sub (var "n") (int32 1) @@ Core.functionTypeCodomain (var "ft")) $
           pair
             (Lists.cons (Core.functionTypeDomain (var "ft")) (Pairs.first (var "rest")))
+            (Pairs.second (var "rest"))])
+
+-- | Peel domain types from a function type, returning the list of domains and the codomain.
+-- Given a count n and a type, peels up to n function types off the front.
+peelDomainsAndCod :: TTermDefinition (Int -> Type -> ([Type], Type))
+peelDomainsAndCod = def "peelDomainsAndCod" $
+  lambda "n" $ lambda "t" $
+    Logic.ifElse (Equality.lte (var "n") (int32 0))
+      (pair (list ([] :: [TTerm Type])) (var "t"))
+      (cases _Type (Strip.deannotateType @@ var "t")
+        (Just $ pair (list ([] :: [TTerm Type])) (var "t")) [
+        _Type_function>>: lambda "ft" $
+          "rest" <~ (peelDomainsAndCod @@ Math.sub (var "n") (int32 1) @@ Core.functionTypeCodomain (var "ft")) $
+          pair (Lists.cons (Core.functionTypeDomain (var "ft")) (Pairs.first (var "rest")))
             (Pairs.second (var "rest"))])
 
 -- | Peel expected argument types from a type scheme body using a substitution
