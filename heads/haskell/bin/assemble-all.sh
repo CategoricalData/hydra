@@ -54,16 +54,9 @@ stack exec bootstrap-from-json -- \
     --include-coders --include-dsls --include-tests \
     --output "$DIST_ROOT"
 
-# Per-package post-processing for hydra-kernel: TestGraph.hs patch.
-TESTGRAPH="$DIST_ROOT/hydra-kernel/src/test/haskell/Hydra/Test/TestGraph.hs"
-if [ -f "$TESTGRAPH" ]; then
-    echo ""
-    echo "Step 3: Patching hydra-kernel TestGraph.hs..."
-    sed -i.bak 's/import qualified Hydra.Lexical as Lexical$/import qualified Hydra.Lexical as Lexical\nimport qualified Hydra.Test.TestEnv as TestEnv/' "$TESTGRAPH"
-    sed -i.bak 's/testGraph = Lexical.emptyGraph/testGraph = TestEnv.testGraph testTypes/' "$TESTGRAPH"
-    sed -i.bak 's/testContext = Lexical.emptyContext/testContext = TestEnv.testContext/' "$TESTGRAPH"
-    rm -f "$TESTGRAPH.bak"
-fi
+# No per-package post-processing today — the generator emits
+# Hydra.Test.TestEnv references directly. See docs/recipes/maintenance.md
+# "Known accepted patches" for the history.
 
 cd "$HYDRA_ROOT_DIR"
 

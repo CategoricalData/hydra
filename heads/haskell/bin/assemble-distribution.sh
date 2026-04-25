@@ -161,32 +161,9 @@ else
     fi
 fi
 
-# Step 3: Package-specific post-processing.
-case "$PACKAGE" in
-    hydra-kernel)
-        # TestGraph.hs patch: replace empty graph/context with TestEnv versions.
-        # Hydra.Test.TestEnv is a hand-written bridge module checked in under
-        # dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestEnv.hs;
-        # bootstrap-from-json doesn't target it (not in testModules), so it
-        # survives regeneration.
-        TESTGRAPH="$OUT_DIR/src/test/haskell/Hydra/Test/TestGraph.hs"
-        if [ -f "$TESTGRAPH" ]; then
-            echo ""
-            echo "Step 3: Patching TestGraph.hs..."
-            # Portable in-place sed: use a .bak suffix then remove it.
-            # (macOS sed -i requires an explicit suffix; GNU accepts empty one.)
-            sed -i.bak 's/import qualified Hydra.Lexical as Lexical$/import qualified Hydra.Lexical as Lexical\nimport qualified Hydra.Test.TestEnv as TestEnv/' "$TESTGRAPH"
-            sed -i.bak 's/testGraph = Lexical.emptyGraph/testGraph = TestEnv.testGraph testTypes/' "$TESTGRAPH"
-            sed -i.bak 's/testContext = Lexical.emptyContext/testContext = TestEnv.testContext/' "$TESTGRAPH"
-            rm -f "$TESTGRAPH.bak"
-        fi
-        ;;
-    *)
-        # No per-package post-processing for other packages today.
-        ;;
-esac
-
-echo ""
+# Step 3: Package-specific post-processing. None today — the generator emits
+# Hydra.Test.TestEnv references directly; see sync-haskell.sh step 5 and
+# docs/recipes/maintenance.md "Known accepted patches".
 
 # Refresh the per-target digest so future fresh-checks short-circuit.
 if [ -f "$INPUT_DIGEST" ]; then
