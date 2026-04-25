@@ -82,6 +82,18 @@ fi
 
 case "$PACKAGE" in
     hydra-kernel)
+        # Copy hand-written hydra/lib/ from heads/lisp/emacs-lisp into dist/.
+        # heads is the source of truth for these helpers; dist mirrors it.
+        for d in lib; do
+            LIB_SRC="$HYDRA_EL_HEAD/src/main/emacs-lisp/hydra/$d"
+            LIB_DST="$OUT_MAIN/hydra/$d"
+            if [ -d "$LIB_SRC" ]; then
+                echo "Step 3a: Copying hand-written hydra/$d/ from heads/lisp/emacs-lisp/..."
+                mkdir -p "$LIB_DST"
+                cp -R "$LIB_SRC/." "$LIB_DST/"
+            fi
+        done
+
         EL_TESTGRAPH="$OUT_DIR/src/test/emacs-lisp/hydra/test/test_graph.el"
         if [ -f "$EL_TESTGRAPH" ]; then
             echo ""

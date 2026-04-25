@@ -85,6 +85,21 @@ fi
 # emits `hydra.test.testEnv.testGraph(testTypes)` directly, and the hand-written
 # heads/scala testEnv.scala resolves the call to TestSuiteRunner.buildTestGraph.)
 case "$PACKAGE" in
+    hydra-kernel)
+        # Copy hand-written hydra/lib/ from heads/scala into dist/.
+        # heads/scala is the source of truth for these helpers; dist mirrors it
+        # so that downstream consumers importing from dist/scala/hydra-kernel
+        # see the same surface as the bootstrap demo.
+        for d in lib; do
+            LIB_SRC="$HYDRA_SCALA_HEAD/src/main/scala/hydra/$d"
+            LIB_DST="$OUT_MAIN/hydra/$d"
+            if [ -d "$LIB_SRC" ]; then
+                echo "Step 3a: Copying hand-written hydra/$d/ from heads/scala/..."
+                mkdir -p "$LIB_DST"
+                cp -R "$LIB_SRC/." "$LIB_DST/"
+            fi
+        done
+        ;;
     *)
         ;;
 esac

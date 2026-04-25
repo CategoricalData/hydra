@@ -96,6 +96,22 @@ fi
 # (TestGraph.java post-generation patch eliminated: the DSL now emits
 # TestEnv refs directly. See task #25 in feature_290_packaging plan.)
 case "$PACKAGE" in
+    hydra-kernel)
+        # Copy hand-written hydra/lib/ and hydra/dsl/ from heads/java into dist/.
+        # heads/java is the source of truth for these helpers; dist mirrors it
+        # so that downstream consumers importing from dist/java/hydra-kernel
+        # see the same surface as the bootstrap demo. Filenames don't collide
+        # with generated output (Names.java vs Libraries.java/PrimitiveType.java).
+        for d in lib dsl; do
+            LIB_SRC="$HYDRA_JAVA_HEAD/src/main/java/hydra/$d"
+            LIB_DST="$OUT_MAIN_DIR/hydra/$d"
+            if [ -d "$LIB_SRC" ]; then
+                echo "Step 3a: Copying hand-written hydra/$d/ from heads/java/..."
+                mkdir -p "$LIB_DST"
+                cp -R "$LIB_SRC/." "$LIB_DST/"
+            fi
+        done
+        ;;
     hydra-lisp)
         # Patch Lisp Coder.java: fix PartialVisitor type inference in
         # encodeTermDefinition.
