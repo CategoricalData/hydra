@@ -233,45 +233,6 @@ substituteTypeVariables subst typ =
                 _ -> recurse typ2
       in (Rewriting.rewriteType replace typ)
 
--- | Substitute type variables throughout a term, including in type annotations, type applications, lambda domains, and type schemes
-substituteTypeVariablesInTerm :: M.Map Core.Name Core.Name -> Core.Term -> Core.Term
-substituteTypeVariablesInTerm subst term =
-
-      let st = substituteTypeVariables subst
-          stOpt = \mt -> Maybes.map st mt
-          stScheme =
-                  \ts -> Core.TypeScheme {
-                    Core.typeSchemeVariables = (Core.typeSchemeVariables ts),
-                    Core.typeSchemeType = (st (Core.typeSchemeType ts)),
-                    Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts)}
-          stSchemeOpt = \mts -> Maybes.map stScheme mts
-          replace =
-                  \recurse -> \t -> case t of
-                    Core.TermLambda v0 -> Core.TermLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.lambdaParameter v0),
-                      Core.lambdaDomain = (stOpt (Core.lambdaDomain v0)),
-                      Core.lambdaBody = (recurse (Core.lambdaBody v0))})
-                    Core.TermLet v0 ->
-                      let mapBinding =
-                              \b -> Core.Binding {
-                                Core.bindingName = (Core.bindingName b),
-                                Core.bindingTerm = (recurse (Core.bindingTerm b)),
-                                Core.bindingType = (stSchemeOpt (Core.bindingType b))}
-                      in (Core.TermLet (Core.Let {
-                        Core.letBindings = (Lists.map mapBinding (Core.letBindings v0)),
-                        Core.letBody = (recurse (Core.letBody v0))}))
-                    Core.TermTypeApplication v0 -> Core.TermTypeApplication (Core.TypeApplicationTerm {
-                      Core.typeApplicationTermBody = (recurse (Core.typeApplicationTermBody v0)),
-                      Core.typeApplicationTermType = (st (Core.typeApplicationTermType v0))})
-                    Core.TermTypeLambda v0 -> Core.TermTypeLambda (Core.TypeLambda {
-                      Core.typeLambdaParameter = (Maybes.fromMaybe (Core.typeLambdaParameter v0) (Maps.lookup (Core.typeLambdaParameter v0) subst)),
-                      Core.typeLambdaBody = (recurse (Core.typeLambdaBody v0))})
-                    Core.TermAnnotated v0 -> Core.TermAnnotated (Core.AnnotatedTerm {
-                      Core.annotatedTermBody = (recurse (Core.annotatedTermBody v0)),
-                      Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)})
-                    _ -> recurse t
-      in (Rewriting.rewriteTerm replace term)
-
 -- | Substitute one variable for another in a term
 substituteVariable :: Core.Name -> Core.Name -> Core.Term -> Core.Term
 substituteVariable from to term =
