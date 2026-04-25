@@ -21,7 +21,7 @@ This will:
 
 - A property graph schema defined using the Java DSL (`hydra.pg.dsl`)
 - Graph instances — one valid and eleven invalid — encoded to JSON via `hydra.encode.pg.model`
-- Validation via `hydra.pg.validation.validateGraph` in all three host languages
+- Validation via `hydra.validate.pg.validateGraph` in all three host languages
 - Identical results across Haskell, Java, and Python
 
 ## Validation conditions covered
@@ -63,15 +63,18 @@ demos/
     README.md                                   # This file
     bin/run.sh                                  # Orchestrator script
   src/main/
-    haskell/Hydra/Ext/Demos/ValidatePg/
+    haskell/Hydra/Demos/ValidatePg/
       Demo.hs                                   # Haskell driver
     java/hydra/demos/validatepg/
       GenerateData.java                         # Data generator (Java DSL -> JSON)
       ValidateDemo.java                         # Java driver
       JsonPgDecoder.java                        # JSON -> PG model decoder
-    python/hydra/demos/validatepg/
-      demo.py                                   # Python driver
 ```
+
+The orchestrator also supports a Python driver at
+`demos/src/main/python/hydra/demos/validatepg/demo.py`; it is not
+checked in today, so the `python` host path is skipped at runtime
+(see `run.sh`'s "driver not found" branch).
 
 ## Data generation
 
