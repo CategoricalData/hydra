@@ -110,6 +110,12 @@ heads/python/.venv/bin/python demos/src/main/python/hydra/demos/genpg/demo.py he
 
 The `sales` argument is the default, so it can be omitted.
 
+> **Note:** the Python driver `demo.py` (and `rdf.py` for the RDF mode) are
+> generated/written separately from the kernel sync; if they are not present
+> under `demos/src/main/python/hydra/demos/genpg/`, the orchestrator scripts
+> (`bin/run.sh`, `bin/run-rdf.sh`) skip the Python host with a "driver not
+> found" message, and the Haskell + Java paths still complete.
+
 ### Java mode
 
 Java 11+ is required. From the repository root:
@@ -121,7 +127,7 @@ Java 11+ is required. From the repository root:
 Then run the demo:
 
 ```bash
-java -cp $(./gradlew printClasspath -q 2>/dev/null || echo "build/classes/java/main") \
+java -cp packages/hydra-java/build/classes/java/main \
   hydra.demos.genpg.Demo sales    # processes sales data
   hydra.demos.genpg.Demo health   # processes health data
 ```
@@ -162,13 +168,13 @@ with [pyshacl](https://github.com/RDFLib/pySHACL) if installed.
 
 Haskell (GHCi):
 ```haskell
-:l Hydra.Sources.Demos.GenPG.Rdf
+:l Hydra.Demos.GenPG.Rdf
 generateSalesRdf
 ```
 
-Python:
+Python (driver not yet checked in; the run script skips this host with a "driver not found" message):
 ```bash
-python3 src/main/python/hydra/demos/genpg/rdf.py sales
+python3 demos/src/main/python/hydra/demos/genpg/rdf.py sales
 ```
 
 Java (after `./gradlew compileJava`):
@@ -271,7 +277,7 @@ stack ghci
 In GHCI:
 ```haskell
 :set +m
-writeEncoderSourceHaskell "../../dist/haskell/hydra-ext/src/main/haskell" (kernelModules <> hydraExtModules) [
+writeEncoderSourceHaskell "../../dist/haskell/hydra-pg/src/main/haskell" (kernelModules <> hydraExtModules) [
   Hydra.Sources.Pg.Mapping.module_,
   Hydra.Sources.Pg.Model.module_]
 ```
@@ -296,7 +302,7 @@ stack ghci < ../../demos/genpg/bin/generate-python.ghci
 
 Or interactively in GHCI:
 ```haskell
-import Hydra.Sources.Demos.GenPG.GeneratePython
+import Hydra.Demos.GenPG.GeneratePython
 generatePythonModules
 ```
 
@@ -320,7 +326,7 @@ stack ghci --ghci-options='+RTS -K256M -A32M -RTS' < ../../demos/genpg/bin/gener
 
 Or interactively in GHCI:
 ```haskell
-import Hydra.Sources.Demos.GenPG.GenerateJava
+import Hydra.Demos.GenPG.GenerateJava
 generateJavaModules
 ```
 
