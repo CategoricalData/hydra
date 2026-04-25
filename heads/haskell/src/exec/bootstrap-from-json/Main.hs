@@ -310,12 +310,14 @@ main = do
       return []
 
   -- Step 2b: Optionally load DSL wrapper modules from every loaded package.
-  -- Compute which non-baseline non-coder packages need to be loaded into the
-  -- universe. Each of hydra-pg, hydra-rdf, hydra-coq, hydra-javascript,
-  -- hydra-ext, hydra-wasm is independent: none depends on another, so we load
-  -- only the package(s) we are targeting.
+  -- Compute which non-baseline non-coder packages need to be loaded into
+  -- the universe. Each of hydra-rdf, hydra-coq, hydra-javascript,
+  -- hydra-ext, hydra-wasm is independent. hydra-pg depends on hydra-rdf
+  -- (e.g. hydra.pg.rdf.environment references hydra.rdf.syntax.Iri), so
+  -- loading hydra-pg implicitly loads hydra-rdf.
   --
-  --   --package <p>  : load only <p> when it's an ext or ext-demo package
+  --   --package <p>  : load <p> + its package-level deps when it's an ext
+  --                    or ext-demo package
   --   --ext-only     : load both ext-demo packages (legacy demo path)
   --   (otherwise)    : nothing extra. --all-packages alone does NOT auto-load
   --                    these — sync-haskell.sh uses --all-packages to regen
@@ -323,9 +325,12 @@ main = do
   --                    assemble-distribution.sh handles coder/ext packages
   --                    individually with --package <pkg>.
   let allExtPackages = extPackages ++ extDemoPackages
+  let packageDeps p = case p of
+        "hydra-pg" -> ["hydra-pg", "hydra-rdf"]
+        _          -> [p]
   let extPackagesToLoad
         | optExtOnly opts                           = extDemoPackages
-        | Just p <- optPackage opts, p `elem` allExtPackages = [p]
+        | Just p <- optPackage opts, p `elem` allExtPackages = packageDeps p
         | otherwise                                 = []
 
   dslMods <- if optIncludeDsls opts
