@@ -106,13 +106,16 @@ substInTypeNonEmpty subst typ0 =
           removeVar = \v -> Typing.TypeSubst (Maps.delete v (Typing.unTypeSubst subst))
       in (Rewriting.rewriteType rewrite typ0)
 
--- | Apply a type substitution to a type scheme
+-- | Apply a type substitution to a type scheme. The scheme's quantifier variables shadow the substitution: any name in typeSchemeVariables is removed from subst before substituting into the body and constraints. Without this, a substitution like {t0 -> Foo} applied to `forall [t0]. t0 -> t0` would incorrectly replace the bound t0.
 substInTypeScheme :: Typing.TypeSubst -> Core.TypeScheme -> Core.TypeScheme
 substInTypeScheme subst ts =
-    Core.TypeScheme {
-      Core.typeSchemeVariables = (Core.typeSchemeVariables ts),
-      Core.typeSchemeType = (substInType subst (Core.typeSchemeType ts)),
-      Core.typeSchemeConstraints = (Maybes.map (substInClassConstraints subst) (Core.typeSchemeConstraints ts))}
+
+      let scopedSubst =
+              Typing.TypeSubst (Lists.foldl (\m -> \v -> Maps.delete v m) (Typing.unTypeSubst subst) (Core.typeSchemeVariables ts))
+      in Core.TypeScheme {
+        Core.typeSchemeVariables = (Core.typeSchemeVariables ts),
+        Core.typeSchemeType = (substInType scopedSubst (Core.typeSchemeType ts)),
+        Core.typeSchemeConstraints = (Maybes.map (substInClassConstraints scopedSubst) (Core.typeSchemeConstraints ts))}
 
 -- | Apply a type substitution to the type annotations within a term
 substTypesInTerm :: Typing.TypeSubst -> Core.Term -> Core.Term
