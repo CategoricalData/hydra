@@ -271,6 +271,21 @@ public class Bootstrap {
             List<Module> allUniverse = new ArrayList<>(fullMods);
             allUniverse.addAll(testMods);
 
+            // Filter skip-emit test namespaces (e.g. hydra.test.testEnv): these are
+            // type-only stubs in the DSL whose hand-written per-language counterparts
+            // are the source of truth. Emitting them would overwrite hand-written code
+            // that registers primitives for the test graph.
+            // Mirrors testSkipEmitNamespaces in Hydra.Sources.Test.All.
+            java.util.Set<String> testSkipEmit = new java.util.HashSet<>();
+            testSkipEmit.add("hydra.test.testEnv");
+            List<Module> testModsFiltered = new ArrayList<>();
+            for (Module m : testMods) {
+                if (!testSkipEmit.contains(m.namespace.value)) {
+                    testModsFiltered.add(m);
+                }
+            }
+            testMods = testModsFiltered;
+
             String outTest = outDir + File.separator + "src/test";
             System.out.println("Mapping test modules to " + targetCap + "...");
             System.out.println("  Universe: " + allUniverse.size() + " modules");

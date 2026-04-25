@@ -266,6 +266,14 @@ def main():
         print(flush=True)
 
         all_universe = full_mods + test_mods
+
+        # Filter skip-emit test namespaces (e.g. hydra.test.testEnv): these are
+        # type-only stubs in the DSL whose hand-written per-language
+        # counterparts are the source of truth. Emitting them would overwrite
+        # hand-written code that registers primitives for the test graph.
+        # Mirrors testSkipEmitNamespaces in Hydra.Sources.Test.All.
+        _test_skip_emit = {"hydra.test.testEnv"}
+        test_mods = [m for m in test_mods if m.namespace.value not in _test_skip_emit]
         out_test = os.path.join(out_dir, "src/test")
 
         # When --kernel-only is active, ext modules are excluded from the main
