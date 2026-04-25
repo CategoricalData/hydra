@@ -90,10 +90,10 @@ module_ = Module ns definitions
      toDefinition betaReduceType,
      toDefinition contractTerm,
      toDefinition countPrimitiveInvocations,
-     toDefinition etaReduceTerm,
      toDefinition etaExpandTerm,
-     toDefinition etaExpansionArity,
      toDefinition etaExpandTypedTerm,
+     toDefinition etaExpansionArity,
+     toDefinition etaReduceTerm,
      toDefinition reduceTerm,
      toDefinition termIsClosed,
      toDefinition termIsValue]
@@ -481,35 +481,6 @@ etaExpandTerm = define "etaExpandTerm" $
 
   contractTerm @@ (var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx0" @@ var "term0")
 
--- TODO: this function probably needs to be replaced with a function which takes not only a Graph, but an extended Graph.
---       etaExpansionArity won't give the correct answer unless it has access to the full lexical environment
---       of each subterm in which it is applied, including lambda-bound variables as well as nested let-bound variables.
---       The new function need not be monadic, because we don't need to call typeOf; it just needs accurate type lookups.
-etaExpansionArity :: TTermDefinition (Graph -> Term -> Int)
-etaExpansionArity = define "etaExpansionArity" $
-  doc ("Calculate the arity for eta expansion"
-    <> " Note: this is a \"trusty\" function which assumes the graph is well-formed, i.e. no dangling references.") $
-  "graph" ~> "term" ~> cases _Term (var "term")
-    (Just $ int32 0) [
-    _Term_annotated>>: "at" ~>
-      etaExpansionArity @@ var "graph" @@ Core.annotatedTermBody (var "at"),
-    _Term_application>>: "app" ~> Math.sub
-      (etaExpansionArity @@ var "graph" @@ Core.applicationFunction (var "app"))
-      (int32 1),
-    _Term_cases>>: constant $ int32 1,
-    _Term_lambda>>: constant $ int32 0,
-    _Term_project>>: constant $ int32 1,
-    _Term_unwrap>>: constant $ int32 1,
-    _Term_typeLambda>>: "ta" ~> etaExpansionArity @@ var "graph" @@ Core.typeLambdaBody (var "ta"),
-    _Term_typeApplication>>: "tt" ~> etaExpansionArity @@ var "graph" @@ Core.typeApplicationTermBody (var "tt"),
-    _Term_variable>>: "name" ~>
-      -- Note: we assume that the graph is fully typed.
-      Maybes.maybe (int32 0)
-        ("ts" ~> Arity.typeArity @@ (Core.typeSchemeType $ var "ts"))
-        (Maybes.bind
-          (Lexical.lookupBinding @@ var "graph" @@ var "name")
-          ("b" ~> Core.bindingType $ var "b"))]
-
 -- TODO: add lambda domains as part of the rewriting process, so inference does not need to be performed again.
 etaExpandTypedTerm :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either Error Term)
 etaExpandTypedTerm = define "etaExpandTypedTerm" $
@@ -656,6 +627,35 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         "txt" <~ Scoping.extendGraphForTypeLambda @@ var "tx" @@ var "tl" $
         var "recurse" @@ var "txt" @@ var "term"]) $
   Rewriting.rewriteTermWithContextM @@ (var "rewrite" @@ true @@ false @@ list ([] :: [TTerm Type])) @@ var "tx0" @@ var "term0"
+
+-- TODO: this function probably needs to be replaced with a function which takes not only a Graph, but an extended Graph.
+--       etaExpansionArity won't give the correct answer unless it has access to the full lexical environment
+--       of each subterm in which it is applied, including lambda-bound variables as well as nested let-bound variables.
+--       The new function need not be monadic, because we don't need to call typeOf; it just needs accurate type lookups.
+etaExpansionArity :: TTermDefinition (Graph -> Term -> Int)
+etaExpansionArity = define "etaExpansionArity" $
+  doc ("Calculate the arity for eta expansion"
+    <> " Note: this is a \"trusty\" function which assumes the graph is well-formed, i.e. no dangling references.") $
+  "graph" ~> "term" ~> cases _Term (var "term")
+    (Just $ int32 0) [
+    _Term_annotated>>: "at" ~>
+      etaExpansionArity @@ var "graph" @@ Core.annotatedTermBody (var "at"),
+    _Term_application>>: "app" ~> Math.sub
+      (etaExpansionArity @@ var "graph" @@ Core.applicationFunction (var "app"))
+      (int32 1),
+    _Term_cases>>: constant $ int32 1,
+    _Term_lambda>>: constant $ int32 0,
+    _Term_project>>: constant $ int32 1,
+    _Term_unwrap>>: constant $ int32 1,
+    _Term_typeLambda>>: "ta" ~> etaExpansionArity @@ var "graph" @@ Core.typeLambdaBody (var "ta"),
+    _Term_typeApplication>>: "tt" ~> etaExpansionArity @@ var "graph" @@ Core.typeApplicationTermBody (var "tt"),
+    _Term_variable>>: "name" ~>
+      -- Note: we assume that the graph is fully typed.
+      Maybes.maybe (int32 0)
+        ("ts" ~> Arity.typeArity @@ (Core.typeSchemeType $ var "ts"))
+        (Maybes.bind
+          (Lexical.lookupBinding @@ var "graph" @@ var "name")
+          ("b" ~> Core.bindingType $ var "b"))]
 
 etaReduceTerm :: TTermDefinition (Term -> Term)
 etaReduceTerm = define "etaReduceTerm" $

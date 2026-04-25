@@ -90,10 +90,10 @@ module_ = Module ns definitions
      toDefinition commentsFromFieldType,
      toDefinition debugIf,
      toDefinition failOnFlag,
-     toDefinition getDebugId,
      toDefinition getAttr,
      toDefinition getAttrWithDefault,
      toDefinition getCount,
+     toDefinition getDebugId,
      toDefinition getDescription,
      toDefinition getTermAnnotation,
      toDefinition getTermDescription,
@@ -101,10 +101,10 @@ module_ = Module ns definitions
      toDefinition getTypeAnnotation,
      toDefinition getTypeClasses,
      toDefinition getTypeDescription,
-     toDefinition isNativeType,
      toDefinition hasDescription,
      toDefinition hasFlag,
      toDefinition hasTypeDescription,
+     toDefinition isNativeType,
      toDefinition nextCount,
      toDefinition normalizeTermAnnotations,
      toDefinition normalizeTypeAnnotations,
@@ -273,21 +273,6 @@ getTypeDescription = define "getTypeDescription" $
   "cx" ~> "graph" ~> "typ" ~>
   getDescription @@ var "cx" @@ var "graph" @@ (typeAnnotationInternal @@ var "typ")
 
-isNativeType :: TTermDefinition (Binding -> Bool)
-isNativeType = define "isNativeType" $
-  doc ("For a typed term, decide whether a coder should encode it as a native type expression,"
-    <> " or as a Hydra type expression.") $
-  "el" ~>
-  "isFlaggedAsFirstClassType" <~ Maybes.fromMaybe false (
-    Maybes.map
-      (constant true)
-      (getTermAnnotation @@ Constants.key_firstClassType @@ (Core.bindingTerm (var "el")))) $
-  Maybes.maybe false
-    ("ts" ~> Logic.and
-      (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _Type)) Phantoms.nothing))
-      (Logic.not (var "isFlaggedAsFirstClassType")))
-    (Core.bindingType (var "el"))
-
 hasDescription :: TTermDefinition (M.Map Name Term -> Bool)
 hasDescription = define "hasDescription" $
   doc "Check if annotations contain description" $
@@ -304,6 +289,21 @@ hasTypeDescription :: TTermDefinition (Type -> Bool)
 hasTypeDescription = define "hasTypeDescription" $
   doc "Check if type has description" $
   "typ" ~> hasDescription @@ (typeAnnotationInternal @@ var "typ")
+
+isNativeType :: TTermDefinition (Binding -> Bool)
+isNativeType = define "isNativeType" $
+  doc ("For a typed term, decide whether a coder should encode it as a native type expression,"
+    <> " or as a Hydra type expression.") $
+  "el" ~>
+  "isFlaggedAsFirstClassType" <~ Maybes.fromMaybe false (
+    Maybes.map
+      (constant true)
+      (getTermAnnotation @@ Constants.key_firstClassType @@ (Core.bindingTerm (var "el")))) $
+  Maybes.maybe false
+    ("ts" ~> Logic.and
+      (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _Type)) Phantoms.nothing))
+      (Logic.not (var "isFlaggedAsFirstClassType")))
+    (Core.bindingType (var "el"))
 
 nextCount :: TTermDefinition (Name -> Context -> (Int, Context))
 nextCount = define "nextCount" $
