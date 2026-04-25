@@ -101,43 +101,22 @@ module_ = Module ns definitions
     Just "GraphQL code generator: converts Hydra modules to GraphQL schema definitions"
   where
     definitions = [
-      toDefinition moduleToGraphql,
-      toDefinition encodeTypeDefinition,
       toDefinition descriptionFromType,
-      toDefinition encodeEnumFieldType,
       toDefinition encodeEnumFieldName,
+      toDefinition encodeEnumFieldType,
       toDefinition encodeFieldName,
       toDefinition encodeFieldType,
       toDefinition encodeLiteralType,
       toDefinition encodeNamedType,
       toDefinition encodeType,
+      toDefinition encodeTypeDefinition,
       toDefinition encodeTypeName,
       toDefinition encodeUnionFieldType,
+      toDefinition moduleToGraphql,
       toDefinition sanitize]
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
-
-
--- | Top-level entry point: convert a module to GraphQL schema files.
-moduleToGraphql :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
-moduleToGraphql = define "moduleToGraphql" $
-  lambda "mod" $ lambda "defs" $
-    "cx" ~> "g" ~> lets [
-    "partitioned">: Environment.partitionDefinitions @@ var "defs",
-    "typeDefs">: Pairs.first (var "partitioned"),
-    "prefixes">: findPrefixes @@ Packaging.moduleNamespace (var "mod") @@ var "typeDefs",
-    "filePath">: Names.namespaceToFilePath @@ Util.caseConventionCamel @@ (wrap _FileExtension (string "graphql")) @@ Packaging.moduleNamespace (var "mod")] $
-    "gtdefs" <<~ (Eithers.mapList (lambda "td" $ encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "td") (var "typeDefs")) $
-    right (Maps.fromList $ Lists.pure $ pair (var "filePath")
-      (Serialization.printExpr @@ (Serialization.parenthesize @@
-        (GraphqlSerde.exprDocument @@ (wrap G._Document
-          (Lists.map
-            (lambda "gtdef" $
-              inject G._Definition G._Definition_typeSystem
-                (inject G._TypeSystemDefinitionOrExtension G._TypeSystemDefinitionOrExtension_definition
-                  (inject G._TypeSystemDefinition G._TypeSystemDefinition_type (var "gtdef"))))
-            (var "gtdefs")))))))
 
 -- | Helper: find namespace prefixes from type definitions
 findPrefixes :: TTerm (Namespace -> [TypeDefinition] -> M.Map Namespace String)
@@ -152,13 +131,12 @@ findPrefixes = lambda "modNs" $ lambda "tdefs" $ lets [
         (Strings.cat2 (Formatting.sanitizeWithUnderscores @@ Sets.empty @@ (Packaging.unNamespace $ var "ns_")) (string "_"))))
     (var "namespaces")
 
--- | Encode a TypeDefinition to a GraphQL TypeDefinition
-encodeTypeDefinition :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> TypeDefinition -> Either Error G.TypeDefinition)
-encodeTypeDefinition = define "encodeTypeDefinition" $
-  "cx" ~> "g" ~> lambda "prefixes" $ lambda "tdef" $
-    encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes"
-      @@ (Packaging.typeDefinitionName $ var "tdef")
-      @@ (Core.typeSchemeType $ Packaging.typeDefinitionType $ var "tdef")
+-- | Helper: wrap a type in a record with a single "value" field
+wrapAsRecord :: TTerm Name -> TTerm Context -> TTerm Graph -> TTerm (M.Map Namespace String) -> TTerm Type -> TTerm (Either Error G.TypeDefinition)
+wrapAsRecord name cx g prefixes innerTyp =
+  encodeNamedType @@ cx @@ g @@ prefixes @@ name @@
+    (inject _Type _Type_record $ list [
+      Core.fieldType (Core.name $ string "value") innerTyp])
 
 -- | Get the description from a type as a GraphQL Description
 descriptionFromType :: TTermDefinition (Context -> Graph -> Type -> Either Error (Maybe G.Description))
@@ -170,6 +148,11 @@ descriptionFromType = define "descriptionFromType" $
         (var "mval"))
       (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ")
 
+-- | Encode a field name to a GraphQL EnumValue
+encodeEnumFieldName :: TTermDefinition (Name -> G.EnumValue)
+encodeEnumFieldName = define "encodeEnumFieldName" $
+  lambda "name" $ wrap G._EnumValue (wrap G._Name (sanitize @@ (Core.unName $ var "name")))
+
 -- | Encode an enum field type to a GraphQL EnumValueDefinition
 encodeEnumFieldType :: TTermDefinition (Context -> Graph -> FieldType -> Either Error G.EnumValueDefinition)
 encodeEnumFieldType = define "encodeEnumFieldType" $
@@ -179,11 +162,6 @@ encodeEnumFieldType = define "encodeEnumFieldType" $
       G._EnumValueDefinition_Description>>: var "desc",
       G._EnumValueDefinition_EnumValue>>: (encodeEnumFieldName @@ (Core.fieldTypeName $ var "ft")),
       G._EnumValueDefinition_Directives>>: nothing])
-
--- | Encode a field name to a GraphQL EnumValue
-encodeEnumFieldName :: TTermDefinition (Name -> G.EnumValue)
-encodeEnumFieldName = define "encodeEnumFieldName" $
-  lambda "name" $ wrap G._EnumValue (wrap G._Name (sanitize @@ (Core.unName $ var "name")))
 
 -- | Encode a field name to a GraphQL Name
 encodeFieldName :: TTermDefinition (Name -> G.Name)
@@ -298,13 +276,6 @@ encodeNamedType = define "encodeNamedType" $
             Core.fieldType (Core.name $ string "domain") (Core.functionTypeDomain (var "ft")),
             Core.fieldType (Core.name $ string "codomain") (Core.functionTypeCodomain (var "ft"))])]
 
--- | Helper: wrap a type in a record with a single "value" field
-wrapAsRecord :: TTerm Name -> TTerm Context -> TTerm Graph -> TTerm (M.Map Namespace String) -> TTerm Type -> TTerm (Either Error G.TypeDefinition)
-wrapAsRecord name cx g prefixes innerTyp =
-  encodeNamedType @@ cx @@ g @@ prefixes @@ name @@
-    (inject _Type _Type_record $ list [
-      Core.fieldType (Core.name $ string "value") innerTyp])
-
 -- | Encode a Hydra type as a GraphQL type reference
 encodeType :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> Type -> Either Error G.Type)
 encodeType = define "encodeType" $
@@ -385,6 +356,14 @@ encodeType = define "encodeType" $
         right (inject G._Type G._Type_nonNull (inject G._NonNullType G._NonNullType_named
           (wrap G._NamedType (wrap G._Name (string "Boolean")))))]
 
+-- | Encode a TypeDefinition to a GraphQL TypeDefinition
+encodeTypeDefinition :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> TypeDefinition -> Either Error G.TypeDefinition)
+encodeTypeDefinition = define "encodeTypeDefinition" $
+  "cx" ~> "g" ~> lambda "prefixes" $ lambda "tdef" $
+    encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes"
+      @@ (Packaging.typeDefinitionName $ var "tdef")
+      @@ (Core.typeSchemeType $ Packaging.typeDefinitionType $ var "tdef")
+
 -- | Encode a Hydra Name as a GraphQL Name with namespace prefix
 encodeTypeName :: TTermDefinition (M.Map Namespace String -> Name -> G.Name)
 encodeTypeName = define "encodeTypeName" $
@@ -416,6 +395,26 @@ encodeUnionFieldType = define "encodeUnionFieldType" $
       G._FieldDefinition_ArgumentsDefinition>>: nothing,
       G._FieldDefinition_Type>>: var "gtype",
       G._FieldDefinition_Directives>>: nothing])
+
+-- | Top-level entry point: convert a module to GraphQL schema files.
+moduleToGraphql :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
+moduleToGraphql = define "moduleToGraphql" $
+  lambda "mod" $ lambda "defs" $
+    "cx" ~> "g" ~> lets [
+    "partitioned">: Environment.partitionDefinitions @@ var "defs",
+    "typeDefs">: Pairs.first (var "partitioned"),
+    "prefixes">: findPrefixes @@ Packaging.moduleNamespace (var "mod") @@ var "typeDefs",
+    "filePath">: Names.namespaceToFilePath @@ Util.caseConventionCamel @@ (wrap _FileExtension (string "graphql")) @@ Packaging.moduleNamespace (var "mod")] $
+    "gtdefs" <<~ (Eithers.mapList (lambda "td" $ encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "td") (var "typeDefs")) $
+    right (Maps.fromList $ Lists.pure $ pair (var "filePath")
+      (Serialization.printExpr @@ (Serialization.parenthesize @@
+        (GraphqlSerde.exprDocument @@ (wrap G._Document
+          (Lists.map
+            (lambda "gtdef" $
+              inject G._Definition G._Definition_typeSystem
+                (inject G._TypeSystemDefinitionOrExtension G._TypeSystemDefinitionOrExtension_definition
+                  (inject G._TypeSystemDefinition G._TypeSystemDefinition_type (var "gtdef"))))
+            (var "gtdefs")))))))
 
 -- | Sanitize a string for use as a GraphQL identifier
 sanitize :: TTermDefinition (String -> String)
