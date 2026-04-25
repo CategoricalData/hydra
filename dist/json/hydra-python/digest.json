@@ -1,12 +1,12 @@
 {
   "version": 1,
   "hashes": {
-    "hydra.python.coder": "3609000b84bd3615fc0694bd2fb4264d6b39091acf4870ab90862cc6c64694b2",
+    "hydra.python.coder": "c51b449d9a04fad32ff29270a992b173aa442c52bf806856fc31651f0bb219ec",
     "hydra.python.environment": "e08ff8fc3439a712cd71c8a574cb18b51e215be85d6d3ce836c391b05d971a98",
     "hydra.python.names": "011bb53777678a5b3529e3668246f057ee5bb18b0e6aaf668528d5d82122419f",
-    "hydra.python.serde": "0aca72b608dc6e74d57232447e1e27d8430126b4f1bd1a50cd26756d0b76bd8b",
+    "hydra.python.serde": "0d85f367957de48c45cb7ee6927093fcd6a613ce0cc8ee3ccd3246bb9b265bc6",
     "hydra.python.syntax": "947d106d4290d741bee54e61e811fafe4361a611316c63d67e01d8fdf93901c6",
     "hydra.python.testing": "b58b112203dcef2f7612036371763a956a8a782caf5c28f6f6b6e47dd9175649",
-    "hydra.python.utils": "0307e77fd157cf23b57e19a555af86cdeb228a7f124ad95999693c83d65ae5c7"
+    "hydra.python.utils": "bc68997cad6e8483a16f2e168c6c136cb4de271d43a551929f5d3d94709b2590"
   }
 }
