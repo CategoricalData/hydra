@@ -252,7 +252,7 @@ fromJson = define "fromJson" $
         ("v" ~> Core.termWrap $ Core.wrappedTerm (var "tname") (var "v"))
         (var "decoded"),
 
-    -- Map -> array of {@key, @value}
+    -- Map -> array of {key, value}
     _Type_map>>: "mt" ~>
       "keyType" <~ (Core.mapTypeKeys $ var "mt") $
       "valType" <~ (Core.mapTypeValues $ var "mt") $
@@ -265,12 +265,12 @@ fromJson = define "fromJson" $
             Eithers.either_
               ("err" ~> left $ var "err")
               ("entryObj" ~>
-                "keyJson" <~ (Maps.lookup (string "@key") (var "entryObj")) $
-                "valJson" <~ (Maps.lookup (string "@value") (var "entryObj")) $
+                "keyJson" <~ (Maps.lookup (string "key") (var "entryObj")) $
+                "valJson" <~ (Maps.lookup (string "value") (var "entryObj")) $
                 Maybes.maybe
-                  (left $ string "missing @key in map entry")
+                  (left $ string "missing key in map entry")
                   ("kj" ~> Maybes.maybe
-                    (left $ string "missing @value in map entry")
+                    (left $ string "missing value in map entry")
                     ("vj" ~>
                       "decodedKey" <~ (fromJson @@ var "types" @@ var "tname" @@ var "keyType" @@ var "kj") $
                       "decodedVal" <~ (fromJson @@ var "types" @@ var "tname" @@ var "valType" @@ var "vj") $
@@ -285,7 +285,7 @@ fromJson = define "fromJson" $
           Eithers.map ("es" ~> Core.termMap $ Maps.fromList $ var "es") (var "entries"))
         (var "arrResult"),
 
-    -- Pair -> {@first, @second}
+    -- Pair -> {first, second}
     _Type_pair>>: "pt" ~>
       "firstType" <~ (Core.pairTypeFirst $ var "pt") $
       "secondType" <~ (Core.pairTypeSecond $ var "pt") $
@@ -293,12 +293,12 @@ fromJson = define "fromJson" $
       Eithers.either_
         ("err" ~> left $ var "err")
         ("obj" ~>
-          "firstJson" <~ (Maps.lookup (string "@first") (var "obj")) $
-          "secondJson" <~ (Maps.lookup (string "@second") (var "obj")) $
+          "firstJson" <~ (Maps.lookup (string "first") (var "obj")) $
+          "secondJson" <~ (Maps.lookup (string "second") (var "obj")) $
           Maybes.maybe
-            (left $ string "missing @first in pair")
+            (left $ string "missing first in pair")
             ("fj" ~> Maybes.maybe
-              (left $ string "missing @second in pair")
+              (left $ string "missing second in pair")
               ("sj" ~>
                 "decodedFirst" <~ (fromJson @@ var "types" @@ var "tname" @@ var "firstType" @@ var "fj") $
                 "decodedSecond" <~ (fromJson @@ var "types" @@ var "tname" @@ var "secondType" @@ var "sj") $
@@ -310,7 +310,7 @@ fromJson = define "fromJson" $
             (var "firstJson"))
         (var "objResult"),
 
-    -- Either -> {@left} or {@right}
+    -- Either -> {left} or {right}
     _Type_either>>: "et" ~>
       "leftType" <~ (Core.eitherTypeLeft $ var "et") $
       "rightType" <~ (Core.eitherTypeRight $ var "et") $
@@ -318,11 +318,11 @@ fromJson = define "fromJson" $
       Eithers.either_
         ("err" ~> left $ var "err")
         ("obj" ~>
-          "leftJson" <~ (Maps.lookup (string "@left") (var "obj")) $
-          "rightJson" <~ (Maps.lookup (string "@right") (var "obj")) $
+          "leftJson" <~ (Maps.lookup (string "left") (var "obj")) $
+          "rightJson" <~ (Maps.lookup (string "right") (var "obj")) $
           Maybes.maybe
             (Maybes.maybe
-              (left $ string "expected @left or @right in Either")
+              (left $ string "expected left or right in Either")
               ("rj" ~>
                 "decoded" <~ (fromJson @@ var "types" @@ var "tname" @@ var "rightType" @@ var "rj") $
                 Eithers.map ("v" ~> Core.termEither $ right $ var "v") (var "decoded"))
