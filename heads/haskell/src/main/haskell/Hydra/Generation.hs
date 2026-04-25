@@ -341,11 +341,13 @@ writePackageSplitJson distJsonRoot universeMods universeForSchema toWrite = do
 packageSplitDigestAnchor :: FilePath -> FilePath
 packageSplitDigestAnchor distJsonRoot = distJsonRoot FP.</> "digest.main.json"
 
--- | Per-package digest path: dist/json/<pkg>/digest.json. The digest
--- covers the DSL sources whose namespaces route to <pkg>.
+-- | Per-package main-source-set digest path:
+-- dist/json/<pkg>/src/main/digest.json. The digest covers the DSL
+-- sources whose namespaces route to <pkg> and live in the main
+-- source set. The parallel test path is at <pkg>/src/test/digest.json.
 perPackageDigestPath :: FilePath -> String -> FilePath
 perPackageDigestPath distJsonRoot pkg =
-  distJsonRoot FP.</> pkg FP.</> "digest.json"
+  distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "digest.json"
 
 -- | After a successful regen, write per-package digest files. Each
 -- package's digest hashes only its own DSL sources (the modules that
