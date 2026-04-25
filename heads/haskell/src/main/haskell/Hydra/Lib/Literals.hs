@@ -21,8 +21,16 @@ bigfloatToBigint :: Double -> Integer
 bigfloatToBigint = round
 
 -- | Convert a bigfloat (Double) to a float32 (Float).
+-- IEEE special values are preserved; for finite values, realToFrac
+-- (which converts via Rational) is used. Note: realToFrac on Double
+-- Inf does work in this direction (Float has same special-value
+-- representation), but we mirror float32ToBigfloat's pattern for
+-- symmetry and to be defensive against future Rational changes.
 bigfloatToFloat32 :: Double -> Float
-bigfloatToFloat32 = realToFrac
+bigfloatToFloat32 x
+  | isNaN x      = 0/0
+  | isInfinite x = if x < 0 then -1/0 else 1/0
+  | otherwise    = realToFrac x
 
 -- | Convert a bigfloat (Double) to a float64 (Double).
 bigfloatToFloat64 :: Double -> Double
@@ -95,8 +103,13 @@ binaryToStringBS :: B.ByteString -> String
 binaryToStringBS = binaryToString
 
 -- | Convert a float32 (Float) to a bigfloat (Double).
+-- Preserves IEEE special values (NaN, +/-Infinity); plain realToFrac
+-- routes through Rational and collapses Inf to maxFinite (~3.4028e38).
 float32ToBigfloat :: Float -> Double
-float32ToBigfloat = realToFrac
+float32ToBigfloat x
+  | isNaN x      = 0/0
+  | isInfinite x = if x < 0 then -1/0 else 1/0
+  | otherwise    = realToFrac x
 
 -- | Convert a float32 (Float) to a decimal (Scientific).
 float32ToDecimal :: Float -> Scientific
