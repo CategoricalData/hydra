@@ -83,6 +83,18 @@ fi
 # Step 3: Package-specific post-processing.
 case "$PACKAGE" in
     hydra-kernel)
+        # Copy hand-written hydra/lib/ from heads/lisp/clojure into dist/.
+        # heads is the source of truth for these helpers; dist mirrors it.
+        for d in lib; do
+            LIB_SRC="$HYDRA_CLOJURE_HEAD/src/main/clojure/hydra/$d"
+            LIB_DST="$OUT_MAIN/hydra/$d"
+            if [ -d "$LIB_SRC" ]; then
+                echo "Step 3a: Copying hand-written hydra/$d/ from heads/lisp/clojure/..."
+                mkdir -p "$LIB_DST"
+                cp -R "$LIB_SRC/." "$LIB_DST/"
+            fi
+        done
+
         # Patch testGraph.clj: replace empty graph/context with a full test
         # graph (primitives + schema types + annotation bindings). The graph
         # must be defined AFTER test_terms/test_types to avoid forward
