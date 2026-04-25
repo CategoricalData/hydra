@@ -107,25 +107,19 @@ module_ = Module ns definitions
     Just "JSON Schema code generator: converts Hydra modules to JSON Schema documents"
   where
     definitions = [
-      toDefinition moduleToJsonSchema,
       toDefinition constructModule,
       toDefinition encodeField,
       toDefinition encodeName,
       toDefinition encodeNamedType,
       toDefinition encodeType,
       toDefinition isRequiredField,
+      toDefinition moduleToJsonSchema,
       toDefinition referenceRestriction]
 
 
 -- | Result type alias
 type Result a = Either Error a
 
-
-moduleToJsonSchema :: TTermDefinition (JsonSchemaOptions -> Module -> [Definition] -> Context -> Graph -> Result (M.Map FilePath String))
-moduleToJsonSchema = define "moduleToJsonSchema" $
-  doc "Convert a Hydra module to a map of JSON Schema documents" $
-  lambda "opts" $ lambda "mod" $ lambda "defs" $ lambda "cx" $ lambda "g" $
-    var "hydra.json.schema.coder.moduleToJsonSchema" @@ var "opts" @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g"
 
 constructModule :: TTermDefinition (Context -> Graph -> JsonSchemaOptions -> Module -> [TypeDefinition] -> Result (M.Map FilePath JS.Document))
 constructModule = define "constructModule" $
@@ -172,6 +166,12 @@ isRequiredField = define "isRequiredField" $
     "typ">: project _FieldType _FieldType_type @@ var "ft"] $
     cases _Type (Strip.deannotateType @@ var "typ") (Just true) [
       _Type_maybe>>: constant false]
+
+moduleToJsonSchema :: TTermDefinition (JsonSchemaOptions -> Module -> [Definition] -> Context -> Graph -> Result (M.Map FilePath String))
+moduleToJsonSchema = define "moduleToJsonSchema" $
+  doc "Convert a Hydra module to a map of JSON Schema documents" $
+  lambda "opts" $ lambda "mod" $ lambda "defs" $ lambda "cx" $ lambda "g" $
+    var "hydra.json.schema.coder.moduleToJsonSchema" @@ var "opts" @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g"
 
 referenceRestriction :: TTermDefinition (Name -> JS.Restriction)
 referenceRestriction = define "referenceRestriction" $

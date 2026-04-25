@@ -112,122 +112,48 @@ module_ = Module ns definitions
     Just "Avro-to-Hydra adapter for converting Avro schemas and data to Hydra types and terms"
   where
     definitions = [
+      toDefinition annotateAdapter,
+      toDefinition avroHydraAdapter,
+      toDefinition avroNameToHydraName,
       toDefinition avro_foreignKey,
       toDefinition avro_primaryKey,
       toDefinition emptyAvroEnvironment,
-      toDefinition avroHydraAdapter,
-      toDefinition prepareFields,
-      toDefinition prepareField,
-      toDefinition annotateAdapter,
-      toDefinition findAvroPrimaryKeyField,
-      toDefinition avroNameToHydraName,
       toDefinition encodeAnnotationValue,
-      toDefinition fieldAnnotationsToCore,
-      toDefinition namedAnnotationsToCore,
-      toDefinition getAvroHydraAdapter,
-      toDefinition foreignKeyE,
-      toDefinition patternToNameConstructor,
-      toDefinition primaryKeyE,
-      toDefinition parseAvroName,
-      toDefinition putAvroHydraAdapter,
-      toDefinition rewriteAvroSchemaM,
-      toDefinition jsonToStringE,
-      toDefinition showQname,
-      toDefinition stringToTermE,
-      toDefinition termToStringE,
       toDefinition err,
-      toDefinition unexpectedE,
       toDefinition expectArrayE,
       toDefinition expectObjectE,
       toDefinition expectStringE,
+      toDefinition fieldAnnotationsToCore,
+      toDefinition findAvroPrimaryKeyField,
+      toDefinition foreignKeyE,
+      toDefinition getAvroHydraAdapter,
+      toDefinition jsonToStringE,
+      toDefinition namedAnnotationsToCore,
+      toDefinition optStringE,
+      toDefinition parseAvroName,
+      toDefinition patternToNameConstructor,
+      toDefinition prepareField,
+      toDefinition prepareFields,
+      toDefinition primaryKeyE,
+      toDefinition putAvroHydraAdapter,
       toDefinition requireStringE,
-      toDefinition optStringE]
+      toDefinition rewriteAvroSchemaM,
+      toDefinition showQname,
+      toDefinition stringToTermE,
+      toDefinition termToStringE,
+      toDefinition unexpectedE]
 
 
 -- | Error helpers
 
-err :: TTermDefinition (Context -> String -> Result a)
-err = define "err" $
-  doc "Construct an error result with a message in context" $
-  lambda "cx" $ lambda "msg" $
-    Ctx.failInContext (Error.errorOther $ Error.otherError (var "msg")) (var "cx")
-
-unexpectedE :: TTermDefinition (Context -> String -> String -> Result a)
-unexpectedE = define "unexpectedE" $
-  doc "Construct an error for unexpected values" $
-  lambda "cx" $ lambda "expected" $ lambda "found" $
-    err @@ var "cx" @@ (Strings.cat $ list [string "Expected ", var "expected", string ", found: ", var "found"])
-
--- | JSON extraction helpers
-
--- Note: the error branches in these three functions are dropped during code generation because the
--- success branches don't constrain the `cx` parameter, so inference generalizes it to `t0` and the
--- code generator eliminates type-incompatible default branches. The functions remain safe because
--- callers (foreignKeyE, requireStringE, optStringE) always pass the correct JSON value types.
--- This mirrors the staging behavior (partial patterns with explicit error branches) but with
--- implicit rather than explicit partiality.
-
-expectArrayE :: TTermDefinition (Context -> JM.Value -> Result [JM.Value])
-expectArrayE = define "expectArrayE" $
-  doc "Extract a JSON array or return an error" $
-  lambda "cx" $ lambda "value" $
-    cases JM._Value (var "value") Nothing [
-      JM._Value_array>>: lambda "v" $ right (var "v")]
-
-expectObjectE :: TTermDefinition (Context -> JM.Value -> Result (M.Map String JM.Value))
-expectObjectE = define "expectObjectE" $
-  doc "Extract a JSON object or return an error" $
-  lambda "cx" $ lambda "value" $
-    cases JM._Value (var "value") Nothing [
-      JM._Value_object>>: lambda "v" $ right (var "v")]
-
-expectStringE :: TTermDefinition (Context -> JM.Value -> Result String)
-expectStringE = define "expectStringE" $
-  doc "Extract a JSON string or return an error" $
-  lambda "cx" $ lambda "value" $
-    cases JM._Value (var "value") Nothing [
-      JM._Value_string>>: lambda "v" $ right (var "v")]
-
-requireStringE :: TTermDefinition (Context -> String -> M.Map String JM.Value -> Result String)
-requireStringE = define "requireStringE" $
-  doc "Look up a required string attribute in a JSON object map" $
-  lambda "cx" $ lambda "fname" $ lambda "m" $
+annotateAdapter :: TTermDefinition (Maybe (M.Map Name Term) -> AvroHydraAdapter -> AvroHydraAdapter)
+annotateAdapter = define "annotateAdapter" $
+  doc "Annotate an adapter's target type with optional annotations" $
+  lambda "ann" $ lambda "ad" $
     Maybes.maybe
-      (err @@ var "cx" @@ (Strings.cat $ list [string "required attribute ", Literals.showString (var "fname"), string " not found"]))
-      (lambda "v" $ expectStringE @@ var "cx" @@ var "v")
-      (Maps.lookup (var "fname") (var "m"))
-
-optStringE :: TTermDefinition (Context -> String -> M.Map String JM.Value -> Result (Maybe String))
-optStringE = define "optStringE" $
-  doc "Look up an optional string attribute in a JSON object map" $
-  lambda "cx" $ lambda "fname" $ lambda "m" $
-    Maybes.maybe
-      (right nothing)
-      (lambda "v" $ Eithers.map (lambda "s" $ Maybes.pure (var "s")) (expectStringE @@ var "cx" @@ var "v"))
-      (Maps.lookup (var "fname") (var "m"))
-
-
--- | Constants
-
-avro_foreignKey :: TTermDefinition String
-avro_foreignKey = define "avro_foreignKey" $
-  string "@foreignKey"
-
-avro_primaryKey :: TTermDefinition String
-avro_primaryKey = define "avro_primaryKey" $
-  string "@primaryKey"
-
-emptyAvroEnvironment :: TTermDefinition AvroEnv.AvroEnvironment
-emptyAvroEnvironment = define "emptyAvroEnvironment" $
-  doc "An empty Avro environment with no named adapters, no namespace, and no elements" $
-  record (Name "hydra.avro.environment.AvroEnvironment") [
-    (Name "namedAdapters")>>: Maps.empty,
-    (Name "namespace")>>: nothing,
-    (Name "elements")>>: Maps.empty]
-
-
--- | Core functions
-
+      (var "ad")
+      (lambda "n" $ Coders.adapterWithTarget (var "ad") (MetaTypes.annot (var "n") (Coders.adapterTarget (var "ad"))))
+      (var "ann")
 
 avroHydraAdapter :: TTermDefinition (Context -> Avro.Schema -> AvroEnv.AvroEnvironment -> Result (AvroHydraAdapter, AvroEnv.AvroEnvironment))
 avroHydraAdapter = define "avroHydraAdapter" $
@@ -541,23 +467,187 @@ avroHydraAdapter = define "avroHydraAdapter" $
             (Lists.maybeHead (var "nonNulls")))
       ]
 
-prepareFields :: TTermDefinition (Context -> AvroEnv.AvroEnvironment -> [Avro.Field] -> Result (M.Map String (Avro.Field, AvroHydraAdapter), AvroEnv.AvroEnvironment))
-prepareFields = define "prepareFields" $
-  doc "Thread AvroEnvironment through preparing multiple fields" $
-  lambda "cx" $ lambda "env" $ lambda "fields" $
-    Lists.foldl
-      (lambda "acc" $ lambda "f" $
-        Eithers.bind (var "acc") (lambda "accPair" $ lets [
-          "m">: Pairs.first (var "accPair"),
-          "env1">: Pairs.second (var "accPair")] $
-          Eithers.bind (prepareField @@ var "cx" @@ var "env1" @@ var "f") (lambda "result" $ lets [
-            "kv">: Pairs.first (var "result"),
-            "env2">: Pairs.second (var "result"),
-            "k">: Pairs.first (var "kv"),
-            "v">: Pairs.second (var "kv")] $
-            right (pair (Maps.insert (var "k") (var "v") (var "m")) (var "env2")))))
-      (right (pair Maps.empty (var "env")))
-      (var "fields")
+avroNameToHydraName :: TTermDefinition (AvroEnv.AvroQualifiedName -> Name)
+avroNameToHydraName = define "avroNameToHydraName" $
+  doc "Convert an Avro qualified name to a Hydra name" $
+  lambda "qname" $ lets [
+    "mns">: project AvroEnv._AvroQualifiedName AvroEnv._AvroQualifiedName_namespace @@ var "qname",
+    "local">: project AvroEnv._AvroQualifiedName AvroEnv._AvroQualifiedName_name @@ var "qname"] $
+    Names.unqualifyName @@ Packaging.qualifiedName
+      (Maybes.map (lambda "s" $ wrap _Namespace (var "s")) (var "mns"))
+      (var "local")
+
+avro_foreignKey :: TTermDefinition String
+avro_foreignKey = define "avro_foreignKey" $
+  string "@foreignKey"
+
+avro_primaryKey :: TTermDefinition String
+avro_primaryKey = define "avro_primaryKey" $
+  string "@primaryKey"
+
+emptyAvroEnvironment :: TTermDefinition AvroEnv.AvroEnvironment
+emptyAvroEnvironment = define "emptyAvroEnvironment" $
+  doc "An empty Avro environment with no named adapters, no namespace, and no elements" $
+  record (Name "hydra.avro.environment.AvroEnvironment") [
+    (Name "namedAdapters")>>: Maps.empty,
+    (Name "namespace")>>: nothing,
+    (Name "elements")>>: Maps.empty]
+
+
+-- | Core functions
+
+encodeAnnotationValue :: TTermDefinition (JM.Value -> Term)
+encodeAnnotationValue = define "encodeAnnotationValue" $
+  doc "Encode a JSON value as a Hydra term for annotation purposes" $
+  lambda "v" $
+    cases JM._Value (var "v") Nothing [
+      JM._Value_array>>: lambda "vals" $
+        Core.termList (Lists.map encodeAnnotationValue (var "vals")),
+      JM._Value_boolean>>: lambda "b" $
+        MetaTerms.booleanLift (var "b"),
+      JM._Value_null>>: constant $
+        MetaTerms.tuple ([] :: [TTerm Term]),
+      JM._Value_number>>: lambda "d" $
+        MetaTerms.decimalLift (var "d"),
+      JM._Value_object>>: lambda "m" $
+        MetaTerms.map (Maps.fromList (Lists.map
+          (lambda "entry" $ lets [
+            "k">: Pairs.first (var "entry"),
+            "v'">: Pairs.second (var "entry")] $
+            pair (MetaTerms.stringLift (var "k")) (encodeAnnotationValue @@ var "v'"))
+          (Maps.toList (var "m")))),
+      JM._Value_string>>: lambda "s" $
+        MetaTerms.stringLift (var "s")]
+
+err :: TTermDefinition (Context -> String -> Result a)
+err = define "err" $
+  doc "Construct an error result with a message in context" $
+  lambda "cx" $ lambda "msg" $
+    Ctx.failInContext (Error.errorOther $ Error.otherError (var "msg")) (var "cx")
+
+expectArrayE :: TTermDefinition (Context -> JM.Value -> Result [JM.Value])
+expectArrayE = define "expectArrayE" $
+  doc "Extract a JSON array or return an error" $
+  lambda "cx" $ lambda "value" $
+    cases JM._Value (var "value") Nothing [
+      JM._Value_array>>: lambda "v" $ right (var "v")]
+
+expectObjectE :: TTermDefinition (Context -> JM.Value -> Result (M.Map String JM.Value))
+expectObjectE = define "expectObjectE" $
+  doc "Extract a JSON object or return an error" $
+  lambda "cx" $ lambda "value" $
+    cases JM._Value (var "value") Nothing [
+      JM._Value_object>>: lambda "v" $ right (var "v")]
+
+expectStringE :: TTermDefinition (Context -> JM.Value -> Result String)
+expectStringE = define "expectStringE" $
+  doc "Extract a JSON string or return an error" $
+  lambda "cx" $ lambda "value" $
+    cases JM._Value (var "value") Nothing [
+      JM._Value_string>>: lambda "v" $ right (var "v")]
+
+fieldAnnotationsToCore :: TTermDefinition (Avro.Field -> M.Map Name Term)
+fieldAnnotationsToCore = define "fieldAnnotationsToCore" $
+  doc "Extract field annotations and convert them to core Name/Term pairs" $
+  lambda "f" $
+    Maps.fromList (Lists.map
+      (lambda "entry" $ lets [
+        "k">: Pairs.first (var "entry"),
+        "v">: Pairs.second (var "entry")] $
+        pair (Core.name (var "k")) (encodeAnnotationValue @@ var "v"))
+      (Maps.toList (project Avro._Field Avro._Field_annotations @@ var "f")))
+
+findAvroPrimaryKeyField :: TTermDefinition (Context -> AvroEnv.AvroQualifiedName -> [Avro.Field] -> Result (Maybe AvroEnv.AvroPrimaryKey))
+findAvroPrimaryKeyField = define "findAvroPrimaryKeyField" $
+  doc "Find the primary key field among a list of Avro fields" $
+  lambda "cx" $ lambda "qname" $ lambda "avroFields" $ lets [
+    "keys">: Maybes.cat (Lists.map (lambda "f" $ primaryKeyE @@ var "cx" @@ var "f") (var "avroFields"))] $
+    Logic.ifElse (Lists.null (var "keys"))
+      (right nothing)
+      (Logic.ifElse (Equality.equal (Lists.length (var "keys")) (int32 1))
+        (right (Lists.maybeHead (var "keys")))
+        (err @@ var "cx" @@ Strings.cat2 (string "multiple primary key fields for ") (showQname @@ var "qname")))
+
+foreignKeyE :: TTermDefinition (Context -> Avro.Field -> Result (Maybe AvroEnv.AvroForeignKey))
+foreignKeyE = define "foreignKeyE" $
+  doc "Extract a foreign key annotation from a field, if present" $
+  lambda "cx" $ lambda "f" $
+    Maybes.maybe
+      (right nothing)
+      (lambda "v" $
+        Eithers.bind (expectObjectE @@ var "cx" @@ var "v") (lambda "m" $
+        Eithers.bind (Eithers.map (lambda "s" $ Core.name (var "s")) (requireStringE @@ var "cx" @@ string "type" @@ var "m")) (lambda "tname" $
+        Eithers.bind (optStringE @@ var "cx" @@ string "pattern" @@ var "m") (lambda "pattern_" $
+          lets [
+            "constr">: Maybes.maybe
+              (lambda "s" $ Core.name (var "s"))
+              (lambda "pat" $ patternToNameConstructor @@ var "pat")
+              (var "pattern_")] $
+            right (just $ record AvroEnv._AvroForeignKey [
+              AvroEnv._AvroForeignKey_typeName>>: var "tname",
+              AvroEnv._AvroForeignKey_constructor>>: var "constr"])))))
+      (Maps.lookup (avro_foreignKey) (project Avro._Field Avro._Field_annotations @@ var "f"))
+
+getAvroHydraAdapter :: TTermDefinition (AvroEnv.AvroQualifiedName -> AvroEnv.AvroEnvironment -> Maybe AvroHydraAdapter)
+getAvroHydraAdapter = define "getAvroHydraAdapter" $
+  doc "Look up an adapter by qualified name in the environment" $
+  lambda "qname" $ lambda "env" $
+    Maps.lookup (var "qname") (project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namedAdapters @@ var "env")
+
+jsonToStringE :: TTermDefinition (Context -> JM.Value -> Result String)
+jsonToStringE = define "jsonToStringE" $
+  doc "Convert a JSON value to a string, supporting booleans, strings, and numbers" $
+  lambda "cx" $ lambda "v" $
+    cases JM._Value (var "v") (Just (unexpectedE @@ var "cx" @@ string "string, number, or boolean" @@ string "other")) [
+      JM._Value_boolean>>: lambda "b" $
+        right (Logic.ifElse (var "b") (string "true") (string "false")),
+      JM._Value_string>>: lambda "s" $
+        right (var "s"),
+      JM._Value_number>>: lambda "d" $
+        right (Literals.showDecimal (var "d"))]
+
+namedAnnotationsToCore :: TTermDefinition (Avro.Named -> M.Map Name Term)
+namedAnnotationsToCore = define "namedAnnotationsToCore" $
+  doc "Extract named type annotations and convert them to core Name/Term pairs" $
+  lambda "n" $
+    Maps.fromList (Lists.map
+      (lambda "entry" $ lets [
+        "k">: Pairs.first (var "entry"),
+        "v">: Pairs.second (var "entry")] $
+        pair (Core.name (var "k")) (encodeAnnotationValue @@ var "v"))
+      (Maps.toList (project Avro._Named Avro._Named_annotations @@ var "n")))
+
+optStringE :: TTermDefinition (Context -> String -> M.Map String JM.Value -> Result (Maybe String))
+optStringE = define "optStringE" $
+  doc "Look up an optional string attribute in a JSON object map" $
+  lambda "cx" $ lambda "fname" $ lambda "m" $
+    Maybes.maybe
+      (right nothing)
+      (lambda "v" $ Eithers.map (lambda "s" $ Maybes.pure (var "s")) (expectStringE @@ var "cx" @@ var "v"))
+      (Maps.lookup (var "fname") (var "m"))
+
+
+-- | Constants
+
+parseAvroName :: TTermDefinition (Maybe String -> String -> AvroEnv.AvroQualifiedName)
+parseAvroName = define "parseAvroName" $
+  doc "Parse a dotted Avro name into a qualified name" $
+  lambda "mns" $ lambda "name_" $ lets [
+    "parts">: Strings.splitOn (string ".") (var "name_"),
+    "local">: Maybes.fromMaybe (var "name_") (Lists.maybeLast (var "parts"))] $
+    Logic.ifElse (Equality.equal (Lists.length (var "parts")) (int32 1))
+      (record AvroEnv._AvroQualifiedName [
+        AvroEnv._AvroQualifiedName_namespace>>: var "mns",
+        AvroEnv._AvroQualifiedName_name>>: var "local"])
+      (record AvroEnv._AvroQualifiedName [
+        AvroEnv._AvroQualifiedName_namespace>>: Maybes.map (lambda "ps" $ Strings.intercalate (string ".") (var "ps")) (Lists.maybeInit (var "parts")),
+        AvroEnv._AvroQualifiedName_name>>: var "local"])
+
+patternToNameConstructor :: TTermDefinition (String -> String -> Name)
+patternToNameConstructor = define "patternToNameConstructor" $
+  doc "Create a name constructor from a pattern string" $
+  lambda "pat" $ lambda "s" $
+    Core.name (Strings.intercalate (var "s") (Strings.splitOn (string "${}") (var "pat")))
 
 prepareField :: TTermDefinition (Context -> AvroEnv.AvroEnvironment -> Avro.Field -> Result ((String, (Avro.Field, AvroHydraAdapter)), AvroEnv.AvroEnvironment))
 prepareField = define "prepareField" $
@@ -630,112 +720,23 @@ prepareField = define "prepareField" $
           (pair (project Avro._Field Avro._Field_name @@ var "f") (pair (var "f") (annotateAdapter @@ var "ann" @@ var "ad")))
           (var "env1"))))
 
-annotateAdapter :: TTermDefinition (Maybe (M.Map Name Term) -> AvroHydraAdapter -> AvroHydraAdapter)
-annotateAdapter = define "annotateAdapter" $
-  doc "Annotate an adapter's target type with optional annotations" $
-  lambda "ann" $ lambda "ad" $
-    Maybes.maybe
-      (var "ad")
-      (lambda "n" $ Coders.adapterWithTarget (var "ad") (MetaTypes.annot (var "n") (Coders.adapterTarget (var "ad"))))
-      (var "ann")
-
-findAvroPrimaryKeyField :: TTermDefinition (Context -> AvroEnv.AvroQualifiedName -> [Avro.Field] -> Result (Maybe AvroEnv.AvroPrimaryKey))
-findAvroPrimaryKeyField = define "findAvroPrimaryKeyField" $
-  doc "Find the primary key field among a list of Avro fields" $
-  lambda "cx" $ lambda "qname" $ lambda "avroFields" $ lets [
-    "keys">: Maybes.cat (Lists.map (lambda "f" $ primaryKeyE @@ var "cx" @@ var "f") (var "avroFields"))] $
-    Logic.ifElse (Lists.null (var "keys"))
-      (right nothing)
-      (Logic.ifElse (Equality.equal (Lists.length (var "keys")) (int32 1))
-        (right (Lists.maybeHead (var "keys")))
-        (err @@ var "cx" @@ Strings.cat2 (string "multiple primary key fields for ") (showQname @@ var "qname")))
-
-avroNameToHydraName :: TTermDefinition (AvroEnv.AvroQualifiedName -> Name)
-avroNameToHydraName = define "avroNameToHydraName" $
-  doc "Convert an Avro qualified name to a Hydra name" $
-  lambda "qname" $ lets [
-    "mns">: project AvroEnv._AvroQualifiedName AvroEnv._AvroQualifiedName_namespace @@ var "qname",
-    "local">: project AvroEnv._AvroQualifiedName AvroEnv._AvroQualifiedName_name @@ var "qname"] $
-    Names.unqualifyName @@ Packaging.qualifiedName
-      (Maybes.map (lambda "s" $ wrap _Namespace (var "s")) (var "mns"))
-      (var "local")
-
-encodeAnnotationValue :: TTermDefinition (JM.Value -> Term)
-encodeAnnotationValue = define "encodeAnnotationValue" $
-  doc "Encode a JSON value as a Hydra term for annotation purposes" $
-  lambda "v" $
-    cases JM._Value (var "v") Nothing [
-      JM._Value_array>>: lambda "vals" $
-        Core.termList (Lists.map encodeAnnotationValue (var "vals")),
-      JM._Value_boolean>>: lambda "b" $
-        MetaTerms.booleanLift (var "b"),
-      JM._Value_null>>: constant $
-        MetaTerms.tuple ([] :: [TTerm Term]),
-      JM._Value_number>>: lambda "d" $
-        MetaTerms.decimalLift (var "d"),
-      JM._Value_object>>: lambda "m" $
-        MetaTerms.map (Maps.fromList (Lists.map
-          (lambda "entry" $ lets [
-            "k">: Pairs.first (var "entry"),
-            "v'">: Pairs.second (var "entry")] $
-            pair (MetaTerms.stringLift (var "k")) (encodeAnnotationValue @@ var "v'"))
-          (Maps.toList (var "m")))),
-      JM._Value_string>>: lambda "s" $
-        MetaTerms.stringLift (var "s")]
-
-fieldAnnotationsToCore :: TTermDefinition (Avro.Field -> M.Map Name Term)
-fieldAnnotationsToCore = define "fieldAnnotationsToCore" $
-  doc "Extract field annotations and convert them to core Name/Term pairs" $
-  lambda "f" $
-    Maps.fromList (Lists.map
-      (lambda "entry" $ lets [
-        "k">: Pairs.first (var "entry"),
-        "v">: Pairs.second (var "entry")] $
-        pair (Core.name (var "k")) (encodeAnnotationValue @@ var "v"))
-      (Maps.toList (project Avro._Field Avro._Field_annotations @@ var "f")))
-
-namedAnnotationsToCore :: TTermDefinition (Avro.Named -> M.Map Name Term)
-namedAnnotationsToCore = define "namedAnnotationsToCore" $
-  doc "Extract named type annotations and convert them to core Name/Term pairs" $
-  lambda "n" $
-    Maps.fromList (Lists.map
-      (lambda "entry" $ lets [
-        "k">: Pairs.first (var "entry"),
-        "v">: Pairs.second (var "entry")] $
-        pair (Core.name (var "k")) (encodeAnnotationValue @@ var "v"))
-      (Maps.toList (project Avro._Named Avro._Named_annotations @@ var "n")))
-
-getAvroHydraAdapter :: TTermDefinition (AvroEnv.AvroQualifiedName -> AvroEnv.AvroEnvironment -> Maybe AvroHydraAdapter)
-getAvroHydraAdapter = define "getAvroHydraAdapter" $
-  doc "Look up an adapter by qualified name in the environment" $
-  lambda "qname" $ lambda "env" $
-    Maps.lookup (var "qname") (project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namedAdapters @@ var "env")
-
-foreignKeyE :: TTermDefinition (Context -> Avro.Field -> Result (Maybe AvroEnv.AvroForeignKey))
-foreignKeyE = define "foreignKeyE" $
-  doc "Extract a foreign key annotation from a field, if present" $
-  lambda "cx" $ lambda "f" $
-    Maybes.maybe
-      (right nothing)
-      (lambda "v" $
-        Eithers.bind (expectObjectE @@ var "cx" @@ var "v") (lambda "m" $
-        Eithers.bind (Eithers.map (lambda "s" $ Core.name (var "s")) (requireStringE @@ var "cx" @@ string "type" @@ var "m")) (lambda "tname" $
-        Eithers.bind (optStringE @@ var "cx" @@ string "pattern" @@ var "m") (lambda "pattern_" $
-          lets [
-            "constr">: Maybes.maybe
-              (lambda "s" $ Core.name (var "s"))
-              (lambda "pat" $ patternToNameConstructor @@ var "pat")
-              (var "pattern_")] $
-            right (just $ record AvroEnv._AvroForeignKey [
-              AvroEnv._AvroForeignKey_typeName>>: var "tname",
-              AvroEnv._AvroForeignKey_constructor>>: var "constr"])))))
-      (Maps.lookup (avro_foreignKey) (project Avro._Field Avro._Field_annotations @@ var "f"))
-
-patternToNameConstructor :: TTermDefinition (String -> String -> Name)
-patternToNameConstructor = define "patternToNameConstructor" $
-  doc "Create a name constructor from a pattern string" $
-  lambda "pat" $ lambda "s" $
-    Core.name (Strings.intercalate (var "s") (Strings.splitOn (string "${}") (var "pat")))
+prepareFields :: TTermDefinition (Context -> AvroEnv.AvroEnvironment -> [Avro.Field] -> Result (M.Map String (Avro.Field, AvroHydraAdapter), AvroEnv.AvroEnvironment))
+prepareFields = define "prepareFields" $
+  doc "Thread AvroEnvironment through preparing multiple fields" $
+  lambda "cx" $ lambda "env" $ lambda "fields" $
+    Lists.foldl
+      (lambda "acc" $ lambda "f" $
+        Eithers.bind (var "acc") (lambda "accPair" $ lets [
+          "m">: Pairs.first (var "accPair"),
+          "env1">: Pairs.second (var "accPair")] $
+          Eithers.bind (prepareField @@ var "cx" @@ var "env1" @@ var "f") (lambda "result" $ lets [
+            "kv">: Pairs.first (var "result"),
+            "env2">: Pairs.second (var "result"),
+            "k">: Pairs.first (var "kv"),
+            "v">: Pairs.second (var "kv")] $
+            right (pair (Maps.insert (var "k") (var "v") (var "m")) (var "env2")))))
+      (right (pair Maps.empty (var "env")))
+      (var "fields")
 
 primaryKeyE :: TTermDefinition (Context -> Avro.Field -> Maybe AvroEnv.AvroPrimaryKey)
 primaryKeyE = define "primaryKeyE" $
@@ -752,20 +753,6 @@ primaryKeyE = define "primaryKeyE" $
           (expectStringE @@ var "cx" @@ var "v"))
       (Maps.lookup (avro_primaryKey) (project Avro._Field Avro._Field_annotations @@ var "f"))
 
-parseAvroName :: TTermDefinition (Maybe String -> String -> AvroEnv.AvroQualifiedName)
-parseAvroName = define "parseAvroName" $
-  doc "Parse a dotted Avro name into a qualified name" $
-  lambda "mns" $ lambda "name_" $ lets [
-    "parts">: Strings.splitOn (string ".") (var "name_"),
-    "local">: Maybes.fromMaybe (var "name_") (Lists.maybeLast (var "parts"))] $
-    Logic.ifElse (Equality.equal (Lists.length (var "parts")) (int32 1))
-      (record AvroEnv._AvroQualifiedName [
-        AvroEnv._AvroQualifiedName_namespace>>: var "mns",
-        AvroEnv._AvroQualifiedName_name>>: var "local"])
-      (record AvroEnv._AvroQualifiedName [
-        AvroEnv._AvroQualifiedName_namespace>>: Maybes.map (lambda "ps" $ Strings.intercalate (string ".") (var "ps")) (Lists.maybeInit (var "parts")),
-        AvroEnv._AvroQualifiedName_name>>: var "local"])
-
 putAvroHydraAdapter :: TTermDefinition (AvroEnv.AvroQualifiedName -> AvroHydraAdapter -> AvroEnv.AvroEnvironment -> AvroEnv.AvroEnvironment)
 putAvroHydraAdapter = define "putAvroHydraAdapter" $
   doc "Store an adapter in the environment by qualified name" $
@@ -778,6 +765,15 @@ putAvroHydraAdapter = define "putAvroHydraAdapter" $
         project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namespace @@ var "env",
       AvroEnv._AvroEnvironment_elements>>:
         project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_elements @@ var "env"]
+
+requireStringE :: TTermDefinition (Context -> String -> M.Map String JM.Value -> Result String)
+requireStringE = define "requireStringE" $
+  doc "Look up a required string attribute in a JSON object map" $
+  lambda "cx" $ lambda "fname" $ lambda "m" $
+    Maybes.maybe
+      (err @@ var "cx" @@ (Strings.cat $ list [string "required attribute ", Literals.showString (var "fname"), string " not found"]))
+      (lambda "v" $ expectStringE @@ var "cx" @@ var "v")
+      (Maps.lookup (var "fname") (var "m"))
 
 rewriteAvroSchemaM :: TTermDefinition (((Avro.Schema -> Result Avro.Schema) -> Avro.Schema -> Result Avro.Schema) -> Avro.Schema -> Result Avro.Schema)
 rewriteAvroSchemaM = define "rewriteAvroSchemaM" $
@@ -831,18 +827,6 @@ rewriteAvroSchemaM = define "rewriteAvroSchemaM" $
             (Eithers.mapList (lambda "us" $ var "recurse" @@ var "us")
               (unwrap Avro._Union @@ var "u"))]] $
     var "f" @@ var "fsub" @@ var "schema"
-
-jsonToStringE :: TTermDefinition (Context -> JM.Value -> Result String)
-jsonToStringE = define "jsonToStringE" $
-  doc "Convert a JSON value to a string, supporting booleans, strings, and numbers" $
-  lambda "cx" $ lambda "v" $
-    cases JM._Value (var "v") (Just (unexpectedE @@ var "cx" @@ string "string, number, or boolean" @@ string "other")) [
-      JM._Value_boolean>>: lambda "b" $
-        right (Logic.ifElse (var "b") (string "true") (string "false")),
-      JM._Value_string>>: lambda "s" $
-        right (var "s"),
-      JM._Value_number>>: lambda "d" $
-        right (Literals.showDecimal (var "d"))]
 
 showQname :: TTermDefinition (AvroEnv.AvroQualifiedName -> String)
 showQname = define "showQname" $
@@ -920,3 +904,18 @@ termToStringE = define "termToStringE" $
           (unexpectedE @@ var "cx" @@ string "literal value" @@ string "Nothing")
           (lambda "term'" $ termToStringE @@ var "cx" @@ var "term'")
           (var "ot")]
+
+unexpectedE :: TTermDefinition (Context -> String -> String -> Result a)
+unexpectedE = define "unexpectedE" $
+  doc "Construct an error for unexpected values" $
+  lambda "cx" $ lambda "expected" $ lambda "found" $
+    err @@ var "cx" @@ (Strings.cat $ list [string "Expected ", var "expected", string ", found: ", var "found"])
+
+-- | JSON extraction helpers
+
+-- Note: the error branches in these three functions are dropped during code generation because the
+-- success branches don't constrain the `cx` parameter, so inference generalizes it to `t0` and the
+-- code generator eliminates type-incompatible default branches. The functions remain safe because
+-- callers (foreignKeyE, requireStringE, optStringE) always pass the correct JSON value types.
+-- This mirrors the staging behavior (partial patterns with explicit error branches) but with
+-- implicit rather than explicit partiality.
