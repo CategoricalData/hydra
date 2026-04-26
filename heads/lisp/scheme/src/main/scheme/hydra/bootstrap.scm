@@ -165,24 +165,26 @@
                 (else (eval form (interaction-environment))))
               (loop))))))))
 
-;; Determine the gen-main base directory
+;; Determine the gen-main base directory: resolves to
+;;   <worktree>/dist/scheme/hydra-kernel/src/main/scheme/hydra/
+;; given that *script-dir* is
+;;   <worktree>/heads/lisp/scheme/src/main/scheme/hydra/
+;; (find "heads/lisp/scheme/" and replace with "dist/scheme/hydra-kernel/").
 (define *gen-main-base*
   (let* ((main-dir *script-dir*)
-         ;; Go from src/main/scheme/hydra/ up to src/ then into gen-main/scheme/hydra/
          (len (string-length main-dir))
-         ;; Find "src/main/" and replace with "src/gen-main/"
+         (needle "heads/lisp/scheme/")
+         (nlen (string-length needle))
          (pos (let loop ((i 0))
                 (cond
-                  ((>= i (- len 8)) #f)
-                  ((and (char=? (string-ref main-dir i) #\s)
-                        (>= (- len i) 9)
-                        (equal? (substring main-dir i (+ i 9)) "src/main/"))
-                   i)
+                  ((> (+ i nlen) len) #f)
+                  ((equal? (substring main-dir i (+ i nlen)) needle) i)
                   (else (loop (+ i 1)))))))
     (if pos
-        (string-append (substring main-dir 0 pos) "src/gen-main/"
-                       (substring main-dir (+ pos 9)))
-        ;; Fallback: relative path
+        (string-append (substring main-dir 0 pos)
+                       "dist/scheme/hydra-kernel/"
+                       (substring main-dir (+ pos nlen)))
+        ;; Fallback: legacy gen-main location
         (string-append main-dir "../../gen-main/scheme/hydra/"))))
 
 (display "Loading kernel...\n")
@@ -268,21 +270,21 @@
   (let ((coder-files
           (cond
             ((equal? target "haskell")
-             '("ext/haskell/syntax.scm" "ext/haskell/operators.scm"
-               "ext/haskell/language.scm" "ext/haskell/utils.scm"
-               "ext/haskell/serde.scm" "ext/haskell/coder.scm"))
+             '("haskell/syntax.scm" "haskell/operators.scm"
+               "haskell/language.scm" "haskell/utils.scm"
+               "haskell/serde.scm" "haskell/coder.scm"))
             ((equal? target "java")
-             '("ext/java/syntax.scm" "ext/java/language.scm" "ext/java/names.scm"
-               "ext/java/environment.scm" "ext/java/utils.scm"
-               "ext/java/serde.scm" "ext/java/coder.scm"))
+             '("java/syntax.scm" "java/language.scm" "java/names.scm"
+               "java/environment.scm" "java/utils.scm"
+               "java/serde.scm" "java/coder.scm"))
             ((equal? target "python")
-             '("ext/python/syntax.scm" "ext/python/language.scm" "ext/python/names.scm"
-               "ext/python/environment.scm" "ext/python/utils.scm"
-               "ext/python/serde.scm" "ext/python/coder.scm"))
+             '("python/syntax.scm" "python/language.scm" "python/names.scm"
+               "python/environment.scm" "python/utils.scm"
+               "python/serde.scm" "python/coder.scm"))
             ((or (equal? target "clojure") (equal? target "scheme")
                  (equal? target "common-lisp") (equal? target "emacs-lisp"))
-             '("ext/lisp/syntax.scm" "ext/lisp/language.scm"
-               "ext/lisp/serde.scm" "ext/lisp/coder.scm"))
+             '("lisp/syntax.scm" "lisp/language.scm"
+               "lisp/serde.scm" "lisp/coder.scm"))
             (else '()))))
     (for-each
       (lambda (f)
@@ -393,25 +395,25 @@
 (define (resolve-coder target)
   (cond
     ((equal? target "python")
-     (list hydra_ext_python_coder_module_to_python
-           hydra_ext_python_language_python_language
+     (list hydra_python_coder_module_to_python
+           hydra_python_language_python_language
            (list #f #t #t #f)   ; flags: infer=f expand=t hoistCase=t hoistPoly=f
            "python"))
     ((equal? target "java")
-     (list hydra_ext_java_coder_module_to_java
-           hydra_ext_java_language_java_language
+     (list hydra_java_coder_module_to_java
+           hydra_java_language_java_language
            (list #f #t #f #t)
            "java"))
     ((equal? target "haskell")
-     (list hydra_ext_haskell_coder_module_to_haskell
-           hydra_ext_haskell_language_haskell_language
+     (list hydra_haskell_coder_module_to_haskell
+           hydra_haskell_language_haskell_language
            (list #f #f #f #f)
            "haskell"))
     ((or (equal? target "clojure") (equal? target "scheme")
          (equal? target "common-lisp") (equal? target "emacs-lisp"))
      ;; Lisp target uses Lisp coder with dialect parameter
-     (let ((mtl hydra_ext_lisp_coder_module_to_lisp)
-           (pte hydra_ext_lisp_serde_program_to_expr)
+     (let ((mtl hydra_lisp_coder_module_to_lisp)
+           (pte hydra_lisp_serde_program_to_expr)
            (dialect (cond ((equal? target "clojure") (list 'clojure '()))
                           ((equal? target "scheme") (list 'scheme '()))
                           ((equal? target "common-lisp") (list 'common_lisp '()))
@@ -440,7 +442,7 @@
                                                   (list 'lower_snake '())))
                                   (fp (((hydra_names_namespace_to_file_path case-conv) ext) ns-val)))
                              (list 'right (list (cons fp code))))))))))
-             hydra_ext_lisp_language_lisp_language
+             hydra_lisp_language_lisp_language
              (list #f #f #f #f)
              (cond ((equal? target "clojure") "clojure")
                    ((equal? target "scheme") "scheme")
