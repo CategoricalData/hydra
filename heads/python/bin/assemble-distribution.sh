@@ -92,23 +92,14 @@ else
 fi
 
 # Step 3: Package-specific post-processing.
+# (Python exception: do NOT copy heads/python/.../lib/ + dsl/ into
+# dist/python/hydra-kernel/. heads/python/pyproject.toml lists both
+# heads/python/src/main/python AND dist/python/hydra-kernel/src/main/python
+# on the package path, and ruff/pyright/pytest all see both. A copy
+# would create twin definitions; bootstrap-demo's setup-python-target.sh
+# handles the runtime layout independently.)
 case "$PACKAGE" in
     hydra-kernel)
-        # Copy hand-written hydra/lib/ and hydra/dsl/ from heads/python into dist/.
-        # heads/python is the source of truth for these helpers; dist mirrors it
-        # so that downstream consumers importing from dist/python/hydra-kernel
-        # see the same surface as the bootstrap demo.
-        for d in lib dsl; do
-            LIB_SRC="$HYDRA_PYTHON_HEAD/src/main/python/hydra/$d"
-            LIB_DST="$OUT_MAIN/hydra/$d"
-            if [ -d "$LIB_SRC" ]; then
-                echo "Step 3a: Copying hand-written hydra/$d/ from heads/python/..."
-                mkdir -p "$LIB_DST"
-                cp -R "$LIB_SRC/." "$LIB_DST/"
-                find "$LIB_DST" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
-            fi
-        done
-
         # Copy test_env.py from heads/python into dist/.
         # The patched test_graph.py below imports hydra.test.test_env, which
         # must resolve under the dist tree at test time.
@@ -116,7 +107,7 @@ case "$PACKAGE" in
         TEST_ENV_DST="$OUT_TEST/hydra/test/test_env.py"
         if [ -f "$TEST_ENV_SRC" ]; then
             echo ""
-            echo "Step 3b: Copying test_env.py from heads/python/..."
+            echo "Step 3a: Copying test_env.py from heads/python/..."
             mkdir -p "$(dirname "$TEST_ENV_DST")"
             cp "$TEST_ENV_SRC" "$TEST_ENV_DST"
         fi
@@ -126,7 +117,7 @@ case "$PACKAGE" in
         # shim, test_env imports fail at module load time.
         TESTGRAPH="$OUT_TEST/hydra/test/test_graph.py"
         if [ -f "$TESTGRAPH" ]; then
-            echo "Step 3c: Patching test_graph.py..."
+            echo "Step 3b: Patching test_graph.py..."
             sed -i.bak '/^test_context = /d' "$TESTGRAPH"
             sed -i.bak '/^test_graph = /d' "$TESTGRAPH"
             rm -f "$TESTGRAPH.bak"
