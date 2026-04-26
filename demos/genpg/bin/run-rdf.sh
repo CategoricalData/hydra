@@ -109,7 +109,7 @@ IO.hPutStrLn IO.stderr (\"HYDRA_TIME_MS=\" Prelude.++ show (fromIntegral (t1 - t
       fi
       ;;
     python)
-      local driver="$REPO_ROOT/demos/src/main/python/python/hydra/demos/genpg/rdf.py"
+      local driver="$REPO_ROOT/demos/src/main/python/hydra/demos/genpg/rdf.py"
       if [ ! -f "$driver" ]; then
         echo -e "  ${YELLOW}SKIPPED${NC} (driver not found)"; return
       fi

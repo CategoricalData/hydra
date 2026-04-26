@@ -1,5 +1,6 @@
 {
   "version": 1,
+  "encoderId": "342e1ad1d5d1f36bd846b98da7e4de55e36f719c027092eb91932718651dbe89",
   "hashes": {
     "com.gdblab.pathAlgebra.expressions": "f0719df11c40836e2ad0607bc54c214438fd454cdc9bf54e23ef63a5c02fda0a",
     "com.gdblab.pathAlgebra.syntax": "e79fd7b2ea7bd7a6811f4fe2ca3ff889c8b0d656c53dde56780f6108d17e1d70",
@@ -174,7 +175,7 @@
     "hydra.shex.syntax": "c821165328747d6670c94d5065fcc819613cda4cd49c2bf8cfd90406e593ed12",
     "hydra.show.core": "e34bb42b1c4dfc61f13e1b0f63fed09d4809e4293d3a85bde3cadb4ad3f7861c",
     "hydra.show.error.core": "2cf88072acf2ad6464e4443c0baf381aafddc4f7af3bb008ab04eba5c41836cf",
-    "hydra.show.errors": "ca047824e3548bdd0bd5ee36924e1b58624bcb8f7b0c8e14ba2164587dba4b0e",
+    "hydra.show.errors": "fdf0b6ab1d5cb7f5ac40d4f7a188900ca98328a87d154733a3420e5ff8d1c33d",
     "hydra.show.graph": "799361a3320b140f8754697fd7733a581212a76519137fd40259f1283c77e9d0",
     "hydra.show.paths": "c356fb7736105a5aececb7f37d0de7a938e09f569e4faf44952507b76c2fae7c",
     "hydra.show.typing": "3ee496b5c31b12c1fd3807d65d24ea0a1f88c88a33a4f3d2593bcf03a7eceb9d",

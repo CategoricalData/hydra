@@ -14,6 +14,15 @@ module Hydra.Digest (
     readDigest,
     writeDigest,
     digestPath,
+    -- Encoder identity: a hash of the JSON encode/decode/model/writer
+    -- DSL sources. When the universe-wide digest's encoderId doesn't
+    -- match the one computed from current sources, every module's
+    -- on-disk JSON is potentially stale (the format changed even
+    -- though the per-namespace DSL hashes didn't). The cache check
+    -- treats this as a universal miss.
+    computeEncoderId,
+    readEncoderId,
+    writeUniverseDigest,
     -- v2 API (richer digest with inputs, outputs, generator stamp)
     Digest(..),
     DigestEntry(..),
@@ -132,6 +141,7 @@ digestPath basePath = FP.takeDirectory basePath FP.</> "digest.json"
 
 
 -- | Read a digest file. Absent or malformed → empty map.
+-- The "encoderId" key, when present, is filtered out of the result.
 readDigest :: FilePath -> IO DigestMap
 readDigest path = do
     exists <- SD.doesFileExist path
@@ -142,13 +152,76 @@ readDigest path = do
         Right s -> return $ parseDigest s
 
 
+-- | Read the encoderId field from a digest file, if present. Absent file
+-- or no encoderId field → empty string. Callers compare this against
+-- 'computeEncoderId'; a mismatch means the encoder/format changed since
+-- the digest was last written.
+readEncoderId :: FilePath -> IO String
+readEncoderId path = do
+    exists <- SD.doesFileExist path
+    if not exists then return "" else do
+      result <- E.try (readFile path) :: IO (Either E.SomeException String)
+      case result of
+        Left _  -> return ""
+        Right s -> return $ parseEncoderId s
+
+
 -- | Write a digest file. Format: a minimal JSON object
 -- { "version": 1, "hashes": { "<namespace>": "<hex>", ... } }
 -- Keys are written in sorted order for deterministic output.
+-- Use 'writeUniverseDigest' to also record an encoderId.
 writeDigest :: FilePath -> DigestMap -> IO ()
 writeDigest path digest = do
     SD.createDirectoryIfMissing True (FP.takeDirectory path)
-    writeFile path (serializeDigest digest)
+    writeFile path (serializeDigest "" digest)
+
+
+-- | Write a digest file together with an encoderId stamp. Format:
+-- { "version": 1, "encoderId": "<hex>", "hashes": { ... } }
+-- The encoderId is computed by 'computeEncoderId'. When empty, the field
+-- is omitted (matching the legacy schema).
+writeUniverseDigest :: FilePath -> String -> DigestMap -> IO ()
+writeUniverseDigest path encoderId digest = do
+    SD.createDirectoryIfMissing True (FP.takeDirectory path)
+    writeFile path (serializeDigest encoderId digest)
+
+
+-- | Compute a hash identifying the on-disk JSON encoder/decoder layer.
+-- Concretely: SHA-256 of the concatenated bytes of the four DSL source
+-- files that govern the wire format. Any change to these files
+-- invalidates the universe-wide cache, even when per-namespace DSL
+-- hashes are unchanged — guards against the failure mode where editing
+-- only Encode.hs or Decode.hs leaves stale JSON on disk for every other
+-- namespace (issue surfaced by feature_343_json on 2026-04-25).
+--
+-- Files hashed (in fixed order):
+--   * Hydra/Sources/Json/Encode.hs   — emits Term → Value
+--   * Hydra/Sources/Json/Decode.hs   — parses Value → Term
+--   * Hydra/Sources/Json/Model.hs    — Value type definition
+--   * Hydra/Sources/Json/Writer.hs   — serializes Value to bytes on disk
+--
+-- A missing file is treated as the zero-byte string for hashing
+-- (fail-soft); the encoderId still reflects the present files'
+-- contents, and a missing encoder file should fail downstream anyway.
+computeEncoderId :: IO String
+computeEncoderId = do
+    let files =
+          [ packagesRoot FP.</> "hydra-kernel/src/main/haskell/Hydra/Sources/Json/Encode.hs"
+          , packagesRoot FP.</> "hydra-kernel/src/main/haskell/Hydra/Sources/Json/Decode.hs"
+          , packagesRoot FP.</> "hydra-kernel/src/main/haskell/Hydra/Sources/Json/Model.hs"
+          , packagesRoot FP.</> "hydra-kernel/src/main/haskell/Hydra/Sources/Json/Writer.hs"
+          ]
+    chunks <- mapM safeRead files
+    let combined = BL.concat chunks
+    return $ SHA.showDigest (SHA.sha256 combined)
+  where
+    safeRead fp = do
+      exists <- SD.doesFileExist fp
+      if not exists then return BL.empty else do
+        result <- E.try (BL.readFile fp) :: IO (Either E.SomeException BL.ByteString)
+        case result of
+          Left _  -> return BL.empty
+          Right b -> return b
 
 
 -- | Minimal JSON parser for the digest file. We deliberately avoid pulling
@@ -156,22 +229,45 @@ writeDigest path digest = do
 -- tolerant parsing (a malformed digest silently becomes an empty map).
 -- The regex only matches `"key": "quoted_value"` pairs, so it naturally
 -- skips the `"version": 1` and `"hashes": { ... }` scaffolding.
+--
+-- The "encoderId" key is filtered from the namespace map: it is a
+-- top-level field, not a namespace hash. Callers wanting the encoderId
+-- use 'parseEncoderId' / 'readEncoderId' instead.
 parseDigest :: String -> DigestMap
 parseDigest s =
     let kvPattern = "\"([^\"]+)\"[[:space:]]*:[[:space:]]*\"([^\"]+)\"" :: String
         matches   = s RE.=~ kvPattern :: [[String]]
-    in M.fromList [(Namespace k, v) | (_:k:v:_) <- matches]
+    in M.fromList [ (Namespace k, v)
+                  | (_:k:v:_) <- matches
+                  , k /= "encoderId"
+                  ]
 
 
-serializeDigest :: DigestMap -> String
-serializeDigest digest = unlines $
+-- | Extract the encoderId field from a digest file's text, or "" if absent.
+parseEncoderId :: String -> String
+parseEncoderId s =
+    let pat = "\"encoderId\"[[:space:]]*:[[:space:]]*\"([^\"]*)\"" :: String
+    in case s RE.=~ pat :: [[String]] of
+         ((_:enc:_):_) -> enc
+         _             -> ""
+
+
+-- | Serialize a digest, optionally with an encoderId stamp. Pass "" to
+-- omit the field (legacy schema).
+serializeDigest :: String -> DigestMap -> String
+serializeDigest encoderId digest = unlines $
     ["{"
-    ,"  \"version\": 1,"
-    ,"  \"hashes\": {"]
+    ,"  \"version\": 1,"]
+    ++ encoderLines ++
+    ["  \"hashes\": {"]
     ++ hashLines ++
     ["  }"
     ,"}"]
   where
+    encoderLines =
+      if null encoderId
+        then []
+        else ["  \"encoderId\": \"" ++ encoderId ++ "\","]
     entries = L.sortBy (\a b -> compare (fst a) (fst b)) (M.toList digest)
     hashLines = zipWith renderEntry [0..] entries
     renderEntry i (Namespace ns, h) =
