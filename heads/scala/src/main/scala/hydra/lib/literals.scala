@@ -28,14 +28,19 @@ object literals:
   def decimalToFloat32(x: BigDecimal): Float = x.toFloat
   def decimalToFloat64(x: BigDecimal): Double = x.toDouble
   def float(ft: Any)(x: BigDecimal): Any = x // Placeholder
-  def float32ToBigfloat(x: Float): BigDecimal = BigDecimal(x.toDouble)
-  def float32ToDecimal(x: Float): BigDecimal = BigDecimal(x.toString)
-  def float64ToBigfloat(x: Double): BigDecimal = BigDecimal(x)
-  def float64ToDecimal(x: Double): BigDecimal = BigDecimal(x.toString)
+  // BigDecimal cannot represent NaN or Infinity; use sentinel zero (mirrors Java).
+  def float32ToBigfloat(x: Float): BigDecimal =
+    if x.isNaN || x.isInfinite then BigDecimal(0) else BigDecimal(x.toDouble)
+  def float32ToDecimal(x: Float): BigDecimal =
+    if x.isNaN || x.isInfinite then BigDecimal(0) else BigDecimal(x.toString)
+  def float64ToBigfloat(x: Double): BigDecimal =
+    if x.isNaN || x.isInfinite then BigDecimal(0) else BigDecimal(x)
+  def float64ToDecimal(x: Double): BigDecimal =
+    if x.isNaN || x.isInfinite then BigDecimal(0) else BigDecimal(x.toString)
   def floatValueToBigfloat(x: Any): BigDecimal = x match
     case d: BigDecimal => d
-    case d: Double => BigDecimal(d)
-    case f: Float => BigDecimal(f)
+    case d: Double => float64ToBigfloat(d)
+    case f: Float => float32ToBigfloat(f)
     case _ => BigDecimal(0)
   def int(it: Any)(x: BigInt): Any = x // Placeholder
   def int8ToBigint(x: Byte): BigInt = BigInt(x)
