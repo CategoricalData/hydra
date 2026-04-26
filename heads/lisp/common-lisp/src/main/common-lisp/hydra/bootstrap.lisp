@@ -109,7 +109,7 @@
     (nreverse result)))
 
 (defun namespace-to-path (ns)
-  (funcall (symbol-value 'hydra_code_generation_namespace_to_path) ns))
+  (funcall (symbol-value 'hydra_codegen_namespace_to_path) ns))
 
 ;; --- Module loading from JSON ---
 
@@ -117,15 +117,15 @@
   (let* ((file-path (format nil "~A/~A.json" json-dir (namespace-to-path ns-str)))
          (json-obj (json-read-file file-path))
          (hydra-json (cl-to-hydra-json json-obj))
-         (mod-type (list :variable "hydra.module.Module"))
+         (mod-type (list :variable "hydra.packaging.Module"))
          (json-result (funcall (funcall (funcall (funcall
                         (symbol-value 'hydra_json_decode_from_json) schema-map)
-                        "hydra.module.Module") mod-type) hydra-json)))
+                        "hydra.packaging.Module") mod-type) hydra-json)))
     (when (eq (first json-result) :left)
       (error "JSON decode error for ~A: ~A" ns-str (second json-result)))
     (let* ((term (second json-result))
            (mod-result (funcall (funcall
-                         (symbol-value 'hydra_decode_module_module) bs-graph) term)))
+                         (symbol-value 'hydra_decode_packaging_module) bs-graph) term)))
       (when (eq (first mod-result) :left)
         (error "Module decode error for ~A: ~A" ns-str (second mod-result)))
       (second mod-result))))
@@ -215,7 +215,7 @@
          (result (handler-case
                    (funcall (funcall (funcall (funcall (funcall (funcall (funcall (funcall
                      (funcall (funcall
-                       (symbol-value 'hydra_code_generation_generate_source_files)
+                       (symbol-value 'hydra_codegen_generate_source_files)
                        coder) language) do-infer) do-expand) do-hoist-case) do-hoist-poly)
                      bs-graph) universe-mods) mods-to-generate) cx)
                    (undefined-function (e)
