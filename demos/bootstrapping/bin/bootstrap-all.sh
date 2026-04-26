@@ -86,6 +86,23 @@ case "$TARGETS" in
     all) TARGETS="haskell,java,scala,python,clojure,scheme,common-lisp,emacs-lisp" ;;
 esac
 
+# Expand "lisp" alias to the four lisp dialects (matches bin/sync.sh).
+expand_lisp() {
+    local in="$1"
+    local out=""
+    IFS=',' read -ra parts <<< "$in"
+    for p in "${parts[@]}"; do
+        if [ "$p" = "lisp" ]; then
+            out="$out,clojure,common-lisp,emacs-lisp,scheme"
+        else
+            out="$out,$p"
+        fi
+    done
+    echo "${out#,}"
+}
+HOSTS=$(expand_lisp "$HOSTS")
+TARGETS=$(expand_lisp "$TARGETS")
+
 IFS=',' read -ra HOST_LIST <<< "$HOSTS"
 IFS=',' read -ra TARGET_LIST <<< "$TARGETS"
 
