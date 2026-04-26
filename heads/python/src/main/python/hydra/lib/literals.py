@@ -222,11 +222,24 @@ def read_decimal(s: str) -> Maybe[Decimal]:
         return NOTHING
 
 
+def _parse_float_token(s: str) -> float:
+    """Parse a float string accepting Hydra special tokens
+    (Infinity, -Infinity, NaN) as well as regular floats. Python's
+    float() accepts 'inf'/'nan' but not Hydra's canonical 'Infinity'/'NaN'."""
+    if s == "Infinity":
+        return float("inf")
+    if s == "-Infinity":
+        return float("-inf")
+    if s == "NaN":
+        return float("nan")
+    return float(s)
+
+
 def read_float32(s: str) -> Maybe[float]:
     """Parse a string to a float32 (Float)."""
     import struct
     try:
-        f64 = float(s)
+        f64 = _parse_float_token(s)
         # Convert to float32 precision
         f32_bytes = struct.pack('f', f64)
         f32 = struct.unpack('f', f32_bytes)[0]
@@ -238,7 +251,7 @@ def read_float32(s: str) -> Maybe[float]:
 def read_float64(s: str) -> Maybe[float]:
     """Parse a string to a float64 (Double)."""
     try:
-        return Just(float(s))
+        return Just(_parse_float_token(s))
     except:
         return NOTHING
 
@@ -416,8 +429,16 @@ def show_float32(x: float) -> str:
     else:
         # Use float32's natural precision (about 6-7 digits)
         # Round to 6 significant figures
-        from math import log10, floor
-        magnitude = floor(log10(abs_f32))
+        from math import log10, floor, isfinite
+        log_val = log10(abs_f32)
+        if not isfinite(log_val):
+            # abs_f32 is too small for log10 to produce a finite result
+            # (subnormal underflow). Fall back to repr.
+            result = repr(f32)
+            if '.' not in result and 'e' not in result:
+                result += '.0'
+            return result
+        magnitude = floor(log_val)
         rounded = round(f32, -int(magnitude) + 5)  # 6 significant figures
         result = repr(rounded)
         if '.' not in result and 'e' not in result:

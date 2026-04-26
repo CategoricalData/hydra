@@ -136,11 +136,7 @@
                             "term": {"variable": "hydra.show.errors.otherError"}},
                           {
                             "name": "resolution",
-                            "term": {
-                              "lambda": {
-                                "body": {"literal": {"string": "resolution error"}},
-                                "domain": {"variable": "hydra.errors.ResolutionError"},
-                                "parameter": "_"}}},
+                            "term": {"variable": "hydra.show.errors.resolutionError"}},
                           {
                             "name": "undefinedField",
                             "term": {"variable": "hydra.show.error.core.undefinedFieldError"}},
@@ -353,6 +349,135 @@
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.errors.OtherError"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.show.errors.resolutionError",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "Show a resolution error as a string, including the offending name or shape"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "re"},
+                    "function": {
+                      "cases": {
+                        "cases": [
+                          {
+                            "name": "noSuchBinding",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "e"},
+                                            "function": {
+                                              "project": {"field": "name", "typeName": "hydra.errors.NoSuchBindingError"}}}},
+                                        "function": {"unwrap": "hydra.core.Name"}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"literal": {"string": "no such binding: "}},
+                                        "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                "domain": {"variable": "hydra.errors.NoSuchBindingError"},
+                                "parameter": "e"}}},
+                          {
+                            "name": "noSuchPrimitive",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "e"},
+                                            "function": {
+                                              "project": {"field": "name", "typeName": "hydra.errors.NoSuchPrimitiveError"}}}},
+                                        "function": {"unwrap": "hydra.core.Name"}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"literal": {"string": "no such primitive: "}},
+                                        "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                "domain": {"variable": "hydra.errors.NoSuchPrimitiveError"},
+                                "parameter": "e"}}},
+                          {
+                            "name": "noMatchingField",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "e"},
+                                            "function": {
+                                              "project": {
+                                                "field": "fieldName",
+                                                "typeName": "hydra.errors.NoMatchingFieldError"}}}},
+                                        "function": {"unwrap": "hydra.core.Name"}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"literal": {"string": "no matching field: "}},
+                                        "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                "domain": {"variable": "hydra.errors.NoMatchingFieldError"},
+                                "parameter": "e"}}},
+                          {
+                            "name": "other",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "e"},
+                                        "function": {"unwrap": "hydra.errors.OtherResolutionError"}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"literal": {"string": "resolution error: "}},
+                                        "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                "domain": {"variable": "hydra.errors.OtherResolutionError"},
+                                "parameter": "e"}}},
+                          {
+                            "name": "unexpectedShape",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "list": [
+                                        {"literal": {"string": "unexpected shape: expected "}},
+                                        {
+                                          "application": {
+                                            "argument": {"variable": "e"},
+                                            "function": {
+                                              "project": {"field": "expected", "typeName": "hydra.errors.UnexpectedShapeError"}}}},
+                                        {"literal": {"string": " but got "}},
+                                        {
+                                          "application": {
+                                            "argument": {"variable": "e"},
+                                            "function": {
+                                              "project": {"field": "actual", "typeName": "hydra.errors.UnexpectedShapeError"}}}}]},
+                                    "function": {"variable": "hydra.lib.strings.cat"}}},
+                                "domain": {"variable": "hydra.errors.UnexpectedShapeError"},
+                                "parameter": "e"}}}],
+                        "typeName": "hydra.errors.ResolutionError"}}}},
+                "domain": {"variable": "hydra.errors.ResolutionError"},
+                "parameter": "re"}}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"literal": {"string": {}}},
+              "domain": {"variable": "hydra.errors.ResolutionError"}}},
           "variables": []}}},
     {
       "term": {

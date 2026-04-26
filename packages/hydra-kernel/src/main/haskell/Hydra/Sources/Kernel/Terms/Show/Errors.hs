@@ -77,6 +77,7 @@ module_ = Module ns definitions
      toDefinition notAForallTypeError,
      toDefinition notAFunctionTypeError,
      toDefinition otherError,
+     toDefinition resolutionError,
      toDefinition typeArityMismatchError,
      toDefinition typeMismatchError,
      toDefinition unboundTypeVariablesError,
@@ -120,7 +121,7 @@ error_ = define "error" $
     _Error_extraction>>: constant $ string "extraction error",
     _Error_inference>>: constant $ string "inference error",
     _Error_other>>: otherError,
-    _Error_resolution>>: constant $ string "resolution error",
+    _Error_resolution>>: resolutionError,
     _Error_undefinedField>>: ShowErrorCore.undefinedFieldError,
     _Error_undefinedTermVariable>>: ShowErrorCore.undefinedTermVariableError,
     _Error_untypedTermVariable>>: ShowErrorCore.untypedTermVariableError,
@@ -160,6 +161,28 @@ otherError :: TTermDefinition (OtherError -> String)
 otherError = define "otherError" $
   doc "Show an other error as a string" $
   "oe" ~> unwrap _OtherError @@ var "oe"
+
+resolutionError :: TTermDefinition (ResolutionError -> String)
+resolutionError = define "resolutionError" $
+  doc "Show a resolution error as a string, including the offending name or shape" $
+  "re" ~> cases _ResolutionError (var "re") Nothing [
+    _ResolutionError_noSuchBinding>>: "e" ~>
+      Strings.cat2 (string "no such binding: ")
+        (Core.unName $ project _NoSuchBindingError _NoSuchBindingError_name @@ var "e"),
+    _ResolutionError_noSuchPrimitive>>: "e" ~>
+      Strings.cat2 (string "no such primitive: ")
+        (Core.unName $ project _NoSuchPrimitiveError _NoSuchPrimitiveError_name @@ var "e"),
+    _ResolutionError_noMatchingField>>: "e" ~>
+      Strings.cat2 (string "no matching field: ")
+        (Core.unName $ project _NoMatchingFieldError _NoMatchingFieldError_fieldName @@ var "e"),
+    _ResolutionError_other>>: "e" ~>
+      Strings.cat2 (string "resolution error: ") (unwrap _OtherResolutionError @@ var "e"),
+    _ResolutionError_unexpectedShape>>: "e" ~>
+      Strings.cat $ list [
+        string "unexpected shape: expected ",
+        project _UnexpectedShapeError _UnexpectedShapeError_expected @@ var "e",
+        string " but got ",
+        project _UnexpectedShapeError _UnexpectedShapeError_actual @@ var "e"]]
 
 typeArityMismatchError :: TTermDefinition (TypeArityMismatchError -> String)
 typeArityMismatchError = define "typeArityMismatchError" $
