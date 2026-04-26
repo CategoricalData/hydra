@@ -55,7 +55,13 @@
                         (expand-file-name "hydra/bootstrap.el" default-directory)))
        (hydra-dir (file-name-directory script-path)))
   ;; Load the kernel loader
-  (load (expand-file-name "loader.el" hydra-dir) nil t))
+  (load (expand-file-name "loader.el" hydra-dir) nil t)
+  ;; Override gen-main and gen-test dirs to point at the dist/ generated content
+  ;; (loader.el defaults to heads/lisp/emacs-lisp/src/gen-main/..., which no
+  ;; longer exists; mirrors the override in run-tests.el).
+  (let ((dist-base (expand-file-name "../../../../../../../dist/emacs-lisp/hydra-kernel/" hydra-dir)))
+    (setq hydra-gen-main-dir (expand-file-name "src/main/emacs-lisp/hydra/" dist-base))
+    (setq hydra-gen-test-dir (expand-file-name "src/test/emacs-lisp/hydra/" dist-base))))
 
 (princ "Loading kernel...\n")
 
@@ -81,7 +87,7 @@
 ;; Emacs's C stack during byte-compilation or at runtime.
 ;; The skip list covers code generation, adaptation, type checking, inference,
 ;; and rewriting modules which have deeply recursive generated code.
-;; Ext coder modules (hydra_ext_*) ARE compiled — they need it for performance
+;; Ext coder modules (hydra_*) ARE compiled — they need it for performance
 ;; and compile+run successfully.
 (fset 'hydra-byte-compile-all
   (lambda ()
@@ -225,18 +231,18 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
   "Resolve the coder, language, flags, and subdirectory for TARGET."
   (cond
    ((string= target "python")
-    (list (symbol-value 'hydra_ext_python_coder_module_to_python)
-          (symbol-value 'hydra_ext_python_language_python_language)
+    (list (symbol-value 'hydra_python_coder_module_to_python)
+          (symbol-value 'hydra_python_language_python_language)
           (list nil t t nil)
           "python"))
    ((string= target "java")
-    (list (symbol-value 'hydra_ext_java_coder_module_to_java)
-          (symbol-value 'hydra_ext_java_language_java_language)
+    (list (symbol-value 'hydra_java_coder_module_to_java)
+          (symbol-value 'hydra_java_language_java_language)
           (list nil t nil t)
           "java"))
    ((string= target "haskell")
-    (list (symbol-value 'hydra_ext_haskell_coder_module_to_haskell)
-          (symbol-value 'hydra_ext_haskell_language_haskell_language)
+    (list (symbol-value 'hydra_haskell_coder_module_to_haskell)
+          (symbol-value 'hydra_haskell_language_haskell_language)
           (list nil nil nil nil)
           "haskell"))
    ((or (string= target "clojure") (string= target "scheme")
@@ -247,8 +253,8 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
                         ("common-lisp" . ".lisp") ("emacs-lisp" . ".el")))
            (dialect (cdr (assoc target dialect-alist)))
            (ext (cdr (assoc target ext-alist)))
-           (mtl (symbol-value 'hydra_ext_lisp_coder_module_to_lisp))
-           (pte (symbol-value 'hydra_ext_lisp_serde_program_to_expr)))
+           (mtl (symbol-value 'hydra_lisp_coder_module_to_lisp))
+           (pte (symbol-value 'hydra_lisp_serde_program_to_expr)))
       (list (lambda (mod)
               (lambda (defs)
                 (lambda (cx)
@@ -264,7 +270,7 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
                                          (if (stringp ns) ns (cdr (assoc :value ns)))))
                                (fp (format "%s%s" (bootstrap-namespace-to-path ns-val) ext)))
                           (list :right (list (cons fp code))))))))))
-            (symbol-value 'hydra_ext_lisp_language_lisp_language)
+            (symbol-value 'hydra_lisp_language_lisp_language)
             (list nil nil nil nil)
             target)))
    (t (error "Unsupported target: %s" target))))
@@ -318,10 +324,10 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
 (hydra-set-function-bindings)
 
 ;; Ensure target_python_version is set (may be dropped by loader retry mechanism)
-(unless (boundp 'hydra_ext_python_coder_target_python_version)
-  (when (boundp 'hydra_ext_python_utils_target_python_version)
-    (setq hydra_ext_python_coder_target_python_version
-          (symbol-value 'hydra_ext_python_utils_target_python_version))))
+(unless (boundp 'hydra_python_coder_target_python_version)
+  (when (boundp 'hydra_python_utils_target_python_version)
+    (setq hydra_python_coder_target_python_version
+          (symbol-value 'hydra_python_utils_target_python_version))))
 
 (let ((coder-info (bootstrap-resolve-coder bootstrap-target))
       (target-cap (concat (upcase (substring bootstrap-target 0 1))
