@@ -55,10 +55,10 @@ esac
 if [ -n "$CODER_CHECK" ] && [ ! -f "$CODER_CHECK" ]; then
     echo "  Coder modules not found. Generating from per-package JSON..."
     cd "$HYDRA_ROOT/heads/haskell"
-    stack build hydra:exe:bootstrap-from-json 2>&1 | grep -v "^$"
+    stack build hydra:exe:bootstrap-from-json
     stack exec bootstrap-from-json -- \
         --target common-lisp \
-        --output "$HYDRA_CL_DIR" \
+        --output "$HYDRA_ROOT/dist/common-lisp/hydra-kernel" \
         --include-coders \
         --dist-json-root "$HYDRA_ROOT/dist/json" 2>&1
     echo "  Coder modules generated."
