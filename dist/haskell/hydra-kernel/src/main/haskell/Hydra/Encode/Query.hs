@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term encoders for hydra.query
 
 module Hydra.Encode.Query where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Lib.Lists as Lists
@@ -11,7 +9,6 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Query as Query
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 comparisonConstraint :: Query.ComparisonConstraint -> Core.Term
 comparisonConstraint x =
     case x of
@@ -45,7 +42,6 @@ comparisonConstraint x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "greaterThanOrEqual"),
           Core.fieldTerm = Core.TermUnit}})
-
 edge :: Query.Edge -> Core.Term
 edge x =
     Core.TermRecord (Core.Record {
@@ -60,7 +56,6 @@ edge x =
         Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map EncodeCore.name opt)) (Query.edgeIn x))}]})
-
 graphPattern :: Query.GraphPattern -> Core.Term
 graphPattern x =
     Core.TermRecord (Core.Record {
@@ -72,7 +67,6 @@ graphPattern x =
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map pattern xs)) (Query.graphPatternPatterns x))}]})
-
 node :: Query.Node -> Core.Term
 node x =
     case x of
@@ -91,7 +85,6 @@ node x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "wildcard"),
           Core.fieldTerm = Core.TermUnit}})
-
 path :: Query.Path -> Core.Term
 path x =
     case x of
@@ -110,7 +103,6 @@ path x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "inverse"),
           Core.fieldTerm = (path v0)}})
-
 pathEquation :: Query.PathEquation -> Core.Term
 pathEquation x =
     Core.TermRecord (Core.Record {
@@ -122,7 +114,6 @@ pathEquation x =
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (path (Query.pathEquationRight x))}]})
-
 pattern :: Query.Pattern -> Core.Term
 pattern x =
     case x of
@@ -151,7 +142,6 @@ pattern x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "graph"),
           Core.fieldTerm = (graphPattern v0)}})
-
 patternImplication :: Query.PatternImplication -> Core.Term
 patternImplication x =
     Core.TermRecord (Core.Record {
@@ -163,7 +153,6 @@ patternImplication x =
         Core.Field {
           Core.fieldName = (Core.Name "consequent"),
           Core.fieldTerm = (pattern (Query.patternImplicationConsequent x))}]})
-
 query :: Query.Query -> Core.Term
 query x =
     Core.TermRecord (Core.Record {
@@ -175,7 +164,6 @@ query x =
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map pattern xs)) (Query.queryPatterns x))}]})
-
 range :: Query.Range -> Core.Term
 range x =
     Core.TermRecord (Core.Record {
@@ -187,7 +175,6 @@ range x =
         Core.Field {
           Core.fieldName = (Core.Name "max"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x2))) (Query.rangeMax x))}]})
-
 regexQuantifier :: Query.RegexQuantifier -> Core.Term
 regexQuantifier x =
     case x of
@@ -226,7 +213,6 @@ regexQuantifier x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (range v0)}})
-
 regexSequence :: Query.RegexSequence -> Core.Term
 regexSequence x =
     Core.TermRecord (Core.Record {
@@ -238,7 +224,6 @@ regexSequence x =
         Core.Field {
           Core.fieldName = (Core.Name "quantifier"),
           Core.fieldTerm = (regexQuantifier (Query.regexSequenceQuantifier x))}]})
-
 step :: Query.Step -> Core.Term
 step x =
     case x of
@@ -257,7 +242,6 @@ step x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "compare"),
           Core.fieldTerm = (comparisonConstraint v0)}})
-
 triplePattern :: Query.TriplePattern -> Core.Term
 triplePattern x =
     Core.TermRecord (Core.Record {
@@ -272,7 +256,6 @@ triplePattern x =
         Core.Field {
           Core.fieldName = (Core.Name "object"),
           Core.fieldTerm = (node (Query.triplePatternObject x))}]})
-
 variable :: Query.Variable -> Core.Term
 variable x =
     Core.TermWrap (Core.WrappedTerm {

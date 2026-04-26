@@ -1,16 +1,13 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Source module for hydra.decode.relational
 
 module Hydra.Sources.Decode.Relational where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
-
 module_ :: Packaging.Module
 module_ =
     Packaging.Module {

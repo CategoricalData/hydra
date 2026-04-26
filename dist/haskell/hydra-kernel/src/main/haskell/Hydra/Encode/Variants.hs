@@ -1,14 +1,11 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term encoders for hydra.variants
 
 module Hydra.Encode.Variants where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 eliminationVariant :: Variants.EliminationVariant -> Core.Term
 eliminationVariant x =
     case x of
@@ -27,7 +24,6 @@ eliminationVariant x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "wrap"),
           Core.fieldTerm = Core.TermUnit}})
-
 functionVariant :: Variants.FunctionVariant -> Core.Term
 functionVariant x =
     case x of
@@ -41,7 +37,6 @@ functionVariant x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "lambda"),
           Core.fieldTerm = Core.TermUnit}})
-
 literalVariant :: Variants.LiteralVariant -> Core.Term
 literalVariant x =
     case x of
@@ -75,7 +70,6 @@ literalVariant x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "string"),
           Core.fieldTerm = Core.TermUnit}})
-
 termVariant :: Variants.TermVariant -> Core.Term
 termVariant x =
     case x of
@@ -184,7 +178,6 @@ termVariant x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "wrap"),
           Core.fieldTerm = Core.TermUnit}})
-
 typeVariant :: Variants.TypeVariant -> Core.Term
 typeVariant x =
     case x of

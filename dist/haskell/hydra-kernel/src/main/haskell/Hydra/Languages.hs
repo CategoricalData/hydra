@@ -1,16 +1,13 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Language constraints for Hydra Core
 
 module Hydra.Languages where
-
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Reflect as Reflect
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Language constraints for Hydra Core, i.e. no constraints.
 hydraLanguage :: Coders.Language
 hydraLanguage =

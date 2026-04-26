@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Algebraic type checking test cases: unit, pairs, eithers, optionals
 
 module Hydra.Test.Checking.AlgebraicTypes where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Lib.Eithers as Eithers
@@ -16,7 +14,6 @@ import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
 allTests :: Testing.TestGroup
 allTests =
     Testing.TestGroup {
@@ -28,7 +25,6 @@ allTests =
         eithersTests,
         optionalsTests],
       Testing.testGroupCases = []}
-
 basicPairsTests :: Testing.TestGroup
 basicPairsTests =
     Testing.TestGroup {
@@ -63,7 +59,6 @@ basicPairsTests =
               Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 eithersInComplexContextsTests :: Testing.TestGroup
 eithersInComplexContextsTests =
     Testing.TestGroup {
@@ -99,7 +94,6 @@ eithersInComplexContextsTests =
                 Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 eithersTests :: Testing.TestGroup
 eithersTests =
     Testing.TestGroup {
@@ -113,7 +107,6 @@ eithersTests =
         nestedEithersTests,
         eithersWithComplexTypesTests],
       Testing.testGroupCases = []}
-
 eithersWithComplexTypesTests :: Testing.TestGroup
 eithersWithComplexTypesTests =
     Testing.TestGroup {
@@ -165,7 +158,6 @@ eithersWithComplexTypesTests =
                 Core.eitherTypeRight = (Core.TypeVariable TestTypes.testTypePersonName)}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 leftValuesTests :: Testing.TestGroup
 leftValuesTests =
     Testing.TestGroup {
@@ -206,7 +198,6 @@ leftValuesTests =
                 Core.eitherTypeRight = (Core.TypeVariable (Core.Name "t0"))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 monomorphicOptionalsTests :: Testing.TestGroup
 monomorphicOptionalsTests =
     Testing.TestGroup {
@@ -244,7 +235,6 @@ monomorphicOptionalsTests =
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeBoolean)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 nestedEithersTests :: Testing.TestGroup
 nestedEithersTests =
     Testing.TestGroup {
@@ -318,7 +308,6 @@ nestedEithersTests =
               Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 nestedOptionalsTests :: Testing.TestGroup
 nestedOptionalsTests =
     Testing.TestGroup {
@@ -353,7 +342,6 @@ nestedOptionalsTests =
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeList (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 nestedPairsTests :: Testing.TestGroup
 nestedPairsTests =
     Testing.TestGroup {
@@ -396,7 +384,6 @@ nestedPairsTests =
               Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 optionalsInComplexContextsTests :: Testing.TestGroup
 optionalsInComplexContextsTests =
     Testing.TestGroup {
@@ -442,7 +429,6 @@ optionalsInComplexContextsTests =
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 optionalsTests :: Testing.TestGroup
 optionalsTests =
     Testing.TestGroup {
@@ -455,7 +441,6 @@ optionalsTests =
         nestedOptionalsTests,
         optionalsWithComplexTypesTests],
       Testing.testGroupCases = []}
-
 optionalsWithComplexTypesTests :: Testing.TestGroup
 optionalsWithComplexTypesTests =
     Testing.TestGroup {
@@ -473,7 +458,6 @@ optionalsWithComplexTypesTests =
               Core.mapTypeValues = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 pairsInComplexContextsTests :: Testing.TestGroup
 pairsInComplexContextsTests =
     Testing.TestGroup {
@@ -507,7 +491,6 @@ pairsInComplexContextsTests =
               Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 pairsTests :: Testing.TestGroup
 pairsTests =
     Testing.TestGroup {
@@ -520,7 +503,6 @@ pairsTests =
         nestedPairsTests,
         pairsWithComplexTypesTests],
       Testing.testGroupCases = []}
-
 pairsWithComplexTypesTests :: Testing.TestGroup
 pairsWithComplexTypesTests =
     Testing.TestGroup {
@@ -568,7 +550,6 @@ pairsWithComplexTypesTests =
               Core.pairTypeSecond = (Core.TypeVariable (Core.Name "Person"))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 polymorphicEithersTests :: Testing.TestGroup
 polymorphicEithersTests =
     Testing.TestGroup {
@@ -639,7 +620,6 @@ polymorphicEithersTests =
                     Core.eitherTypeRight = (Core.TypeVariable (Core.Name "t0"))}))}))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 polymorphicOptionalsTests :: Testing.TestGroup
 polymorphicOptionalsTests =
     Testing.TestGroup {
@@ -702,7 +682,6 @@ polymorphicOptionalsTests =
                   Core.functionTypeCodomain = (Core.TypeMaybe (Core.TypeVariable (Core.Name "t0")))}))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 polymorphicPairsTests :: Testing.TestGroup
 polymorphicPairsTests =
     Testing.TestGroup {
@@ -781,7 +760,6 @@ polymorphicPairsTests =
                   Core.pairTypeSecond = (Core.TypeVariable (Core.Name "t0"))}))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 rightValuesTests :: Testing.TestGroup
 rightValuesTests =
     Testing.TestGroup {
@@ -822,7 +800,6 @@ rightValuesTests =
                 Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeBoolean)}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 unitTermInPolymorphicContextTests :: Testing.TestGroup
 unitTermInPolymorphicContextTests =
     Testing.TestGroup {
@@ -844,7 +821,6 @@ unitTermInPolymorphicContextTests =
                 Core.functionTypeCodomain = Core.TypeUnit}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 unitTermTests :: Testing.TestGroup
 unitTermTests =
     Testing.TestGroup {
@@ -859,7 +835,6 @@ unitTermTests =
             Testing.universalTestCaseExpected = (ShowCore.type_ Core.TypeUnit)})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 unitTests :: Testing.TestGroup
 unitTests =
     Testing.TestGroup {

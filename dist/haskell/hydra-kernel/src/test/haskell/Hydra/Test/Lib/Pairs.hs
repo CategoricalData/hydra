@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Test cases for hydra.lib.pairs primitives
 
 module Hydra.Test.Lib.Pairs where
-
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Pairs as Pairs
@@ -11,7 +9,6 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Test cases for hydra.lib.pairs primitives
 allTests :: Testing.TestGroup
 allTests =

@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Functions for generating domain-specific DSL modules from type modules
 
 module Hydra.Dsls where
-
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
@@ -25,7 +23,6 @@ import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Collect forall type variable names from a type
 collectForallVars :: Core.Type -> [Core.Name]
 collectForallVars typ =
@@ -33,7 +30,6 @@ collectForallVars typ =
       Core.TypeAnnotated v0 -> collectForallVars (Core.annotatedTypeBody v0)
       Core.TypeForall v0 -> Lists.cons (Core.forallTypeParameter v0) (collectForallVars (Core.forallTypeBody v0))
       _ -> []
-
 -- | Deduplicate bindings by appending underscore suffixes to duplicate names
 deduplicateBindings :: [Core.Binding] -> [Core.Binding]
 deduplicateBindings bindings =
@@ -46,7 +42,6 @@ deduplicateBindings bindings =
           Core.bindingName = (Core.Name uniqueName),
           Core.bindingTerm = (Core.bindingTerm b),
           Core.bindingType = (Core.bindingType b)}])) [] bindings
-
 -- | Generate a binding name for a DSL function from a type name
 dslBindingName :: Core.Name -> Core.Name
 dslBindingName n =
@@ -63,7 +58,6 @@ dslBindingName n =
                   "dsl"] nsParts)
         in (Core.Name (Strings.intercalate "." (Lists.concat2 dslNsParts [
           localPart])))) (Lists.uncons nsParts)) (Lists.maybeInit parts))
-
 -- | Generate a qualified DSL element name from a type name and local element name
 dslDefinitionName :: Core.Name -> String -> Core.Name
 dslDefinitionName typeName localName =
@@ -80,7 +74,6 @@ dslDefinitionName typeName localName =
                   "dsl"] nsParts)) (Lists.uncons nsParts)
         in (Core.Name (Strings.intercalate "." (Lists.concat2 dslNsParts [
           localName])))) (Lists.maybeInit parts))
-
 -- | Transform a type module into a DSL module
 dslModule :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error (Maybe Packaging.Module)
 dslModule cx graph mod =
@@ -112,7 +105,6 @@ dslModule cx graph mod =
       Packaging.moduleDescription = (Just (Strings.cat [
         "DSL functions for ",
         (Packaging.unNamespace (Packaging.moduleNamespace mod))]))})))))
-
 -- | Generate a DSL module namespace from a source module namespace
 dslNamespace :: Packaging.Namespace -> Packaging.Namespace
 dslNamespace ns =
@@ -125,7 +117,6 @@ dslNamespace ns =
       in (Maybes.maybe prefixFull (\ht -> Logic.ifElse (Equality.equal (Pairs.first ht) "hydra") (Packaging.Namespace (Strings.cat [
         "hydra.dsl.",
         (Strings.intercalate "." (Pairs.second ht))])) prefixFull) (Lists.uncons parts))
-
 -- | Build a TypeScheme with TTerm-wrapped parameter and result types
 dslTypeScheme :: Core.Type -> [Core.Type] -> Core.Type -> Core.TypeScheme
 dslTypeScheme origType paramTypes resultType =
@@ -145,19 +136,16 @@ dslTypeScheme origType paramTypes resultType =
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeType = funType,
         Core.typeSchemeConstraints = Nothing}
-
 -- | Filter bindings to only DSL-eligible type definitions
 filterTypeBindings :: t0 -> t1 -> [Core.Binding] -> Either t2 [Core.Binding]
 filterTypeBindings cx graph bindings =
     Eithers.map Maybes.cat (Eithers.mapList (isDslEligibleBinding cx graph) (Lists.filter Annotations.isNativeType bindings))
-
 -- | Find a unique name by appending underscores
 findUniqueName :: String -> [String] -> String
 findUniqueName candidate usedNames =
     Logic.ifElse (Lists.null (Lists.filter (Equality.equal candidate) usedNames)) candidate (findUniqueName (Strings.cat [
       candidate,
       "_"]) usedNames)
-
 -- | Generate all DSL bindings for a type binding
 generateBindingsForType :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.DecodingError [Core.Binding]
 generateBindingsForType cx graph b =
@@ -173,7 +161,6 @@ generateBindingsForType cx graph b =
           Core.TypeUnion v0 -> Lists.map (generateUnionInjector rawType typeName) v0
           Core.TypeWrap v0 -> generateWrappedTypeAccessors rawType typeName v0
           _ -> []))))
-
 -- | Generate a record field accessor function
 generateRecordAccessor :: Core.Type -> Core.Name -> Core.FieldType -> Core.Binding
 generateRecordAccessor origType typeName ft =
@@ -231,7 +218,6 @@ generateRecordAccessor origType typeName ft =
         Core.bindingName = accessorName,
         Core.bindingTerm = body,
         Core.bindingType = (Just ts)}
-
 -- | Generate a record constructor function
 generateRecordConstructor :: Core.Type -> Core.Name -> [Core.FieldType] -> [Core.Binding]
 generateRecordConstructor origType typeName fieldTypes =
@@ -285,7 +271,6 @@ generateRecordConstructor origType typeName fieldTypes =
           Core.bindingName = (dslBindingName typeName),
           Core.bindingTerm = body,
           Core.bindingType = (Just ts)}]
-
 -- | Generate a withXxx record field updater function
 generateRecordWithUpdater :: Core.Type -> Core.Name -> [Core.FieldType] -> Core.FieldType -> Core.Binding
 generateRecordWithUpdater origType typeName allFields targetField =
@@ -382,7 +367,6 @@ generateRecordWithUpdater origType typeName allFields targetField =
         Core.bindingName = updaterName,
         Core.bindingTerm = body,
         Core.bindingType = (Just ts)}
-
 -- | Generate a union injection helper
 generateUnionInjector :: Core.Type -> Core.Name -> Core.FieldType -> Core.Binding
 generateUnionInjector origType typeName ft =
@@ -450,7 +434,6 @@ generateUnionInjector origType typeName ft =
         Core.bindingName = injectorName,
         Core.bindingTerm = body,
         Core.bindingType = (Just ts)}
-
 -- | Generate wrap/unwrap accessors for a wrapped type
 generateWrappedTypeAccessors :: Core.Type -> Core.Name -> Core.Type -> [Core.Binding]
 generateWrappedTypeAccessors origType typeName innerType =
@@ -534,14 +517,12 @@ generateWrappedTypeAccessors origType typeName innerType =
           Core.bindingName = unwrapName,
           Core.bindingTerm = unwrapBody,
           Core.bindingType = (Just unwrapTs)}]
-
 -- | Check if a binding is eligible for DSL generation
 isDslEligibleBinding :: t0 -> t1 -> Core.Binding -> Either t2 (Maybe Core.Binding)
 isDslEligibleBinding cx graph b =
 
       let ns = Names.namespaceOf (Core.bindingName b)
       in (Logic.ifElse (Equality.equal (Maybes.maybe "" Packaging.unNamespace ns) "hydra.phantoms") (Right Nothing) (Right (Just b)))
-
 -- | Build the nominal result type with type applications for forall variables
 nominalResultType :: Core.Name -> Core.Type -> Core.Type
 nominalResultType typeName origType =

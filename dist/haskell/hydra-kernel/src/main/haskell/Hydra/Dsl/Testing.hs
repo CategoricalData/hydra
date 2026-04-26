@@ -1,21 +1,17 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | DSL functions for hydra.testing
 
 module Hydra.Dsl.Testing where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 tag :: Phantoms.TTerm String -> Phantoms.TTerm Testing.Tag
 tag x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.testing.Tag"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
 testCaseUniversal :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm Testing.TestCase
 testCaseUniversal x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -23,7 +19,6 @@ testCaseUniversal x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "universal"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
 testCaseWithMetadata :: Phantoms.TTerm String -> Phantoms.TTerm Testing.TestCase -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm [Testing.Tag] -> Phantoms.TTerm Testing.TestCaseWithMetadata
 testCaseWithMetadata name case_ description tags =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -41,7 +36,6 @@ testCaseWithMetadata name case_ description tags =
         Core.Field {
           Core.fieldName = (Core.Name "tags"),
           Core.fieldTerm = (Phantoms.unTTerm tags)}]}))
-
 testCaseWithMetadataCase :: Phantoms.TTerm Testing.TestCaseWithMetadata -> Phantoms.TTerm Testing.TestCase
 testCaseWithMetadataCase x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -49,7 +43,6 @@ testCaseWithMetadataCase x =
         Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
         Core.projectionField = (Core.Name "case")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 testCaseWithMetadataDescription :: Phantoms.TTerm Testing.TestCaseWithMetadata -> Phantoms.TTerm (Maybe String)
 testCaseWithMetadataDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -57,7 +50,6 @@ testCaseWithMetadataDescription x =
         Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
         Core.projectionField = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 testCaseWithMetadataName :: Phantoms.TTerm Testing.TestCaseWithMetadata -> Phantoms.TTerm String
 testCaseWithMetadataName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -65,7 +57,6 @@ testCaseWithMetadataName x =
         Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
         Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 testCaseWithMetadataTags :: Phantoms.TTerm Testing.TestCaseWithMetadata -> Phantoms.TTerm [Testing.Tag]
 testCaseWithMetadataTags x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -73,7 +64,6 @@ testCaseWithMetadataTags x =
         Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
         Core.projectionField = (Core.Name "tags")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 testCaseWithMetadataWithCase :: Phantoms.TTerm Testing.TestCaseWithMetadata -> Phantoms.TTerm Testing.TestCase -> Phantoms.TTerm Testing.TestCaseWithMetadata
 testCaseWithMetadataWithCase original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -103,7 +93,6 @@ testCaseWithMetadataWithCase original newVal =
               Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
               Core.projectionField = (Core.Name "tags")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
 testCaseWithMetadataWithDescription :: Phantoms.TTerm Testing.TestCaseWithMetadata -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Testing.TestCaseWithMetadata
 testCaseWithMetadataWithDescription original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -133,7 +122,6 @@ testCaseWithMetadataWithDescription original newVal =
               Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
               Core.projectionField = (Core.Name "tags")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
 testCaseWithMetadataWithName :: Phantoms.TTerm Testing.TestCaseWithMetadata -> Phantoms.TTerm String -> Phantoms.TTerm Testing.TestCaseWithMetadata
 testCaseWithMetadataWithName original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -163,7 +151,6 @@ testCaseWithMetadataWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
               Core.projectionField = (Core.Name "tags")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
 testCaseWithMetadataWithTags :: Phantoms.TTerm Testing.TestCaseWithMetadata -> Phantoms.TTerm [Testing.Tag] -> Phantoms.TTerm Testing.TestCaseWithMetadata
 testCaseWithMetadataWithTags original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -193,7 +180,6 @@ testCaseWithMetadataWithTags original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "tags"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
 testGroup :: Phantoms.TTerm String -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm [Testing.TestGroup] -> Phantoms.TTerm [Testing.TestCaseWithMetadata] -> Phantoms.TTerm Testing.TestGroup
 testGroup name description subgroups cases =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -211,7 +197,6 @@ testGroup name description subgroups cases =
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = (Phantoms.unTTerm cases)}]}))
-
 testGroupCases :: Phantoms.TTerm Testing.TestGroup -> Phantoms.TTerm [Testing.TestCaseWithMetadata]
 testGroupCases x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -219,7 +204,6 @@ testGroupCases x =
         Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
         Core.projectionField = (Core.Name "cases")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 testGroupDescription :: Phantoms.TTerm Testing.TestGroup -> Phantoms.TTerm (Maybe String)
 testGroupDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -227,7 +211,6 @@ testGroupDescription x =
         Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
         Core.projectionField = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 testGroupName :: Phantoms.TTerm Testing.TestGroup -> Phantoms.TTerm String
 testGroupName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -235,7 +218,6 @@ testGroupName x =
         Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
         Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 testGroupSubgroups :: Phantoms.TTerm Testing.TestGroup -> Phantoms.TTerm [Testing.TestGroup]
 testGroupSubgroups x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -243,7 +225,6 @@ testGroupSubgroups x =
         Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
         Core.projectionField = (Core.Name "subgroups")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 testGroupWithCases :: Phantoms.TTerm Testing.TestGroup -> Phantoms.TTerm [Testing.TestCaseWithMetadata] -> Phantoms.TTerm Testing.TestGroup
 testGroupWithCases original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -273,7 +254,6 @@ testGroupWithCases original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
 testGroupWithDescription :: Phantoms.TTerm Testing.TestGroup -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Testing.TestGroup
 testGroupWithDescription original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -303,7 +283,6 @@ testGroupWithDescription original newVal =
               Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
               Core.projectionField = (Core.Name "cases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
 testGroupWithName :: Phantoms.TTerm Testing.TestGroup -> Phantoms.TTerm String -> Phantoms.TTerm Testing.TestGroup
 testGroupWithName original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -333,7 +312,6 @@ testGroupWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
               Core.projectionField = (Core.Name "cases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
 testGroupWithSubgroups :: Phantoms.TTerm Testing.TestGroup -> Phantoms.TTerm [Testing.TestGroup] -> Phantoms.TTerm Testing.TestGroup
 testGroupWithSubgroups original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -363,13 +341,11 @@ testGroupWithSubgroups original newVal =
               Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
               Core.projectionField = (Core.Name "cases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
 unTag :: Phantoms.TTerm Testing.Tag -> Phantoms.TTerm String
 unTag x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.testing.Tag")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 universalTestCase :: Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm Testing.UniversalTestCase
 universalTestCase actual expected =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -381,7 +357,6 @@ universalTestCase actual expected =
         Core.Field {
           Core.fieldName = (Core.Name "expected"),
           Core.fieldTerm = (Phantoms.unTTerm expected)}]}))
-
 universalTestCaseActual :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm String
 universalTestCaseActual x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -389,7 +364,6 @@ universalTestCaseActual x =
         Core.projectionTypeName = (Core.Name "hydra.testing.UniversalTestCase"),
         Core.projectionField = (Core.Name "actual")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 universalTestCaseExpected :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm String
 universalTestCaseExpected x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -397,7 +371,6 @@ universalTestCaseExpected x =
         Core.projectionTypeName = (Core.Name "hydra.testing.UniversalTestCase"),
         Core.projectionField = (Core.Name "expected")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 universalTestCaseWithActual :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm String -> Phantoms.TTerm Testing.UniversalTestCase
 universalTestCaseWithActual original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -413,7 +386,6 @@ universalTestCaseWithActual original newVal =
               Core.projectionTypeName = (Core.Name "hydra.testing.UniversalTestCase"),
               Core.projectionField = (Core.Name "expected")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
 universalTestCaseWithExpected :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm String -> Phantoms.TTerm Testing.UniversalTestCase
 universalTestCaseWithExpected original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {

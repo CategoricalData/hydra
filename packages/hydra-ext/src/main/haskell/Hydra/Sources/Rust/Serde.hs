@@ -1576,10 +1576,20 @@ derivesToExpr = define "derivesToExpr" $
 
 toRustDocComment :: TTermDefinition (String -> String)
 toRustDocComment = define "toRustDocComment" $
-  doc "Convert a string to Rust doc comments" $
-  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map (lambda "s" $ Strings.cat2 (string "/// ") (var "s")) (Strings.lines $ var "c")
+  doc ("Convert a string to Rust doc comments. Empty source lines emit `///`"
+    <> " (no trailing space) so blank doc lines don't carry trailing whitespace.") $
+  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map
+    (lambda "s" $ Logic.ifElse (Equality.equal (var "s") (string ""))
+      (string "///")
+      (Strings.cat2 (string "/// ") (var "s")))
+    (Strings.lines $ var "c")
 
 toRustComment :: TTermDefinition (String -> String)
 toRustComment = define "toRustComment" $
-  doc "Convert a string to Rust line comments" $
-  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map (lambda "s" $ Strings.cat2 (string "// ") (var "s")) (Strings.lines $ var "c")
+  doc ("Convert a string to Rust line comments. Empty source lines emit `//`"
+    <> " (no trailing space).") $
+  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map
+    (lambda "s" $ Logic.ifElse (Equality.equal (var "s") (string ""))
+      (string "//")
+      (Strings.cat2 (string "// ") (var "s")))
+    (Strings.lines $ var "c")

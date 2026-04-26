@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Source-to-source automatic differentiation for Float64 terms.
 
 module Hydra.Differentiation where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
@@ -12,7 +10,6 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Differentiate a binary primitive application given both arguments and their derivatives
 differentiateBinary :: Core.Name -> Core.Term -> Core.Term -> Core.Term -> Core.Term -> Core.Term
 differentiateBinary bfname a b da db =
@@ -147,7 +144,6 @@ differentiateBinary bfname a b da db =
               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.log")),
               Core.applicationArgument = a}))}))})),
         Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1.0))))}))})) (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))))))))
-
 -- | Differentiate a function term (Float64 -> Float64) with respect to its parameter
 differentiateFunction :: Core.Term -> Core.Term
 differentiateFunction term =
@@ -161,7 +157,6 @@ differentiateFunction term =
           Core.lambdaDomain = (Core.lambdaDomain v0),
           Core.lambdaBody = (differentiateTerm paramName body)}))
       _ -> term
-
 -- | Differentiate a term with respect to a named variable
 differentiateTerm :: Core.Name -> Core.Term -> Core.Term
 differentiateTerm dx term =
@@ -233,7 +228,6 @@ differentiateTerm dx term =
       Core.TermMaybe _ -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))
       Core.TermInject _ -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))
       Core.TermWrap _ -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))
-
 -- | Compute the gradient of a term as a record of partial derivatives
 gradient :: Core.Name -> [Core.Name] -> Core.Term -> Core.Term
 gradient typeName vars term =
@@ -242,7 +236,6 @@ gradient typeName vars term =
       Core.recordFields = (Lists.map (\v -> Core.Field {
         Core.fieldName = v,
         Core.fieldTerm = (differentiateTerm v term)}) vars)})
-
 -- | Look up the derivative of a unary Float64 primitive
 primitiveDerivative :: Core.Name -> Maybe Core.Term
 primitiveDerivative name =

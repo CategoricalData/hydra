@@ -3442,7 +3442,8 @@
               {
                 "@key": "description",
                 "@value": {
-                  "literal": {"string": "Convert a string to Haddock documentation comments"}}}],
+                  "literal": {
+                    "string": "Convert a string to Haddock documentation comments. Empty source lines emit `-- |` (no trailing space) so blank doc lines don't carry trailing whitespace into the generated file."}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3459,11 +3460,32 @@
                               "lambda": {
                                 "body": {
                                   "application": {
-                                    "argument": {"variable": "s"},
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "s"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"literal": {"string": "-- | "}},
+                                            "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                     "function": {
                                       "application": {
-                                        "argument": {"literal": {"string": "-- | "}},
-                                        "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                        "argument": {"literal": {"string": "-- |"}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"literal": {"string": ""}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "s"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.equality.equal"},
+                                                        "type": {"literal": {"string": {}}}}}}}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                "type": {"literal": {"string": {}}}}}}}}}}},
                                 "domain": {"literal": {"string": {}}},
                                 "parameter": "s"}},
                             "function": {
@@ -3493,7 +3515,9 @@
             "annotation": [
               {
                 "@key": "description",
-                "@value": {"literal": {"string": "Convert a string to simple line comments"}}}],
+                "@value": {
+                  "literal": {
+                    "string": "Convert a string to simple line comments. Empty source lines emit `--` (no trailing space) for the same reason as toHaskellComments."}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3510,11 +3534,32 @@
                               "lambda": {
                                 "body": {
                                   "application": {
-                                    "argument": {"variable": "s"},
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "s"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"literal": {"string": "-- "}},
+                                            "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                     "function": {
                                       "application": {
-                                        "argument": {"literal": {"string": "-- "}},
-                                        "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                        "argument": {"literal": {"string": "--"}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"literal": {"string": ""}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "s"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.equality.equal"},
+                                                        "type": {"literal": {"string": {}}}}}}}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                "type": {"literal": {"string": {}}}}}}}}}}},
                                 "domain": {"literal": {"string": {}}},
                                 "parameter": "s"}},
                             "function": {

@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Inference tests for nominal types
 
 module Hydra.Test.Inference.NominalTypes where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Lib.Eithers as Eithers
@@ -16,7 +14,6 @@ import qualified Hydra.Test.TestTypes as TestTypes
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Nominal type tests
 allTests :: Testing.TestGroup
 allTests =
@@ -30,7 +27,6 @@ allTests =
         testGroupForVariants,
         testGroupForWrappers],
       Testing.testGroupCases = []}
-
 testGroupForCaseStatements :: Testing.TestGroup
 testGroupForCaseStatements =
     Testing.TestGroup {
@@ -100,7 +96,6 @@ testGroupForCaseStatements =
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]}
-
 testGroupForProjections :: Testing.TestGroup
 testGroupForProjections =
     Testing.TestGroup {
@@ -163,7 +158,6 @@ testGroupForProjections =
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]}],
       Testing.testGroupCases = []}
-
 testGroupForRecords :: Testing.TestGroup
 testGroupForRecords =
     Testing.TestGroup {
@@ -516,7 +510,6 @@ testGroupForRecords =
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]}],
       Testing.testGroupCases = []}
-
 testGroupForVariants :: Testing.TestGroup
 testGroupForVariants =
     Testing.TestGroup {
@@ -626,7 +619,6 @@ testGroupForVariants =
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]}],
       Testing.testGroupCases = []}
-
 testGroupForWrappers :: Testing.TestGroup
 testGroupForWrappers =
     Testing.TestGroup {
