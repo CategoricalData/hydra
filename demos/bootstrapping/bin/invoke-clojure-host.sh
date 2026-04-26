@@ -14,7 +14,7 @@ set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
-HYDRA_CLOJURE_DIR="$HYDRA_ROOT/heads/lisp/hydra-clojure"
+HYDRA_CLOJURE_DIR="$HYDRA_ROOT/heads/lisp/clojure"
 
 # Parse arguments (pass through to Clojure bootstrap)
 TARGET=""
