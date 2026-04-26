@@ -95,15 +95,15 @@ module_ = Module ns definitions
     Just "Utility functions for working with RDF graphs and descriptions"
   where
     definitions = [
-      toDefinition key_rdfBlankNodeCounter,
       toDefinition descriptionsToGraph,
       toDefinition emptyDescription,
-      toDefinition emptyRdfGraph,
       toDefinition emptyLangStrings,
+      toDefinition emptyRdfGraph,
       toDefinition encodeLiteral,
       toDefinition forObjects,
       toDefinition iri,
       toDefinition keyIri,
+      toDefinition key_rdfBlankNodeCounter,
       toDefinition mergeGraphs,
       toDefinition nameToIri,
       toDefinition nextBlankNode,
@@ -114,12 +114,6 @@ module_ = Module ns definitions
       toDefinition triplesOf,
       toDefinition xmlSchemaDatatypeIri]
 
-
--- | The key used for tracking blank node counters
-key_rdfBlankNodeCounter :: TTermDefinition Name
-key_rdfBlankNodeCounter = define "key_rdfBlankNodeCounter" $
-  doc "The key used for tracking blank node counters" $
-  wrap _Name $ string "rdfBlankNodeCounter"
 
 -- | Convert a list of descriptions to an RDF graph
 descriptionsToGraph :: TTermDefinition ([Rdf.Description] -> Rdf.Graph)
@@ -137,17 +131,17 @@ emptyDescription = define "emptyDescription" $
       Rdf._Description_subject>>: var "node",
       Rdf._Description_graph>>: emptyRdfGraph]
 
--- | An empty RDF graph
-emptyRdfGraph :: TTermDefinition Rdf.Graph
-emptyRdfGraph = define "emptyRdfGraph" $
-  doc "An empty RDF graph" $
-  wrap Rdf._Graph Sets.empty
-
 -- | An empty LangStrings value
 emptyLangStrings :: TTermDefinition Rdf.LangStrings
 emptyLangStrings = define "emptyLangStrings" $
   doc "An empty LangStrings value" $
   wrap Rdf._LangStrings Maps.empty
+
+-- | An empty RDF graph
+emptyRdfGraph :: TTermDefinition Rdf.Graph
+emptyRdfGraph = define "emptyRdfGraph" $
+  doc "An empty RDF graph" $
+  wrap Rdf._Graph Sets.empty
 
 -- | Encode a Hydra literal as an RDF literal
 encodeLiteral :: TTermDefinition (Literal -> Rdf.Literal)
@@ -260,6 +254,12 @@ keyIri = define "keyIri" $
   doc "Construct a key IRI from a local name" $
   lambda "local" $
     iri @@ string "urn:key:" @@ var "local"
+
+-- | The key used for tracking blank node counters
+key_rdfBlankNodeCounter :: TTermDefinition Name
+key_rdfBlankNodeCounter = define "key_rdfBlankNodeCounter" $
+  doc "The key used for tracking blank node counters" $
+  wrap _Name $ string "rdfBlankNodeCounter"
 
 -- | Merge a list of RDF graphs into a single graph
 mergeGraphs :: TTermDefinition ([Rdf.Graph] -> Rdf.Graph)

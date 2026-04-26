@@ -6,12 +6,13 @@ if [ $# -lt 1 ]; then
     exit 1
 fi
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+THIS_SCRIPT="$SCRIPT_DIR/$(basename "${BASH_SOURCE[0]}")"
 HYDRA_CL_HEAD="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_ROOT_DIR="$( cd "${HYDRA_CL_HEAD}/../../.." && pwd )"
 echo "=== Testing Common Lisp distribution: $1 ==="
 
 source "$HYDRA_ROOT_DIR/bin/lib/test-cache.sh"
-if test_cache_check common-lisp "$HYDRA_ROOT_DIR/dist/common-lisp" "${HYDRA_CL_HEAD}/src/test" "${BASH_SOURCE[0]}"; then
+if test_cache_check common-lisp "$HYDRA_ROOT_DIR/dist/common-lisp" "${HYDRA_CL_HEAD}/src/test" "$THIS_SCRIPT"; then
     echo "  Cache hit: no changes since last successful common-lisp test run; skipping."
     echo "=== Done (cache hit). ==="
     exit 0
@@ -19,4 +20,4 @@ fi
 cd "$HYDRA_CL_HEAD"
 bash run-tests.sh
 
-test_cache_record common-lisp "$HYDRA_ROOT_DIR/dist/common-lisp" "${HYDRA_CL_HEAD}/src/test" "${BASH_SOURCE[0]}"
+test_cache_record common-lisp "$HYDRA_ROOT_DIR/dist/common-lisp" "${HYDRA_CL_HEAD}/src/test" "$THIS_SCRIPT"

@@ -44,7 +44,7 @@ This is the recommended workflow:
    set up the source module file with standard imports, namespace, module definition, and an empty `definitions` list.
    Build to verify it compiles.
 3. **Promote one function** — translate it into the Hydra DSL and add it to the module's `definitions` list.
-4. **Regenerate** — generate the promoted function into `gen-main` (e.g., `writeHaskell`).
+4. **Regenerate** — generate the promoted function into `dist/haskell/<pkg>/src/main/haskell/` (e.g., `writeHaskell`).
 5. **Comment out the original** — in the staging module,
    comment out the original function definition but **preserve it as a comment**.
    This is critical: the commented-out version serves as the authoritative reference for what the generated code should
@@ -754,7 +754,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
 20. **GHCi regeneration**: Use stdin redirect to run GHCi scripts from `heads/haskell`:
 
     ```bash
-    cd heads/haskell && stack ghci hydra-haskell:lib < my_regen_script.ghci
+    cd heads/haskell && stack ghci hydra:lib < my_regen_script.ghci
     ```
 
     The script should contain the imports and `writeHaskell` call.
@@ -1073,8 +1073,8 @@ Key differences from promoting terms:
 - Reference other type bindings (e.g., `Module.module'` for the `Module` type) — note that `module'` is the
   *type binding*, while `module_` is the Haskell `Module` value for the module definition
 - Add the new binding to the module's `definitions` list
-- After regeneration, the type appears in `gen-main` with field names prefixed by the type name
-  (e.g., `testGeneratorNamespacesForModule`)
+- After regeneration, the type appears under `dist/haskell/<pkg>/src/main/haskell/` with field
+  names prefixed by the type name (e.g., `testGeneratorNamespacesForModule`)
 
 ## Promoting data and constants modules
 
@@ -1116,9 +1116,9 @@ listsMap = defineName "listsMap" "hydra.lib.lists" "map"
 This generates simple data constructors in all target languages:
 
 ```haskell
--- Generated output (gen-main)
-lists :: Module.Namespace
-lists = (Module.Namespace "hydra.lib.lists")
+-- Generated output (dist/haskell/hydra-kernel/src/main/haskell/)
+lists :: Packaging.Namespace
+lists = (Packaging.Namespace "hydra.lib.lists")
 
 listsMap :: Core.Name
 listsMap = (Core.Name "hydra.lib.lists.map")

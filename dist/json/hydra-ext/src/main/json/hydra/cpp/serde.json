@@ -5107,6 +5107,78 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.cpp.serde.encodeMemInitializer",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {"string": "Convert a member initializer to an expression"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "name",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "mi"},
+                            "function": {
+                              "project": {"field": "name", "typeName": "hydra.cpp.syntax.MemInitializer"}}}},
+                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                      {
+                        "name": "args",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "mi"},
+                            "function": {
+                              "project": {"field": "arguments", "typeName": "hydra.cpp.syntax.MemInitializer"}}}},
+                        "type": {
+                          "type": {"list": {"variable": "hydra.cpp.syntax.Expression"}},
+                          "variables": []}}],
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "list": [
+                            {
+                              "application": {
+                                "argument": {"variable": "name"},
+                                "function": {"variable": "hydra.serialization.cst"}}},
+                            {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "args"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "hydra.cpp.serde.encodeExpression"},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.lists.map"},
+                                                    "type": {"variable": "hydra.cpp.syntax.Expression"}}},
+                                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "hydra.serialization.inlineStyle"},
+                                        "function": {"variable": "hydra.serialization.commaSep"}}}}},
+                                "function": {"variable": "hydra.serialization.parens"}}}]},
+                        "function": {"variable": "hydra.serialization.noSep"}}}}},
+                "domain": {"variable": "hydra.cpp.syntax.MemInitializer"},
+                "parameter": "mi"}}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.cpp.syntax.MemInitializer"}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.cpp.serde.encodeMemberAccessOperation",
         "term": {
           "annotated": {
@@ -5329,78 +5401,6 @@
                   "codomain": {"variable": "hydra.ast.Expr"},
                   "domain": {"variable": "hydra.cpp.syntax.MemberSpecification"}}},
               "domain": {"literal": {"boolean": {}}}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.cpp.serde.encodeMemInitializer",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "Convert a member initializer to an expression"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "name",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "mi"},
-                            "function": {
-                              "project": {"field": "name", "typeName": "hydra.cpp.syntax.MemInitializer"}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
-                      {
-                        "name": "args",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "mi"},
-                            "function": {
-                              "project": {"field": "arguments", "typeName": "hydra.cpp.syntax.MemInitializer"}}}},
-                        "type": {
-                          "type": {"list": {"variable": "hydra.cpp.syntax.Expression"}},
-                          "variables": []}}],
-                    "body": {
-                      "application": {
-                        "argument": {
-                          "list": [
-                            {
-                              "application": {
-                                "argument": {"variable": "name"},
-                                "function": {"variable": "hydra.serialization.cst"}}},
-                            {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {"variable": "args"},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"variable": "hydra.cpp.serde.encodeExpression"},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.lists.map"},
-                                                    "type": {"variable": "hydra.cpp.syntax.Expression"}}},
-                                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"variable": "hydra.serialization.inlineStyle"},
-                                        "function": {"variable": "hydra.serialization.commaSep"}}}}},
-                                "function": {"variable": "hydra.serialization.parens"}}}]},
-                        "function": {"variable": "hydra.serialization.noSep"}}}}},
-                "domain": {"variable": "hydra.cpp.syntax.MemInitializer"},
-                "parameter": "mi"}}}},
-        "type": {
-          "type": {
-            "function": {
-              "codomain": {"variable": "hydra.ast.Expr"},
-              "domain": {"variable": "hydra.cpp.syntax.MemInitializer"}}},
           "variables": []}}},
     {
       "term": {

@@ -1,8 +1,0 @@
-{
-  "version": 1,
-  "hashes": {
-    "hydra.javaScript.operators": "a073f2b533ceed744223eb21e32d8e34026a87cf67c3dba91369562dd70e6737",
-    "hydra.javaScript.serde": "28cf35b20944c057fd81d336d186aad680d4112f3379ff2bf666b7555850d756",
-    "hydra.javaScript.syntax": "081105d283977bf9cab3db995653c431a644136ccf6dc8895dd75da5d9cba42e"
-  }
-}

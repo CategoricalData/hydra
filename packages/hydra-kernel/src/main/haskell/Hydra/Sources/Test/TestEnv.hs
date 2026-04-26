@@ -33,11 +33,15 @@ module_ = Module ns definitions
     Just ("Type-level declarations for the hand-written Hydra.Test.TestEnv module.")
   where
    definitions = [
-     Phantoms.toDefinition testGraph,
-     Phantoms.toDefinition testContext]
+     Phantoms.toDefinition testContext,
+     Phantoms.toDefinition testGraph]
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
+
+-- | Stub: the real testContext lives in hand-written Hydra.Test.TestEnv
+testContext :: TTermDefinition Context
+testContext = define "testContext" $ asTerm Lexical.emptyContext
 
 -- | Stub: the real testGraph lives in hand-written Hydra.Test.TestEnv.
 -- The hand-written runtime takes a test-types map; the DSL stub has the
@@ -46,7 +50,3 @@ define = definitionInModule module_
 testGraph :: TTermDefinition (M.Map Name Type -> Graph)
 testGraph = define "testGraph" $
   "tys" ~> asTerm Lexical.emptyGraph
-
--- | Stub: the real testContext lives in hand-written Hydra.Test.TestEnv
-testContext :: TTermDefinition Context
-testContext = define "testContext" $ asTerm Lexical.emptyContext

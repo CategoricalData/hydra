@@ -121,7 +121,7 @@ The matrix tool handles all regeneration in dependency order. For
 incremental work, you can run the steps individually:
 
 ```bash
-cd packages/hydra-haskell
+cd heads/haskell
 
 # Build to verify the source compiles
 stack build
@@ -459,7 +459,7 @@ you need to rewrite every consumer of the old types to use the new one, often wi
 
 ### Updating Non-Generated Code
 
-Type consolidation affects not only Sources and gen-main, but also hand-written code that references the old types:
+Type consolidation affects not only Sources and the generated `dist/haskell/<pkg>/` trees, but also hand-written code that references the old types:
 
 - **Test infrastructure**: Test runners in Java (`TestSuiteRunner.java`), Python, and Haskell (`TestUtils.hs`,
   `TestSuiteSpec.hs`) construct kernel types directly.
@@ -503,9 +503,9 @@ Generated Haskell code depends on modules that need to be generated. Solution:
 
 **Adding a field to a kernel type** (e.g., adding `transitionalGraf` to `Graph`):
 1. Add the field to the type definition in Sources (e.g., `Sources/Kernel/Types/Graph.hs`)
-2. Regenerate just the types module into gen-main (e.g., via `writeHaskell` in ghci)
-3. Manually patch **all** record construction sites in gen-main to supply the new field —
-   search for `TypeName {` across gen-main
+2. Regenerate just the types module into the generated tree (e.g., via `writeHaskell` in ghci into `dist/haskell/hydra-kernel/src/main/haskell/`)
+3. Manually patch **all** record construction sites in the generated tree to supply the new field —
+   search for `TypeName {` across `dist/haskell/`
 4. If the new field's type needs a default value (like `emptyGraf`), add that helper manually to the generated file
 5. Update the DSL helpers (e.g., `Dsl/Meta/Graph.hs`) — constructor, accessors, and all `with*` helpers
 6. Update all Source-level constructor calls to supply the new field
@@ -513,7 +513,7 @@ Generated Haskell code depends on modules that need to be generated. Solution:
 8. Regenerate cleanly — the generated files will now replace your manual patches
 9. `stack build` again and run tests to confirm
 
-The key insight: gen-main patches in step 3 are temporary scaffolding.
+The key insight: the patches in step 3 are temporary scaffolding.
 They only need to be correct enough for the build to succeed so that regeneration can produce the real versions.
 
 ### Silent State Pipeline Bugs
@@ -581,7 +581,7 @@ Phase 4: cross-host coders for each (host, target) with host ≠ haskell
 
 | Stage | Typical Failures | What To Check |
 |-------|-----------------|---------------|
-| `stack build` (packages/hydra-haskell) | Missing fields, wrong types in Sources | Source files, DSL helpers, gen-main bootstrap |
+| `stack build` (heads/haskell) | Missing fields, wrong types in Sources | Source files, DSL helpers, generated bootstrap under `dist/haskell/hydra-kernel/` |
 | `sync-haskell.sh` | Haskell test failures | Generated code correctness, `verify-json-kernel` |
 | `stack build` (extension packages) | Coders using old type names/fields | Extension package source files referencing old types |
 | `sync-java.sh` | Java compilation errors | Hand-written Java code (test runners, utilities) |
@@ -720,7 +720,7 @@ This change is particularly complex because:
 3. Changing a fundamental type like `Graph` affects both sides
 
 The solution is to update files in the correct order:
-1. First update generated files (`gen-main`) to make them compile with the new type
+1. First update generated files under `dist/haskell/<pkg>/src/main/haskell/` to make them compile with the new type
 2. Then update source files (`Sources`) to generate the correct definitions
 3. Regenerate to verify consistency
 
@@ -779,7 +779,7 @@ Adding a primitive requires updates to **six files**:
    graphElements :: T.list Core.binding
    ```
 
-2. **Updated generated type** in `Hydra/Graph.hs` (gen-main):
+2. **Updated generated type** in `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Graph.hs`:
    ```haskell
    -- From:
    graphElements :: (M.Map Core.Name Core.Binding)
@@ -823,7 +823,7 @@ Lists.find ("b" ~> (Core.bindingName (var "b")) `eq` (var "name")) elements
 
 **Types (Sources + Generated):**
 - `Hydra/Sources/Kernel/Types/Graph.hs` - Type definition source
-- `Hydra/Graph.hs` (gen-main) - Generated type
+- `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Graph.hs` - Generated type
 
 **DSL Helpers:**
 - `Hydra/Dsl/Meta/Graph.hs` - Graph construction helpers
@@ -858,8 +858,8 @@ Lists.find ("b" ~> (Core.bindingName (var "b")) `eq` (var "name")) elements
 
 ### Key Lessons
 
-1. **Update gen-main first**: When changing fundamental types, update generated files first so the project compiles,
-   then update source files.
+1. **Update generated files first**: When changing fundamental types, update files under `dist/haskell/<pkg>/`
+   first so the project compiles, then update source files.
 
 2. **Adding primitives is multi-file**: Plan for updating 6 files when adding a new primitive function.
 

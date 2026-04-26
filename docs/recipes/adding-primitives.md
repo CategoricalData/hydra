@@ -436,7 +436,7 @@ stack test
 
 ### Python
 ```bash
-cd packages/hydra-python
+cd heads/python
 pytest
 ```
 
@@ -467,7 +467,7 @@ charsIsAlphaNum = subgroup "isAlphaNum" [
 4. **Regenerate the test suite for all implementations** (this step is required!):
 ```bash
 # Refresh the Haskell kernel (DSL → JSON → Haskell, including test modules)
-bin/sync-haskell.sh
+heads/haskell/bin/sync-haskell.sh
 
 # Regenerate Java and Python test distributions (from the worktree root)
 bin/sync-java.sh --no-tests
@@ -490,7 +490,7 @@ stack test 2>&1 | grep -i '<your-primitive-name>'
 ./gradlew :hydra-java:test --tests "*TestSuiteRunner*" --info 2>&1 | grep -i '<your-primitive-name>'
 
 # Python: run tests and confirm your cases are included
-cd packages/hydra-python
+cd heads/python
 pytest -v 2>&1 | grep -i '<your_primitive_name>'
 ```
 

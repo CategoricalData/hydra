@@ -203,7 +203,7 @@ if $NEED_PYTHON; then
     done
 
     if [ -z "$PYTHON_CMD" ]; then
-        ENV_ERRORS+=("Python 3.12 or later is required but not found. Create a venv: cd hydra-python && python3.12 -m venv .venv")
+        ENV_ERRORS+=("Python 3.12 or later is required but not found. Create a venv: cd heads/python && python3.12 -m venv .venv")
     fi
 
     # Check for pytest (needed for Python target testing).

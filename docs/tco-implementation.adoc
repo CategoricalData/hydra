@@ -388,13 +388,13 @@ it reuses the existing local variables via reassignment.
 | `packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Coder.hs`
 
 | Python coder (generated)
-| `dist/haskell/hydra-ext/src/main/haskell/Hydra/Python/Coder.hs`
+| `dist/haskell/hydra-python/src/main/haskell/Hydra/Python/Coder.hs`
 
 | Java coder (TCO at ~line 4855)
 | `packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Coder.hs`
 
 | Java coder (generated)
-| `dist/haskell/hydra-ext/src/main/haskell/Hydra/Java/Coder.hs`
+| `dist/haskell/hydra-java/src/main/haskell/Hydra/Java/Coder.hs`
 
 | Generated Python (shows TCO output)
 | `dist/python/hydra-kernel/src/main/python/hydra/rewriting.py`

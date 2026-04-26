@@ -71,44 +71,28 @@ module_ = Module ns definitions
     Just "Transform test cases for code generation, filtering to tests that can be compiled to target languages"
   where
     definitions = [
-      toDefinition transformToCompiledTests,
-      toDefinition transformTestCase,
-      toDefinition buildConvertCaseCall,
-      toDefinition encodeCaseConvention,
       toDefinition addGenerationPrefix,
-      toDefinition transformModule,
-      toDefinition collectTestCases,
+      toDefinition buildConvertCaseCall,
       toDefinition buildTopologicalSortCall,
       toDefinition buildTopologicalSortSCCCall,
+      toDefinition collectTestCases,
       toDefinition encodeAdjacencyList,
-      toDefinition encodeInt,
+      toDefinition encodeCaseConvention,
       toDefinition encodeEitherListList,
+      toDefinition encodeInt,
+      toDefinition encodeIntList,
       toDefinition encodeListList,
-      toDefinition encodeIntList]
+      toDefinition transformModule,
+      toDefinition transformTestCase,
+      toDefinition transformToCompiledTests]
 
 
--- | Transform test group hierarchy to only include delegated evaluation tests
-transformToCompiledTests :: TTermDefinition (TestGroup -> Maybe TestGroup)
-transformToCompiledTests = define "transformToCompiledTests" $
-  doc "Transform test group hierarchy to only include delegated evaluation tests" $
-  lambda "tg" $ lets [
-    "name_">: project _TestGroup _TestGroup_name @@ var "tg",
-    "desc">: project _TestGroup _TestGroup_description @@ var "tg",
-    "subgroups">: project _TestGroup _TestGroup_subgroups @@ var "tg",
-    "cases_">: project _TestGroup _TestGroup_cases @@ var "tg",
-    "transformedCases">: Maybes.cat (Lists.map (lambda "tc" $ transformTestCase @@ var "tc") (var "cases_")),
-    "transformedSubgroups">: Maybes.cat (Lists.map (lambda "sg" $ transformToCompiledTests @@ var "sg") (var "subgroups"))] $
-    Logic.ifElse
-      (Logic.and (Lists.null (var "transformedCases")) (Lists.null (var "transformedSubgroups")))
-      nothing
-      (just $ Testing.testGroup (var "name_") (var "desc") (var "transformedSubgroups") (var "transformedCases"))
-
-
--- | Transform a test case (pass through unchanged — all test cases are now universal)
-transformTestCase :: TTermDefinition (TestCaseWithMetadata -> Maybe TestCaseWithMetadata)
-transformTestCase = define "transformTestCase" $
-  doc "Pass through test cases unchanged" $
-  lambda "tcm" $ just (var "tcm")
+-- | Add "generation" namespace prefix
+addGenerationPrefix :: TTermDefinition (Namespace -> Namespace)
+addGenerationPrefix = define "addGenerationPrefix" $
+  doc "Add generation namespace prefix" $
+  lambda "ns_" $
+    wrap _Namespace (Strings.cat2 (string "generation.") (unwrap _Namespace @@ var "ns_"))
 
 
 -- | Build a Term representing a convertCase function call
@@ -123,54 +107,6 @@ buildConvertCaseCall = define "buildConvertCaseCall" $
           (encodeCaseConvention @@ var "fromConv"))
         (encodeCaseConvention @@ var "toConv"))
       (Core.termLiteral $ Core.literalString (var "input_"))
-
-
--- | Encode CaseConvention as a Term (unit variant)
-encodeCaseConvention :: TTermDefinition (CaseConvention -> Term)
-encodeCaseConvention = define "encodeCaseConvention" $
-  doc "Encode CaseConvention as a Term (unit variant)" $
-  lambda "conv" $
-    Core.termInject $ Core.injection
-      (Core.nameLift _CaseConvention)
-      (Core.field
-        (cases _CaseConvention (var "conv") Nothing [
-          _CaseConvention_lowerSnake>>: constant (Core.nameLift _CaseConvention_lowerSnake),
-          _CaseConvention_upperSnake>>: constant (Core.nameLift _CaseConvention_upperSnake),
-          _CaseConvention_camel>>: constant (Core.nameLift _CaseConvention_camel),
-          _CaseConvention_pascal>>: constant (Core.nameLift _CaseConvention_pascal)])
-        Core.termUnit)
-
-
--- | Add "generation" namespace prefix
-addGenerationPrefix :: TTermDefinition (Namespace -> Namespace)
-addGenerationPrefix = define "addGenerationPrefix" $
-  doc "Add generation namespace prefix" $
-  lambda "ns_" $
-    wrap _Namespace (Strings.cat2 (string "generation.") (unwrap _Namespace @@ var "ns_"))
-
-
--- | Transform module with generation namespace
-transformModule :: TTermDefinition (Module -> Module)
-transformModule = define "transformModule" $
-  doc "Transform module with generation namespace" $
-  lambda "m" $
-    Packaging.module_
-      (addGenerationPrefix @@ (project _Module _Module_namespace @@ var "m"))
-      (project _Module _Module_definitions @@ var "m")
-      (project _Module _Module_termDependencies @@ var "m")
-      (project _Module _Module_typeDependencies @@ var "m")
-      (project _Module _Module_description @@ var "m")
-
-
--- | Collect all test cases from a test group (flattening hierarchy)
-collectTestCases :: TTermDefinition (TestGroup -> [TestCaseWithMetadata])
-collectTestCases = define "collectTestCases" $
-  doc "Collect all test cases from a test group (flattening hierarchy)" $
-  lambda "tg" $
-    Lists.concat2
-      (project _TestGroup _TestGroup_cases @@ var "tg")
-      (Lists.concat (Lists.map (lambda "sg" $ collectTestCases @@ var "sg")
-        (project _TestGroup _TestGroup_subgroups @@ var "tg")))
 
 
 -- | Build a Term representing a topologicalSort function call
@@ -193,6 +129,17 @@ buildTopologicalSortSCCCall = define "buildTopologicalSortSCCCall" $
       (encodeAdjacencyList @@ var "adjList")
 
 
+-- | Collect all test cases from a test group (flattening hierarchy)
+collectTestCases :: TTermDefinition (TestGroup -> [TestCaseWithMetadata])
+collectTestCases = define "collectTestCases" $
+  doc "Collect all test cases from a test group (flattening hierarchy)" $
+  lambda "tg" $
+    Lists.concat2
+      (project _TestGroup _TestGroup_cases @@ var "tg")
+      (Lists.concat (Lists.map (lambda "sg" $ collectTestCases @@ var "sg")
+        (project _TestGroup _TestGroup_subgroups @@ var "tg")))
+
+
 -- | Encode an adjacency list as a Term
 encodeAdjacencyList :: TTermDefinition ([(Int, [Int])] -> Term)
 encodeAdjacencyList = define "encodeAdjacencyList" $
@@ -206,12 +153,20 @@ encodeAdjacencyList = define "encodeAdjacencyList" $
       (var "pairs"))
 
 
--- | Encode an Int as a Term
-encodeInt :: TTermDefinition (Int -> Term)
-encodeInt = define "encodeInt" $
-  doc "Encode an Int as a Term" $
-  lambda "n" $
-    Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 (var "n")
+-- | Encode CaseConvention as a Term (unit variant)
+encodeCaseConvention :: TTermDefinition (CaseConvention -> Term)
+encodeCaseConvention = define "encodeCaseConvention" $
+  doc "Encode CaseConvention as a Term (unit variant)" $
+  lambda "conv" $
+    Core.termInject $ Core.injection
+      (Core.nameLift _CaseConvention)
+      (Core.field
+        (cases _CaseConvention (var "conv") Nothing [
+          _CaseConvention_lowerSnake>>: constant (Core.nameLift _CaseConvention_lowerSnake),
+          _CaseConvention_upperSnake>>: constant (Core.nameLift _CaseConvention_upperSnake),
+          _CaseConvention_camel>>: constant (Core.nameLift _CaseConvention_camel),
+          _CaseConvention_pascal>>: constant (Core.nameLift _CaseConvention_pascal)])
+        Core.termUnit)
 
 
 -- | Encode Either [[Int]] [Int] as a Term
@@ -225,12 +180,12 @@ encodeEitherListList = define "encodeEitherListList" $
       (var "e"))
 
 
--- | Encode [[Int]] as a Term
-encodeListList :: TTermDefinition ([[Int]] -> Term)
-encodeListList = define "encodeListList" $
-  doc "Encode [[Int]] as a Term" $
-  lambda "lists" $
-    Core.termList (Lists.map (lambda "l" $ encodeIntList @@ var "l") (var "lists"))
+-- | Encode an Int as a Term
+encodeInt :: TTermDefinition (Int -> Term)
+encodeInt = define "encodeInt" $
+  doc "Encode an Int as a Term" $
+  lambda "n" $
+    Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 (var "n")
 
 
 -- | Encode [Int] as a Term
@@ -239,4 +194,49 @@ encodeIntList = define "encodeIntList" $
   doc "Encode [Int] as a Term" $
   lambda "ints" $
     Core.termList (Lists.map (lambda "n" $ encodeInt @@ var "n") (var "ints"))
+
+
+-- | Encode [[Int]] as a Term
+encodeListList :: TTermDefinition ([[Int]] -> Term)
+encodeListList = define "encodeListList" $
+  doc "Encode [[Int]] as a Term" $
+  lambda "lists" $
+    Core.termList (Lists.map (lambda "l" $ encodeIntList @@ var "l") (var "lists"))
+
+
+-- | Transform module with generation namespace
+transformModule :: TTermDefinition (Module -> Module)
+transformModule = define "transformModule" $
+  doc "Transform module with generation namespace" $
+  lambda "m" $
+    Packaging.module_
+      (addGenerationPrefix @@ (project _Module _Module_namespace @@ var "m"))
+      (project _Module _Module_definitions @@ var "m")
+      (project _Module _Module_termDependencies @@ var "m")
+      (project _Module _Module_typeDependencies @@ var "m")
+      (project _Module _Module_description @@ var "m")
+
+
+-- | Transform a test case (pass through unchanged — all test cases are now universal)
+transformTestCase :: TTermDefinition (TestCaseWithMetadata -> Maybe TestCaseWithMetadata)
+transformTestCase = define "transformTestCase" $
+  doc "Pass through test cases unchanged" $
+  lambda "tcm" $ just (var "tcm")
+
+
+-- | Transform test group hierarchy to only include delegated evaluation tests
+transformToCompiledTests :: TTermDefinition (TestGroup -> Maybe TestGroup)
+transformToCompiledTests = define "transformToCompiledTests" $
+  doc "Transform test group hierarchy to only include delegated evaluation tests" $
+  lambda "tg" $ lets [
+    "name_">: project _TestGroup _TestGroup_name @@ var "tg",
+    "desc">: project _TestGroup _TestGroup_description @@ var "tg",
+    "subgroups">: project _TestGroup _TestGroup_subgroups @@ var "tg",
+    "cases_">: project _TestGroup _TestGroup_cases @@ var "tg",
+    "transformedCases">: Maybes.cat (Lists.map (lambda "tc" $ transformTestCase @@ var "tc") (var "cases_")),
+    "transformedSubgroups">: Maybes.cat (Lists.map (lambda "sg" $ transformToCompiledTests @@ var "sg") (var "subgroups"))] $
+    Logic.ifElse
+      (Logic.and (Lists.null (var "transformedCases")) (Lists.null (var "transformedSubgroups")))
+      nothing
+      (just $ Testing.testGroup (var "name_") (var "desc") (var "transformedSubgroups") (var "transformedCases"))
 

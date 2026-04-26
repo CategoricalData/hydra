@@ -112,7 +112,7 @@ main
       fi
       ;;
     python)
-      local driver="$REPO_ROOT/demos/src/main/python/python/hydra/demos/validatepg/demo.py"
+      local driver="$REPO_ROOT/demos/src/main/python/hydra/demos/validatepg/demo.py"
       if [ ! -f "$driver" ]; then
         echo -e "  ${YELLOW}SKIPPED${NC} (driver not found)"; return
       fi

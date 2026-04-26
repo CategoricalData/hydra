@@ -136,7 +136,6 @@ module_ = Module ns definitions
       toDefinition pyClassDefinitionToPyStatement,
       toDefinition pyClosedPatternToPyPatterns,
       toDefinition pyConjunctionToPyExpression,
-      toDefinition pyExpressionsToPyArgs,
       toDefinition pyExpressionToBitwiseOr,
       toDefinition pyExpressionToDisjunction,
       toDefinition pyExpressionToPyAnnotatedRhs,
@@ -145,6 +144,7 @@ module_ = Module ns definitions
       toDefinition pyExpressionToPySlice,
       toDefinition pyExpressionToPyStarNamedExpression,
       toDefinition pyExpressionToPyStatement,
+      toDefinition pyExpressionsToPyArgs,
       toDefinition pyList,
       toDefinition pyNameToPyExpression,
       toDefinition pyNameToPyNamedExpression,
@@ -172,252 +172,27 @@ module_ = Module ns definitions
       toDefinition unionTypeClassStatements310,
       toDefinition unitVariantMethods]
 
--- | Current target Python version. Change this to Python310 for PyPy compatibility.
-targetPythonVersion :: TTermDefinition PyHelpers.PythonVersion
-targetPythonVersion = def "targetPythonVersion" $
-  doc "Current target Python version for code generation" $
-  injectUnit PyHelpers._PythonVersion PyHelpers._PythonVersion_python310
+-- | Annotate an expression with an optional comment using Annotated[]
+annotatedExpression :: TTermDefinition (Maybe String -> Py.Expression -> Py.Expression)
+annotatedExpression = def "annotatedExpression" $
+  doc "Annotate an expression with an optional comment using Annotated[]" $
+  "mcomment" ~> "expr" ~>
+    Maybes.maybe (var "expr")
+      ("c" ~>
+        pyPrimaryToPyExpression @@
+          (primaryWithExpressionSlices
+            @@ (pyNameToPyPrimary @@ (PyDsl.name $ string "Annotated"))
+            @@ list [var "expr", doubleQuotedString @@ var "c"]))
+      (var "mcomment")
 
--- | The Python None value as a Name
-pyNone :: TTermDefinition Py.Name
-pyNone = def "pyNone" $
-  doc "The Python None value as a Name" $
-  PyDsl.name $ string "None"
-
--- | Convert a Name to a Primary (simple atom)
-pyNameToPyPrimary :: TTermDefinition (Py.Name -> Py.Primary)
-pyNameToPyPrimary = def "pyNameToPyPrimary" $
-  doc "Convert a Name to a Primary (simple atom)" $
-  lambda "name" $ PyDsl.primarySimple $ PyDsl.atomName $ var "name"
-
--- | Convert a Primary to a BitwiseXor
-pyPrimaryToPyBitwiseXor :: TTermDefinition (Py.Primary -> Py.BitwiseXor)
-pyPrimaryToPyBitwiseXor = def "pyPrimaryToPyBitwiseXor" $
-  doc "Convert a Primary to a BitwiseXor" $
-  "prim" ~> PyDsl.pyPrimaryToPyBitwiseXor (var "prim")
-
--- | Convert a Primary to a BitwiseOr
-pyPrimaryToPyBitwiseOr :: TTermDefinition (Py.Primary -> Py.BitwiseOr)
-pyPrimaryToPyBitwiseOr = def "pyPrimaryToPyBitwiseOr" $
-  doc "Convert a Primary to a BitwiseOr" $
-  "prim" ~> PyDsl.pyPrimaryToPyBitwiseOr (var "prim")
-
--- | Convert a BitwiseOr to a Conjunction
-pyBitwiseOrToPyConjunction :: TTermDefinition (Py.BitwiseOr -> Py.Conjunction)
-pyBitwiseOrToPyConjunction = def "pyBitwiseOrToPyConjunction" $
-  doc "Convert a BitwiseOr to a Conjunction" $
-  lambda "bor" $
-    PyDsl.conjunction $ list [
-      PyDsl.inversionSimple $
-        PyDsl.comparison (var "bor") (list ([] :: [TTerm Py.CompareOpBitwiseOrPair]))]
-
--- | Convert a Primary to a Conjunction
-pyPrimaryToPyConjunction :: TTermDefinition (Py.Primary -> Py.Conjunction)
-pyPrimaryToPyConjunction = def "pyPrimaryToPyConjunction" $
-  doc "Convert a Primary to a Conjunction" $
-  lambda "prim" $
-    pyBitwiseOrToPyConjunction @@ (pyPrimaryToPyBitwiseOr @@ var "prim")
-
--- | Convert a Conjunction to an Expression
-pyConjunctionToPyExpression :: TTermDefinition (Py.Conjunction -> Py.Expression)
-pyConjunctionToPyExpression = def "pyConjunctionToPyExpression" $
-  doc "Convert a Conjunction to an Expression" $
-  lambda "conj" $
-    PyDsl.expressionSimple $ PyDsl.disjunction $ list [var "conj"]
-
--- | Convert a Primary to an Expression
-pyPrimaryToPyExpression :: TTermDefinition (Py.Primary -> Py.Expression)
-pyPrimaryToPyExpression = def "pyPrimaryToPyExpression" $
-  doc "Convert a Primary to an Expression" $
-  lambda "prim" $
-    pyConjunctionToPyExpression @@ (pyPrimaryToPyConjunction @@ var "prim")
-
--- | Convert an Atom to an Expression
-pyAtomToPyExpression :: TTermDefinition (Py.Atom -> Py.Expression)
-pyAtomToPyExpression = def "pyAtomToPyExpression" $
-  doc "Convert an Atom to an Expression" $
-  lambda "atom" $
-    pyPrimaryToPyExpression @@ (PyDsl.primarySimple $ var "atom")
-
--- | Convert a Name to an Expression
-pyNameToPyExpression :: TTermDefinition (Py.Name -> Py.Expression)
-pyNameToPyExpression = def "pyNameToPyExpression" $
-  doc "Convert a Name to an Expression" $
-  lambda "name" $
-    pyPrimaryToPyExpression @@ (pyNameToPyPrimary @@ var "name")
-
--- | Convert a SimpleStatement to a Statement
-pySimpleStatementToPyStatement :: TTermDefinition (Py.SimpleStatement -> Py.Statement)
-pySimpleStatementToPyStatement = def "pySimpleStatementToPyStatement" $
-  doc "Convert a SimpleStatement to a Statement" $
-  lambda "s" $
-    PyDsl.statementSimple $ list [var "s"]
-
--- | Convert an Expression to a SimpleStatement
-pyExpressionToPySimpleStatement :: TTermDefinition (Py.Expression -> Py.SimpleStatement)
-pyExpressionToPySimpleStatement = def "pyExpressionToPySimpleStatement" $
-  doc "Convert an Expression to a SimpleStatement (as star expressions)" $
-  lambda "expr" $
-    PyDsl.simpleStatementStarExpressions $ list [PyDsl.starExpressionSimple $ var "expr"]
-
--- | Convert an Expression to a Statement
-pyExpressionToPyStatement :: TTermDefinition (Py.Expression -> Py.Statement)
-pyExpressionToPyStatement = def "pyExpressionToPyStatement" $
-  doc "Convert an Expression to a Statement" $
-  lambda "expr" $
-    pySimpleStatementToPyStatement @@ (pyExpressionToPySimpleStatement @@ var "expr")
-
--- | Convert an Expression to an AnnotatedRhs
-pyExpressionToPyAnnotatedRhs :: TTermDefinition (Py.Expression -> Py.AnnotatedRhs)
-pyExpressionToPyAnnotatedRhs = def "pyExpressionToPyAnnotatedRhs" $
-  doc "Convert an Expression to an AnnotatedRhs" $
-  lambda "expr" $
-    PyDsl.annotatedRhsStar $ list [PyDsl.starExpressionSimple $ var "expr"]
-
--- | Convert an Expression to a Slice
-pyExpressionToPySlice :: TTermDefinition (Py.Expression -> Py.Slice)
-pyExpressionToPySlice = def "pyExpressionToPySlice" $
-  doc "Convert an Expression to a Slice" $
-  lambda "expr" $
-    PyDsl.sliceNamed $ PyDsl.namedExpressionSimple $ var "expr"
-
--- | Convert an Expression to a StarNamedExpression
-pyExpressionToPyStarNamedExpression :: TTermDefinition (Py.Expression -> Py.StarNamedExpression)
-pyExpressionToPyStarNamedExpression = def "pyExpressionToPyStarNamedExpression" $
-  doc "Convert an Expression to a StarNamedExpression" $
-  lambda "expr" $
-    PyDsl.starNamedExpressionSimple $ PyDsl.namedExpressionSimple $ var "expr"
-
--- | Convert a list of Expressions to Args
-pyExpressionsToPyArgs :: TTermDefinition ([Py.Expression] -> Py.Args)
-pyExpressionsToPyArgs = def "pyExpressionsToPyArgs" $
-  doc "Convert a list of Expressions to Args" $
-  "exprs" ~>
-    PyDsl.argsPositionalOnly $
-      Lists.map ("e" ~> PyDsl.posArgExpression $ var "e") (var "exprs")
-
--- | Convert a Name to a StarTarget
-pyNameToPyStarTarget :: TTermDefinition (Py.Name -> Py.StarTarget)
-pyNameToPyStarTarget = def "pyNameToPyStarTarget" $
-  doc "Convert a Name to a StarTarget" $
-  lambda "name" $
-    PyDsl.starTargetUnstarred $ PyDsl.targetWithStarAtomAtom $ PyDsl.starAtomName $ var "name"
-
--- | Convert a Name to a TypeParameter
-pyNameToPyTypeParameter :: TTermDefinition (Py.Name -> Py.TypeParameter)
-pyNameToPyTypeParameter = def "pyNameToPyTypeParameter" $
-  doc "Convert a Name to a TypeParameter" $
-  "name" ~>
-    PyDsl.typeParameterSimple $ PyDsl.simpleTypeParameterSimple $ var "name"
-
--- | Convert a Name to a NamedExpression
-pyNameToPyNamedExpression :: TTermDefinition (Py.Name -> Py.NamedExpression)
-pyNameToPyNamedExpression = def "pyNameToPyNamedExpression" $
-  doc "Convert a Name to a NamedExpression" $
-  lambda "name" $
-    PyDsl.namedExpressionSimple $ pyNameToPyExpression @@ var "name"
-
--- | Convert an Assignment to a Statement
-pyAssignmentToPyStatement :: TTermDefinition (Py.Assignment -> Py.Statement)
-pyAssignmentToPyStatement = def "pyAssignmentToPyStatement" $
-  doc "Convert an Assignment to a Statement" $
-  lambda "a" $
-    pySimpleStatementToPyStatement @@ (PyDsl.simpleStatementAssignment $ var "a")
-
--- | Convert a ClassDefinition to a Statement
-pyClassDefinitionToPyStatement :: TTermDefinition (Py.ClassDefinition -> Py.Statement)
-pyClassDefinitionToPyStatement = def "pyClassDefinitionToPyStatement" $
-  doc "Convert a ClassDefinition to a Statement" $
-  lambda "cd" $
-    PyDsl.statementCompound $ PyDsl.compoundStatementClassDef $ var "cd"
-
--- | Convert a ClosedPattern to Patterns
-pyClosedPatternToPyPatterns :: TTermDefinition (Py.ClosedPattern -> Py.Patterns)
-pyClosedPatternToPyPatterns = def "pyClosedPatternToPyPatterns" $
-  doc "Convert a ClosedPattern to Patterns" $
-  "p" ~>
-    PyDsl.patternsPattern $ PyDsl.patternOr $ PyDsl.orPattern $ list [var "p"]
-
--- | Combine a Primary with a PrimaryRhs
-primaryWithRhs :: TTermDefinition (Py.Primary -> Py.PrimaryRhs -> Py.Primary)
-primaryWithRhs = def "primaryWithRhs" $
-  doc "Combine a Primary with a PrimaryRhs" $
-  "prim" ~> "rhs" ~>
-    PyDsl.primaryCompound $ PyDsl.primaryWithRhs (var "prim") (var "rhs")
-
--- | Create a Primary with slices
-primaryWithSlices :: TTermDefinition (Py.Primary -> Py.Slice -> [Py.SliceOrStarredExpression] -> Py.Primary)
-primaryWithSlices = def "primaryWithSlices" $
-  doc "Create a Primary with slices" $
-  "prim" ~> "first" ~> "rest" ~>
-    primaryWithRhs @@ var "prim" @@
-      (PyDsl.primaryRhsSlices $
-        PyDsl.slices (var "first") (var "rest"))
-
--- | Create a Primary with expression slices
-primaryWithExpressionSlices :: TTermDefinition (Py.Primary -> [Py.Expression] -> Py.Primary)
-primaryWithExpressionSlices = def "primaryWithExpressionSlices" $
-  doc "Create a Primary with expression slices" $
-  lambdas ["prim", "exprs"] $
-    Maybes.fromMaybe (var "prim") (Maybes.map
-      (lambda "p" $
-        primaryWithSlices @@ var "prim"
-          @@ (pyExpressionToPySlice @@ Pairs.first (var "p"))
-          @@ (Lists.map
-                (lambda "e" $ PyDsl.sliceOrStarredExpressionSlice $ pyExpressionToPySlice @@ var "e")
-                (Pairs.second (var "p"))))
-      (Lists.uncons $ var "exprs"))
-
--- | Create a function call expression
-functionCall :: TTermDefinition (Py.Primary -> [Py.Expression] -> Py.Expression)
-functionCall = def "functionCall" $
-  doc "Create a function call expression" $
-  lambdas ["func", "args"] $
-    pyPrimaryToPyExpression @@
-      (primaryWithRhs @@ var "func" @@
-        (PyDsl.primaryRhsCall $ pyExpressionsToPyArgs @@ var "args"))
-
--- | Create a primary with parameters (subscript)
-primaryAndParams :: TTermDefinition (Py.Primary -> [Py.Expression] -> Py.Expression)
-primaryAndParams = def "primaryAndParams" $
-  doc "Create a primary with parameters (subscript)" $
-  lambdas ["prim", "params"] $
-    pyPrimaryToPyExpression @@ (primaryWithExpressionSlices @@ var "prim" @@ var "params")
-
--- | Create a name with parameters
-nameAndParams :: TTermDefinition (Py.Name -> [Py.Expression] -> Py.Expression)
-nameAndParams = def "nameAndParams" $
-  doc "Create a name with parameters" $
-  lambdas ["pyName", "params"] $
-    primaryAndParams @@ (pyNameToPyPrimary @@ var "pyName") @@ var "params"
-
--- | Create a string expression with a given quote style
-stringToPyExpression :: TTermDefinition (Py.QuoteStyle -> String -> Py.Expression)
-stringToPyExpression = def "stringToPyExpression" $
-  doc "Create a string expression with a given quote style" $
-  lambdas ["style", "s"] $
-    pyAtomToPyExpression @@ (PyDsl.atomString $ PyDsl.string_ (var "s") (var "style"))
-
--- | Create a single-quoted string expression
-singleQuotedString :: TTermDefinition (String -> Py.Expression)
-singleQuotedString = def "singleQuotedString" $
-  doc "Create a single-quoted string expression" $
-  lambda "s" $
-    stringToPyExpression @@ PyDsl.quoteStyleSingle @@ var "s"
-
--- | Create a double-quoted string expression
-doubleQuotedString :: TTermDefinition (String -> Py.Expression)
-doubleQuotedString = def "doubleQuotedString" $
-  doc "Create a double-quoted string expression" $
-  lambda "s" $
-    stringToPyExpression @@ PyDsl.quoteStyleDouble @@ var "s"
-
--- | Create a triple-quoted string expression
-tripleQuotedString :: TTermDefinition (String -> Py.Expression)
-tripleQuotedString = def "tripleQuotedString" $
-  doc "Create a triple-quoted string expression" $
-  lambda "s" $
-    stringToPyExpression @@ PyDsl.quoteStyleTriple @@ var "s"
+-- | Annotate a statement with an optional comment
+annotatedStatement :: TTermDefinition (Maybe String -> Py.Statement -> Py.Statement)
+annotatedStatement = def "annotatedStatement" $
+  doc "Annotate a statement with an optional comment" $
+  lambdas ["mcomment", "stmt"] $
+    Maybes.maybe (var "stmt")
+      (lambda "c" $ PyDsl.statementAnnotated $ PyDsl.annotatedStatement (var "c") (var "stmt"))
+      (var "mcomment")
 
 -- | Create an assignment statement from name and annotated rhs
 assignment :: TTermDefinition (Py.Name -> Py.AnnotatedRhs -> Py.Statement)
@@ -437,32 +212,6 @@ assignmentStatement = def "assignmentStatement" $
   lambdas ["name", "expr"] $
     assignment @@ var "name" @@ (pyExpressionToPyAnnotatedRhs @@ var "expr")
 
--- | Create a dotted assignment statement: obj.attr = expr
-dottedAssignmentStatement :: TTermDefinition (Py.Name -> Py.Name -> Py.Expression -> Py.Statement)
-dottedAssignmentStatement = def "dottedAssignmentStatement" $
-  doc "Create a dotted assignment statement: obj.attr = expr" $
-  lambdas ["obj", "attr", "expr"] $
-    "target" <~ (PyDsl.starTargetUnstarred $
-      inject Py._TargetWithStarAtom Py._TargetWithStarAtom_project $
-        record Py._TPrimaryAndName [
-          Py._TPrimaryAndName_primary>>: inject Py._TPrimary Py._TPrimary_atom $
-            inject Py._Atom Py._Atom_name $ var "obj",
-          Py._TPrimaryAndName_name>>: var "attr"]) $
-    pyAssignmentToPyStatement @@
-      (PyDsl.assignmentUntyped $
-        PyDsl.untypedAssignmentSimple
-          (list [var "target"])
-          (pyExpressionToPyAnnotatedRhs @@ var "expr"))
-
--- | Create a return statement with a single expression
-returnSingle :: TTermDefinition (Py.Expression -> Py.Statement)
-returnSingle = def "returnSingle" $
-  doc "Create a return statement with a single expression" $
-  "expr" ~>
-    pySimpleStatementToPyStatement @@
-      (PyDsl.simpleStatementReturn $
-        PyDsl.returnStatement $ list [PyDsl.starExpressionSimple $ var "expr"])
-
 -- | Create a cast expression
 castTo :: TTermDefinition (Py.Expression -> Py.Expression -> Py.Expression)
 castTo = def "castTo" $
@@ -470,107 +219,12 @@ castTo = def "castTo" $
   "pytype" ~> "pyexpr" ~>
     functionCall @@ (pyNameToPyPrimary @@ (PyDsl.name $ string "cast")) @@ list [var "pytype", var "pyexpr"]
 
--- | Project a field from an expression
-projectFromExpression :: TTermDefinition (Py.Expression -> Py.Name -> Py.Expression)
-projectFromExpression = def "projectFromExpression" $
-  doc "Project a field from an expression" $
-  "exp" ~> "name" ~>
-    "prim" <~ (PyDsl.primarySimple $ PyDsl.atomGroup $
-        PyDsl.groupExpression $ PyDsl.namedExpressionSimple $ var "exp") $
-    pyPrimaryToPyExpression @@
-      (PyDsl.primaryCompound $ PyDsl.primaryWithRhs (var "prim") (PyDsl.primaryRhsProject $ var "name"))
-
--- | Annotate a statement with an optional comment
-annotatedStatement :: TTermDefinition (Maybe String -> Py.Statement -> Py.Statement)
-annotatedStatement = def "annotatedStatement" $
-  doc "Annotate a statement with an optional comment" $
-  lambdas ["mcomment", "stmt"] $
-    Maybes.maybe (var "stmt")
-      (lambda "c" $ PyDsl.statementAnnotated $ PyDsl.annotatedStatement (var "c") (var "stmt"))
-      (var "mcomment")
-
--- | Annotate an expression with an optional comment using Annotated[]
-annotatedExpression :: TTermDefinition (Maybe String -> Py.Expression -> Py.Expression)
-annotatedExpression = def "annotatedExpression" $
-  doc "Annotate an expression with an optional comment using Annotated[]" $
-  "mcomment" ~> "expr" ~>
-    Maybes.maybe (var "expr")
-      ("c" ~>
-        pyPrimaryToPyExpression @@
-          (primaryWithExpressionSlices
-            @@ (pyNameToPyPrimary @@ (PyDsl.name $ string "Annotated"))
-            @@ list [var "expr", doubleQuotedString @@ var "c"]))
-      (var "mcomment")
-
 -- | Create a comment statement (triple-quoted string)
 commentStatement :: TTermDefinition (String -> Py.Statement)
 commentStatement = def "commentStatement" $
   doc "Create a comment statement (triple-quoted string)" $
   lambda "s" $
     pyExpressionToPyStatement @@ (tripleQuotedString @@ var "s")
-
--- | Create a raise AssertionError statement
-raiseAssertionError :: TTermDefinition (String -> Py.Statement)
-raiseAssertionError = def "raiseAssertionError" $
-  doc "Create a raise AssertionError statement" $
-  "msg" ~>
-    pySimpleStatementToPyStatement @@
-      (PyDsl.simpleStatementRaise $ PyDsl.raiseStatement $ just $
-        PyDsl.raiseExpression
-          (functionCall @@ (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "AssertionError")
-            @@ list [doubleQuotedString @@ var "msg"])
-          nothing)
-
--- | Create a raise TypeError statement
-raiseTypeError :: TTermDefinition (String -> Py.Statement)
-raiseTypeError = def "raiseTypeError" $
-  doc "Create a raise TypeError statement" $
-  "msg" ~>
-    pySimpleStatementToPyStatement @@
-      (PyDsl.simpleStatementRaise $ PyDsl.raiseStatement $ just $
-        PyDsl.raiseExpression
-          (functionCall @@ (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "TypeError")
-            @@ list [doubleQuotedString @@ var "msg"])
-          nothing)
-
--- | Create a NewType statement
-newtypeStatement :: TTermDefinition (Py.Name -> Maybe String -> Py.Expression -> Py.Statement)
-newtypeStatement = def "newtypeStatement" $
-  doc "Create a NewType statement" $
-  lambdas ["name", "mcomment", "expr"] $
-    annotatedStatement @@ var "mcomment" @@
-      (assignmentStatement @@ var "name" @@
-        (functionCall @@ (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "NewType")
-          @@ list [doubleQuotedString @@ (PyDsl.unName $ var "name"), var "expr"]))
-
--- | Generate a type alias statement using PEP 695 syntax (Python 3.12+)
-typeAliasStatement :: TTermDefinition (Py.Name -> [Py.TypeParameter] -> Maybe String -> Py.Expression -> Py.Statement)
-typeAliasStatement = def "typeAliasStatement" $
-  doc "Generate a type alias statement using PEP 695 syntax (Python 3.12+)" $
-  "name" ~> "tparams" ~> "mcomment" ~> "tyexpr" ~>
-    annotatedStatement @@ var "mcomment" @@
-      (pySimpleStatementToPyStatement @@
-        (PyDsl.simpleStatementTypeAlias $
-          PyDsl.typeAlias (var "name") (var "tparams") (var "tyexpr")))
-
--- | Create a Python list from expressions
-pyList :: TTermDefinition ([Py.Expression] -> Py.List)
-pyList = def "pyList" $
-  doc "Create a Python list from expressions" $
-  "exprs" ~>
-    PyDsl.list_ $ Lists.map pyExpressionToPyStarNamedExpression (var "exprs")
-
--- | Decode a Power to a Primary if possible
-decodePyPowerToPyPrimary :: TTermDefinition (Py.Power -> Maybe Py.Primary)
-decodePyPowerToPyPrimary = def "decodePyPowerToPyPrimary" $
-  doc "Decode a Power to a Primary if possible" $
-  lambda "p" $ lets [
-    "lhs">: PyDsl.powerLhs $ var "p",
-    "await">: PyDsl.awaitPrimaryAwait $ var "lhs",
-    "prim">: PyDsl.awaitPrimaryPrimary $ var "lhs"] $
-    Logic.ifElse (var "await")
-      nothing
-      (just $ var "prim")
 
 -- | Decode a Comparison to a Primary if possible
 decodePyComparisonToPyAwaitPrimary :: TTermDefinition (Py.Comparison -> Maybe Py.Primary)
@@ -604,16 +258,6 @@ decodePyComparisonToPyAwaitPrimary = def "decodePyComparisonToPyAwaitPrimary" $
       Py._Factor_simple>>: lambda "power" $ decodePyPowerToPyPrimary @@ var "power"]
     @@ var "termRhs")
 
--- | Decode an Inversion to a Primary if possible
-decodePyInversionToPyPrimary :: TTermDefinition (Py.Inversion -> Maybe Py.Primary)
-decodePyInversionToPyPrimary = def "decodePyInversionToPyPrimary" $
-  doc "Decode an Inversion to a Primary if possible" $
-  lambda "i" $
-    (match Py._Inversion (Just nothing) [
-      Py._Inversion_simple>>: lambda "comparison" $
-        decodePyComparisonToPyAwaitPrimary @@ var "comparison"]
-    @@ var "i")
-
 -- | Decode a Conjunction to a Primary if possible
 decodePyConjunctionToPyPrimary :: TTermDefinition (Py.Conjunction -> Maybe Py.Primary)
 decodePyConjunctionToPyPrimary = def "decodePyConjunctionToPyPrimary" $
@@ -637,55 +281,85 @@ decodePyExpressionToPyPrimary = def "decodePyExpressionToPyPrimary" $
           nothing]
     @@ var "e")
 
--- | Extracts the primary from an expression, or wraps it in parentheses if the expression does not contain a primary
-pyExpressionToPyPrimary :: TTermDefinition (Py.Expression -> Py.Primary)
-pyExpressionToPyPrimary = def "pyExpressionToPyPrimary" $
-  doc "Extracts the primary from an expression, or wraps it in parentheses if the expression does not contain a primary" $
-  lambda "e" $
-    Maybes.maybe
-      (PyDsl.primarySimple $ PyDsl.atomGroup $ PyDsl.groupExpression $
-        PyDsl.namedExpressionSimple $ var "e")
-      (lambda "prim" $ var "prim")
-      (decodePyExpressionToPyPrimary @@ var "e")
+-- | Decode an Inversion to a Primary if possible
+decodePyInversionToPyPrimary :: TTermDefinition (Py.Inversion -> Maybe Py.Primary)
+decodePyInversionToPyPrimary = def "decodePyInversionToPyPrimary" $
+  doc "Decode an Inversion to a Primary if possible" $
+  lambda "i" $
+    (match Py._Inversion (Just nothing) [
+      Py._Inversion_simple>>: lambda "comparison" $
+        decodePyComparisonToPyAwaitPrimary @@ var "comparison"]
+    @@ var "i")
 
--- | Convert an Expression to a Disjunction.
---   For ExpressionSimple(disj), extracts the disjunction.
---   For other expressions (Conditional, Lambda), wraps in parentheses.
-pyExpressionToDisjunction :: TTermDefinition (Py.Expression -> Py.Disjunction)
-pyExpressionToDisjunction = def "pyExpressionToDisjunction" $
-  doc "Convert an Expression to a Disjunction, wrapping in parens if needed" $
-  lambda "e" $
-    cases Py._Expression (var "e")
-      -- Default for non-simple expressions: wrap in parens to get a primary, then to disjunction
-      (Just $ PyDsl.disjunction $ list [
-        pyPrimaryToPyConjunction @@
-          (PyDsl.primarySimple $ PyDsl.atomGroup $ PyDsl.groupExpression $
-            PyDsl.namedExpressionSimple $ var "e")]) [
-      -- Simple expressions already contain a disjunction
-      Py._Expression_simple>>: "disj" ~> var "disj"]
+-- | Decode a Power to a Primary if possible
+decodePyPowerToPyPrimary :: TTermDefinition (Py.Power -> Maybe Py.Primary)
+decodePyPowerToPyPrimary = def "decodePyPowerToPyPrimary" $
+  doc "Decode a Power to a Primary if possible" $
+  lambda "p" $ lets [
+    "lhs">: PyDsl.powerLhs $ var "p",
+    "await">: PyDsl.awaitPrimaryAwait $ var "lhs",
+    "prim">: PyDsl.awaitPrimaryPrimary $ var "lhs"] $
+    Logic.ifElse (var "await")
+      nothing
+      (just $ var "prim")
 
--- | Convert an Expression to a BitwiseOr, wrapping in parens if needed
-pyExpressionToBitwiseOr :: TTermDefinition (Py.Expression -> Py.BitwiseOr)
-pyExpressionToBitwiseOr = def "pyExpressionToBitwiseOr" $
-  doc "Convert an Expression to a BitwiseOr, wrapping in parens if needed" $
-  lambda "e" $
-    PyDsl.pyPrimaryToPyBitwiseOr
-      (PyDsl.primarySimple $ PyDsl.atomGroup $ PyDsl.groupExpression $
-        PyDsl.namedExpressionSimple $ var "e")
+-- | Create a dotted assignment statement: obj.attr = expr
+dottedAssignmentStatement :: TTermDefinition (Py.Name -> Py.Name -> Py.Expression -> Py.Statement)
+dottedAssignmentStatement = def "dottedAssignmentStatement" $
+  doc "Create a dotted assignment statement: obj.attr = expr" $
+  lambdas ["obj", "attr", "expr"] $
+    "target" <~ (PyDsl.starTargetUnstarred $
+      inject Py._TargetWithStarAtom Py._TargetWithStarAtom_project $
+        record Py._TPrimaryAndName [
+          Py._TPrimaryAndName_primary>>: inject Py._TPrimary Py._TPrimary_atom $
+            inject Py._Atom Py._Atom_name $ var "obj",
+          Py._TPrimaryAndName_name>>: var "attr"]) $
+    pyAssignmentToPyStatement @@
+      (PyDsl.assignmentUntyped $
+        PyDsl.untypedAssignmentSimple
+          (list [var "target"])
+          (pyExpressionToPyAnnotatedRhs @@ var "expr"))
 
--- | Convert a Primary to a Slice
-pyPrimaryToPySlice :: TTermDefinition (Py.Primary -> Py.Slice)
-pyPrimaryToPySlice = def "pyPrimaryToPySlice" $
-  doc "Convert a Primary to a Slice" $
-  lambda "prim" $
-    pyExpressionToPySlice @@ (pyPrimaryToPyExpression @@ var "prim")
+-- | Create a double-quoted string expression
+doubleQuotedString :: TTermDefinition (String -> Py.Expression)
+doubleQuotedString = def "doubleQuotedString" $
+  doc "Create a double-quoted string expression" $
+  lambda "s" $
+    stringToPyExpression @@ PyDsl.quoteStyleDouble @@ var "s"
 
--- | Convert a BitwiseOr to an Expression
-pyBitwiseOrToPyExpression :: TTermDefinition (Py.BitwiseOr -> Py.Expression)
-pyBitwiseOrToPyExpression = def "pyBitwiseOrToPyExpression" $
-  doc "Convert a BitwiseOr to an Expression" $
-  lambda "bor" $
-    pyConjunctionToPyExpression @@ (pyBitwiseOrToPyConjunction @@ var "bor")
+-- | Find all namespaces referenced by a list of definitions, plus the core namespace
+findNamespaces :: TTermDefinition (Namespace -> [Definition] -> Namespaces Py.DottedName)
+findNamespaces = def "findNamespaces" $
+  doc "Find all namespaces referenced by a list of definitions, plus the core namespace" $
+  lambdas ["focusNs", "defs"] $ lets [
+    "coreNs">: Packaging.namespace $ string "hydra.core",
+    "namespaces">: Analysis.namespacesForDefinitions @@ PyNames.encodeNamespace @@ var "focusNs" @@ var "defs"] $
+    Logic.ifElse (Equality.equal
+      (Packaging.unNamespace $ Pairs.first $ Packaging.namespacesFocus $ var "namespaces")
+      (Packaging.unNamespace $ var "coreNs"))
+      (var "namespaces")
+      (Packaging.namespaces
+        (Packaging.namespacesFocus $ var "namespaces")
+        (Maps.insert (var "coreNs")
+          (PyNames.encodeNamespace @@ var "coreNs")
+          (Packaging.namespacesMapping $ var "namespaces")))
+
+-- | Create a function call expression
+functionCall :: TTermDefinition (Py.Primary -> [Py.Expression] -> Py.Expression)
+functionCall = def "functionCall" $
+  doc "Create a function call expression" $
+  lambdas ["func", "args"] $
+    pyPrimaryToPyExpression @@
+      (primaryWithRhs @@ var "func" @@
+        (PyDsl.primaryRhsCall $ pyExpressionsToPyArgs @@ var "args"))
+
+-- | Generate __getitem__ method parameters for metaclass
+getItemParams :: TTermDefinition Py.Parameters
+getItemParams = def "getItemParams" $
+  PyDsl.parametersParamNoDefault $
+    PyDsl.paramNoDefaultParametersSimple $ list [
+      PyDsl.paramNoDefaultSimple $ PyDsl.paramSimple $ PyDsl.name $ string "cls",
+      PyDsl.paramNoDefaultSimple $ PyDsl.paramSimple $ PyDsl.name $ string "item"]
 
 -- | Create an indented block with optional comment
 indentedBlock :: TTermDefinition (Maybe String -> [[Py.Statement]] -> Py.Block)
@@ -703,6 +377,23 @@ indentedBlock = def "indentedBlock" $
         PyDsl.statementSimple $ list [
           pyExpressionToPySimpleStatement @@ (pyAtomToPyExpression @@ PyDsl.atomEllipsis)]]])
       (PyDsl.blockIndented $ var "groups")
+
+-- | Create a name with parameters
+nameAndParams :: TTermDefinition (Py.Name -> [Py.Expression] -> Py.Expression)
+nameAndParams = def "nameAndParams" $
+  doc "Create a name with parameters" $
+  lambdas ["pyName", "params"] $
+    primaryAndParams @@ (pyNameToPyPrimary @@ var "pyName") @@ var "params"
+
+-- | Create a NewType statement
+newtypeStatement :: TTermDefinition (Py.Name -> Maybe String -> Py.Expression -> Py.Statement)
+newtypeStatement = def "newtypeStatement" $
+  doc "Create a NewType statement" $
+  lambdas ["name", "mcomment", "expr"] $
+    annotatedStatement @@ var "mcomment" @@
+      (assignmentStatement @@ var "name" @@
+        (functionCall @@ (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "NewType")
+          @@ list [doubleQuotedString @@ (PyDsl.unName $ var "name"), var "expr"]))
 
 -- | Build an or-expression from multiple primaries
 orExpression :: TTermDefinition ([Py.Primary] -> Py.Expression)
@@ -722,6 +413,355 @@ orExpression = def "orExpression" $
         (Lists.uncons $ var "ps")) $
     pyBitwiseOrToPyExpression @@ (var "build" @@ nothing @@ var "prims")
 
+-- | Create a primary with parameters (subscript)
+primaryAndParams :: TTermDefinition (Py.Primary -> [Py.Expression] -> Py.Expression)
+primaryAndParams = def "primaryAndParams" $
+  doc "Create a primary with parameters (subscript)" $
+  lambdas ["prim", "params"] $
+    pyPrimaryToPyExpression @@ (primaryWithExpressionSlices @@ var "prim" @@ var "params")
+
+-- | Create a Primary with expression slices
+primaryWithExpressionSlices :: TTermDefinition (Py.Primary -> [Py.Expression] -> Py.Primary)
+primaryWithExpressionSlices = def "primaryWithExpressionSlices" $
+  doc "Create a Primary with expression slices" $
+  lambdas ["prim", "exprs"] $
+    Maybes.fromMaybe (var "prim") (Maybes.map
+      (lambda "p" $
+        primaryWithSlices @@ var "prim"
+          @@ (pyExpressionToPySlice @@ Pairs.first (var "p"))
+          @@ (Lists.map
+                (lambda "e" $ PyDsl.sliceOrStarredExpressionSlice $ pyExpressionToPySlice @@ var "e")
+                (Pairs.second (var "p"))))
+      (Lists.uncons $ var "exprs"))
+
+-- | Combine a Primary with a PrimaryRhs
+primaryWithRhs :: TTermDefinition (Py.Primary -> Py.PrimaryRhs -> Py.Primary)
+primaryWithRhs = def "primaryWithRhs" $
+  doc "Combine a Primary with a PrimaryRhs" $
+  "prim" ~> "rhs" ~>
+    PyDsl.primaryCompound $ PyDsl.primaryWithRhs (var "prim") (var "rhs")
+
+-- | Create a Primary with slices
+primaryWithSlices :: TTermDefinition (Py.Primary -> Py.Slice -> [Py.SliceOrStarredExpression] -> Py.Primary)
+primaryWithSlices = def "primaryWithSlices" $
+  doc "Create a Primary with slices" $
+  "prim" ~> "first" ~> "rest" ~>
+    primaryWithRhs @@ var "prim" @@
+      (PyDsl.primaryRhsSlices $
+        PyDsl.slices (var "first") (var "rest"))
+
+-- | Project a field from an expression
+projectFromExpression :: TTermDefinition (Py.Expression -> Py.Name -> Py.Expression)
+projectFromExpression = def "projectFromExpression" $
+  doc "Project a field from an expression" $
+  "exp" ~> "name" ~>
+    "prim" <~ (PyDsl.primarySimple $ PyDsl.atomGroup $
+        PyDsl.groupExpression $ PyDsl.namedExpressionSimple $ var "exp") $
+    pyPrimaryToPyExpression @@
+      (PyDsl.primaryCompound $ PyDsl.primaryWithRhs (var "prim") (PyDsl.primaryRhsProject $ var "name"))
+
+-- | Convert an Assignment to a Statement
+pyAssignmentToPyStatement :: TTermDefinition (Py.Assignment -> Py.Statement)
+pyAssignmentToPyStatement = def "pyAssignmentToPyStatement" $
+  doc "Convert an Assignment to a Statement" $
+  lambda "a" $
+    pySimpleStatementToPyStatement @@ (PyDsl.simpleStatementAssignment $ var "a")
+
+-- | Convert an Atom to an Expression
+pyAtomToPyExpression :: TTermDefinition (Py.Atom -> Py.Expression)
+pyAtomToPyExpression = def "pyAtomToPyExpression" $
+  doc "Convert an Atom to an Expression" $
+  lambda "atom" $
+    pyPrimaryToPyExpression @@ (PyDsl.primarySimple $ var "atom")
+
+-- | Convert a BitwiseOr to a Conjunction
+pyBitwiseOrToPyConjunction :: TTermDefinition (Py.BitwiseOr -> Py.Conjunction)
+pyBitwiseOrToPyConjunction = def "pyBitwiseOrToPyConjunction" $
+  doc "Convert a BitwiseOr to a Conjunction" $
+  lambda "bor" $
+    PyDsl.conjunction $ list [
+      PyDsl.inversionSimple $
+        PyDsl.comparison (var "bor") (list ([] :: [TTerm Py.CompareOpBitwiseOrPair]))]
+
+-- | Convert a BitwiseOr to an Expression
+pyBitwiseOrToPyExpression :: TTermDefinition (Py.BitwiseOr -> Py.Expression)
+pyBitwiseOrToPyExpression = def "pyBitwiseOrToPyExpression" $
+  doc "Convert a BitwiseOr to an Expression" $
+  lambda "bor" $
+    pyConjunctionToPyExpression @@ (pyBitwiseOrToPyConjunction @@ var "bor")
+
+-- | Convert a ClassDefinition to a Statement
+pyClassDefinitionToPyStatement :: TTermDefinition (Py.ClassDefinition -> Py.Statement)
+pyClassDefinitionToPyStatement = def "pyClassDefinitionToPyStatement" $
+  doc "Convert a ClassDefinition to a Statement" $
+  lambda "cd" $
+    PyDsl.statementCompound $ PyDsl.compoundStatementClassDef $ var "cd"
+
+-- | Convert a ClosedPattern to Patterns
+pyClosedPatternToPyPatterns :: TTermDefinition (Py.ClosedPattern -> Py.Patterns)
+pyClosedPatternToPyPatterns = def "pyClosedPatternToPyPatterns" $
+  doc "Convert a ClosedPattern to Patterns" $
+  "p" ~>
+    PyDsl.patternsPattern $ PyDsl.patternOr $ PyDsl.orPattern $ list [var "p"]
+
+-- | Convert a Conjunction to an Expression
+pyConjunctionToPyExpression :: TTermDefinition (Py.Conjunction -> Py.Expression)
+pyConjunctionToPyExpression = def "pyConjunctionToPyExpression" $
+  doc "Convert a Conjunction to an Expression" $
+  lambda "conj" $
+    PyDsl.expressionSimple $ PyDsl.disjunction $ list [var "conj"]
+
+-- | Convert an Expression to a BitwiseOr, wrapping in parens if needed
+pyExpressionToBitwiseOr :: TTermDefinition (Py.Expression -> Py.BitwiseOr)
+pyExpressionToBitwiseOr = def "pyExpressionToBitwiseOr" $
+  doc "Convert an Expression to a BitwiseOr, wrapping in parens if needed" $
+  lambda "e" $
+    PyDsl.pyPrimaryToPyBitwiseOr
+      (PyDsl.primarySimple $ PyDsl.atomGroup $ PyDsl.groupExpression $
+        PyDsl.namedExpressionSimple $ var "e")
+
+-- | Convert an Expression to a Disjunction.
+--   For ExpressionSimple(disj), extracts the disjunction.
+--   For other expressions (Conditional, Lambda), wraps in parentheses.
+pyExpressionToDisjunction :: TTermDefinition (Py.Expression -> Py.Disjunction)
+pyExpressionToDisjunction = def "pyExpressionToDisjunction" $
+  doc "Convert an Expression to a Disjunction, wrapping in parens if needed" $
+  lambda "e" $
+    cases Py._Expression (var "e")
+      -- Default for non-simple expressions: wrap in parens to get a primary, then to disjunction
+      (Just $ PyDsl.disjunction $ list [
+        pyPrimaryToPyConjunction @@
+          (PyDsl.primarySimple $ PyDsl.atomGroup $ PyDsl.groupExpression $
+            PyDsl.namedExpressionSimple $ var "e")]) [
+      -- Simple expressions already contain a disjunction
+      Py._Expression_simple>>: "disj" ~> var "disj"]
+
+-- | Convert an Expression to an AnnotatedRhs
+pyExpressionToPyAnnotatedRhs :: TTermDefinition (Py.Expression -> Py.AnnotatedRhs)
+pyExpressionToPyAnnotatedRhs = def "pyExpressionToPyAnnotatedRhs" $
+  doc "Convert an Expression to an AnnotatedRhs" $
+  lambda "expr" $
+    PyDsl.annotatedRhsStar $ list [PyDsl.starExpressionSimple $ var "expr"]
+
+-- | Extracts the primary from an expression, or wraps it in parentheses if the expression does not contain a primary
+pyExpressionToPyPrimary :: TTermDefinition (Py.Expression -> Py.Primary)
+pyExpressionToPyPrimary = def "pyExpressionToPyPrimary" $
+  doc "Extracts the primary from an expression, or wraps it in parentheses if the expression does not contain a primary" $
+  lambda "e" $
+    Maybes.maybe
+      (PyDsl.primarySimple $ PyDsl.atomGroup $ PyDsl.groupExpression $
+        PyDsl.namedExpressionSimple $ var "e")
+      (lambda "prim" $ var "prim")
+      (decodePyExpressionToPyPrimary @@ var "e")
+
+-- | Convert an Expression to a SimpleStatement
+pyExpressionToPySimpleStatement :: TTermDefinition (Py.Expression -> Py.SimpleStatement)
+pyExpressionToPySimpleStatement = def "pyExpressionToPySimpleStatement" $
+  doc "Convert an Expression to a SimpleStatement (as star expressions)" $
+  lambda "expr" $
+    PyDsl.simpleStatementStarExpressions $ list [PyDsl.starExpressionSimple $ var "expr"]
+
+-- | Convert an Expression to a Slice
+pyExpressionToPySlice :: TTermDefinition (Py.Expression -> Py.Slice)
+pyExpressionToPySlice = def "pyExpressionToPySlice" $
+  doc "Convert an Expression to a Slice" $
+  lambda "expr" $
+    PyDsl.sliceNamed $ PyDsl.namedExpressionSimple $ var "expr"
+
+-- | Convert an Expression to a StarNamedExpression
+pyExpressionToPyStarNamedExpression :: TTermDefinition (Py.Expression -> Py.StarNamedExpression)
+pyExpressionToPyStarNamedExpression = def "pyExpressionToPyStarNamedExpression" $
+  doc "Convert an Expression to a StarNamedExpression" $
+  lambda "expr" $
+    PyDsl.starNamedExpressionSimple $ PyDsl.namedExpressionSimple $ var "expr"
+
+-- | Convert an Expression to a Statement
+pyExpressionToPyStatement :: TTermDefinition (Py.Expression -> Py.Statement)
+pyExpressionToPyStatement = def "pyExpressionToPyStatement" $
+  doc "Convert an Expression to a Statement" $
+  lambda "expr" $
+    pySimpleStatementToPyStatement @@ (pyExpressionToPySimpleStatement @@ var "expr")
+
+-- | Convert a list of Expressions to Args
+pyExpressionsToPyArgs :: TTermDefinition ([Py.Expression] -> Py.Args)
+pyExpressionsToPyArgs = def "pyExpressionsToPyArgs" $
+  doc "Convert a list of Expressions to Args" $
+  "exprs" ~>
+    PyDsl.argsPositionalOnly $
+      Lists.map ("e" ~> PyDsl.posArgExpression $ var "e") (var "exprs")
+
+-- | Create a Python list from expressions
+pyList :: TTermDefinition ([Py.Expression] -> Py.List)
+pyList = def "pyList" $
+  doc "Create a Python list from expressions" $
+  "exprs" ~>
+    PyDsl.list_ $ Lists.map pyExpressionToPyStarNamedExpression (var "exprs")
+
+-- | Convert a Name to an Expression
+pyNameToPyExpression :: TTermDefinition (Py.Name -> Py.Expression)
+pyNameToPyExpression = def "pyNameToPyExpression" $
+  doc "Convert a Name to an Expression" $
+  lambda "name" $
+    pyPrimaryToPyExpression @@ (pyNameToPyPrimary @@ var "name")
+
+-- | Convert a Name to a NamedExpression
+pyNameToPyNamedExpression :: TTermDefinition (Py.Name -> Py.NamedExpression)
+pyNameToPyNamedExpression = def "pyNameToPyNamedExpression" $
+  doc "Convert a Name to a NamedExpression" $
+  lambda "name" $
+    PyDsl.namedExpressionSimple $ pyNameToPyExpression @@ var "name"
+
+-- | Convert a Name to a Primary (simple atom)
+pyNameToPyPrimary :: TTermDefinition (Py.Name -> Py.Primary)
+pyNameToPyPrimary = def "pyNameToPyPrimary" $
+  doc "Convert a Name to a Primary (simple atom)" $
+  lambda "name" $ PyDsl.primarySimple $ PyDsl.atomName $ var "name"
+
+-- | Convert a Name to a StarTarget
+pyNameToPyStarTarget :: TTermDefinition (Py.Name -> Py.StarTarget)
+pyNameToPyStarTarget = def "pyNameToPyStarTarget" $
+  doc "Convert a Name to a StarTarget" $
+  lambda "name" $
+    PyDsl.starTargetUnstarred $ PyDsl.targetWithStarAtomAtom $ PyDsl.starAtomName $ var "name"
+
+-- | Convert a Name to a TypeParameter
+pyNameToPyTypeParameter :: TTermDefinition (Py.Name -> Py.TypeParameter)
+pyNameToPyTypeParameter = def "pyNameToPyTypeParameter" $
+  doc "Convert a Name to a TypeParameter" $
+  "name" ~>
+    PyDsl.typeParameterSimple $ PyDsl.simpleTypeParameterSimple $ var "name"
+
+-- | The Python None value as a Name
+pyNone :: TTermDefinition Py.Name
+pyNone = def "pyNone" $
+  doc "The Python None value as a Name" $
+  PyDsl.name $ string "None"
+
+-- | Convert a Primary to a BitwiseOr
+pyPrimaryToPyBitwiseOr :: TTermDefinition (Py.Primary -> Py.BitwiseOr)
+pyPrimaryToPyBitwiseOr = def "pyPrimaryToPyBitwiseOr" $
+  doc "Convert a Primary to a BitwiseOr" $
+  "prim" ~> PyDsl.pyPrimaryToPyBitwiseOr (var "prim")
+
+-- | Convert a Primary to a BitwiseXor
+pyPrimaryToPyBitwiseXor :: TTermDefinition (Py.Primary -> Py.BitwiseXor)
+pyPrimaryToPyBitwiseXor = def "pyPrimaryToPyBitwiseXor" $
+  doc "Convert a Primary to a BitwiseXor" $
+  "prim" ~> PyDsl.pyPrimaryToPyBitwiseXor (var "prim")
+
+-- | Convert a Primary to a Conjunction
+pyPrimaryToPyConjunction :: TTermDefinition (Py.Primary -> Py.Conjunction)
+pyPrimaryToPyConjunction = def "pyPrimaryToPyConjunction" $
+  doc "Convert a Primary to a Conjunction" $
+  lambda "prim" $
+    pyBitwiseOrToPyConjunction @@ (pyPrimaryToPyBitwiseOr @@ var "prim")
+
+-- | Convert a Primary to an Expression
+pyPrimaryToPyExpression :: TTermDefinition (Py.Primary -> Py.Expression)
+pyPrimaryToPyExpression = def "pyPrimaryToPyExpression" $
+  doc "Convert a Primary to an Expression" $
+  lambda "prim" $
+    pyConjunctionToPyExpression @@ (pyPrimaryToPyConjunction @@ var "prim")
+
+-- | Convert a Primary to a Slice
+pyPrimaryToPySlice :: TTermDefinition (Py.Primary -> Py.Slice)
+pyPrimaryToPySlice = def "pyPrimaryToPySlice" $
+  doc "Convert a Primary to a Slice" $
+  lambda "prim" $
+    pyExpressionToPySlice @@ (pyPrimaryToPyExpression @@ var "prim")
+
+-- | Convert a SimpleStatement to a Statement
+pySimpleStatementToPyStatement :: TTermDefinition (Py.SimpleStatement -> Py.Statement)
+pySimpleStatementToPyStatement = def "pySimpleStatementToPyStatement" $
+  doc "Convert a SimpleStatement to a Statement" $
+  lambda "s" $
+    PyDsl.statementSimple $ list [var "s"]
+
+-- | Create a raise AssertionError statement
+raiseAssertionError :: TTermDefinition (String -> Py.Statement)
+raiseAssertionError = def "raiseAssertionError" $
+  doc "Create a raise AssertionError statement" $
+  "msg" ~>
+    pySimpleStatementToPyStatement @@
+      (PyDsl.simpleStatementRaise $ PyDsl.raiseStatement $ just $
+        PyDsl.raiseExpression
+          (functionCall @@ (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "AssertionError")
+            @@ list [doubleQuotedString @@ var "msg"])
+          nothing)
+
+-- | Create a raise TypeError statement
+raiseTypeError :: TTermDefinition (String -> Py.Statement)
+raiseTypeError = def "raiseTypeError" $
+  doc "Create a raise TypeError statement" $
+  "msg" ~>
+    pySimpleStatementToPyStatement @@
+      (PyDsl.simpleStatementRaise $ PyDsl.raiseStatement $ just $
+        PyDsl.raiseExpression
+          (functionCall @@ (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "TypeError")
+            @@ list [doubleQuotedString @@ var "msg"])
+          nothing)
+
+-- | Create a return statement with a single expression
+returnSingle :: TTermDefinition (Py.Expression -> Py.Statement)
+returnSingle = def "returnSingle" $
+  doc "Create a return statement with a single expression" $
+  "expr" ~>
+    pySimpleStatementToPyStatement @@
+      (PyDsl.simpleStatementReturn $
+        PyDsl.returnStatement $ list [PyDsl.starExpressionSimple $ var "expr"])
+
+-- | Generate __eq__ and __hash__ method parameters
+selfOnlyParams :: TTermDefinition Py.Parameters
+selfOnlyParams = def "selfOnlyParams" $
+  PyDsl.parametersParamNoDefault $
+    PyDsl.paramNoDefaultParametersSimple $ list [
+      PyDsl.paramNoDefaultSimple $ PyDsl.paramSimple $ PyDsl.name $ string "self"]
+
+-- | Generate self and other parameters
+selfOtherParams :: TTermDefinition Py.Parameters
+selfOtherParams = def "selfOtherParams" $
+  PyDsl.parametersParamNoDefault $
+    PyDsl.paramNoDefaultParametersSimple $ list [
+      PyDsl.paramNoDefaultSimple $ PyDsl.paramSimple $ PyDsl.name $ string "self",
+      PyDsl.paramNoDefaultSimple $ PyDsl.paramSimple $ PyDsl.name $ string "other"]
+
+-- | Create a single-quoted string expression
+singleQuotedString :: TTermDefinition (String -> Py.Expression)
+singleQuotedString = def "singleQuotedString" $
+  doc "Create a single-quoted string expression" $
+  lambda "s" $
+    stringToPyExpression @@ PyDsl.quoteStyleSingle @@ var "s"
+
+-- | Create a string expression with a given quote style
+stringToPyExpression :: TTermDefinition (Py.QuoteStyle -> String -> Py.Expression)
+stringToPyExpression = def "stringToPyExpression" $
+  doc "Create a string expression with a given quote style" $
+  lambdas ["style", "s"] $
+    pyAtomToPyExpression @@ (PyDsl.atomString $ PyDsl.string_ (var "s") (var "style"))
+
+-- | Current target Python version. Change this to Python310 for PyPy compatibility.
+targetPythonVersion :: TTermDefinition PyHelpers.PythonVersion
+targetPythonVersion = def "targetPythonVersion" $
+  doc "Current target Python version for code generation" $
+  injectUnit PyHelpers._PythonVersion PyHelpers._PythonVersion_python310
+
+-- | Create a triple-quoted string expression
+tripleQuotedString :: TTermDefinition (String -> Py.Expression)
+tripleQuotedString = def "tripleQuotedString" $
+  doc "Create a triple-quoted string expression" $
+  lambda "s" $
+    stringToPyExpression @@ PyDsl.quoteStyleTriple @@ var "s"
+
+-- | Generate a type alias statement using PEP 695 syntax (Python 3.12+)
+typeAliasStatement :: TTermDefinition (Py.Name -> [Py.TypeParameter] -> Maybe String -> Py.Expression -> Py.Statement)
+typeAliasStatement = def "typeAliasStatement" $
+  doc "Generate a type alias statement using PEP 695 syntax (Python 3.12+)" $
+  "name" ~> "tparams" ~> "mcomment" ~> "tyexpr" ~>
+    annotatedStatement @@ var "mcomment" @@
+      (pySimpleStatementToPyStatement @@
+        (PyDsl.simpleStatementTypeAlias $
+          PyDsl.typeAlias (var "name") (var "tparams") (var "tyexpr")))
+
 -- | Generate a type alias statement using Python 3.10-compatible syntax
 typeAliasStatement310 :: TTermDefinition (Py.Name -> [Py.TypeParameter] -> Maybe String -> Py.Expression -> Py.Statement)
 typeAliasStatement310 = def "typeAliasStatement310" $
@@ -735,14 +775,6 @@ typeAliasStatement310 = def "typeAliasStatement310" $
             (PyDsl.singleTargetName $ var "name")
             (PyDsl.pyNameToPyExpression $ PyDsl.name $ string "TypeAlias")
             (just $ pyExpressionToPyAnnotatedRhs @@ var "quotedExpr")))
-
--- | Generate __getitem__ method parameters for metaclass
-getItemParams :: TTermDefinition Py.Parameters
-getItemParams = def "getItemParams" $
-  PyDsl.parametersParamNoDefault $
-    PyDsl.paramNoDefaultParametersSimple $ list [
-      PyDsl.paramNoDefaultSimple $ PyDsl.paramSimple $ PyDsl.name $ string "cls",
-      PyDsl.paramNoDefaultSimple $ PyDsl.paramSimple $ PyDsl.name $ string "item"]
 
 -- | Generate a subscriptable union class for Python 3.10
 unionTypeClassStatements310 :: TTermDefinition (Py.Name -> Maybe String -> Py.Expression -> [Py.Statement] -> [Py.Statement])
@@ -796,21 +828,6 @@ unionTypeClassStatements310 = def "unionTypeClassStatements310" $
           (indentedBlock @@ nothing @@ var "bodyGroups"))) $
     list [var "metaClass", var "unionClass"]
 
--- | Generate __eq__ and __hash__ method parameters
-selfOnlyParams :: TTermDefinition Py.Parameters
-selfOnlyParams = def "selfOnlyParams" $
-  PyDsl.parametersParamNoDefault $
-    PyDsl.paramNoDefaultParametersSimple $ list [
-      PyDsl.paramNoDefaultSimple $ PyDsl.paramSimple $ PyDsl.name $ string "self"]
-
--- | Generate self and other parameters
-selfOtherParams :: TTermDefinition Py.Parameters
-selfOtherParams = def "selfOtherParams" $
-  PyDsl.parametersParamNoDefault $
-    PyDsl.paramNoDefaultParametersSimple $ list [
-      PyDsl.paramNoDefaultSimple $ PyDsl.paramSimple $ PyDsl.name $ string "self",
-      PyDsl.paramNoDefaultSimple $ PyDsl.paramSimple $ PyDsl.name $ string "other"]
-
 -- | Generate __slots__, __eq__, and __hash__ methods for unit-typed union variants
 unitVariantMethods :: TTermDefinition (Py.Name -> [Py.Statement])
 unitVariantMethods = def "unitVariantMethods" $
@@ -859,20 +876,3 @@ unitVariantMethods = def "unitVariantMethods" $
             nothing
             (indentedBlock @@ nothing @@ list [list [var "returnHash"]])) $
     list [var "slotsStmt", var "eqMethod", var "hashMethod"]
-
--- | Find all namespaces referenced by a list of definitions, plus the core namespace
-findNamespaces :: TTermDefinition (Namespace -> [Definition] -> Namespaces Py.DottedName)
-findNamespaces = def "findNamespaces" $
-  doc "Find all namespaces referenced by a list of definitions, plus the core namespace" $
-  lambdas ["focusNs", "defs"] $ lets [
-    "coreNs">: Packaging.namespace $ string "hydra.core",
-    "namespaces">: Analysis.namespacesForDefinitions @@ PyNames.encodeNamespace @@ var "focusNs" @@ var "defs"] $
-    Logic.ifElse (Equality.equal
-      (Packaging.unNamespace $ Pairs.first $ Packaging.namespacesFocus $ var "namespaces")
-      (Packaging.unNamespace $ var "coreNs"))
-      (var "namespaces")
-      (Packaging.namespaces
-        (Packaging.namespacesFocus $ var "namespaces")
-        (Maps.insert (var "coreNs")
-          (PyNames.encodeNamespace @@ var "coreNs")
-          (Packaging.namespacesMapping $ var "namespaces")))

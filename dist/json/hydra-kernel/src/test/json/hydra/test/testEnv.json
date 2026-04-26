@@ -2,6 +2,11 @@
   "definitions": [
     {
       "term": {
+        "name": "hydra.test.testEnv.testContext",
+        "term": {"variable": "hydra.lexical.emptyContext"},
+        "type": {"type": {"variable": "hydra.context.Context"}, "variables": []}}},
+    {
+      "term": {
         "name": "hydra.test.testEnv.testGraph",
         "term": {
           "typeLambda": {
@@ -16,12 +21,7 @@
             "function": {
               "codomain": {"variable": "hydra.graph.Graph"},
               "domain": {"variable": "t0"}}},
-          "variables": ["t0"]}}},
-    {
-      "term": {
-        "name": "hydra.test.testEnv.testContext",
-        "term": {"variable": "hydra.lexical.emptyContext"},
-        "type": {"type": {"variable": "hydra.context.Context"}, "variables": []}}}],
+          "variables": ["t0"]}}}],
   "description": "Type-level declarations for the hand-written Hydra.Test.TestEnv module.",
   "namespace": "hydra.test.testEnv",
   "termDependencies": ["hydra.lexical"],

@@ -94,7 +94,6 @@ data Options = Options
   , optOutput             :: Maybe FilePath
   , optIncludeCoders      :: Bool
   , optIncludeDsls        :: Bool
-  , optIncludeExt         :: Bool
   , optIncludeTests       :: Bool
   , optKernelOnly         :: Bool
   , optTypesOnly          :: Bool
@@ -111,7 +110,6 @@ defaultOptions = Options
   , optOutput             = Nothing
   , optIncludeCoders      = False
   , optIncludeDsls        = False
-  , optIncludeExt         = False
   , optIncludeTests       = False
   , optKernelOnly         = False
   , optTypesOnly          = False
@@ -132,7 +130,6 @@ parseArgs = go defaultOptions
     go opts ("--output" : o : rest) = go (opts { optOutput = Just o }) rest
     go opts ("--include-coders" : rest) = go (opts { optIncludeCoders = True }) rest
     go opts ("--include-dsls" : rest) = go (opts { optIncludeDsls = True }) rest
-    go opts ("--include-ext" : rest) = go (opts { optIncludeExt = True }) rest
     go opts ("--include-tests" : rest) = go (opts { optIncludeTests = True }) rest
     go opts ("--kernel-only" : rest) = go (opts { optKernelOnly = True }) rest
     go opts ("--types-only" : rest) = go (opts { optTypesOnly = True }) rest
@@ -151,8 +148,6 @@ usage = unlines
   , "  --output <dir>           Output base directory"
   , "  --include-coders         Also load coder packages (hydra-java/python/scala/lisp)"
   , "  --include-dsls           Also load DSL wrapper modules"
-  , "  --include-ext            Also load long-tail ext packages (hydra-coq,"
-  , "                           hydra-javascript, hydra-ext, hydra-wasm)"
   , "  --include-tests          Also generate kernel test modules"
   , "  --kernel-only            Only generate kernel modules (exclude coder packages)"
   , "  --types-only             Only generate type-defining modules"
@@ -226,8 +221,9 @@ main = do
 
   -- Dependency order: baseline packages (hydra-kernel + hydra-haskell) are
   -- loaded individually in Step 1. Coder packages are loaded with
-  -- --include-coders. Ext demo packages are loaded with --ext-only.
-  -- Long-tail ext packages are loaded with --include-ext.
+  -- --include-coders. Ext demo packages are loaded with --ext-only. Other
+  -- non-baseline non-coder packages (extPackages and extDemoPackages) are
+  -- auto-loaded based on --package or --all-packages — see Step 2c.
   let coderPackages   = ["hydra-java", "hydra-python", "hydra-scala", "hydra-lisp"]
   let extDemoPackages = ["hydra-pg", "hydra-rdf"]
   let extPackages     = ["hydra-coq", "hydra-javascript", "hydra-ext", "hydra-wasm"]
@@ -251,7 +247,6 @@ main = do
   putStrLn $ "  Output:            " ++ outBase
   putStrLn $ "  Include coders:    " ++ show (optIncludeCoders opts)
   putStrLn $ "  Include DSLs:      " ++ show (optIncludeDsls opts)
-  putStrLn $ "  Include ext:       " ++ show (optIncludeExt opts)
   putStrLn $ "  Include tests:     " ++ show (optIncludeTests opts)
   putStrLn ""
 
@@ -315,6 +310,29 @@ main = do
       return []
 
   -- Step 2b: Optionally load DSL wrapper modules from every loaded package.
+  -- Compute which non-baseline non-coder packages need to be loaded into
+  -- the universe. Each of hydra-rdf, hydra-coq, hydra-javascript,
+  -- hydra-ext, hydra-wasm is independent. hydra-pg depends on hydra-rdf
+  -- (e.g. hydra.pg.rdf.environment references hydra.rdf.syntax.Iri), so
+  -- loading hydra-pg implicitly loads hydra-rdf.
+  --
+  --   --package <p>  : load <p> + its package-level deps when it's an ext
+  --                    or ext-demo package
+  --   --ext-only     : load both ext-demo packages (legacy demo path)
+  --   (otherwise)    : nothing extra. --all-packages alone does NOT auto-load
+  --                    these — sync-haskell.sh uses --all-packages to regen
+  --                    only baseline + dsl artifacts; the per-package
+  --                    assemble-distribution.sh handles coder/ext packages
+  --                    individually with --package <pkg>.
+  let allExtPackages = extPackages ++ extDemoPackages
+  let packageDeps p = case p of
+        "hydra-pg" -> ["hydra-pg", "hydra-rdf"]
+        _          -> [p]
+  let extPackagesToLoad
+        | optExtOnly opts                           = extDemoPackages
+        | Just p <- optPackage opts, p `elem` allExtPackages = packageDeps p
+        | otherwise                                 = []
+
   dslMods <- if optIncludeDsls opts
     then do
       putStrLn "Step 2b: Loading DSL wrapper modules from JSON..."
@@ -322,8 +340,7 @@ main = do
       let dslPackages =
             ["hydra-kernel", "hydra-haskell"]
               ++ (if optIncludeCoders opts then coderPackages else [])
-              ++ (if optIncludeExt opts then extPackages else [])
-              ++ (if optExtOnly opts then extDemoPackages else [])
+              ++ extPackagesToLoad
       mods <- fmap concat $ CM.forM dslPackages loadPackageDsl
       loadEnd3 <- getCurrentTime
       putStrLn $ "  Loaded " ++ show (length mods) ++ " DSL modules."
@@ -332,18 +349,15 @@ main = do
       return mods
     else return []
 
-  -- Step 2c: Optionally load long-tail ext packages (hydra-coq,
-  -- hydra-javascript, hydra-ext) plus their type-resolution dependencies
-  -- (hydra-pg, hydra-rdf). Ext modules reference pg decode/encode
-  -- meta-sources and pg model types, so those must be in the universe.
-  -- Already-loaded namespaces (via --include-coders) are skipped.
-  extMods <- if optIncludeExt opts
-    then do
+  -- Step 2c: Load main modules for any ext / ext-demo packages selected above.
+  -- Already-loaded namespaces (via --include-coders) are skipped to avoid
+  -- duplicates.
+  extMods <- if Prelude.null extPackagesToLoad
+    then return []
+    else do
       putStrLn "Step 2c: Loading ext package modules from JSON..."
       loadStart4 <- getCurrentTime
-      let extAndDepPackages = extPackages ++ extDemoPackages
-      allExtMods <- fmap concat $ CM.forM extAndDepPackages loadPackageMain
-      -- Dedup against coder and baseline mods by namespace.
+      allExtMods <- fmap concat $ CM.forM extPackagesToLoad loadPackageMain
       let coderNsSet = fmap (unNamespace . moduleNamespace) (baselineMods ++ coderMods)
           mods = Prelude.filter
             (\m -> unNamespace (moduleNamespace m) `notElem` coderNsSet)
@@ -353,7 +367,6 @@ main = do
       putStrLn $ "  Time: " ++ formatTime (elapsed loadEnd4 loadStart4)
       putStrLn ""
       return mods
-    else return []
 
   -- Apply filters
   let allMods = baselineMods ++ coderMods ++ extMods ++ dslMods
@@ -461,9 +474,14 @@ main = do
   -- Only applied when --package is set (scoped mode). In unscoped mode
   -- the per-module digest semantics get harder to reason about because
   -- multiple packages share the same outBase tree.
+  -- Source set indicator: tests are generated when --include-tests is set
+  -- AND we're scoped to a single package. (In --all-packages mode, tests
+  -- are generated separately via testMods.)
+  let sourceSetForFilter = if optIncludeTests opts then "test" else "main"
+
   modsToGenerateScopedFiltered <- case optPackage opts of
     Nothing  -> return modsToGenerateScoped
-    Just pkg -> filterByTargetDigest outBase pkg modsToGenerateScoped
+    Just pkg -> filterByTargetDigest outBase pkg sourceSetForFilter modsToGenerateScoped
 
   -- Prepend synthesized source modules to modsToGenerate (deduping by namespace
   -- to keep ordering stable). They go into the same universe as the main modules.
@@ -676,12 +694,13 @@ elapsed end start = realToFrac (diffUTCTime end start)
 -- Modules with no current DSL source (synth modules etc.) are also
 -- kept — we can't verify staleness, so we don't risk a false skip.
 --
--- The per-target digest is read from <outBase>/<pkg>/digest.json,
--- where outBase is e.g. "../../dist/java" (the parent of the
--- per-package target dirs).
-filterByTargetDigest :: FilePath -> String -> [Module] -> IO [Module]
-filterByTargetDigest outBase pkg mods = do
-  let digestPath = outBase FP.</> pkg FP.</> "digest.json"
+-- The per-target digest is read from
+-- <outBase>/<pkg>/src/<sourceSet>/digest.json, where outBase is e.g.
+-- "../../dist/java" (the parent of the per-package target dirs) and
+-- sourceSet is "main" or "test".
+filterByTargetDigest :: FilePath -> String -> String -> [Module] -> IO [Module]
+filterByTargetDigest outBase pkg sourceSet mods = do
+  let digestPath = outBase FP.</> pkg FP.</> "src" FP.</> sourceSet FP.</> "digest.json"
   exists <- SD.doesFileExist digestPath
   if not exists
     then do

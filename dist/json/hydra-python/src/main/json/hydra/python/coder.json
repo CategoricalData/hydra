@@ -2,256 +2,6 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.python.coder.analyzePythonFunction",
-        "term": {
-          "typeLambda": {
-            "body": {
-              "annotated": {
-                "annotation": [
-                  {
-                    "@key": "description",
-                    "@value": {
-                      "literal": {
-                        "string": "Analyze a function term with Python-specific Graph management"}}}],
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "lambda": {
-                        "body": {
-                          "lambda": {
-                            "body": {
-                              "application": {
-                                "argument": {"variable": "term"},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "env"},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"variable": "hydra.python.coder.pythonEnvironmentSetGraph"},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"variable": "hydra.python.coder.pythonEnvironmentGetGraph"},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"variable": "hydra.python.coder.pythonBindingMetadata"},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {"variable": "cx"},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.analysis.analyzeFunctionTermWith"},
-                                                            "type": {"variable": "hydra.python.environment.PythonEnvironment"}}},
-                                                        "type": {"variable": "t0"}}}}}}}}}}}}}}},
-                            "domain": {"variable": "hydra.core.Term"},
-                            "parameter": "term"}},
-                        "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
-                        "parameter": "env"}},
-                    "domain": {"variable": "hydra.context.Context"},
-                    "parameter": "cx"}}}},
-            "parameter": "t0"}},
-        "type": {
-          "type": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "either": {
-                          "left": {"variable": "t0"},
-                          "right": {
-                            "application": {
-                              "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
-                              "function": {"variable": "hydra.typing.FunctionStructure"}}}}},
-                      "domain": {"variable": "hydra.core.Term"}}},
-                  "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
-              "domain": {"variable": "hydra.context.Context"}}},
-          "variables": ["t0"]}}},
-    {
-      "term": {
-        "name": "hydra.python.coder.classVariantPatternUnit",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "Create a class pattern for a unit variant (no value captured)"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "inject": {
-                    "field": {
-                      "name": "class",
-                      "term": {
-                        "record": {
-                          "fields": [
-                            {
-                              "name": "nameOrAttribute",
-                              "term": {
-                                "wrap": {
-                                  "body": {"list": [{"variable": "pyVariantName"}]},
-                                  "typeName": "hydra.python.syntax.NameOrAttribute"}}},
-                            {
-                              "name": "positionalPatterns",
-                              "term": {
-                                "typeApplication": {
-                                  "body": {"maybe": null},
-                                  "type": {"variable": "hydra.python.syntax.PositionalPatterns"}}}},
-                            {
-                              "name": "keywordPatterns",
-                              "term": {
-                                "typeApplication": {
-                                  "body": {"maybe": null},
-                                  "type": {"variable": "hydra.python.syntax.KeywordPatterns"}}}}],
-                          "typeName": "hydra.python.syntax.ClassPattern"}}},
-                    "typeName": "hydra.python.syntax.ClosedPattern"}},
-                "domain": {"variable": "hydra.python.syntax.Name"},
-                "parameter": "pyVariantName"}}}},
-        "type": {
-          "type": {
-            "function": {
-              "codomain": {"variable": "hydra.python.syntax.ClosedPattern"},
-              "domain": {"variable": "hydra.python.syntax.Name"}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.python.coder.classVariantPatternWithCapture",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "Create a class pattern for a variant with captured value"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "lambda": {
-                        "body": {
-                          "let": {
-                            "bindings": [
-                              {
-                                "name": "pyVarNameAttr",
-                                "term": {
-                                  "wrap": {
-                                    "body": {"list": [{"variable": "pyVariantName"}]},
-                                    "typeName": "hydra.python.syntax.NameOrAttribute"}},
-                                "type": {
-                                  "type": {"variable": "hydra.python.syntax.NameOrAttribute"},
-                                  "variables": []}}],
-                            "body": {
-                              "let": {
-                                "bindings": [
-                                  {
-                                    "name": "capturePattern",
-                                    "term": {
-                                      "inject": {
-                                        "field": {
-                                          "name": "capture",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {
-                                                "wrap": {
-                                                  "body": {
-                                                    "application": {
-                                                      "argument": {"variable": "varName"},
-                                                      "function": {
-                                                        "application": {
-                                                          "argument": {"variable": "env"},
-                                                          "function": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {
-                                                                  "field": {"name": "lowerSnake", "term": {"unit": {}}},
-                                                                  "typeName": "hydra.util.CaseConvention"}},
-                                                              "function": {
-                                                                "application": {
-                                                                  "argument": {"literal": {"boolean": false}},
-                                                                  "function": {"variable": "hydra.python.names.encodeName"}}}}}}}}},
-                                                  "typeName": "hydra.python.syntax.PatternCaptureTarget"}},
-                                              "typeName": "hydra.python.syntax.CapturePattern"}}},
-                                        "typeName": "hydra.python.syntax.ClosedPattern"}},
-                                    "type": {
-                                      "type": {"variable": "hydra.python.syntax.ClosedPattern"},
-                                      "variables": []}}],
-                                "body": {
-                                  "let": {
-                                    "bindings": [
-                                      {
-                                        "name": "keywordPattern",
-                                        "term": {
-                                          "record": {
-                                            "fields": [
-                                              {
-                                                "name": "name",
-                                                "term": {
-                                                  "wrap": {
-                                                    "body": {"literal": {"string": "value"}},
-                                                    "typeName": "hydra.python.syntax.Name"}}},
-                                              {
-                                                "name": "pattern",
-                                                "term": {
-                                                  "inject": {
-                                                    "field": {
-                                                      "name": "or",
-                                                      "term": {
-                                                        "wrap": {
-                                                          "body": {"list": [{"variable": "capturePattern"}]},
-                                                          "typeName": "hydra.python.syntax.OrPattern"}}},
-                                                    "typeName": "hydra.python.syntax.Pattern"}}}],
-                                            "typeName": "hydra.python.syntax.KeywordPattern"}},
-                                        "type": {
-                                          "type": {"variable": "hydra.python.syntax.KeywordPattern"},
-                                          "variables": []}}],
-                                    "body": {
-                                      "inject": {
-                                        "field": {
-                                          "name": "class",
-                                          "term": {
-                                            "record": {
-                                              "fields": [
-                                                {"name": "nameOrAttribute", "term": {"variable": "pyVarNameAttr"}},
-                                                {
-                                                  "name": "positionalPatterns",
-                                                  "term": {
-                                                    "typeApplication": {
-                                                      "body": {"maybe": null},
-                                                      "type": {"variable": "hydra.python.syntax.PositionalPatterns"}}}},
-                                                {
-                                                  "name": "keywordPatterns",
-                                                  "term": {
-                                                    "maybe": {
-                                                      "wrap": {
-                                                        "body": {"list": [{"variable": "keywordPattern"}]},
-                                                        "typeName": "hydra.python.syntax.KeywordPatterns"}}}}],
-                                              "typeName": "hydra.python.syntax.ClassPattern"}}},
-                                        "typeName": "hydra.python.syntax.ClosedPattern"}}}}}}}},
-                        "domain": {"variable": "hydra.core.Name"},
-                        "parameter": "varName"}},
-                    "domain": {"variable": "hydra.python.syntax.Name"},
-                    "parameter": "pyVariantName"}},
-                "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
-                "parameter": "env"}}}},
-        "type": {
-          "type": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"variable": "hydra.python.syntax.ClosedPattern"},
-                      "domain": {"variable": "hydra.core.Name"}}},
-                  "domain": {"variable": "hydra.python.syntax.Name"}}},
-              "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
-          "variables": []}}},
-    {
-      "term": {
         "name": "hydra.environment.reorderDefs",
         "term": {
           "annotated": {
@@ -565,6 +315,256 @@
             "function": {
               "codomain": {"list": {"variable": "hydra.packaging.Definition"}},
               "domain": {"list": {"variable": "hydra.packaging.Definition"}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.python.coder.analyzePythonFunction",
+        "term": {
+          "typeLambda": {
+            "body": {
+              "annotated": {
+                "annotation": [
+                  {
+                    "@key": "description",
+                    "@value": {
+                      "literal": {
+                        "string": "Analyze a function term with Python-specific Graph management"}}}],
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "lambda": {
+                        "body": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {"variable": "term"},
+                                "function": {
+                                  "application": {
+                                    "argument": {"variable": "env"},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "hydra.python.coder.pythonEnvironmentSetGraph"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "hydra.python.coder.pythonEnvironmentGetGraph"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "hydra.python.coder.pythonBindingMetadata"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "cx"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.analysis.analyzeFunctionTermWith"},
+                                                            "type": {"variable": "hydra.python.environment.PythonEnvironment"}}},
+                                                        "type": {"variable": "t0"}}}}}}}}}}}}}}},
+                            "domain": {"variable": "hydra.core.Term"},
+                            "parameter": "term"}},
+                        "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
+                        "parameter": "env"}},
+                    "domain": {"variable": "hydra.context.Context"},
+                    "parameter": "cx"}}}},
+            "parameter": "t0"}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "either": {
+                          "left": {"variable": "t0"},
+                          "right": {
+                            "application": {
+                              "argument": {"variable": "hydra.python.environment.PythonEnvironment"},
+                              "function": {"variable": "hydra.typing.FunctionStructure"}}}}},
+                      "domain": {"variable": "hydra.core.Term"}}},
+                  "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
+              "domain": {"variable": "hydra.context.Context"}}},
+          "variables": ["t0"]}}},
+    {
+      "term": {
+        "name": "hydra.python.coder.classVariantPatternUnit",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "Create a class pattern for a unit variant (no value captured)"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "class",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "nameOrAttribute",
+                              "term": {
+                                "wrap": {
+                                  "body": {"list": [{"variable": "pyVariantName"}]},
+                                  "typeName": "hydra.python.syntax.NameOrAttribute"}}},
+                            {
+                              "name": "positionalPatterns",
+                              "term": {
+                                "typeApplication": {
+                                  "body": {"maybe": null},
+                                  "type": {"variable": "hydra.python.syntax.PositionalPatterns"}}}},
+                            {
+                              "name": "keywordPatterns",
+                              "term": {
+                                "typeApplication": {
+                                  "body": {"maybe": null},
+                                  "type": {"variable": "hydra.python.syntax.KeywordPatterns"}}}}],
+                          "typeName": "hydra.python.syntax.ClassPattern"}}},
+                    "typeName": "hydra.python.syntax.ClosedPattern"}},
+                "domain": {"variable": "hydra.python.syntax.Name"},
+                "parameter": "pyVariantName"}}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.python.syntax.ClosedPattern"},
+              "domain": {"variable": "hydra.python.syntax.Name"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.python.coder.classVariantPatternWithCapture",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {"string": "Create a class pattern for a variant with captured value"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "lambda": {
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "pyVarNameAttr",
+                                "term": {
+                                  "wrap": {
+                                    "body": {"list": [{"variable": "pyVariantName"}]},
+                                    "typeName": "hydra.python.syntax.NameOrAttribute"}},
+                                "type": {
+                                  "type": {"variable": "hydra.python.syntax.NameOrAttribute"},
+                                  "variables": []}}],
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "capturePattern",
+                                    "term": {
+                                      "inject": {
+                                        "field": {
+                                          "name": "capture",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {
+                                                "wrap": {
+                                                  "body": {
+                                                    "application": {
+                                                      "argument": {"variable": "varName"},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"variable": "env"},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "inject": {
+                                                                  "field": {"name": "lowerSnake", "term": {"unit": {}}},
+                                                                  "typeName": "hydra.util.CaseConvention"}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {"literal": {"boolean": false}},
+                                                                  "function": {"variable": "hydra.python.names.encodeName"}}}}}}}}},
+                                                  "typeName": "hydra.python.syntax.PatternCaptureTarget"}},
+                                              "typeName": "hydra.python.syntax.CapturePattern"}}},
+                                        "typeName": "hydra.python.syntax.ClosedPattern"}},
+                                    "type": {
+                                      "type": {"variable": "hydra.python.syntax.ClosedPattern"},
+                                      "variables": []}}],
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "keywordPattern",
+                                        "term": {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "name",
+                                                "term": {
+                                                  "wrap": {
+                                                    "body": {"literal": {"string": "value"}},
+                                                    "typeName": "hydra.python.syntax.Name"}}},
+                                              {
+                                                "name": "pattern",
+                                                "term": {
+                                                  "inject": {
+                                                    "field": {
+                                                      "name": "or",
+                                                      "term": {
+                                                        "wrap": {
+                                                          "body": {"list": [{"variable": "capturePattern"}]},
+                                                          "typeName": "hydra.python.syntax.OrPattern"}}},
+                                                    "typeName": "hydra.python.syntax.Pattern"}}}],
+                                            "typeName": "hydra.python.syntax.KeywordPattern"}},
+                                        "type": {
+                                          "type": {"variable": "hydra.python.syntax.KeywordPattern"},
+                                          "variables": []}}],
+                                    "body": {
+                                      "inject": {
+                                        "field": {
+                                          "name": "class",
+                                          "term": {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "nameOrAttribute", "term": {"variable": "pyVarNameAttr"}},
+                                                {
+                                                  "name": "positionalPatterns",
+                                                  "term": {
+                                                    "typeApplication": {
+                                                      "body": {"maybe": null},
+                                                      "type": {"variable": "hydra.python.syntax.PositionalPatterns"}}}},
+                                                {
+                                                  "name": "keywordPatterns",
+                                                  "term": {
+                                                    "maybe": {
+                                                      "wrap": {
+                                                        "body": {"list": [{"variable": "keywordPattern"}]},
+                                                        "typeName": "hydra.python.syntax.KeywordPatterns"}}}}],
+                                              "typeName": "hydra.python.syntax.ClassPattern"}}},
+                                        "typeName": "hydra.python.syntax.ClosedPattern"}}}}}}}},
+                        "domain": {"variable": "hydra.core.Name"},
+                        "parameter": "varName"}},
+                    "domain": {"variable": "hydra.python.syntax.Name"},
+                    "parameter": "pyVariantName"}},
+                "domain": {"variable": "hydra.python.environment.PythonEnvironment"},
+                "parameter": "env"}}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.python.syntax.ClosedPattern"},
+                      "domain": {"variable": "hydra.core.Name"}}},
+                  "domain": {"variable": "hydra.python.syntax.Name"}}},
+              "domain": {"variable": "hydra.python.environment.PythonEnvironment"}}},
           "variables": []}}},
     {
       "term": {
@@ -25057,77 +25057,6 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.coder.isCasesFull",
-        "term": {
-          "typeLambda": {
-            "body": {
-              "typeLambda": {
-                "body": {
-                  "annotated": {
-                    "annotation": [
-                      {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Check if union cases are fully covered"}}}],
-                    "body": {
-                      "lambda": {
-                        "body": {
-                          "lambda": {
-                            "body": {
-                              "let": {
-                                "bindings": [
-                                  {
-                                    "name": "numCases",
-                                    "term": {
-                                      "application": {
-                                        "argument": {"variable": "cases_"},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.lists.length"},
-                                            "type": {"variable": "t1"}}}}},
-                                    "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
-                                "body": {
-                                  "let": {
-                                    "bindings": [
-                                      {
-                                        "name": "numFields",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "rowType"},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"variable": "hydra.lib.lists.length"},
-                                                "type": {"variable": "t0"}}}}},
-                                        "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
-                                    "body": {
-                                      "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "numFields"},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"variable": "numCases"},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.equality.lt"},
-                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                        "function": {"variable": "hydra.lib.logic.not"}}}}}}},
-                            "domain": {"list": {"variable": "t1"}},
-                            "parameter": "cases_"}},
-                        "domain": {"list": {"variable": "t0"}},
-                        "parameter": "rowType"}}}},
-                "parameter": "t1"}},
-            "parameter": "t0"}},
-        "type": {
-          "type": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"literal": {"boolean": {}}},
-                  "domain": {"list": {"variable": "t1"}}}},
-              "domain": {"list": {"variable": "t0"}}}},
-          "variables": ["t0", "t1"]}}},
-    {
-      "term": {
         "name": "hydra.python.coder.isCaseStatementApplication",
         "term": {
           "annotated": {
@@ -25360,6 +25289,77 @@
                             "second": {"variable": "hydra.core.Term"}}}}}}}},
               "domain": {"variable": "hydra.core.Term"}}},
           "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.python.coder.isCasesFull",
+        "term": {
+          "typeLambda": {
+            "body": {
+              "typeLambda": {
+                "body": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "Check if union cases are fully covered"}}}],
+                    "body": {
+                      "lambda": {
+                        "body": {
+                          "lambda": {
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "numCases",
+                                    "term": {
+                                      "application": {
+                                        "argument": {"variable": "cases_"},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.lib.lists.length"},
+                                            "type": {"variable": "t1"}}}}},
+                                    "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "numFields",
+                                        "term": {
+                                          "application": {
+                                            "argument": {"variable": "rowType"},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.lists.length"},
+                                                "type": {"variable": "t0"}}}}},
+                                        "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                                    "body": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "numFields"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "numCases"},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.equality.lt"},
+                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                        "function": {"variable": "hydra.lib.logic.not"}}}}}}},
+                            "domain": {"list": {"variable": "t1"}},
+                            "parameter": "cases_"}},
+                        "domain": {"list": {"variable": "t0"}},
+                        "parameter": "rowType"}}}},
+                "parameter": "t1"}},
+            "parameter": "t0"}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"literal": {"boolean": {}}},
+                  "domain": {"list": {"variable": "t1"}}}},
+              "domain": {"list": {"variable": "t0"}}}},
+          "variables": ["t0", "t1"]}}},
     {
       "term": {
         "name": "hydra.python.coder.isTypeModuleCheck",

@@ -60,210 +60,68 @@ module_ = Module ns definitions
     Just "Rust code generator: converts Hydra type and term modules to Rust source code"
   where
     definitions = [
-      toDefinition standardDerives,
-      toDefinition rustPath,
-      toDefinition rustPathSegmented,
-      toDefinition rustApply1,
-      toDefinition rustApply2,
-      toDefinition rustUnit,
-      toDefinition rustExprPath,
-      toDefinition rustCall,
-      toDefinition rustBlock,
-      toDefinition rustLetStmt,
-      toDefinition rustClosure,
-      toDefinition encodeLiteralType,
+      toDefinition encodeEnumVariant,
       toDefinition encodeLiteral,
-      toDefinition encodeType,
-      toDefinition encodeTerm,
+      toDefinition encodeLiteralType,
       toDefinition encodeProjectionElim,
+      toDefinition encodeStructField,
+      toDefinition encodeTerm,
+      toDefinition encodeTermDefinition,
+      toDefinition encodeType,
+      toDefinition encodeTypeDefinition,
       toDefinition encodeUnionElim,
       toDefinition encodeUnwrapElim,
-      toDefinition encodeStructField,
-      toDefinition encodeEnumVariant,
-      toDefinition encodeTypeDefinition,
-      toDefinition encodeTermDefinition,
-      toDefinition moduleToRust]
+      toDefinition moduleToRust,
+      toDefinition rustApply1,
+      toDefinition rustApply2,
+      toDefinition rustBlock,
+      toDefinition rustCall,
+      toDefinition rustClosure,
+      toDefinition rustExprPath,
+      toDefinition rustLetStmt,
+      toDefinition rustPath,
+      toDefinition rustPathSegmented,
+      toDefinition rustUnit,
+      toDefinition standardDerives]
 
 -- =============================================================================
 -- Standard derives
 -- =============================================================================
 
-standardDerives :: TTermDefinition [String]
-standardDerives = def "standardDerives" $
-  list $ string <$> ["Clone", "Debug", "PartialEq", "Eq", "PartialOrd", "Ord"]
+-- | Encode a Hydra union field as a Rust enum variant
+encodeEnumVariant :: TTermDefinition (Context -> Graph -> FieldType -> Either Error R.EnumVariant)
+encodeEnumVariant = def "encodeEnumVariant" $
+  "cx" ~> "g" ~> lambda "ft" $
+    "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
+    "ftyp" <~ Core.fieldTypeType (var "ft") $
+    "dtyp" <~ (Strip.deannotateType @@ var "ftyp") $
+    "isUnit" <~ (cases _Type (var "dtyp") (Just $ boolean False) [
+      _Type_unit>>: constant $ boolean True,
+      _Type_record>>: lambda "rt" $
+        Lists.null (var "rt")]) $
+    Logic.ifElse (var "isUnit")
+      -- Unit variant
+      (right (record R._EnumVariant [
+        R._EnumVariant_name>>: Formatting.capitalize @@ var "fname",
+        R._EnumVariant_body>>: inject R._EnumVariantBody R._EnumVariantBody_unit unit,
+        R._EnumVariant_doc>>: nothing]))
+      -- Non-unit variant: check if it's a record (struct variant) or other (tuple variant)
+      (cases _Type (var "dtyp") (Just $
+          -- Default: tuple variant with single element
+          "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
+            right (record R._EnumVariant [
+              R._EnumVariant_name>>: Formatting.capitalize @@ var "fname",
+              R._EnumVariant_body>>: inject R._EnumVariantBody R._EnumVariantBody_tuple $ list [var "sftyp"],
+              R._EnumVariant_doc>>: nothing]))
+        [_Type_record>>: lambda "rt" $
+          "sfields" <<~ (Eithers.mapList (encodeStructField @@ var "cx" @@ var "g") (var "rt")) $
+            right (record R._EnumVariant [
+              R._EnumVariant_name>>: Formatting.capitalize @@ var "fname",
+              R._EnumVariant_body>>: inject R._EnumVariantBody R._EnumVariantBody_struct (var "sfields"),
+              R._EnumVariant_doc>>: nothing])])
 
 -- =============================================================================
--- Rust type AST helpers
--- =============================================================================
-
--- | Construct a simple Rust path type (e.g., "String" -> String)
-rustPath :: TTermDefinition (String -> R.Type)
-rustPath = def "rustPath" $
-  lambda "name" $
-    inject R._Type R._Type_path $
-      record R._TypePath [
-        R._TypePath_global>>: boolean False,
-        R._TypePath_segments>>: list [
-          record R._PathSegment [
-            R._PathSegment_name>>: var "name",
-            R._PathSegment_arguments>>: inject R._GenericArguments R._GenericArguments_none unit]]]
-
--- | Construct a Rust path type with multiple segments (e.g., ["num", "BigInt"] -> num::BigInt)
-rustPathSegmented :: TTermDefinition ([String] -> R.Type)
-rustPathSegmented = def "rustPathSegmented" $
-  lambda "segs" $
-    inject R._Type R._Type_path $
-      record R._TypePath [
-        R._TypePath_global>>: boolean False,
-        R._TypePath_segments>>:
-          Lists.map (lambda "s" $
-            record R._PathSegment [
-              R._PathSegment_name>>: var "s",
-              R._PathSegment_arguments>>: inject R._GenericArguments R._GenericArguments_none unit])
-          (var "segs")]
-
--- | Apply a type constructor to one type argument (e.g., Vec<T>)
-rustApply1 :: TTermDefinition (String -> R.Type -> R.Type)
-rustApply1 = def "rustApply1" $
-  lambda "name" $ lambda "arg" $
-    inject R._Type R._Type_path $
-      record R._TypePath [
-        R._TypePath_global>>: boolean False,
-        R._TypePath_segments>>: list [
-          record R._PathSegment [
-            R._PathSegment_name>>: var "name",
-            R._PathSegment_arguments>>:
-              inject R._GenericArguments R._GenericArguments_angleBracketed $
-                record R._AngleBracketedArgs [
-                  R._AngleBracketedArgs_args>>: list [
-                    inject R._GenericArg R._GenericArg_type (var "arg")]]]]]
-
--- | Apply a type constructor to two type arguments (e.g., BTreeMap<K, V>)
-rustApply2 :: TTermDefinition (String -> R.Type -> R.Type -> R.Type)
-rustApply2 = def "rustApply2" $
-  lambda "name" $ lambda "arg1" $ lambda "arg2" $
-    inject R._Type R._Type_path $
-      record R._TypePath [
-        R._TypePath_global>>: boolean False,
-        R._TypePath_segments>>: list [
-          record R._PathSegment [
-            R._PathSegment_name>>: var "name",
-            R._PathSegment_arguments>>:
-              inject R._GenericArguments R._GenericArguments_angleBracketed $
-                record R._AngleBracketedArgs [
-                  R._AngleBracketedArgs_args>>: list [
-                    inject R._GenericArg R._GenericArg_type (var "arg1"),
-                    inject R._GenericArg R._GenericArg_type (var "arg2")]]]]]
-
--- | The Rust unit type ()
-rustUnit :: TTermDefinition R.Type
-rustUnit = def "rustUnit" $
-  inject R._Type R._Type_unit unit
-
--- =============================================================================
--- Rust expression AST helpers
--- =============================================================================
-
--- | Variable reference as a path expression
-rustExprPath :: TTermDefinition (String -> R.Expression)
-rustExprPath = def "rustExprPath" $
-  lambda "name" $
-    inject R._Expression R._Expression_path $
-      record R._ExprPath [
-        R._ExprPath_global>>: boolean False,
-        R._ExprPath_segments>>: list [
-          record R._PathSegment [
-            R._PathSegment_name>>: var "name",
-            R._PathSegment_arguments>>: inject R._GenericArguments R._GenericArguments_none unit]]]
-
--- | Function call expression
-rustCall :: TTermDefinition (R.Expression -> [R.Expression] -> R.Expression)
-rustCall = def "rustCall" $
-  lambda "fun" $ lambda "args" $
-    inject R._Expression R._Expression_call $
-      record R._CallExpr [
-        R._CallExpr_function>>: var "fun",
-        R._CallExpr_args>>: var "args"]
-
--- | Block expression with statements and trailing expression
-rustBlock :: TTermDefinition ([R.Statement] -> R.Expression -> R.Expression)
-rustBlock = def "rustBlock" $
-  lambda "stmts" $ lambda "expr" $
-    inject R._Expression R._Expression_block $
-      record R._Block [
-        R._Block_statements>>: var "stmts",
-        R._Block_expression>>: just (var "expr")]
-
--- | Let statement: let name = expr;
-rustLetStmt :: TTermDefinition (String -> R.Expression -> R.Statement)
-rustLetStmt = def "rustLetStmt" $
-  lambda "name" $ lambda "expr" $
-    inject R._Statement R._Statement_let $
-      record R._LetStatement [
-        R._LetStatement_pattern>>:
-          inject R._Pattern R._Pattern_identifier $
-            record R._IdentifierPattern [
-              R._IdentifierPattern_name>>: var "name",
-              R._IdentifierPattern_mutable>>: boolean False,
-              R._IdentifierPattern_atPattern>>: nothing],
-        R._LetStatement_mutable>>: boolean False,
-        R._LetStatement_type>>: nothing,
-        R._LetStatement_init>>: just (var "expr")]
-
--- | Closure expression: |params| body
-rustClosure :: TTermDefinition ([String] -> R.Expression -> R.Expression)
-rustClosure = def "rustClosure" $
-  lambda "params" $ lambda "body" $
-    inject R._Expression R._Expression_closure $
-      record R._ClosureExpr [
-        R._ClosureExpr_move>>: boolean False,
-        R._ClosureExpr_params>>:
-          Lists.map (lambda "p" $
-            record R._ClosureParam [
-              R._ClosureParam_pattern>>:
-                inject R._Pattern R._Pattern_identifier $
-                  record R._IdentifierPattern [
-                    R._IdentifierPattern_name>>: var "p",
-                    R._IdentifierPattern_mutable>>: boolean False,
-                    R._IdentifierPattern_atPattern>>: nothing],
-              R._ClosureParam_type>>: nothing])
-          (var "params"),
-        R._ClosureExpr_returnType>>: nothing,
-        R._ClosureExpr_body>>: var "body"]
-
--- =============================================================================
--- Literal type encoding
--- =============================================================================
-
--- | Encode a Hydra literal type as a Rust type
-encodeLiteralType :: TTermDefinition (LiteralType -> R.Type)
-encodeLiteralType = def "encodeLiteralType" $
-  lambda "lt" $ cases _LiteralType (var "lt") Nothing [
-    _LiteralType_binary>>: constant $
-      rustApply1 @@ string "Vec" @@ (rustPath @@ string "u8"),
-    _LiteralType_boolean>>: constant $
-      rustPath @@ string "bool",
-    _LiteralType_float>>: lambda "ft" $
-      cases _FloatType (var "ft") Nothing [
-        _FloatType_bigfloat>>: constant $ rustPath @@ string "f64",
-        _FloatType_float32>>: constant $ rustPath @@ string "f32",
-        _FloatType_float64>>: constant $ rustPath @@ string "f64"],
-    _LiteralType_integer>>: lambda "it" $
-      cases _IntegerType (var "it") Nothing [
-        _IntegerType_bigint>>: constant $ rustPathSegmented @@ list [string "num", string "BigInt"],
-        _IntegerType_int8>>: constant $ rustPath @@ string "i8",
-        _IntegerType_int16>>: constant $ rustPath @@ string "i16",
-        _IntegerType_int32>>: constant $ rustPath @@ string "i32",
-        _IntegerType_int64>>: constant $ rustPath @@ string "i64",
-        _IntegerType_uint8>>: constant $ rustPath @@ string "u8",
-        _IntegerType_uint16>>: constant $ rustPath @@ string "u16",
-        _IntegerType_uint32>>: constant $ rustPath @@ string "u32",
-        _IntegerType_uint64>>: constant $ rustPath @@ string "u64"],
-    _LiteralType_string>>: constant $
-      rustPath @@ string "String"]
-
--- =============================================================================
--- Literal value encoding
+-- Type definition encoding
 -- =============================================================================
 
 -- | Encode a Hydra literal value as a Rust expression
@@ -357,72 +215,72 @@ encodeLiteral = def "encodeLiteral" $
 -- Type encoding
 -- =============================================================================
 
--- | Encode a Hydra type as a Rust syntax type
-encodeType :: TTermDefinition (Context -> Graph -> Type -> Either Error R.Type)
-encodeType = def "encodeType" $
-  "cx" ~> "g" ~> lambda "t" $
-    "typ" <~ (Strip.deannotateType @@ var "t") $
-    cases _Type (var "typ") Nothing [
-      _Type_annotated>>: lambda "at" $
-        encodeType @@ var "cx" @@ var "g" @@ Core.annotatedTypeBody (var "at"),
-      _Type_application>>: lambda "at" $
-        encodeType @@ var "cx" @@ var "g" @@ Core.applicationTypeFunction (var "at"),
-      _Type_unit>>: constant $
-        right (asTerm rustUnit),
-      _Type_void>>: constant $
-        right (asTerm rustUnit),
-      _Type_literal>>: lambda "lt" $
-        right (encodeLiteralType @@ var "lt"),
-      _Type_list>>: lambda "inner" $
-        Eithers.map (lambda "enc" $ rustApply1 @@ string "Vec" @@ var "enc")
-          (encodeType @@ var "cx" @@ var "g" @@ var "inner"),
-      _Type_set>>: lambda "inner" $
-        Eithers.map (lambda "enc" $ rustApply1 @@ string "BTreeSet" @@ var "enc")
-          (encodeType @@ var "cx" @@ var "g" @@ var "inner"),
-      _Type_map>>: lambda "mt" $
-        "kt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeKeys (var "mt")) $
-        "vt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeValues (var "mt")) $
-          right (rustApply2 @@ string "BTreeMap" @@ var "kt" @@ var "vt"),
-      _Type_maybe>>: lambda "inner" $
-        Eithers.map (lambda "enc" $ rustApply1 @@ string "Option" @@ var "enc")
-          (encodeType @@ var "cx" @@ var "g" @@ var "inner"),
-      _Type_either>>: lambda "et" $
-        "lt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.eitherTypeLeft (var "et")) $
-        "rt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.eitherTypeRight (var "et")) $
-          right (rustApply2 @@ string "Either" @@ var "lt" @@ var "rt"),
-      _Type_pair>>: lambda "pt" $
-        "ft" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.pairTypeFirst (var "pt")) $
-        "st" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.pairTypeSecond (var "pt")) $
-          right (inject R._Type R._Type_tuple $ list [var "ft", var "st"]),
-      _Type_function>>: lambda "ft" $
-        "dom" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeDomain (var "ft")) $
-        "cod" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeCodomain (var "ft")) $
-          right (rustApply1 @@ string "Box"
-            @@ (inject R._Type R._Type_dynTrait $ list [
-              inject R._TypeParamBound R._TypeParamBound_trait $
-                record R._TypePath [
-                  R._TypePath_global>>: boolean False,
-                  R._TypePath_segments>>: list [
-                    record R._PathSegment [
-                      R._PathSegment_name>>: string "Fn",
-                      R._PathSegment_arguments>>:
-                        inject R._GenericArguments R._GenericArguments_parenthesized $
-                          record R._ParenthesizedArgs [
-                            R._ParenthesizedArgs_inputs>>: list [var "dom"],
-                            R._ParenthesizedArgs_output>>: just (var "cod")]]]]])),
-      _Type_record>>: lambda "_" $
-        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous record type")) (var "cx"),
-      _Type_union>>: lambda "_" $
-        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous union type")) (var "cx"),
-      _Type_wrap>>: lambda "_" $
-        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous wrap type")) (var "cx"),
-      _Type_variable>>: lambda "name" $
-        right (rustPath @@ (Formatting.capitalize @@ Core.unName (var "name"))),
-      _Type_forall>>: lambda "fa" $
-        encodeType @@ var "cx" @@ var "g" @@ Core.forallTypeBody (var "fa")]
+-- | Encode a Hydra literal type as a Rust type
+encodeLiteralType :: TTermDefinition (LiteralType -> R.Type)
+encodeLiteralType = def "encodeLiteralType" $
+  lambda "lt" $ cases _LiteralType (var "lt") Nothing [
+    _LiteralType_binary>>: constant $
+      rustApply1 @@ string "Vec" @@ (rustPath @@ string "u8"),
+    _LiteralType_boolean>>: constant $
+      rustPath @@ string "bool",
+    _LiteralType_float>>: lambda "ft" $
+      cases _FloatType (var "ft") Nothing [
+        _FloatType_bigfloat>>: constant $ rustPath @@ string "f64",
+        _FloatType_float32>>: constant $ rustPath @@ string "f32",
+        _FloatType_float64>>: constant $ rustPath @@ string "f64"],
+    _LiteralType_integer>>: lambda "it" $
+      cases _IntegerType (var "it") Nothing [
+        _IntegerType_bigint>>: constant $ rustPathSegmented @@ list [string "num", string "BigInt"],
+        _IntegerType_int8>>: constant $ rustPath @@ string "i8",
+        _IntegerType_int16>>: constant $ rustPath @@ string "i16",
+        _IntegerType_int32>>: constant $ rustPath @@ string "i32",
+        _IntegerType_int64>>: constant $ rustPath @@ string "i64",
+        _IntegerType_uint8>>: constant $ rustPath @@ string "u8",
+        _IntegerType_uint16>>: constant $ rustPath @@ string "u16",
+        _IntegerType_uint32>>: constant $ rustPath @@ string "u32",
+        _IntegerType_uint64>>: constant $ rustPath @@ string "u64"],
+    _LiteralType_string>>: constant $
+      rustPath @@ string "String"]
 
 -- =============================================================================
--- Term encoding
+-- Literal value encoding
+-- =============================================================================
+
+-- | Encode a Hydra record projection as a Rust expression.
+-- Takes an optional argument for applied projections.
+encodeProjectionElim :: TTermDefinition (Context -> Graph -> Projection -> Maybe Term -> Either Error R.Expression)
+encodeProjectionElim = def "encodeProjectionElim" $
+  "cx" ~> "g" ~> lambda "proj" $ lambda "marg" $
+        "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionField (var "proj"))) $
+        Maybes.cases (var "marg")
+          -- Unapplied projection: |v| v.field
+          (right (rustClosure @@ list [string "v"] @@
+            (inject R._Expression R._Expression_fieldAccess $
+              record R._FieldAccessExpr [
+                R._FieldAccessExpr_object>>: rustExprPath @@ string "v",
+                R._FieldAccessExpr_field>>: var "fname"])))
+          (lambda "arg" $
+            "sarg" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "arg") $
+              right (inject R._Expression R._Expression_fieldAccess $
+                record R._FieldAccessExpr [
+                  R._FieldAccessExpr_object>>: var "sarg",
+                  R._FieldAccessExpr_field>>: var "fname"]))
+
+-- | Encode a Hydra record field as a Rust struct field
+encodeStructField :: TTermDefinition (Context -> Graph -> FieldType -> Either Error R.StructField)
+encodeStructField = def "encodeStructField" $
+  "cx" ~> "g" ~> lambda "ft" $
+    "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
+    "ftyp" <~ Core.fieldTypeType (var "ft") $
+    "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
+      right (record R._StructField [
+        R._StructField_name>>: Formatting.convertCaseCamelToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ RustLanguageSource.rustReservedWords @@ var "fname"),
+        R._StructField_type>>: var "sftyp",
+        R._StructField_public>>: boolean True,
+        R._StructField_doc>>: nothing])
+
+-- =============================================================================
+-- Enum variant encoding
 -- =============================================================================
 
 -- | Encode a Hydra term as a Rust expression
@@ -547,25 +405,181 @@ encodeTerm = def "encodeTerm" $
 -- Elimination encoding
 -- =============================================================================
 
--- | Encode a Hydra record projection as a Rust expression.
--- Takes an optional argument for applied projections.
-encodeProjectionElim :: TTermDefinition (Context -> Graph -> Projection -> Maybe Term -> Either Error R.Expression)
-encodeProjectionElim = def "encodeProjectionElim" $
-  "cx" ~> "g" ~> lambda "proj" $ lambda "marg" $
-        "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionField (var "proj"))) $
-        Maybes.cases (var "marg")
-          -- Unapplied projection: |v| v.field
-          (right (rustClosure @@ list [string "v"] @@
-            (inject R._Expression R._Expression_fieldAccess $
-              record R._FieldAccessExpr [
-                R._FieldAccessExpr_object>>: rustExprPath @@ string "v",
-                R._FieldAccessExpr_field>>: var "fname"])))
-          (lambda "arg" $
-            "sarg" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "arg") $
-              right (inject R._Expression R._Expression_fieldAccess $
-                record R._FieldAccessExpr [
-                  R._FieldAccessExpr_object>>: var "sarg",
-                  R._FieldAccessExpr_field>>: var "fname"]))
+-- | Encode a Hydra term definition as a Rust function item
+encodeTermDefinition :: TTermDefinition (Context -> Graph -> TermDefinition -> Either Error R.ItemWithComments)
+encodeTermDefinition = def "encodeTermDefinition" $
+  "cx" ~> "g" ~> lambda "tdef" $
+    "name" <~ Packaging.termDefinitionName (var "tdef") $
+    "term" <~ Packaging.termDefinitionTerm (var "tdef") $
+    "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ var "name")) $
+    "typ" <~ Maybes.maybe
+      (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
+      (unaryFunction Core.typeSchemeType)
+      (Packaging.termDefinitionType (var "tdef")) $
+    "body" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "term") $
+    "retType" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
+      right (record R._ItemWithComments [
+        R._ItemWithComments_doc>>: nothing,
+        R._ItemWithComments_visibility>>: inject R._Visibility R._Visibility_public unit,
+        R._ItemWithComments_item>>: inject R._Item R._Item_fn $
+          record R._FnDef [
+            R._FnDef_name>>: var "lname",
+            R._FnDef_generics>>: list ([] :: [TTerm R.GenericParam]),
+            R._FnDef_whereClause>>: nothing,
+            R._FnDef_params>>: list ([] :: [TTerm R.FnParam]),
+            R._FnDef_returnType>>: just (var "retType"),
+            R._FnDef_body>>: record R._Block [
+              R._Block_statements>>: list ([] :: [TTerm R.Statement]),
+              R._Block_expression>>: just (var "body")],
+            R._FnDef_public>>: boolean True,
+            R._FnDef_async>>: boolean False,
+            R._FnDef_const>>: boolean False,
+            R._FnDef_unsafe>>: boolean False,
+            R._FnDef_doc>>: nothing]])
+
+-- =============================================================================
+-- Module entry point
+-- =============================================================================
+
+-- | Encode a Hydra type as a Rust syntax type
+encodeType :: TTermDefinition (Context -> Graph -> Type -> Either Error R.Type)
+encodeType = def "encodeType" $
+  "cx" ~> "g" ~> lambda "t" $
+    "typ" <~ (Strip.deannotateType @@ var "t") $
+    cases _Type (var "typ") Nothing [
+      _Type_annotated>>: lambda "at" $
+        encodeType @@ var "cx" @@ var "g" @@ Core.annotatedTypeBody (var "at"),
+      _Type_application>>: lambda "at" $
+        encodeType @@ var "cx" @@ var "g" @@ Core.applicationTypeFunction (var "at"),
+      _Type_unit>>: constant $
+        right (asTerm rustUnit),
+      _Type_void>>: constant $
+        right (asTerm rustUnit),
+      _Type_literal>>: lambda "lt" $
+        right (encodeLiteralType @@ var "lt"),
+      _Type_list>>: lambda "inner" $
+        Eithers.map (lambda "enc" $ rustApply1 @@ string "Vec" @@ var "enc")
+          (encodeType @@ var "cx" @@ var "g" @@ var "inner"),
+      _Type_set>>: lambda "inner" $
+        Eithers.map (lambda "enc" $ rustApply1 @@ string "BTreeSet" @@ var "enc")
+          (encodeType @@ var "cx" @@ var "g" @@ var "inner"),
+      _Type_map>>: lambda "mt" $
+        "kt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeKeys (var "mt")) $
+        "vt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeValues (var "mt")) $
+          right (rustApply2 @@ string "BTreeMap" @@ var "kt" @@ var "vt"),
+      _Type_maybe>>: lambda "inner" $
+        Eithers.map (lambda "enc" $ rustApply1 @@ string "Option" @@ var "enc")
+          (encodeType @@ var "cx" @@ var "g" @@ var "inner"),
+      _Type_either>>: lambda "et" $
+        "lt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.eitherTypeLeft (var "et")) $
+        "rt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.eitherTypeRight (var "et")) $
+          right (rustApply2 @@ string "Either" @@ var "lt" @@ var "rt"),
+      _Type_pair>>: lambda "pt" $
+        "ft" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.pairTypeFirst (var "pt")) $
+        "st" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.pairTypeSecond (var "pt")) $
+          right (inject R._Type R._Type_tuple $ list [var "ft", var "st"]),
+      _Type_function>>: lambda "ft" $
+        "dom" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeDomain (var "ft")) $
+        "cod" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeCodomain (var "ft")) $
+          right (rustApply1 @@ string "Box"
+            @@ (inject R._Type R._Type_dynTrait $ list [
+              inject R._TypeParamBound R._TypeParamBound_trait $
+                record R._TypePath [
+                  R._TypePath_global>>: boolean False,
+                  R._TypePath_segments>>: list [
+                    record R._PathSegment [
+                      R._PathSegment_name>>: string "Fn",
+                      R._PathSegment_arguments>>:
+                        inject R._GenericArguments R._GenericArguments_parenthesized $
+                          record R._ParenthesizedArgs [
+                            R._ParenthesizedArgs_inputs>>: list [var "dom"],
+                            R._ParenthesizedArgs_output>>: just (var "cod")]]]]])),
+      _Type_record>>: lambda "_" $
+        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous record type")) (var "cx"),
+      _Type_union>>: lambda "_" $
+        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous union type")) (var "cx"),
+      _Type_wrap>>: lambda "_" $
+        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous wrap type")) (var "cx"),
+      _Type_variable>>: lambda "name" $
+        right (rustPath @@ (Formatting.capitalize @@ Core.unName (var "name"))),
+      _Type_forall>>: lambda "fa" $
+        encodeType @@ var "cx" @@ var "g" @@ Core.forallTypeBody (var "fa")]
+
+-- =============================================================================
+-- Term encoding
+-- =============================================================================
+
+-- | Encode a Hydra type definition as a Rust item
+encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> Either Error R.ItemWithComments)
+encodeTypeDefinition = def "encodeTypeDefinition" $
+  "cx" ~> "g" ~> lambda "tdef" $
+    "name" <~ Packaging.typeDefinitionName (var "tdef") $
+    "typ" <~ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "tdef")) $
+    "lname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ var "name")) $
+    -- Filter free type variables to unqualified names only (type parameters, not type references)
+    "freeVars" <~ (Lists.filter
+      (lambda "v" $ Equality.equal (Lists.length (Strings.splitOn (string ".") (Core.unName (var "v")))) (int32 1))
+      (Sets.toList (Variables.freeVariablesInType @@ var "typ"))) $
+    "generics" <~ (Lists.map (lambda "v" $
+      record R._GenericParam [
+        R._GenericParam_name>>: Formatting.capitalize @@ Core.unName (var "v"),
+        R._GenericParam_bounds>>: list ([] :: [TTerm R.TypeParamBound])])
+      (var "freeVars")) $
+    "dtyp" <~ (Strip.deannotateType @@ var "typ") $
+    "item" <<~ (cases _Type (var "dtyp") (Just $
+        -- Fallback: type alias
+        "styp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
+          right (inject R._Item R._Item_typeAlias $
+            record R._TypeAlias [
+              R._TypeAlias_name>>: var "lname",
+              R._TypeAlias_generics>>: var "generics",
+              R._TypeAlias_type>>: var "styp",
+              R._TypeAlias_public>>: boolean True,
+              R._TypeAlias_doc>>: nothing]))
+      [_Type_record>>: lambda "rt" $
+        "sfields" <<~ (Eithers.mapList (encodeStructField @@ var "cx" @@ var "g") (var "rt")) $
+          right (inject R._Item R._Item_struct $
+            record R._StructDef [
+              R._StructDef_name>>: var "lname",
+              R._StructDef_generics>>: var "generics",
+              R._StructDef_whereClause>>: nothing,
+              R._StructDef_body>>: inject R._StructBody R._StructBody_named (var "sfields"),
+              R._StructDef_derives>>: asTerm standardDerives,
+              R._StructDef_public>>: boolean True,
+              R._StructDef_doc>>: nothing]),
+      _Type_union>>: lambda "rt" $
+        "variants" <<~ (Eithers.mapList (encodeEnumVariant @@ var "cx" @@ var "g") (var "rt")) $
+          right (inject R._Item R._Item_enum $
+            record R._EnumDef [
+              R._EnumDef_name>>: var "lname",
+              R._EnumDef_generics>>: var "generics",
+              R._EnumDef_whereClause>>: nothing,
+              R._EnumDef_variants>>: var "variants",
+              R._EnumDef_derives>>: asTerm standardDerives,
+              R._EnumDef_public>>: boolean True,
+              R._EnumDef_doc>>: nothing]),
+      _Type_wrap>>: lambda "wt" $
+        "styp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "wt") $
+          right (inject R._Item R._Item_struct $
+            record R._StructDef [
+              R._StructDef_name>>: var "lname",
+              R._StructDef_generics>>: var "generics",
+              R._StructDef_whereClause>>: nothing,
+              R._StructDef_body>>: inject R._StructBody R._StructBody_tuple $ list [
+                record R._TupleField [
+                  R._TupleField_type>>: var "styp",
+                  R._TupleField_public>>: boolean True]],
+              R._StructDef_derives>>: asTerm standardDerives,
+              R._StructDef_public>>: boolean True,
+              R._StructDef_doc>>: nothing])]) $
+    right (record R._ItemWithComments [
+      R._ItemWithComments_doc>>: nothing,
+      R._ItemWithComments_visibility>>: inject R._Visibility R._Visibility_public unit,
+      R._ItemWithComments_item>>: var "item"])
+
+-- =============================================================================
+-- Term definition encoding
+-- =============================================================================
 
 -- | Encode a Hydra case statement (union elimination) as a Rust expression.
 -- Takes an optional argument for applied case statements.
@@ -647,167 +661,6 @@ encodeUnwrapElim = def "encodeUnwrapElim" $
 -- Struct field encoding
 -- =============================================================================
 
--- | Encode a Hydra record field as a Rust struct field
-encodeStructField :: TTermDefinition (Context -> Graph -> FieldType -> Either Error R.StructField)
-encodeStructField = def "encodeStructField" $
-  "cx" ~> "g" ~> lambda "ft" $
-    "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
-    "ftyp" <~ Core.fieldTypeType (var "ft") $
-    "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
-      right (record R._StructField [
-        R._StructField_name>>: Formatting.convertCaseCamelToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ RustLanguageSource.rustReservedWords @@ var "fname"),
-        R._StructField_type>>: var "sftyp",
-        R._StructField_public>>: boolean True,
-        R._StructField_doc>>: nothing])
-
--- =============================================================================
--- Enum variant encoding
--- =============================================================================
-
--- | Encode a Hydra union field as a Rust enum variant
-encodeEnumVariant :: TTermDefinition (Context -> Graph -> FieldType -> Either Error R.EnumVariant)
-encodeEnumVariant = def "encodeEnumVariant" $
-  "cx" ~> "g" ~> lambda "ft" $
-    "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
-    "ftyp" <~ Core.fieldTypeType (var "ft") $
-    "dtyp" <~ (Strip.deannotateType @@ var "ftyp") $
-    "isUnit" <~ (cases _Type (var "dtyp") (Just $ boolean False) [
-      _Type_unit>>: constant $ boolean True,
-      _Type_record>>: lambda "rt" $
-        Lists.null (var "rt")]) $
-    Logic.ifElse (var "isUnit")
-      -- Unit variant
-      (right (record R._EnumVariant [
-        R._EnumVariant_name>>: Formatting.capitalize @@ var "fname",
-        R._EnumVariant_body>>: inject R._EnumVariantBody R._EnumVariantBody_unit unit,
-        R._EnumVariant_doc>>: nothing]))
-      -- Non-unit variant: check if it's a record (struct variant) or other (tuple variant)
-      (cases _Type (var "dtyp") (Just $
-          -- Default: tuple variant with single element
-          "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
-            right (record R._EnumVariant [
-              R._EnumVariant_name>>: Formatting.capitalize @@ var "fname",
-              R._EnumVariant_body>>: inject R._EnumVariantBody R._EnumVariantBody_tuple $ list [var "sftyp"],
-              R._EnumVariant_doc>>: nothing]))
-        [_Type_record>>: lambda "rt" $
-          "sfields" <<~ (Eithers.mapList (encodeStructField @@ var "cx" @@ var "g") (var "rt")) $
-            right (record R._EnumVariant [
-              R._EnumVariant_name>>: Formatting.capitalize @@ var "fname",
-              R._EnumVariant_body>>: inject R._EnumVariantBody R._EnumVariantBody_struct (var "sfields"),
-              R._EnumVariant_doc>>: nothing])])
-
--- =============================================================================
--- Type definition encoding
--- =============================================================================
-
--- | Encode a Hydra type definition as a Rust item
-encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> Either Error R.ItemWithComments)
-encodeTypeDefinition = def "encodeTypeDefinition" $
-  "cx" ~> "g" ~> lambda "tdef" $
-    "name" <~ Packaging.typeDefinitionName (var "tdef") $
-    "typ" <~ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "tdef")) $
-    "lname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ var "name")) $
-    -- Filter free type variables to unqualified names only (type parameters, not type references)
-    "freeVars" <~ (Lists.filter
-      (lambda "v" $ Equality.equal (Lists.length (Strings.splitOn (string ".") (Core.unName (var "v")))) (int32 1))
-      (Sets.toList (Variables.freeVariablesInType @@ var "typ"))) $
-    "generics" <~ (Lists.map (lambda "v" $
-      record R._GenericParam [
-        R._GenericParam_name>>: Formatting.capitalize @@ Core.unName (var "v"),
-        R._GenericParam_bounds>>: list ([] :: [TTerm R.TypeParamBound])])
-      (var "freeVars")) $
-    "dtyp" <~ (Strip.deannotateType @@ var "typ") $
-    "item" <<~ (cases _Type (var "dtyp") (Just $
-        -- Fallback: type alias
-        "styp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
-          right (inject R._Item R._Item_typeAlias $
-            record R._TypeAlias [
-              R._TypeAlias_name>>: var "lname",
-              R._TypeAlias_generics>>: var "generics",
-              R._TypeAlias_type>>: var "styp",
-              R._TypeAlias_public>>: boolean True,
-              R._TypeAlias_doc>>: nothing]))
-      [_Type_record>>: lambda "rt" $
-        "sfields" <<~ (Eithers.mapList (encodeStructField @@ var "cx" @@ var "g") (var "rt")) $
-          right (inject R._Item R._Item_struct $
-            record R._StructDef [
-              R._StructDef_name>>: var "lname",
-              R._StructDef_generics>>: var "generics",
-              R._StructDef_whereClause>>: nothing,
-              R._StructDef_body>>: inject R._StructBody R._StructBody_named (var "sfields"),
-              R._StructDef_derives>>: asTerm standardDerives,
-              R._StructDef_public>>: boolean True,
-              R._StructDef_doc>>: nothing]),
-      _Type_union>>: lambda "rt" $
-        "variants" <<~ (Eithers.mapList (encodeEnumVariant @@ var "cx" @@ var "g") (var "rt")) $
-          right (inject R._Item R._Item_enum $
-            record R._EnumDef [
-              R._EnumDef_name>>: var "lname",
-              R._EnumDef_generics>>: var "generics",
-              R._EnumDef_whereClause>>: nothing,
-              R._EnumDef_variants>>: var "variants",
-              R._EnumDef_derives>>: asTerm standardDerives,
-              R._EnumDef_public>>: boolean True,
-              R._EnumDef_doc>>: nothing]),
-      _Type_wrap>>: lambda "wt" $
-        "styp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "wt") $
-          right (inject R._Item R._Item_struct $
-            record R._StructDef [
-              R._StructDef_name>>: var "lname",
-              R._StructDef_generics>>: var "generics",
-              R._StructDef_whereClause>>: nothing,
-              R._StructDef_body>>: inject R._StructBody R._StructBody_tuple $ list [
-                record R._TupleField [
-                  R._TupleField_type>>: var "styp",
-                  R._TupleField_public>>: boolean True]],
-              R._StructDef_derives>>: asTerm standardDerives,
-              R._StructDef_public>>: boolean True,
-              R._StructDef_doc>>: nothing])]) $
-    right (record R._ItemWithComments [
-      R._ItemWithComments_doc>>: nothing,
-      R._ItemWithComments_visibility>>: inject R._Visibility R._Visibility_public unit,
-      R._ItemWithComments_item>>: var "item"])
-
--- =============================================================================
--- Term definition encoding
--- =============================================================================
-
--- | Encode a Hydra term definition as a Rust function item
-encodeTermDefinition :: TTermDefinition (Context -> Graph -> TermDefinition -> Either Error R.ItemWithComments)
-encodeTermDefinition = def "encodeTermDefinition" $
-  "cx" ~> "g" ~> lambda "tdef" $
-    "name" <~ Packaging.termDefinitionName (var "tdef") $
-    "term" <~ Packaging.termDefinitionTerm (var "tdef") $
-    "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ var "name")) $
-    "typ" <~ Maybes.maybe
-      (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
-      (unaryFunction Core.typeSchemeType)
-      (Packaging.termDefinitionType (var "tdef")) $
-    "body" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "term") $
-    "retType" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
-      right (record R._ItemWithComments [
-        R._ItemWithComments_doc>>: nothing,
-        R._ItemWithComments_visibility>>: inject R._Visibility R._Visibility_public unit,
-        R._ItemWithComments_item>>: inject R._Item R._Item_fn $
-          record R._FnDef [
-            R._FnDef_name>>: var "lname",
-            R._FnDef_generics>>: list ([] :: [TTerm R.GenericParam]),
-            R._FnDef_whereClause>>: nothing,
-            R._FnDef_params>>: list ([] :: [TTerm R.FnParam]),
-            R._FnDef_returnType>>: just (var "retType"),
-            R._FnDef_body>>: record R._Block [
-              R._Block_statements>>: list ([] :: [TTerm R.Statement]),
-              R._Block_expression>>: just (var "body")],
-            R._FnDef_public>>: boolean True,
-            R._FnDef_async>>: boolean False,
-            R._FnDef_const>>: boolean False,
-            R._FnDef_unsafe>>: boolean False,
-            R._FnDef_doc>>: nothing]])
-
--- =============================================================================
--- Module entry point
--- =============================================================================
-
 -- | Convert a Hydra module to a map of file paths to Rust source code strings.
 moduleToRust :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
 moduleToRust = def "moduleToRust" $
@@ -822,3 +675,150 @@ moduleToRust = def "moduleToRust" $
     "code" <~ (SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (RustSerdeSource.crateToExpr @@ var "crate"))) $
     "filePath" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ wrap _FileExtension (string "rs") @@ (Packaging.moduleNamespace (var "mod"))) $
       right (Maps.singleton (var "filePath") (var "code"))
+
+-- | Apply a type constructor to one type argument (e.g., Vec<T>)
+rustApply1 :: TTermDefinition (String -> R.Type -> R.Type)
+rustApply1 = def "rustApply1" $
+  lambda "name" $ lambda "arg" $
+    inject R._Type R._Type_path $
+      record R._TypePath [
+        R._TypePath_global>>: boolean False,
+        R._TypePath_segments>>: list [
+          record R._PathSegment [
+            R._PathSegment_name>>: var "name",
+            R._PathSegment_arguments>>:
+              inject R._GenericArguments R._GenericArguments_angleBracketed $
+                record R._AngleBracketedArgs [
+                  R._AngleBracketedArgs_args>>: list [
+                    inject R._GenericArg R._GenericArg_type (var "arg")]]]]]
+
+-- | Apply a type constructor to two type arguments (e.g., BTreeMap<K, V>)
+rustApply2 :: TTermDefinition (String -> R.Type -> R.Type -> R.Type)
+rustApply2 = def "rustApply2" $
+  lambda "name" $ lambda "arg1" $ lambda "arg2" $
+    inject R._Type R._Type_path $
+      record R._TypePath [
+        R._TypePath_global>>: boolean False,
+        R._TypePath_segments>>: list [
+          record R._PathSegment [
+            R._PathSegment_name>>: var "name",
+            R._PathSegment_arguments>>:
+              inject R._GenericArguments R._GenericArguments_angleBracketed $
+                record R._AngleBracketedArgs [
+                  R._AngleBracketedArgs_args>>: list [
+                    inject R._GenericArg R._GenericArg_type (var "arg1"),
+                    inject R._GenericArg R._GenericArg_type (var "arg2")]]]]]
+
+-- | Block expression with statements and trailing expression
+rustBlock :: TTermDefinition ([R.Statement] -> R.Expression -> R.Expression)
+rustBlock = def "rustBlock" $
+  lambda "stmts" $ lambda "expr" $
+    inject R._Expression R._Expression_block $
+      record R._Block [
+        R._Block_statements>>: var "stmts",
+        R._Block_expression>>: just (var "expr")]
+
+-- | Function call expression
+rustCall :: TTermDefinition (R.Expression -> [R.Expression] -> R.Expression)
+rustCall = def "rustCall" $
+  lambda "fun" $ lambda "args" $
+    inject R._Expression R._Expression_call $
+      record R._CallExpr [
+        R._CallExpr_function>>: var "fun",
+        R._CallExpr_args>>: var "args"]
+
+-- | Closure expression: |params| body
+rustClosure :: TTermDefinition ([String] -> R.Expression -> R.Expression)
+rustClosure = def "rustClosure" $
+  lambda "params" $ lambda "body" $
+    inject R._Expression R._Expression_closure $
+      record R._ClosureExpr [
+        R._ClosureExpr_move>>: boolean False,
+        R._ClosureExpr_params>>:
+          Lists.map (lambda "p" $
+            record R._ClosureParam [
+              R._ClosureParam_pattern>>:
+                inject R._Pattern R._Pattern_identifier $
+                  record R._IdentifierPattern [
+                    R._IdentifierPattern_name>>: var "p",
+                    R._IdentifierPattern_mutable>>: boolean False,
+                    R._IdentifierPattern_atPattern>>: nothing],
+              R._ClosureParam_type>>: nothing])
+          (var "params"),
+        R._ClosureExpr_returnType>>: nothing,
+        R._ClosureExpr_body>>: var "body"]
+
+-- =============================================================================
+-- Literal type encoding
+-- =============================================================================
+
+-- | Variable reference as a path expression
+rustExprPath :: TTermDefinition (String -> R.Expression)
+rustExprPath = def "rustExprPath" $
+  lambda "name" $
+    inject R._Expression R._Expression_path $
+      record R._ExprPath [
+        R._ExprPath_global>>: boolean False,
+        R._ExprPath_segments>>: list [
+          record R._PathSegment [
+            R._PathSegment_name>>: var "name",
+            R._PathSegment_arguments>>: inject R._GenericArguments R._GenericArguments_none unit]]]
+
+-- | Let statement: let name = expr;
+rustLetStmt :: TTermDefinition (String -> R.Expression -> R.Statement)
+rustLetStmt = def "rustLetStmt" $
+  lambda "name" $ lambda "expr" $
+    inject R._Statement R._Statement_let $
+      record R._LetStatement [
+        R._LetStatement_pattern>>:
+          inject R._Pattern R._Pattern_identifier $
+            record R._IdentifierPattern [
+              R._IdentifierPattern_name>>: var "name",
+              R._IdentifierPattern_mutable>>: boolean False,
+              R._IdentifierPattern_atPattern>>: nothing],
+        R._LetStatement_mutable>>: boolean False,
+        R._LetStatement_type>>: nothing,
+        R._LetStatement_init>>: just (var "expr")]
+
+-- | Construct a simple Rust path type (e.g., "String" -> String)
+rustPath :: TTermDefinition (String -> R.Type)
+rustPath = def "rustPath" $
+  lambda "name" $
+    inject R._Type R._Type_path $
+      record R._TypePath [
+        R._TypePath_global>>: boolean False,
+        R._TypePath_segments>>: list [
+          record R._PathSegment [
+            R._PathSegment_name>>: var "name",
+            R._PathSegment_arguments>>: inject R._GenericArguments R._GenericArguments_none unit]]]
+
+-- | Construct a Rust path type with multiple segments (e.g., ["num", "BigInt"] -> num::BigInt)
+rustPathSegmented :: TTermDefinition ([String] -> R.Type)
+rustPathSegmented = def "rustPathSegmented" $
+  lambda "segs" $
+    inject R._Type R._Type_path $
+      record R._TypePath [
+        R._TypePath_global>>: boolean False,
+        R._TypePath_segments>>:
+          Lists.map (lambda "s" $
+            record R._PathSegment [
+              R._PathSegment_name>>: var "s",
+              R._PathSegment_arguments>>: inject R._GenericArguments R._GenericArguments_none unit])
+          (var "segs")]
+
+-- | The Rust unit type ()
+rustUnit :: TTermDefinition R.Type
+rustUnit = def "rustUnit" $
+  inject R._Type R._Type_unit unit
+
+-- =============================================================================
+-- Rust expression AST helpers
+-- =============================================================================
+
+standardDerives :: TTermDefinition [String]
+standardDerives = def "standardDerives" $
+  list $ string <$> ["Clone", "Debug", "PartialEq", "Eq", "PartialOrd", "Ord"]
+
+-- =============================================================================
+-- Rust type AST helpers
+-- =============================================================================
