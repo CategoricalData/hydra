@@ -13,7 +13,7 @@ fi
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
-HYDRA_ELISP_DIR="$HYDRA_ROOT/heads/lisp/hydra-emacs-lisp"
+HYDRA_ELISP_DIR="$HYDRA_ROOT/heads/lisp/emacs-lisp"
 
 # Clean and create output directory
 echo "Preparing output directory: $OUTPUT_DIR"

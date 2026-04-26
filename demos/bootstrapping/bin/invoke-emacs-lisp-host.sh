@@ -10,7 +10,7 @@ set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
-HYDRA_EL_DIR="$HYDRA_ROOT/heads/lisp/hydra-emacs-lisp"
+HYDRA_EL_DIR="$HYDRA_ROOT/heads/lisp/emacs-lisp"
 
 # Parse arguments (pass through to EL bootstrap)
 TARGET=""
