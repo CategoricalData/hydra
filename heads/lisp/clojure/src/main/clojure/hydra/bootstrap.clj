@@ -73,8 +73,8 @@
           ["hydra.haskell.ast" "hydra.haskell.language"
            "hydra.haskell.operators" "hydra.haskell.utils"
            "hydra.haskell.serde" "hydra.haskell.coder"])
-        {:coder @(rc 'hydra_ext_haskell_coder_module_to_haskell)
-         :language @(rc 'hydra_ext_haskell_language_haskell_language)
+        {:coder @(rc 'hydra_haskell_coder_module_to_haskell)
+         :language @(rc 'hydra_haskell_language_haskell_language)
          :flags [false false false false]
          :subdir "haskell"})
     "java"
@@ -82,8 +82,8 @@
           ["hydra.java.syntax" "hydra.java.language" "hydra.java.names"
            "hydra.java.environment" "hydra.java.utils"
            "hydra.java.serde" "hydra.java.coder"])
-        {:coder @(rc 'hydra_ext_java_coder_module_to_java)
-         :language @(rc 'hydra_ext_java_language_java_language)
+        {:coder @(rc 'hydra_java_coder_module_to_java)
+         :language @(rc 'hydra_java_language_java_language)
          :flags [false true false true]
          :subdir "java"})
     "python"
@@ -92,17 +92,17 @@
            "hydra.python.environment" "hydra.python.utils"
            "hydra.python.serde" "hydra.python.coder"])
         (preload/install-coder-performance-patches!)
-        {:coder @(rc 'hydra_ext_python_coder_module_to_python)
-         :language @(rc 'hydra_ext_python_language_python_language)
+        {:coder @(rc 'hydra_python_coder_module_to_python)
+         :language @(rc 'hydra_python_language_python_language)
          :flags [false true true false]
          :subdir "python"})
     ("clojure" "scheme" "common-lisp" "emacs-lisp")
     (do (load-coder-modules!
           ["hydra.lisp.syntax" "hydra.lisp.language"
            "hydra.lisp.serde" "hydra.lisp.coder"])
-        (let [module-to-lisp @(rc 'hydra_ext_lisp_coder_module_to_lisp)
-              program-to-expr @(rc 'hydra_ext_lisp_serde_program_to_expr)
-              lang @(rc 'hydra_ext_lisp_language_lisp_language)
+        (let [module-to-lisp @(rc 'hydra_lisp_coder_module_to_lisp)
+              program-to-expr @(rc 'hydra_lisp_serde_program_to_expr)
+              lang @(rc 'hydra_lisp_language_lisp_language)
               dialect (case target
                         "clojure"    (list :clojure nil)
                         "scheme"     (list :scheme nil)
