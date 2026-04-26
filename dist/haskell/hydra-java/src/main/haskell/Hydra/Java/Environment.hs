@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Environment types for Java code generation
 
 module Hydra.Java.Environment where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Java.Syntax as Syntax
@@ -12,44 +10,33 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
-
 -- | Classification of a Java symbol for code generation
 data JavaSymbolClass =
   -- | A constant value
-  JavaSymbolClassConstant  |
+  JavaSymbolClassConstant |
   -- | A nullary function (no arguments)
-  JavaSymbolClassNullaryFunction  |
+  JavaSymbolClassNullaryFunction |
   -- | A hoisted lambda wrapped in type lambdas. The Int is the number of curried lambda parameters.
   JavaSymbolClassHoistedLambda Int |
   -- | A unary function (single argument)
-  JavaSymbolClassUnaryFunction  |
+  JavaSymbolClassUnaryFunction |
   -- | A local variable
   JavaSymbolClassLocalVariable
   deriving (Eq, Ord, Read, Show)
-
 _JavaSymbolClass = Core.Name "hydra.java.environment.JavaSymbolClass"
-
 _JavaSymbolClass_constant = Core.Name "constant"
-
 _JavaSymbolClass_nullaryFunction = Core.Name "nullaryFunction"
-
 _JavaSymbolClass_hoistedLambda = Core.Name "hoistedLambda"
-
 _JavaSymbolClass_unaryFunction = Core.Name "unaryFunction"
-
 _JavaSymbolClass_localVariable = Core.Name "localVariable"
-
 -- | Feature flags for the target Java version
 data JavaFeatures =
   JavaFeatures {
     -- | Whether the diamond operator (<>) is supported (Java 7+)
     javaFeaturesSupportsDiamondOperator :: Bool}
   deriving (Eq, Ord, Read, Show)
-
 _JavaFeatures = Core.Name "hydra.java.environment.JavaFeatures"
-
 _JavaFeatures_supportsDiamondOperator = Core.Name "supportsDiamondOperator"
-
 -- | Aliases and context for Java code generation
 data Aliases =
   Aliases {
@@ -80,35 +67,20 @@ data Aliases =
     -- | Variables that have been thunked (wrapped in Supplier) for lazy evaluation
     aliasesThunkedVars :: (S.Set Core.Name)}
   deriving (Eq, Ord, Read, Show)
-
 _Aliases = Core.Name "hydra.java.environment.Aliases"
-
 _Aliases_currentNamespace = Core.Name "currentNamespace"
-
 _Aliases_packages = Core.Name "packages"
-
 _Aliases_branchVars = Core.Name "branchVars"
-
 _Aliases_recursiveVars = Core.Name "recursiveVars"
-
 _Aliases_inScopeTypeParams = Core.Name "inScopeTypeParams"
-
 _Aliases_polymorphicLocals = Core.Name "polymorphicLocals"
-
 _Aliases_inScopeJavaVars = Core.Name "inScopeJavaVars"
-
 _Aliases_varRenames = Core.Name "varRenames"
-
 _Aliases_lambdaVars = Core.Name "lambdaVars"
-
 _Aliases_typeVarSubst = Core.Name "typeVarSubst"
-
 _Aliases_trustedTypeVars = Core.Name "trustedTypeVars"
-
 _Aliases_methodCodomain = Core.Name "methodCodomain"
-
 _Aliases_thunkedVars = Core.Name "thunkedVars"
-
 -- | Environment for Java code generation
 data JavaEnvironment =
   JavaEnvironment {
@@ -116,9 +88,6 @@ data JavaEnvironment =
     javaEnvironmentAliases :: Aliases,
     -- | Graph context for type inference
     javaEnvironmentGraph :: Graph.Graph}
-
 _JavaEnvironment = Core.Name "hydra.java.environment.JavaEnvironment"
-
 _JavaEnvironment_aliases = Core.Name "aliases"
-
 _JavaEnvironment_graph = Core.Name "graph"
