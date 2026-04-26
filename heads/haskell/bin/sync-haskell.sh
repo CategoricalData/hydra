@@ -189,6 +189,14 @@ if [ "$NO_TESTS" = false ]; then
     #   - heads/haskell/{package.yaml,stack.yaml} (build config)
     HASKELL_TEST_CACHE="$HYDRA_HASKELL_DIR/.stack-work/haskell-test-cache.txt"
     compute_haskell_test_hash() {
+        # Use $SCRIPT_DIR (absolute, captured before any cd) instead of
+        # ${BASH_SOURCE[0]} which may be relative and fail to resolve
+        # after the script has already cd'd into $HYDRA_HASKELL_DIR.
+        # When BASH_SOURCE[0] is "heads/haskell/bin/sync-haskell.sh" and
+        # CWD is heads/haskell, the relative resolves to a non-existent
+        # path; shasum fails, xargs propagates non-zero, pipefail aborts
+        # the whole script before stack test runs (diagnosed by
+        # feature_343_json on 2026-04-26).
         {
             find "$HYDRA_ROOT_DIR/dist/haskell/hydra-kernel/src/main/haskell" \
                  "$HYDRA_ROOT_DIR/dist/haskell/hydra-kernel/src/test/haskell" \
@@ -197,7 +205,7 @@ if [ "$NO_TESTS" = false ]; then
                  -type f -name '*.hs' 2>/dev/null
             echo "$HYDRA_HASKELL_DIR/package.yaml"
             echo "$HYDRA_HASKELL_DIR/stack.yaml"
-            echo "${BASH_SOURCE[0]}"
+            echo "$SCRIPT_DIR/sync-haskell.sh"
         } | LC_ALL=C sort | xargs shasum -a 256 2>/dev/null | shasum -a 256 | awk '{print $1}'
     }
 
