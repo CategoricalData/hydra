@@ -283,10 +283,10 @@ adaptTypeScheme :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.Lit
 adaptTypeScheme constraints litmap ts0 =
 
       let vars0 = Core.typeSchemeVariables ts0
-          t0 = Core.typeSchemeType ts0
+          t0 = Core.typeSchemeBody ts0
       in (Eithers.bind (adaptType constraints litmap t0) (\t1 -> Right (Core.TypeScheme {
         Core.typeSchemeVariables = vars0,
-        Core.typeSchemeType = t1,
+        Core.typeSchemeBody = t1,
         Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts0)})))
 
 -- | Compose two coders into a single coder
@@ -580,7 +580,7 @@ schemaGraphToDefinitions constraints graph nameLists cx =
                   Packaging.typeDefinitionName = (Pairs.first pair),
                   Packaging.typeDefinitionType = Core.TypeScheme {
                     Core.typeSchemeVariables = [],
-                    Core.typeSchemeType = (Pairs.second pair),
+                    Core.typeSchemeBody = (Pairs.second pair),
                     Core.typeSchemeConstraints = Nothing}}
         in (Right (tmap1, (Lists.map (\names -> Lists.map toDef (Maybes.mapMaybe (\n -> Maybes.map (\t -> (n, t)) (Maps.lookup n tmap1)) names)) nameLists))))))
 

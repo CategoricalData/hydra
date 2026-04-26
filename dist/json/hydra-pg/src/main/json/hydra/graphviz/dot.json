@@ -3,12 +3,12 @@
     {
       "type": {
         "name": "hydra.graphviz.dot.Id",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.graphviz.dot.Graph",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "strict", "type": {"literal": {"boolean": {}}}},
               {"name": "directed", "type": {"literal": {"boolean": {}}}},
@@ -23,7 +23,7 @@
       "type": {
         "name": "hydra.graphviz.dot.Stmt",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "node", "type": {"variable": "hydra.graphviz.dot.NodeStmt"}},
               {"name": "edge", "type": {"variable": "hydra.graphviz.dot.EdgeStmt"}},
@@ -39,7 +39,7 @@
       "type": {
         "name": "hydra.graphviz.dot.EqualityPair",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "left", "type": {"variable": "hydra.graphviz.dot.Id"}},
               {"name": "right", "type": {"variable": "hydra.graphviz.dot.Id"}}]},
@@ -48,7 +48,7 @@
       "type": {
         "name": "hydra.graphviz.dot.AttrStmt",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.graphviz.dot.AttrType"}},
               {
@@ -59,7 +59,7 @@
       "type": {
         "name": "hydra.graphviz.dot.AttrType",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "graph", "type": {"unit": {}}},
               {"name": "node", "type": {"unit": {}}},
@@ -69,14 +69,14 @@
       "type": {
         "name": "hydra.graphviz.dot.AttrList",
         "type": {
-          "type": {
+          "body": {
             "wrap": {"list": {"list": {"variable": "hydra.graphviz.dot.EqualityPair"}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.graphviz.dot.EdgeStmt",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "left",
@@ -92,7 +92,7 @@
       "type": {
         "name": "hydra.graphviz.dot.NodeOrSubgraph",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "node", "type": {"variable": "hydra.graphviz.dot.NodeId"}},
               {
@@ -103,7 +103,7 @@
       "type": {
         "name": "hydra.graphviz.dot.NodeStmt",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "id", "type": {"variable": "hydra.graphviz.dot.NodeId"}},
               {
@@ -114,7 +114,7 @@
       "type": {
         "name": "hydra.graphviz.dot.NodeId",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "id", "type": {"variable": "hydra.graphviz.dot.Id"}},
               {
@@ -125,7 +125,7 @@
       "type": {
         "name": "hydra.graphviz.dot.Port",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "id",
@@ -138,7 +138,7 @@
       "type": {
         "name": "hydra.graphviz.dot.Subgraph",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "subgraphId",
@@ -151,13 +151,13 @@
       "type": {
         "name": "hydra.graphviz.dot.SubgraphId",
         "type": {
-          "type": {"wrap": {"maybe": {"variable": "hydra.graphviz.dot.Id"}}},
+          "body": {"wrap": {"maybe": {"variable": "hydra.graphviz.dot.Id"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.graphviz.dot.CompassPt",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "n", "type": {"unit": {}}},
               {"name": "ne", "type": {"unit": {}}},

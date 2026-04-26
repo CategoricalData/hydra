@@ -4,7 +4,7 @@
       "type": {
         "name": "hydra.protobuf.proto3.Definition",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "enum",
@@ -17,12 +17,12 @@
       "type": {
         "name": "hydra.protobuf.proto3.EnumDefinition",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Enum type definition"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Enum type definition"}}}],
               "body": {
                 "record": [
                   {
@@ -31,8 +31,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Enum type name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Enum type name"}}}],
                         "body": {"variable": "hydra.protobuf.proto3.TypeName"}}}},
                   {
                     "name": "values",
@@ -40,8 +40,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Enum value definitions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Enum value definitions"}}}],
                         "body": {"list": {"variable": "hydra.protobuf.proto3.EnumValue"}}}}},
                   {
                     "name": "options",
@@ -49,20 +49,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Protocol buffer options"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Protocol buffer options"}}}],
                         "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.protobuf.proto3.EnumValue",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Enum value definition"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Enum value definition"}}}],
               "body": {
                 "record": [
                   {
@@ -71,8 +71,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Enum value name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Enum value name"}}}],
                         "body": {"variable": "hydra.protobuf.proto3.EnumValueName"}}}},
                   {
                     "name": "number",
@@ -80,8 +80,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Enum value number"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Enum value number"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}},
                   {
                     "name": "options",
@@ -89,24 +89,24 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Protocol buffer options"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Protocol buffer options"}}}],
                         "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.protobuf.proto3.EnumValueName",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.protobuf.proto3.Field",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A single field of a message type"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A single field of a message type"}}}],
               "body": {
                 "record": [
                   {
@@ -115,8 +115,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The field name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The field name"}}}],
                         "body": {"variable": "hydra.protobuf.proto3.FieldName"}}}},
                   {
                     "name": "jsonName",
@@ -124,8 +124,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The field JSON name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The field JSON name"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}},
                   {
                     "name": "type",
@@ -133,8 +133,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The datatype of the field"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The datatype of the field"}}}],
                         "body": {"variable": "hydra.protobuf.proto3.FieldType"}}}},
                   {
                     "name": "number",
@@ -142,8 +142,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The field number"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The field number"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}},
                   {
                     "name": "options",
@@ -151,27 +151,27 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The protocol buffer options"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The protocol buffer options"}}}],
                         "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.protobuf.proto3.FieldName",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "The name of a field"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "The name of a field"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.protobuf.proto3.FieldType",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "map", "type": {"variable": "hydra.protobuf.proto3.MapType"}},
               {
@@ -187,12 +187,12 @@
     {
       "type": {
         "name": "hydra.protobuf.proto3.FileReference",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.protobuf.proto3.MapType",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "keys",
@@ -205,12 +205,12 @@
       "type": {
         "name": "hydra.protobuf.proto3.MessageDefinition",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A protocol buffer message type"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A protocol buffer message type"}}}],
               "body": {
                 "record": [
                   {
@@ -219,8 +219,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The fully qualified message name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The fully qualified message name"}}}],
                         "body": {"variable": "hydra.protobuf.proto3.TypeName"}}}},
                   {
                     "name": "fields",
@@ -228,8 +228,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The list of fields"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The list of fields"}}}],
                         "body": {"list": {"variable": "hydra.protobuf.proto3.Field"}}}}},
                   {
                     "name": "options",
@@ -237,20 +237,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The protocol buffer options"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The protocol buffer options"}}}],
                         "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.protobuf.proto3.Option",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A protocol buffer option, which can be attached to a message, field, enumeration, etc"}}}],
               "body": {
@@ -261,8 +261,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The option's name. For protobuf built-in options (options defined in descriptor.proto), this is the short name. For example, `\"map_entry\"`. For custom options, it should be the fully-qualified name. For example, `\"google.api.http\"`."}}}],
                         "body": {"literal": {"string": {}}}}}},
@@ -272,24 +272,24 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The option's value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The option's value"}}}],
                         "body": {"variable": "hydra.protobuf.proto3.Value"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.protobuf.proto3.PackageName",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.protobuf.proto3.ProtoFile",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A .proto file, usually containing one or more enum or message type definitions"}}}],
               "body": {
@@ -311,12 +311,12 @@
       "type": {
         "name": "hydra.protobuf.proto3.ScalarType",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "One of several Proto3 scalar types"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "One of several Proto3 scalar types"}}}],
               "body": {
                 "union": [
                   {"name": "bool", "type": {"unit": {}}},
@@ -339,12 +339,12 @@
       "type": {
         "name": "hydra.protobuf.proto3.SimpleType",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A scalar type or a reference to an enum type or message type"}}}],
               "body": {
@@ -360,12 +360,12 @@
       "type": {
         "name": "hydra.protobuf.proto3.TypeName",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "The local name of an enum type or message type"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}},
@@ -373,24 +373,24 @@
       "type": {
         "name": "hydra.protobuf.proto3.TypeReference",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A reference to an enum type or message type"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A reference to an enum type or message type"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.protobuf.proto3.Value",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A scalar value"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A scalar value"}}}],
               "body": {
                 "union": [
                   {"name": "boolean", "type": {"literal": {"boolean": {}}}},

@@ -4,19 +4,19 @@
       "type": {
         "name": "hydra.pg.query.AggregationQuery",
         "type": {
-          "type": {"union": [{"name": "count", "type": {"unit": {}}}]},
+          "body": {"union": [{"name": "count", "type": {"unit": {}}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.ApplicationQuery",
         "type": {
-          "type": {"wrap": {"list": {"variable": "hydra.pg.query.Query"}}},
+          "body": {"wrap": {"list": {"variable": "hydra.pg.query.Query"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.AssociativeExpression",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "operator",
@@ -29,7 +29,7 @@
       "type": {
         "name": "hydra.pg.query.BinaryExpression",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "left", "type": {"variable": "hydra.pg.query.Expression"}},
               {
@@ -41,7 +41,7 @@
       "type": {
         "name": "hydra.pg.query.BinaryBooleanOperator",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "and", "type": {"unit": {}}},
               {"name": "or", "type": {"unit": {}}},
@@ -51,7 +51,7 @@
       "type": {
         "name": "hydra.pg.query.BinaryOperator",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "boolean",
@@ -65,7 +65,7 @@
       "type": {
         "name": "hydra.pg.query.Binding",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "key", "type": {"variable": "hydra.pg.query.Variable"}},
               {"name": "value", "type": {"variable": "hydra.pg.query.Query"}}]},
@@ -74,7 +74,7 @@
       "type": {
         "name": "hydra.pg.query.ComparisonOperator",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "eq", "type": {"unit": {}}},
               {"name": "neq", "type": {"unit": {}}},
@@ -87,7 +87,7 @@
       "type": {
         "name": "hydra.pg.query.EdgeProjectionPattern",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "direction",
@@ -106,7 +106,7 @@
       "type": {
         "name": "hydra.pg.query.Expression",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "associative",
@@ -129,7 +129,7 @@
       "type": {
         "name": "hydra.pg.query.LetQuery",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "bindings",
@@ -140,7 +140,7 @@
       "type": {
         "name": "hydra.pg.query.MatchQuery",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "optional", "type": {"literal": {"boolean": {}}}},
               {
@@ -154,7 +154,7 @@
       "type": {
         "name": "hydra.pg.query.Projection",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "value", "type": {"variable": "hydra.pg.query.Expression"}},
               {
@@ -165,7 +165,7 @@
       "type": {
         "name": "hydra.pg.query.Projections",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "all", "type": {"literal": {"boolean": {}}}},
               {
@@ -176,7 +176,7 @@
       "type": {
         "name": "hydra.pg.query.PropertyPattern",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "key", "type": {"variable": "hydra.pg.model.PropertyKey"}},
               {
@@ -187,7 +187,7 @@
       "type": {
         "name": "hydra.pg.query.PropertyProjection",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "base", "type": {"variable": "hydra.pg.query.Expression"}},
               {"name": "key", "type": {"variable": "hydra.pg.model.PropertyKey"}}]},
@@ -195,12 +195,12 @@
     {
       "type": {
         "name": "hydra.pg.query.PropertyValue",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.PropertyValuePattern",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "variable",
@@ -211,7 +211,7 @@
       "type": {
         "name": "hydra.pg.query.Query",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "application",
@@ -228,7 +228,7 @@
       "type": {
         "name": "hydra.pg.query.SelectQuery",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "distinct", "type": {"literal": {"boolean": {}}}},
               {
@@ -239,7 +239,7 @@
       "type": {
         "name": "hydra.pg.query.UnaryExpression",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "operator",
@@ -250,17 +250,17 @@
       "type": {
         "name": "hydra.pg.query.UnaryOperator",
         "type": {
-          "type": {"union": [{"name": "negate", "type": {"unit": {}}}]},
+          "body": {"union": [{"name": "negate", "type": {"unit": {}}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.Variable",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.VertexPattern",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "variable",

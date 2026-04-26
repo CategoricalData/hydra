@@ -1808,7 +1808,7 @@
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                                                                 {
-                                                                                                                  "name": "type",
+                                                                                                                  "name": "body",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {"name": "variable", "term": {"variable": "n"}},
@@ -2126,7 +2126,7 @@
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                                                                 {
-                                                                                                                  "name": "type",
+                                                                                                                  "name": "body",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {"name": "variable", "term": {"variable": "n"}},
@@ -2440,7 +2440,7 @@
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                                                                 {
-                                                                                                                  "name": "type",
+                                                                                                                  "name": "body",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {"name": "variable", "term": {"variable": "n"}},
@@ -2761,7 +2761,7 @@
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                                                                 {
-                                                                                                                  "name": "type",
+                                                                                                                  "name": "body",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {"name": "variable", "term": {"variable": "n"}},
@@ -3096,7 +3096,7 @@
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                                                                 {
-                                                                                                                  "name": "type",
+                                                                                                                  "name": "body",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {"name": "variable", "term": {"variable": "n"}},
@@ -3424,7 +3424,7 @@
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                                                                 {
-                                                                                                                  "name": "type",
+                                                                                                                  "name": "body",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {"name": "variable", "term": {"variable": "n"}},
@@ -3762,7 +3762,7 @@
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                                                                 {
-                                                                                                                  "name": "type",
+                                                                                                                  "name": "body",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {"name": "variable", "term": {"variable": "n"}},
@@ -4104,7 +4104,7 @@
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                                                                 {
-                                                                                                                  "name": "type",
+                                                                                                                  "name": "body",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {"name": "variable", "term": {"variable": "n"}},
@@ -4467,7 +4467,7 @@
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                                                                 {
-                                                                                                                  "name": "type",
+                                                                                                                  "name": "body",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {"name": "variable", "term": {"variable": "n"}},
@@ -4865,7 +4865,7 @@
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                                                                 {
-                                                                                                                  "name": "type",
+                                                                                                                  "name": "body",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {"name": "variable", "term": {"variable": "n"}},
@@ -5196,7 +5196,7 @@
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                                                                 {
-                                                                                                                  "name": "type",
+                                                                                                                  "name": "body",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {"name": "variable", "term": {"variable": "n"}},
@@ -5571,7 +5571,7 @@
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                                                                 {
-                                                                                                                  "name": "type",
+                                                                                                                  "name": "body",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {"name": "variable", "term": {"variable": "n"}},
@@ -5960,7 +5960,7 @@
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                                                                 {
-                                                                                                                  "name": "type",
+                                                                                                                  "name": "body",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {"name": "variable", "term": {"variable": "n"}},
@@ -6347,7 +6347,7 @@
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                                                                 {
-                                                                                                                  "name": "type",
+                                                                                                                  "name": "body",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {"name": "variable", "term": {"variable": "n"}},
@@ -6702,7 +6702,7 @@
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                                                                 {
-                                                                                                                  "name": "type",
+                                                                                                                  "name": "body",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {"name": "variable", "term": {"variable": "n"}},
@@ -7022,7 +7022,7 @@
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                                                                 {
-                                                                                                                  "name": "type",
+                                                                                                                  "name": "body",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {"name": "variable", "term": {"variable": "n"}},
@@ -7345,7 +7345,7 @@
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                                                                 {
-                                                                                                                  "name": "type",
+                                                                                                                  "name": "body",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {"name": "variable", "term": {"variable": "n"}},
@@ -7618,7 +7618,7 @@
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                                                                 {
-                                                                                                                  "name": "type",
+                                                                                                                  "name": "body",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {"name": "variable", "term": {"variable": "n"}},
@@ -7851,7 +7851,7 @@
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                                                                                 {
-                                                                                                                  "name": "type",
+                                                                                                                  "name": "body",
                                                                                                                   "term": {
                                                                                                                     "inject": {
                                                                                                                       "field": {"name": "variable", "term": {"variable": "n"}},
@@ -11041,7 +11041,7 @@
                         "body": {"list": []},
                         "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
-        "type": {"type": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+        "type": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "description": "Test cases for type unification operations",
   "namespace": "hydra.test.unification",
   "termDependencies": ["hydra.unification", "hydra.lexical", "hydra.show.core"],

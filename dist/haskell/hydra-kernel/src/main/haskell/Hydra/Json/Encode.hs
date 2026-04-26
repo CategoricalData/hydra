@@ -159,8 +159,8 @@ toJson types tname typ term =
                             encodedK = toJson types tname keyType k
                             encodedV = toJson types tname valType v
                         in (Eithers.either (\err -> Left err) (\ek -> Eithers.map (\ev -> Model.ValueObject (Maps.fromList [
-                          ("@key", ek),
-                          ("@value", ev)])) encodedV) encodedK)
+                          ("key", ek),
+                          ("value", ev)])) encodedV) encodedK)
                   entries = Eithers.mapList encodeEntry (Maps.toList v1)
               in (Eithers.map (\es -> Model.ValueArray es) entries)
             _ -> Left "expected map term"
@@ -174,8 +174,8 @@ toJson types tname typ term =
                   encodedFirst = toJson types tname firstType first
                   encodedSecond = toJson types tname secondType second
               in (Eithers.either (\err -> Left err) (\ef -> Eithers.map (\es -> Model.ValueObject (Maps.fromList [
-                ("@first", ef),
-                ("@second", es)])) encodedSecond) encodedFirst)
+                ("first", ef),
+                ("second", es)])) encodedSecond) encodedFirst)
             _ -> Left "expected pair term"
         Core.TypeEither v0 ->
           let leftType = Core.eitherTypeLeft v0
@@ -184,10 +184,10 @@ toJson types tname typ term =
             Core.TermEither v1 -> Eithers.either (\l ->
               let encodedL = toJson types tname leftType l
               in (Eithers.map (\v -> Model.ValueObject (Maps.fromList [
-                ("@left", v)])) encodedL)) (\r ->
+                ("left", v)])) encodedL)) (\r ->
               let encodedR = toJson types tname rightType r
               in (Eithers.map (\v -> Model.ValueObject (Maps.fromList [
-                ("@right", v)])) encodedR)) v1
+                ("right", v)])) encodedR)) v1
             _ -> Left "expected either term"
         Core.TypeVariable v0 ->
           let lookedUp = Maps.lookup v0 types
@@ -241,8 +241,8 @@ toJsonUntyped term =
                         encodedK = toJsonUntyped k
                         encodedV = toJsonUntyped v
                     in (Eithers.either (\err -> Left err) (\ek -> Eithers.map (\ev -> Model.ValueObject (Maps.fromList [
-                      ("@key", ek),
-                      ("@value", ev)])) encodedV) encodedK)
+                      ("key", ek),
+                      ("value", ev)])) encodedV) encodedK)
               entries = Eithers.mapList encodeEntry (Maps.toList v0)
           in (Eithers.map (\es -> Model.ValueArray es) entries)
         Core.TermPair v0 ->
@@ -251,15 +251,15 @@ toJsonUntyped term =
               encodedFirst = toJsonUntyped first
               encodedSecond = toJsonUntyped second
           in (Eithers.either (\err -> Left err) (\ef -> Eithers.map (\es -> Model.ValueObject (Maps.fromList [
-            ("@first", ef),
-            ("@second", es)])) encodedSecond) encodedFirst)
+            ("first", ef),
+            ("second", es)])) encodedSecond) encodedFirst)
         Core.TermEither v0 -> Eithers.either (\l ->
           let encodedL = toJsonUntyped l
           in (Eithers.map (\v -> Model.ValueObject (Maps.fromList [
-            ("@left", v)])) encodedL)) (\r ->
+            ("left", v)])) encodedL)) (\r ->
           let encodedR = toJsonUntyped r
           in (Eithers.map (\v -> Model.ValueObject (Maps.fromList [
-            ("@right", v)])) encodedR)) v0
+            ("right", v)])) encodedR)) v0
         _ -> Left (Strings.cat [
           "unsupported term variant for JSON encoding: ",
           (ShowCore.term term)])

@@ -259,8 +259,8 @@ shaclCoder mod cx g =
                     Core.bindingTerm = dataTerm,
                     Core.bindingType = (Just (Core.TypeScheme {
                       Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-                      Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
+                      Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                      Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionType v0)))
                 _ -> Nothing) (Packaging.moduleDefinitions mod))
           toShape =
                   \el -> Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_t -> _t) (DecodeCore.type_ g (Core.bindingTerm el))) (\_typ -> Eithers.map (\_cp -> Model.Definition {

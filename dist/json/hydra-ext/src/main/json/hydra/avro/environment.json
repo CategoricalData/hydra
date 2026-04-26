@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.avro.environment.AvroQualifiedName",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "An Avro qualified name with optional namespace"}}}],
               "body": {
                 "record": [
@@ -19,8 +19,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The optional namespace"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The optional namespace"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}},
                   {
                     "name": "name",
@@ -28,20 +28,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The local name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The local name"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.avro.environment.AvroForeignKey",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "An Avro foreign key annotation linking a field to another type"}}}],
               "body": {
@@ -52,8 +52,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The Hydra type name referenced by this foreign key"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
@@ -62,8 +62,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A function which constructs element names from string values"}}}],
                         "body": {
@@ -75,12 +75,12 @@
       "type": {
         "name": "hydra.avro.environment.AvroPrimaryKey",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "An Avro primary key annotation identifying the element name field"}}}],
               "body": {
@@ -91,8 +91,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The name of the primary key field"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The name of the primary key field"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "constructor",
@@ -100,8 +100,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A function which constructs element names from string values"}}}],
                         "body": {
@@ -113,12 +113,12 @@
       "type": {
         "name": "hydra.avro.environment.AvroEnvironment",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "Environment for Avro-to-Hydra code generation"}}}],
               "body": {
                 "record": [
@@ -128,8 +128,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Named adapters for previously processed schemas"}}}],
                         "body": {
                           "map": {
@@ -153,8 +153,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The current Avro namespace"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The current Avro namespace"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}},
                   {
                     "name": "elements",
@@ -162,8 +162,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Generated Hydra elements"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Generated Hydra elements"}}}],
                         "body": {
                           "map": {
                             "keys": {"variable": "hydra.core.Name"},
@@ -173,12 +173,12 @@
       "type": {
         "name": "hydra.avro.environment.EncodeEnvironment",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Environment for Hydra-to-Avro encoding, tracking which named types have been emitted"}}}],
               "body": {
@@ -189,8 +189,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All named types available for reference"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All named types available for reference"}}}],
                         "body": {
                           "map": {
                             "keys": {"variable": "hydra.core.Name"},
@@ -201,8 +201,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Adapters for types that have already been fully emitted (emit references for these)"}}}],
                         "body": {

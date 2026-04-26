@@ -233,9 +233,9 @@ fromJson types tname typ value =
                     \entryJson ->
                       let objResult = expectObject entryJson
                       in (Eithers.either (\err -> Left err) (\entryObj ->
-                        let keyJson = Maps.lookup "@key" entryObj
-                            valJson = Maps.lookup "@value" entryObj
-                        in (Maybes.maybe (Left "missing @key in map entry") (\kj -> Maybes.maybe (Left "missing @value in map entry") (\vj ->
+                        let keyJson = Maps.lookup "key" entryObj
+                            valJson = Maps.lookup "value" entryObj
+                        in (Maybes.maybe (Left "missing key in map entry") (\kj -> Maybes.maybe (Left "missing value in map entry") (\vj ->
                           let decodedKey = fromJson types tname keyType kj
                               decodedVal = fromJson types tname valType vj
                           in (Eithers.either (\err -> Left err) (\k -> Eithers.map (\v -> (k, v)) decodedVal) decodedKey)) valJson) keyJson)) objResult)
@@ -246,9 +246,9 @@ fromJson types tname typ value =
               secondType = Core.pairTypeSecond v0
               objResult = expectObject value
           in (Eithers.either (\err -> Left err) (\obj ->
-            let firstJson = Maps.lookup "@first" obj
-                secondJson = Maps.lookup "@second" obj
-            in (Maybes.maybe (Left "missing @first in pair") (\fj -> Maybes.maybe (Left "missing @second in pair") (\sj ->
+            let firstJson = Maps.lookup "first" obj
+                secondJson = Maps.lookup "second" obj
+            in (Maybes.maybe (Left "missing first in pair") (\fj -> Maybes.maybe (Left "missing second in pair") (\sj ->
               let decodedFirst = fromJson types tname firstType fj
                   decodedSecond = fromJson types tname secondType sj
               in (Eithers.either (\err -> Left err) (\f -> Eithers.map (\s -> Core.TermPair (f, s)) decodedSecond) decodedFirst)) secondJson) firstJson)) objResult)
@@ -257,9 +257,9 @@ fromJson types tname typ value =
               rightType = Core.eitherTypeRight v0
               objResult = expectObject value
           in (Eithers.either (\err -> Left err) (\obj ->
-            let leftJson = Maps.lookup "@left" obj
-                rightJson = Maps.lookup "@right" obj
-            in (Maybes.maybe (Maybes.maybe (Left "expected @left or @right in Either") (\rj ->
+            let leftJson = Maps.lookup "left" obj
+                rightJson = Maps.lookup "right" obj
+            in (Maybes.maybe (Maybes.maybe (Left "expected left or right in Either") (\rj ->
               let decoded = fromJson types tname rightType rj
               in (Eithers.map (\v -> Core.TermEither (Right v)) decoded)) rightJson) (\lj ->
               let decoded = fromJson types tname leftType lj

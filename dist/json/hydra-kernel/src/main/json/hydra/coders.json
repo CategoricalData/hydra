@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.coders.Adapter",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A two-level bidirectional encoder which adapts types to types and terms to terms"}}}],
               "body": {
@@ -28,8 +28,8 @@
                                       "annotated": {
                                         "annotation": [
                                           {
-                                            "@key": "description",
-                                            "@value": {
+                                            "key": "description",
+                                            "value": {
                                               "literal": {
                                                 "string": "Whether information may be lost in the course of this adaptation"}}}],
                                         "body": {"literal": {"boolean": {}}}}}},
@@ -39,8 +39,8 @@
                                       "annotated": {
                                         "annotation": [
                                           {
-                                            "@key": "description",
-                                            "@value": {"literal": {"string": "The source type"}}}],
+                                            "key": "description",
+                                            "value": {"literal": {"string": "The source type"}}}],
                                         "body": {"variable": "t1"}}}},
                                   {
                                     "name": "target",
@@ -48,8 +48,8 @@
                                       "annotated": {
                                         "annotation": [
                                           {
-                                            "@key": "description",
-                                            "@value": {"literal": {"string": "The target type"}}}],
+                                            "key": "description",
+                                            "value": {"literal": {"string": "The target type"}}}],
                                         "body": {"variable": "t2"}}}},
                                   {
                                     "name": "coder",
@@ -57,8 +57,8 @@
                                       "annotated": {
                                         "annotation": [
                                           {
-                                            "@key": "description",
-                                            "@value": {
+                                            "key": "description",
+                                            "value": {
                                               "literal": {
                                                 "string": "The coder for transforming instances of the source type to instances of the target type"}}}],
                                         "body": {
@@ -77,12 +77,12 @@
       "type": {
         "name": "hydra.coders.AdapterContext",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "An evaluation context together with a source language and a target language"}}}],
               "body": {
@@ -93,8 +93,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The underlying graph of elements and primitives"}}}],
                         "body": {"variable": "hydra.graph.Graph"}}}},
                   {
@@ -103,8 +103,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The language being encoded or decoded"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The language being encoded or decoded"}}}],
                         "body": {"variable": "hydra.coders.Language"}}}},
                   {
                     "name": "adapters",
@@ -112,8 +112,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "A map of type names to adapters for those types"}}}],
                         "body": {
                           "map": {
@@ -136,12 +136,12 @@
       "type": {
         "name": "hydra.coders.Bicoder",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A two-level encoder and decoder, operating both at a type level and an instance (data) level"}}}],
               "body": {
@@ -160,8 +160,8 @@
                                       "annotated": {
                                         "annotation": [
                                           {
-                                            "@key": "description",
-                                            "@value": {"literal": {"string": "A function from source types to adapters"}}}],
+                                            "key": "description",
+                                            "value": {"literal": {"string": "A function from source types to adapters"}}}],
                                         "body": {
                                           "function": {
                                             "codomain": {
@@ -184,8 +184,8 @@
                                       "annotated": {
                                         "annotation": [
                                           {
-                                            "@key": "description",
-                                            "@value": {"literal": {"string": "A function from target types to adapters"}}}],
+                                            "key": "description",
+                                            "value": {"literal": {"string": "A function from target types to adapters"}}}],
                                         "body": {
                                           "function": {
                                             "codomain": {
@@ -211,12 +211,12 @@
       "type": {
         "name": "hydra.coders.Coder",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "An encoder and decoder; a bidirectional transformation between two types"}}}],
               "body": {
@@ -231,8 +231,8 @@
                               "annotated": {
                                 "annotation": [
                                   {
-                                    "@key": "description",
-                                    "@value": {
+                                    "key": "description",
+                                    "value": {
                                       "literal": {
                                         "string": "A function which encodes source values as target values in a given context"}}}],
                                 "body": {
@@ -251,8 +251,8 @@
                               "annotated": {
                                 "annotation": [
                                   {
-                                    "@key": "description",
-                                    "@value": {
+                                    "key": "description",
+                                    "value": {
                                       "literal": {
                                         "string": "A function which decodes target values as source values in a given context"}}}],
                                 "body": {
@@ -272,12 +272,12 @@
       "type": {
         "name": "hydra.coders.CoderDirection",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Indicates either the 'out' or the 'in' direction of a coder"}}}],
               "body": {
@@ -289,12 +289,12 @@
       "type": {
         "name": "hydra.coders.Language",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A named language together with language-specific constraints"}}}],
               "body": {
@@ -305,8 +305,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The unique name of the language"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The unique name of the language"}}}],
                         "body": {"variable": "hydra.coders.LanguageName"}}}},
                   {
                     "name": "constraints",
@@ -314,8 +314,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The constraints which characterize the language"}}}],
                         "body": {"variable": "hydra.coders.LanguageConstraints"}}}}]}}},
           "variables": []}}},
@@ -323,12 +323,12 @@
       "type": {
         "name": "hydra.coders.LanguageConstraints",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A set of constraints on valid type and term expressions, characterizing a language"}}}],
               "body": {
@@ -339,8 +339,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All supported elimination variants"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All supported elimination variants"}}}],
                         "body": {"set": {"variable": "hydra.variants.EliminationVariant"}}}}},
                   {
                     "name": "literalVariants",
@@ -348,8 +348,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All supported literal variants"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All supported literal variants"}}}],
                         "body": {"set": {"variable": "hydra.variants.LiteralVariant"}}}}},
                   {
                     "name": "floatTypes",
@@ -357,8 +357,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All supported float types"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All supported float types"}}}],
                         "body": {"set": {"variable": "hydra.core.FloatType"}}}}},
                   {
                     "name": "functionVariants",
@@ -366,8 +366,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All supported function variants"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All supported function variants"}}}],
                         "body": {"set": {"variable": "hydra.variants.FunctionVariant"}}}}},
                   {
                     "name": "integerTypes",
@@ -375,8 +375,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All supported integer types"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All supported integer types"}}}],
                         "body": {"set": {"variable": "hydra.core.IntegerType"}}}}},
                   {
                     "name": "termVariants",
@@ -384,8 +384,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All supported term variants"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All supported term variants"}}}],
                         "body": {"set": {"variable": "hydra.variants.TermVariant"}}}}},
                   {
                     "name": "typeVariants",
@@ -393,8 +393,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All supported type variants"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All supported type variants"}}}],
                         "body": {"set": {"variable": "hydra.variants.TypeVariant"}}}}},
                   {
                     "name": "types",
@@ -402,8 +402,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A logical set of types, as a predicate which tests a type for inclusion"}}}],
                         "body": {
@@ -415,24 +415,24 @@
       "type": {
         "name": "hydra.coders.LanguageName",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "The unique name of a language"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "The unique name of a language"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.coders.SymmetricAdapter",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A bidirectional encoder which maps between the same type and term languages on either side"}}}],
               "body": {
@@ -459,12 +459,12 @@
       "type": {
         "name": "hydra.coders.TraversalOrder",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "Specifies either a pre-order or post-order traversal"}}}],
               "body": {
                 "union": [
@@ -474,8 +474,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Pre-order traversal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Pre-order traversal"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "post",
@@ -483,20 +483,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Post-order traversal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Post-order traversal"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.coders.TypeAdapter",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A function which maps a Hydra type to a symmetric adapter between types and terms"}}}],
               "body": {

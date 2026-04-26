@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.parquet.format.Type",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Types supported by Parquet.  These types are intended to be used in combination with the encodings to control the on disk storage format. For example INT16 is not included as a type since a good encoding of INT32 would handle this."}}}],
               "body": {
@@ -26,12 +26,12 @@
       "type": {
         "name": "hydra.parquet.format.FieldRepetitionType",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Representation of Schemas"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Representation of Schemas"}}}],
               "body": {
                 "union": [
                   {
@@ -40,8 +40,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "This field is required (can not be null) and each record has exactly 1 value."}}}],
                         "body": {"unit": {}}}}},
@@ -51,8 +51,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The field is optional (can be null) and each record has 0 or 1 values."}}}],
                         "body": {"unit": {}}}}},
@@ -62,8 +62,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The field is repeated and can contain 0 or more values"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}},
@@ -71,12 +71,12 @@
       "type": {
         "name": "hydra.parquet.format.Statistics",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Statistics per row group and per page. All fields are optional."}}}],
               "body": {
@@ -93,8 +93,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Max value for the column, determined by its ColumnOrder. Values are encoded using PLAIN encoding, except that variable-length byte arrays do not include a length prefix."}}}],
                         "body": {"maybe": {"literal": {"binary": {}}}}}}},
@@ -104,8 +104,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Max value for the column, determined by its ColumnOrder. Values are encoded using PLAIN encoding, except that variable-length byte arrays do not include a length prefix."}}}],
                         "body": {"maybe": {"literal": {"binary": {}}}}}}}]}}},
@@ -114,12 +114,12 @@
       "type": {
         "name": "hydra.parquet.format.DecimalType",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Decimal logical type annotation. To maintain forward-compatibility in v1, implementations using this logical type must also set scale and precision on the annotated SchemaElement. Allowed for physical types: INT32, INT64, FIXED, and BINARY"}}}],
               "body": {
@@ -131,7 +131,7 @@
       "type": {
         "name": "hydra.parquet.format.TimeUnit",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "millis", "type": {"unit": {}}},
               {"name": "micros", "type": {"unit": {}}},
@@ -141,12 +141,12 @@
       "type": {
         "name": "hydra.parquet.format.TimestampType",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Timestamp logical type annotation. Allowed for physical types: INT64"}}}],
               "body": {
@@ -160,12 +160,12 @@
       "type": {
         "name": "hydra.parquet.format.TimeType",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Time logical type annotation. Allowed for physical types: INT32 (millis), INT64 (micros, nanos)"}}}],
               "body": {
@@ -179,12 +179,12 @@
       "type": {
         "name": "hydra.parquet.format.IntType",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Integer logical type annotation. bitWidth must be 8, 16, 32, or 64. Allowed for physical types: INT32, INT64"}}}],
               "body": {
@@ -196,12 +196,12 @@
       "type": {
         "name": "hydra.parquet.format.LogicalType",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "LogicalType annotations to replace ConvertedType. To maintain compatibility, implementations using LogicalType for a SchemaElement aust also set the corresponding ConvertedType (if any) from the following table."}}}],
               "body": {
@@ -212,8 +212,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "use ConvertedType UTF8"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "use ConvertedType UTF8"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "map",
@@ -221,8 +221,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "use ConvertedType MAP"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "use ConvertedType MAP"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "list",
@@ -230,8 +230,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "use ConvertedType LIST"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "use ConvertedType LIST"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "enum",
@@ -239,8 +239,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "use ConvertedType ENUM"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "use ConvertedType ENUM"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "decimal",
@@ -248,8 +248,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "use ConvertedType DECIMAL + SchemaElement.{scale, precision}"}}}],
                         "body": {"variable": "hydra.parquet.format.DecimalType"}}}},
@@ -259,8 +259,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "use ConvertedType DATE"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "use ConvertedType DATE"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "time",
@@ -268,8 +268,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "use ConvertedType TIME_MICROS for TIME(isAdjustedToUTC = *, unit = MICROS). use ConvertedType TIME_MILLIS for TIME(isAdjustedToUTC = *, unit = MILLIS)"}}}],
                         "body": {"variable": "hydra.parquet.format.TimeType"}}}},
@@ -279,8 +279,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "use ConvertedType TIMESTAMP_MICROS for TIMESTAMP(isAdjustedToUTC = *, unit = MICROS). use ConvertedType TIMESTAMP_MILLIS for TIMESTAMP(isAdjustedToUTC = *, unit = MILLIS)"}}}],
                         "body": {"variable": "hydra.parquet.format.TimestampType"}}}},
@@ -290,8 +290,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "use ConvertedType INT_* or UINT_*"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "use ConvertedType INT_* or UINT_*"}}}],
                         "body": {"variable": "hydra.parquet.format.IntType"}}}},
                   {
                     "name": "unknown",
@@ -299,8 +299,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "no compatible ConvertedType"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "no compatible ConvertedType"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "json",
@@ -308,8 +308,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "use ConvertedType JSON"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "use ConvertedType JSON"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "bson",
@@ -317,8 +317,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "use ConvertedType BSON"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "use ConvertedType BSON"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "uuid",
@@ -326,20 +326,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "no compatible ConvertedType"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "no compatible ConvertedType"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.SchemaElement",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Represents a element inside a schema definition.\n- if it is a group (inner node) then type is undefined and num_children is defined\n- if it is a primitive type (leaf) then type is defined and num_children is undefined\nthe nodes are listed in depth first traversal order."}}}],
               "body": {
@@ -350,8 +350,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Data type for this field. Not set if the current element is a non-leaf node"}}}],
                         "body": {"maybe": {"variable": "hydra.parquet.format.Type"}}}}},
@@ -361,8 +361,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "If type is FIXED_LEN_BYTE_ARRAY, this is the byte length of the values. Otherwise, if specified, this is the maximum bit length to store any of the values. (e.g. a low cardinality INT col could have this set to 3).  Note that this is in the schema, and therefore fixed for the entire file."}}}],
                         "body": {"maybe": {"literal": {"integer": {"int32": {}}}}}}}},
@@ -372,8 +372,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "repetition of the field. The root of the schema does not have a repetition_type. All other nodes must have one"}}}],
                         "body": {"maybe": {"variable": "hydra.parquet.format.FieldRepetitionType"}}}}},
@@ -383,8 +383,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Name of the field in the schema"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Name of the field in the schema"}}}],
                         "body": {"literal": {"string": {}}}}}},
                   {
                     "name": "numChildren",
@@ -392,8 +392,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Nested fields.  Since thrift does not support nested fields, the nesting is flattened to a single list by a depth-first traversal. The children count is used to construct the nested relationship. This field is not set when the element is a primitive type"}}}],
                         "body": {"maybe": {"literal": {"integer": {"int32": {}}}}}}}},
@@ -403,8 +403,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "When the original schema supports field ids, this will save the original field id in the parquet schema"}}}],
                         "body": {"maybe": {"literal": {"integer": {"int32": {}}}}}}}},
@@ -414,8 +414,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The logical type of this SchemaElement. LogicalType replaces ConvertedType, but ConvertedType is still required for some logical types to ensure forward-compatibility in format v1."}}}],
                         "body": {"maybe": {"variable": "hydra.parquet.format.LogicalType"}}}}}]}}},
@@ -424,12 +424,12 @@
       "type": {
         "name": "hydra.parquet.format.Encoding",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Encodings supported by Parquet.  Not all encodings are valid for all types.  These enums are also used to specify the encoding of definition and repetition levels. See the accompanying doc for the details of the more complicated encodings."}}}],
               "body": {
@@ -440,8 +440,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Default encoding.\nBOOLEAN - 1 bit per value. 0 is false; 1 is true.\nINT32 - 4 bytes per value.  Stored as little-endian.\nINT64 - 8 bytes per value.  Stored as little-endian.\nFLOAT - 4 bytes per value.  IEEE. Stored as little-endian.\nDOUBLE - 8 bytes per value.  IEEE. Stored as little-endian.\nBYTE_ARRAY - 4 byte length stored as little endian, followed by bytes.\nFIXED_LEN_BYTE_ARRAY - Just the bytes."}}}],
                         "body": {"unit": {}}}}},
@@ -451,8 +451,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Group packed run length encoding. Usable for definition/repetition levels encoding and Booleans (on one bit: 0 is false; 1 is true.)"}}}],
                         "body": {"unit": {}}}}},
@@ -462,8 +462,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Bit packed encoding.  This can only be used if the data has a known max width.  Usable for definition/repetition levels encoding."}}}],
                         "body": {"unit": {}}}}},
@@ -473,8 +473,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Delta encoding for integers. This can be used for int columns and works best on sorted data"}}}],
                         "body": {"unit": {}}}}},
@@ -484,8 +484,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Encoding for byte arrays to separate the length values and the data. The lengths are encoded using DELTA_BINARY_PACKED"}}}],
                         "body": {"unit": {}}}}},
@@ -495,8 +495,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Incremental-encoded byte array. Prefix lengths are encoded using DELTA_BINARY_PACKED. Suffixes are stored as delta length byte arrays."}}}],
                         "body": {"unit": {}}}}},
@@ -506,8 +506,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Dictionary encoding: the ids are encoded using the RLE encoding"}}}],
                         "body": {"unit": {}}}}},
@@ -517,8 +517,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Encoding for floating-point data. K byte-streams are created where K is the size in bytes of the data type. The individual bytes of an FP value are scattered to the corresponding stream and the streams are concatenated. This itself does not reduce the size of the data but can lead to better compression afterwards."}}}],
                         "body": {"unit": {}}}}}]}}},
@@ -527,12 +527,12 @@
       "type": {
         "name": "hydra.parquet.format.CompressionCodec",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Supported compression algorithms. Codecs added in format version X.Y can be read by readers based on X.Y and later. Codec support may vary between readers based on the format version and libraries available at runtime. See Compression.md for a detailed specification of these algorithms."}}}],
               "body": {
@@ -547,8 +547,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Added in 2.4"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Added in 2.4"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "zstd",
@@ -556,8 +556,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Added in 2.4"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Added in 2.4"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "lz4Raw",
@@ -565,15 +565,15 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Added in 2.9"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Added in 2.9"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.PageType",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "dataPage", "type": {"unit": {}}},
               {"name": "indexPage", "type": {"unit": {}}},
@@ -584,12 +584,12 @@
       "type": {
         "name": "hydra.parquet.format.BoundaryOrder",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Enum to annotate whether lists of min/max elements inside ColumnIndex are ordered and if so, in which direction."}}}],
               "body": {
@@ -602,12 +602,12 @@
       "type": {
         "name": "hydra.parquet.format.DataPageHeader",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Data page header"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Data page header"}}}],
               "body": {
                 "record": [
                   {
@@ -616,8 +616,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Number of values, including NULLs, in this data page."}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}},
                   {
@@ -626,8 +626,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Encoding used for this data page"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Encoding used for this data page"}}}],
                         "body": {"variable": "hydra.parquet.format.Encoding"}}}},
                   {
                     "name": "definitionLevelEncoding",
@@ -635,8 +635,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Encoding used for definition levels"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Encoding used for definition levels"}}}],
                         "body": {"variable": "hydra.parquet.format.Encoding"}}}},
                   {
                     "name": "repetitionLevelEncoding",
@@ -644,8 +644,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Encoding used for repetition levels"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Encoding used for repetition levels"}}}],
                         "body": {"variable": "hydra.parquet.format.Encoding"}}}},
                   {
                     "name": "statistics",
@@ -653,25 +653,25 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Optional statistics for the data in this page"}}}],
                         "body": {"maybe": {"variable": "hydra.parquet.format.Statistics"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.IndexPageHeader",
-        "type": {"type": {"record": []}, "variables": []}}},
+        "type": {"body": {"record": []}, "variables": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.DictionaryPageHeader",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "The dictionary page must be placed at the first position of the column chunk if it is partly or completely dictionary encoded. At most one dictionary page can be placed in a column chunk."}}}],
               "body": {
@@ -682,8 +682,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Number of values in the dictionary"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Number of values in the dictionary"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}},
                   {
                     "name": "encoding",
@@ -691,8 +691,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Encoding using this dictionary page"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Encoding using this dictionary page"}}}],
                         "body": {"variable": "hydra.parquet.format.Encoding"}}}},
                   {
                     "name": "isSorted",
@@ -700,8 +700,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "If true, the entries in the dictionary are sorted in ascending order"}}}],
                         "body": {"maybe": {"literal": {"boolean": {}}}}}}}]}}},
@@ -710,12 +710,12 @@
       "type": {
         "name": "hydra.parquet.format.DataPageHeaderV2",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "New page format allowing reading levels without decompressing the data Repetition and definition levels are uncompressed The remaining section containing the data is compressed if is_compressed is true"}}}],
               "body": {
@@ -726,8 +726,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Number of values, including NULLs, in this data page."}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}},
                   {
@@ -736,8 +736,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Number of NULL values, in this data page. Number of non-null = num_values - num_nulls which is also the number of values in the data section"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}},
@@ -747,8 +747,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Number of rows in this data page. which means pages change on record boundaries (r = 0)"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}},
@@ -758,8 +758,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Encoding used for data in this page"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Encoding used for data in this page"}}}],
                         "body": {"variable": "hydra.parquet.format.Encoding"}}}},
                   {
                     "name": "definitionLevelsByteLength",
@@ -767,8 +767,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "length of the definition levels"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "length of the definition levels"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}},
                   {
                     "name": "repetitionLevelsByteLength",
@@ -776,8 +776,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "length of the repetition levels"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "length of the repetition levels"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}},
                   {
                     "name": "isCompressed",
@@ -785,8 +785,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "whether the values are compressed. Which means the section of the page between definition_levels_byte_length + repetition_levels_byte_length + 1 and compressed_page_size (included) is compressed with the compression_codec. If missing it is considered compressed"}}}],
                         "body": {"maybe": {"literal": {"boolean": {}}}}}}},
@@ -796,8 +796,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "optional statistics for the data in this page"}}}],
                         "body": {"maybe": {"variable": "hydra.parquet.format.Statistics"}}}}}]}}},
           "variables": []}}},
@@ -805,12 +805,12 @@
       "type": {
         "name": "hydra.parquet.format.BloomFilterAlgorithm",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "The algorithm used in Bloom filter."}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "The algorithm used in Bloom filter."}}}],
               "body": {
                 "union": [
                   {
@@ -819,20 +819,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Block-based Bloom filter."}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Block-based Bloom filter."}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.BloomFilterHash",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "The hash function used in Bloom filter. This function takes the hash of a column value using plain encoding."}}}],
               "body": {
@@ -843,32 +843,32 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "xxHash Strategy."}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "xxHash Strategy."}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.BloomFilterCompression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "The compression used in the Bloom filter."}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "The compression used in the Bloom filter."}}}],
               "body": {"union": [{"name": "uncompressed", "type": {"unit": {}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.BloomFilterHeader",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Bloom filter header is stored at beginning of Bloom filter data of each column and followed by its bitset."}}}],
               "body": {
@@ -879,8 +879,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The size of bitset in bytes"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The size of bitset in bytes"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}},
                   {
                     "name": "algorithm",
@@ -888,8 +888,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The algorithm for setting bits."}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The algorithm for setting bits."}}}],
                         "body": {"variable": "hydra.parquet.format.BloomFilterAlgorithm"}}}},
                   {
                     "name": "hash",
@@ -897,8 +897,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The hash function used for Bloom filter."}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The hash function used for Bloom filter."}}}],
                         "body": {"variable": "hydra.parquet.format.BloomFilterHash"}}}},
                   {
                     "name": "compression",
@@ -906,15 +906,15 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The compression used in the Bloom filter"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The compression used in the Bloom filter"}}}],
                         "body": {"variable": "hydra.parquet.format.BloomFilterCompression"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.PageHeader",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "type",
@@ -922,8 +922,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "the type of the page: indicates which of the *_header fields is set"}}}],
                     "body": {"variable": "hydra.parquet.format.PageType"}}}},
@@ -933,8 +933,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Uncompressed page size in bytes (not including this header)"}}}],
                     "body": {"literal": {"integer": {"int32": {}}}}}}},
@@ -944,8 +944,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Compressed (and potentially encrypted) page size in bytes, not including this header"}}}],
                     "body": {"literal": {"integer": {"int32": {}}}}}}},
@@ -955,8 +955,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "The 32bit CRC for the page, to be be calculated as follows:\n- Using the standard CRC32 algorithm\n- On the data only, i.e. this header should not be included. 'Data'\n  hereby refers to the concatenation of the repetition levels, the\n  definition levels and the column value, in this exact order.\n- On the encoded versions of the repetition levels, definition levels and\n  column values\n- On the compressed versions of the repetition levels, definition levels\n  and column values where possible;\n  - For v1 data pages, the repetition levels, definition levels and column\n    values are always compressed together. If a compression scheme is\n    specified, the CRC shall be calculated on the compressed version of\n    this concatenation. If no compression scheme is specified, the CRC\n    shall be calculated on the uncompressed version of this concatenation.\n  - For v2 data pages, the repetition levels and definition levels are\n    handled separately from the data and are never compressed (only\n    encoded). If a compression scheme is specified, the CRC shall be\n    calculated on the concatenation of the uncompressed repetition levels,\n    uncompressed definition levels and the compressed column values.\n    If no compression scheme is specified, the CRC shall be calculated on\n    the uncompressed concatenation.\n- In encrypted columns, CRC is calculated after page encryption; the\n  encryption itself is performed after page compression (if compressed)\nIf enabled, this allows for disabling checksumming in HDFS if only a few pages need to be read. "}}}],
                     "body": {"maybe": {"literal": {"integer": {"int32": {}}}}}}}},
@@ -977,12 +977,12 @@
       "type": {
         "name": "hydra.parquet.format.KeyValue",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Wrapper struct to store key values"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Wrapper struct to store key values"}}}],
               "body": {
                 "record": [
                   {"name": "key", "type": {"literal": {"string": {}}}},
@@ -992,12 +992,12 @@
       "type": {
         "name": "hydra.parquet.format.SortingColumn",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Wrapper struct to specify sort order"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Wrapper struct to specify sort order"}}}],
               "body": {
                 "record": [
                   {
@@ -1006,8 +1006,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The column index (in this row group)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The column index (in this row group)"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}},
                   {
                     "name": "descending",
@@ -1015,8 +1015,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "If true, indicates this column is sorted in descending order."}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -1026,8 +1026,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "If true, nulls will come before non-null values, otherwise, nulls go at the end."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
@@ -1036,12 +1036,12 @@
       "type": {
         "name": "hydra.parquet.format.PageEncodingStats",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "statistics of a given page type and encoding"}}}],
               "body": {
                 "record": [
@@ -1051,8 +1051,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "the page type (data/dic/...)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "the page type (data/dic/...)"}}}],
                         "body": {"variable": "hydra.parquet.format.PageType"}}}},
                   {
                     "name": "encoding",
@@ -1060,8 +1060,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "encoding of the page"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "encoding of the page"}}}],
                         "body": {"variable": "hydra.parquet.format.Encoding"}}}},
                   {
                     "name": "count",
@@ -1069,8 +1069,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "number of pages of this type with this encoding"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}}]}}},
           "variables": []}}},
@@ -1078,12 +1078,12 @@
       "type": {
         "name": "hydra.parquet.format.ColumnMetaData",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Description for column metadata"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Description for column metadata"}}}],
               "body": {
                 "record": [
                   {
@@ -1092,8 +1092,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Type of this column"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Type of this column"}}}],
                         "body": {"variable": "hydra.parquet.format.Type"}}}},
                   {
                     "name": "encodings",
@@ -1101,8 +1101,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Set of all encodings used for this column. The purpose is to validate whether we can decode those pages."}}}],
                         "body": {"list": {"variable": "hydra.parquet.format.Encoding"}}}}},
@@ -1112,8 +1112,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Path in schema"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Path in schema"}}}],
                         "body": {"list": {"literal": {"string": {}}}}}}},
                   {
                     "name": "codec",
@@ -1121,8 +1121,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Compression codec"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Compression codec"}}}],
                         "body": {"variable": "hydra.parquet.format.CompressionCodec"}}}},
                   {
                     "name": "numValues",
@@ -1130,8 +1130,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Number of values in this column"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Number of values in this column"}}}],
                         "body": {"literal": {"integer": {"int64": {}}}}}}},
                   {
                     "name": "totalUncompressedSize",
@@ -1139,8 +1139,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "total byte size of all uncompressed pages in this column chunk (including the headers)"}}}],
                         "body": {"literal": {"integer": {"int64": {}}}}}}},
@@ -1150,8 +1150,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "total byte size of all compressed, and potentially encrypted, pages in this column chunk (including the headers)"}}}],
                         "body": {"literal": {"integer": {"int64": {}}}}}}},
@@ -1161,8 +1161,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional key/value metadata"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional key/value metadata"}}}],
                         "body": {"maybe": {"list": {"variable": "hydra.parquet.format.KeyValue"}}}}}},
                   {
                     "name": "dataPageOffset",
@@ -1170,8 +1170,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Byte offset from beginning of file to first data page"}}}],
                         "body": {"literal": {"integer": {"int64": {}}}}}}},
                   {
@@ -1180,8 +1180,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Byte offset from beginning of file to root index page"}}}],
                         "body": {"maybe": {"literal": {"integer": {"int64": {}}}}}}}},
                   {
@@ -1190,8 +1190,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Byte offset from the beginning of file to first (only) dictionary page"}}}],
                         "body": {"maybe": {"literal": {"integer": {"int64": {}}}}}}}},
@@ -1201,8 +1201,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "optional statistics for this column chunk"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "optional statistics for this column chunk"}}}],
                         "body": {"maybe": {"variable": "hydra.parquet.format.Statistics"}}}}},
                   {
                     "name": "encodingStats",
@@ -1210,8 +1210,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Set of all encodings used for pages in this column chunk. This information can be used to determine if all data pages are dictionary encoded for example"}}}],
                         "body": {
@@ -1222,20 +1222,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Byte offset from beginning of file to Bloom filter data."}}}],
                         "body": {"maybe": {"literal": {"integer": {"int64": {}}}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.EncryptionWithFooterKey",
-        "type": {"type": {"record": []}, "variables": []}}},
+        "type": {"body": {"record": []}, "variables": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.EncryptionWithColumnKey",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "pathInSchema",
@@ -1243,8 +1243,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Column path in schema"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Column path in schema"}}}],
                     "body": {"list": {"literal": {"string": {}}}}}}},
               {
                 "name": "keyMetadata",
@@ -1252,15 +1252,15 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Retrieval metadata of column encryption key"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Retrieval metadata of column encryption key"}}}],
                     "body": {"maybe": {"literal": {"binary": {}}}}}}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.ColumnCryptoMetaData",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "encryptionWithFooterKey",
@@ -1273,7 +1273,7 @@
       "type": {
         "name": "hydra.parquet.format.ColumnChunk",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "filePath",
@@ -1281,8 +1281,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "File where column data is stored.  If not set, assumed to be same file as metadata.  This path is relative to the current file."}}}],
                     "body": {"maybe": {"literal": {"string": {}}}}}}},
@@ -1292,8 +1292,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Byte offset in file_path to the ColumnMetaData"}}}],
                     "body": {"literal": {"integer": {"int64": {}}}}}}},
               {
@@ -1302,8 +1302,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Column metadata for this chunk. This is the same content as what is at file_path/file_offset.  Having it here has it replicated in the file metadata."}}}],
                     "body": {"maybe": {"variable": "hydra.parquet.format.ColumnMetaData"}}}}},
@@ -1313,8 +1313,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "File offset of ColumnChunk's OffsetIndex"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "File offset of ColumnChunk's OffsetIndex"}}}],
                     "body": {"maybe": {"literal": {"integer": {"int64": {}}}}}}}},
               {
                 "name": "offsetIndexLength",
@@ -1322,8 +1322,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Size of ColumnChunk's OffsetIndex, in bytes"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Size of ColumnChunk's OffsetIndex, in bytes"}}}],
                     "body": {"maybe": {"literal": {"integer": {"int32": {}}}}}}}},
               {
                 "name": "columnIndexOffset",
@@ -1331,8 +1331,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "File offset of ColumnChunk's ColumnIndex"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "File offset of ColumnChunk's ColumnIndex"}}}],
                     "body": {"maybe": {"literal": {"integer": {"int64": {}}}}}}}},
               {
                 "name": "columnIndexLength",
@@ -1340,8 +1340,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Size of ColumnChunk's ColumnIndex, in bytes"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Size of ColumnChunk's ColumnIndex, in bytes"}}}],
                     "body": {"maybe": {"literal": {"integer": {"int32": {}}}}}}}},
               {
                 "name": "cryptoMetadata",
@@ -1349,8 +1349,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Crypto metadata of encrypted columns"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Crypto metadata of encrypted columns"}}}],
                     "body": {"maybe": {"variable": "hydra.parquet.format.ColumnCryptoMetaData"}}}}},
               {
                 "name": "encryptedColumnMetadata",
@@ -1358,15 +1358,15 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Encrypted column metadata for this chunk"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Encrypted column metadata for this chunk"}}}],
                     "body": {"maybe": {"literal": {"binary": {}}}}}}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.RowGroup",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "columns",
@@ -1374,8 +1374,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Metadata for each column chunk in this row group. This list must have the same order as the SchemaElement list in FileMetaData."}}}],
                     "body": {"list": {"variable": "hydra.parquet.format.ColumnChunk"}}}}},
@@ -1385,8 +1385,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Total byte size of all the uncompressed column data in this row group"}}}],
                     "body": {"literal": {"integer": {"int64": {}}}}}}},
@@ -1396,8 +1396,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Number of rows in this row group"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Number of rows in this row group"}}}],
                     "body": {"literal": {"integer": {"int64": {}}}}}}},
               {
                 "name": "sortingColumns",
@@ -1405,8 +1405,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "If set, specifies a sort ordering of the rows in this RowGroup. The sorting columns can be a subset of all the columns."}}}],
                     "body": {
@@ -1417,8 +1417,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Byte offset from beginning of file to first page (data or dictionary) in this row group"}}}],
                     "body": {"maybe": {"literal": {"integer": {"int64": {}}}}}}}},
@@ -1428,8 +1428,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Total byte size of all compressed (and potentially encrypted) column data in this row group"}}}],
                     "body": {"maybe": {"literal": {"integer": {"int64": {}}}}}}}},
@@ -1439,20 +1439,20 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Row group ordinal in the file"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Row group ordinal in the file"}}}],
                     "body": {"maybe": {"literal": {"integer": {"int16": {}}}}}}}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.ColumnOrder",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Union to specify the order used for the min_value and max_value fields for a column. This union takes the role of an enhanced enum that allows rich elements (which will be needed for a collation-based ordering in the future). Possible values are:\n* TypeDefinedOrder - the column uses the order defined by its logical or physical type (if there is no logical type).\nIf the reader does not support the value of this union, min and max stats for this column should be ignored. "}}}],
               "body": {
@@ -1463,8 +1463,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The sort orders for logical types are:\n  UTF8 - unsigned byte-wise comparison\n  INT8 - signed comparison\n  INT16 - signed comparison\n  INT32 - signed comparison\n  INT64 - signed comparison\n  UINT8 - unsigned comparison\n  UINT16 - unsigned comparison\n  UINT32 - unsigned comparison\n  UINT64 - unsigned comparison\n  DECIMAL - signed comparison of the represented value\n  DATE - signed comparison\n  TIME_MILLIS - signed comparison\n  TIME_MICROS - signed comparison\n  TIMESTAMP_MILLIS - signed comparison\n  TIMESTAMP_MICROS - signed comparison\n  INTERVAL - unsigned comparison\n  JSON - unsigned byte-wise comparison\n  BSON - unsigned byte-wise comparison\n  ENUM - unsigned byte-wise comparison\n  LIST - undefined\n  MAP - undefined\nIn the absence of logical types, the sort order is determined by the physical type:\n  BOOLEAN - false, true\n  INT32 - signed comparison\n  INT64 - signed comparison\n  INT96 (only used for legacy timestamps) - undefined\n  FLOAT - signed comparison of the represented value (*)\n  DOUBLE - signed comparison of the represented value (*)\n  BYTE_ARRAY - unsigned byte-wise comparison\n  FIXED_LEN_BYTE_ARRAY - unsigned byte-wise comparison\n(*) Because the sorting order is not specified properly for floating\n    point values (relations vs. total ordering) the following\n    compatibility rules should be applied when reading statistics:\n    - If the min is a NaN, it should be ignored.\n    - If the max is a NaN, it should be ignored.\n    - If the min is +0, the row group may contain -0 values as well.\n    - If the max is -0, the row group may contain +0 values as well.\n    - When looking for NaN values, min and max should be ignored."}}}],
                         "body": {"unit": {}}}}}]}}},
@@ -1473,7 +1473,7 @@
       "type": {
         "name": "hydra.parquet.format.PageLocation",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "offset",
@@ -1481,8 +1481,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Offset of the page in the file"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Offset of the page in the file"}}}],
                     "body": {"literal": {"integer": {"int64": {}}}}}}},
               {
                 "name": "compressedPageSize",
@@ -1490,8 +1490,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Size of the page, including header. Sum of compressed_page_size and header length"}}}],
                     "body": {"literal": {"integer": {"int32": {}}}}}}},
@@ -1501,8 +1501,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Index within the RowGroup of the first row of the page; this means pages change on record boundaries (r = 0)."}}}],
                     "body": {"literal": {"integer": {"int64": {}}}}}}}]},
@@ -1511,7 +1511,7 @@
       "type": {
         "name": "hydra.parquet.format.OffsetIndex",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "pageLocations",
@@ -1519,8 +1519,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "PageLocations, ordered by increasing PageLocation.offset. It is required that page_locations[i].first_row_index < page_locations[i+1].first_row_index."}}}],
                     "body": {"list": {"variable": "hydra.parquet.format.PageLocation"}}}}}]},
@@ -1529,12 +1529,12 @@
       "type": {
         "name": "hydra.parquet.format.ColumnIndex",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Description for ColumnIndex. Each <array-field>[i] refers to the page at OffsetIndex.page_locations[i]"}}}],
               "body": {
@@ -1545,8 +1545,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A list of Boolean values to determine the validity of the corresponding min and max values. If true, a page contains only null values, and writers have to set the corresponding entries in min_values and max_values to byte[0], so that all lists have the same length. If false, the corresponding entries in min_values and max_values must be valid."}}}],
                         "body": {"list": {"literal": {"boolean": {}}}}}}},
@@ -1556,8 +1556,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "minValues and maxValues are lists containing lower and upper bounds for the values of each page determined by the ColumnOrder of the column. These may be the actual minimum and maximum values found on a page, but can also be (more compact) values that do not exist on a page. For example, instead of storing \"Blart Versenwald III\", a writer may set min_values[i]=\"B\", max_values[i]=\"C\". Such more compact values must still be valid values within the column's logical type. Readers must make sure that list entries are populated before using them by inspecting null_pages."}}}],
                         "body": {"list": {"literal": {"binary": {}}}}}}},
@@ -1568,8 +1568,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Stores whether both min_values and max_values are orderd and if so, in which direction. This allows readers to perform binary searches in both lists. Readers cannot assume that max_values[i] <= min_values[i+1], even if the lists are ordered."}}}],
                         "body": {"variable": "hydra.parquet.format.BoundaryOrder"}}}},
@@ -1579,8 +1579,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A list containing the number of null values for each page"}}}],
                         "body": {"maybe": {"list": {"literal": {"integer": {"int64": {}}}}}}}}}]}}},
@@ -1589,16 +1589,14 @@
       "type": {
         "name": "hydra.parquet.format.AesGcmV1",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "aadPrefix",
                 "type": {
                   "annotated": {
                     "annotation": [
-                      {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "AAD prefix"}}}],
+                      {"key": "description", "value": {"literal": {"string": "AAD prefix"}}}],
                     "body": {"maybe": {"literal": {"binary": {}}}}}}},
               {
                 "name": "aadFileUnique",
@@ -1606,8 +1604,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Unique file identifier part of AAD suffix"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Unique file identifier part of AAD suffix"}}}],
                     "body": {"maybe": {"literal": {"binary": {}}}}}}},
               {
                 "name": "supplyAadPrefix",
@@ -1615,8 +1613,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "In files encrypted with AAD prefix without storing it, readers must supply the prefix"}}}],
                     "body": {"maybe": {"literal": {"boolean": {}}}}}}}]},
@@ -1625,16 +1623,14 @@
       "type": {
         "name": "hydra.parquet.format.AesGcmCtrV1",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "aadPrefix",
                 "type": {
                   "annotated": {
                     "annotation": [
-                      {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "AAD prefix"}}}],
+                      {"key": "description", "value": {"literal": {"string": "AAD prefix"}}}],
                     "body": {"maybe": {"literal": {"binary": {}}}}}}},
               {
                 "name": "aadFileUnique",
@@ -1642,8 +1638,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Unique file identifier part of AAD suffix"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Unique file identifier part of AAD suffix"}}}],
                     "body": {"maybe": {"literal": {"binary": {}}}}}}},
               {
                 "name": "supplyAadPrefix",
@@ -1651,8 +1647,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "In files encrypted with AAD prefix without storing it, readers must supply the prefix"}}}],
                     "body": {"maybe": {"literal": {"boolean": {}}}}}}}]},
@@ -1661,7 +1657,7 @@
       "type": {
         "name": "hydra.parquet.format.EncryptionAlgorithm",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "aesGcmV1",
@@ -1674,12 +1670,12 @@
       "type": {
         "name": "hydra.parquet.format.FileMetaData",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Description for file metadata"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Description for file metadata"}}}],
               "body": {
                 "record": [
                   {
@@ -1688,8 +1684,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Version of this file"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Version of this file"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}},
                   {
                     "name": "schema",
@@ -1697,8 +1693,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Parquet schema for this file.  This schema contains metadata for all the columns. The schema is represented as a tree with a single root.  The nodes of the tree are flattened to a list by doing a depth-first traversal. The column metadata contains the path in the schema for that column which can be used to map columns to nodes in the schema. The first element is the root"}}}],
                         "body": {"list": {"variable": "hydra.parquet.format.SchemaElement"}}}}},
@@ -1708,8 +1704,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Number of rows in this file"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Number of rows in this file"}}}],
                         "body": {"literal": {"integer": {"int64": {}}}}}}},
                   {
                     "name": "rowGroups",
@@ -1717,8 +1713,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Row groups in this file"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Row groups in this file"}}}],
                         "body": {"list": {"variable": "hydra.parquet.format.RowGroup"}}}}},
                   {
                     "name": "keyValueMetadata",
@@ -1726,8 +1722,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional key/value metadata"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional key/value metadata"}}}],
                         "body": {"maybe": {"list": {"variable": "hydra.parquet.format.KeyValue"}}}}}},
                   {
                     "name": "createdBy",
@@ -1735,8 +1731,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "String for application that wrote this file.  This should be in the format <Application> version <App Version> (build <App Build Hash>). e.g. impala version 1.0 (build 6cf94d29b2b7115df4de2c06e2ab4326d721eb55)"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}},
@@ -1746,8 +1742,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Sort order used for the min_value and max_value fields in the Statistics objects and the min_values and max_values fields in the ColumnIndex objects of each column in this file. Sort orders are listed in the order matching the columns in the schema. The indexes are not necessary the same though, because only leaf nodes of the schema are represented in the list of sort orders.\nWithout column_orders, the meaning of the min_value and max_value fields in the Statistics object and the ColumnIndex object is undefined. To ensure well-defined behaviour, if these fields are written to a Parquet file, column_orders must be written as well.\nThe obsolete min and max fields in the Statistics object are always sorted by signed comparison regardless of column_orders."}}}],
                         "body": {"maybe": {"list": {"variable": "hydra.parquet.format.ColumnOrder"}}}}}},
@@ -1757,8 +1753,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Encryption algorithm. This field is set only in encrypted files with plaintext footer. Files with encrypted footer store algorithm id in FileCryptoMetaData structure."}}}],
                         "body": {"maybe": {"variable": "hydra.parquet.format.EncryptionAlgorithm"}}}}},
@@ -1768,8 +1764,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Retrieval metadata of key used for signing the footer. Used only in encrypted files with plaintext footer."}}}],
                         "body": {"maybe": {"literal": {"binary": {}}}}}}}]}}},
@@ -1778,12 +1774,12 @@
       "type": {
         "name": "hydra.parquet.format.FileCryptoMetaData",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "Crypto metadata for files with encrypted footer"}}}],
               "body": {
                 "record": [
@@ -1793,8 +1789,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Encryption algorithm. This field is only used for files with encrypted footer. Files with plaintext footer store algorithm id inside footer (FileMetaData structure)."}}}],
                         "body": {"variable": "hydra.parquet.format.EncryptionAlgorithm"}}}},
@@ -1804,8 +1800,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Retrieval metadata of key used for encryption of footer, and (possibly) columns"}}}],
                         "body": {"maybe": {"literal": {"binary": {}}}}}}}]}}},

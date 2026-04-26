@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Show a checking error as a string"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Show a checking error as a string"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -54,7 +54,7 @@
                 "domain": {"variable": "hydra.error.checking.CheckingError"},
                 "parameter": "ce"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.error.checking.CheckingError"}}},
@@ -66,8 +66,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Show a decoding error as a string"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Show a decoding error as a string"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -83,7 +83,7 @@
                 "domain": {"variable": "hydra.errors.DecodingError"},
                 "parameter": "de"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.errors.DecodingError"}}},
@@ -95,8 +95,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Show an error as a string"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Show an error as a string"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -159,7 +159,7 @@
                 "domain": {"variable": "hydra.errors.Error"},
                 "parameter": "e"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.errors.Error"}}},
@@ -171,8 +171,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Show an incorrect unification error as a string"}}}],
             "body": {
               "lambda": {
@@ -188,7 +188,7 @@
                               "project": {
                                 "field": "substitution",
                                 "typeName": "hydra.error.checking.IncorrectUnificationError"}}}},
-                        "type": {"type": {"variable": "hydra.typing.TypeSubst"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.typing.TypeSubst"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -202,7 +202,7 @@
                 "domain": {"variable": "hydra.error.checking.IncorrectUnificationError"},
                 "parameter": "e"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.error.checking.IncorrectUnificationError"}}},
@@ -214,8 +214,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Show a not-a-forall-type error as a string"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Show a not-a-forall-type error as a string"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -230,7 +230,7 @@
                               "project": {
                                 "field": "type",
                                 "typeName": "hydra.error.checking.NotAForallTypeError"}}}},
-                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -243,7 +243,7 @@
                                   "project": {
                                     "field": "typeArguments",
                                     "typeName": "hydra.error.checking.NotAForallTypeError"}}}},
-                            "type": {"type": {"list": {"variable": "hydra.core.Type"}}, "variables": []}}],
+                            "type": {"body": {"list": {"variable": "hydra.core.Type"}}, "variables": []}}],
                         "body": {
                           "application": {
                             "argument": {
@@ -279,7 +279,7 @@
                 "domain": {"variable": "hydra.error.checking.NotAForallTypeError"},
                 "parameter": "e"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.error.checking.NotAForallTypeError"}}},
@@ -291,8 +291,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Show a not-a-function-type error as a string"}}}],
             "body": {
               "lambda": {
@@ -308,7 +308,7 @@
                               "project": {
                                 "field": "type",
                                 "typeName": "hydra.error.checking.NotAFunctionTypeError"}}}},
-                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -322,7 +322,7 @@
                 "domain": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
                 "parameter": "e"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.error.checking.NotAFunctionTypeError"}}},
@@ -334,8 +334,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Show an other error as a string"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Show an other error as a string"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -345,7 +345,7 @@
                 "domain": {"variable": "hydra.errors.OtherError"},
                 "parameter": "oe"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.errors.OtherError"}}},
@@ -357,8 +357,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Show a resolution error as a string, including the offending name or shape"}}}],
             "body": {
@@ -474,7 +474,7 @@
                 "domain": {"variable": "hydra.errors.ResolutionError"},
                 "parameter": "re"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.errors.ResolutionError"}}},
@@ -486,8 +486,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Show a type arity mismatch error as a string"}}}],
             "body": {
               "lambda": {
@@ -503,7 +503,7 @@
                               "project": {
                                 "field": "type",
                                 "typeName": "hydra.error.checking.TypeArityMismatchError"}}}},
-                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -516,7 +516,7 @@
                                   "project": {
                                     "field": "expectedArity",
                                     "typeName": "hydra.error.checking.TypeArityMismatchError"}}}},
-                            "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                            "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                         "body": {
                           "let": {
                             "bindings": [
@@ -529,7 +529,7 @@
                                       "project": {
                                         "field": "actualArity",
                                         "typeName": "hydra.error.checking.TypeArityMismatchError"}}}},
-                                "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                                "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                             "body": {
                               "let": {
                                 "bindings": [
@@ -542,7 +542,7 @@
                                           "project": {
                                             "field": "typeArguments",
                                             "typeName": "hydra.error.checking.TypeArityMismatchError"}}}},
-                                    "type": {"type": {"list": {"variable": "hydra.core.Type"}}, "variables": []}}],
+                                    "type": {"body": {"list": {"variable": "hydra.core.Type"}}, "variables": []}}],
                                 "body": {
                                   "application": {
                                     "argument": {
@@ -579,7 +579,7 @@
                 "domain": {"variable": "hydra.error.checking.TypeArityMismatchError"},
                 "parameter": "e"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.error.checking.TypeArityMismatchError"}}},
@@ -591,8 +591,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Show a type mismatch error as a string"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Show a type mismatch error as a string"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -607,7 +607,7 @@
                               "project": {
                                 "field": "expectedType",
                                 "typeName": "hydra.error.checking.TypeMismatchError"}}}},
-                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -620,7 +620,7 @@
                                   "project": {
                                     "field": "actualType",
                                     "typeName": "hydra.error.checking.TypeMismatchError"}}}},
-                            "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                            "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                         "body": {
                           "application": {
                             "argument": {
@@ -639,7 +639,7 @@
                 "domain": {"variable": "hydra.error.checking.TypeMismatchError"},
                 "parameter": "e"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.error.checking.TypeMismatchError"}}},
@@ -651,8 +651,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Show an unbound type variables error as a string"}}}],
             "body": {
               "lambda": {
@@ -668,7 +668,7 @@
                               "project": {
                                 "field": "variables",
                                 "typeName": "hydra.error.checking.UnboundTypeVariablesError"}}}},
-                        "type": {"type": {"set": {"variable": "hydra.core.Name"}}, "variables": []}}],
+                        "type": {"body": {"set": {"variable": "hydra.core.Name"}}, "variables": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -681,7 +681,7 @@
                                   "project": {
                                     "field": "type",
                                     "typeName": "hydra.error.checking.UnboundTypeVariablesError"}}}},
-                            "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                            "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                         "body": {
                           "application": {
                             "argument": {
@@ -721,7 +721,7 @@
                 "domain": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
                 "parameter": "e"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.error.checking.UnboundTypeVariablesError"}}},
@@ -733,8 +733,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Show an unequal types error as a string"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Show an unequal types error as a string"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -749,7 +749,7 @@
                               "project": {
                                 "field": "types",
                                 "typeName": "hydra.error.checking.UnequalTypesError"}}}},
-                        "type": {"type": {"list": {"variable": "hydra.core.Type"}}, "variables": []}}],
+                        "type": {"body": {"list": {"variable": "hydra.core.Type"}}, "variables": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -762,7 +762,7 @@
                                   "project": {
                                     "field": "description",
                                     "typeName": "hydra.error.checking.UnequalTypesError"}}}},
-                            "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                            "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                         "body": {
                           "application": {
                             "argument": {
@@ -784,7 +784,7 @@
                 "domain": {"variable": "hydra.error.checking.UnequalTypesError"},
                 "parameter": "e"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.error.checking.UnequalTypesError"}}},
@@ -796,8 +796,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Show a unification error as a string"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Show a unification error as a string"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -810,7 +810,7 @@
                             "argument": {"variable": "e"},
                             "function": {
                               "project": {"field": "leftType", "typeName": "hydra.errors.UnificationError"}}}},
-                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -821,7 +821,7 @@
                                 "argument": {"variable": "e"},
                                 "function": {
                                   "project": {"field": "rightType", "typeName": "hydra.errors.UnificationError"}}}},
-                            "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                            "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                         "body": {
                           "let": {
                             "bindings": [
@@ -832,7 +832,7 @@
                                     "argument": {"variable": "e"},
                                     "function": {
                                       "project": {"field": "message", "typeName": "hydra.errors.UnificationError"}}}},
-                                "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                             "body": {
                               "application": {
                                 "argument": {
@@ -853,7 +853,7 @@
                 "domain": {"variable": "hydra.errors.UnificationError"},
                 "parameter": "e"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.errors.UnificationError"}}},
@@ -865,8 +865,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Show an unsupported term variant error as a string"}}}],
             "body": {
               "lambda": {
@@ -889,7 +889,7 @@
                 "domain": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
                 "parameter": "e"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.error.checking.UnsupportedTermVariantError"}}},
@@ -903,8 +903,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Show an untyped lambda error as a string"}}}],
+                    "key": "description",
+                    "value": {"literal": {"string": "Show an untyped lambda error as a string"}}}],
                 "body": {
                   "lambda": {
                     "body": {"literal": {"string": "untyped lambda"}},
@@ -912,7 +912,7 @@
                     "parameter": "_"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "t0"}}},
@@ -924,8 +924,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Show an untyped let binding error as a string"}}}],
             "body": {
               "lambda": {
@@ -941,7 +941,7 @@
                               "project": {
                                 "field": "binding",
                                 "typeName": "hydra.error.checking.UntypedLetBindingError"}}}},
-                        "type": {"type": {"variable": "hydra.core.Binding"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.core.Binding"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -955,7 +955,7 @@
                 "domain": {"variable": "hydra.error.checking.UntypedLetBindingError"},
                 "parameter": "e"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.error.checking.UntypedLetBindingError"}}},

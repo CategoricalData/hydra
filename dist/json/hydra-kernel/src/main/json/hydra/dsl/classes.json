@@ -40,7 +40,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.classes.TypeClass"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -85,7 +85,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.classes.TypeClass"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},

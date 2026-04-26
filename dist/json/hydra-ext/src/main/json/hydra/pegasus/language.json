@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Language constraints for LinkedIn Pegasus (PDL)"}}}],
             "body": {
               "let": {
@@ -23,8 +23,8 @@
                             "type": {"variable": "t0"}}},
                         "parameter": "t0"}},
                     "type": {
-                      "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
-                      "type": {"set": {"variable": "t0"}},
+                      "body": {"set": {"variable": "t0"}},
+                      "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
                       "variables": ["t0"]}},
                   {
                     "name": "literalVariants",
@@ -57,7 +57,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.LiteralVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.LiteralVariant"}},
                       "variables": []}},
                   {
                     "name": "floatTypes",
@@ -78,7 +78,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.FloatType"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.core.FloatType"}},
+                      "body": {"set": {"variable": "hydra.core.FloatType"}},
                       "variables": []}},
                   {
                     "name": "functionVariants",
@@ -90,8 +90,8 @@
                             "type": {"variable": "t0"}}},
                         "parameter": "t0"}},
                     "type": {
-                      "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
-                      "type": {"set": {"variable": "t0"}},
+                      "body": {"set": {"variable": "t0"}},
+                      "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
                       "variables": ["t0"]}},
                   {
                     "name": "integerTypes",
@@ -112,7 +112,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.IntegerType"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.core.IntegerType"}},
+                      "body": {"set": {"variable": "hydra.core.IntegerType"}},
                       "variables": []}},
                   {
                     "name": "termVariants",
@@ -165,7 +165,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TermVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.TermVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.TermVariant"}},
                       "variables": []}},
                   {
                     "name": "typeVariants",
@@ -226,7 +226,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TypeVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.TypeVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.TypeVariant"}},
                       "variables": []}},
                   {
                     "name": "typePredicate",
@@ -239,7 +239,7 @@
                             "parameter": "_"}},
                         "parameter": "t0"}},
                     "type": {
-                      "type": {
+                      "body": {
                         "function": {
                           "codomain": {"literal": {"boolean": {}}},
                           "domain": {"variable": "t0"}}},
@@ -283,7 +283,7 @@
                                     "type": {"variable": "hydra.core.Type"}}}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
                     "typeName": "hydra.coders.Language"}}}}}},
-        "type": {"type": {"variable": "hydra.coders.Language"}, "variables": []}}}],
+        "type": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}}],
   "description": "Language constraints for LinkedIn Pegasus (PDL)",
   "namespace": "hydra.pegasus.language",
   "termDependencies": ["hydra.lexical"],

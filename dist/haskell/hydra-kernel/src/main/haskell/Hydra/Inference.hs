@@ -67,7 +67,7 @@ bindUnboundTypeVariables cx term0 =
                                   Core.bindingType = Nothing}) (\ts ->
                                   let bvars = Sets.fromList (Core.typeSchemeVariables ts)
                                       excluded = Sets.union svars bvars
-                                      inType = Sets.difference (Variables.freeVariablesInType (Core.typeSchemeType ts)) excluded
+                                      inType = Sets.difference (Variables.freeVariablesInType (Core.typeSchemeBody ts)) excluded
                                       phantoms = Sets.difference (Variables.freeTypeVariablesInTerm bterm) (Sets.union excluded inType)
                                       phantomSubst = Typing.TypeSubst (Maps.fromList (Lists.map (\v -> (v, Core.TypeUnit)) (Sets.toList phantoms)))
                                       bterm1 = Substitution.substTypesInTerm phantomSubst bterm
@@ -75,7 +75,7 @@ bindUnboundTypeVariables cx term0 =
                                       ts2 =
                                               Core.TypeScheme {
                                                 Core.typeSchemeVariables = (Lists.concat2 (Core.typeSchemeVariables ts) unbound),
-                                                Core.typeSchemeType = (Core.typeSchemeType ts),
+                                                Core.typeSchemeBody = (Core.typeSchemeBody ts),
                                                 Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts)}
                                       bterm2 =
                                               Lists.foldl (\t -> \v -> Core.TermTypeLambda (Core.TypeLambda {
@@ -153,7 +153,7 @@ generalize cx typ =
           constraintsMaybe = Logic.ifElse (Maps.null relevantConstraints) Nothing (Just relevantConstraints)
       in Core.TypeScheme {
         Core.typeSchemeVariables = vars,
-        Core.typeSchemeType = typ,
+        Core.typeSchemeBody = typ,
         Core.typeSchemeConstraints = constraintsMaybe}
 
 -- | Return the first element of a list, or Left(Other) with the given description if the list is empty
@@ -335,7 +335,7 @@ inferTypeOfCaseStatement fcx cx caseStmt =
         let schemaType = Pairs.first stRp
             fcx2 = Pairs.second stRp
             svars = Core.typeSchemeVariables schemaType
-            stype = Core.typeSchemeType schemaType
+            stype = Core.typeSchemeBody schemaType
         in (Eithers.bind (ExtractCore.unionType tname stype) (\sfields -> Eithers.bind (Eithers.mapMaybe (\t -> inferTypeOfTerm fcx2 cx t (Strings.cat [
           "case ",
           (Core.unName tname),
@@ -480,7 +480,7 @@ inferTypeOfInjection fcx cx injection =
           let schemaType = Pairs.first stRp
               fcx3 = Pairs.second stRp
               svars = Core.typeSchemeVariables schemaType
-              stype = Core.typeSchemeType schemaType
+              stype = Core.typeSchemeBody schemaType
               iterm = Typing.inferenceResultTerm result
               ityp = Typing.inferenceResultType result
               isubst = Typing.inferenceResultSubst result
@@ -508,7 +508,7 @@ inferTypeOfLambda fcx cx lambda =
                   extendContext [
                     (var, Core.TypeScheme {
                       Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = dom,
+                      Core.typeSchemeBody = dom,
                       Core.typeSchemeConstraints = Nothing})] cx
       in (Eithers.bind (inferTypeOfTerm fcx2 cx2 body "lambda body") (\result ->
         let fcx3 = Typing.inferenceResultContext result
@@ -623,7 +623,7 @@ inferTypeOfLetNormalized fcx0 cx0 letTerm =
           cx1 =
                   extendContext (Lists.zip bnames (Lists.map (\t -> Core.TypeScheme {
                     Core.typeSchemeVariables = [],
-                    Core.typeSchemeType = t,
+                    Core.typeSchemeBody = t,
                     Core.typeSchemeConstraints = Nothing}) tbins0)) cx0
       in (Eithers.bind (inferTypesOfTemporaryBindings fcx2 cx1 bins0) (\irRp ->
         let inferredResult = Pairs.first irRp
@@ -801,7 +801,7 @@ inferTypeOfPrimitive fcx cx name =
           ts = Pairs.first tsResult
           fcx2 = Pairs.second tsResult
           constraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
-      in (Right (yieldCheckedWithConstraints fcx2 (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)) (Core.typeSchemeType ts) Substitution.idTypeSubst constraints))) (Maybes.map Graph.primitiveType (Maps.lookup name (Graph.graphPrimitives cx)))
+      in (Right (yieldCheckedWithConstraints fcx2 (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)) (Core.typeSchemeBody ts) Substitution.idTypeSubst constraints))) (Maybes.map Graph.primitiveType (Maps.lookup name (Graph.graphPrimitives cx)))
 
 -- | Infer the type of a record projection (Either version)
 inferTypeOfProjection :: Context.Context -> Graph.Graph -> Core.Projection -> Either Errors.Error Typing.InferenceResult
@@ -813,7 +813,7 @@ inferTypeOfProjection fcx cx proj =
         let schemaType = Pairs.first stRp
             fcx2 = Pairs.second stRp
             svars = Core.typeSchemeVariables schemaType
-            stype = Core.typeSchemeType schemaType
+            stype = Core.typeSchemeBody schemaType
         in (Eithers.bind (ExtractCore.recordType tname stype) (\sfields -> Eithers.bind (Resolution.findFieldType fcx2 fname sfields) (\ftyp -> Right (yield fcx2 (buildTypeApplicationTerm svars (Core.TermProject (Core.Projection {
           Core.projectionTypeName = tname,
           Core.projectionField = fname}))) (Core.TypeFunction (Core.FunctionType {
@@ -834,7 +834,7 @@ inferTypeOfRecord fcx cx record =
           let results = Pairs.first rp
               fcx3 = Pairs.second rp
               svars = Core.typeSchemeVariables schemaType
-              stype = Core.typeSchemeType schemaType
+              stype = Core.typeSchemeBody schemaType
               iterms = Pairs.first results
               itypes = Pairs.first (Pairs.second results)
               isubst = Pairs.first (Pairs.second (Pairs.second results))
@@ -915,7 +915,7 @@ inferTypeOfUnwrap fcx cx tname =
       let schemaType = Pairs.first stRp
           fcx2 = Pairs.second stRp
           svars = Core.typeSchemeVariables schemaType
-          stype = Core.typeSchemeType schemaType
+          stype = Core.typeSchemeBody schemaType
       in (Eithers.bind (ExtractCore.wrappedType tname stype) (\wtyp -> Right (yield fcx2 (buildTypeApplicationTerm svars (Core.TermUnwrap tname)) (Core.TypeFunction (Core.FunctionType {
         Core.functionTypeDomain = (Resolution.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
         Core.functionTypeCodomain = wtyp})) Substitution.idTypeSubst))))
@@ -929,14 +929,14 @@ inferTypeOfVariable fcx cx name =
           ts = Pairs.first tsResult
           fcx2 = Pairs.second tsResult
           constraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
-      in (Right (yieldCheckedWithConstraints fcx2 (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)) (Core.typeSchemeType ts) Substitution.idTypeSubst constraints))) (Maybes.map Graph.primitiveType (Maps.lookup name (Graph.graphPrimitives cx)))) (\scheme ->
+      in (Right (yieldCheckedWithConstraints fcx2 (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)) (Core.typeSchemeBody ts) Substitution.idTypeSubst constraints))) (Maybes.map Graph.primitiveType (Maps.lookup name (Graph.graphPrimitives cx)))) (\scheme ->
       let tsResult = Resolution.instantiateTypeScheme fcx scheme
           ts = Pairs.first tsResult
           fcx2 = Pairs.second tsResult
           constraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
       in (Right (Typing.InferenceResult {
         Typing.inferenceResultTerm = (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)),
-        Typing.inferenceResultType = (Core.typeSchemeType ts),
+        Typing.inferenceResultType = (Core.typeSchemeBody ts),
         Typing.inferenceResultSubst = Substitution.idTypeSubst,
         Typing.inferenceResultClassConstraints = constraints,
         Typing.inferenceResultContext = fcx2}))) (Maps.lookup name (Graph.graphBoundTypes cx))
@@ -953,7 +953,7 @@ inferTypeOfWrappedTerm fcx cx wt =
         in (Eithers.bind (inferTypeOfTerm fcx2 cx term "wrapped term") (\result ->
           let fcx3 = Typing.inferenceResultContext result
               svars = Core.typeSchemeVariables schemaType
-              stype = Core.typeSchemeType schemaType
+              stype = Core.typeSchemeBody schemaType
               iterm = Typing.inferenceResultTerm result
               itype = Typing.inferenceResultType result
               isubst = Typing.inferenceResultSubst result
@@ -989,7 +989,7 @@ inferTypesOfTemporaryBindings fcx cx bins =
             let tsResult = Resolution.instantiateTypeScheme fcx2 ts
                 instantiatedTs = Pairs.first tsResult
                 freshConstraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints instantiatedTs)
-            in (Eithers.bind (Eithers.bimap (\_e -> Errors.ErrorUnification _e) (\_a -> _a) (Unification.unifyTypes fcx2 (Graph.graphSchemaTypes cx) (Core.typeSchemeType instantiatedTs) u_prime "original binding type")) (\unifySubst -> Right (Substitution.substInClassConstraints unifySubst freshConstraints)))) (Core.bindingType binding)) (\originalBindingConstraints ->
+            in (Eithers.bind (Eithers.bimap (\_e -> Errors.ErrorUnification _e) (\_a -> _a) (Unification.unifyTypes fcx2 (Graph.graphSchemaTypes cx) (Core.typeSchemeBody instantiatedTs) u_prime "original binding type")) (\unifySubst -> Right (Substitution.substInClassConstraints unifySubst freshConstraints)))) (Core.bindingType binding)) (\originalBindingConstraints ->
             let c1 = mergeClassConstraints c1Inferred originalBindingConstraints
             in (Eithers.bind (inferTypesOfTemporaryBindings fcx2 (Substitution.substInContext u cx) tl) (\rp2 ->
               let result2 = Pairs.first rp2

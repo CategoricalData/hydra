@@ -7,11 +7,11 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Disable type checking by default, for better performance"}}}],
             "body": {"literal": {"boolean": true}}}},
-        "type": {"type": {"literal": {"boolean": {}}}, "variables": []}}},
+        "type": {"body": {"literal": {"boolean": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.ignoredVariable",
@@ -19,10 +19,10 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "The name used for ignored variables"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "The name used for ignored variables"}}}],
             "body": {"literal": {"string": "_"}}}},
-        "type": {"type": {"literal": {"string": {}}}, "variables": []}}},
+        "type": {"body": {"literal": {"string": {}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.key_classes",
@@ -30,13 +30,13 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Annotation key for type classes"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Annotation key for type classes"}}}],
             "body": {
               "wrap": {
                 "body": {"literal": {"string": "classes"}},
                 "typeName": "hydra.core.Name"}}}},
-        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.key_debugId",
@@ -44,13 +44,13 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Annotation key for debug identifiers"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Annotation key for debug identifiers"}}}],
             "body": {
               "wrap": {
                 "body": {"literal": {"string": "debugId"}},
                 "typeName": "hydra.core.Name"}}}},
-        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.key_deprecated",
@@ -58,13 +58,13 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Annotation key for deprecated markers"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Annotation key for deprecated markers"}}}],
             "body": {
               "wrap": {
                 "body": {"literal": {"string": "deprecated"}},
                 "typeName": "hydra.core.Name"}}}},
-        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.key_description",
@@ -72,13 +72,13 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Annotation key for descriptions"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Annotation key for descriptions"}}}],
             "body": {
               "wrap": {
                 "body": {"literal": {"string": "description"}},
                 "typeName": "hydra.core.Name"}}}},
-        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.key_exclude",
@@ -86,13 +86,13 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Annotation key for exclusions"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Annotation key for exclusions"}}}],
             "body": {
               "wrap": {
                 "body": {"literal": {"string": "exclude"}},
                 "typeName": "hydra.core.Name"}}}},
-        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.key_firstClassType",
@@ -100,15 +100,15 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "A flag which tells the language coders to encode a given encoded type as a term rather than a native type"}}}],
             "body": {
               "wrap": {
                 "body": {"literal": {"string": "firstClassType"}},
                 "typeName": "hydra.core.Name"}}}},
-        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.key_maxLength",
@@ -116,14 +116,14 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Annotation key for maximum length constraints"}}}],
             "body": {
               "wrap": {
                 "body": {"literal": {"string": "maxLength"}},
                 "typeName": "hydra.core.Name"}}}},
-        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.key_minLength",
@@ -131,14 +131,14 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Annotation key for minimum length constraints"}}}],
             "body": {
               "wrap": {
                 "body": {"literal": {"string": "minLength"}},
                 "typeName": "hydra.core.Name"}}}},
-        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.key_preserveFieldName",
@@ -146,15 +146,15 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Annotation key for preserving field names during code generation"}}}],
             "body": {
               "wrap": {
                 "body": {"literal": {"string": "preserveFieldName"}},
                 "typeName": "hydra.core.Name"}}}},
-        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.key_type",
@@ -162,13 +162,13 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Annotation key for type information"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Annotation key for type information"}}}],
             "body": {
               "wrap": {
                 "body": {"literal": {"string": "type"}},
                 "typeName": "hydra.core.Name"}}}},
-        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.key_freshTypeVariableCount",
@@ -176,14 +176,14 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "A counter for generating fresh type variable names"}}}],
             "body": {
               "wrap": {
                 "body": {"literal": {"string": "freshTypeVariableCount"}},
                 "typeName": "hydra.core.Name"}}}},
-        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.maxInt32",
@@ -191,10 +191,10 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "The maximum value of a 32-bit integer"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "The maximum value of a 32-bit integer"}}}],
             "body": {"literal": {"integer": {"int32": 2147483647}}}}},
-        "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}},
+        "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.maxTraceDepth",
@@ -202,12 +202,12 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "A maximum depth for nested computations. Currently, this is set very high because deep recursion is common in type inference over the Hydra kernel."}}}],
             "body": {"literal": {"integer": {"int32": 5000}}}}},
-        "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}},
+        "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.constants.warningAutoGeneratedFile",
@@ -215,13 +215,13 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "A standard warning message for auto-generated files"}}}],
             "body": {
               "literal": {
                 "string": "Note: this is an automatically generated file. Do not edit."}}}},
-        "type": {"type": {"literal": {"string": {}}}, "variables": []}}}],
+        "type": {"body": {"literal": {"string": {}}}, "variables": []}}}],
   "description": "A module for tier-0 constants.",
   "namespace": "hydra.constants",
   "termDependencies": [],

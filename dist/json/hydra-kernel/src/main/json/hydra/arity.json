@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Find the arity (expected number of arguments) of a primitive constant or function"}}}],
             "body": {
@@ -26,14 +26,14 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "arg_"},
-                                "function": {"project": {"field": "type", "typeName": "hydra.core.TypeScheme"}}}},
+                                "function": {"project": {"field": "body", "typeName": "hydra.core.TypeScheme"}}}},
                             "function": {"variable": "hydra.arity.typeArity"}}},
                         "domain": {"variable": "hydra.core.TypeScheme"},
                         "parameter": "arg_"}}}},
                 "domain": {"variable": "hydra.graph.Primitive"},
                 "parameter": "arg_"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"integer": {"int32": {}}}},
               "domain": {"variable": "hydra.graph.Primitive"}}},
@@ -45,8 +45,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Find the arity (expected number of arguments) of a term"}}}],
             "body": {
               "cases": {
@@ -142,7 +142,7 @@
                 "default": {"literal": {"integer": {"int32": 0}}},
                 "typeName": "hydra.core.Term"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"integer": {"int32": {}}}},
               "domain": {"variable": "hydra.core.Term"}}},
@@ -154,8 +154,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Find the arity (expected number of arguments) of a type"}}}],
             "body": {
               "cases": {
@@ -230,7 +230,7 @@
                 "default": {"literal": {"integer": {"int32": 0}}},
                 "typeName": "hydra.core.Type"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"integer": {"int32": {}}}},
               "domain": {"variable": "hydra.core.Type"}}},
@@ -242,8 +242,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Find the arity (expected number of arguments) of a type scheme"}}}],
             "body": {
@@ -253,12 +253,12 @@
                     "argument": {
                       "application": {
                         "argument": {"variable": "arg_"},
-                        "function": {"project": {"field": "type", "typeName": "hydra.core.TypeScheme"}}}},
+                        "function": {"project": {"field": "body", "typeName": "hydra.core.TypeScheme"}}}},
                     "function": {"variable": "hydra.arity.typeArity"}}},
                 "domain": {"variable": "hydra.core.TypeScheme"},
                 "parameter": "arg_"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"integer": {"int32": {}}}},
               "domain": {"variable": "hydra.core.TypeScheme"}}},
@@ -270,8 +270,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)"}}}],
             "body": {
@@ -361,7 +361,7 @@
                 "domain": {"variable": "hydra.core.Type"},
                 "parameter": "t"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"list": {"variable": "hydra.core.Type"}},
               "domain": {"variable": "hydra.core.Type"}}},

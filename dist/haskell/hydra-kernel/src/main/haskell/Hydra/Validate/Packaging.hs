@@ -48,7 +48,7 @@ checkConflictingVariantNames mod =
         Packaging.DefinitionType v0 ->
           let typeName = Packaging.typeDefinitionName v0
               localTypeName = Names.localNameOf typeName
-              typ = Core.typeSchemeType (Packaging.typeDefinitionType v0)
+              typ = Core.typeSchemeBody (Packaging.typeDefinitionType v0)
           in case typ of
             Core.TypeUnion v1 -> Lists.foldl (\innerAcc -> \field -> Maybes.cases innerAcc (
               let fieldName = Core.fieldTypeName field

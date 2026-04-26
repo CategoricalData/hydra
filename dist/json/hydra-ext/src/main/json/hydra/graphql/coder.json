@@ -73,7 +73,7 @@
                 "parameter": "cx"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -108,7 +108,7 @@
             "domain": {"variable": "hydra.core.Name"},
             "parameter": "name"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.graphql.syntax.EnumValue"},
               "domain": {"variable": "hydra.core.Name"}}},
@@ -134,7 +134,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "either": {
-                                            "@right": {
+                                            "right": {
                                               "record": {
                                                 "fields": [
                                                   {"name": "Description", "term": {"variable": "desc"}},
@@ -194,7 +194,7 @@
                 "parameter": "cx"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -226,7 +226,7 @@
             "domain": {"variable": "hydra.core.Name"},
             "parameter": "name"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.graphql.syntax.Name"},
               "domain": {"variable": "hydra.core.Name"}}},
@@ -258,7 +258,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "either": {
-                                                        "@right": {
+                                                        "right": {
                                                           "record": {
                                                             "fields": [
                                                               {"name": "Description", "term": {"variable": "desc"}},
@@ -366,7 +366,7 @@
                 "parameter": "cx"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -411,7 +411,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@right": {
+                                                "right": {
                                                   "wrap": {
                                                     "body": {
                                                       "wrap": {
@@ -442,7 +442,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@right": {
+                                                                "right": {
                                                                   "wrap": {
                                                                     "body": {
                                                                       "wrap": {
@@ -459,7 +459,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "either": {
-                                                        "@left": {
+                                                        "left": {
                                                           "inject": {
                                                             "field": {
                                                               "name": "other",
@@ -502,7 +502,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@right": {
+                                                                "right": {
                                                                   "wrap": {
                                                                     "body": {
                                                                       "wrap": {
@@ -519,7 +519,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "either": {
-                                                        "@left": {
+                                                        "left": {
                                                           "inject": {
                                                             "field": {
                                                               "name": "other",
@@ -553,7 +553,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@right": {
+                                                "right": {
                                                   "wrap": {
                                                     "body": {
                                                       "wrap": {
@@ -570,7 +570,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "either": {
-                                        "@left": {
+                                        "left": {
                                           "inject": {
                                             "field": {
                                               "name": "other",
@@ -598,7 +598,7 @@
                 "parameter": "cx"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -651,7 +651,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "either": {
-                                                                            "@right": {
+                                                                            "right": {
                                                                               "inject": {
                                                                                 "field": {
                                                                                   "name": "object",
@@ -789,7 +789,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "either": {
-                                                                                "@right": {
+                                                                                "right": {
                                                                                   "inject": {
                                                                                     "field": {
                                                                                       "name": "object",
@@ -921,7 +921,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "either": {
-                                                                                    "@right": {
+                                                                                    "right": {
                                                                                       "inject": {
                                                                                         "field": {
                                                                                           "name": "enum",
@@ -1652,7 +1652,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@left": {
+                                                    "left": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "other",
@@ -1688,7 +1688,7 @@
                 "parameter": "cx"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1955,7 +1955,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "either": {
-                                                                            "@right": {
+                                                                            "right": {
                                                                               "inject": {
                                                                                 "field": {
                                                                                   "name": "named",
@@ -1987,7 +1987,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "either": {
-                                                                            "@right": {
+                                                                            "right": {
                                                                               "inject": {
                                                                                 "field": {
                                                                                   "name": "named",
@@ -2019,7 +2019,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "either": {
-                                                                            "@left": {
+                                                                            "left": {
                                                                               "inject": {
                                                                                 "field": {
                                                                                   "name": "other",
@@ -2042,7 +2042,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "either": {
-                                                                            "@left": {
+                                                                            "left": {
                                                                               "inject": {
                                                                                 "field": {
                                                                                   "name": "other",
@@ -2093,7 +2093,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "either": {
-                                                                            "@right": {
+                                                                            "right": {
                                                                               "inject": {
                                                                                 "field": {
                                                                                   "name": "named",
@@ -2189,7 +2189,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "either": {
-                                                                            "@right": {
+                                                                            "right": {
                                                                               "inject": {
                                                                                 "field": {
                                                                                   "name": "named",
@@ -2215,7 +2215,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "either": {
-                                                                            "@right": {
+                                                                            "right": {
                                                                               "inject": {
                                                                                 "field": {
                                                                                   "name": "named",
@@ -2237,7 +2237,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@left": {
+                                                                    "left": {
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "other",
@@ -2487,7 +2487,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "either": {
-                                                            "@right": {
+                                                            "right": {
                                                               "inject": {
                                                                 "field": {
                                                                   "name": "nonNull",
@@ -2524,7 +2524,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "either": {
-                                                            "@right": {
+                                                            "right": {
                                                               "inject": {
                                                                 "field": {
                                                                   "name": "nonNull",
@@ -2561,7 +2561,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "either": {
-                                                            "@left": {
+                                                            "left": {
                                                               "inject": {
                                                                 "field": {
                                                                   "name": "other",
@@ -2584,7 +2584,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "either": {
-                                                            "@left": {
+                                                            "left": {
                                                               "inject": {
                                                                 "field": {
                                                                   "name": "other",
@@ -2607,7 +2607,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "either": {
-                                                            "@right": {
+                                                            "right": {
                                                               "inject": {
                                                                 "field": {
                                                                   "name": "nonNull",
@@ -2723,7 +2723,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "either": {
-                                                            "@right": {
+                                                            "right": {
                                                               "inject": {
                                                                 "field": {
                                                                   "name": "nonNull",
@@ -2754,7 +2754,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "either": {
-                                                            "@right": {
+                                                            "right": {
                                                               "inject": {
                                                                 "field": {
                                                                   "name": "nonNull",
@@ -2781,7 +2781,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@left": {
+                                                    "left": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "other",
@@ -2816,7 +2816,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2858,7 +2858,7 @@
                                         "argument": {"variable": "tdef"},
                                         "function": {
                                           "project": {"field": "type", "typeName": "hydra.packaging.TypeDefinition"}}}},
-                                    "function": {"project": {"field": "type", "typeName": "hydra.core.TypeScheme"}}}},
+                                    "function": {"project": {"field": "body", "typeName": "hydra.core.TypeScheme"}}}},
                                 "function": {
                                   "application": {
                                     "argument": {
@@ -2892,7 +2892,7 @@
                 "parameter": "cx"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2929,7 +2929,7 @@
                             "argument": {"variable": "name"},
                             "function": {"variable": "hydra.names.qualifyName"}}},
                         "type": {
-                          "type": {"variable": "hydra.packaging.QualifiedName"},
+                          "body": {"variable": "hydra.packaging.QualifiedName"},
                           "variables": []}},
                       {
                         "name": "local",
@@ -2938,7 +2938,7 @@
                             "argument": {"variable": "qualName"},
                             "function": {
                               "project": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "mns",
                         "term": {
@@ -2947,7 +2947,7 @@
                             "function": {
                               "project": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
                         "type": {
-                          "type": {"maybe": {"variable": "hydra.packaging.Namespace"}},
+                          "body": {"maybe": {"variable": "hydra.packaging.Namespace"}},
                           "variables": []}},
                       {
                         "name": "prefix",
@@ -3002,7 +3002,7 @@
                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"variable": "hydra.packaging.Namespace"}}}}}}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "wrap": {
                         "body": {
@@ -3024,7 +3024,7 @@
                 "values": {"literal": {"string": {}}}}},
             "parameter": "prefixes"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3057,7 +3057,7 @@
                                       "application": {
                                         "argument": {"variable": "ft"},
                                         "function": {"project": {"field": "type", "typeName": "hydra.core.FieldType"}}}},
-                                    "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}},
+                                    "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}},
                                   {
                                     "name": "isUnit",
                                     "term": {
@@ -3067,7 +3067,7 @@
                                             "argument": {"variable": "innerType"},
                                             "function": {"variable": "hydra.strip.deannotateType"}}},
                                         "function": {"variable": "hydra.predicates.isUnitType"}}},
-                                    "type": {"type": {"literal": {"boolean": {}}}, "variables": []}},
+                                    "type": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                                   {
                                     "name": "effectiveType",
                                     "term": {
@@ -3099,7 +3099,7 @@
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.logic.ifElse"},
                                                     "type": {"variable": "hydra.core.Type"}}}}}}}}},
-                                    "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                    "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                 "body": {
                                   "application": {
                                     "argument": {
@@ -3114,7 +3114,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "either": {
-                                                            "@right": {
+                                                            "right": {
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "Description", "term": {"variable": "desc"}},
@@ -3216,7 +3216,7 @@
                 "parameter": "cx"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3259,7 +3259,7 @@
                                         "argument": {"variable": "defs"},
                                         "function": {"variable": "hydra.environment.partitionDefinitions"}}},
                                     "type": {
-                                      "type": {
+                                      "body": {
                                         "pair": {
                                           "first": {"list": {"variable": "hydra.packaging.TypeDefinition"}},
                                           "second": {"list": {"variable": "hydra.packaging.TermDefinition"}}}},
@@ -3277,7 +3277,7 @@
                                                 "type": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}},
                                             "type": {"list": {"variable": "hydra.packaging.TermDefinition"}}}}}},
                                     "type": {
-                                      "type": {"list": {"variable": "hydra.packaging.TypeDefinition"}},
+                                      "body": {"list": {"variable": "hydra.packaging.TypeDefinition"}},
                                       "variables": []}},
                                   {
                                     "name": "prefixes",
@@ -3337,7 +3337,7 @@
                                                                     "body": {"variable": "hydra.lib.lists.nub"},
                                                                     "type": {"variable": "hydra.packaging.Namespace"}}}}},
                                                             "type": {
-                                                              "type": {"list": {"variable": "hydra.packaging.Namespace"}},
+                                                              "body": {"list": {"variable": "hydra.packaging.Namespace"}},
                                                               "variables": []}}],
                                                         "body": {
                                                           "application": {
@@ -3354,8 +3354,8 @@
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "pair": {
-                                                                                    "@first": {"variable": "ns_"},
-                                                                                    "@second": {
+                                                                                    "first": {"variable": "ns_"},
+                                                                                    "second": {
                                                                                       "application": {
                                                                                         "argument": {
                                                                                           "application": {
@@ -3421,7 +3421,7 @@
                                                 "domain": {"variable": "hydra.packaging.Namespace"},
                                                 "parameter": "modNs"}}}}}},
                                     "type": {
-                                      "type": {
+                                      "body": {
                                         "map": {
                                           "keys": {"variable": "hydra.packaging.Namespace"},
                                           "values": {"literal": {"string": {}}}}},
@@ -3448,7 +3448,7 @@
                                                     "field": {"name": "camel", "term": {"unit": {}}},
                                                     "typeName": "hydra.util.CaseConvention"}},
                                                 "function": {"variable": "hydra.names.namespaceToFilePath"}}}}}}},
-                                    "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                    "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                 "body": {
                                   "application": {
                                     "argument": {
@@ -3459,7 +3459,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "application": {
                                                         "argument": {
                                                           "application": {
@@ -3469,8 +3469,8 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "pair": {
-                                                                        "@first": {"variable": "filePath"},
-                                                                        "@second": {
+                                                                        "first": {"variable": "filePath"},
+                                                                        "second": {
                                                                           "application": {
                                                                             "argument": {
                                                                               "application": {
@@ -3595,7 +3595,7 @@
                 "parameter": "mod"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3630,7 +3630,7 @@
             "domain": {"literal": {"string": {}}},
             "parameter": "s"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"literal": {"string": {}}}}},

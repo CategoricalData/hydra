@@ -9,8 +9,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {
                         "string": "Join two types, producing a list of type constraints.The comment is used to provide context for the constraints."}}}],
                 "body": {
@@ -30,7 +30,7 @@
                                           "application": {
                                             "argument": {"variable": "left"},
                                             "function": {"variable": "hydra.strip.deannotateType"}}},
-                                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                     "body": {
                                       "let": {
                                         "bindings": [
@@ -40,7 +40,7 @@
                                               "application": {
                                                 "argument": {"variable": "right"},
                                                 "function": {"variable": "hydra.strip.deannotateType"}}},
-                                            "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                            "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -70,7 +70,7 @@
                                                     "domain": {"variable": "hydra.core.Type"},
                                                     "parameter": "l"}},
                                                 "type": {
-                                                  "type": {
+                                                  "body": {
                                                     "function": {
                                                       "codomain": {
                                                         "function": {
@@ -91,7 +91,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@left": {
+                                                                    "left": {
                                                                       "record": {
                                                                         "fields": [
                                                                           {"name": "leftType", "term": {"variable": "sleft"}},
@@ -128,7 +128,7 @@
                                                             "type": {"variable": "t1"}}},
                                                         "parameter": "t1"}},
                                                     "type": {
-                                                      "type": {
+                                                      "body": {
                                                         "either": {
                                                           "left": {"variable": "hydra.errors.UnificationError"},
                                                           "right": {"variable": "t1"}}},
@@ -154,7 +154,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "either": {
-                                                                                "@right": {
+                                                                                "right": {
                                                                                   "typeApplication": {"body": {"list": []}, "type": {"variable": "t1"}}}}},
                                                                             "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                         "type": {"list": {"variable": "t1"}}}},
@@ -179,7 +179,7 @@
                                                                                 "right": {"list": {"variable": "t1"}}}}}}}}}}}},
                                                             "parameter": "t1"}},
                                                         "type": {
-                                                          "type": {
+                                                          "body": {
                                                             "either": {
                                                               "left": {"variable": "hydra.errors.UnificationError"},
                                                               "right": {"list": {"variable": "t1"}}}},
@@ -207,7 +207,7 @@
                                                                                   "typeApplication": {
                                                                                     "body": {
                                                                                       "either": {
-                                                                                        "@right": {
+                                                                                        "right": {
                                                                                           "application": {
                                                                                             "argument": {"variable": "rights"},
                                                                                             "function": {
@@ -264,7 +264,7 @@
                                                                 "domain": {"list": {"variable": "hydra.core.Type"}},
                                                                 "parameter": "lefts"}},
                                                             "type": {
-                                                              "type": {
+                                                              "body": {
                                                                 "function": {
                                                                   "codomain": {
                                                                     "function": {
@@ -469,7 +469,7 @@
                                                                     "domain": {"list": {"variable": "hydra.core.FieldType"}},
                                                                     "parameter": "left"}},
                                                                 "type": {
-                                                                  "type": {
+                                                                  "body": {
                                                                     "function": {
                                                                       "codomain": {
                                                                         "function": {
@@ -506,7 +506,7 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "either": {
-                                                                                                        "@right": {
+                                                                                                        "right": {
                                                                                                           "list": [
                                                                                                             {
                                                                                                               "application": {
@@ -569,7 +569,7 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "either": {
-                                                                                                        "@right": {
+                                                                                                        "right": {
                                                                                                           "list": [
                                                                                                             {
                                                                                                               "application": {
@@ -628,7 +628,7 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "either": {
-                                                                                                        "@right": {
+                                                                                                        "right": {
                                                                                                           "list": [
                                                                                                             {
                                                                                                               "application": {
@@ -691,7 +691,7 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "either": {
-                                                                                                        "@right": {
+                                                                                                        "right": {
                                                                                                           "list": [
                                                                                                             {
                                                                                                               "application": {
@@ -739,7 +739,7 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "either": {
-                                                                                                        "@right": {
+                                                                                                        "right": {
                                                                                                           "list": [
                                                                                                             {
                                                                                                               "application": {
@@ -798,7 +798,7 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "either": {
-                                                                                                        "@right": {
+                                                                                                        "right": {
                                                                                                           "list": [
                                                                                                             {
                                                                                                               "application": {
@@ -836,7 +836,7 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "either": {
-                                                                                                        "@right": {
+                                                                                                        "right": {
                                                                                                           "list": [
                                                                                                             {
                                                                                                               "application": {
@@ -925,7 +925,7 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "either": {
-                                                                                                        "@right": {
+                                                                                                        "right": {
                                                                                                           "list": [
                                                                                                             {
                                                                                                               "application": {
@@ -993,7 +993,7 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "either": {
-                                                                                                        "@right": {
+                                                                                                        "right": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {"list": []},
                                                                                                             "type": {"variable": "hydra.typing.TypeConstraint"}}}}},
@@ -1028,7 +1028,7 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "either": {
-                                                                                                        "@right": {
+                                                                                                        "right": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {"list": []},
                                                                                                             "type": {"variable": "hydra.typing.TypeConstraint"}}}}},
@@ -1063,7 +1063,7 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "either": {
-                                                                                                        "@right": {
+                                                                                                        "right": {
                                                                                                           "list": [
                                                                                                             {
                                                                                                               "application": {
@@ -1096,7 +1096,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1124,8 +1124,8 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Robinson's algorithm, following https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf\nSpecifically this is an implementation of the following rules:\n  * Unify({(x, t)} ∪ E) = {t/x} Unify(E{t/x}) if x ∉ FV(t)\n  * Unify(∅) = I (the identity substitution x ↦ x)\n  * Unify({(x, x)} ∪ E) = Unify(E)\n  * Unify({(f(s1, ..., sn), f(t1, ..., tn))} ∪ E) = Unify({(s1, t1), ..., (sn, tn)} ∪ E))"}}}],
                     "body": {
@@ -1156,7 +1156,7 @@
                                                                 "function": {
                                                                   "project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                             "function": {"variable": "hydra.strip.deannotateType"}}},
-                                                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                                     "body": {
                                                       "let": {
                                                         "bindings": [
@@ -1170,7 +1170,7 @@
                                                                     "function": {
                                                                       "project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                 "function": {"variable": "hydra.strip.deannotateType"}}},
-                                                            "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                                            "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                                         "body": {
                                                           "let": {
                                                             "bindings": [
@@ -1181,7 +1181,7 @@
                                                                     "argument": {"variable": "c"},
                                                                     "function": {
                                                                       "project": {"field": "comment", "typeName": "hydra.typing.TypeConstraint"}}}},
-                                                                "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                                                "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                                             "body": {
                                                               "let": {
                                                                 "bindings": [
@@ -1203,7 +1203,7 @@
                                                                                           "application": {
                                                                                             "argument": {"variable": "v"},
                                                                                             "function": {"variable": "hydra.substitution.singletonTypeSubst"}}}}},
-                                                                                    "type": {"type": {"variable": "hydra.typing.TypeSubst"}, "variables": []}}],
+                                                                                    "type": {"body": {"variable": "hydra.typing.TypeSubst"}, "variables": []}}],
                                                                                 "body": {
                                                                                   "let": {
                                                                                     "bindings": [
@@ -1221,7 +1221,7 @@
                                                                                             "domain": {"variable": "hydra.typing.TypeSubst"},
                                                                                             "parameter": "s"}},
                                                                                         "type": {
-                                                                                          "type": {
+                                                                                          "body": {
                                                                                             "function": {
                                                                                               "codomain": {"variable": "hydra.typing.TypeSubst"},
                                                                                               "domain": {"variable": "hydra.typing.TypeSubst"}}},
@@ -1268,7 +1268,7 @@
                                                                         "domain": {"variable": "hydra.core.Name"},
                                                                         "parameter": "v"}},
                                                                     "type": {
-                                                                      "type": {
+                                                                      "body": {
                                                                         "function": {
                                                                           "codomain": {
                                                                             "function": {
@@ -1303,7 +1303,7 @@
                                                                                               "typeApplication": {
                                                                                                 "body": {
                                                                                                   "either": {
-                                                                                                    "@left": {
+                                                                                                    "left": {
                                                                                                       "record": {
                                                                                                         "fields": [
                                                                                                           {"name": "leftType", "term": {"variable": "sleft"}},
@@ -1377,7 +1377,7 @@
                                                                             "domain": {"variable": "hydra.core.Name"},
                                                                             "parameter": "v"}},
                                                                         "type": {
-                                                                          "type": {
+                                                                          "body": {
                                                                             "function": {
                                                                               "codomain": {
                                                                                 "function": {
@@ -1428,7 +1428,7 @@
                                                                                         "domain": {"list": {"variable": "hydra.typing.TypeConstraint"}},
                                                                                         "parameter": "constraints2"}},
                                                                                     "type": {
-                                                                                      "type": {
+                                                                                      "body": {
                                                                                         "function": {
                                                                                           "codomain": {
                                                                                             "either": {
@@ -1468,7 +1468,7 @@
                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                                             "type": {"variable": "hydra.typing.TypeSubst"}}}}}}}}},
                                                                             "type": {
-                                                                              "type": {
+                                                                              "body": {
                                                                                 "either": {
                                                                                   "left": {"variable": "hydra.errors.UnificationError"},
                                                                                   "right": {"variable": "hydra.typing.TypeSubst"}}},
@@ -1500,7 +1500,7 @@
                                                                                         "default": {"variable": "noVars"},
                                                                                         "typeName": "hydra.core.Type"}}}},
                                                                                 "type": {
-                                                                                  "type": {
+                                                                                  "body": {
                                                                                     "either": {
                                                                                       "left": {"variable": "hydra.errors.UnificationError"},
                                                                                       "right": {"variable": "hydra.typing.TypeSubst"}}},
@@ -1551,7 +1551,7 @@
                                                                                                                                       "typeApplication": {
                                                                                                                                         "body": {
                                                                                                                                           "either": {
-                                                                                                                                            "@left": {
+                                                                                                                                            "left": {
                                                                                                                                               "record": {
                                                                                                                                                 "fields": [
                                                                                                                                                   {"name": "leftType", "term": {"variable": "sleft"}},
@@ -1722,7 +1722,7 @@
                                             "domain": {"variable": "hydra.typing.TypeConstraint"},
                                             "parameter": "c"}},
                                         "type": {
-                                          "type": {
+                                          "body": {
                                             "function": {
                                               "codomain": {
                                                 "function": {
@@ -1782,7 +1782,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"either": {"@right": {"variable": "hydra.substitution.idTypeSubst"}}},
+                                                        "body": {"either": {"right": {"variable": "hydra.substitution.idTypeSubst"}}},
                                                         "type": {"variable": "hydra.errors.UnificationError"}}},
                                                     "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                 "function": {
@@ -1810,7 +1810,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1865,7 +1865,7 @@
                                                 "domain": {"variable": "hydra.core.Type"},
                                                 "parameter": "l"}},
                                             "type": {
-                                              "type": {
+                                              "body": {
                                                 "function": {
                                                   "codomain": {
                                                     "function": {
@@ -1923,7 +1923,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2003,7 +2003,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2033,8 +2033,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Determine whether a type variable appears within a type expression.No distinction is made between free and bound type variables."}}}],
             "body": {
@@ -2091,7 +2091,7 @@
                                 "domain": {"literal": {"boolean": {}}},
                                 "parameter": "b"}},
                             "type": {
-                              "type": {
+                              "body": {
                                 "function": {
                                   "codomain": {
                                     "function": {
@@ -2123,7 +2123,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "var"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

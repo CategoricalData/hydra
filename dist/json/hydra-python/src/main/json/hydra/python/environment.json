@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.python.environment.PythonVersion",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Target Python version for code generation"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Target Python version for code generation"}}}],
               "body": {
                 "union": [
                   {"name": "python310", "type": {"unit": {}}},
@@ -19,12 +19,12 @@
       "type": {
         "name": "hydra.python.environment.PythonEnvironment",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Environment for Python code generation"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Environment for Python code generation"}}}],
               "body": {
                 "record": [
                   {
@@ -33,8 +33,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Namespace mapping for imports"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Namespace mapping for imports"}}}],
                         "body": {
                           "application": {
                             "argument": {"variable": "hydra.python.syntax.DottedName"},
@@ -45,8 +45,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Type variables in scope, with their Python names"}}}],
                         "body": {
                           "pair": {
@@ -61,8 +61,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Graph context for type inference"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Graph context for type inference"}}}],
                         "body": {"variable": "hydra.graph.Graph"}}}},
                   {
                     "name": "nullaryBindings",
@@ -70,8 +70,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Set of nullary bindings (need call syntax)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Set of nullary bindings (need call syntax)"}}}],
                         "body": {"set": {"variable": "hydra.core.Name"}}}}},
                   {
                     "name": "version",
@@ -79,8 +79,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Target Python version"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Target Python version"}}}],
                         "body": {"variable": "hydra.python.environment.PythonVersion"}}}},
                   {
                     "name": "skipCasts",
@@ -88,8 +88,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "When True, skip generating cast() calls for reduced memory usage"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
@@ -99,8 +99,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Variables that are inline let bindings (walrus operators)"}}}],
                         "body": {"set": {"variable": "hydra.core.Name"}}}}}]}}},
@@ -109,12 +109,12 @@
       "type": {
         "name": "hydra.python.environment.PythonModuleMetadata",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Temporary metadata used to create the header section of a Python file"}}}],
               "body": {
@@ -125,8 +125,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Namespace mapping for imports"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Namespace mapping for imports"}}}],
                         "body": {
                           "application": {
                             "argument": {"variable": "hydra.python.syntax.DottedName"},
@@ -137,8 +137,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Type variables used in the module"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Type variables used in the module"}}}],
                         "body": {"set": {"variable": "hydra.core.Name"}}}}},
                   {"name": "usesAnnotated", "type": {"literal": {"boolean": {}}}},
                   {"name": "usesCallable", "type": {"literal": {"boolean": {}}}},
@@ -165,12 +165,12 @@
       "type": {
         "name": "hydra.python.environment.PyGraph",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Combined graph and metadata state for Python code generation"}}}],
               "body": {
@@ -181,8 +181,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The Hydra graph being processed"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The Hydra graph being processed"}}}],
                         "body": {"variable": "hydra.graph.Graph"}}}},
                   {
                     "name": "metadata",
@@ -190,8 +190,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Accumulated module metadata"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Accumulated module metadata"}}}],
                         "body": {"variable": "hydra.python.environment.PythonModuleMetadata"}}}}]}}},
           "variables": []}}}],
   "description": "Environment types for Python code generation",

@@ -53,7 +53,7 @@ allTests =
                         Packaging.termDefinitionType = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "a"],
-                          Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                          Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                             Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))})),
                           Core.typeSchemeConstraints = Nothing}))})],
@@ -107,7 +107,7 @@ allTests =
                         Packaging.termDefinitionType = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "a"],
-                          Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                          Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                             Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))})),
                           Core.typeSchemeConstraints = Nothing}))})],
@@ -166,7 +166,7 @@ allTests =
                         Packaging.termDefinitionType = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "a"],
-                          Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                          Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                             Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))})),
                           Core.typeSchemeConstraints = Nothing}))})],
@@ -198,7 +198,7 @@ allTests =
                         Packaging.termDefinitionType = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "a"],
-                          Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                          Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                             Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))})),
                           Core.typeSchemeConstraints = Nothing}))})],
@@ -239,7 +239,7 @@ allTests =
                         Packaging.termDefinitionType = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "a"],
-                          Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                          Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                             Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))})),
                           Core.typeSchemeConstraints = Nothing}))})],
@@ -271,7 +271,7 @@ allTests =
                         Packaging.termDefinitionType = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [
                             Core.Name "a"],
-                          Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                          Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                             Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))})),
                           Core.typeSchemeConstraints = Nothing}))})],
@@ -325,7 +325,7 @@ allTests =
                             Core.Name "t0",
                             (Core.Name "t1"),
                             (Core.Name "t2")],
-                          Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                          Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                             Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),

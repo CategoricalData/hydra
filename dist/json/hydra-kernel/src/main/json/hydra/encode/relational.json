@@ -44,7 +44,7 @@
             "domain": {"variable": "hydra.relational.ColumnName"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.relational.ColumnName"}}},
@@ -135,7 +135,7 @@
                 "parameter": "t"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -251,7 +251,7 @@
             "domain": {"variable": "hydra.relational.ForeignKey"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.relational.ForeignKey"}}},
@@ -309,7 +309,7 @@
             "domain": {"variable": "hydra.relational.PrimaryKey"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.relational.PrimaryKey"}}},
@@ -396,7 +396,7 @@
                 "parameter": "v"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -454,7 +454,7 @@
             "domain": {"variable": "hydra.relational.RelationName"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.relational.RelationName"}}},
@@ -671,7 +671,7 @@
                 "parameter": "t"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -794,8 +794,7 @@
                 "parameter": "v"}},
             "parameter": "t0"}},
         "type": {
-          "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -808,6 +807,7 @@
                 "function": {
                   "codomain": {"variable": "hydra.core.Term"},
                   "domain": {"variable": "t0"}}}}},
+          "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
           "variables": ["t0"]}}},
     {
       "term": {
@@ -878,7 +878,7 @@
                 "parameter": "v"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

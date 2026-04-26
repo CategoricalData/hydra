@@ -4,24 +4,24 @@
       "type": {
         "name": "hydra.testing.Tag",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A tag for test cases"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A tag for test cases"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.testing.TestCase",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A test case with an actual and expected string for comparison"}}}],
               "body": {
@@ -32,20 +32,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A universal test case (string comparison)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A universal test case (string comparison)"}}}],
                         "body": {"variable": "hydra.testing.UniversalTestCase"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.testing.TestCaseWithMetadata",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A test case together with metadata"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A test case together with metadata"}}}],
               "body": {
                 "record": [
                   {
@@ -54,8 +54,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A short name for the test case"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A short name for the test case"}}}],
                         "body": {"literal": {"string": {}}}}}},
                   {
                     "name": "case",
@@ -63,8 +63,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The test case itself"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The test case itself"}}}],
                         "body": {"variable": "hydra.testing.TestCase"}}}},
                   {
                     "name": "description",
@@ -72,8 +72,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "An optional longer description of the test case"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}},
                   {
@@ -82,20 +82,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Zero or more tags for the test case"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Zero or more tags for the test case"}}}],
                         "body": {"list": {"variable": "hydra.testing.Tag"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.testing.TestGroup",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A collection of test cases with a name and optional description"}}}],
               "body": {
@@ -106,8 +106,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A short name for the test group"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A short name for the test group"}}}],
                         "body": {"literal": {"string": {}}}}}},
                   {
                     "name": "description",
@@ -115,8 +115,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "An optional longer description of the test group"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}},
                   {
@@ -125,8 +125,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Zero or more subgroups"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Zero or more subgroups"}}}],
                         "body": {"list": {"variable": "hydra.testing.TestGroup"}}}}},
                   {
                     "name": "cases",
@@ -134,20 +134,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Zero or more test cases"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Zero or more test cases"}}}],
                         "body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.testing.UniversalTestCase",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A universal test case: the actual and expected values are both strings"}}}],
               "body": {
@@ -158,8 +158,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The actual result (a string produced by evaluating and showing the test expression)"}}}],
                         "body": {"literal": {"string": {}}}}}},
@@ -169,8 +169,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The expected result (a string produced by showing the expected value)"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},

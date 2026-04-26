@@ -9,8 +9,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Extract a comparison from a term"}}}],
+                    "key": "description",
+                    "value": {"literal": {"string": "Extract a comparison from a term"}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -33,7 +33,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "either": {
-                                                            "@left": {
+                                                            "left": {
                                                               "inject": {
                                                                 "field": {
                                                                   "name": "extraction",
@@ -64,7 +64,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "either": {
-                                                                "@right": {
+                                                                "right": {
                                                                   "inject": {
                                                                     "field": {"name": "greaterThan", "term": {"unit": {}}},
                                                                     "typeName": "hydra.util.Comparison"}}}},
@@ -100,7 +100,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "either": {
-                                                            "@right": {
+                                                            "right": {
                                                               "inject": {
                                                                 "field": {"name": "lessThan", "term": {"unit": {}}},
                                                                 "typeName": "hydra.util.Comparison"}}}},
@@ -136,7 +136,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "either": {
-                                                        "@right": {
+                                                        "right": {
                                                           "inject": {
                                                             "field": {"name": "equalTo", "term": {"unit": {}}},
                                                             "typeName": "hydra.util.Comparison"}}}},
@@ -199,7 +199,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.protobuf.environment.StructuralTypeRef",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A reference to a structural type (Either or Pair) with its component types"}}}],
               "body": {
@@ -20,8 +20,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "An Either type with left and right component types"}}}],
                         "body": {
                           "pair": {
@@ -33,8 +33,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "A Pair type with first and second component types"}}}],
                         "body": {
                           "pair": {

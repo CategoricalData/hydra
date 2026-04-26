@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.context.Context",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "An execution context for tracing and diagnostics, threaded through function calls"}}}],
               "body": {
@@ -20,8 +20,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A stack of context labels describing the current execution path"}}}],
                         "body": {"list": {"literal": {"string": {}}}}}}},
@@ -31,8 +31,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A log of warnings and/or info messages"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A log of warnings and/or info messages"}}}],
                         "body": {"list": {"literal": {"string": {}}}}}}},
                   {
                     "name": "other",
@@ -40,8 +40,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A map of string keys to arbitrary terms as values, for application-specific use"}}}],
                         "body": {
@@ -53,12 +53,12 @@
       "type": {
         "name": "hydra.context.InContext",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A particular domain object (such as an error) together with an execution context"}}}],
               "body": {
@@ -71,8 +71,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {"literal": {"string": "A domain object; typically an error"}}}],
+                                "key": "description",
+                                "value": {"literal": {"string": "A domain object; typically an error"}}}],
                             "body": {"variable": "e"}}}},
                       {
                         "name": "context",
@@ -80,8 +80,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {
+                                "key": "description",
+                                "value": {
                                   "literal": {"string": "The execution context at the point of capture"}}}],
                             "body": {"variable": "hydra.context.Context"}}}}]},
                   "parameter": "e"}}}},

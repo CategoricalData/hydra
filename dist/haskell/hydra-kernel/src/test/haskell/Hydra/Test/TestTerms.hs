@@ -43,7 +43,7 @@ testElementArthur =
       Core.bindingTerm = testDataArthur,
       Core.bindingType = (Just (Core.TypeScheme {
         Core.typeSchemeVariables = [],
-        Core.typeSchemeType = (Core.TypeVariable TestTypes.testTypePersonName),
+        Core.typeSchemeBody = (Core.TypeVariable TestTypes.testTypePersonName),
         Core.typeSchemeConstraints = Nothing}))}
 
 testElementFirstName :: Core.Binding
@@ -55,7 +55,7 @@ testElementFirstName =
         Core.projectionField = (Core.Name "firstName")})),
       Core.bindingType = (Just (Core.TypeScheme {
         Core.typeSchemeVariables = [],
-        Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+        Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
           Core.functionTypeDomain = (Core.TypeVariable TestTypes.testTypePersonName),
           Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})),
         Core.typeSchemeConstraints = Nothing}))}

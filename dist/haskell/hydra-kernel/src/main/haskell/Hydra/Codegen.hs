@@ -43,7 +43,7 @@ import qualified Data.Set as S
 
 -- | Build a schema map (Name -> Type) from a graph's schema types
 buildSchemaMap :: Graph.Graph -> M.Map Core.Name Core.Type
-buildSchemaMap g = Maps.map (\ts -> Strip.deannotateType (Core.typeSchemeType ts)) (Graph.graphSchemaTypes g)
+buildSchemaMap g = Maps.map (\ts -> Strip.deannotateType (Core.typeSchemeBody ts)) (Graph.graphSchemaTypes g)
 
 -- | Decode a single module from a JSON value
 decodeModuleFromJson :: Graph.Graph -> [Packaging.Module] -> Model.Value -> Either Errors.Error Packaging.Module
@@ -116,8 +116,8 @@ generateCoderModules codec bsGraph universeModules typeModules cx =
                         Core.bindingTerm = dataTerm,
                         Core.bindingType = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [],
-                          Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-                          Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
+                          Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                          Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionType v0)))
                     _ -> Nothing) (Packaging.moduleDefinitions m))) (Lists.concat2 schemaModules universeModules))
           dataElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
@@ -170,8 +170,8 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                         Core.bindingTerm = dataTerm,
                         Core.bindingType = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [],
-                          Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-                          Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
+                          Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                          Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionType v0)))
                     _ -> Nothing) (Packaging.moduleDefinitions mod))))) modsToGenerate
           termModulesToGenerate =
                   Lists.filter (\mod -> Logic.not (Lists.null (Maybes.cat (Lists.map (\d -> case d of
@@ -195,8 +195,8 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                         Core.bindingTerm = dataTerm,
                         Core.bindingType = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [],
-                          Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-                          Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
+                          Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                          Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionType v0)))
                     _ -> Nothing) (Packaging.moduleDefinitions m))) (Lists.concat2 schemaMods typeModulesToGenerate))
           dataMods = moduleTermDepsTransitive namespaceMap modsToGenerate
           dataElements =
@@ -395,8 +395,8 @@ modulesToGraph bsGraph universeModules modules =
                         Core.bindingTerm = dataTerm,
                         Core.bindingType = (Just (Core.TypeScheme {
                           Core.typeSchemeVariables = [],
-                          Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-                          Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
+                          Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                          Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionType v0)))
                     _ -> Nothing) (Packaging.moduleDefinitions m))) (Lists.concat2 schemaModules modules))
           dataElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of

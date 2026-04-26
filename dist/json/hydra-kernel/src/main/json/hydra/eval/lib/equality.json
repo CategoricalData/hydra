@@ -15,8 +15,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {"literal": {"string": "Interpreter-friendly identity function."}}}],
+                                "key": "description",
+                                "value": {"literal": {"string": "Interpreter-friendly identity function."}}}],
                             "body": {
                               "lambda": {
                                 "body": {
@@ -27,7 +27,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"either": {"@right": {"variable": "x"}}},
+                                                "body": {"either": {"right": {"variable": "x"}}},
                                                 "type": {"variable": "t3"}}},
                                             "type": {"variable": "t2"}}},
                                         "domain": {"variable": "t2"},
@@ -41,7 +41,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -65,8 +65,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Interpreter-friendly max."}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Interpreter-friendly max."}}}],
                         "body": {
                           "lambda": {
                             "body": {
@@ -81,7 +81,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "application",
@@ -174,7 +174,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -202,8 +202,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Interpreter-friendly min."}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Interpreter-friendly min."}}}],
                         "body": {
                           "lambda": {
                             "body": {
@@ -218,7 +218,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "application",
@@ -311,7 +311,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Convert a JSON value to a YAML node. Always succeeds since YAML is a superset of JSON."}}}],
             "body": {
@@ -127,7 +127,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "pair": {
-                                                                  "@first": {
+                                                                  "first": {
                                                                     "inject": {
                                                                       "field": {
                                                                         "name": "scalar",
@@ -147,7 +147,7 @@
                                                                                       "type": {"variable": "hydra.json.model.Value"}}}}}},
                                                                             "typeName": "hydra.yaml.model.Scalar"}}},
                                                                       "typeName": "hydra.yaml.model.Node"}},
-                                                                  "@second": {
+                                                                  "second": {
                                                                     "application": {
                                                                       "argument": {
                                                                         "application": {
@@ -212,7 +212,7 @@
                 "domain": {"variable": "hydra.json.model.Value"},
                 "parameter": "value"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.yaml.model.Node"},
               "domain": {"variable": "hydra.json.model.Value"}}},
@@ -224,8 +224,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Encode a Hydra term to a YAML node via JSON encoding."}}}],
             "body": {
               "lambda": {
@@ -282,7 +282,7 @@
                     "values": {"variable": "hydra.core.Type"}}},
                 "parameter": "types"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

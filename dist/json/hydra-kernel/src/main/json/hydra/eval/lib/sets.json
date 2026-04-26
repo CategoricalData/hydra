@@ -9,8 +9,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Interpreter-friendly set difference."}}}],
+                    "key": "description",
+                    "value": {"literal": {"string": "Interpreter-friendly set difference."}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -29,7 +29,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "application": {
                                                         "argument": {
                                                           "application": {
@@ -216,7 +216,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -242,8 +242,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Interpreter-friendly set intersection."}}}],
+                    "key": "description",
+                    "value": {"literal": {"string": "Interpreter-friendly set intersection."}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -262,7 +262,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "application": {
                                                         "argument": {
                                                           "application": {
@@ -449,7 +449,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -475,8 +475,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Interpreter-friendly map for Set terms."}}}],
+                    "key": "description",
+                    "value": {"literal": {"string": "Interpreter-friendly map for Set terms."}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -495,7 +495,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "inject": {
                                                         "field": {
                                                           "name": "application",
@@ -588,7 +588,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -614,8 +614,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Interpreter-friendly set union."}}}],
+                    "key": "description",
+                    "value": {"literal": {"string": "Interpreter-friendly set union."}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -634,7 +634,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "either": {
-                                                    "@right": {
+                                                    "right": {
                                                       "application": {
                                                         "argument": {
                                                           "application": {
@@ -729,7 +729,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -755,8 +755,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Interpreter-friendly unions for list of Set terms."}}}],
                 "body": {
                   "lambda": {
@@ -774,7 +774,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@right": {
+                                                "right": {
                                                   "application": {
                                                     "argument": {"variable": "elements"},
                                                     "function": {
@@ -873,7 +873,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

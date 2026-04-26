@@ -200,7 +200,7 @@ replaceTypedefs types typ0 =
                             _ -> rewrite recurse t
                       forTypeScheme =
                               \ts ->
-                                let t = Core.typeSchemeType ts
+                                let t = Core.typeSchemeBody ts
                                 in (Logic.ifElse (Lists.null (Core.typeSchemeVariables ts)) (forMono t) typ)
                   in (Maybes.maybe typ (\ts -> forTypeScheme ts) (Maps.lookup v0 types))
                 Core.TypeWrap _ -> typ
@@ -307,7 +307,7 @@ topologicalSortTypeDefinitions :: [Packaging.TypeDefinition] -> [[Packaging.Type
 topologicalSortTypeDefinitions defs =
 
       let toPair =
-              \def -> (Packaging.typeDefinitionName def, (Sets.toList (typeDependencyNames False (Core.typeSchemeType (Packaging.typeDefinitionType def)))))
+              \def -> (Packaging.typeDefinitionName def, (Sets.toList (typeDependencyNames False (Core.typeSchemeBody (Packaging.typeDefinitionType def)))))
           nameToDef = Maps.fromList (Lists.map (\d -> (Packaging.typeDefinitionName d, d)) defs)
           sorted = Sorting.topologicalSortComponents (Lists.map toPair defs)
       in (Lists.map (\names -> Maybes.cat (Lists.map (\n -> Maps.lookup n nameToDef) names)) sorted)

@@ -100,7 +100,7 @@ fTypeToTypeScheme typ =
                     Core.TypeForall v0 -> gatherForall (Lists.cons (Core.forallTypeParameter v0) vars) (Core.forallTypeBody v0)
                     _ -> Core.TypeScheme {
                       Core.typeSchemeVariables = (Lists.reverse vars),
-                      Core.typeSchemeType = typ2,
+                      Core.typeSchemeBody = typ2,
                       Core.typeSchemeConstraints = Nothing}
       in (gatherForall [] typ)
 
@@ -109,7 +109,7 @@ typeSchemeToFType :: Core.TypeScheme -> Core.Type
 typeSchemeToFType ts =
 
       let vars = Core.typeSchemeVariables ts
-          body = Core.typeSchemeType ts
+          body = Core.typeSchemeBody ts
       in (Lists.foldl (\t -> \v -> Core.TypeForall (Core.ForallType {
         Core.forallTypeParameter = v,
         Core.forallTypeBody = t})) body (Lists.reverse vars))

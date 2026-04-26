@@ -197,11 +197,11 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "quantified variable shadows substitution",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.type_ (Core.typeSchemeType (Substitution.substInTypeScheme (Typing.TypeSubst (Maps.fromList [
+                Testing.universalTestCaseActual = (ShowCore.type_ (Core.typeSchemeBody (Substitution.substInTypeScheme (Typing.TypeSubst (Maps.fromList [
                   (Core.Name "a", (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))])) (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "a"],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                     Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))})),
                   Core.typeSchemeConstraints = Nothing})))),
@@ -213,11 +213,11 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "free variable in body is substituted",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.type_ (Core.typeSchemeType (Substitution.substInTypeScheme (Typing.TypeSubst (Maps.fromList [
+                Testing.universalTestCaseActual = (ShowCore.type_ (Core.typeSchemeBody (Substitution.substInTypeScheme (Typing.TypeSubst (Maps.fromList [
                   (Core.Name "b", (Core.TypeLiteral Core.LiteralTypeString))])) (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "a"],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                     Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "b"))})),
                   Core.typeSchemeConstraints = Nothing})))),
@@ -229,12 +229,12 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "mixed: free substituted, quantified shadowed",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.type_ (Core.typeSchemeType (Substitution.substInTypeScheme (Typing.TypeSubst (Maps.fromList [
+                Testing.universalTestCaseActual = (ShowCore.type_ (Core.typeSchemeBody (Substitution.substInTypeScheme (Typing.TypeSubst (Maps.fromList [
                   (Core.Name "a", (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
                   (Core.Name "b", (Core.TypeLiteral Core.LiteralTypeString))])) (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "a"],
-                  Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                  Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                     Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "b"))})),
                   Core.typeSchemeConstraints = Nothing})))),
@@ -246,13 +246,13 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "multiple quantifiers shadow substitution",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.type_ (Core.typeSchemeType (Substitution.substInTypeScheme (Typing.TypeSubst (Maps.fromList [
+                Testing.universalTestCaseActual = (ShowCore.type_ (Core.typeSchemeBody (Substitution.substInTypeScheme (Typing.TypeSubst (Maps.fromList [
                   (Core.Name "a", (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
                   (Core.Name "b", (Core.TypeLiteral Core.LiteralTypeString))])) (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "a",
                     (Core.Name "b")],
-                  Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                  Core.typeSchemeBody = (Core.TypePair (Core.PairType {
                     Core.pairTypeFirst = (Core.TypeVariable (Core.Name "a")),
                     Core.pairTypeSecond = (Core.TypeVariable (Core.Name "b"))})),
                   Core.typeSchemeConstraints = Nothing})))),
@@ -264,10 +264,10 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty quantifiers: normal substitution",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.type_ (Core.typeSchemeType (Substitution.substInTypeScheme (Typing.TypeSubst (Maps.fromList [
+                Testing.universalTestCaseActual = (ShowCore.type_ (Core.typeSchemeBody (Substitution.substInTypeScheme (Typing.TypeSubst (Maps.fromList [
                   (Core.Name "a", (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))])) (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
-                  Core.typeSchemeType = (Core.TypeVariable (Core.Name "a")),
+                  Core.typeSchemeBody = (Core.TypeVariable (Core.Name "a")),
                   Core.typeSchemeConstraints = Nothing})))),
                 Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
               Testing.testCaseWithMetadataDescription = Nothing,

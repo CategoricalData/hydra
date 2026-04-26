@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.workflow.HydraSchemaSpec",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "The specification of a Hydra schema, provided as a set of modules and a distinguished type"}}}],
               "body": {
@@ -20,8 +20,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The modules to include in the schema graph"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The modules to include in the schema graph"}}}],
                         "body": {"list": {"variable": "hydra.packaging.Module"}}}}},
                   {
                     "name": "typeName",
@@ -29,8 +29,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "The name of the top-level type; all data which passes through the workflow will be instances of this type"}}}],
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
@@ -39,12 +39,12 @@
       "type": {
         "name": "hydra.workflow.SchemaSpec",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "The specification of a schema at the source end of a workflow"}}}],
               "body": {
@@ -55,8 +55,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A native Hydra schema"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A native Hydra schema"}}}],
                         "body": {"variable": "hydra.workflow.HydraSchemaSpec"}}}},
                   {
                     "name": "file",
@@ -64,8 +64,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "A schema provided as a file, available at the given file path"}}}],
                         "body": {"literal": {"string": {}}}}}},
@@ -75,8 +75,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "A schema which will be provided within the workflow"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}},
@@ -84,12 +84,12 @@
       "type": {
         "name": "hydra.workflow.TransformWorkflow",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "The specification of a workflow which takes a schema specification, reads data from a directory, and writes data to another directory"}}}],
               "body": {
@@ -100,8 +100,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A descriptive name for the workflow"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A descriptive name for the workflow"}}}],
                         "body": {"literal": {"string": {}}}}}},
                   {
                     "name": "schemaSpec",
@@ -109,8 +109,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The schema specification"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The schema specification"}}}],
                         "body": {"variable": "hydra.workflow.SchemaSpec"}}}},
                   {
                     "name": "srcDir",
@@ -118,8 +118,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The source directory"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The source directory"}}}],
                         "body": {"literal": {"string": {}}}}}},
                   {
                     "name": "destDir",
@@ -127,8 +127,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The destination directory"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The destination directory"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}}],
   "description": "A model for Hydra transformation workflows",

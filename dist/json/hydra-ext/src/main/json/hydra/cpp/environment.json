@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.cpp.environment.CppEnvironment",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Environment for C++ code generation"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Environment for C++ code generation"}}}],
               "body": {
                 "record": [
                   {
@@ -18,8 +18,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Namespace mapping for code generation"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Namespace mapping for code generation"}}}],
                         "body": {
                           "application": {
                             "argument": {"literal": {"string": {}}},
@@ -30,8 +30,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Type variables in scope, with their C++ names"}}}],
                         "body": {
                           "pair": {

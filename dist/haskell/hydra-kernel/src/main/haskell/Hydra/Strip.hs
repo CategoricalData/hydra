@@ -57,11 +57,11 @@ deannotateTypeSchemeRecursive :: Core.TypeScheme -> Core.TypeScheme
 deannotateTypeSchemeRecursive ts =
 
       let vars = Core.typeSchemeVariables ts
-          typ = Core.typeSchemeType ts
+          typ = Core.typeSchemeBody ts
           constraints = Core.typeSchemeConstraints ts
       in Core.TypeScheme {
         Core.typeSchemeVariables = vars,
-        Core.typeSchemeType = (deannotateTypeRecursive typ),
+        Core.typeSchemeBody = (deannotateTypeRecursive typ),
         Core.typeSchemeConstraints = constraints}
 
 -- | Strip System F type annotations from the top levels of a term, but leave application-specific annotations intact

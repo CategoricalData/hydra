@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.lisp.syntax.Program",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A Lisp program, consisting of a sequence of top-level forms"}}}],
               "body": {
@@ -20,8 +20,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The target Lisp dialect"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The target Lisp dialect"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Dialect"}}}},
                   {
                     "name": "module",
@@ -29,8 +29,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional module/namespace declaration"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional module/namespace declaration"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.ModuleDeclaration"}}}}},
                   {
                     "name": "imports",
@@ -38,8 +38,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Import/require declarations"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Import/require declarations"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.ImportDeclaration"}}}}},
                   {
                     "name": "exports",
@@ -47,8 +47,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Export/provide declarations"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Export/provide declarations"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.ExportDeclaration"}}}}},
                   {
                     "name": "forms",
@@ -56,20 +56,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The top-level forms in the program"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The top-level forms in the program"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.TopLevelFormWithComments"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.TopLevelForm",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A top-level form in a Lisp program"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A top-level form in a Lisp program"}}}],
               "body": {
                 "union": [
                   {
@@ -78,8 +78,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A named function definition"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A named function definition"}}}],
                         "body": {"variable": "hydra.lisp.syntax.FunctionDefinition"}}}},
                   {
                     "name": "variable",
@@ -87,8 +87,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A global variable definition"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A global variable definition"}}}],
                         "body": {"variable": "hydra.lisp.syntax.VariableDefinition"}}}},
                   {
                     "name": "constant",
@@ -96,8 +96,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A constant definition"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A constant definition"}}}],
                         "body": {"variable": "hydra.lisp.syntax.ConstantDefinition"}}}},
                   {
                     "name": "recordType",
@@ -105,8 +105,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A record/struct type definition"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A record/struct type definition"}}}],
                         "body": {"variable": "hydra.lisp.syntax.RecordTypeDefinition"}}}},
                   {
                     "name": "macro",
@@ -114,8 +114,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A macro definition"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A macro definition"}}}],
                         "body": {"variable": "hydra.lisp.syntax.MacroDefinition"}}}},
                   {
                     "name": "expression",
@@ -123,20 +123,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A bare expression at the top level"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A bare expression at the top level"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.TopLevelFormWithComments",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "A top-level form together with optional documentation"}}}],
               "body": {
                 "record": [
@@ -146,8 +146,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional documentation string"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional documentation string"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}}},
                   {
                     "name": "comment",
@@ -155,8 +155,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional comment"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional comment"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Comment"}}}}},
                   {
                     "name": "form",
@@ -164,20 +164,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The form itself"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The form itself"}}}],
                         "body": {"variable": "hydra.lisp.syntax.TopLevelForm"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.FunctionDefinition",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A named function definition. Serializes as (defn name [params] body) in Clojure, (defun name (params) body) in Emacs Lisp and Common Lisp, (define (name params) body) in Scheme"}}}],
               "body": {
@@ -188,8 +188,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The function name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The function name"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   {
                     "name": "params",
@@ -197,8 +197,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The parameter list"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The parameter list"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Symbol"}}}}},
                   {
                     "name": "restParam",
@@ -206,8 +206,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional rest/variadic parameter"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional rest/variadic parameter"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}}},
                   {
                     "name": "doc",
@@ -215,8 +215,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional docstring"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional docstring"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}}},
                   {
                     "name": "typeHints",
@@ -224,8 +224,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Optional type hints for parameters and return type"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.TypeHint"}}}}},
                   {
@@ -234,20 +234,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The function body (one or more expressions)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The function body (one or more expressions)"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.VariableDefinition",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A global variable definition. Serializes as (def name value) in Clojure, (defvar name value) in Emacs Lisp and Common Lisp, (define name value) in Scheme"}}}],
               "body": {
@@ -258,8 +258,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The variable name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The variable name"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   {
                     "name": "value",
@@ -267,8 +267,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The initial value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The initial value"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}},
                   {
                     "name": "doc",
@@ -276,20 +276,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional docstring"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional docstring"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.ConstantDefinition",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A constant definition. Serializes as (def ^:const name value) in Clojure, (defconst name value) in Emacs Lisp, (defconstant name value) in Common Lisp. Scheme has no dedicated constant form; uses define."}}}],
               "body": {
@@ -300,8 +300,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The constant name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The constant name"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   {
                     "name": "value",
@@ -309,8 +309,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The constant value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The constant value"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}},
                   {
                     "name": "doc",
@@ -318,20 +318,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional docstring"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional docstring"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.RecordTypeDefinition",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A record/struct type definition. Serializes as (defrecord Name [fields]) in Clojure, (cl-defstruct name fields) in Emacs Lisp, (defstruct name fields) in Common Lisp, (define-record-type <Name> ...) in Scheme"}}}],
               "body": {
@@ -342,8 +342,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The record type name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The record type name"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   {
                     "name": "fields",
@@ -351,8 +351,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The field definitions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The field definitions"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.FieldDefinition"}}}}},
                   {
                     "name": "doc",
@@ -360,20 +360,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional docstring"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional docstring"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.FieldDefinition",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A field in a record type definition"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A field in a record type definition"}}}],
               "body": {
                 "record": [
                   {
@@ -382,8 +382,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The field name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The field name"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   {
                     "name": "defaultValue",
@@ -391,20 +391,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional default value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional default value"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.MacroDefinition",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A macro definition. Serializes as (defmacro name [params] body) in Clojure, (defmacro name (params) body) in Emacs Lisp and Common Lisp, (define-syntax name ...) in Scheme"}}}],
               "body": {
@@ -415,8 +415,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The macro name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The macro name"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   {
                     "name": "params",
@@ -424,8 +424,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The parameter list"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The parameter list"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Symbol"}}}}},
                   {
                     "name": "restParam",
@@ -433,8 +433,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional rest parameter"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional rest parameter"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}}},
                   {
                     "name": "body",
@@ -442,20 +442,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The macro body"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The macro body"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.Expression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A Lisp expression"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A Lisp expression"}}}],
               "body": {
                 "union": [
                   {
@@ -464,8 +464,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Function application: (f arg1 arg2 ...)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Function application: (f arg1 arg2 ...)"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Application"}}}},
                   {
                     "name": "lambda",
@@ -473,8 +473,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Anonymous function"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Anonymous function"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Lambda"}}}},
                   {
                     "name": "let",
@@ -482,8 +482,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Local variable binding"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Local variable binding"}}}],
                         "body": {"variable": "hydra.lisp.syntax.LetExpression"}}}},
                   {
                     "name": "if",
@@ -491,8 +491,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Conditional expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Conditional expression"}}}],
                         "body": {"variable": "hydra.lisp.syntax.IfExpression"}}}},
                   {
                     "name": "cond",
@@ -500,8 +500,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Multi-branch conditional"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Multi-branch conditional"}}}],
                         "body": {"variable": "hydra.lisp.syntax.CondExpression"}}}},
                   {
                     "name": "case",
@@ -509,8 +509,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Case/match dispatch"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Case/match dispatch"}}}],
                         "body": {"variable": "hydra.lisp.syntax.CaseExpression"}}}},
                   {
                     "name": "and",
@@ -518,8 +518,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Logical and (short-circuiting)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Logical and (short-circuiting)"}}}],
                         "body": {"variable": "hydra.lisp.syntax.AndExpression"}}}},
                   {
                     "name": "or",
@@ -527,8 +527,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Logical or (short-circuiting)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Logical or (short-circuiting)"}}}],
                         "body": {"variable": "hydra.lisp.syntax.OrExpression"}}}},
                   {
                     "name": "not",
@@ -536,8 +536,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Logical negation"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Logical negation"}}}],
                         "body": {"variable": "hydra.lisp.syntax.NotExpression"}}}},
                   {
                     "name": "do",
@@ -545,8 +545,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Sequential evaluation (progn/do/begin)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Sequential evaluation (progn/do/begin)"}}}],
                         "body": {"variable": "hydra.lisp.syntax.DoExpression"}}}},
                   {
                     "name": "begin",
@@ -554,8 +554,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Sequential evaluation (explicit begin block)"}}}],
                         "body": {"variable": "hydra.lisp.syntax.BeginExpression"}}}},
                   {
@@ -564,8 +564,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Variable reference"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Variable reference"}}}],
                         "body": {"variable": "hydra.lisp.syntax.VariableReference"}}}},
                   {
                     "name": "literal",
@@ -573,8 +573,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A literal value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A literal value"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Literal"}}}},
                   {
                     "name": "list",
@@ -582,8 +582,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A list literal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A list literal"}}}],
                         "body": {"variable": "hydra.lisp.syntax.ListLiteral"}}}},
                   {
                     "name": "vector",
@@ -591,8 +591,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A vector literal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A vector literal"}}}],
                         "body": {"variable": "hydra.lisp.syntax.VectorLiteral"}}}},
                   {
                     "name": "map",
@@ -600,8 +600,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A map/association literal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A map/association literal"}}}],
                         "body": {"variable": "hydra.lisp.syntax.MapLiteral"}}}},
                   {
                     "name": "set",
@@ -609,8 +609,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A set literal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A set literal"}}}],
                         "body": {"variable": "hydra.lisp.syntax.SetLiteral"}}}},
                   {
                     "name": "cons",
@@ -618,8 +618,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A cons expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A cons expression"}}}],
                         "body": {"variable": "hydra.lisp.syntax.ConsExpression"}}}},
                   {
                     "name": "dottedPair",
@@ -627,8 +627,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A dotted pair literal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A dotted pair literal"}}}],
                         "body": {"variable": "hydra.lisp.syntax.DottedPair"}}}},
                   {
                     "name": "fieldAccess",
@@ -636,8 +636,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Field access on a record/struct"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Field access on a record/struct"}}}],
                         "body": {"variable": "hydra.lisp.syntax.FieldAccess"}}}},
                   {
                     "name": "typeAnnotation",
@@ -645,8 +645,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A type-annotated expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A type-annotated expression"}}}],
                         "body": {"variable": "hydra.lisp.syntax.TypeAnnotation"}}}},
                   {
                     "name": "quote",
@@ -654,8 +654,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A quoted expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A quoted expression"}}}],
                         "body": {"variable": "hydra.lisp.syntax.QuoteExpression"}}}},
                   {
                     "name": "quasiquote",
@@ -663,8 +663,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A quasiquoted expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A quasiquoted expression"}}}],
                         "body": {"variable": "hydra.lisp.syntax.QuasiquoteExpression"}}}},
                   {
                     "name": "unquote",
@@ -672,8 +672,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An unquoted expression within a quasiquote"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An unquoted expression within a quasiquote"}}}],
                         "body": {"variable": "hydra.lisp.syntax.UnquoteExpression"}}}},
                   {
                     "name": "splicingUnquote",
@@ -681,8 +681,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A splicing unquote within a quasiquote"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A splicing unquote within a quasiquote"}}}],
                         "body": {"variable": "hydra.lisp.syntax.SplicingUnquoteExpression"}}}},
                   {
                     "name": "sExpression",
@@ -690,8 +690,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "An arbitrary S-expression (escape hatch for dialect-specific forms)"}}}],
                         "body": {"variable": "hydra.lisp.syntax.SExpression"}}}}]}}},
@@ -700,12 +700,12 @@
       "type": {
         "name": "hydra.lisp.syntax.Application",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "Function application: (function arg1 arg2 ...)"}}}],
               "body": {
                 "record": [
@@ -715,8 +715,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The function being applied"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The function being applied"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}},
                   {
                     "name": "arguments",
@@ -724,20 +724,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The arguments"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The arguments"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.Lambda",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "An anonymous function. Serializes as (fn [params] body) in Clojure, (lambda (params) body) in Emacs Lisp, Common Lisp, and Scheme. If name is provided, emits (fn name [params] body) in Clojure for self-reference."}}}],
               "body": {
@@ -748,8 +748,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Optional name for self-referential lambdas (Clojure named fn)"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}}},
@@ -759,8 +759,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The parameter list"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The parameter list"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Symbol"}}}}},
                   {
                     "name": "restParam",
@@ -768,8 +768,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional rest parameter"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional rest parameter"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Symbol"}}}}},
                   {
                     "name": "body",
@@ -777,20 +777,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The lambda body"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The lambda body"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.VariableReference",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A reference to a variable by name"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A reference to a variable by name"}}}],
               "body": {
                 "record": [
                   {
@@ -799,8 +799,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The variable name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The variable name"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   {
                     "name": "functionNamespace",
@@ -808,8 +808,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Whether to reference from the function namespace. In Lisp-2 dialects (Common Lisp), this emits #'name. In Lisp-1 dialects, this has no effect."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
@@ -818,12 +818,12 @@
       "type": {
         "name": "hydra.lisp.syntax.FieldAccess",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Field access on a record/struct. Serializes as (:field record) in Clojure, (struct-field record) in Emacs Lisp and Common Lisp, (record-field record) in Scheme"}}}],
               "body": {
@@ -834,8 +834,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The record type name (used to form accessor name)"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   {
@@ -844,8 +844,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The field name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The field name"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   {
                     "name": "target",
@@ -853,20 +853,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The expression being accessed"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The expression being accessed"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.TypeAnnotation",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "An expression with a type annotation"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "An expression with a type annotation"}}}],
               "body": {
                 "record": [
                   {
@@ -875,8 +875,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The annotated expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The annotated expression"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}},
                   {
                     "name": "type",
@@ -884,20 +884,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The type specifier"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The type specifier"}}}],
                         "body": {"variable": "hydra.lisp.syntax.TypeSpecifier"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.IfExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Conditional: (if test then else)"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Conditional: (if test then else)"}}}],
               "body": {
                 "record": [
                   {
@@ -906,8 +906,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The test expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The test expression"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}},
                   {
                     "name": "then",
@@ -915,8 +915,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The then branch"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The then branch"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}},
                   {
                     "name": "else",
@@ -924,20 +924,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional else branch"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional else branch"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.CondExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Multi-branch conditional. Serializes as (cond test1 expr1 test2 expr2 :else default) in Clojure, (cond (test1 expr1) (test2 expr2) (t default)) in Emacs Lisp and Common Lisp, (cond (test1 expr1) (test2 expr2) (else default)) in Scheme"}}}],
               "body": {
@@ -948,8 +948,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The condition-expression pairs"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The condition-expression pairs"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.CondClause"}}}}},
                   {
                     "name": "default",
@@ -957,20 +957,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional default expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional default expression"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.CondClause",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A clause in a cond expression"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A clause in a cond expression"}}}],
               "body": {
                 "record": [
                   {
@@ -979,8 +979,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The test condition"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The test condition"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}},
                   {
                     "name": "body",
@@ -988,20 +988,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The result expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The result expression"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.CaseExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Case dispatch on a value. Serializes as (case x key1 expr1 key2 expr2 default) in Clojure, (case x (key1 expr1) (key2 expr2) (otherwise default)) in Common Lisp, (case x ((key1) expr1) ((key2) expr2) (else default)) in Scheme"}}}],
               "body": {
@@ -1012,8 +1012,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The expression being dispatched on"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The expression being dispatched on"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}},
                   {
                     "name": "clauses",
@@ -1021,8 +1021,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The case clauses"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The case clauses"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.CaseClause"}}}}},
                   {
                     "name": "default",
@@ -1030,20 +1030,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional default clause"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional default clause"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.CaseClause",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A clause in a case expression"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A clause in a case expression"}}}],
               "body": {
                 "record": [
                   {
@@ -1052,8 +1052,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The matching keys (one or more datum values)"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}},
                   {
@@ -1062,20 +1062,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The result expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The result expression"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.AndExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Logical and: (and expr1 expr2 ...)"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Logical and: (and expr1 expr2 ...)"}}}],
               "body": {
                 "record": [
                   {
@@ -1084,20 +1084,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The operand expressions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The operand expressions"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.OrExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Logical or: (or expr1 expr2 ...)"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Logical or: (or expr1 expr2 ...)"}}}],
               "body": {
                 "record": [
                   {
@@ -1106,20 +1106,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The operand expressions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The operand expressions"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.NotExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "Logical negation: (not expr)"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "Logical negation: (not expr)"}}}],
               "body": {
                 "record": [
                   {
@@ -1128,20 +1128,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The operand expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The operand expression"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.DoExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Sequential evaluation of expressions, returning the last. Serializes as (do expr1 expr2 ...) in Clojure, (progn expr1 expr2 ...) in Emacs Lisp and Common Lisp, (begin expr1 expr2 ...) in Scheme"}}}],
               "body": {
@@ -1152,20 +1152,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The expressions to evaluate in sequence"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The expressions to evaluate in sequence"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.BeginExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "An explicit begin block (distinct from do for Scheme compatibility)"}}}],
               "body": {
@@ -1176,20 +1176,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The expressions to evaluate in sequence"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The expressions to evaluate in sequence"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.QuoteExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A quoted form: 'expr or (quote expr)"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A quoted form: 'expr or (quote expr)"}}}],
               "body": {
                 "record": [
                   {
@@ -1198,20 +1198,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The quoted form"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The quoted form"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.QuasiquoteExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A quasiquoted form: `expr"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A quasiquoted form: `expr"}}}],
               "body": {
                 "record": [
                   {
@@ -1220,20 +1220,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The quasiquoted form"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The quasiquoted form"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.UnquoteExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "An unquoted form within a quasiquote: ~expr or ,expr"}}}],
               "body": {
                 "record": [
@@ -1243,20 +1243,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The unquoted form"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The unquoted form"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.SplicingUnquoteExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "A splicing unquote within a quasiquote: ~@expr or ,@expr"}}}],
               "body": {
                 "record": [
@@ -1266,20 +1266,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The spliced form"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The spliced form"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.LetExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Local variable bindings. Serializes as (let [x 1 y 2] body) in Clojure (always sequential), (let ((x 1) (y 2)) body) or (let* ...) in other dialects"}}}],
               "body": {
@@ -1290,8 +1290,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The kind of let (parallel or sequential)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The kind of let (parallel or sequential)"}}}],
                         "body": {"variable": "hydra.lisp.syntax.LetKind"}}}},
                   {
                     "name": "bindings",
@@ -1299,8 +1299,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The variable bindings"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The variable bindings"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.LetBinding"}}}}},
                   {
                     "name": "body",
@@ -1308,20 +1308,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The body expressions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The body expressions"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.LetKind",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "The kind of let binding"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "The kind of let binding"}}}],
               "body": {
                 "union": [
                   {"name": "parallel", "type": {"unit": {}}},
@@ -1332,12 +1332,12 @@
       "type": {
         "name": "hydra.lisp.syntax.LetBinding",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A single binding in a let expression"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A single binding in a let expression"}}}],
               "body": {
                 "union": [
                   {
@@ -1346,8 +1346,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A simple name-value binding"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A simple name-value binding"}}}],
                         "body": {"variable": "hydra.lisp.syntax.SimpleBinding"}}}},
                   {
                     "name": "destructuring",
@@ -1355,20 +1355,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A destructuring binding"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A destructuring binding"}}}],
                         "body": {"variable": "hydra.lisp.syntax.DestructuringBinding"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.SimpleBinding",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "A simple name-value binding in a let expression"}}}],
               "body": {
                 "record": [
@@ -1378,8 +1378,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The bound variable"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The bound variable"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   {
                     "name": "value",
@@ -1387,20 +1387,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The value expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The value expression"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.DestructuringBinding",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A destructuring binding in a let expression"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A destructuring binding in a let expression"}}}],
               "body": {
                 "record": [
                   {
@@ -1409,8 +1409,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The destructuring pattern"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The destructuring pattern"}}}],
                         "body": {"variable": "hydra.lisp.syntax.DestructuringPattern"}}}},
                   {
                     "name": "value",
@@ -1418,20 +1418,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The value to destructure"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The value to destructure"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.DestructuringPattern",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A destructuring pattern"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A destructuring pattern"}}}],
               "body": {
                 "union": [
                   {
@@ -1440,8 +1440,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Sequential destructuring: [a b c] in Clojure, (a b c) in others"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Symbol"}}}}},
@@ -1451,8 +1451,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Associative/map destructuring: {:keys [a b]} in Clojure"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Symbol"}}}}},
                   {
@@ -1461,8 +1461,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Destructuring with a rest element: [a b & rest] (leading symbols + rest symbol)"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Symbol"}}}}}]}}},
@@ -1471,12 +1471,12 @@
       "type": {
         "name": "hydra.lisp.syntax.Pattern",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "A pattern for use in case expressions or match forms"}}}],
               "body": {
                 "union": [
@@ -1486,8 +1486,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "A constructor pattern (for union/sum type matching)"}}}],
                         "body": {"variable": "hydra.lisp.syntax.ConstructorPattern"}}}},
                   {
@@ -1496,8 +1496,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A literal pattern"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A literal pattern"}}}],
                         "body": {"variable": "hydra.lisp.syntax.LiteralPattern"}}}},
                   {
                     "name": "wildcard",
@@ -1505,8 +1505,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A wildcard pattern matching anything"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A wildcard pattern matching anything"}}}],
                         "body": {"variable": "hydra.lisp.syntax.WildcardPattern"}}}},
                   {
                     "name": "variable",
@@ -1514,8 +1514,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "A variable pattern that binds the matched value"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Symbol"}}}}]}}},
           "variables": []}}},
@@ -1523,12 +1523,12 @@
       "type": {
         "name": "hydra.lisp.syntax.ConstructorPattern",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "A constructor pattern matching a tagged value"}}}],
               "body": {
                 "record": [
@@ -1538,8 +1538,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The constructor/tag name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The constructor/tag name"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   {
                     "name": "arguments",
@@ -1547,20 +1547,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The sub-patterns for constructor arguments"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The sub-patterns for constructor arguments"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Pattern"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.LiteralPattern",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A pattern matching a literal value"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A pattern matching a literal value"}}}],
               "body": {
                 "record": [
                   {
@@ -1569,32 +1569,32 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The literal to match"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The literal to match"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Literal"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.WildcardPattern",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A wildcard pattern that matches any value"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A wildcard pattern that matches any value"}}}],
               "body": {"record": []}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.Literal",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A Lisp literal value"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A Lisp literal value"}}}],
               "body": {
                 "union": [
                   {
@@ -1603,8 +1603,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An integer literal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An integer literal"}}}],
                         "body": {"variable": "hydra.lisp.syntax.IntegerLiteral"}}}},
                   {
                     "name": "float",
@@ -1612,8 +1612,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A floating-point literal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A floating-point literal"}}}],
                         "body": {"variable": "hydra.lisp.syntax.FloatLiteral"}}}},
                   {
                     "name": "string",
@@ -1621,8 +1621,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A string literal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A string literal"}}}],
                         "body": {"literal": {"string": {}}}}}},
                   {
                     "name": "character",
@@ -1630,8 +1630,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A character literal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A character literal"}}}],
                         "body": {"variable": "hydra.lisp.syntax.CharacterLiteral"}}}},
                   {
                     "name": "boolean",
@@ -1639,8 +1639,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "A boolean literal (dialect-specific rendering)"}}}],
                         "body": {"literal": {"boolean": {}}}}}},
                   {
@@ -1649,8 +1649,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Nil/null/empty list (dialect-specific rendering)"}}}],
                         "body": {"unit": {}}}}},
                   {
@@ -1659,8 +1659,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A keyword literal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A keyword literal"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Keyword"}}}},
                   {
                     "name": "symbol",
@@ -1668,20 +1668,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A quoted symbol literal"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A quoted symbol literal"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Symbol"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.IntegerLiteral",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "An integer literal"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "An integer literal"}}}],
               "body": {
                 "record": [
                   {
@@ -1690,8 +1690,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The integer value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The integer value"}}}],
                         "body": {"literal": {"integer": {"bigint": {}}}}}}},
                   {
                     "name": "bigint",
@@ -1699,8 +1699,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Whether this is explicitly a big integer (e.g. 42N in Clojure)"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
@@ -1709,12 +1709,12 @@
       "type": {
         "name": "hydra.lisp.syntax.FloatLiteral",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A floating-point literal"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A floating-point literal"}}}],
               "body": {
                 "record": [
                   {
@@ -1723,8 +1723,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The float value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The float value"}}}],
                         "body": {"literal": {"float": {"bigfloat": {}}}}}}},
                   {
                     "name": "precision",
@@ -1732,8 +1732,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Optional precision hint (e.g. 3.14d0 vs 3.14f0 in Common Lisp)"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
@@ -1742,12 +1742,12 @@
       "type": {
         "name": "hydra.lisp.syntax.CharacterLiteral",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A character literal. Concrete syntax varies: \\a (Clojure), ?a (Emacs Lisp), #\\a (Common Lisp, Scheme)"}}}],
               "body": {
@@ -1758,20 +1758,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The character value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The character value"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.BooleanStyle",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "The style of boolean literals in a dialect"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "The style of boolean literals in a dialect"}}}],
               "body": {
                 "union": [
                   {"name": "trueFalse", "type": {"unit": {}}},
@@ -1782,12 +1782,12 @@
       "type": {
         "name": "hydra.lisp.syntax.NilStyle",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "The style of nil/null in a dialect"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "The style of nil/null in a dialect"}}}],
               "body": {
                 "union": [
                   {"name": "nil", "type": {"unit": {}}},
@@ -1797,24 +1797,24 @@
       "type": {
         "name": "hydra.lisp.syntax.Symbol",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A Lisp symbol (identifier)"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A Lisp symbol (identifier)"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.Keyword",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A keyword (self-evaluating symbol). Serializes as :name in Clojure, Emacs Lisp, and Common Lisp"}}}],
               "body": {
@@ -1825,8 +1825,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The keyword name (without the leading colon)"}}}],
                         "body": {"literal": {"string": {}}}}}},
                   {
@@ -1835,8 +1835,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Optional namespace (e.g. my.ns/foo in Clojure)"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
           "variables": []}}},
@@ -1844,12 +1844,12 @@
       "type": {
         "name": "hydra.lisp.syntax.QualifiedSymbol",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A namespace-qualified symbol. Serializes as ns/name in Clojure, pkg:name or pkg::name in Common Lisp"}}}],
               "body": {
@@ -1860,8 +1860,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The namespace or package"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The namespace or package"}}}],
                         "body": {"literal": {"string": {}}}}}},
                   {
                     "name": "name",
@@ -1869,32 +1869,32 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The local name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The local name"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.NamespaceName",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A namespace or package name"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A namespace or package name"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.ListLiteral",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A list literal: '(1 2 3) or (list 1 2 3)"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A list literal: '(1 2 3) or (list 1 2 3)"}}}],
               "body": {
                 "record": [
                   {
@@ -1903,8 +1903,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The list elements"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The list elements"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}},
                   {
                     "name": "quoted",
@@ -1912,8 +1912,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Whether to use quote syntax vs constructor syntax"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}},
@@ -1921,12 +1921,12 @@
       "type": {
         "name": "hydra.lisp.syntax.VectorLiteral",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A vector literal. Serializes as [1 2 3] in Clojure and Emacs Lisp, #(1 2 3) in Common Lisp and Scheme"}}}],
               "body": {
@@ -1937,20 +1937,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The vector elements"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The vector elements"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.MapLiteral",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A map/dictionary literal. Serializes as {:a 1 :b 2} in Clojure, as an alist '((a . 1) (b . 2)) in other dialects"}}}],
               "body": {
@@ -1961,20 +1961,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The key-value pairs"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The key-value pairs"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.MapEntry"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.MapEntry",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A key-value pair in a map literal"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A key-value pair in a map literal"}}}],
               "body": {
                 "record": [
                   {
@@ -1983,8 +1983,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The key expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The key expression"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}},
                   {
                     "name": "value",
@@ -1992,20 +1992,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The value expression"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The value expression"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.SetLiteral",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A set literal. Serializes as #{1 2 3} in Clojure. Other dialects use a list-based construction."}}}],
               "body": {
@@ -2016,20 +2016,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The set elements"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The set elements"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Expression"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.ConsExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A cons expression: (cons head tail)"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A cons expression: (cons head tail)"}}}],
               "body": {
                 "record": [
                   {
@@ -2038,8 +2038,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The head element"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The head element"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}},
                   {
                     "name": "tail",
@@ -2047,20 +2047,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The tail (typically a list or another cons)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The tail (typically a list or another cons)"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.DottedPair",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A dotted pair literal: '(a . b). Not available in Clojure."}}}],
               "body": {
@@ -2071,8 +2071,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The first element"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The first element"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}},
                   {
                     "name": "cdr",
@@ -2080,20 +2080,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The second element"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The second element"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Expression"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.TypeHint",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A type hint or annotation. In Clojure: ^Type name. In Common Lisp: (declare (type Type name)). In Scheme and Emacs Lisp: typically unused."}}}],
               "body": {
@@ -2104,8 +2104,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The annotated symbol"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The annotated symbol"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   {
                     "name": "type",
@@ -2113,20 +2113,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The type specifier"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The type specifier"}}}],
                         "body": {"variable": "hydra.lisp.syntax.TypeSpecifier"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.TypeSpecifier",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A type specifier"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A type specifier"}}}],
               "body": {
                 "union": [
                   {
@@ -2135,8 +2135,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A named type reference"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A named type reference"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Symbol"}}}},
                   {
                     "name": "list",
@@ -2144,8 +2144,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A list type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A list type"}}}],
                         "body": {"variable": "hydra.lisp.syntax.TypeSpecifier"}}}},
                   {
                     "name": "function",
@@ -2153,8 +2153,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A function type (params and return)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A function type (params and return)"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.TypeSpecifier"}}}}},
                   {
                     "name": "maybe",
@@ -2162,8 +2162,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An optional type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An optional type"}}}],
                         "body": {"variable": "hydra.lisp.syntax.TypeSpecifier"}}}},
                   {
                     "name": "map",
@@ -2171,17 +2171,15 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A map type (key and value type specifiers)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A map type (key and value type specifiers)"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.TypeSpecifier"}}}}},
                   {
                     "name": "set",
                     "type": {
                       "annotated": {
                         "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A set type"}}}],
+                          {"key": "description", "value": {"literal": {"string": "A set type"}}}],
                         "body": {"variable": "hydra.lisp.syntax.TypeSpecifier"}}}},
                   {
                     "name": "pair",
@@ -2189,8 +2187,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A pair/tuple type (two type specifiers)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A pair/tuple type (two type specifiers)"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.TypeSpecifier"}}}}},
                   {
                     "name": "either",
@@ -2198,8 +2196,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An either/union type (two type specifiers)"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An either/union type (two type specifiers)"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.TypeSpecifier"}}}}},
                   {
                     "name": "unit",
@@ -2207,20 +2205,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The unit type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The unit type"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.ModuleDeclaration",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A module/namespace declaration. Serializes as (ns name ...) in Clojure, (provide 'name) in Emacs Lisp, (defpackage :name ... ) (in-package :name) in Common Lisp, (define-library (name) ...) in Scheme"}}}],
               "body": {
@@ -2231,8 +2229,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The module/namespace name"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The module/namespace name"}}}],
                         "body": {"variable": "hydra.lisp.syntax.NamespaceName"}}}},
                   {
                     "name": "doc",
@@ -2240,20 +2238,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Optional module documentation"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Optional module documentation"}}}],
                         "body": {"maybe": {"variable": "hydra.lisp.syntax.Docstring"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.ImportDeclaration",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "An import/require declaration. Serializes as (:require [name ...]) in Clojure, (require 'name) in Emacs Lisp, (:use :name) or (:import-from :name ...) in Common Lisp, (import (name)) in Scheme"}}}],
               "body": {
@@ -2264,8 +2262,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The module being imported"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The module being imported"}}}],
                         "body": {"variable": "hydra.lisp.syntax.NamespaceName"}}}},
                   {
                     "name": "spec",
@@ -2273,20 +2271,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Import specification"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Import specification"}}}],
                         "body": {"variable": "hydra.lisp.syntax.ImportSpec"}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.ImportSpec",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "An import specification describing how to import symbols"}}}],
               "body": {
                 "union": [
@@ -2296,8 +2294,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Import everything"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Import everything"}}}],
                         "body": {"unit": {}}}}},
                   {
                     "name": "alias",
@@ -2305,8 +2303,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Import with an alias: (:require [name :as alias]) in Clojure"}}}],
                         "body": {"variable": "hydra.lisp.syntax.Symbol"}}}},
@@ -2316,8 +2314,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "Import specific symbols: (:require [name :refer [sym1 sym2]]) in Clojure"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Symbol"}}}}},
@@ -2327,8 +2325,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Import with renaming: list of (from, to) symbol pairs"}}}],
                         "body": {"list": {"list": {"variable": "hydra.lisp.syntax.Symbol"}}}}}}]}}},
           "variables": []}}},
@@ -2336,12 +2334,12 @@
       "type": {
         "name": "hydra.lisp.syntax.ExportDeclaration",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "An export/provide declaration. Serializes as (provide 'name) in Emacs Lisp, (:export :sym1 :sym2) in Common Lisp, (export sym1 sym2) in Scheme. In Clojure, symbols are public by default."}}}],
               "body": {
@@ -2352,20 +2350,18 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The symbols to export"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The symbols to export"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.Symbol"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.Comment",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
-                {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A comment"}}}],
+                {"key": "description", "value": {"literal": {"string": "A comment"}}}],
               "body": {
                 "record": [
                   {
@@ -2374,8 +2370,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The comment style"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The comment style"}}}],
                         "body": {"variable": "hydra.lisp.syntax.CommentStyle"}}}},
                   {
                     "name": "text",
@@ -2383,20 +2379,20 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The comment text"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The comment text"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.CommentStyle",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "The style of a comment"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "The style of a comment"}}}],
               "body": {
                 "union": [
                   {"name": "line", "type": {"unit": {}}},
@@ -2407,24 +2403,24 @@
       "type": {
         "name": "hydra.lisp.syntax.Docstring",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A documentation string"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A documentation string"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.lisp.syntax.Dialect",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A Lisp dialect"}}}],
+                  "key": "description",
+                  "value": {"literal": {"string": "A Lisp dialect"}}}],
               "body": {
                 "union": [
                   {"name": "clojure", "type": {"unit": {}}},
@@ -2436,12 +2432,12 @@
       "type": {
         "name": "hydra.lisp.syntax.SExpression",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "A raw S-expression. This is an escape hatch for expressing arbitrary Lisp forms that do not fit into the structured AST above."}}}],
               "body": {
@@ -2452,8 +2448,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An atomic value"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "An atomic value"}}}],
                         "body": {"literal": {"string": {}}}}}},
                   {
                     "name": "list",
@@ -2461,8 +2457,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A list of S-expressions"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A list of S-expressions"}}}],
                         "body": {"list": {"variable": "hydra.lisp.syntax.SExpression"}}}}}]}}},
           "variables": []}}}],
   "description": "A unified Lisp syntax model covering Clojure, Emacs Lisp, Common Lisp, and Scheme (R7RS). Designed for code generation from Hydra types and terms.",

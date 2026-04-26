@@ -13,8 +13,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Interpreter-friendly even."}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Interpreter-friendly even."}}}],
                         "body": {
                           "lambda": {
                             "body": {
@@ -27,7 +27,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@right": {
+                                                "right": {
                                                   "inject": {
                                                     "field": {
                                                       "name": "application",
@@ -185,7 +185,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -210,8 +210,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Interpreter-friendly odd."}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Interpreter-friendly odd."}}}],
                         "body": {
                           "lambda": {
                             "body": {
@@ -224,7 +224,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "either": {
-                                                "@right": {
+                                                "right": {
                                                   "inject": {
                                                     "field": {
                                                       "name": "application",
@@ -279,7 +279,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

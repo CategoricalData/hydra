@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.atlas.AtlasAttributeDef",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "class that captures details of a struct-attribute."}}}],
               "body": {
                 "record": [
@@ -59,7 +59,7 @@
       "type": {
         "name": "hydra.atlas.AtlasAttributeDef_Cardinality",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "single", "type": {"unit": {}}},
               {"name": "list", "type": {"unit": {}}},
@@ -69,7 +69,7 @@
       "type": {
         "name": "hydra.atlas.AtlasAttributeDef_IndexType",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "default", "type": {"unit": {}}},
               {"name": "string", "type": {"unit": {}}}]},
@@ -78,12 +78,12 @@
       "type": {
         "name": "hydra.atlas.AtlasBaseTypeDef",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Base class that captures common-attributes for all Atlas types."}}}],
               "body": {
@@ -124,12 +124,12 @@
       "type": {
         "name": "hydra.atlas.AtlasConstraintDef",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "class that captures details of a constraint."}}}],
               "body": {
                 "record": [
@@ -145,12 +145,12 @@
       "type": {
         "name": "hydra.atlas.AtlasEntityDef",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "class that captures details of a entity-type."}}}],
               "body": {
                 "record": [
@@ -164,8 +164,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "the value of this field is derived from 'superTypes' specified in all AtlasEntityDef"}}}],
                         "body": {"set": {"literal": {"string": {}}}}}}},
@@ -175,8 +175,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "the value of this field is derived from all the relationshipDefs this entityType is referenced in"}}}],
                         "body": {"list": {"variable": "hydra.atlas.AtlasRelationshipAttributeDef"}}}}},
@@ -186,8 +186,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {
                                 "string": "the value of this field is derived from all the businessMetadataDefs this entityType is referenced in"}}}],
                         "body": {
@@ -199,12 +199,12 @@
       "type": {
         "name": "hydra.atlas.AtlasRelationshipAttributeDef",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "class that captures details of a struct-attribute."}}}],
               "body": {
                 "record": [
@@ -220,12 +220,12 @@
       "type": {
         "name": "hydra.atlas.AtlasStructDef",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "class that captures details of a struct-type."}}}],
               "body": {
                 "record": [
@@ -240,7 +240,7 @@
       "type": {
         "name": "hydra.atlas.TypeCategory",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "primitive", "type": {"unit": {}}},
               {"name": "objectIdType", "type": {"unit": {}}},

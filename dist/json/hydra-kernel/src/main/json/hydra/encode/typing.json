@@ -306,7 +306,7 @@
                 "parameter": "env"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -482,7 +482,7 @@
             "domain": {"variable": "hydra.typing.InferenceResult"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.typing.InferenceResult"}}},
@@ -552,7 +552,7 @@
             "domain": {"variable": "hydra.typing.TermSubst"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.typing.TermSubst"}}},
@@ -656,7 +656,7 @@
             "domain": {"variable": "hydra.typing.TypeConstraint"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.typing.TypeConstraint"}}},
@@ -726,7 +726,7 @@
             "domain": {"variable": "hydra.typing.TypeSubst"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.typing.TypeSubst"}}},

@@ -65,7 +65,7 @@
             "domain": {"variable": "hydra.tabular.ColumnType"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.tabular.ColumnType"}}},
@@ -160,7 +160,7 @@
                 "parameter": "v"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -239,7 +239,7 @@
             "domain": {"variable": "hydra.tabular.HeaderRow"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.tabular.HeaderRow"}}},
@@ -383,7 +383,7 @@
                 "parameter": "v"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -484,7 +484,7 @@
             "domain": {"variable": "hydra.tabular.TableType"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.tabular.TableType"}}},

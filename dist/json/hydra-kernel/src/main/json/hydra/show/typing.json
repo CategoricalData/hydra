@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Show a type constraint as a string"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Show a type constraint as a string"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -21,7 +21,7 @@
                             "argument": {"variable": "tc"},
                             "function": {
                               "project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
-                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}},
+                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}},
                       {
                         "name": "rtyp",
                         "term": {
@@ -29,7 +29,7 @@
                             "argument": {"variable": "tc"},
                             "function": {
                               "project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
-                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                        "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -47,7 +47,7 @@
                 "domain": {"variable": "hydra.typing.TypeConstraint"},
                 "parameter": "tc"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.typing.TypeConstraint"}}},
@@ -59,8 +59,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Show a type substitution as a string"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Show a type substitution as a string"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -73,7 +73,7 @@
                             "argument": {"variable": "ts"},
                             "function": {"unwrap": "hydra.typing.TypeSubst"}}},
                         "type": {
-                          "type": {
+                          "body": {
                             "map": {
                               "keys": {"variable": "hydra.core.Name"},
                               "values": {"variable": "hydra.core.Type"}}},
@@ -91,7 +91,7 @@
                                     "type": {"variable": "hydra.core.Name"}}},
                                 "type": {"variable": "hydra.core.Type"}}}}},
                         "type": {
-                          "type": {
+                          "body": {
                             "list": {
                               "pair": {
                                 "first": {"variable": "hydra.core.Name"},
@@ -119,7 +119,7 @@
                                                     "type": {"variable": "hydra.core.Name"}}},
                                                 "type": {"variable": "hydra.core.Type"}}}}},
                                         "function": {"unwrap": "hydra.core.Name"}}},
-                                    "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                                    "type": {"body": {"literal": {"string": {}}}, "variables": []}},
                                   {
                                     "name": "typ",
                                     "term": {
@@ -132,7 +132,7 @@
                                                 "body": {"variable": "hydra.lib.pairs.second"},
                                                 "type": {"variable": "hydra.core.Name"}}},
                                             "type": {"variable": "hydra.core.Type"}}}}},
-                                    "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                    "type": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                 "body": {
                                   "application": {
                                     "argument": {
@@ -150,7 +150,7 @@
                                 "second": {"variable": "hydra.core.Type"}}},
                             "parameter": "pair"}},
                         "type": {
-                          "type": {
+                          "body": {
                             "function": {
                               "codomain": {"literal": {"string": {}}},
                               "domain": {
@@ -176,7 +176,7 @@
                                             "first": {"variable": "hydra.core.Name"},
                                             "second": {"variable": "hydra.core.Type"}}}}},
                                     "type": {"literal": {"string": {}}}}}}}}},
-                        "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                        "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -194,7 +194,7 @@
                 "domain": {"variable": "hydra.typing.TypeSubst"},
                 "parameter": "ts"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.typing.TypeSubst"}}},

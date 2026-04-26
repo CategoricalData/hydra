@@ -46,7 +46,7 @@ buildFieldMapping modules =
       Packaging.DefinitionType v0 ->
         let qname = Core.unName (Packaging.typeDefinitionName v0)
             tname = localName qname
-            ty = Core.typeSchemeType (Packaging.typeDefinitionType v0)
+            ty = Core.typeSchemeBody (Packaging.typeDefinitionType v0)
             extracted = extractTypeParams ty
             bodyTy = Pairs.second extracted
         in case bodyTy of
@@ -118,7 +118,7 @@ collectFreeTypeVarsInTypeScheme ts =
 
       let explicit =
               Sets.fromList (Lists.map (\n -> Core.unName n) (Lists.filter (\n -> isTypeVarLike (Core.unName n)) (Core.typeSchemeVariables ts)))
-      in (Sets.union explicit (collectFreeTypeVarsInType (Core.typeSchemeType ts)))
+      in (Sets.union explicit (collectFreeTypeVarsInType (Core.typeSchemeBody ts)))
 
 -- | Flatten consecutive TermLet wrappers into (bindings, innermostBody)
 collectLetBindings :: Core.Term -> ([Core.Binding], Core.Term)
@@ -174,7 +174,7 @@ collectQualifiedNamesInType ty =
 collectQualifiedNamesInTypeScheme :: Core.TypeScheme -> S.Set String
 collectQualifiedNamesInTypeScheme ts =
 
-      let extracted = extractTypeParams (Core.typeSchemeType ts)
+      let extracted = extractTypeParams (Core.typeSchemeBody ts)
           body = Pairs.second extracted
       in (collectQualifiedNamesInType body)
 

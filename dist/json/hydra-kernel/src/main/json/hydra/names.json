@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Given a mapping of namespaces to prefixes, convert a name to a compact string representation"}}}],
             "body": {
@@ -25,7 +25,7 @@
                                 "argument": {"variable": "name"},
                                 "function": {"variable": "hydra.names.qualifyName"}}},
                             "type": {
-                              "type": {"variable": "hydra.packaging.QualifiedName"},
+                              "body": {"variable": "hydra.packaging.QualifiedName"},
                               "variables": []}},
                           {
                             "name": "mns",
@@ -35,7 +35,7 @@
                                 "function": {
                                   "project": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
                             "type": {
-                              "type": {"maybe": {"variable": "hydra.packaging.Namespace"}},
+                              "body": {"maybe": {"variable": "hydra.packaging.Namespace"}},
                               "variables": []}},
                           {
                             "name": "local",
@@ -44,7 +44,7 @@
                                 "argument": {"variable": "qualName"},
                                 "function": {
                                   "project": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
-                            "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                            "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                         "body": {
                           "application": {
                             "argument": {"variable": "mns"},
@@ -114,7 +114,7 @@
                     "values": {"literal": {"string": {}}}}},
                 "parameter": "namespaces"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -132,8 +132,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Generate a fresh type variable name, threading Context"}}}],
             "body": {
               "lambda": {
@@ -149,18 +149,18 @@
                               "application": {
                                 "argument": {"variable": "hydra.constants.key_freshTypeVariableCount"},
                                 "function": {"variable": "hydra.annotations.getCount"}}}}},
-                        "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                        "type": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                     "body": {
                       "typeApplication": {
                         "body": {
                           "typeApplication": {
                             "body": {
                               "pair": {
-                                "@first": {
+                                "first": {
                                   "application": {
                                     "argument": {"variable": "count"},
                                     "function": {"variable": "hydra.names.normalTypeVariable"}}},
-                                "@second": {
+                                "second": {
                                   "application": {
                                     "argument": {"variable": "cx"},
                                     "function": {
@@ -181,7 +181,7 @@
                 "domain": {"variable": "hydra.context.Context"},
                 "parameter": "cx"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "pair": {
@@ -196,8 +196,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Generate multiple fresh type variable names, threading Context"}}}],
             "body": {
@@ -230,7 +230,7 @@
                                                             "body": {"variable": "hydra.lib.pairs.first"},
                                                             "type": {"list": {"variable": "hydra.core.Name"}}}},
                                                         "type": {"variable": "hydra.context.Context"}}}}},
-                                                "type": {"type": {"list": {"variable": "hydra.core.Name"}}, "variables": []}}],
+                                                "type": {"body": {"list": {"variable": "hydra.core.Name"}}, "variables": []}}],
                                             "body": {
                                               "let": {
                                                 "bindings": [
@@ -246,7 +246,7 @@
                                                                 "body": {"variable": "hydra.lib.pairs.second"},
                                                                 "type": {"list": {"variable": "hydra.core.Name"}}}},
                                                             "type": {"variable": "hydra.context.Context"}}}}},
-                                                    "type": {"type": {"variable": "hydra.context.Context"}, "variables": []}}],
+                                                    "type": {"body": {"variable": "hydra.context.Context"}, "variables": []}}],
                                                 "body": {
                                                   "let": {
                                                     "bindings": [
@@ -257,7 +257,7 @@
                                                             "argument": {"variable": "cx0"},
                                                             "function": {"variable": "hydra.names.freshName"}}},
                                                         "type": {
-                                                          "type": {
+                                                          "body": {
                                                             "pair": {
                                                               "first": {"variable": "hydra.core.Name"},
                                                               "second": {"variable": "hydra.context.Context"}}},
@@ -277,7 +277,7 @@
                                                                         "body": {"variable": "hydra.lib.pairs.first"},
                                                                         "type": {"variable": "hydra.core.Name"}}},
                                                                     "type": {"variable": "hydra.context.Context"}}}}},
-                                                            "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}],
+                                                            "type": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
                                                         "body": {
                                                           "let": {
                                                             "bindings": [
@@ -293,14 +293,14 @@
                                                                             "body": {"variable": "hydra.lib.pairs.second"},
                                                                             "type": {"variable": "hydra.core.Name"}}},
                                                                         "type": {"variable": "hydra.context.Context"}}}}},
-                                                                "type": {"type": {"variable": "hydra.context.Context"}, "variables": []}}],
+                                                                "type": {"body": {"variable": "hydra.context.Context"}, "variables": []}}],
                                                             "body": {
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "pair": {
-                                                                        "@first": {
+                                                                        "first": {
                                                                           "application": {
                                                                             "argument": {
                                                                               "application": {
@@ -316,7 +316,7 @@
                                                                                   "typeApplication": {
                                                                                     "body": {"variable": "hydra.lib.lists.concat2"},
                                                                                     "type": {"variable": "hydra.core.Name"}}}}}}},
-                                                                        "@second": {"variable": "cx1"}}},
+                                                                        "second": {"variable": "cx1"}}},
                                                                     "type": {"list": {"variable": "hydra.core.Name"}}}},
                                                                 "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}},
                                         "domain": {"variable": "t0"},
@@ -328,7 +328,7 @@
                                     "parameter": "acc"}},
                                 "parameter": "t0"}},
                             "type": {
-                              "type": {
+                              "body": {
                                 "function": {
                                   "codomain": {
                                     "function": {
@@ -362,9 +362,9 @@
                                       "typeApplication": {
                                         "body": {
                                           "pair": {
-                                            "@first": {
+                                            "first": {
                                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}},
-                                            "@second": {"variable": "cx"}}},
+                                            "second": {"variable": "cx"}}},
                                         "type": {"list": {"variable": "hydra.core.Name"}}}},
                                     "type": {"variable": "hydra.context.Context"}}},
                                 "function": {
@@ -386,7 +386,7 @@
                 "domain": {"literal": {"integer": {"int32": {}}}},
                 "parameter": "n"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -404,8 +404,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract the local part of a name"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract the local part of a name"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -419,7 +419,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "arg_"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"literal": {"string": {}}},
               "domain": {"variable": "hydra.core.Name"}}},
@@ -431,8 +431,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator"}}}],
             "body": {
@@ -453,7 +453,7 @@
                                         "argument": {"variable": "name"},
                                         "function": {"variable": "hydra.names.qualifyName"}}},
                                     "type": {
-                                      "type": {"variable": "hydra.packaging.QualifiedName"},
+                                      "body": {"variable": "hydra.packaging.QualifiedName"},
                                       "variables": []}}],
                                 "body": {
                                   "let": {
@@ -466,7 +466,7 @@
                                             "function": {
                                               "project": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
                                         "type": {
-                                          "type": {"maybe": {"variable": "hydra.packaging.Namespace"}},
+                                          "body": {"maybe": {"variable": "hydra.packaging.Namespace"}},
                                           "variables": []}}],
                                     "body": {
                                       "let": {
@@ -478,7 +478,7 @@
                                                 "argument": {"variable": "qualName"},
                                                 "function": {
                                                   "project": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
-                                            "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                            "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -533,7 +533,7 @@
                                                     "domain": {"variable": "hydra.packaging.Namespace"},
                                                     "parameter": "ns"}},
                                                 "type": {
-                                                  "type": {
+                                                  "body": {
                                                     "function": {
                                                       "codomain": {"literal": {"string": {}}},
                                                       "domain": {"variable": "hydra.packaging.Namespace"}}},
@@ -572,7 +572,7 @@
                                                                         "body": {"variable": "hydra.lib.maybes.maybe"},
                                                                         "type": {"literal": {"string": {}}}}},
                                                                     "type": {"variable": "hydra.packaging.Namespace"}}}}}}}}},
-                                                    "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                                    "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                                 "body": {
                                                   "let": {
                                                     "bindings": [
@@ -591,7 +591,7 @@
                                                                         "field": {"name": "pascal", "term": {"unit": {}}},
                                                                         "typeName": "hydra.util.CaseConvention"}},
                                                                     "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
-                                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                                     "body": {
                                                       "application": {
                                                         "argument": {
@@ -613,7 +613,7 @@
                 "domain": {"variable": "hydra.util.CaseConvention"},
                 "parameter": "nsConv"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -634,8 +634,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract the namespace of a name, if any"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Extract the namespace of a name, if any"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -649,7 +649,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "arg_"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"maybe": {"variable": "hydra.packaging.Namespace"}},
               "domain": {"variable": "hydra.core.Name"}}},
@@ -661,8 +661,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Convert a namespace to a file path with the given case convention and file extension"}}}],
             "body": {
@@ -707,7 +707,7 @@
                                                 "body": {"variable": "hydra.lib.lists.map"},
                                                 "type": {"literal": {"string": {}}}}},
                                             "type": {"literal": {"string": {}}}}}}}}},
-                                "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                                "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                             "body": {
                               "application": {
                                 "argument": {
@@ -737,7 +737,7 @@
                 "domain": {"variable": "hydra.util.CaseConvention"},
                 "parameter": "caseConv"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -755,8 +755,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Type variable naming convention follows Haskell: t0, t1, etc."}}}],
             "body": {
@@ -777,7 +777,7 @@
                 "domain": {"literal": {"integer": {"int32": {}}}},
                 "parameter": "i"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Name"},
               "domain": {"literal": {"integer": {"int32": {}}}}}},
@@ -789,8 +789,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Construct a qualified (dot-separated) name"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Construct a qualified (dot-separated) name"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -814,7 +814,7 @@
                 "domain": {"variable": "hydra.packaging.Namespace"},
                 "parameter": "ns"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -829,8 +829,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Split a dot-separated name into a namespace and local name"}}}],
             "body": {
@@ -856,7 +856,7 @@
                               "typeApplication": {
                                 "body": {"variable": "hydra.lib.lists.reverse"},
                                 "type": {"literal": {"string": {}}}}}}},
-                        "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                        "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
@@ -885,7 +885,7 @@
                                                     "body": {"variable": "hydra.lib.pairs.first"},
                                                     "type": {"literal": {"string": {}}}}},
                                                 "type": {"list": {"literal": {"string": {}}}}}}}},
-                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
                                       "let": {
                                         "bindings": [
@@ -901,7 +901,7 @@
                                                         "body": {"variable": "hydra.lib.pairs.second"},
                                                         "type": {"literal": {"string": {}}}}},
                                                     "type": {"list": {"literal": {"string": {}}}}}}}},
-                                            "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                                            "type": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                                         "body": {
                                           "application": {
                                             "argument": {
@@ -995,7 +995,7 @@
                 "domain": {"variable": "hydra.core.Name"},
                 "parameter": "name"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.packaging.QualifiedName"},
               "domain": {"variable": "hydra.core.Name"}}},
@@ -1007,8 +1007,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {
                     "string": "Generate a unique label by appending a suffix if the label is already in use"}}}],
             "body": {
@@ -1054,7 +1054,7 @@
                 "domain": {"set": {"literal": {"string": {}}}},
                 "parameter": "visited"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1069,8 +1069,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {
+                "key": "description",
+                "value": {
                   "literal": {"string": "Convert a qualified name to a dot-separated name"}}}],
             "body": {
               "lambda": {
@@ -1112,7 +1112,7 @@
                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"variable": "hydra.packaging.Namespace"}}}}}}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                        "type": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "wrap": {
                         "body": {
@@ -1130,7 +1130,7 @@
                 "domain": {"variable": "hydra.packaging.QualifiedName"},
                 "parameter": "qname"}}}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Name"},
               "domain": {"variable": "hydra.packaging.QualifiedName"}}},

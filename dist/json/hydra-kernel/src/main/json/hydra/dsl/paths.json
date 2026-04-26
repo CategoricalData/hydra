@@ -85,8 +85,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {"literal": {"string": "The target node of the edge"}}}],
+                                "key": "description",
+                                "value": {"literal": {"string": "The target node of the edge"}}}],
                             "body": {"variable": "hydra.paths.SubtermNode"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "target"}},
@@ -96,8 +96,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The subterm path connecting source to target"}}}],
                         "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -108,13 +108,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The source node of the edge"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The source node of the edge"}}}],
                     "body": {"variable": "hydra.paths.SubtermNode"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "source"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -130,8 +130,8 @@
                             "annotated": {
                               "annotation": [
                                 {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The target node of the edge"}}}],
+                                  "key": "description",
+                                  "value": {"literal": {"string": "The target node of the edge"}}}],
                               "body": {"variable": "hydra.paths.SubtermNode"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                   "domain": {
@@ -140,8 +140,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "The subterm path connecting source to target"}}}],
                           "body": {"variable": "hydra.paths.SubtermPath"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -151,8 +151,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The source node of the edge"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The source node of the edge"}}}],
                       "body": {"variable": "hydra.paths.SubtermNode"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -208,7 +208,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -216,8 +216,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The source node of the edge"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The source node of the edge"}}}],
                       "body": {"variable": "hydra.paths.SubtermNode"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -277,7 +277,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -285,8 +285,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The subterm path connecting source to target"}}}],
                       "body": {"variable": "hydra.paths.SubtermPath"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -347,7 +347,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -355,8 +355,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The target node of the edge"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The target node of the edge"}}}],
                       "body": {"variable": "hydra.paths.SubtermNode"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -515,8 +515,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The source node of the edge"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The source node of the edge"}}}],
                         "body": {"variable": "hydra.paths.SubtermNode"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -526,7 +526,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -540,8 +540,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The source node of the edge"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The source node of the edge"}}}],
                           "body": {"variable": "hydra.paths.SubtermNode"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -700,8 +700,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The subterm path connecting source to target"}}}],
                         "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -712,7 +712,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -726,8 +726,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "The subterm path connecting source to target"}}}],
                           "body": {"variable": "hydra.paths.SubtermPath"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -887,8 +887,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The target node of the edge"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The target node of the edge"}}}],
                         "body": {"variable": "hydra.paths.SubtermNode"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -898,7 +898,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -912,8 +912,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The target node of the edge"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The target node of the edge"}}}],
                           "body": {"variable": "hydra.paths.SubtermNode"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -988,8 +988,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All edges in the graph"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All edges in the graph"}}}],
                         "body": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "edges"}},
@@ -999,13 +999,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "All nodes in the graph"}}}],
                     "body": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "nodes"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1019,8 +1019,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "All edges in the graph"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "All edges in the graph"}}}],
                           "body": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -1029,8 +1029,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "All nodes in the graph"}}}],
                       "body": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -1086,7 +1086,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1094,8 +1094,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "All nodes in the graph"}}}],
                       "body": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -1155,7 +1155,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1163,8 +1163,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "All edges in the graph"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "All edges in the graph"}}}],
                       "body": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -1273,8 +1273,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All nodes in the graph"}}}],
                         "body": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -1284,7 +1284,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1298,8 +1298,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "All nodes in the graph"}}}],
                           "body": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -1408,8 +1408,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All edges in the graph"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All edges in the graph"}}}],
                         "body": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -1419,7 +1419,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1433,8 +1433,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "All edges in the graph"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "All edges in the graph"}}}],
                           "body": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -1525,8 +1525,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                                "key": "description",
+                                "value": {"literal": {"string": "A unique identifier for the node"}}}],
                             "body": {"literal": {"string": {}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "id"}},
@@ -1536,8 +1536,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A human-readable label for the node"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "label"}},
@@ -1547,13 +1547,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The qualified name of the term"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The qualified name of the term"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "name"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1569,8 +1569,8 @@
                             "annotated": {
                               "annotation": [
                                 {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                                  "key": "description",
+                                  "value": {"literal": {"string": "A unique identifier for the node"}}}],
                               "body": {"literal": {"string": {}}}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                   "domain": {
@@ -1579,8 +1579,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A human-readable label for the node"}}}],
                           "body": {"literal": {"string": {}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -1589,8 +1589,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The qualified name of the term"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The qualified name of the term"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -1646,7 +1646,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1654,8 +1654,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The qualified name of the term"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The qualified name of the term"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -1715,7 +1715,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1723,8 +1723,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A human-readable label for the node"}}}],
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -1782,7 +1782,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -1790,8 +1790,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A unique identifier for the node"}}}],
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -1946,8 +1946,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The qualified name of the term"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The qualified name of the term"}}}],
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -1957,7 +1957,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1971,8 +1971,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The qualified name of the term"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The qualified name of the term"}}}],
                           "body": {"variable": "hydra.core.Name"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -2127,8 +2127,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A human-readable label for the node"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -2138,7 +2138,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2152,8 +2152,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A human-readable label for the node"}}}],
                           "body": {"literal": {"string": {}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -2310,8 +2310,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A unique identifier for the node"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -2321,7 +2321,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -2335,8 +2335,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A unique identifier for the node"}}}],
                           "body": {"literal": {"string": {}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -2379,7 +2379,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2430,7 +2430,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2481,7 +2481,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -2526,7 +2526,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -2571,7 +2571,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -2616,7 +2616,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -2661,7 +2661,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -2713,15 +2713,15 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {
                             "string": "Access a specific branch of a union elimination by field name"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2733,8 +2733,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {
                               "string": "Access a specific branch of a union elimination by field name"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
@@ -2780,7 +2780,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -2832,14 +2832,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Access a specific binding in a let term by variable name"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2851,8 +2851,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "Access a specific binding in a let term by variable name"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -2904,13 +2904,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Access an element of a list by index"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Access an element of a list by index"}}}],
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2922,8 +2922,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Access an element of a list by index"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "Access an element of a list by index"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -2974,13 +2974,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Access a key in a map by index"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Access a key in a map by index"}}}],
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -2992,8 +2992,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Access a key in a map by index"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "Access a key in a map by index"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -3044,13 +3044,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Access a value in a map by index"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Access a value in a map by index"}}}],
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3062,8 +3062,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Access a value in a map by index"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "Access a value in a map by index"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -3107,7 +3107,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -3159,14 +3159,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Access an element of a product (tuple) by index"}}}],
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3178,8 +3178,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "Access an element of a product (tuple) by index"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -3231,13 +3231,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Access a field of a record by field name"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Access a field of a record by field name"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3249,8 +3249,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Access a field of a record by field name"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "Access a field of a record by field name"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -3301,13 +3301,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "Access an element of a set by index"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "Access an element of a set by index"}}}],
                     "body": {"literal": {"integer": {"int32": {}}}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3319,8 +3319,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Access an element of a set by index"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "Access an element of a set by index"}}}],
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -3364,7 +3364,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -3409,7 +3409,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -3454,7 +3454,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -3499,7 +3499,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -3544,7 +3544,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtermStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -3634,8 +3634,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {"literal": {"string": "The target node of the edge"}}}],
+                                "key": "description",
+                                "value": {"literal": {"string": "The target node of the edge"}}}],
                             "body": {"variable": "hydra.paths.SubtypeNode"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "target"}},
@@ -3645,8 +3645,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The subtype path connecting source to target"}}}],
                         "body": {"variable": "hydra.paths.SubtypePath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -3657,13 +3657,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The source node of the edge"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The source node of the edge"}}}],
                     "body": {"variable": "hydra.paths.SubtypeNode"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "source"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -3679,8 +3679,8 @@
                             "annotated": {
                               "annotation": [
                                 {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The target node of the edge"}}}],
+                                  "key": "description",
+                                  "value": {"literal": {"string": "The target node of the edge"}}}],
                               "body": {"variable": "hydra.paths.SubtypeNode"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                   "domain": {
@@ -3689,8 +3689,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "The subtype path connecting source to target"}}}],
                           "body": {"variable": "hydra.paths.SubtypePath"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -3700,8 +3700,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The source node of the edge"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The source node of the edge"}}}],
                       "body": {"variable": "hydra.paths.SubtypeNode"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -3757,7 +3757,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3765,8 +3765,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The source node of the edge"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The source node of the edge"}}}],
                       "body": {"variable": "hydra.paths.SubtypeNode"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -3826,7 +3826,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3834,8 +3834,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "The subtype path connecting source to target"}}}],
                       "body": {"variable": "hydra.paths.SubtypePath"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -3896,7 +3896,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -3904,8 +3904,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The target node of the edge"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The target node of the edge"}}}],
                       "body": {"variable": "hydra.paths.SubtypeNode"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -4064,8 +4064,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The source node of the edge"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The source node of the edge"}}}],
                         "body": {"variable": "hydra.paths.SubtypeNode"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -4075,7 +4075,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4089,8 +4089,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The source node of the edge"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The source node of the edge"}}}],
                           "body": {"variable": "hydra.paths.SubtypeNode"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -4249,8 +4249,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "The subtype path connecting source to target"}}}],
                         "body": {"variable": "hydra.paths.SubtypePath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -4261,7 +4261,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4275,8 +4275,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {
+                              "key": "description",
+                              "value": {
                                 "literal": {"string": "The subtype path connecting source to target"}}}],
                           "body": {"variable": "hydra.paths.SubtypePath"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -4436,8 +4436,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The target node of the edge"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The target node of the edge"}}}],
                         "body": {"variable": "hydra.paths.SubtypeNode"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -4447,7 +4447,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4461,8 +4461,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The target node of the edge"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The target node of the edge"}}}],
                           "body": {"variable": "hydra.paths.SubtypeNode"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -4537,8 +4537,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All edges in the graph"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All edges in the graph"}}}],
                         "body": {"list": {"variable": "hydra.paths.SubtypeEdge"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "edges"}},
@@ -4548,13 +4548,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "All nodes in the graph"}}}],
                     "body": {"list": {"variable": "hydra.paths.SubtypeNode"}}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "nodes"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4568,8 +4568,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "All edges in the graph"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "All edges in the graph"}}}],
                           "body": {"list": {"variable": "hydra.paths.SubtypeEdge"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -4578,8 +4578,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "All nodes in the graph"}}}],
                       "body": {"list": {"variable": "hydra.paths.SubtypeNode"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -4635,7 +4635,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -4643,8 +4643,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "All nodes in the graph"}}}],
                       "body": {"list": {"variable": "hydra.paths.SubtypeNode"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -4704,7 +4704,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -4712,8 +4712,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "All edges in the graph"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "All edges in the graph"}}}],
                       "body": {"list": {"variable": "hydra.paths.SubtypeEdge"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -4822,8 +4822,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All nodes in the graph"}}}],
                         "body": {"list": {"variable": "hydra.paths.SubtypeNode"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -4833,7 +4833,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4847,8 +4847,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "All nodes in the graph"}}}],
                           "body": {"list": {"variable": "hydra.paths.SubtypeNode"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -4957,8 +4957,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "All edges in the graph"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "All edges in the graph"}}}],
                         "body": {"list": {"variable": "hydra.paths.SubtypeEdge"}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -4968,7 +4968,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -4982,8 +4982,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "All edges in the graph"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "All edges in the graph"}}}],
                           "body": {"list": {"variable": "hydra.paths.SubtypeEdge"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -5074,8 +5074,8 @@
                           "annotated": {
                             "annotation": [
                               {
-                                "@key": "description",
-                                "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                                "key": "description",
+                                "value": {"literal": {"string": "A unique identifier for the node"}}}],
                             "body": {"literal": {"string": {}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "id"}},
@@ -5085,8 +5085,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A human-readable label for the node"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "label"}},
@@ -5096,13 +5096,13 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {"literal": {"string": "The qualified name of the type"}}}],
+                        "key": "description",
+                        "value": {"literal": {"string": "The qualified name of the type"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "name"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5118,8 +5118,8 @@
                             "annotated": {
                               "annotation": [
                                 {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                                  "key": "description",
+                                  "value": {"literal": {"string": "A unique identifier for the node"}}}],
                               "body": {"literal": {"string": {}}}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                   "domain": {
@@ -5128,8 +5128,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A human-readable label for the node"}}}],
                           "body": {"literal": {"string": {}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -5138,8 +5138,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The qualified name of the type"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The qualified name of the type"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -5195,7 +5195,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5203,8 +5203,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The qualified name of the type"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "The qualified name of the type"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -5264,7 +5264,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5272,8 +5272,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A human-readable label for the node"}}}],
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -5331,7 +5331,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5339,8 +5339,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                          "key": "description",
+                          "value": {"literal": {"string": "A unique identifier for the node"}}}],
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
@@ -5495,8 +5495,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The qualified name of the type"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "The qualified name of the type"}}}],
                         "body": {"variable": "hydra.core.Name"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -5506,7 +5506,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5520,8 +5520,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The qualified name of the type"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "The qualified name of the type"}}}],
                           "body": {"variable": "hydra.core.Name"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -5676,8 +5676,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A human-readable label for the node"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -5687,7 +5687,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5701,8 +5701,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A human-readable label for the node"}}}],
                           "body": {"literal": {"string": {}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -5859,8 +5859,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "A unique identifier for the node"}}}],
                         "body": {"literal": {"string": {}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "newVal"}},
@@ -5870,7 +5870,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "original"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -5884,8 +5884,8 @@
                         "annotated": {
                           "annotation": [
                             {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                              "key": "description",
+                              "value": {"literal": {"string": "A unique identifier for the node"}}}],
                           "body": {"literal": {"string": {}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
@@ -5928,7 +5928,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -5979,7 +5979,7 @@
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -6030,7 +6030,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6075,7 +6075,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6120,7 +6120,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6165,7 +6165,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6210,7 +6210,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6255,7 +6255,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6300,7 +6300,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6345,7 +6345,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6390,7 +6390,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6435,7 +6435,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6480,7 +6480,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6525,7 +6525,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6570,7 +6570,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6615,7 +6615,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6667,14 +6667,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Access a field type of a record type by field name"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -6686,8 +6686,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "Access a field type of a record type by field name"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -6732,7 +6732,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -6784,14 +6784,14 @@
                   "annotated": {
                     "annotation": [
                       {
-                        "@key": "description",
-                        "@value": {
+                        "key": "description",
+                        "value": {
                           "literal": {"string": "Access a field type of a union type by field name"}}}],
                     "body": {"variable": "hydra.core.Name"}}},
                 "function": {"variable": "hydra.phantoms.TTerm"}}},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "application": {
@@ -6803,8 +6803,8 @@
                     "annotated": {
                       "annotation": [
                         {
-                          "@key": "description",
-                          "@value": {
+                          "key": "description",
+                          "value": {
                             "literal": {"string": "Access a field type of a union type by field name"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -6849,7 +6849,7 @@
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"variable": "hydra.paths.SubtypeStep"},
               "function": {"variable": "hydra.phantoms.TTerm"}}},

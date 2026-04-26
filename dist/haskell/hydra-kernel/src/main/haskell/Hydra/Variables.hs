@@ -40,7 +40,7 @@ freeTypeVariablesInTerm term0 =
                         let forBinding =
                                 \b ->
                                   let newVars = Maybes.maybe vars (\ts -> Sets.union vars (Sets.fromList (Core.typeSchemeVariables ts))) (Core.bindingType b)
-                                  in (Sets.union (getAll newVars (Core.bindingTerm b)) (Maybes.maybe Sets.empty (\ts -> tryType newVars (Core.typeSchemeType ts)) (Core.bindingType b)))
+                                  in (Sets.union (getAll newVars (Core.bindingTerm b)) (Maybes.maybe Sets.empty (\ts -> tryType newVars (Core.typeSchemeBody ts)) (Core.bindingType b)))
                         in (Sets.union (allOf (Lists.map forBinding (Core.letBindings v0))) (recurse (Core.letBody v0)))
                       Core.TermTypeApplication v0 -> Sets.union (tryType vars (Core.typeApplicationTermType v0)) (recurse (Core.typeApplicationTermBody v0))
                       Core.TermTypeLambda v0 -> Sets.union (tryType vars (Core.TypeVariable (Core.typeLambdaParameter v0))) (recurse (Core.typeLambdaBody v0))
@@ -85,7 +85,7 @@ freeVariablesInTypeScheme :: Core.TypeScheme -> S.Set Core.Name
 freeVariablesInTypeScheme ts =
 
       let vars = Core.typeSchemeVariables ts
-          t = Core.typeSchemeType ts
+          t = Core.typeSchemeBody ts
       in (Sets.difference (freeVariablesInType t) (Sets.fromList vars))
 
 -- | Find free variables in a type scheme (simple version)
@@ -93,7 +93,7 @@ freeVariablesInTypeSchemeSimple :: Core.TypeScheme -> S.Set Core.Name
 freeVariablesInTypeSchemeSimple ts =
 
       let vars = Core.typeSchemeVariables ts
-          t = Core.typeSchemeType ts
+          t = Core.typeSchemeBody ts
       in (Sets.difference (freeVariablesInTypeSimple t) (Sets.fromList vars))
 
 -- | Same as freeVariablesInType, but ignores the binding action of lambda types
@@ -155,7 +155,7 @@ normalizeTypeVariablesInTerm term =
                                                       withType =
                                                               \ts ->
                                                                 let vars = Core.typeSchemeVariables ts
-                                                                    typ = Core.typeSchemeType ts
+                                                                    typ = Core.typeSchemeBody ts
                                                                     k = Lists.length vars
                                                                     gen =
                                                                             \i -> \rem -> \acc2 ->
@@ -179,7 +179,7 @@ normalizeTypeVariablesInTerm term =
                                                                               Core.bindingTerm = newVal,
                                                                               Core.bindingType = (Just (Core.TypeScheme {
                                                                                 Core.typeSchemeVariables = newVars,
-                                                                                Core.typeSchemeType = (substType newSubst typ),
+                                                                                Core.typeSchemeBody = (substType newSubst typ),
                                                                                 Core.typeSchemeConstraints = newConstraints}))}
                                                                 in (step (Lists.cons b1 acc) tl)
                                                   in (Maybes.maybe noType (\ts -> withType ts) (Core.bindingType b))) (Lists.uncons bs)

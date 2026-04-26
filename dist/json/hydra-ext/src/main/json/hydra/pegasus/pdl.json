@@ -4,12 +4,12 @@
       "type": {
         "name": "hydra.pegasus.pdl.Annotations",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Annotations which can be applied to record fields, aliased union members, enum symbols, or named schemas"}}}],
               "body": {
@@ -21,7 +21,7 @@
       "type": {
         "name": "hydra.pegasus.pdl.EnumField",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "name",
@@ -33,12 +33,12 @@
     {
       "type": {
         "name": "hydra.pegasus.pdl.EnumFieldName",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pegasus.pdl.EnumSchema",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "fields",
@@ -47,12 +47,12 @@
     {
       "type": {
         "name": "hydra.pegasus.pdl.FieldName",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pegasus.pdl.NamedSchema",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "qualifiedName",
@@ -68,7 +68,7 @@
       "type": {
         "name": "hydra.pegasus.pdl.NamedSchemaType",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {
                 "name": "record",
@@ -79,20 +79,20 @@
     {
       "type": {
         "name": "hydra.pegasus.pdl.Name",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pegasus.pdl.Namespace",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pegasus.pdl.Package",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pegasus.pdl.PrimitiveType",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "boolean", "type": {"unit": {}}},
               {"name": "bytes", "type": {"unit": {}}},
@@ -105,12 +105,12 @@
     {
       "type": {
         "name": "hydra.pegasus.pdl.PropertyKey",
-        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "type": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pegasus.pdl.Property",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "key", "type": {"variable": "hydra.pegasus.pdl.PropertyKey"}},
               {
@@ -121,7 +121,7 @@
       "type": {
         "name": "hydra.pegasus.pdl.QualifiedName",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.pegasus.pdl.Name"}},
               {
@@ -132,12 +132,12 @@
       "type": {
         "name": "hydra.pegasus.pdl.RecordField",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Note: the default value for an enum-valued must be one of the enumerated string symbols"}}}],
               "body": {
@@ -156,12 +156,12 @@
       "type": {
         "name": "hydra.pegasus.pdl.RecordSchema",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "Note: all included schemas must be record schemas"}}}],
               "body": {
                 "record": [
@@ -176,7 +176,7 @@
       "type": {
         "name": "hydra.pegasus.pdl.Schema",
         "type": {
-          "type": {
+          "body": {
             "union": [
               {"name": "array", "type": {"variable": "hydra.pegasus.pdl.Schema"}},
               {"name": "fixed", "type": {"literal": {"integer": {"int32": {}}}}},
@@ -199,7 +199,7 @@
       "type": {
         "name": "hydra.pegasus.pdl.SchemaFile",
         "type": {
-          "type": {
+          "body": {
             "record": [
               {
                 "name": "namespace",
@@ -218,12 +218,12 @@
       "type": {
         "name": "hydra.pegasus.pdl.UnionMember",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {"string": "Note: annotations are only available for aliased members"}}}],
               "body": {
                 "record": [
@@ -239,12 +239,12 @@
       "type": {
         "name": "hydra.pegasus.pdl.UnionSchema",
         "type": {
-          "type": {
+          "body": {
             "annotated": {
               "annotation": [
                 {
-                  "@key": "description",
-                  "@value": {
+                  "key": "description",
+                  "value": {
                     "literal": {
                       "string": "Note: unions are not allowed as member types of other unions"}}}],
               "body": {"wrap": {"list": {"variable": "hydra.pegasus.pdl.UnionMember"}}}}},

@@ -680,8 +680,8 @@ typeScheme x =
           Core.fieldName = (Core.Name "variables"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map name xs)) (Core.typeSchemeVariables x))},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (type_ (Core.typeSchemeType x))},
+          Core.fieldName = (Core.Name "body"),
+          Core.fieldTerm = (type_ (Core.typeSchemeBody x))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\m -> Core.TermMap (Maps.bimap name typeVariableMetadata m)) opt)) (Core.typeSchemeConstraints x))}]})

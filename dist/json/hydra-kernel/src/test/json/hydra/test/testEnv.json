@@ -4,7 +4,7 @@
       "term": {
         "name": "hydra.test.testEnv.testContext",
         "term": {"variable": "hydra.lexical.emptyContext"},
-        "type": {"type": {"variable": "hydra.context.Context"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.context.Context"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testEnv.testGraph",
@@ -17,7 +17,7 @@
                 "parameter": "tys"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.graph.Graph"},
               "domain": {"variable": "t0"}}},

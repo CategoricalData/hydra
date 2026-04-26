@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Default Tinkerpop annotation schema"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Default Tinkerpop annotation schema"}}}],
             "body": {
               "record": {
                 "fields": [
@@ -39,7 +39,7 @@
                   {"name": "ignore", "term": {"literal": {"string": "ignore"}}}],
                 "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
         "type": {
-          "type": {"variable": "hydra.pg.mapping.AnnotationSchema"},
+          "body": {"variable": "hydra.pg.mapping.AnnotationSchema"},
           "variables": []}}},
     {
       "term": {
@@ -50,8 +50,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Example property graph schema with string values"}}}],
                 "body": {
                   "typeApplication": {
@@ -81,7 +81,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "typeApplication": {
-                                                                    "body": {"either": {"@right": {"unit": {}}}},
+                                                                    "body": {"either": {"right": {"unit": {}}}},
                                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                                 "type": {"unit": {}}}},
                                                             "domain": {"variable": "hydra.core.Type"},
@@ -100,7 +100,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "either": {
-                                                                        "@right": {
+                                                                        "right": {
                                                                           "inject": {
                                                                             "field": {"name": "unit", "term": {"unit": {}}},
                                                                             "typeName": "hydra.core.Type"}}}},
@@ -154,7 +154,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "either": {
-                                                                        "@right": {
+                                                                        "right": {
                                                                           "inject": {
                                                                             "field": {
                                                                               "name": "literal",
@@ -191,7 +191,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "typeApplication": {
-                                                                    "body": {"either": {"@right": {"unit": {}}}},
+                                                                    "body": {"either": {"right": {"unit": {}}}},
                                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                                 "type": {"unit": {}}}},
                                                             "domain": {"variable": "hydra.core.Type"},
@@ -210,7 +210,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "either": {
-                                                                        "@right": {
+                                                                        "right": {
                                                                           "inject": {
                                                                             "field": {"name": "unit", "term": {"unit": {}}},
                                                                             "typeName": "hydra.core.Type"}}}},
@@ -264,7 +264,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "either": {
-                                                                        "@right": {
+                                                                        "right": {
                                                                           "inject": {
                                                                             "field": {
                                                                               "name": "literal",
@@ -301,7 +301,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "typeApplication": {
-                                                                    "body": {"either": {"@right": {"unit": {}}}},
+                                                                    "body": {"either": {"right": {"unit": {}}}},
                                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                                 "type": {"unit": {}}}},
                                                             "domain": {"variable": "hydra.core.Type"},
@@ -320,7 +320,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "either": {
-                                                                        "@right": {
+                                                                        "right": {
                                                                           "inject": {
                                                                             "field": {"name": "unit", "term": {"unit": {}}},
                                                                             "typeName": "hydra.core.Type"}}}},
@@ -374,7 +374,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "either": {
-                                                                        "@right": {
+                                                                        "right": {
                                                                           "inject": {
                                                                             "field": {
                                                                               "name": "literal",
@@ -407,7 +407,7 @@
                     "type": {"literal": {"string": {}}}}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "application": {
               "argument": {"literal": {"string": {}}},
               "function": {
@@ -427,8 +427,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {
+                    "key": "description",
+                    "value": {
                       "literal": {"string": "Extract a string from a term using the empty graph"}}}],
                 "body": {
                   "lambda": {
@@ -516,7 +516,7 @@
                     "parameter": "cx"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -536,8 +536,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Get all elements from a lazy graph"}}}],
+                    "key": "description",
+                    "value": {"literal": {"string": "Get all elements from a lazy graph"}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -636,7 +636,7 @@
                     "parameter": "lg"}}}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "list": {
@@ -661,8 +661,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Convert a property graph element to JSON"}}}],
+                            "key": "description",
+                            "value": {"literal": {"string": "Convert a property graph element to JSON"}}}],
                         "body": {
                           "lambda": {
                             "body": {
@@ -705,7 +705,7 @@
                                                                                           "type": {"variable": "t2"}}}}},
                                                                                   "function": {"unwrap": "hydra.pg.model.VertexLabel"}}}},
                                                                             "typeName": "hydra.json.model.Value"}},
-                                                                        "type": {"type": {"variable": "hydra.json.model.Value"}, "variables": []}}],
+                                                                        "type": {"body": {"variable": "hydra.json.model.Value"}, "variables": []}}],
                                                                     "body": {
                                                                       "application": {
                                                                         "argument": {
@@ -765,7 +765,7 @@
                                                                                                                                         "body": {"variable": "hydra.lib.pairs.first"},
                                                                                                                                         "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                                                                                     "type": {"variable": "t2"}}}}},
-                                                                                                                            "type": {"type": {"variable": "hydra.pg.model.PropertyKey"}, "variables": []}},
+                                                                                                                            "type": {"body": {"variable": "hydra.pg.model.PropertyKey"}, "variables": []}},
                                                                                                                           {
                                                                                                                             "name": "v",
                                                                                                                             "term": {
@@ -778,7 +778,7 @@
                                                                                                                                         "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                                                         "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                                                                                     "type": {"variable": "t2"}}}}},
-                                                                                                                            "type": {"type": {"variable": "t2"}, "variables": []}}],
+                                                                                                                            "type": {"body": {"variable": "t2"}, "variables": []}}],
                                                                                                                         "body": {
                                                                                                                           "application": {
                                                                                                                             "argument": {
@@ -789,17 +789,17 @@
                                                                                                                                       "typeApplication": {
                                                                                                                                         "body": {
                                                                                                                                           "either": {
-                                                                                                                                            "@right": {
+                                                                                                                                            "right": {
                                                                                                                                               "typeApplication": {
                                                                                                                                                 "body": {
                                                                                                                                                   "typeApplication": {
                                                                                                                                                     "body": {
                                                                                                                                                       "pair": {
-                                                                                                                                                        "@first": {
+                                                                                                                                                        "first": {
                                                                                                                                                           "application": {
                                                                                                                                                             "argument": {"variable": "key"},
                                                                                                                                                             "function": {"unwrap": "hydra.pg.model.PropertyKey"}}},
-                                                                                                                                                        "@second": {
+                                                                                                                                                        "second": {
                                                                                                                                                           "inject": {
                                                                                                                                                             "field": {
                                                                                                                                                               "name": "string",
@@ -893,8 +893,8 @@
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {
                                                                                                                             "pair": {
-                                                                                                                              "@first": {"literal": {"string": "properties"}},
-                                                                                                                              "@second": {
+                                                                                                                              "first": {"literal": {"string": "properties"}},
+                                                                                                                              "second": {
                                                                                                                                 "inject": {
                                                                                                                                   "field": {
                                                                                                                                     "name": "object",
@@ -943,7 +943,7 @@
                                                                                                               "typeApplication": {
                                                                                                                 "body": {
                                                                                                                   "either": {
-                                                                                                                    "@right": {
+                                                                                                                    "right": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {"maybe": null},
                                                                                                                         "type": {
@@ -1018,8 +1018,8 @@
                                                                                                           "typeApplication": {
                                                                                                             "body": {
                                                                                                               "pair": {
-                                                                                                                "@first": {"literal": {"string": "label"}},
-                                                                                                                "@second": {"variable": "labelJson"}}},
+                                                                                                                "first": {"literal": {"string": "label"}},
+                                                                                                                "second": {"variable": "labelJson"}}},
                                                                                                             "type": {"literal": {"string": {}}}}},
                                                                                                         "type": {"variable": "hydra.json.model.Value"}}}},
                                                                                                   {
@@ -1029,8 +1029,8 @@
                                                                                                           "typeApplication": {
                                                                                                             "body": {
                                                                                                               "pair": {
-                                                                                                                "@first": {"literal": {"string": "id"}},
-                                                                                                                "@second": {
+                                                                                                                "first": {"literal": {"string": "id"}},
+                                                                                                                "second": {
                                                                                                                   "inject": {
                                                                                                                     "field": {
                                                                                                                       "name": "string",
@@ -1167,7 +1167,7 @@
                                                                                                           "type": {"variable": "t2"}}}}},
                                                                                                   "function": {"unwrap": "hydra.pg.model.EdgeLabel"}}}},
                                                                                             "typeName": "hydra.json.model.Value"}},
-                                                                                        "type": {"type": {"variable": "hydra.json.model.Value"}, "variables": []}}],
+                                                                                        "type": {"body": {"variable": "hydra.json.model.Value"}, "variables": []}}],
                                                                                     "body": {
                                                                                       "application": {
                                                                                         "argument": {
@@ -1227,7 +1227,7 @@
                                                                                                                                                         "body": {"variable": "hydra.lib.pairs.first"},
                                                                                                                                                         "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                                                                                                     "type": {"variable": "t2"}}}}},
-                                                                                                                                            "type": {"type": {"variable": "hydra.pg.model.PropertyKey"}, "variables": []}},
+                                                                                                                                            "type": {"body": {"variable": "hydra.pg.model.PropertyKey"}, "variables": []}},
                                                                                                                                           {
                                                                                                                                             "name": "v",
                                                                                                                                             "term": {
@@ -1240,7 +1240,7 @@
                                                                                                                                                         "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                                                                         "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                                                                                                     "type": {"variable": "t2"}}}}},
-                                                                                                                                            "type": {"type": {"variable": "t2"}, "variables": []}}],
+                                                                                                                                            "type": {"body": {"variable": "t2"}, "variables": []}}],
                                                                                                                                         "body": {
                                                                                                                                           "application": {
                                                                                                                                             "argument": {
@@ -1251,17 +1251,17 @@
                                                                                                                                                       "typeApplication": {
                                                                                                                                                         "body": {
                                                                                                                                                           "either": {
-                                                                                                                                                            "@right": {
+                                                                                                                                                            "right": {
                                                                                                                                                               "typeApplication": {
                                                                                                                                                                 "body": {
                                                                                                                                                                   "typeApplication": {
                                                                                                                                                                     "body": {
                                                                                                                                                                       "pair": {
-                                                                                                                                                                        "@first": {
+                                                                                                                                                                        "first": {
                                                                                                                                                                           "application": {
                                                                                                                                                                             "argument": {"variable": "key"},
                                                                                                                                                                             "function": {"unwrap": "hydra.pg.model.PropertyKey"}}},
-                                                                                                                                                                        "@second": {
+                                                                                                                                                                        "second": {
                                                                                                                                                                           "inject": {
                                                                                                                                                                             "field": {
                                                                                                                                                                               "name": "string",
@@ -1355,8 +1355,8 @@
                                                                                                                                         "typeApplication": {
                                                                                                                                           "body": {
                                                                                                                                             "pair": {
-                                                                                                                                              "@first": {"literal": {"string": "properties"}},
-                                                                                                                                              "@second": {
+                                                                                                                                              "first": {"literal": {"string": "properties"}},
+                                                                                                                                              "second": {
                                                                                                                                                 "inject": {
                                                                                                                                                   "field": {
                                                                                                                                                     "name": "object",
@@ -1405,7 +1405,7 @@
                                                                                                                               "typeApplication": {
                                                                                                                                 "body": {
                                                                                                                                   "either": {
-                                                                                                                                    "@right": {
+                                                                                                                                    "right": {
                                                                                                                                       "typeApplication": {
                                                                                                                                         "body": {"maybe": null},
                                                                                                                                         "type": {
@@ -1480,8 +1480,8 @@
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {
                                                                                                                               "pair": {
-                                                                                                                                "@first": {"literal": {"string": "label"}},
-                                                                                                                                "@second": {"variable": "labelJson"}}},
+                                                                                                                                "first": {"literal": {"string": "label"}},
+                                                                                                                                "second": {"variable": "labelJson"}}},
                                                                                                                             "type": {"literal": {"string": {}}}}},
                                                                                                                         "type": {"variable": "hydra.json.model.Value"}}}},
                                                                                                                   {
@@ -1491,8 +1491,8 @@
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {
                                                                                                                               "pair": {
-                                                                                                                                "@first": {"literal": {"string": "id"}},
-                                                                                                                                "@second": {
+                                                                                                                                "first": {"literal": {"string": "id"}},
+                                                                                                                                "second": {
                                                                                                                                   "inject": {
                                                                                                                                     "field": {
                                                                                                                                       "name": "string",
@@ -1510,8 +1510,8 @@
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {
                                                                                                                               "pair": {
-                                                                                                                                "@first": {"literal": {"string": "out"}},
-                                                                                                                                "@second": {
+                                                                                                                                "first": {"literal": {"string": "out"}},
+                                                                                                                                "second": {
                                                                                                                                   "inject": {
                                                                                                                                     "field": {
                                                                                                                                       "name": "string",
@@ -1529,8 +1529,8 @@
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {
                                                                                                                               "pair": {
-                                                                                                                                "@first": {"literal": {"string": "in"}},
-                                                                                                                                "@second": {
+                                                                                                                                "first": {"literal": {"string": "in"}},
+                                                                                                                                "second": {
                                                                                                                                   "inject": {
                                                                                                                                     "field": {
                                                                                                                                       "name": "string",
@@ -1753,7 +1753,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1792,8 +1792,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Convert a list of property graph elements to JSON"}}}],
                         "body": {
                           "lambda": {
@@ -1890,7 +1890,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {
@@ -1926,8 +1926,8 @@
               "annotated": {
                 "annotation": [
                   {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Get all elements from a property graph"}}}],
+                    "key": "description",
+                    "value": {"literal": {"string": "Get all elements from a property graph"}}}],
                 "body": {
                   "lambda": {
                     "body": {
@@ -2048,8 +2048,7 @@
                     "parameter": "g"}}}},
             "parameter": "t0"}},
         "type": {
-          "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "list": {
@@ -2060,6 +2059,7 @@
                 "application": {
                   "argument": {"variable": "t0"},
                   "function": {"variable": "hydra.pg.model.Graph"}}}}},
+          "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
           "variables": ["t0"]}}},
     {
       "term": {
@@ -2074,8 +2074,8 @@
                       "annotated": {
                         "annotation": [
                           {
-                            "@key": "description",
-                            "@value": {
+                            "key": "description",
+                            "value": {
                               "literal": {"string": "Convert a type-annotated term to property graph elements"}}}],
                         "body": {
                           "lambda": {
@@ -2099,7 +2099,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@right": {
+                                                                    "right": {
                                                                       "lambda": {
                                                                         "body": {
                                                                           "lambda": {
@@ -2221,7 +2221,7 @@
                                                                                                         "parameter": "t"}},
                                                                                                     "parameter": "t3"}},
                                                                                                 "type": {
-                                                                                                  "type": {
+                                                                                                  "body": {
                                                                                                     "function": {
                                                                                                       "codomain": {
                                                                                                         "list": {
@@ -2404,7 +2404,7 @@
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {
                 "function": {

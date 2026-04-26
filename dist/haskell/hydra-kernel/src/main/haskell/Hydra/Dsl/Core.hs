@@ -1908,7 +1908,7 @@ typeRecord x =
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 typeScheme :: Phantoms.TTerm [Core.Name] -> Phantoms.TTerm Core.Type -> Phantoms.TTerm (Maybe (M.Map Core.Name Core.TypeVariableMetadata)) -> Phantoms.TTerm Core.TypeScheme
-typeScheme variables type_ constraints =
+typeScheme variables body constraints =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.core.TypeScheme"),
       Core.recordFields = [
@@ -1916,11 +1916,19 @@ typeScheme variables type_ constraints =
           Core.fieldName = (Core.Name "variables"),
           Core.fieldTerm = (Phantoms.unTTerm variables)},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm type_)},
+          Core.fieldName = (Core.Name "body"),
+          Core.fieldTerm = (Phantoms.unTTerm body)},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Phantoms.unTTerm constraints)}]}))
+
+typeSchemeBody :: Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm Core.Type
+typeSchemeBody x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.core.TypeScheme"),
+        Core.projectionField = (Core.Name "body")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeSchemeConstraints :: Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm (Maybe (M.Map Core.Name Core.TypeVariableMetadata))
 typeSchemeConstraints x =
@@ -1930,14 +1938,6 @@ typeSchemeConstraints x =
         Core.projectionField = (Core.Name "constraints")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-typeSchemeType :: Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm Core.Type
-typeSchemeType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.core.TypeScheme"),
-        Core.projectionField = (Core.Name "type")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
 typeSchemeVariables :: Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm [Core.Name]
 typeSchemeVariables x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -1945,6 +1945,29 @@ typeSchemeVariables x =
         Core.projectionTypeName = (Core.Name "hydra.core.TypeScheme"),
         Core.projectionField = (Core.Name "variables")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+typeSchemeWithBody :: Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Core.TypeScheme
+typeSchemeWithBody original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.core.TypeScheme"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "variables"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.core.TypeScheme"),
+              Core.projectionField = (Core.Name "variables")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "body"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "constraints"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.core.TypeScheme"),
+              Core.projectionField = (Core.Name "constraints")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeSchemeWithConstraints :: Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm (Maybe (M.Map Core.Name Core.TypeVariableMetadata)) -> Phantoms.TTerm Core.TypeScheme
 typeSchemeWithConstraints original newVal =
@@ -1959,38 +1982,15 @@ typeSchemeWithConstraints original newVal =
               Core.projectionField = (Core.Name "variables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
+          Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.core.TypeScheme"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-typeSchemeWithType :: Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Core.TypeScheme
-typeSchemeWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.core.TypeScheme"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "variables"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.core.TypeScheme"),
-              Core.projectionField = (Core.Name "variables")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "constraints"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.core.TypeScheme"),
-              Core.projectionField = (Core.Name "constraints")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeSchemeWithVariables :: Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm [Core.Name] -> Phantoms.TTerm Core.TypeScheme
 typeSchemeWithVariables original newVal =
@@ -2001,11 +2001,11 @@ typeSchemeWithVariables original newVal =
           Core.fieldName = (Core.Name "variables"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
+          Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.core.TypeScheme"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),

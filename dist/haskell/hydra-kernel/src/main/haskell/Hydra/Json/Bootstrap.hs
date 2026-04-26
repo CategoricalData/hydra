@@ -1169,7 +1169,7 @@ typesByName =
               Core.annotatedTypeAnnotation = (M.fromList [
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The free type variables")))])}))},
           Core.FieldType {
-            Core.fieldTypeName = (Core.Name "type"),
+            Core.fieldTypeName = (Core.Name "body"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
               Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
               Core.annotatedTypeAnnotation = (M.fromList [

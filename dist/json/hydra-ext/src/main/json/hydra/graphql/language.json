@@ -7,8 +7,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "Language constraints for GraphQL"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "Language constraints for GraphQL"}}}],
             "body": {
               "let": {
                 "bindings": [
@@ -22,8 +22,8 @@
                             "type": {"variable": "t0"}}},
                         "parameter": "t0"}},
                     "type": {
-                      "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
-                      "type": {"set": {"variable": "t0"}},
+                      "body": {"set": {"variable": "t0"}},
+                      "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
                       "variables": ["t0"]}},
                   {
                     "name": "literalVariants",
@@ -52,7 +52,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.LiteralVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.LiteralVariant"}},
                       "variables": []}},
                   {
                     "name": "floatTypes",
@@ -69,7 +69,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.FloatType"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.core.FloatType"}},
+                      "body": {"set": {"variable": "hydra.core.FloatType"}},
                       "variables": []}},
                   {
                     "name": "functionVariants",
@@ -81,8 +81,8 @@
                             "type": {"variable": "t0"}}},
                         "parameter": "t0"}},
                     "type": {
-                      "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
-                      "type": {"set": {"variable": "t0"}},
+                      "body": {"set": {"variable": "t0"}},
+                      "constraints": [{"key": "t0", "value": {"classes": ["ordering"]}}],
                       "variables": ["t0"]}},
                   {
                     "name": "integerTypes",
@@ -99,7 +99,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.IntegerType"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.core.IntegerType"}},
+                      "body": {"set": {"variable": "hydra.core.IntegerType"}},
                       "variables": []}},
                   {
                     "name": "termVariants",
@@ -132,7 +132,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TermVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.TermVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.TermVariant"}},
                       "variables": []}},
                   {
                     "name": "typeVariants",
@@ -205,7 +205,7 @@
                             "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TypeVariant"}}}}},
                     "type": {
-                      "type": {"set": {"variable": "hydra.variants.TypeVariant"}},
+                      "body": {"set": {"variable": "hydra.variants.TypeVariant"}},
                       "variables": []}},
                   {
                     "name": "typePredicate",
@@ -249,7 +249,7 @@
                         "domain": {"variable": "hydra.core.Type"},
                         "parameter": "typ"}},
                     "type": {
-                      "type": {
+                      "body": {
                         "function": {
                           "codomain": {"literal": {"boolean": {}}},
                           "domain": {"variable": "hydra.core.Type"}}},
@@ -288,7 +288,7 @@
                               {"name": "types", "term": {"variable": "typePredicate"}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
                     "typeName": "hydra.coders.Language"}}}}}},
-        "type": {"type": {"variable": "hydra.coders.Language"}, "variables": []}}},
+        "type": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.graphql.language.graphqlReservedWords",
@@ -296,8 +296,8 @@
           "annotated": {
             "annotation": [
               {
-                "@key": "description",
-                "@value": {"literal": {"string": "A set of reserved words in GraphQL"}}}],
+                "key": "description",
+                "value": {"literal": {"string": "A set of reserved words in GraphQL"}}}],
             "body": {
               "application": {
                 "argument": {
@@ -306,7 +306,7 @@
                   "typeApplication": {
                     "body": {"variable": "hydra.lib.sets.fromList"},
                     "type": {"literal": {"string": {}}}}}}}}},
-        "type": {"type": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
+        "type": {"body": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
   "description": "Language constraints and reserved words for GraphQL",
   "namespace": "hydra.graphql.language",
   "termDependencies": ["hydra.lexical", "hydra.strip"],

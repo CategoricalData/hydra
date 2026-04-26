@@ -114,7 +114,7 @@ substInTypeScheme subst ts =
               Typing.TypeSubst (Lists.foldl (\m -> \v -> Maps.delete v m) (Typing.unTypeSubst subst) (Core.typeSchemeVariables ts))
       in Core.TypeScheme {
         Core.typeSchemeVariables = (Core.typeSchemeVariables ts),
-        Core.typeSchemeType = (substInType scopedSubst (Core.typeSchemeType ts)),
+        Core.typeSchemeBody = (substInType scopedSubst (Core.typeSchemeBody ts)),
         Core.typeSchemeConstraints = (Maybes.map (substInClassConstraints scopedSubst) (Core.typeSchemeConstraints ts))}
 
 -- | Apply a type substitution to the type annotations within a term

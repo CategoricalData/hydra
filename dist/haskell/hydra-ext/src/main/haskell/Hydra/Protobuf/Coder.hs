@@ -69,14 +69,14 @@ constructModule cx g mod typeDefs =
           toDef =
                   \td ->
                     let name = Packaging.typeDefinitionName td
-                        typ = Core.typeSchemeType (Packaging.typeDefinitionType td)
+                        typ = Core.typeSchemeBody (Packaging.typeDefinitionType td)
                         encodeDefEither = \n -> \t -> encodeDefinition cx g ns_ n t
                         flatTyp = flattenType typ
                         enc = encodeDefEither name
                     in case (Strip.deannotateType flatTyp) of
                       Core.TypeVariable _ -> enc flatTyp
                       _ -> Eithers.bind (Adapt.adaptTypeForLanguage Language.protobufLanguage flatTyp) (\adaptedType -> enc adaptedType)
-          types = Lists.map (\td -> Core.typeSchemeType (Packaging.typeDefinitionType td)) typeDefs
+          types = Lists.map (\td -> Core.typeSchemeBody (Packaging.typeDefinitionType td)) typeDefs
           structRefs = collectStructuralTypes types
           javaOptions =
                   [

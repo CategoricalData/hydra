@@ -100,7 +100,7 @@
                     "parameter": "y"}}}],
             "typeName": "hydra.coders.CoderDirection"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.coders.CoderDirection"}}},
@@ -149,7 +149,7 @@
             "domain": {"variable": "hydra.coders.LanguageName"},
             "parameter": "x"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.coders.LanguageName"}}},
@@ -254,7 +254,7 @@
                     "parameter": "y"}}}],
             "typeName": "hydra.coders.TraversalOrder"}},
         "type": {
-          "type": {
+          "body": {
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.coders.TraversalOrder"}}},

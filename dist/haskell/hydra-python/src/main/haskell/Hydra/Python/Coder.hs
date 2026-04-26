@@ -574,7 +574,7 @@ encodeDefinition cx env def_ =
             typ =
                     Maybes.maybe (Core.TypeScheme {
                       Core.typeSchemeVariables = [],
-                      Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Unit")),
+                      Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Unit")),
                       Core.typeSchemeConstraints = Nothing}) (\x -> x) (Packaging.termDefinitionType v0)
         in (Eithers.bind (Annotations.getTermDescription cx (pythonEnvironmentGetGraph env) term) (\comment ->
           let normComment = Maybes.map Formatting.normalizeComment comment
@@ -583,7 +583,7 @@ encodeDefinition cx env def_ =
               stmt]]))))
       Packaging.DefinitionType v0 ->
         let name = Packaging.typeDefinitionName v0
-            typ = Core.typeSchemeType (Packaging.typeDefinitionType v0)
+            typ = Core.typeSchemeBody (Packaging.typeDefinitionType v0)
         in (Eithers.bind (Annotations.getTypeDescription cx (pythonEnvironmentGetGraph env) typ) (\comment ->
           let normComment = Maybes.map Formatting.normalizeComment comment
           in (encodeTypeAssignment cx env name typ normComment)))
@@ -1372,7 +1372,7 @@ encodeVariable cx env name args =
           tcMetadata = Graph.graphMetadata tc
           inlineVars = PythonEnvironment.pythonEnvironmentInlineVariables env
           mTypScheme = Maps.lookup name tcTypes
-          mTyp = Maybes.map (\ts_ -> Core.typeSchemeType ts_) mTypScheme
+          mTyp = Maybes.map (\ts_ -> Core.typeSchemeBody ts_) mTypScheme
           asVariable = PythonNames.termVariableReference env name
           asFunctionCall =
                   Utils.functionCall (Utils.pyNameToPyPrimary (PythonNames.encodeName True Util.CaseConventionLowerSnake env name)) args
@@ -1410,13 +1410,13 @@ encodeVariable cx env name args =
         let elTrivial1 = Predicates.isTrivialTerm (Core.bindingTerm el)
         in (Maybes.maybe (Right asVariable) (\ts -> Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeSchemeArity ts) 0) (Predicates.isComplexBinding tc el)) (Logic.not elTrivial1)) (Right asFunctionCall) (
           let asFunctionRef =
-                  Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables ts))) (makeSimpleLambda (Arity.typeArity (Core.typeSchemeType ts)) asVariable) asVariable
+                  Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables ts))) (makeSimpleLambda (Arity.typeArity (Core.typeSchemeBody ts)) asVariable) asVariable
           in (Right asFunctionRef))) (Core.bindingType el))) (Lexical.lookupBinding g name)) (\prim ->
         let primArity = Arity.primitiveArity prim
         in (Logic.ifElse (Equality.equal primArity 0) (Right asFunctionCall) (
           let ts = Graph.primitiveType prim
               asFunctionRef =
-                      Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables ts))) (makeSimpleLambda (Arity.typeArity (Core.typeSchemeType ts)) asVariable) asVariable
+                      Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables ts))) (makeSimpleLambda (Arity.typeArity (Core.typeSchemeBody ts)) asVariable) asVariable
           in (Right asFunctionRef)))) (Lexical.lookupPrimitive g name)))) (\typ -> Logic.ifElse (Sets.member name tcLambdaVars) (Right asVariable) (Logic.ifElse (Sets.member name inlineVars) (
         let asFunctionRef =
                 Logic.ifElse (Logic.not (Sets.null (Variables.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable
@@ -1516,7 +1516,7 @@ extendMetaForTerm topLevel meta0 term =
                     let forBinding =
                             \m -> \b -> Maybes.maybe m (\ts ->
                               let term1 = Core.bindingTerm b
-                              in (Logic.ifElse (Analysis.isSimpleAssignment term1) m (extendMetaForType True True (Core.typeSchemeType ts) m))) (Core.bindingType b)
+                              in (Logic.ifElse (Analysis.isSimpleAssignment term1) m (extendMetaForType True True (Core.typeSchemeBody ts) m))) (Core.bindingType b)
                     in forBinding) meta bindings)
                 Core.TermLiteral v0 -> case v0 of
                   Core.LiteralDecimal _ -> setMetaUsesDecimal meta True
@@ -1614,11 +1614,11 @@ gatherMetadata focusNs defs =
                   \meta -> \def -> case def of
                     Packaging.DefinitionTerm v0 ->
                       let term = Packaging.termDefinitionTerm v0
-                          typ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeType (Packaging.termDefinitionType v0)
+                          typ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody (Packaging.termDefinitionType v0)
                           meta2 = extendMetaForType True True typ meta
                       in (extendMetaForTerm True meta2 term)
                     Packaging.DefinitionType v0 ->
-                      let typ = Core.typeSchemeType (Packaging.typeDefinitionType v0)
+                      let typ = Core.typeSchemeBody (Packaging.typeDefinitionType v0)
                           meta2 = setMetaUsesName meta True
                       in (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType True False t m) meta2 typ)
           result = Lists.foldl addDef start defs
