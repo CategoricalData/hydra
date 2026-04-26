@@ -310,12 +310,14 @@ main = do
       return []
 
   -- Step 2b: Optionally load DSL wrapper modules from every loaded package.
-  -- Compute which non-baseline non-coder packages need to be loaded into the
-  -- universe. Each of hydra-pg, hydra-rdf, hydra-coq, hydra-javascript,
-  -- hydra-ext, hydra-wasm is independent: none depends on another, so we load
-  -- only the package(s) we are targeting.
+  -- Compute which non-baseline non-coder packages need to be loaded into
+  -- the universe. Each of hydra-rdf, hydra-coq, hydra-javascript,
+  -- hydra-ext, hydra-wasm is independent. hydra-pg depends on hydra-rdf
+  -- (e.g. hydra.pg.rdf.environment references hydra.rdf.syntax.Iri), so
+  -- loading hydra-pg implicitly loads hydra-rdf.
   --
-  --   --package <p>  : load only <p> when it's an ext or ext-demo package
+  --   --package <p>  : load <p> + its package-level deps when it's an ext
+  --                    or ext-demo package
   --   --ext-only     : load both ext-demo packages (legacy demo path)
   --   (otherwise)    : nothing extra. --all-packages alone does NOT auto-load
   --                    these — sync-haskell.sh uses --all-packages to regen
@@ -323,9 +325,12 @@ main = do
   --                    assemble-distribution.sh handles coder/ext packages
   --                    individually with --package <pkg>.
   let allExtPackages = extPackages ++ extDemoPackages
+  let packageDeps p = case p of
+        "hydra-pg" -> ["hydra-pg", "hydra-rdf"]
+        _          -> [p]
   let extPackagesToLoad
         | optExtOnly opts                           = extDemoPackages
-        | Just p <- optPackage opts, p `elem` allExtPackages = [p]
+        | Just p <- optPackage opts, p `elem` allExtPackages = packageDeps p
         | otherwise                                 = []
 
   dslMods <- if optIncludeDsls opts
@@ -469,9 +474,14 @@ main = do
   -- Only applied when --package is set (scoped mode). In unscoped mode
   -- the per-module digest semantics get harder to reason about because
   -- multiple packages share the same outBase tree.
+  -- Source set indicator: tests are generated when --include-tests is set
+  -- AND we're scoped to a single package. (In --all-packages mode, tests
+  -- are generated separately via testMods.)
+  let sourceSetForFilter = if optIncludeTests opts then "test" else "main"
+
   modsToGenerateScopedFiltered <- case optPackage opts of
     Nothing  -> return modsToGenerateScoped
-    Just pkg -> filterByTargetDigest outBase pkg modsToGenerateScoped
+    Just pkg -> filterByTargetDigest outBase pkg sourceSetForFilter modsToGenerateScoped
 
   -- Prepend synthesized source modules to modsToGenerate (deduping by namespace
   -- to keep ordering stable). They go into the same universe as the main modules.
@@ -684,12 +694,13 @@ elapsed end start = realToFrac (diffUTCTime end start)
 -- Modules with no current DSL source (synth modules etc.) are also
 -- kept — we can't verify staleness, so we don't risk a false skip.
 --
--- The per-target digest is read from <outBase>/<pkg>/digest.json,
--- where outBase is e.g. "../../dist/java" (the parent of the
--- per-package target dirs).
-filterByTargetDigest :: FilePath -> String -> [Module] -> IO [Module]
-filterByTargetDigest outBase pkg mods = do
-  let digestPath = outBase FP.</> pkg FP.</> "digest.json"
+-- The per-target digest is read from
+-- <outBase>/<pkg>/src/<sourceSet>/digest.json, where outBase is e.g.
+-- "../../dist/java" (the parent of the per-package target dirs) and
+-- sourceSet is "main" or "test".
+filterByTargetDigest :: FilePath -> String -> String -> [Module] -> IO [Module]
+filterByTargetDigest outBase pkg sourceSet mods = do
+  let digestPath = outBase FP.</> pkg FP.</> "src" FP.</> sourceSet FP.</> "digest.json"
   exists <- SD.doesFileExist digestPath
   if not exists
     then do
