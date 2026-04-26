@@ -549,7 +549,7 @@ typeScheme = define "typeScheme" $
   doc "Show a type scheme as a string" $
   "ts" ~>
   "vars" <~ Core.typeSchemeVariables (var "ts") $
-  "body" <~ Core.typeSchemeType (var "ts") $
+  "body" <~ Core.typeSchemeBody (var "ts") $
   "varNames" <~ Lists.map (unwrap _Name) (var "vars") $
   "fa" <~ Logic.ifElse (Lists.null $ var "vars")
     (string "")

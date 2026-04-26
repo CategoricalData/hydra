@@ -73,7 +73,7 @@ module_ = Module ns definitions
 primitiveArity :: TTermDefinition (Primitive -> Int)
 primitiveArity = define "primitiveArity" $
   doc "Find the arity (expected number of arguments) of a primitive constant or function" $
-  (typeArity <.> unaryFunction Core.typeSchemeType <.> unaryFunction Graph.primitiveType)
+  (typeArity <.> unaryFunction Core.typeSchemeBody <.> unaryFunction Graph.primitiveType)
 
 termArity :: TTermDefinition (Term -> Int)
 termArity = define "termArity" $
@@ -99,7 +99,7 @@ typeArity = define "typeArity" $
 typeSchemeArity :: TTermDefinition (TypeScheme -> Int)
 typeSchemeArity = define "typeSchemeArity" $
   doc "Find the arity (expected number of arguments) of a type scheme" $
-  typeArity <.> unaryFunction Core.typeSchemeType
+  typeArity <.> unaryFunction Core.typeSchemeBody
 
 uncurryType :: TTermDefinition (Type -> [Type])
 uncurryType = define "uncurryType" $

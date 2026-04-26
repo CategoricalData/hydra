@@ -86,7 +86,7 @@ toTerm :: FExpr -> Core.Term
 toTerm expr = case expr of
   FAbs v dom e -> Core.TermLambda (Core.Lambda (Core.Name v) (Just hdom) (toTerm e))
     where
-      hdom = Core.typeSchemeType $ toTypeScheme dom
+      hdom = Core.typeSchemeBody $ toTypeScheme dom
   -- App (App (Const Pair) (nat 0)) (nat 1)
   --   e1 = App (Const Pair) (nat 0)
   --   e2 = nat 1
@@ -119,7 +119,7 @@ toTerm expr = case expr of
   FTyAbs params body -> L.foldl (\t v -> Core.TermTypeLambda $ Core.TypeLambda (Core.Name v) t) (toTerm body) $ L.reverse params
   FTyApp fun args -> L.foldl (\t a -> Core.TermTypeApplication $ Core.TypeApplicationTerm t a) (toTerm fun) $ L.reverse hargs
     where
-      hargs = fmap (\t -> Core.typeSchemeType $ toTypeScheme t) args
+      hargs = fmap (\t -> Core.typeSchemeBody $ toTypeScheme t) args
   FVar v -> Core.TermVariable $ Core.Name v
 
 toType :: FTy -> Core.Type

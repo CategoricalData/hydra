@@ -985,7 +985,7 @@ encodeDefinition = def "encodeDefinition" $
         right $ list [list [var "stmt"]],
       _Definition_type>>: "td" ~>
         "name" <~ (project _TypeDefinition _TypeDefinition_name @@ var "td") $
-        "typ" <~ (Core.typeSchemeType $ project _TypeDefinition _TypeDefinition_type @@ var "td") $
+        "typ" <~ (Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_type @@ var "td") $
         "comment" <<~ (Annotations.getTypeDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "typ") $
         "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
         encodeTypeAssignment @@ var "cx" @@ var "env" @@ var "name" @@ var "typ" @@ var "normComment"]
@@ -2052,7 +2052,7 @@ encodeVariable = def "encodeVariable" $
     "tcMetadata" <~ (Graph.graphMetadata $ var "tc") $
     "inlineVars" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "env") $
     "mTypScheme" <~ (Maps.lookup (var "name") (var "tcTypes")) $
-    "mTyp" <~ (Maybes.map ("ts_" ~> Core.typeSchemeType (var "ts_")) (var "mTypScheme")) $
+    "mTyp" <~ (Maybes.map ("ts_" ~> Core.typeSchemeBody (var "ts_")) (var "mTypScheme")) $
     "asVariable" <~ (PyNames.termVariableReference @@ var "env" @@ var "name") $
     "asFunctionCall" <~ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "args") $
     Logic.ifElse (Logic.not $ Lists.null (var "args"))
@@ -2104,7 +2104,7 @@ encodeVariable = def "encodeVariable" $
                                             (Logic.not (var "elTrivial1")))
                       (right $ var "asFunctionCall")
                       ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Lists.null (Core.typeSchemeVariables $ var "ts"))
-                          (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeType $ var "ts")) @@ var "asVariable")
+                          (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeBody $ var "ts")) @@ var "asVariable")
                           (var "asVariable")) $
                         right $ var "asFunctionRef"))
                   (Core.bindingType $ var "el"))
@@ -2118,7 +2118,7 @@ encodeVariable = def "encodeVariable" $
                 -- Non-nullary primitive: function reference
                 ("ts" <~ (Phantoms.project _Primitive _Primitive_type @@ var "prim") $
                   "asFunctionRef" <~ (Logic.ifElse (Logic.not $ Lists.null (Core.typeSchemeVariables $ var "ts"))
-                      (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeType $ var "ts")) @@ var "asVariable")
+                      (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeBody $ var "ts")) @@ var "asVariable")
                       (var "asVariable")) $
                   right $ var "asFunctionRef"))
             (Lexical.lookupPrimitive @@ var "g" @@ var "name"))))
@@ -2288,7 +2288,7 @@ extendMetaForTerm = def "extendMetaForTerm" $
                 "term1" <~ Core.bindingTerm (var "b") $
                 Logic.ifElse (Analysis.isSimpleAssignment @@ var "term1")
                   (var "m")
-                  (extendMetaForType @@ true @@ true @@ (Core.typeSchemeType $ var "ts") @@ var "m"))
+                  (extendMetaForType @@ true @@ true @@ (Core.typeSchemeBody $ var "ts") @@ var "m"))
               (Core.bindingType $ var "b")) $
             var "forBinding") (var "meta") (var "bindings"),
         _Term_literal>>: "l" ~>
@@ -2462,14 +2462,14 @@ gatherMetadata = def "gatherMetadata" $
           "term" <~ Packaging.termDefinitionTerm (var "termDef") $
           "typ" <~ Maybes.maybe
             (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
-            (unaryFunction Core.typeSchemeType)
+            (unaryFunction Core.typeSchemeBody)
             (Packaging.termDefinitionType (var "termDef")) $
           -- First extend for the type annotation (isTypeDef=True, isTermAnnot=True)
           "meta2" <~ (extendMetaForType @@ true @@ true @@ var "typ" @@ var "meta") $
           -- Then extend for the term body (isTopLevel=True)
           extendMetaForTerm @@ true @@ var "meta2" @@ var "term",
         _Definition_type>>: "typeDef" ~>
-          "typ" <~ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "typeDef")) $
+          "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionType (var "typeDef")) $
           -- Set usesName=True for type definitions
           "meta2" <~ (setMetaUsesName @@ var "meta" @@ true) $
           -- Fold extendMetaForType over the type (isTypeDef=True, isTermAnnot=False)

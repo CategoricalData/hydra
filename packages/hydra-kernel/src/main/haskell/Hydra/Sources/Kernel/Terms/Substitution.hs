@@ -268,7 +268,7 @@ substInTypeScheme = define "substInTypeScheme" $
       (Core.typeSchemeVariables $ var "ts")] $
     Core.typeScheme
       (Core.typeSchemeVariables $ var "ts")
-      (substInType @@ var "scopedSubst" @@ (Core.typeSchemeType $ var "ts"))
+      (substInType @@ var "scopedSubst" @@ (Core.typeSchemeBody $ var "ts"))
       -- Also apply the substitution to the constraints
       (Maybes.map (substInClassConstraints @@ var "scopedSubst") (Core.typeSchemeConstraints $ var "ts"))
 

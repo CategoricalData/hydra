@@ -50,7 +50,7 @@ datatype gname lname typ = Binding {
         (Name "type", TermVariable (Name "hydra.core.Type"))]})),
     bindingType = Just (TypeScheme {
       typeSchemeVariables = [],
-      typeSchemeType = TypeVariable (Name "hydra.core.Type"),
+      typeSchemeBody = TypeVariable (Name "hydra.core.Type"),
       typeSchemeConstraints = Nothing})}
   where
     elName = qualify gname (Name lname)

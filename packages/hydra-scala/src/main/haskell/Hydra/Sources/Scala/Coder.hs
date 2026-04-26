@@ -436,7 +436,7 @@ encodeLetBinding = def "encodeLetBinding" $
       ("ts" ~> just (var "ts")),
     -- Check if the binding has a function type
     "isFn">: Maybes.maybe false
-      ("ts" ~> cases _Type (Strip.deannotateType @@ (Core.typeSchemeType $ var "ts"))
+      ("ts" ~> cases _Type (Strip.deannotateType @@ (Core.typeSchemeBody $ var "ts"))
         (Just false)
         [_Type_function>>: constant true,
          _Type_forall>>: ("fa" ~> cases _Type (Strip.deannotateType @@ Core.forallTypeBody (var "fa"))
@@ -454,10 +454,10 @@ encodeLetBinding = def "encodeLetBinding" $
         "useDef">: Logic.or (var "isFn") (Logic.not (Lists.null (var "newVars")))] $
         Logic.ifElse (var "useDef")
           -- Generate local def with type params and/or typed params
-          (asTerm encodeLocalDef @@ var "cx" @@ var "g" @@ var "outerTypeVars" @@ var "bname" @@ var "bterm" @@ (Core.typeSchemeType $ var "ts"))
+          (asTerm encodeLocalDef @@ var "cx" @@ var "g" @@ var "outerTypeVars" @@ var "bname" @@ var "bterm" @@ (Core.typeSchemeBody $ var "ts"))
           -- Monomorphic non-function: val with type annotation
           (Eithers.bind (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "bterm")
-            ("srhs" ~> Eithers.bind (asTerm encodeType @@ var "cx" @@ var "g" @@ (Core.typeSchemeType $ var "ts"))
+            ("srhs" ~> Eithers.bind (asTerm encodeType @@ var "cx" @@ var "g" @@ (Core.typeSchemeBody $ var "ts"))
               ("styp" ~> right (mkLazyVal (var "bname") (just (var "styp")) (var "srhs"))))))
       (var "mts")
 
@@ -811,7 +811,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "lname">: ScalaUtilsSource.scalaEscapeName @@ (Names.localNameOf @@ var "name"),
     "typ'">: Maybes.maybe
       (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
-      (unaryFunction Core.typeSchemeType)
+      (unaryFunction Core.typeSchemeBody)
       (project _TermDefinition _TermDefinition_type @@ var "td"),
     -- Check if the type is a function type (needs def) by looking at the stripped type
     "isFunctionType">: cases _Type (Strip.deannotateType @@ var "typ'")
@@ -960,7 +960,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
   doc "Encode a type definition as a Scala statement" $
   lambda "cx" $ lambda "g" $ lambda "td" $ lets [
     "name">: project _TypeDefinition _TypeDefinition_name @@ var "td",
-    "typ">: Core.typeSchemeType $ project _TypeDefinition _TypeDefinition_type @@ var "td",
+    "typ">: Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_type @@ var "td",
     "lname">: Names.localNameOf @@ var "name",
     "tname">: record _Type_Name [_Type_Name_value>>: var "lname"],
     "dname">: record _Data_Name [_Data_Name_value>>: wrap _PredefString (var "lname")],

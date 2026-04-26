@@ -540,7 +540,7 @@ typeScheme = define "TypeScheme" $
     "variables">:
       doc "The free type variables" $
       T.list name,
-    "type">:
+    "body">:
       doc "The type expression"
       type_,
     "constraints">:

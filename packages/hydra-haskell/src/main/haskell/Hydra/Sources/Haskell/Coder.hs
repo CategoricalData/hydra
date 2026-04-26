@@ -206,7 +206,7 @@ constructModule = haskellCoderDefinition "constructModule" $
     cases _Definition (var "def") Nothing [
       _Definition_type>>: "type" ~> lets [
         "name">: Packaging.typeDefinitionName $ var "type",
-        "typ">: Core.typeSchemeType $ Packaging.typeDefinitionType $ var "type"] $
+        "typ">: Core.typeSchemeBody $ Packaging.typeDefinitionType $ var "type"] $
         toTypeDeclarationsFrom @@ var "namespaces" @@ var "name" @@ var "typ" @@ var "cx" @@ var "g",
       _Definition_term>>: "term" ~>
         "d" <<~ toDataDeclaration @@ var "namespaces" @@ var "term" @@ var "cx" @@ var "g" $
@@ -768,10 +768,10 @@ gatherMetadata = haskellCoderDefinition "gatherMetadata" $
           Maybes.maybe (var "metaWithTerm")
             ("ts" ~>
               Rewriting.foldOverType @@ Coders.traversalOrderPre
-                @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "metaWithTerm" @@ (Core.typeSchemeType $ var "ts"))
+                @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "metaWithTerm" @@ (Core.typeSchemeBody $ var "ts"))
             (Packaging.termDefinitionType $ var "termDef"),
         _Definition_type>>: "typeDef" ~>
-          "typ" <~ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "typeDef")) $
+          "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionType (var "typeDef")) $
           Rewriting.foldOverType @@ Coders.traversalOrderPre
             @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "meta" @@ var "typ"]) $
     Lists.foldl (var "addDef") (asTerm emptyMetadata) (var "defs")
@@ -916,7 +916,7 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
          "explicitClasses" <<~ Annotations.getTypeClasses @@ var "cx" @@ var "g" @@ (Strip.removeTypesFromTerm @@ var "term") $
          -- Combine constraints from TypeScheme with any explicit annotations
          "combinedClasses" <~ Maps.union (var "schemeClasses") (var "explicitClasses") $
-         "schemeType" <~ optCases (var "typ") Core.typeUnit ("ts" ~> Core.typeSchemeType (var "ts")) $
+         "schemeType" <~ optCases (var "typ") Core.typeUnit ("ts" ~> Core.typeSchemeBody (var "ts")) $
          "htype" <<~ encodeTypeWithClassAssertions @@ var "namespaces" @@ var "combinedClasses" @@ var "schemeType" @@ var "cx" @@ var "g" $ lets [
          "decl">: inject H._Declaration H._Declaration_typedBinding $ record H._TypedBinding [
            H._TypedBinding_typeSignature>>: record H._TypeSignature [

@@ -123,7 +123,7 @@ bindingUsesContextTypeVars = define "bindingUsesContextTypeVars" $
   optCases (Core.bindingType $ var "binding")
     false  -- No type scheme means no type variables used
     ("ts" ~>
-      "freeInType" <~ Variables.freeVariablesInType @@ Core.typeSchemeType (var "ts") $
+      "freeInType" <~ Variables.freeVariablesInType @@ Core.typeSchemeBody (var "ts") $
       "contextTypeVars" <~ Graph.graphTypeVariables (var "cx") $
       Logic.not $ Sets.null $ Sets.intersection (var "freeInType") (var "contextTypeVars"))
 
@@ -175,7 +175,7 @@ augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
             (Core.typeSchemeVariables $ var "ts")
             (Lists.foldl
               ("acc" ~> "t" ~> Core.typeFunction $ Core.functionType (var "t") (var "acc"))
-              (Core.typeSchemeType $ var "ts")
+              (Core.typeSchemeBody $ var "ts")
               (Lists.reverse $ var "varTypes"))
             (Core.typeSchemeConstraints $ var "ts")) (Core.bindingType $ var "b")))
         (just $ pair
@@ -239,7 +239,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
     -- into the hoisted binding's type.
     "freeInBindingType" <~ optCases (Core.bindingType $ var "b")
       Sets.empty
-      ("ts" ~> Variables.freeVariablesInType @@ (Core.typeSchemeType $ var "ts")) $
+      ("ts" ~> Variables.freeVariablesInType @@ (Core.typeSchemeBody $ var "ts")) $
     "freeInCapturedVarTypes" <~ Sets.unions (Lists.map ("t" ~> Variables.freeVariablesInType @@ var "t") (var "capturedTermVarTypes")) $
     "capturedTypeVars" <~ Sets.toList (Sets.intersection
       (Graph.graphTypeVariables $ var "cx")
@@ -255,7 +255,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
           (Lists.nub $ Lists.concat2 (var "capturedTypeVars") (Core.typeSchemeVariables $ var "ts"))
           (Lists.foldl
             ("t" ~> "a" ~> Core.typeFunction $ Core.functionType (var "a") (var "t"))
-            (Core.typeSchemeType $ var "ts")
+            (Core.typeSchemeBody $ var "ts")
             (Lists.reverse $ var "capturedTermVarTypes"))
           (Core.typeSchemeConstraints $ var "ts"))
        (Core.bindingType $ var "b"))
