@@ -68,7 +68,7 @@ if [ -n "$CODER_CHECK" ] && [ ! -f "$CODER_CHECK" ]; then
 
     # Build the Haskell bootstrap-from-json if needed
     cd "$HYDRA_ROOT/heads/haskell"
-    stack build hydra:exe:bootstrap-from-json 2>&1 | grep -v "^$"
+    stack build hydra:exe:bootstrap-from-json
 
     # --dist-json-root points at the dist/json root; the bootstrap walks
     # per-package subdirectories in dependency order.
