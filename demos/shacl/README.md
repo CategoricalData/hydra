@@ -134,15 +134,15 @@ demos/
     README.md                                   # This file
     bin/run.sh                                  # Orchestrator script
   src/main/
-    haskell/Hydra/Ext/Demos/Shacl/
+    haskell/Hydra/Demos/Shacl/
       Demo.hs                                   # Haskell driver
       ShaclRdf.hs                               # ShapesGraph -> RDF triples serializer
 packages/hydra-rdf/
   src/main/
-    haskell/Hydra/Ext/Sources/Shacl/
+    haskell/Hydra/Sources/Shacl/
       Coder.hs                                  # SHACL coder (DSL source)
 dist/haskell/hydra-rdf/
   src/main/
-    haskell/Hydra/Ext/Shacl/
+    haskell/Hydra/Shacl/
       Coder.hs                                  # SHACL coder (generated)
 ```

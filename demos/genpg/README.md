@@ -27,55 +27,45 @@ The GenPG demo:
 
 ```
 demos/
-├── genpg/
-│   ├── README.md                 # This file
-│   ├── bin/run.sh                   # Run GraphSON demo (all hosts)
-│   ├── bin/run-rdf.sh               # Run RDF/SHACL demo (all hosts)
+├── genpg/                            # Demo data, run scripts, output
+│   ├── README.md                     # This file
+│   ├── bin/run.sh                    # Run GraphSON demo (all hosts)
+│   ├── bin/run-rdf.sh                # Run RDF/SHACL demo (all hosts)
 │   ├── bin/generate-python.ghci      # Script to generate Python modules
 │   ├── bin/generate-java.ghci        # Script to generate Java modules
 │   ├── data/
-│   │   ├── sources/sales/        # CSV input files (sales example)
-│   │   └── sources/health/       # CSV input files (health example)
-│   └── output/                   # GraphSON output (shared by all modes)
-├── src/                          # Demo sources (demos/src/)
-│   ├── main/
-│   │   ├── haskell/Hydra/Ext/Demos/GenPG/
-│   │   │   ├── Demo.hs           # Haskell GraphSON driver
-│   │   │   ├── Rdf.hs            # Haskell RDF/SHACL driver
-│   │   │   ├── Modules.hs        # Shared module definitions (sales/health)
-│   │   │   ├── GeneratePython.hs # Python code generation
-│   │   │   ├── GenerateJava.hs   # Java code generation
-│   │   │   └── Examples/
-│   │   │       ├── Sales/        # Sales dataset definitions
-│   │   │       │   ├── DatabaseSchema.hs
-│   │   │       │   ├── GraphSchema.hs
-│   │   │       │   └── Mapping.hs
-│   │   │       └── Health/       # Health dataset definitions
-│   │   │           ├── DatabaseSchema.hs
-│   │   │           ├── GraphSchema.hs
-│   │   │           └── Mapping.hs
-│   │   ├── python/hydra/demos/genpg/
-│   │   │   ├── demo.py           # Python GraphSON driver
-│   │   │   ├── rdf.py            # Python RDF/SHACL driver
-│   │   │   └── generate_prompt.py # LLM prompt generator
-│   │   └── java/hydra/demos/genpg/
-│   │       ├── Demo.java         # Java GraphSON driver
-│   │       └── RdfDemo.java      # Java RDF/SHACL driver
-│   └── gen-main/
-│       ├── haskell/Hydra/Pg/
-│       │   ├── Model.hs          # Generated: property graph model
-│       │   ├── Mapping.hs        # Generated: mapping definitions
-│       │   └── Graphson/         # Generated: GraphSON coder, syntax, utils
-│       ├── python/hydra/
-│       │   ├── pg/               # Generated: property graph models
-│       │   ├── demos/genpg/      # Generated: transform.py, sales.py, health.py
-│       │   ├── encode/pg/        # Generated: encoders
-│       │   └── decode/pg/        # Generated: decoders
-│       └── java/hydra/
-│           ├── pg/               # Generated: PG mapping, GraphSON modules
-│           ├── demos/genpg/      # Generated: Transform, Sales, Health
-│           ├── encode/pg/        # Generated: encoders
-│           └── decode/pg/        # Generated: decoders
+│   │   ├── sources/sales/            # CSV input files (sales example)
+│   │   └── sources/health/           # CSV input files (health example)
+│   └── output/                       # GraphSON output (shared by all modes)
+├── src/main/                         # Cross-demo sources (shared with other demos)
+│   ├── haskell/Hydra/Demos/GenPG/    # Haskell sources for this demo
+│   │   ├── Demo.hs                   # Haskell GraphSON driver
+│   │   ├── Rdf.hs                    # Haskell RDF/SHACL driver
+│   │   ├── Modules.hs                # Shared module definitions (sales/health)
+│   │   ├── Runtime.hs                # Runtime helpers
+│   │   ├── GeneratePython.hs         # Python code generation
+│   │   ├── GenerateJava.hs           # Java code generation
+│   │   ├── ExampleDatabaseSchema.hs  # Top-level example schema
+│   │   ├── ExampleGraphSchema.hs
+│   │   ├── ExampleMapping.hs
+│   │   └── Examples/
+│   │       ├── Sales/                # Sales dataset definitions
+│   │       │   ├── DatabaseSchema.hs
+│   │       │   ├── GraphSchema.hs
+│   │       │   └── Mapping.hs
+│   │       └── Health/               # Health dataset definitions
+│   │           ├── DatabaseSchema.hs
+│   │           ├── GraphSchema.hs
+│   │           └── Mapping.hs
+│   └── java/hydra/demos/genpg/       # Java sources
+│       ├── Demo.java                 # Java GraphSON driver
+│       └── RdfDemo.java              # Java RDF/SHACL driver
+└── ...
+
+# Generated outputs land under the standard 0.15 dist tree:
+dist/haskell/hydra-pg/src/main/haskell/Hydra/Pg/        # PG model, GraphSON, mapping
+dist/python/hydra-pg/src/main/python/hydra/pg/          # Python PG runtime
+dist/java/hydra-pg/src/main/java/hydra/pg/              # Java PG runtime
 ```
 
 ## Prerequisites
@@ -120,6 +110,12 @@ heads/python/.venv/bin/python demos/src/main/python/hydra/demos/genpg/demo.py he
 
 The `sales` argument is the default, so it can be omitted.
 
+> **Note:** the Python driver `demo.py` (and `rdf.py` for the RDF mode) are
+> generated/written separately from the kernel sync; if they are not present
+> under `demos/src/main/python/hydra/demos/genpg/`, the orchestrator scripts
+> (`bin/run.sh`, `bin/run-rdf.sh`) skip the Python host with a "driver not
+> found" message, and the Haskell + Java paths still complete.
+
 ### Java mode
 
 Java 11+ is required. From the repository root:
@@ -131,7 +127,7 @@ Java 11+ is required. From the repository root:
 Then run the demo:
 
 ```bash
-java -cp $(./gradlew printClasspath -q 2>/dev/null || echo "build/classes/java/main") \
+java -cp packages/hydra-java/build/classes/java/main \
   hydra.demos.genpg.Demo sales    # processes sales data
   hydra.demos.genpg.Demo health   # processes health data
 ```
@@ -172,13 +168,13 @@ with [pyshacl](https://github.com/RDFLib/pySHACL) if installed.
 
 Haskell (GHCi):
 ```haskell
-:l Hydra.Sources.Demos.GenPG.Rdf
+:l Hydra.Demos.GenPG.Rdf
 generateSalesRdf
 ```
 
-Python:
+Python (driver not yet checked in; the run script skips this host with a "driver not found" message):
 ```bash
-python3 src/main/python/hydra/demos/genpg/rdf.py sales
+python3 demos/src/main/python/hydra/demos/genpg/rdf.py sales
 ```
 
 Java (after `./gradlew compileJava`):
@@ -281,7 +277,7 @@ stack ghci
 In GHCI:
 ```haskell
 :set +m
-writeEncoderSourceHaskell "../../dist/haskell/hydra-ext/src/main/haskell" (kernelModules <> hydraExtModules) [
+writeEncoderSourceHaskell "../../dist/haskell/hydra-pg/src/main/haskell" (kernelModules <> hydraExtModules) [
   Hydra.Sources.Pg.Mapping.module_,
   Hydra.Sources.Pg.Model.module_]
 ```
@@ -306,7 +302,7 @@ stack ghci < ../../demos/genpg/bin/generate-python.ghci
 
 Or interactively in GHCI:
 ```haskell
-import Hydra.Sources.Demos.GenPG.GeneratePython
+import Hydra.Demos.GenPG.GeneratePython
 generatePythonModules
 ```
 
@@ -330,7 +326,7 @@ stack ghci --ghci-options='+RTS -K256M -A32M -RTS' < ../../demos/genpg/bin/gener
 
 Or interactively in GHCI:
 ```haskell
-import Hydra.Sources.Demos.GenPG.GenerateJava
+import Hydra.Demos.GenPG.GenerateJava
 generateJavaModules
 ```
 

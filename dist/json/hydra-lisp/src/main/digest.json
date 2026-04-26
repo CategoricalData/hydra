@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "hashes": {
+    "hydra.lisp.coder": "db901887ac768abb50c3043380d593edd79a1e56479ed8ed252172720090714d",
+    "hydra.lisp.serde": "e1578961b09320287ca4ea3c064719a4d68976068d991434783f704d894b0e8c",
+    "hydra.lisp.syntax": "16a3a0767073aaba7b7328f53913458e1348bafa604bbe675448e314b3afdc3e"
+  }
+}

@@ -116,10 +116,10 @@ module_ = Module ns definitions
     Just "Python code generator: converts Hydra modules to Python source code"
   where
     definitions = [
+      toDefinition Environment.reorderDefs,
       toDefinition analyzePythonFunction,
       toDefinition classVariantPatternUnit,
       toDefinition classVariantPatternWithCapture,
-      toDefinition Environment.reorderDefs,
       toDefinition collectTypeVariables,
       toDefinition condImportSymbol,
       toDefinition dataclassDecorator,
@@ -182,8 +182,8 @@ module_ = Module ns definitions
       toDefinition genericArg,
       toDefinition initialEnvironment,
       toDefinition initialMetadata,
-      toDefinition isCasesFull,
       toDefinition isCaseStatementApplication,
+      toDefinition isCasesFull,
       toDefinition isTypeModuleCheck,
       toDefinition isTypeVariableName,
       toDefinition isVariantUnitType,
@@ -2541,17 +2541,6 @@ initialMetadata = def "initialMetadata" $
       PyHelpers._PythonModuleMetadata_usesRight>>: false,
       PyHelpers._PythonModuleMetadata_usesTypeVar>>: false]
 
--- | Determine whether a union type's cases are fully covered.
---   Returns true if the number of cases >= number of fields in the row type.
-isCasesFull :: TTermDefinition ([FieldType] -> [Field] -> Bool)
-isCasesFull = def "isCasesFull" $
-  doc "Check if union cases are fully covered" $
-  "rowType" ~> "cases_" ~>
-    "numCases" <~ (Lists.length $ var "cases_") $
-    "numFields" <~ (Lists.length $ var "rowType") $
-    -- numCases >= numFields is equivalent to NOT (numCases < numFields)
-    Logic.not $ Equality.lt (var "numCases") (var "numFields")
-
 -- | Check if a term is a case statement applied to exactly one argument.
 --   Returns Just (tname, dflt, cases, arg) if so, Nothing otherwise.
 isCaseStatementApplication :: TTermDefinition (Term -> Maybe (Name, Maybe Term, [Field], Term))
@@ -2572,6 +2561,17 @@ isCaseStatementApplication = def "isCaseStatementApplication" $
               (Core.caseStatementDefault $ var "cs")
               (Core.caseStatementCases $ var "cs")
               (var "arg")])
+
+-- | Determine whether a union type's cases are fully covered.
+--   Returns true if the number of cases >= number of fields in the row type.
+isCasesFull :: TTermDefinition ([FieldType] -> [Field] -> Bool)
+isCasesFull = def "isCasesFull" $
+  doc "Check if union cases are fully covered" $
+  "rowType" ~> "cases_" ~>
+    "numCases" <~ (Lists.length $ var "cases_") $
+    "numFields" <~ (Lists.length $ var "rowType") $
+    -- numCases >= numFields is equivalent to NOT (numCases < numFields)
+    Logic.not $ Equality.lt (var "numCases") (var "numFields")
 
 -- | Check whether a list of definitions contains any type definitions
 isTypeModuleCheck :: TTermDefinition ([Definition] -> Bool)

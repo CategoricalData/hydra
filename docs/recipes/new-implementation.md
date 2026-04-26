@@ -387,7 +387,6 @@ The following primitives require thunking in eager languages:
 | `hydra.lib.logic.ifElse` | both `then` and `else` branches | Only the chosen branch should be evaluated |
 | `hydra.lib.maybes.maybe` | the `nothing`-case default value | Only evaluated when the Maybe is Nothing |
 | `hydra.lib.maybes.fromMaybe` | the default value | Only evaluated when the Maybe is Nothing |
-| `hydra.lib.maybes.fromJustOr` | the default value | Only evaluated when the Maybe is Nothing |
 | `hydra.lib.eithers.fromLeft` | the default value | Only evaluated when the Either is Right |
 | `hydra.lib.eithers.fromRight` | the default value | Only evaluated when the Either is Left |
 

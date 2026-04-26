@@ -76,10 +76,27 @@ with open('$cache_file', 'w') as f:
 #   - every *.<lang-ext> file under dist-root
 #   - every file under heads-test-dir
 #   - the runner script itself
+#
+# The runner script is one of the file paths fed into shasum, so it must
+# resolve to a real file from the current working directory. Callers that
+# pass `${BASH_SOURCE[0]}` may pass a relative path (e.g. when the script
+# was invoked as `heads/python/bin/test-distribution.sh` from the worktree
+# root); we resolve it here so a subsequent `cd` in the caller doesn't
+# break the hash. Fail loudly if the path can't be resolved — silently
+# emitting an empty-input hash would cache a wrong result.
 _compute_test_hash() {
     local dist_root="$1"
     local heads_test_dir="$2"
     local runner_script="$3"
+
+    if [ ! -f "$runner_script" ]; then
+        echo "test-cache: runner script not found: $runner_script (cwd: $PWD)" >&2
+        return 1
+    fi
+    # Resolve to absolute so a later `cd` doesn't invalidate the path.
+    local abs_runner
+    abs_runner=$(cd "$(dirname "$runner_script")" && pwd)/$(basename "$runner_script")
+
     # Collect all relevant files, sort for determinism, hash each + list.
     {
         if [ -d "$dist_root" ]; then
@@ -92,6 +109,6 @@ _compute_test_hash() {
         if [ -d "$heads_test_dir" ]; then
             find "$heads_test_dir" -type f 2>/dev/null
         fi
-        echo "$runner_script"
-    } | LC_ALL=C sort | xargs shasum -a 256 2>/dev/null | shasum -a 256 | awk '{print $1}'
+        echo "$abs_runner"
+    } | LC_ALL=C sort | xargs shasum -a 256 | shasum -a 256 | awk '{print $1}'
 }

@@ -35,9 +35,12 @@ for the full picture.
 - **Generated Haskell kernel** ([`dist/haskell/hydra-kernel/src/main/haskell/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-kernel/src/main/haskell))
   - `Hydra/Core.hs`, `Hydra/Graph.hs`, etc. — generated from the kernel DSL sources
 
-- **Generated coder output** — per-package and catch-all directories under `dist/haskell/`
+- **Generated coder output** — per-package directories under `dist/haskell/`
   - [`dist/haskell/hydra-haskell/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-haskell/src/main/haskell) — Haskell coder
-  - [`dist/haskell/hydra-ext/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-ext/src/main/haskell) — Java, Python, Scala, Lisp, and other coders
+  - [`dist/haskell/hydra-java/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-java/src/main/haskell), [`hydra-python/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-python/src/main/haskell), [`hydra-scala/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-scala/src/main/haskell), [`hydra-lisp/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-lisp/src/main/haskell) — per-target coders
+  - [`dist/haskell/hydra-pg/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-pg/src/main/haskell), [`hydra-rdf/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-rdf/src/main/haskell) — domain coders (property graphs, RDF/SHACL)
+  - [`dist/haskell/hydra-ext/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-ext/src/main/haskell) — long-tail coders (Avro, Protobuf, GraphQL, Cpp, Csharp, Go, Rust, TypeScript, Yaml, ...)
+  - [`dist/haskell/hydra-coq/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-coq/src/main/haskell), [`hydra-javascript/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-javascript/src/main/haskell), [`hydra-wasm/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-wasm/src/main/haskell) — additional targets
 
 The Haskell head is the **bootstrapping implementation**: the DSL sources in `packages/`
 are compiled through it to generate code for Java, Python, Scala, Lisp, and other languages.
@@ -195,8 +198,12 @@ writeJava    "../../dist/java/hydra-kernel/src/main/java"       mainModules main
 
 For extension coders (Avro, Protobuf, GraphQL, ...), import `Hydra.ExtGeneration`
 instead and use the same `write*` functions with the ext-specific module lists.
-See [`packages/hydra-ext/README.md`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/README.md)
-for the full list of supported targets.
+The supported extension targets live under
+[`packages/hydra-ext/src/main/haskell/Hydra/Sources/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-ext/src/main/haskell/Hydra/Sources)
+(Avro, Cpp, Csharp, Datalog, Geojson, Go, GraphQL, JsonSchema, Pegasus, Protobuf, Rust, TypeScript, Yaml, ...).
+Property graph and RDF coders live in
+[`packages/hydra-pg/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-pg) and
+[`packages/hydra-rdf/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-rdf).
 
 ## Working with Hydra
 

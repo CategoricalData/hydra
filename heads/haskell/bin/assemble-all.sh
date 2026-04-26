@@ -34,7 +34,7 @@ cd "$HYDRA_ROOT_DIR/heads/haskell"
 stack build hydra:exe:bootstrap-from-json >/dev/null 2>&1
 
 # Invalidate per-target digests so Stage 7 can't trust stale records.
-rm -f "$DIST_ROOT"/*/digest.json
+rm -f "$DIST_ROOT"/*/src/main/digest.json "$DIST_ROOT"/*/src/test/digest.json
 
 echo "Step 1: Generating main haskell modules for every package..."
 # --include-ext is omitted: hydra-ext has targetLanguages:[] so its
@@ -54,33 +54,28 @@ stack exec bootstrap-from-json -- \
     --include-coders --include-dsls --include-tests \
     --output "$DIST_ROOT"
 
-# Per-package post-processing for hydra-kernel: TestGraph.hs patch.
-TESTGRAPH="$DIST_ROOT/hydra-kernel/src/test/haskell/Hydra/Test/TestGraph.hs"
-if [ -f "$TESTGRAPH" ]; then
-    echo ""
-    echo "Step 3: Patching hydra-kernel TestGraph.hs..."
-    sed -i.bak 's/import qualified Hydra.Lexical as Lexical$/import qualified Hydra.Lexical as Lexical\nimport qualified Hydra.Test.TestEnv as TestEnv/' "$TESTGRAPH"
-    sed -i.bak 's/testGraph = Lexical.emptyGraph/testGraph = TestEnv.testGraph testTypes/' "$TESTGRAPH"
-    sed -i.bak 's/testContext = Lexical.emptyContext/testContext = TestEnv.testContext/' "$TESTGRAPH"
-    rm -f "$TESTGRAPH.bak"
-fi
+# No per-package post-processing today — the generator emits
+# Hydra.Test.TestEnv references directly. See docs/recipes/maintenance.md
+# "Known accepted patches" for the history.
 
 cd "$HYDRA_ROOT_DIR"
 
-# Refresh per-target digests for fresh-check cache.
+# Refresh per-source-set digests for fresh-check cache.
 for pkg_dir in "$DIST_ROOT"/*/; do
     pkg=$(basename "$pkg_dir")
-    input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/digest.json"
-    # Strip trailing slash so the digest path is stable.
     pkg_dir_trim="${pkg_dir%/}"
-    output_digest="$pkg_dir_trim/digest.json"
-    if [ -f "$input_digest" ]; then
-        (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
-         stack exec digest-check -- refresh \
-            --inputs "$input_digest" \
-            --output-dir "$pkg_dir_trim" \
-            --output-digest "$output_digest")
-    fi
+    for set_name in main test; do
+        input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/src/$set_name/digest.json"
+        out_set_dir="$pkg_dir_trim/src/$set_name/haskell"
+        out_digest="$pkg_dir_trim/src/$set_name/digest.json"
+        if [ -f "$input_digest" ] && [ -d "$out_set_dir" ]; then
+            (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
+             stack exec digest-check -- refresh \
+                --inputs "$input_digest" \
+                --output-dir "$out_set_dir" \
+                --output-digest "$out_digest")
+        fi
+    done
 done
 
 echo ""

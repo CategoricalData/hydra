@@ -170,10 +170,10 @@ module_ = Module ns definitions
       toDefinition encodeLogicalOrOperation,
       toDefinition encodeMap,
       toDefinition encodeMapEntry,
+      toDefinition encodeMemInitializer,
       toDefinition encodeMemberAccessOperation,
       toDefinition encodeMemberDeclaration,
       toDefinition encodeMemberSpecification,
-      toDefinition encodeMemInitializer,
       toDefinition encodeModuloOperation,
       toDefinition encodeMultiplicativeExpression,
       toDefinition encodeMultiplyOperation,
@@ -998,6 +998,16 @@ encodeMapEntry = define "encodeMapEntry" $
       Serialization.cst @@ string "->",
       encodeExpression @@ var "val"]
 
+encodeMemInitializer :: TTermDefinition (Cpp.MemInitializer -> Expr)
+encodeMemInitializer = define "encodeMemInitializer" $
+  doc "Convert a member initializer to an expression" $
+  lambda "mi" $ lets [
+    "name">: project Cpp._MemInitializer Cpp._MemInitializer_name @@ var "mi",
+    "args">: project Cpp._MemInitializer Cpp._MemInitializer_arguments @@ var "mi"] $
+    Serialization.noSep @@ list [
+      Serialization.cst @@ var "name",
+      Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeExpression (var "args")))]
+
 encodeMemberAccessOperation :: TTermDefinition (Cpp.MemberAccessOperation -> Expr)
 encodeMemberAccessOperation = define "encodeMemberAccessOperation" $
   doc "Convert a member access operation to an expression" $
@@ -1029,16 +1039,6 @@ encodeMemberSpecification = define "encodeMemberSpecification" $
       Cpp._MemberSpecification_accessLabel>>: lambda "a" $
         Serialization.noSep @@ list [encodeAccessSpecifier @@ var "a", Serialization.cst @@ string ":"],
       Cpp._MemberSpecification_member>>: lambda "d" $ encodeMemberDeclaration @@ var "commas" @@ var "d"]
-
-encodeMemInitializer :: TTermDefinition (Cpp.MemInitializer -> Expr)
-encodeMemInitializer = define "encodeMemInitializer" $
-  doc "Convert a member initializer to an expression" $
-  lambda "mi" $ lets [
-    "name">: project Cpp._MemInitializer Cpp._MemInitializer_name @@ var "mi",
-    "args">: project Cpp._MemInitializer Cpp._MemInitializer_arguments @@ var "mi"] $
-    Serialization.noSep @@ list [
-      Serialization.cst @@ var "name",
-      Serialization.parens @@ (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map encodeExpression (var "args")))]
 
 encodeModuloOperation :: TTermDefinition (Cpp.ModuloOperation -> Expr)
 encodeModuloOperation = define "encodeModuloOperation" $

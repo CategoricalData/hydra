@@ -30,46 +30,14 @@ while [ $# -gt 0 ]; do
 done
 
 OUT_DIR="$DIST_ROOT/$PACKAGE"
-INPUT_DIGEST="$HYDRA_ROOT_DIR/dist/json/$PACKAGE/digest.json"
-OUTPUT_DIGEST="$OUT_DIR/digest.json"
-
-# Cheap Python pre-check: compare input digest hashes to recorded
-# output digest inputs. Avoids stack-exec startup for warm runs.
-if [ -f "$INPUT_DIGEST" ] && [ -f "$OUTPUT_DIGEST" ]; then
-    if python3 -c "
-import json, sys
-try:
-    out = json.load(open('$OUTPUT_DIGEST'))
-    inp = json.load(open('$INPUT_DIGEST'))
-    recorded = {k: (v.get('hash') if isinstance(v, dict) else v)
-                for k, v in out.get('inputs', {}).items()}
-    current = inp.get('hashes', inp)
-    sys.exit(0 if recorded == current else 1)
-except Exception:
-    sys.exit(1)
-" 2>/dev/null; then
-        echo "  Cache hit; skipping work."
-        echo "=== Done. $PACKAGE (cache hit) ==="
-        exit 0
-    fi
-fi
-
-# Freshness check: skip the slow path when nothing has changed.
-if [ -f "$INPUT_DIGEST" ] && [ -f "$OUTPUT_DIGEST" ]; then
-    if (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
-        stack exec digest-check -- fresh \
-            --inputs "$INPUT_DIGEST" \
-            --output-dir "$OUT_DIR" \
-            --output-digest "$OUTPUT_DIGEST" 2>/dev/null); then
-        echo "  Cache hit; skipping work."
-        echo "=== Done. $PACKAGE (cache hit) ==="
-        exit 0
-    fi
-fi
-
-# Cache miss: invalidate the per-target digest so Stage 7 can't trust stale records.
-rm -f "$OUTPUT_DIGEST"
-
+OUT_MAIN="$OUT_DIR/src/main/common-lisp"
+OUT_TEST="$OUT_DIR/src/test/common-lisp"
+DIST_JSON_ROOT="$HYDRA_ROOT_DIR/dist/json"
+INPUT_DIGEST_MAIN="$DIST_JSON_ROOT/$PACKAGE/src/main/digest.json"
+INPUT_DIGEST_TEST="$DIST_JSON_ROOT/$PACKAGE/src/test/digest.json"
+OUTPUT_DIGEST_MAIN="$OUT_DIR/src/main/digest.json"
+OUTPUT_DIGEST_TEST="$OUT_DIR/src/test/digest.json"
+TEST_JSON_DIR="$DIST_JSON_ROOT/$PACKAGE/src/test/json"
 
 echo "=== Assembling Common Lisp distribution: $PACKAGE ==="
 echo "  Output: $OUT_DIR"
@@ -77,58 +45,48 @@ echo ""
 
 HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 
-# Per-source-set caches: skip regeneration of main and test source sets
-# independently. See heads/java/bin/assemble-distribution.sh for the
-# pattern; same shape across every target language.
-MAIN_INPUT_HASH_FILE="$OUT_DIR/.main-input-hash.txt"
-TEST_INPUT_HASH_FILE="$OUT_DIR/.test-input-hash.txt"
-MAIN_JSON_DIR="$HYDRA_ROOT_DIR/dist/json/$PACKAGE/src/main/json"
-TEST_JSON_DIR="$HYDRA_ROOT_DIR/dist/json/$PACKAGE/src/test/json"
-hash_dir() {
-    local d="$1"
-    if [ -d "$d" ]; then
-        find "$d" -type f -name '*.json' 2>/dev/null \
-            | LC_ALL=C sort | xargs shasum -a 256 2>/dev/null \
-            | shasum -a 256 | awk '{print $1}'
-    else
-        echo ""
-    fi
-}
+# Per-source-set freshness check via digest-check. See
+# heads/java/bin/assemble-distribution.sh for the pattern; same shape
+# across every target language.
+source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 
 # Step 1: Main modules.
-MAIN_HASH=$(hash_dir "$MAIN_JSON_DIR")
-RECORDED_MAIN=""
-[ -f "$MAIN_INPUT_HASH_FILE" ] && RECORDED_MAIN=$(cat "$MAIN_INPUT_HASH_FILE")
-if [ -n "$MAIN_HASH" ] && [ "$MAIN_HASH" = "$RECORDED_MAIN" ]; then
+if assemble_check_fresh "$INPUT_DIGEST_MAIN" "$OUT_MAIN" "$OUTPUT_DIGEST_MAIN"; then
     echo "Step 1: Main modules unchanged; skipping main regeneration."
 else
+    rm -f "$OUTPUT_DIGEST_MAIN"
     echo "Step 1: Generating main Common Lisp modules..."
     "$HASKELL_BIN/transform-json-to-lisp.sh" "$PACKAGE" common-lisp main \
         --output "$DIST_ROOT"
-    [ -n "$MAIN_HASH" ] && mkdir -p "$OUT_DIR" && echo "$MAIN_HASH" > "$MAIN_INPUT_HASH_FILE"
+    assemble_refresh_digest "$INPUT_DIGEST_MAIN" "$OUT_MAIN" "$OUTPUT_DIGEST_MAIN"
 fi
 
-# Step 2: Test modules. Any package can have a test source set; today
-# only hydra-kernel does, but the mechanism is uniform.
+# Step 2: Test modules. Any package can have a test source set (just
+# `dist/json/<pkg>/src/test/json/`); the per-source-set digest mechanism
+# is uniform — adding a test dir for any package automatically wires it
+# into the build.
 echo ""
 if [ ! -d "$TEST_JSON_DIR" ]; then
     echo "Step 2: No test sources for $PACKAGE; skipping."
 else
-    TEST_HASH=$(hash_dir "$TEST_JSON_DIR")
-    RECORDED_TEST=""
-    [ -f "$TEST_INPUT_HASH_FILE" ] && RECORDED_TEST=$(cat "$TEST_INPUT_HASH_FILE")
-    if [ "$TEST_HASH" = "$RECORDED_TEST" ]; then
+    if assemble_check_fresh "$INPUT_DIGEST_TEST" "$OUT_TEST" "$OUTPUT_DIGEST_TEST"; then
         echo "Step 2: Test modules unchanged; skipping test regeneration."
     else
+        rm -f "$OUTPUT_DIGEST_TEST"
         echo "Step 2: Generating test Common Lisp modules..."
         "$HASKELL_BIN/transform-json-to-lisp.sh" "$PACKAGE" common-lisp test \
             --output "$DIST_ROOT"
-        mkdir -p "$OUT_DIR" && echo "$TEST_HASH" > "$TEST_INPUT_HASH_FILE"
+        assemble_refresh_digest "$INPUT_DIGEST_TEST" "$OUT_TEST" "$OUTPUT_DIGEST_TEST"
     fi
 fi
 
 case "$PACKAGE" in
     hydra-kernel)
+        # (Common Lisp exception: do NOT copy heads/lisp/common-lisp/.../lib/
+        # into dist/common-lisp/hydra-kernel/. The Common Lisp test runner
+        # loads from both heads and dist, so a copy could produce conflicting
+        # symbol definitions at load time.)
+
         # Patch test_graph.lisp — same pattern as Clojure and Scheme: delete
         # empty defs, append full graph/context defs at end of file.
         CL_TESTGRAPH="$OUT_DIR/src/test/common-lisp/hydra/test/test_graph.lisp"
@@ -168,13 +126,5 @@ CLEOF
 esac
 
 echo ""
-# Refresh the per-target digest so future fresh-checks short-circuit.
-if [ -f "$INPUT_DIGEST" ]; then
-    (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
-     stack exec digest-check -- refresh \
-        --inputs "$INPUT_DIGEST" \
-        --output-dir "$OUT_DIR" \
-        --output-digest "$OUTPUT_DIGEST")
-fi
 
 echo "=== Done. $PACKAGE assembled under $OUT_DIR ==="

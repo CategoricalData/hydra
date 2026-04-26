@@ -2,21 +2,6 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.rdf.utils.key_rdfBlankNodeCounter",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "The key used for tracking blank node counters"}}}],
-            "body": {
-              "wrap": {
-                "body": {"literal": {"string": "rdfBlankNodeCounter"}},
-                "typeName": "hydra.core.Name"}}}},
-        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
-    {
-      "term": {
         "name": "hydra.rdf.utils.descriptionsToGraph",
         "term": {
           "annotated": {
@@ -78,23 +63,6 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.rdf.utils.emptyRdfGraph",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "An empty RDF graph"}}}],
-            "body": {
-              "wrap": {
-                "body": {
-                  "typeApplication": {
-                    "body": {"variable": "hydra.lib.sets.empty"},
-                    "type": {"variable": "hydra.rdf.syntax.Triple"}}},
-                "typeName": "hydra.rdf.syntax.Graph"}}}},
-        "type": {"type": {"variable": "hydra.rdf.syntax.Graph"}, "variables": []}}},
-    {
-      "term": {
         "name": "hydra.rdf.utils.emptyLangStrings",
         "term": {
           "annotated": {
@@ -115,6 +83,23 @@
         "type": {
           "type": {"variable": "hydra.rdf.syntax.LangStrings"},
           "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.rdf.utils.emptyRdfGraph",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {"literal": {"string": "An empty RDF graph"}}}],
+            "body": {
+              "wrap": {
+                "body": {
+                  "typeApplication": {
+                    "body": {"variable": "hydra.lib.sets.empty"},
+                    "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                "typeName": "hydra.rdf.syntax.Graph"}}}},
+        "type": {"type": {"variable": "hydra.rdf.syntax.Graph"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rdf.utils.encodeLiteral",
@@ -712,6 +697,21 @@
               "codomain": {"variable": "hydra.rdf.syntax.Iri"},
               "domain": {"literal": {"string": {}}}}},
           "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.rdf.utils.key_rdfBlankNodeCounter",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {"string": "The key used for tracking blank node counters"}}}],
+            "body": {
+              "wrap": {
+                "body": {"literal": {"string": "rdfBlankNodeCounter"}},
+                "typeName": "hydra.core.Name"}}}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.rdf.utils.mergeGraphs",

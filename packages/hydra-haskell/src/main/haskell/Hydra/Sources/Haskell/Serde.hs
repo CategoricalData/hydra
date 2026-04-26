@@ -110,6 +110,7 @@ module_ = Module ns definitions
       toDefinition caseExpressionToExpr,
       toDefinition caseRhsToExpr,
       toDefinition classAssertionToExpr,
+      toDefinition constructRecordExpressionToExpr,
       toDefinition constructorToExpr,
       toDefinition constructorWithCommentsToExpr,
       toDefinition dataOrNewtypeToExpr,
@@ -117,7 +118,6 @@ module_ = Module ns definitions
       toDefinition declarationToExpr,
       toDefinition declarationWithCommentsToExpr,
       toDefinition expressionToExpr,
-      toDefinition constructRecordExpressionToExpr,
       toDefinition fieldToExpr,
       toDefinition fieldWithCommentsToExpr,
       toDefinition ifExpressionToExpr,
@@ -132,12 +132,12 @@ module_ = Module ns definitions
       toDefinition patternToExpr,
       toDefinition rightHandSideToExpr,
       toDefinition statementToExpr,
+      toDefinition toHaskellComments,
+      toDefinition toSimpleComments,
       toDefinition typeSignatureToExpr,
       toDefinition typeToExpr,
       toDefinition valueBindingToExpr,
       toDefinition variableToExpr,
-      toDefinition toHaskellComments,
-      toDefinition toSimpleComments,
       toDefinition writeQualifiedName]
 
 alternativeToExpr :: TTermDefinition (H.Alternative -> Expr)
@@ -203,6 +203,20 @@ classAssertionToExpr = haskellSerdeDefinition "classAssertionToExpr" $
     "types">: project H._ClassAssertion H._ClassAssertion_types @@ var "clsAsrt"] $
     Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (list [
       Serialization.commaSep @@ Serialization.halfBlockStyle @@ (Lists.map (typeToExpr) (var "types"))]))
+
+constructRecordExpressionToExpr :: TTermDefinition (H.ConstructRecordExpression -> Expr)
+constructRecordExpressionToExpr = haskellSerdeDefinition "constructRecordExpressionToExpr" $
+  doc "Convert a record construction expression to an AST expression" $
+  lambda "constructRecord" $ lets [
+    "name">: project H._ConstructRecordExpression H._ConstructRecordExpression_name @@ var "constructRecord",
+    "updates">: project H._ConstructRecordExpression H._ConstructRecordExpression_fields @@ var "constructRecord",
+    "fromUpdate">: lambda "update" $ lets [
+      "fn">: project H._FieldUpdate H._FieldUpdate_name @@ var "update",
+      "val">: project H._FieldUpdate H._FieldUpdate_value @@ var "update"] $
+      Serialization.ifx @@ HaskellOperators.defineOp @@ (nameToExpr @@ var "fn") @@ (expressionToExpr @@ var "val"),
+    "body">: Serialization.commaSep @@ Serialization.halfBlockStyle @@ (Lists.map (var "fromUpdate") (var "updates"))] $
+    Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (list [
+      Serialization.brackets @@ Serialization.curlyBraces @@ Serialization.halfBlockStyle @@ var "body"]))
 
 constructorToExpr :: TTermDefinition (H.Constructor -> Expr)
 constructorToExpr = haskellSerdeDefinition "constructorToExpr" $
@@ -324,20 +338,6 @@ expressionToExpr = haskellSerdeDefinition "expressionToExpr" $
         Serialization.parenList @@ false @@ (Lists.map (expressionToExpr) (var "exprs")),
       H._Expression_variable>>: lambda "name" $ nameToExpr @@ var "name"]
 
-constructRecordExpressionToExpr :: TTermDefinition (H.ConstructRecordExpression -> Expr)
-constructRecordExpressionToExpr = haskellSerdeDefinition "constructRecordExpressionToExpr" $
-  doc "Convert a record construction expression to an AST expression" $
-  lambda "constructRecord" $ lets [
-    "name">: project H._ConstructRecordExpression H._ConstructRecordExpression_name @@ var "constructRecord",
-    "updates">: project H._ConstructRecordExpression H._ConstructRecordExpression_fields @@ var "constructRecord",
-    "fromUpdate">: lambda "update" $ lets [
-      "fn">: project H._FieldUpdate H._FieldUpdate_name @@ var "update",
-      "val">: project H._FieldUpdate H._FieldUpdate_value @@ var "update"] $
-      Serialization.ifx @@ HaskellOperators.defineOp @@ (nameToExpr @@ var "fn") @@ (expressionToExpr @@ var "val"),
-    "body">: Serialization.commaSep @@ Serialization.halfBlockStyle @@ (Lists.map (var "fromUpdate") (var "updates"))] $
-    Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (list [
-      Serialization.brackets @@ Serialization.curlyBraces @@ Serialization.halfBlockStyle @@ var "body"]))
-
 fieldToExpr :: TTermDefinition (H.Field -> Expr)
 fieldToExpr = haskellSerdeDefinition "fieldToExpr" $
   doc "Convert a field declaration to an AST expression" $
@@ -439,7 +439,6 @@ lambdaExpressionToExpr = haskellSerdeDefinition "lambdaExpressionToExpr" $
 --
 --      H._Literal_integer>>: lambda "i" $ Literals.showBigint $ var "i",
 --      H._Literal_string>>: lambda "s" $ Literals.showString $ var "s"]
-
 
 -- KNOWN LIMITATION: when generating Haskell source from Double/Float values,
 -- NaN and Infinity come through as "NaN"/"Infinity"/"-Infinity" (from Haskell's Show),
@@ -561,6 +560,16 @@ statementToExpr = haskellSerdeDefinition "statementToExpr" $
   doc "Convert a statement to an AST expression" $
   lambda "stmt" $ expressionToExpr @@ (unwrap H._Statement @@ var "stmt")
 
+toHaskellComments :: TTermDefinition (String -> String)
+toHaskellComments = haskellSerdeDefinition "toHaskellComments" $
+  doc "Convert a string to Haddock documentation comments" $
+  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map (lambda "s" $ Strings.cat2 (string "-- | ") (var "s")) (Strings.lines $ var "c")
+
+toSimpleComments :: TTermDefinition (String -> String)
+toSimpleComments = haskellSerdeDefinition "toSimpleComments" $
+  doc "Convert a string to simple line comments" $
+  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map (lambda "s" $ Strings.cat2 (string "-- ") (var "s")) (Strings.lines $ var "c")
+
 typeSignatureToExpr :: TTermDefinition (H.TypeSignature -> Expr)
 typeSignatureToExpr = haskellSerdeDefinition "typeSignatureToExpr" $
   doc "Convert a type signature to an AST expression" $
@@ -632,16 +641,6 @@ variableToExpr :: TTermDefinition (H.Variable -> Expr)
 variableToExpr = haskellSerdeDefinition "variableToExpr" $
   doc "Convert a type variable to an AST expression" $
   lambda "variable" $ nameToExpr @@ (unwrap H._Variable @@ var "variable")
-
-toHaskellComments :: TTermDefinition (String -> String)
-toHaskellComments = haskellSerdeDefinition "toHaskellComments" $
-  doc "Convert a string to Haddock documentation comments" $
-  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map (lambda "s" $ Strings.cat2 (string "-- | ") (var "s")) (Strings.lines $ var "c")
-
-toSimpleComments :: TTermDefinition (String -> String)
-toSimpleComments = haskellSerdeDefinition "toSimpleComments" $
-  doc "Convert a string to simple line comments" $
-  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map (lambda "s" $ Strings.cat2 (string "-- ") (var "s")) (Strings.lines $ var "c")
 
 writeQualifiedName :: TTermDefinition (H.QualifiedName -> String)
 writeQualifiedName = haskellSerdeDefinition "writeQualifiedName" $

@@ -101,69 +101,23 @@ module_ = Module ns definitions
     Just "SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions"
   where
     definitions = [
-      toDefinition err,
-      toDefinition unexpectedE,
-      toDefinition shaclCoder,
       toDefinition common,
       toDefinition defaultCommonProperties,
       toDefinition elementIri,
       toDefinition encodeField,
       toDefinition encodeFieldType,
+      toDefinition encodeList,
       toDefinition encodeLiteralType,
       toDefinition encodeTerm,
-      toDefinition encodeList,
-      toDefinition foldAccumResult,
       toDefinition encodeType,
+      toDefinition err,
+      toDefinition foldAccumResult,
       toDefinition node,
       toDefinition property,
+      toDefinition shaclCoder,
+      toDefinition unexpectedE,
       toDefinition withType]
 
-
--- | Construct a Left (InContext Error) error
-err :: TTermDefinition (Context -> String -> Either Error a)
-err = define "err" $
-  doc "Construct an error result with a context and message" $
-  lambda "cx" $ lambda "msg" $
-    left (Error.errorOther $ Error.otherError (var "msg"))
-
--- | Construct an 'expected X, found Y' error
-unexpectedE :: TTermDefinition (Context -> String -> String -> Either Error a)
-unexpectedE = define "unexpectedE" $
-  doc "Construct an error for unexpected input, given expected and found descriptions" $
-  lambda "cx" $ lambda "expected" $ lambda "found" $
-    err @@ var "cx" @@ (Strings.cat $ list [
-      string "Expected ",
-      var "expected",
-      string ", found: ",
-      var "found"])
-
--- | Main SHACL coder: encode a module's type elements into a ShapesGraph
-shaclCoder :: TTermDefinition (Module -> Context -> Graph -> Either Error (Shacl.ShapesGraph, Context))
-shaclCoder = define "shaclCoder" $
-  doc "Encode a module's type elements as a SHACL ShapesGraph" $
-  lambda "mod" $ lambda "cx" $ lambda "g" $ lets [
-    "typeEls">: Maybes.cat (Lists.map
-      ("d" ~> cases _Definition (var "d") (Just nothing) [
-        _Definition_type>>: "td" ~>
-          just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Packaging.typeDefinitionType $ var "td"))])
-      (Packaging.moduleDefinitions (var "mod"))),
-    "toShape">: lambda "el" $
-      Eithers.bind
-        (Eithers.bimap
-          ("__de" ~> Error.errorOther (Error.otherError ((unwrap _DecodingError) @@ var "__de")))
-          ("__t" ~> var "__t")
-          (Phantoms.decoderFor _Type @@ var "g" @@ (Core.bindingTerm (var "el"))))
-        ("__typ" ~> Eithers.map
-          ("__cp" ~> record Shacl._Definition [
-            Shacl._Definition_iri>>: elementIri @@ var "el",
-            Shacl._Definition_target>>: inject Shacl._Shape Shacl._Shape_node
-              (record Shacl._NodeShape [Shacl._NodeShape_common>>: var "__cp"])])
-          (encodeType @@ (Core.bindingName (var "el")) @@ var "__typ" @@ var "cx"))] $
-    Eithers.map
-      ("__shapes" ~> pair
-        (wrap Shacl._ShapesGraph (Sets.fromList (var "__shapes")))
-        (var "cx"))
-      (Eithers.mapList (var "toShape") (var "typeEls"))
 
 -- | Construct CommonProperties with the given constraints and defaults for everything else
 common :: TTermDefinition ([Shacl.CommonConstraint] -> Shacl.CommonProperties)
@@ -251,6 +205,49 @@ encodeFieldType = define "encodeFieldType" $
         (encodeType @@ var "rname" @@ var "t" @@ var "cx")] $
     -- Dispatch on the type: peel optional/set wrappers, then build shape
     var "forType" @@ (just (bigint 1)) @@ (just (bigint 1)) @@ var "ftype"
+
+-- | Helper for encoding lists as RDF (recursive)
+encodeList :: TTermDefinition (Rdf.Resource -> [Term] -> Context -> Graph -> Either Error ([Rdf.Description], Context))
+encodeList = define "encodeList" $
+  doc "Encode a list of terms as RDF list structure" $
+  lambda "subj" $ lambda "terms" $ lambda "cx0" $ lambda "g" $
+    Logic.ifElse (Lists.null (var "terms"))
+      (right $ pair
+        (list [record Rdf._Description [
+          Rdf._Description_subject>>: inject Rdf._Node Rdf._Node_iri (wrap Rdf._Iri (string "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")),
+          Rdf._Description_graph>>: wrap Rdf._Graph Sets.empty]])
+        (var "cx0"))
+      (Maybes.maybe
+        (right $ pair (list ([] :: [TTerm Rdf.Description])) (var "cx0"))
+        (lambda "p" $ lets [
+          "pair1">: nextBlankNode @@ var "cx0",
+          "node1">: Pairs.first (var "pair1"),
+          "cx1">: Pairs.second (var "pair1")] $
+          Eithers.bind
+            (encodeTerm @@ var "node1" @@ Pairs.first (var "p") @@ var "cx1" @@ var "g")
+            ("__r1" ~> lets [
+              "fdescs">: Pairs.first (var "__r1"),
+              "cx2">: Pairs.second (var "__r1"),
+              "firstTriples">: Lists.concat2
+                (triplesOf @@ var "fdescs")
+                (forObjects @@ var "subj" @@ (rdfIri @@ string "first") @@ (subjectsOf @@ var "fdescs")),
+              "pair2">: nextBlankNode @@ var "cx2",
+              "next">: Pairs.first (var "pair2"),
+              "cx3">: Pairs.second (var "pair2")] $
+              Eithers.map
+                ("__r2" ~> lets [
+                  "rdescs">: Pairs.first (var "__r2"),
+                  "cx4">: Pairs.second (var "__r2"),
+                  "restTriples">: Lists.concat2
+                    (triplesOf @@ var "rdescs")
+                    (forObjects @@ var "subj" @@ (rdfIri @@ string "rest") @@ (subjectsOf @@ var "rdescs"))] $
+                  pair
+                    (list [record Rdf._Description [
+                      Rdf._Description_subject>>: resourceToNode @@ var "subj",
+                      Rdf._Description_graph>>: wrap Rdf._Graph (Sets.fromList (Lists.concat2 (var "firstTriples") (var "restTriples")))]])
+                    (var "cx4"))
+                (encodeList @@ var "next" @@ Pairs.second (var "p") @@ var "cx3" @@ var "g")))
+        (Lists.uncons (var "terms")))
 
 -- | Encode a Hydra LiteralType as SHACL CommonProperties with a datatype constraint
 encodeLiteralType :: TTermDefinition (LiteralType -> Shacl.CommonProperties)
@@ -376,66 +373,6 @@ encodeTerm = define "encodeTerm" $
             (Pairs.second (var "__r")))
           (encodeField @@ var "rname" @@ var "subject" @@ var "field" @@ var "cx" @@ var "g")]
 
--- | Helper for encoding lists as RDF (recursive)
-encodeList :: TTermDefinition (Rdf.Resource -> [Term] -> Context -> Graph -> Either Error ([Rdf.Description], Context))
-encodeList = define "encodeList" $
-  doc "Encode a list of terms as RDF list structure" $
-  lambda "subj" $ lambda "terms" $ lambda "cx0" $ lambda "g" $
-    Logic.ifElse (Lists.null (var "terms"))
-      (right $ pair
-        (list [record Rdf._Description [
-          Rdf._Description_subject>>: inject Rdf._Node Rdf._Node_iri (wrap Rdf._Iri (string "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")),
-          Rdf._Description_graph>>: wrap Rdf._Graph Sets.empty]])
-        (var "cx0"))
-      (Maybes.maybe
-        (right $ pair (list ([] :: [TTerm Rdf.Description])) (var "cx0"))
-        (lambda "p" $ lets [
-          "pair1">: nextBlankNode @@ var "cx0",
-          "node1">: Pairs.first (var "pair1"),
-          "cx1">: Pairs.second (var "pair1")] $
-          Eithers.bind
-            (encodeTerm @@ var "node1" @@ Pairs.first (var "p") @@ var "cx1" @@ var "g")
-            ("__r1" ~> lets [
-              "fdescs">: Pairs.first (var "__r1"),
-              "cx2">: Pairs.second (var "__r1"),
-              "firstTriples">: Lists.concat2
-                (triplesOf @@ var "fdescs")
-                (forObjects @@ var "subj" @@ (rdfIri @@ string "first") @@ (subjectsOf @@ var "fdescs")),
-              "pair2">: nextBlankNode @@ var "cx2",
-              "next">: Pairs.first (var "pair2"),
-              "cx3">: Pairs.second (var "pair2")] $
-              Eithers.map
-                ("__r2" ~> lets [
-                  "rdescs">: Pairs.first (var "__r2"),
-                  "cx4">: Pairs.second (var "__r2"),
-                  "restTriples">: Lists.concat2
-                    (triplesOf @@ var "rdescs")
-                    (forObjects @@ var "subj" @@ (rdfIri @@ string "rest") @@ (subjectsOf @@ var "rdescs"))] $
-                  pair
-                    (list [record Rdf._Description [
-                      Rdf._Description_subject>>: resourceToNode @@ var "subj",
-                      Rdf._Description_graph>>: wrap Rdf._Graph (Sets.fromList (Lists.concat2 (var "firstTriples") (var "restTriples")))]])
-                    (var "cx4"))
-                (encodeList @@ var "next" @@ Pairs.second (var "p") @@ var "cx3" @@ var "g")))
-        (Lists.uncons (var "terms")))
-
--- | Fold over a list, accumulating results and threading context
-foldAccumResult :: TTermDefinition ((Context -> a -> Either Error (b, Context)) -> Context -> [a] -> Either Error ([b], Context))
-foldAccumResult = define "foldAccumResult" $
-  doc "Fold over a list, accumulating results and threading context through each step" $
-  lambda "f" $ lambda "cx" $ lambda "xs" $
-    Maybes.maybe
-      (right (pair (list ([] :: [TTerm b])) (var "cx")))
-      (lambda "p" $
-        Eithers.bind
-          (var "f" @@ var "cx" @@ Pairs.first (var "p"))
-          ("__r" ~> Eithers.map
-            ("__rest" ~> pair
-              (Lists.cons (Pairs.first (var "__r")) (Pairs.first (var "__rest")))
-              (Pairs.second (var "__rest")))
-            (foldAccumResult @@ var "f" @@ (Pairs.second (var "__r")) @@ Pairs.second (var "p"))))
-      (Lists.uncons (var "xs"))
-
 -- | Encode a Hydra Type as SHACL CommonProperties
 encodeType :: TTermDefinition (Name -> Type -> Context -> Either Error Shacl.CommonProperties)
 encodeType = define "encodeType" $
@@ -479,6 +416,30 @@ encodeType = define "encodeType" $
             (Sets.fromList (list [
               inject Shacl._Reference Shacl._Reference_named (nameToIri @@ var "vname")]))])]
 
+-- | Construct a Left (InContext Error) error
+err :: TTermDefinition (Context -> String -> Either Error a)
+err = define "err" $
+  doc "Construct an error result with a context and message" $
+  lambda "cx" $ lambda "msg" $
+    left (Error.errorOther $ Error.otherError (var "msg"))
+
+-- | Fold over a list, accumulating results and threading context
+foldAccumResult :: TTermDefinition ((Context -> a -> Either Error (b, Context)) -> Context -> [a] -> Either Error ([b], Context))
+foldAccumResult = define "foldAccumResult" $
+  doc "Fold over a list, accumulating results and threading context through each step" $
+  lambda "f" $ lambda "cx" $ lambda "xs" $
+    Maybes.maybe
+      (right (pair (list ([] :: [TTerm b])) (var "cx")))
+      (lambda "p" $
+        Eithers.bind
+          (var "f" @@ var "cx" @@ Pairs.first (var "p"))
+          ("__r" ~> Eithers.map
+            ("__rest" ~> pair
+              (Lists.cons (Pairs.first (var "__r")) (Pairs.first (var "__rest")))
+              (Pairs.second (var "__rest")))
+            (foldAccumResult @@ var "f" @@ (Pairs.second (var "__r")) @@ Pairs.second (var "p"))))
+      (Lists.uncons (var "xs"))
+
 -- | Construct a SHACL node shape from a list of common constraints
 node :: TTermDefinition ([Shacl.CommonConstraint] -> Shacl.Shape)
 node = define "node" $
@@ -500,6 +461,45 @@ property = define "property" $
       Shacl._PropertyShape_name>>: wrap Rdf._LangStrings Maps.empty,
       Shacl._PropertyShape_order>>: nothing,
       Shacl._PropertyShape_path>>: var "iri"]
+
+-- | Main SHACL coder: encode a module's type elements into a ShapesGraph
+shaclCoder :: TTermDefinition (Module -> Context -> Graph -> Either Error (Shacl.ShapesGraph, Context))
+shaclCoder = define "shaclCoder" $
+  doc "Encode a module's type elements as a SHACL ShapesGraph" $
+  lambda "mod" $ lambda "cx" $ lambda "g" $ lets [
+    "typeEls">: Maybes.cat (Lists.map
+      ("d" ~> cases _Definition (var "d") (Just nothing) [
+        _Definition_type>>: "td" ~>
+          just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Packaging.typeDefinitionType $ var "td"))])
+      (Packaging.moduleDefinitions (var "mod"))),
+    "toShape">: lambda "el" $
+      Eithers.bind
+        (Eithers.bimap
+          ("__de" ~> Error.errorOther (Error.otherError ((unwrap _DecodingError) @@ var "__de")))
+          ("__t" ~> var "__t")
+          (Phantoms.decoderFor _Type @@ var "g" @@ (Core.bindingTerm (var "el"))))
+        ("__typ" ~> Eithers.map
+          ("__cp" ~> record Shacl._Definition [
+            Shacl._Definition_iri>>: elementIri @@ var "el",
+            Shacl._Definition_target>>: inject Shacl._Shape Shacl._Shape_node
+              (record Shacl._NodeShape [Shacl._NodeShape_common>>: var "__cp"])])
+          (encodeType @@ (Core.bindingName (var "el")) @@ var "__typ" @@ var "cx"))] $
+    Eithers.map
+      ("__shapes" ~> pair
+        (wrap Shacl._ShapesGraph (Sets.fromList (var "__shapes")))
+        (var "cx"))
+      (Eithers.mapList (var "toShape") (var "typeEls"))
+
+-- | Construct an 'expected X, found Y' error
+unexpectedE :: TTermDefinition (Context -> String -> String -> Either Error a)
+unexpectedE = define "unexpectedE" $
+  doc "Construct an error for unexpected input, given expected and found descriptions" $
+  lambda "cx" $ lambda "expected" $ lambda "found" $
+    err @@ var "cx" @@ (Strings.cat $ list [
+      string "Expected ",
+      var "expected",
+      string ", found: ",
+      var "found"])
 
 -- | Add an rdf:type triple to an RDF Description
 withType :: TTermDefinition (Name -> Rdf.Description -> Rdf.Description)

@@ -2275,63 +2275,6 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.utils.pyExpressionsToPyArgs",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "Convert a list of Expressions to Args"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "positional",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "exprs"},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "lambda": {
-                                    "body": {
-                                      "inject": {
-                                        "field": {"name": "expression", "term": {"variable": "e"}},
-                                        "typeName": "hydra.python.syntax.PosArg"}},
-                                    "domain": {"variable": "hydra.python.syntax.Expression"},
-                                    "parameter": "e"}},
-                                "function": {
-                                  "typeApplication": {
-                                    "body": {
-                                      "typeApplication": {
-                                        "body": {"variable": "hydra.lib.lists.map"},
-                                        "type": {"variable": "hydra.python.syntax.Expression"}}},
-                                    "type": {"variable": "hydra.python.syntax.PosArg"}}}}}}}},
-                      {
-                        "name": "kwargOrStarred",
-                        "term": {
-                          "typeApplication": {
-                            "body": {"list": []},
-                            "type": {"variable": "hydra.python.syntax.KwargOrStarred"}}}},
-                      {
-                        "name": "kwargOrDoubleStarred",
-                        "term": {
-                          "typeApplication": {
-                            "body": {"list": []},
-                            "type": {"variable": "hydra.python.syntax.KwargOrDoubleStarred"}}}}],
-                    "typeName": "hydra.python.syntax.Args"}},
-                "domain": {"list": {"variable": "hydra.python.syntax.Expression"}},
-                "parameter": "exprs"}}}},
-        "type": {
-          "type": {
-            "function": {
-              "codomain": {"variable": "hydra.python.syntax.Args"},
-              "domain": {"list": {"variable": "hydra.python.syntax.Expression"}}}},
-          "variables": []}}},
-    {
-      "term": {
         "name": "hydra.python.utils.pyExpressionToBitwiseOr",
         "term": {
           "annotated": {
@@ -2734,6 +2677,63 @@
             "function": {
               "codomain": {"variable": "hydra.python.syntax.Statement"},
               "domain": {"variable": "hydra.python.syntax.Expression"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.python.utils.pyExpressionsToPyArgs",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {"literal": {"string": "Convert a list of Expressions to Args"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "record": {
+                    "fields": [
+                      {
+                        "name": "positional",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "exprs"},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "lambda": {
+                                    "body": {
+                                      "inject": {
+                                        "field": {"name": "expression", "term": {"variable": "e"}},
+                                        "typeName": "hydra.python.syntax.PosArg"}},
+                                    "domain": {"variable": "hydra.python.syntax.Expression"},
+                                    "parameter": "e"}},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.lib.lists.map"},
+                                        "type": {"variable": "hydra.python.syntax.Expression"}}},
+                                    "type": {"variable": "hydra.python.syntax.PosArg"}}}}}}}},
+                      {
+                        "name": "kwargOrStarred",
+                        "term": {
+                          "typeApplication": {
+                            "body": {"list": []},
+                            "type": {"variable": "hydra.python.syntax.KwargOrStarred"}}}},
+                      {
+                        "name": "kwargOrDoubleStarred",
+                        "term": {
+                          "typeApplication": {
+                            "body": {"list": []},
+                            "type": {"variable": "hydra.python.syntax.KwargOrDoubleStarred"}}}}],
+                    "typeName": "hydra.python.syntax.Args"}},
+                "domain": {"list": {"variable": "hydra.python.syntax.Expression"}},
+                "parameter": "exprs"}}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.python.syntax.Args"},
+              "domain": {"list": {"variable": "hydra.python.syntax.Expression"}}}},
           "variables": []}}},
     {
       "term": {

@@ -686,15 +686,13 @@ Each language coder needs to know how to encode/decode the new types in the targ
 #### 11.5.4: Verify Generated Code
 
 ```bash
-# Python
-cd packages/hydra-python
+# Python (run from the worktree root, dist paths are relative)
 python3 -m py_compile dist/python/hydra-kernel/src/main/python/hydra/core.py
 python3 -m py_compile dist/python/hydra-kernel/src/main/python/hydra/meta.py
 python3 -m py_compile dist/python/hydra-kernel/src/main/python/hydra/util.py
 
-# Java (if applicable)
-cd packages/hydra-java
-./gradlew compileJava
+# Java (run from the worktree root)
+./gradlew :hydra-java:compileJava
 
 # Scala (if applicable)
 cd packages/hydra-scala

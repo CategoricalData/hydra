@@ -585,284 +585,6 @@
         "type": {"type": {"literal": {"boolean": {}}}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.reduction.etaReduceTerm",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "Eta-reduce a term by removing redundant lambda abstractions"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "noChange",
-                        "term": {"variable": "term"},
-                        "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
-                    "body": {
-                      "let": {
-                        "bindings": [
-                          {
-                            "name": "reduceLambda",
-                            "term": {
-                              "lambda": {
-                                "body": {
-                                  "let": {
-                                    "bindings": [
-                                      {
-                                        "name": "v",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "l"},
-                                            "function": {"project": {"field": "parameter", "typeName": "hydra.core.Lambda"}}}},
-                                        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}],
-                                    "body": {
-                                      "let": {
-                                        "bindings": [
-                                          {
-                                            "name": "d",
-                                            "term": {
-                                              "application": {
-                                                "argument": {"variable": "l"},
-                                                "function": {"project": {"field": "domain", "typeName": "hydra.core.Lambda"}}}},
-                                            "type": {"type": {"maybe": {"variable": "hydra.core.Type"}}, "variables": []}}],
-                                        "body": {
-                                          "let": {
-                                            "bindings": [
-                                              {
-                                                "name": "body",
-                                                "term": {
-                                                  "application": {
-                                                    "argument": {"variable": "l"},
-                                                    "function": {"project": {"field": "body", "typeName": "hydra.core.Lambda"}}}},
-                                                "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
-                                            "body": {
-                                              "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "body"},
-                                                    "function": {"variable": "hydra.reduction.etaReduceTerm"}}},
-                                                "function": {
-                                                  "cases": {
-                                                    "cases": [
-                                                      {
-                                                        "name": "annotated",
-                                                        "term": {
-                                                          "lambda": {
-                                                            "body": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "record": {
-                                                                    "fields": [
-                                                                      {"name": "parameter", "term": {"variable": "v"}},
-                                                                      {"name": "domain", "term": {"variable": "d"}},
-                                                                      {
-                                                                        "name": "body",
-                                                                        "term": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "at"},
-                                                                            "function": {"project": {"field": "body", "typeName": "hydra.core.AnnotatedTerm"}}}}}],
-                                                                    "typeName": "hydra.core.Lambda"}},
-                                                                "function": {"variable": "reduceLambda"}}},
-                                                            "domain": {"variable": "hydra.core.AnnotatedTerm"},
-                                                            "parameter": "at"}}},
-                                                      {
-                                                        "name": "application",
-                                                        "term": {
-                                                          "lambda": {
-                                                            "body": {
-                                                              "let": {
-                                                                "bindings": [
-                                                                  {
-                                                                    "name": "lhs",
-                                                                    "term": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "app"},
-                                                                        "function": {
-                                                                          "project": {"field": "function", "typeName": "hydra.core.Application"}}}},
-                                                                    "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
-                                                                "body": {
-                                                                  "let": {
-                                                                    "bindings": [
-                                                                      {
-                                                                        "name": "rhs",
-                                                                        "term": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "app"},
-                                                                            "function": {
-                                                                              "project": {"field": "argument", "typeName": "hydra.core.Application"}}}},
-                                                                        "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
-                                                                    "body": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "rhs"},
-                                                                            "function": {"variable": "hydra.reduction.etaReduceTerm"}}},
-                                                                        "function": {
-                                                                          "cases": {
-                                                                            "cases": [
-                                                                              {
-                                                                                "name": "annotated",
-                                                                                "term": {
-                                                                                  "lambda": {
-                                                                                    "body": {
-                                                                                      "application": {
-                                                                                        "argument": {
-                                                                                          "record": {
-                                                                                            "fields": [
-                                                                                              {"name": "parameter", "term": {"variable": "v"}},
-                                                                                              {"name": "domain", "term": {"variable": "d"}},
-                                                                                              {
-                                                                                                "name": "body",
-                                                                                                "term": {
-                                                                                                  "inject": {
-                                                                                                    "field": {
-                                                                                                      "name": "application",
-                                                                                                      "term": {
-                                                                                                        "record": {
-                                                                                                          "fields": [
-                                                                                                            {"name": "function", "term": {"variable": "lhs"}},
-                                                                                                            {
-                                                                                                              "name": "argument",
-                                                                                                              "term": {
-                                                                                                                "application": {
-                                                                                                                  "argument": {"variable": "at"},
-                                                                                                                  "function": {"project": {"field": "body", "typeName": "hydra.core.AnnotatedTerm"}}}}}],
-                                                                                                          "typeName": "hydra.core.Application"}}},
-                                                                                                    "typeName": "hydra.core.Term"}}}],
-                                                                                            "typeName": "hydra.core.Lambda"}},
-                                                                                        "function": {"variable": "reduceLambda"}}},
-                                                                                    "domain": {"variable": "hydra.core.AnnotatedTerm"},
-                                                                                    "parameter": "at"}}},
-                                                                              {
-                                                                                "name": "variable",
-                                                                                "term": {
-                                                                                  "lambda": {
-                                                                                    "body": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "noChange"},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {
-                                                                                              "application": {
-                                                                                                "argument": {"variable": "lhs"},
-                                                                                                "function": {"variable": "hydra.reduction.etaReduceTerm"}}},
-                                                                                            "function": {
-                                                                                              "application": {
-                                                                                                "argument": {
-                                                                                                  "application": {
-                                                                                                    "argument": {
-                                                                                                      "application": {
-                                                                                                        "argument": {
-                                                                                                          "application": {
-                                                                                                            "argument": {"variable": "lhs"},
-                                                                                                            "function": {
-                                                                                                              "application": {
-                                                                                                                "argument": {"variable": "v"},
-                                                                                                                "function": {"variable": "hydra.variables.isFreeVariableInTerm"}}}}},
-                                                                                                        "function": {"variable": "hydra.lib.logic.not"}}},
-                                                                                                    "function": {
-                                                                                                      "application": {
-                                                                                                        "argument": {
-                                                                                                          "application": {
-                                                                                                            "argument": {
-                                                                                                              "application": {
-                                                                                                                "argument": {"variable": "v1"},
-                                                                                                                "function": {"unwrap": "hydra.core.Name"}}},
-                                                                                                            "function": {
-                                                                                                              "application": {
-                                                                                                                "argument": {
-                                                                                                                  "application": {
-                                                                                                                    "argument": {"variable": "v"},
-                                                                                                                    "function": {"unwrap": "hydra.core.Name"}}},
-                                                                                                                "function": {
-                                                                                                                  "typeApplication": {
-                                                                                                                    "body": {"variable": "hydra.lib.equality.equal"},
-                                                                                                                    "type": {"literal": {"string": {}}}}}}}}},
-                                                                                                        "function": {"variable": "hydra.lib.logic.and"}}}}},
-                                                                                                "function": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}}},
-                                                                                    "domain": {"variable": "hydra.core.Name"},
-                                                                                    "parameter": "v1"}}}],
-                                                                            "default": {"variable": "noChange"},
-                                                                            "typeName": "hydra.core.Term"}}}}}}}},
-                                                            "domain": {"variable": "hydra.core.Application"},
-                                                            "parameter": "app"}}}],
-                                                    "default": {"variable": "noChange"},
-                                                    "typeName": "hydra.core.Term"}}}}}}}}}},
-                                "domain": {"variable": "hydra.core.Lambda"},
-                                "parameter": "l"}},
-                            "type": {
-                              "type": {
-                                "function": {
-                                  "codomain": {"variable": "hydra.core.Term"},
-                                  "domain": {"variable": "hydra.core.Lambda"}}},
-                              "variables": []}}],
-                        "body": {
-                          "application": {
-                            "argument": {"variable": "term"},
-                            "function": {
-                              "cases": {
-                                "cases": [
-                                  {
-                                    "name": "annotated",
-                                    "term": {
-                                      "lambda": {
-                                        "body": {
-                                          "inject": {
-                                            "field": {
-                                              "name": "annotated",
-                                              "term": {
-                                                "record": {
-                                                  "fields": [
-                                                    {
-                                                      "name": "body",
-                                                      "term": {
-                                                        "application": {
-                                                          "argument": {
-                                                            "application": {
-                                                              "argument": {"variable": "at"},
-                                                              "function": {"project": {"field": "body", "typeName": "hydra.core.AnnotatedTerm"}}}},
-                                                          "function": {"variable": "hydra.reduction.etaReduceTerm"}}}},
-                                                    {
-                                                      "name": "annotation",
-                                                      "term": {
-                                                        "application": {
-                                                          "argument": {"variable": "at"},
-                                                          "function": {
-                                                            "project": {"field": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}}}],
-                                                  "typeName": "hydra.core.AnnotatedTerm"}}},
-                                            "typeName": "hydra.core.Term"}},
-                                        "domain": {"variable": "hydra.core.AnnotatedTerm"},
-                                        "parameter": "at"}}},
-                                  {
-                                    "name": "lambda",
-                                    "term": {
-                                      "lambda": {
-                                        "body": {
-                                          "application": {
-                                            "argument": {"variable": "l"},
-                                            "function": {"variable": "reduceLambda"}}},
-                                        "domain": {"variable": "hydra.core.Lambda"},
-                                        "parameter": "l"}}}],
-                                "default": {"variable": "noChange"},
-                                "typeName": "hydra.core.Term"}}}}}}}},
-                "domain": {"variable": "hydra.core.Term"},
-                "parameter": "term"}}}},
-        "type": {
-          "type": {
-            "function": {
-              "codomain": {"variable": "hydra.core.Term"},
-              "domain": {"variable": "hydra.core.Term"}}},
-          "variables": []}}},
-    {
-      "term": {
         "name": "hydra.reduction.etaExpandTerm",
         "term": {
           "annotated": {
@@ -3685,199 +3407,6 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.reduction.etaExpansionArity",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "Calculate the arity for eta expansion Note: this is a \"trusty\" function which assumes the graph is well-formed, i.e. no dangling references."}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {"variable": "term"},
-                        "function": {
-                          "cases": {
-                            "cases": [
-                              {
-                                "name": "annotated",
-                                "term": {
-                                  "lambda": {
-                                    "body": {
-                                      "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "at"},
-                                            "function": {"project": {"field": "body", "typeName": "hydra.core.AnnotatedTerm"}}}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"variable": "graph"},
-                                            "function": {"variable": "hydra.reduction.etaExpansionArity"}}}}},
-                                    "domain": {"variable": "hydra.core.AnnotatedTerm"},
-                                    "parameter": "at"}}},
-                              {
-                                "name": "application",
-                                "term": {
-                                  "lambda": {
-                                    "body": {
-                                      "application": {
-                                        "argument": {"literal": {"integer": {"int32": 1}}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "app"},
-                                                    "function": {
-                                                      "project": {"field": "function", "typeName": "hydra.core.Application"}}}},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {"variable": "graph"},
-                                                    "function": {"variable": "hydra.reduction.etaExpansionArity"}}}}},
-                                            "function": {"variable": "hydra.lib.math.sub"}}}}},
-                                    "domain": {"variable": "hydra.core.Application"},
-                                    "parameter": "app"}}},
-                              {
-                                "name": "cases",
-                                "term": {
-                                  "lambda": {
-                                    "body": {"literal": {"integer": {"int32": 1}}},
-                                    "domain": {"variable": "hydra.core.CaseStatement"},
-                                    "parameter": "_"}}},
-                              {
-                                "name": "lambda",
-                                "term": {
-                                  "lambda": {
-                                    "body": {"literal": {"integer": {"int32": 0}}},
-                                    "domain": {"variable": "hydra.core.Lambda"},
-                                    "parameter": "_"}}},
-                              {
-                                "name": "project",
-                                "term": {
-                                  "lambda": {
-                                    "body": {"literal": {"integer": {"int32": 1}}},
-                                    "domain": {"variable": "hydra.core.Projection"},
-                                    "parameter": "_"}}},
-                              {
-                                "name": "unwrap",
-                                "term": {
-                                  "lambda": {
-                                    "body": {"literal": {"integer": {"int32": 1}}},
-                                    "domain": {"variable": "hydra.core.Name"},
-                                    "parameter": "_"}}},
-                              {
-                                "name": "typeLambda",
-                                "term": {
-                                  "lambda": {
-                                    "body": {
-                                      "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "ta"},
-                                            "function": {"project": {"field": "body", "typeName": "hydra.core.TypeLambda"}}}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"variable": "graph"},
-                                            "function": {"variable": "hydra.reduction.etaExpansionArity"}}}}},
-                                    "domain": {"variable": "hydra.core.TypeLambda"},
-                                    "parameter": "ta"}}},
-                              {
-                                "name": "typeApplication",
-                                "term": {
-                                  "lambda": {
-                                    "body": {
-                                      "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "tt"},
-                                            "function": {
-                                              "project": {"field": "body", "typeName": "hydra.core.TypeApplicationTerm"}}}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"variable": "graph"},
-                                            "function": {"variable": "hydra.reduction.etaExpansionArity"}}}}},
-                                    "domain": {"variable": "hydra.core.TypeApplicationTerm"},
-                                    "parameter": "tt"}}},
-                              {
-                                "name": "variable",
-                                "term": {
-                                  "lambda": {
-                                    "body": {
-                                      "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {
-                                              "lambda": {
-                                                "body": {
-                                                  "application": {
-                                                    "argument": {"variable": "b"},
-                                                    "function": {"project": {"field": "type", "typeName": "hydra.core.Binding"}}}},
-                                                "domain": {"variable": "hydra.core.Binding"},
-                                                "parameter": "b"}},
-                                            "function": {
-                                              "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "name"},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"variable": "graph"},
-                                                        "function": {"variable": "hydra.lexical.lookupBinding"}}}}},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.maybes.bind"},
-                                                        "type": {"variable": "hydra.core.Binding"}}},
-                                                    "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {
-                                              "lambda": {
-                                                "body": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "ts"},
-                                                        "function": {"project": {"field": "type", "typeName": "hydra.core.TypeScheme"}}}},
-                                                    "function": {"variable": "hydra.arity.typeArity"}}},
-                                                "domain": {"variable": "hydra.core.TypeScheme"},
-                                                "parameter": "ts"}},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"literal": {"integer": {"int32": 0}}},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                        "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                    "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}},
-                                    "domain": {"variable": "hydra.core.Name"},
-                                    "parameter": "name"}}}],
-                            "default": {"literal": {"integer": {"int32": 0}}},
-                            "typeName": "hydra.core.Term"}}}},
-                    "domain": {"variable": "hydra.core.Term"},
-                    "parameter": "term"}},
-                "domain": {"variable": "hydra.graph.Graph"},
-                "parameter": "graph"}}}},
-        "type": {
-          "type": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"literal": {"integer": {"int32": {}}}},
-                  "domain": {"variable": "hydra.core.Term"}}},
-              "domain": {"variable": "hydra.graph.Graph"}}},
-          "variables": []}}},
-    {
-      "term": {
         "name": "hydra.reduction.etaExpandTypedTerm",
         "term": {
           "annotated": {
@@ -5809,6 +5338,477 @@
                       "domain": {"variable": "hydra.core.Term"}}},
                   "domain": {"variable": "hydra.graph.Graph"}}},
               "domain": {"variable": "hydra.context.Context"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.reduction.etaExpansionArity",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "Calculate the arity for eta expansion Note: this is a \"trusty\" function which assumes the graph is well-formed, i.e. no dangling references."}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {"variable": "term"},
+                        "function": {
+                          "cases": {
+                            "cases": [
+                              {
+                                "name": "annotated",
+                                "term": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "at"},
+                                            "function": {"project": {"field": "body", "typeName": "hydra.core.AnnotatedTerm"}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "graph"},
+                                            "function": {"variable": "hydra.reduction.etaExpansionArity"}}}}},
+                                    "domain": {"variable": "hydra.core.AnnotatedTerm"},
+                                    "parameter": "at"}}},
+                              {
+                                "name": "application",
+                                "term": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {"literal": {"integer": {"int32": 1}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "app"},
+                                                    "function": {
+                                                      "project": {"field": "function", "typeName": "hydra.core.Application"}}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "graph"},
+                                                    "function": {"variable": "hydra.reduction.etaExpansionArity"}}}}},
+                                            "function": {"variable": "hydra.lib.math.sub"}}}}},
+                                    "domain": {"variable": "hydra.core.Application"},
+                                    "parameter": "app"}}},
+                              {
+                                "name": "cases",
+                                "term": {
+                                  "lambda": {
+                                    "body": {"literal": {"integer": {"int32": 1}}},
+                                    "domain": {"variable": "hydra.core.CaseStatement"},
+                                    "parameter": "_"}}},
+                              {
+                                "name": "lambda",
+                                "term": {
+                                  "lambda": {
+                                    "body": {"literal": {"integer": {"int32": 0}}},
+                                    "domain": {"variable": "hydra.core.Lambda"},
+                                    "parameter": "_"}}},
+                              {
+                                "name": "project",
+                                "term": {
+                                  "lambda": {
+                                    "body": {"literal": {"integer": {"int32": 1}}},
+                                    "domain": {"variable": "hydra.core.Projection"},
+                                    "parameter": "_"}}},
+                              {
+                                "name": "unwrap",
+                                "term": {
+                                  "lambda": {
+                                    "body": {"literal": {"integer": {"int32": 1}}},
+                                    "domain": {"variable": "hydra.core.Name"},
+                                    "parameter": "_"}}},
+                              {
+                                "name": "typeLambda",
+                                "term": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "ta"},
+                                            "function": {"project": {"field": "body", "typeName": "hydra.core.TypeLambda"}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "graph"},
+                                            "function": {"variable": "hydra.reduction.etaExpansionArity"}}}}},
+                                    "domain": {"variable": "hydra.core.TypeLambda"},
+                                    "parameter": "ta"}}},
+                              {
+                                "name": "typeApplication",
+                                "term": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "tt"},
+                                            "function": {
+                                              "project": {"field": "body", "typeName": "hydra.core.TypeApplicationTerm"}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "graph"},
+                                            "function": {"variable": "hydra.reduction.etaExpansionArity"}}}}},
+                                    "domain": {"variable": "hydra.core.TypeApplicationTerm"},
+                                    "parameter": "tt"}}},
+                              {
+                                "name": "variable",
+                                "term": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {
+                                              "lambda": {
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {"variable": "b"},
+                                                    "function": {"project": {"field": "type", "typeName": "hydra.core.Binding"}}}},
+                                                "domain": {"variable": "hydra.core.Binding"},
+                                                "parameter": "b"}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "name"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"variable": "graph"},
+                                                        "function": {"variable": "hydra.lexical.lookupBinding"}}}}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.maybes.bind"},
+                                                        "type": {"variable": "hydra.core.Binding"}}},
+                                                    "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "lambda": {
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "ts"},
+                                                        "function": {"project": {"field": "type", "typeName": "hydra.core.TypeScheme"}}}},
+                                                    "function": {"variable": "hydra.arity.typeArity"}}},
+                                                "domain": {"variable": "hydra.core.TypeScheme"},
+                                                "parameter": "ts"}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"literal": {"integer": {"int32": 0}}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.maybes.maybe"},
+                                                        "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                    "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}},
+                                    "domain": {"variable": "hydra.core.Name"},
+                                    "parameter": "name"}}}],
+                            "default": {"literal": {"integer": {"int32": 0}}},
+                            "typeName": "hydra.core.Term"}}}},
+                    "domain": {"variable": "hydra.core.Term"},
+                    "parameter": "term"}},
+                "domain": {"variable": "hydra.graph.Graph"},
+                "parameter": "graph"}}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"literal": {"integer": {"int32": {}}}},
+                  "domain": {"variable": "hydra.core.Term"}}},
+              "domain": {"variable": "hydra.graph.Graph"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.reduction.etaReduceTerm",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "Eta-reduce a term by removing redundant lambda abstractions"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "noChange",
+                        "term": {"variable": "term"},
+                        "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "reduceLambda",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "v",
+                                        "term": {
+                                          "application": {
+                                            "argument": {"variable": "l"},
+                                            "function": {"project": {"field": "parameter", "typeName": "hydra.core.Lambda"}}}},
+                                        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}],
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "d",
+                                            "term": {
+                                              "application": {
+                                                "argument": {"variable": "l"},
+                                                "function": {"project": {"field": "domain", "typeName": "hydra.core.Lambda"}}}},
+                                            "type": {"type": {"maybe": {"variable": "hydra.core.Type"}}, "variables": []}}],
+                                        "body": {
+                                          "let": {
+                                            "bindings": [
+                                              {
+                                                "name": "body",
+                                                "term": {
+                                                  "application": {
+                                                    "argument": {"variable": "l"},
+                                                    "function": {"project": {"field": "body", "typeName": "hydra.core.Lambda"}}}},
+                                                "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                            "body": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "body"},
+                                                    "function": {"variable": "hydra.reduction.etaReduceTerm"}}},
+                                                "function": {
+                                                  "cases": {
+                                                    "cases": [
+                                                      {
+                                                        "name": "annotated",
+                                                        "term": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "record": {
+                                                                    "fields": [
+                                                                      {"name": "parameter", "term": {"variable": "v"}},
+                                                                      {"name": "domain", "term": {"variable": "d"}},
+                                                                      {
+                                                                        "name": "body",
+                                                                        "term": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "at"},
+                                                                            "function": {"project": {"field": "body", "typeName": "hydra.core.AnnotatedTerm"}}}}}],
+                                                                    "typeName": "hydra.core.Lambda"}},
+                                                                "function": {"variable": "reduceLambda"}}},
+                                                            "domain": {"variable": "hydra.core.AnnotatedTerm"},
+                                                            "parameter": "at"}}},
+                                                      {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "let": {
+                                                                "bindings": [
+                                                                  {
+                                                                    "name": "lhs",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "app"},
+                                                                        "function": {
+                                                                          "project": {"field": "function", "typeName": "hydra.core.Application"}}}},
+                                                                    "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                                "body": {
+                                                                  "let": {
+                                                                    "bindings": [
+                                                                      {
+                                                                        "name": "rhs",
+                                                                        "term": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "app"},
+                                                                            "function": {
+                                                                              "project": {"field": "argument", "typeName": "hydra.core.Application"}}}},
+                                                                        "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "rhs"},
+                                                                            "function": {"variable": "hydra.reduction.etaReduceTerm"}}},
+                                                                        "function": {
+                                                                          "cases": {
+                                                                            "cases": [
+                                                                              {
+                                                                                "name": "annotated",
+                                                                                "term": {
+                                                                                  "lambda": {
+                                                                                    "body": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "record": {
+                                                                                            "fields": [
+                                                                                              {"name": "parameter", "term": {"variable": "v"}},
+                                                                                              {"name": "domain", "term": {"variable": "d"}},
+                                                                                              {
+                                                                                                "name": "body",
+                                                                                                "term": {
+                                                                                                  "inject": {
+                                                                                                    "field": {
+                                                                                                      "name": "application",
+                                                                                                      "term": {
+                                                                                                        "record": {
+                                                                                                          "fields": [
+                                                                                                            {"name": "function", "term": {"variable": "lhs"}},
+                                                                                                            {
+                                                                                                              "name": "argument",
+                                                                                                              "term": {
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "at"},
+                                                                                                                  "function": {"project": {"field": "body", "typeName": "hydra.core.AnnotatedTerm"}}}}}],
+                                                                                                          "typeName": "hydra.core.Application"}}},
+                                                                                                    "typeName": "hydra.core.Term"}}}],
+                                                                                            "typeName": "hydra.core.Lambda"}},
+                                                                                        "function": {"variable": "reduceLambda"}}},
+                                                                                    "domain": {"variable": "hydra.core.AnnotatedTerm"},
+                                                                                    "parameter": "at"}}},
+                                                                              {
+                                                                                "name": "variable",
+                                                                                "term": {
+                                                                                  "lambda": {
+                                                                                    "body": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "noChange"},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "lhs"},
+                                                                                                "function": {"variable": "hydra.reduction.etaReduceTerm"}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "lhs"},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "v"},
+                                                                                                                "function": {"variable": "hydra.variables.isFreeVariableInTerm"}}}}},
+                                                                                                        "function": {"variable": "hydra.lib.logic.not"}}},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "argument": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "v1"},
+                                                                                                                "function": {"unwrap": "hydra.core.Name"}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "argument": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"variable": "v"},
+                                                                                                                    "function": {"unwrap": "hydra.core.Name"}}},
+                                                                                                                "function": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {"variable": "hydra.lib.equality.equal"},
+                                                                                                                    "type": {"literal": {"string": {}}}}}}}}},
+                                                                                                        "function": {"variable": "hydra.lib.logic.and"}}}}},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}}},
+                                                                                    "domain": {"variable": "hydra.core.Name"},
+                                                                                    "parameter": "v1"}}}],
+                                                                            "default": {"variable": "noChange"},
+                                                                            "typeName": "hydra.core.Term"}}}}}}}},
+                                                            "domain": {"variable": "hydra.core.Application"},
+                                                            "parameter": "app"}}}],
+                                                    "default": {"variable": "noChange"},
+                                                    "typeName": "hydra.core.Term"}}}}}}}}}},
+                                "domain": {"variable": "hydra.core.Lambda"},
+                                "parameter": "l"}},
+                            "type": {
+                              "type": {
+                                "function": {
+                                  "codomain": {"variable": "hydra.core.Term"},
+                                  "domain": {"variable": "hydra.core.Lambda"}}},
+                              "variables": []}}],
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "term"},
+                            "function": {
+                              "cases": {
+                                "cases": [
+                                  {
+                                    "name": "annotated",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "inject": {
+                                            "field": {
+                                              "name": "annotated",
+                                              "term": {
+                                                "record": {
+                                                  "fields": [
+                                                    {
+                                                      "name": "body",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "at"},
+                                                              "function": {"project": {"field": "body", "typeName": "hydra.core.AnnotatedTerm"}}}},
+                                                          "function": {"variable": "hydra.reduction.etaReduceTerm"}}}},
+                                                    {
+                                                      "name": "annotation",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {"variable": "at"},
+                                                          "function": {
+                                                            "project": {"field": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}}}],
+                                                  "typeName": "hydra.core.AnnotatedTerm"}}},
+                                            "typeName": "hydra.core.Term"}},
+                                        "domain": {"variable": "hydra.core.AnnotatedTerm"},
+                                        "parameter": "at"}}},
+                                  {
+                                    "name": "lambda",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {"variable": "l"},
+                                            "function": {"variable": "reduceLambda"}}},
+                                        "domain": {"variable": "hydra.core.Lambda"},
+                                        "parameter": "l"}}}],
+                                "default": {"variable": "noChange"},
+                                "typeName": "hydra.core.Term"}}}}}}}},
+                "domain": {"variable": "hydra.core.Term"},
+                "parameter": "term"}}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.core.Term"}}},
           "variables": []}}},
     {
       "term": {

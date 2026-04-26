@@ -40,8 +40,14 @@ while [ $# -gt 0 ]; do
 done
 
 OUT_DIR="$DIST_ROOT/$PACKAGE"
-INPUT_DIGEST="$HYDRA_ROOT_DIR/dist/json/$PACKAGE/digest.json"
-OUTPUT_DIGEST="$OUT_DIR/digest.json"
+DIST_JSON_ROOT="$HYDRA_ROOT_DIR/dist/json"
+INPUT_DIGEST_MAIN="$DIST_JSON_ROOT/$PACKAGE/src/main/digest.json"
+INPUT_DIGEST_TEST="$DIST_JSON_ROOT/$PACKAGE/src/test/digest.json"
+OUTPUT_DIGEST_MAIN="$OUT_DIR/src/main/digest.json"
+OUTPUT_DIGEST_TEST="$OUT_DIR/src/test/digest.json"
+OUT_MAIN_DIR="$OUT_DIR/src/main/java"
+OUT_TEST_DIR="$OUT_DIR/src/test/java"
+TEST_JSON_DIR="$DIST_JSON_ROOT/$PACKAGE/src/test/json"
 
 echo "=== Assembling Java distribution: $PACKAGE ==="
 echo "  Output: $OUT_DIR"
@@ -49,108 +55,52 @@ echo ""
 
 HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 
-# Cheap Python pre-check: compare input digest hashes to recorded
-# output digest inputs. Avoids stack-exec startup for warm runs.
-if [ -f "$INPUT_DIGEST" ] && [ -f "$OUTPUT_DIGEST" ]; then
-    if python3 -c "
-import json, sys
-try:
-    out = json.load(open('$OUTPUT_DIGEST'))
-    inp = json.load(open('$INPUT_DIGEST'))
-    recorded = {k: (v.get('hash') if isinstance(v, dict) else v)
-                for k, v in out.get('inputs', {}).items()}
-    current = inp.get('hashes', inp)
-    sys.exit(0 if recorded == current else 1)
-except Exception:
-    sys.exit(1)
-" 2>/dev/null; then
-        echo "  Cache hit; skipping work."
-        echo "=== Done. $PACKAGE (cache hit) ==="
-        exit 0
-    fi
-fi
+# Per-source-set freshness check via digest-check. The per-source-set
+# digest pair (input at dist/json/<pkg>/src/<set>/digest.json, output at
+# dist/<lang>/<pkg>/src/<set>/digest.json) is the single source of
+# truth for "does this set need to regen?". Replaces the older split of
+# per-package digest.json + .{main,test}-input-hash.txt dotfiles.
+source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 
-# Freshness check: skip the slow path when nothing has changed.
-# digest-check exits 0 on cache hit, 1 on miss. The 'fresh' subcommand
-# verifies the input digest matches what was recorded, every output
-# file exists with its recorded hash, and the generator stamp matches.
-if [ -f "$INPUT_DIGEST" ] && [ -f "$OUTPUT_DIGEST" ]; then
-    if (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
-        stack exec digest-check -- fresh \
-            --inputs "$INPUT_DIGEST" \
-            --output-dir "$OUT_DIR" \
-            --output-digest "$OUTPUT_DIGEST" 2>/dev/null); then
-        echo "  Cache hit; skipping work."
-        echo "=== Done. $PACKAGE assembled under $OUT_DIR (cache hit) ==="
-        exit 0
-    fi
-fi
-
-# Cache miss: invalidate the per-target digest so Stage 7's per-module
-# freshness filter inside bootstrap-from-json can't trust stale records
-# (output files may be missing/modified, so DSL-hash-only freshness is
-# unreliable).
-rm -f "$OUTPUT_DIGEST"
-
-# Per-source-set caches: skip regeneration of main and test source sets
-# independently. Most edits affect main only; without this, every sync
-# also re-emits all 54 generated test modules per target — wasted work.
-# Hash files live alongside the per-package OUTPUT_DIGEST so cleanup
-# is a single rm.
-MAIN_INPUT_HASH_FILE="$OUT_DIR/.main-input-hash.txt"
-TEST_INPUT_HASH_FILE="$OUT_DIR/.test-input-hash.txt"
-MAIN_JSON_DIR="$HYDRA_ROOT_DIR/dist/json/$PACKAGE/src/main/json"
-TEST_JSON_DIR="$HYDRA_ROOT_DIR/dist/json/$PACKAGE/src/test/json"
-hash_dir() {
-    local d="$1"
-    if [ -d "$d" ]; then
-        find "$d" -type f -name '*.json' 2>/dev/null \
-            | LC_ALL=C sort | xargs shasum -a 256 2>/dev/null \
-            | shasum -a 256 | awk '{print $1}'
-    else
-        echo ""
-    fi
-}
-
-# Step 1: Main modules via Layer 1 transform.
-# bootstrap-from-json appends <pkg>/src/main/<target> to --output, so we
-# pass the dist-root directory (parent of per-package dirs).
-MAIN_HASH=$(hash_dir "$MAIN_JSON_DIR")
-RECORDED_MAIN=""
-[ -f "$MAIN_INPUT_HASH_FILE" ] && RECORDED_MAIN=$(cat "$MAIN_INPUT_HASH_FILE")
-if [ -n "$MAIN_HASH" ] && [ "$MAIN_HASH" = "$RECORDED_MAIN" ]; then
+# Step 1: Main modules.
+if assemble_check_fresh "$INPUT_DIGEST_MAIN" "$OUT_MAIN_DIR" "$OUTPUT_DIGEST_MAIN"; then
     echo "Step 1: Main modules unchanged; skipping main regeneration."
 else
+    rm -f "$OUTPUT_DIGEST_MAIN"
     echo "Step 1: Generating main Java modules..."
     "$HASKELL_BIN/transform-json-to-java.sh" "$PACKAGE" main \
         --output "$DIST_ROOT" --include-dsls
-    [ -n "$MAIN_HASH" ] && mkdir -p "$OUT_DIR" && echo "$MAIN_HASH" > "$MAIN_INPUT_HASH_FILE"
+    assemble_refresh_digest "$INPUT_DIGEST_MAIN" "$OUT_MAIN_DIR" "$OUTPUT_DIGEST_MAIN"
 fi
 
 # Step 2: Test modules. Any package can have a test source set (just
-# `dist/json/<pkg>/src/test/json/`); today only hydra-kernel does, but
-# the mechanism is uniform — adding a test dir for any package
-# automatically wires it into the build.
+# `dist/json/<pkg>/src/test/json/`); the per-source-set digest mechanism
+# is uniform — adding a test dir for any package automatically wires it
+# into the build.
 echo ""
 if [ ! -d "$TEST_JSON_DIR" ]; then
     echo "Step 2: No test sources for $PACKAGE; skipping."
 else
-    TEST_HASH=$(hash_dir "$TEST_JSON_DIR")
-    RECORDED_TEST=""
-    [ -f "$TEST_INPUT_HASH_FILE" ] && RECORDED_TEST=$(cat "$TEST_INPUT_HASH_FILE")
-    if [ "$TEST_HASH" = "$RECORDED_TEST" ]; then
+    if assemble_check_fresh "$INPUT_DIGEST_TEST" "$OUT_TEST_DIR" "$OUTPUT_DIGEST_TEST"; then
         echo "Step 2: Test modules unchanged; skipping test regeneration."
     else
+        rm -f "$OUTPUT_DIGEST_TEST"
         echo "Step 2: Generating test Java modules..."
         "$HASKELL_BIN/transform-json-to-java.sh" "$PACKAGE" test \
             --output "$DIST_ROOT"
-        mkdir -p "$OUT_DIR" && echo "$TEST_HASH" > "$TEST_INPUT_HASH_FILE"
+        assemble_refresh_digest "$INPUT_DIGEST_TEST" "$OUT_TEST_DIR" "$OUTPUT_DIGEST_TEST"
     fi
 fi
 
 # Step 3: Package-specific post-processing.
 # (TestGraph.java post-generation patch eliminated: the DSL now emits
 # TestEnv refs directly. See task #25 in feature_290_packaging plan.)
+#
+# (Java exception: do NOT copy heads/java/.../lib/ into dist/java/hydra-kernel/.
+# packages/hydra-java/build.gradle declares both heads/java/src/main/java
+# AND dist/java/hydra-kernel/src/main/java as srcDirs, so a copy would
+# duplicate every class. Bootstrap-demo target setup handles the runtime
+# layout independently.)
 case "$PACKAGE" in
     hydra-lisp)
         # Patch Lisp Coder.java: fix PartialVisitor type inference in
@@ -170,14 +120,5 @@ case "$PACKAGE" in
 esac
 
 echo ""
-
-# Refresh the per-target digest so future fresh-checks short-circuit.
-if [ -f "$INPUT_DIGEST" ]; then
-    (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
-     stack exec digest-check -- refresh \
-        --inputs "$INPUT_DIGEST" \
-        --output-dir "$OUT_DIR" \
-        --output-digest "$OUTPUT_DIGEST")
-fi
 
 echo "=== Done. $PACKAGE assembled under $OUT_DIR ==="

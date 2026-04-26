@@ -152,7 +152,7 @@ Cross-reference against the module registries (Step 1) before deleting.
 **Java** — check for orphaned type files within valid packages:
 ```bash
 # For a specific package (e.g., hydra/testing/), compare Java files
-# against the types defined in the corresponding Haskell gen-main module
+# against the types defined in the corresponding generated Haskell module
 diff <(ls dist/java/hydra-kernel/src/main/java/hydra/testing/ | sed 's/.java//' | sort) \
      <(grep '^data ' dist/haskell/hydra-kernel/src/main/haskell/Hydra/Testing.hs | awk '{print $2}' | sort)
 ```
@@ -389,17 +389,21 @@ Fix it at the generator level.
 
 ### Known accepted patches
 
-These patches are currently in place and have open or implied issues tracking
-them as generator bugs:
+No post-generation patches are currently applied in the active sync path.
+The former `TestGraph.hs` patch (which replaced `emptyGraph` / `emptyContext`
+with `TestEnv.testGraph testTypes` / `TestEnv.testContext`) was eliminated
+when the DSL was updated to emit the `TestEnv` references directly; see
+`heads/haskell/bin/sync-haskell.sh` step 5 for the current no-op note.
 
-- `heads/haskell/bin/sync-haskell.sh` and
-  `heads/haskell/bin/assemble-distribution.sh`: both patch `TestGraph.hs` to
-  replace `emptyGraph` / `emptyContext` with `TestEnv.testGraph testTypes` /
-  `TestEnv.testContext`. The `Hydra.Test.TestEnv` module is hand-written and
-  checked in under `dist/haskell/hydra-kernel/src/test/haskell/`.
+`Hydra.Test.TestEnv` remains hand-written and checked in under
+`dist/haskell/hydra-kernel/src/test/haskell/`; it is exempted from
+regeneration because `bootstrap-from-json` does not target it. This is
+tolerated under principle 2 (hand-written file under `dist/`) rather than
+moved to `heads/` because the Haskell test harness imports it from that
+location and the bridge is small. Treat it as tech debt, not precedent.
 
-Two patches that were previously applied by the now-retired per-language
-sync scripts under `heads/haskell/bin/` are NOT currently re-applied anywhere:
+Two patches that were previously applied by retired per-language sync
+scripts are NOT currently re-applied anywhere:
 
 - Java Lisp `Coder.java`: a `PartialVisitor` type parameter that the Java
   coder infers incorrectly. Surfaces when generating `hydra-lisp` into Java.

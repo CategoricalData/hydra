@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "generator": "v0-unstamped",
+  "inputs": {
+    "hydra.python.coder": { "kind": "Other", "hash": "c51b449d9a04fad32ff29270a992b173aa442c52bf806856fc31651f0bb219ec" },
+    "hydra.python.environment": { "kind": "Other", "hash": "e08ff8fc3439a712cd71c8a574cb18b51e215be85d6d3ce836c391b05d971a98" },
+    "hydra.python.names": { "kind": "Other", "hash": "011bb53777678a5b3529e3668246f057ee5bb18b0e6aaf668528d5d82122419f" },
+    "hydra.python.serde": { "kind": "Other", "hash": "0d85f367957de48c45cb7ee6927093fcd6a613ce0cc8ee3ccd3246bb9b265bc6" },
+    "hydra.python.syntax": { "kind": "Other", "hash": "947d106d4290d741bee54e61e811fafe4361a611316c63d67e01d8fdf93901c6" },
+    "hydra.python.testing": { "kind": "Other", "hash": "b58b112203dcef2f7612036371763a956a8a782caf5c28f6f6b6e47dd9175649" },
+    "hydra.python.utils": { "kind": "Other", "hash": "bc68997cad6e8483a16f2e168c6c136cb4de271d43a551929f5d3d94709b2590" }
+  },
+  "outputs": {
+    "Hydra/Dsl/Python/Environment.hs": { "kind": "TargetFile", "hash": "d8c8bcad115d885a41463940cb0a9cb0e60d460ecda6c4eb727990ce65925858" },
+    "Hydra/Dsl/Python/Syntax.hs": { "kind": "TargetFile", "hash": "0966b959d76204790d4a32e0a04583b962acafeda48490bff70ec71e8986ac82" },
+    "Hydra/Python/Coder.hs": { "kind": "TargetFile", "hash": "12bba18524ae552a20083322c5480e1b19d9e298414d3145ad867b2098bf0252" },
+    "Hydra/Python/Environment.hs": { "kind": "TargetFile", "hash": "5535aebaa1f37d1b9a9575938056b02ac0de541c512e9570fbb63bdeb76621d6" },
+    "Hydra/Python/Language.hs": { "kind": "TargetFile", "hash": "7c624523033b0705a8a73aea27890c27409df9d5d277fb8b942029daaf30edc2" },
+    "Hydra/Python/Names.hs": { "kind": "TargetFile", "hash": "1b2a90dd8fa60b39955801c14f419b20f34c9725db6e6534061aa20a6acee319" },
+    "Hydra/Python/Serde.hs": { "kind": "TargetFile", "hash": "8a61dd892055a3cc0d996e4987e9fe748a1ccdad8ff81d1d024eeddc7ee44370" },
+    "Hydra/Python/Syntax.hs": { "kind": "TargetFile", "hash": "3ca89e085b5ae2fe34149a24fbefe410884c5e79d86ea8bb689ef0719b2cb107" },
+    "Hydra/Python/Testing.hs": { "kind": "TargetFile", "hash": "501a63fd0c2950924e09085bfaf6bf3bc80762109a64ed3940df013bb05383d7" },
+    "Hydra/Python/Utils.hs": { "kind": "TargetFile", "hash": "295b4e65fe7fc2427ef05b36416362e1141bfd594af012f510adff065333ab51" }
+  }
+}

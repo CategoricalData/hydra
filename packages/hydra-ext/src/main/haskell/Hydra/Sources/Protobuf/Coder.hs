@@ -86,20 +86,9 @@ module_ = Module ns definitions
     Just "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions"
   where
     definitions = [
-      toDefinition key_proto_field_index,
-      toDefinition err,
-      toDefinition unexpectedE,
-      toDefinition fromEitherString,
-      toDefinition structuralTypeName,
-      toDefinition generateStructuralTypeMessage,
-      toDefinition encodeSimpleTypeForHelper,
       toDefinition collectStructuralTypes,
       toDefinition collectStructuralTypes_collectFromType,
-      toDefinition moduleToProtobuf,
-      toDefinition javaMultipleFilesOptionName,
-      toDefinition javaPackageOptionName,
       toDefinition constructModule,
-      toDefinition mapAccumResult,
       toDefinition encodeDefinition,
       toDefinition encodeEnumDefinition,
       toDefinition encodeEnumValueName,
@@ -108,170 +97,32 @@ module_ = Module ns definitions
       toDefinition encodeRecordType,
       toDefinition encodeScalarType,
       toDefinition encodeScalarTypeWrapped,
+      toDefinition encodeSimpleTypeForHelper,
       toDefinition encodeTypeName,
       toDefinition encodeTypeReference,
-      toDefinition flattenType,
+      toDefinition err,
       toDefinition findOptions,
-      toDefinition isEnumFields,
+      toDefinition flattenType,
+      toDefinition fromEitherString,
+      toDefinition generateStructuralTypeMessage,
       toDefinition isEnumDefinition,
+      toDefinition isEnumFields,
+      toDefinition javaMultipleFilesOptionName,
+      toDefinition javaPackageOptionName,
+      toDefinition key_proto_field_index,
+      toDefinition mapAccumResult,
+      toDefinition moduleToProtobuf,
       toDefinition namespaceToFileReference,
       toDefinition namespaceToPackageName,
       toDefinition readBooleanAnnotation,
-      toDefinition simplifyType]
+      toDefinition simplifyType,
+      toDefinition structuralTypeName,
+      toDefinition unexpectedE]
 
 
 -- =============================================================================
 -- Constants
 -- =============================================================================
-
-key_proto_field_index :: TTermDefinition Name
-key_proto_field_index = def "key_proto_field_index" $
-  Core.name (string "proto_field_index")
-
--- =============================================================================
--- Error helpers
--- =============================================================================
-
-err :: TTermDefinition (Context -> String -> Either Error a)
-err = def "err" $
-  "cx" ~> "msg" ~>
-  Ctx.failInContext (Error.errorOther $ Error.otherError (var "msg")) (var "cx")
-
-unexpectedE :: TTermDefinition (Context -> String -> String -> Either Error a)
-unexpectedE = def "unexpectedE" $
-  "cx" ~> "expected" ~> "found" ~>
-  asTerm err @@ var "cx" @@ (Strings.cat (list [string "Expected ", var "expected", string ", found: ", var "found"]))
-
-fromEitherString :: TTermDefinition (Context -> Either String a -> Either Error a)
-fromEitherString = def "fromEitherString" $
-  "cx" ~> "e" ~>
-  Eithers.bimap
-    ("msg" ~> Error.errorOther (Error.otherError (var "msg")))
-    ("a" ~> var "a")
-    (var "e")
-
--- =============================================================================
--- StructuralTypeRef helpers
--- =============================================================================
-
--- | Generate a message name for a structural type reference.
--- The StructuralTypeRef is represented as a tagged union with "either" and "pair" variants,
--- where each variant holds a pair of types (left/right or first/second).
-structuralTypeName :: TTermDefinition (Namespace -> Term -> P3.TypeName)
-structuralTypeName = def "structuralTypeName" $
-  doc "Generate a message name for a structural type reference" $
-  "localNs" ~> "ref" ~> lets [
-    "typeSuffix">: "typ" ~> lets [
-      "st">: asTerm simplifyType @@ var "typ"] $
-      cases _Type (var "st")
-        (Just $ string "value") [
-        _Type_literal>>: "lt" ~>
-          cases _LiteralType (var "lt") (Just $ string "value") [
-            _LiteralType_binary>>: constant $ string "bytes",
-            _LiteralType_boolean>>: constant $ string "bool",
-            _LiteralType_float>>: "ft" ~>
-              cases _FloatType (var "ft") (Just $ string "float") [
-                _FloatType_float32>>: constant $ string "float",
-                _FloatType_float64>>: constant $ string "double"],
-            _LiteralType_integer>>: "it" ~>
-              cases _IntegerType (var "it") (Just $ string "int64") [
-                _IntegerType_int32>>: constant $ string "int32",
-                _IntegerType_int64>>: constant $ string "int64",
-                _IntegerType_uint32>>: constant $ string "uint32",
-                _IntegerType_uint64>>: constant $ string "uint64"],
-            _LiteralType_string>>: constant $ string "string"],
-        _Type_record>>: constant $ string "record",
-        _Type_union>>: constant $ string "union",
-        _Type_variable>>: "name" ~> Names.localNameOf @@ var "name",
-        _Type_unit>>: constant $ string "unit",
-        _Type_list>>: constant $ string "list",
-        _Type_set>>: constant $ string "set",
-        _Type_map>>: constant $ string "map",
-        _Type_maybe>>: constant $ string "maybe"]] $
-    wrap P3._TypeName $
-      match _StructuralTypeRef Nothing [
-        (Name "either")>>: "p" ~>
-          Strings.cat (list [string "Either_",
-            var "typeSuffix" @@ (Pairs.first (var "p")),
-            string "_",
-            var "typeSuffix" @@ (Pairs.second (var "p"))]),
-        (Name "pair")>>: "p" ~>
-          Strings.cat (list [string "Pair_",
-            var "typeSuffix" @@ (Pairs.first (var "p")),
-            string "_",
-            var "typeSuffix" @@ (Pairs.second (var "p"))])] @@ var "ref"
-
--- | Generate a helper message definition for a structural type.
--- Returns the definition and the updated context (counter state).
-generateStructuralTypeMessage :: TTermDefinition (Context -> Graph -> Namespace -> Term -> Either Error (P3.Definition, Context))
-generateStructuralTypeMessage = def "generateStructuralTypeMessage" $
-  doc "Generate a helper message definition for a structural type" $
-  "cx" ~> "g" ~> "localNs" ~> "ref" ~> lets [
-    "cx1">: Annotations.resetCount @@ asTerm key_proto_field_index @@ var "cx",
-    "cx2">: Pairs.second (Annotations.nextCount @@ asTerm key_proto_field_index @@ var "cx1"),
-    "makeField">: "cx0" ~> "fname" ~> "ftyp" ~>
-      "ft" <<~ (asTerm encodeSimpleTypeForHelper @@ var "cx0" @@ var "localNs" @@ var "ftyp") $ lets [
-        "idxPair">: Annotations.nextCount @@ asTerm key_proto_field_index @@ var "cx0",
-        "idx">: Pairs.first (var "idxPair"),
-        "cx1_">: Pairs.second (var "idxPair")] $
-        right $ pair
-          (record P3._Field [
-            P3._Field_name>>: wrap P3._FieldName (var "fname"),
-            P3._Field_jsonName>>: nothing,
-            P3._Field_type>>: inject P3._FieldType P3._FieldType_simple (var "ft"),
-            P3._Field_number>>: var "idx",
-            P3._Field_options>>: emptyList])
-          (var "cx1_")] $
-    match _StructuralTypeRef Nothing [
-      (Name "either")>>: "p" ~> lets [
-        "lt">: Pairs.first (var "p"),
-        "rt">: Pairs.second (var "p")] $
-        "leftResult" <<~ (var "makeField" @@ var "cx2" @@ string "left" @@ var "lt") $
-        "leftField" <~ Pairs.first (var "leftResult") $
-        "cx3" <~ Pairs.second (var "leftResult") $
-        "rightResult" <<~ (var "makeField" @@ var "cx3" @@ string "right" @@ var "rt") $
-        "rightField" <~ Pairs.first (var "rightResult") $
-        "cx4" <~ Pairs.second (var "rightResult") $
-        right $ pair
-          (inject P3._Definition P3._Definition_message $
-            record P3._MessageDefinition [
-              P3._MessageDefinition_name>>: asTerm structuralTypeName @@ var "localNs" @@ var "ref",
-              P3._MessageDefinition_fields>>: list [var "leftField", var "rightField"],
-              P3._MessageDefinition_options>>: emptyList])
-          (var "cx4"),
-      (Name "pair")>>: "p" ~> lets [
-        "ft">: Pairs.first (var "p"),
-        "st">: Pairs.second (var "p")] $
-        "firstResult" <<~ (var "makeField" @@ var "cx2" @@ string "first" @@ var "ft") $
-        "firstField" <~ Pairs.first (var "firstResult") $
-        "cx3" <~ Pairs.second (var "firstResult") $
-        "secondResult" <<~ (var "makeField" @@ var "cx3" @@ string "second" @@ var "st") $
-        "secondField" <~ Pairs.first (var "secondResult") $
-        "cx4" <~ Pairs.second (var "secondResult") $
-        right $ pair
-          (inject P3._Definition P3._Definition_message $
-            record P3._MessageDefinition [
-              P3._MessageDefinition_name>>: asTerm structuralTypeName @@ var "localNs" @@ var "ref",
-              P3._MessageDefinition_fields>>: list [var "firstField", var "secondField"],
-              P3._MessageDefinition_options>>: emptyList])
-          (var "cx4")] @@ var "ref"
-
--- | Encode a simple type for helper message fields
-encodeSimpleTypeForHelper :: TTermDefinition (Context -> Namespace -> Type -> Either Error P3.SimpleType)
-encodeSimpleTypeForHelper = def "encodeSimpleTypeForHelper" $
-  doc "Encode a simple type for helper message fields" $
-  "cx" ~> "localNs" ~> "typ" ~> lets [
-    "forNominal">: "name" ~> right (inject P3._SimpleType P3._SimpleType_reference (asTerm encodeTypeReference @@ var "localNs" @@ var "name"))] $
-    cases _Type (asTerm simplifyType @@ var "typ")
-      (Just $ asTerm unexpectedE @@ var "cx" @@ string "simple type in structural type helper" @@ (ShowCore.type_ @@ (Strip.removeTypeAnnotations @@ var "typ"))) [
-      _Type_literal>>: "lt" ~>
-        Eithers.map
-          ("st" ~> inject P3._SimpleType P3._SimpleType_scalar (var "st"))
-          (asTerm encodeScalarType @@ var "cx" @@ var "lt"),
-      _Type_record>>: constant $ asTerm unexpectedE @@ var "cx" @@ string "named type reference" @@ string "anonymous record type",
-      _Type_union>>: constant $ asTerm unexpectedE @@ var "cx" @@ string "named type reference" @@ string "anonymous union type",
-      _Type_unit>>: constant $ right (inject P3._SimpleType P3._SimpleType_reference (wrap P3._TypeName (string "google.protobuf.Empty"))),
-      _Type_variable>>: "name" ~> var "forNominal" @@ var "name"]
 
 -- | Collect all structural type references (Either, Pair) from a list of types
 collectStructuralTypes :: TTermDefinition ([Type] -> S.Set Term)
@@ -305,35 +156,6 @@ collectStructuralTypes_collectFromType = def "collectStructuralTypes_collectFrom
 
 -- =============================================================================
 -- Module-level entry point
--- =============================================================================
-
--- | Note: follows the Protobuf Style Guide (https://protobuf.dev/programming-guides/style)
-moduleToProtobuf :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
-moduleToProtobuf = def "moduleToProtobuf" $
-  doc "Convert a Hydra module to Protocol Buffers v3 source files" $
-  "mod" ~> "defs" ~> "cx" ~> "g" ~> lets [
-    "ns_">: Packaging.moduleNamespace (var "mod"),
-    "partitioned">: Environment.partitionDefinitions @@ var "defs",
-    "typeDefs">: Pairs.first (var "partitioned")] $
-    "pfile" <<~ (asTerm constructModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "typeDefs") $ lets [
-      "content">: Serialization.printExpr @@ (Serialization.parenthesize @@ (ProtobufSerdeSource.writeProtoFile @@ var "pfile")),
-      "path">: unwrap P3._FileReference @@ (asTerm namespaceToFileReference @@ var "ns_")] $
-      right $ Maps.singleton (var "path") (var "content")
-
--- =============================================================================
--- Option name constants
--- =============================================================================
-
-javaMultipleFilesOptionName :: TTermDefinition String
-javaMultipleFilesOptionName = def "javaMultipleFilesOptionName" $
-  string "java_multiple_files"
-
-javaPackageOptionName :: TTermDefinition String
-javaPackageOptionName = def "javaPackageOptionName" $
-  string "java_package"
-
--- =============================================================================
--- Module construction
 -- =============================================================================
 
 constructModule :: TTermDefinition (Context -> Graph -> Module -> [TypeDefinition] -> Either Error P3.ProtoFile)
@@ -411,28 +233,6 @@ constructModule = def "constructModule" $
 
 -- =============================================================================
 -- Accumulator helper
--- =============================================================================
-
--- | Helper to thread context through a list, accumulating results
-mapAccumResult :: TTermDefinition ((Context -> a -> Either Error (b, Context)) -> Context -> [a] -> Either Error ([b], Context))
-mapAccumResult = def "mapAccumResult" $
-  doc "Thread context through a list, accumulating results" $
-  "f" ~> "cx0" ~> "xs" ~>
-    Lists.foldl
-      ("accE" ~> "x" ~>
-        Eithers.bind (var "accE") ("accPair" ~> lets [
-          "bs">: Pairs.first (var "accPair"),
-          "cxN">: Pairs.second (var "accPair")] $
-          Eithers.map
-            ("resultPair" ~> pair
-              (Lists.concat (list [var "bs", list [Pairs.first (var "resultPair")]]))
-              (Pairs.second (var "resultPair")))
-            (var "f" @@ var "cxN" @@ var "x")))
-      (right $ pair emptyList (var "cx0"))
-      (var "xs")
-
--- =============================================================================
--- Definition encoding
 -- =============================================================================
 
 encodeDefinition :: TTermDefinition (Context -> Graph -> Namespace -> Name -> Type -> Either Error P3.Definition)
@@ -666,6 +466,23 @@ encodeScalarTypeWrapped = def "encodeScalarTypeWrapped" $
 -- Type name encoding
 -- =============================================================================
 
+-- | Encode a simple type for helper message fields
+encodeSimpleTypeForHelper :: TTermDefinition (Context -> Namespace -> Type -> Either Error P3.SimpleType)
+encodeSimpleTypeForHelper = def "encodeSimpleTypeForHelper" $
+  doc "Encode a simple type for helper message fields" $
+  "cx" ~> "localNs" ~> "typ" ~> lets [
+    "forNominal">: "name" ~> right (inject P3._SimpleType P3._SimpleType_reference (asTerm encodeTypeReference @@ var "localNs" @@ var "name"))] $
+    cases _Type (asTerm simplifyType @@ var "typ")
+      (Just $ asTerm unexpectedE @@ var "cx" @@ string "simple type in structural type helper" @@ (ShowCore.type_ @@ (Strip.removeTypeAnnotations @@ var "typ"))) [
+      _Type_literal>>: "lt" ~>
+        Eithers.map
+          ("st" ~> inject P3._SimpleType P3._SimpleType_scalar (var "st"))
+          (asTerm encodeScalarType @@ var "cx" @@ var "lt"),
+      _Type_record>>: constant $ asTerm unexpectedE @@ var "cx" @@ string "named type reference" @@ string "anonymous record type",
+      _Type_union>>: constant $ asTerm unexpectedE @@ var "cx" @@ string "named type reference" @@ string "anonymous union type",
+      _Type_unit>>: constant $ right (inject P3._SimpleType P3._SimpleType_reference (wrap P3._TypeName (string "google.protobuf.Empty"))),
+      _Type_variable>>: "name" ~> var "forNominal" @@ var "name"]
+
 encodeTypeName :: TTermDefinition (Name -> P3.TypeName)
 encodeTypeName = def "encodeTypeName" $
   doc "Encode a Hydra type name as a Protobuf type name" $
@@ -693,22 +510,10 @@ encodeTypeReference = def "encodeTypeReference" $
 -- Type flattening
 -- =============================================================================
 
--- | Eliminate type lambdas and type applications, simply replacing type variables with the string type
-flattenType :: TTermDefinition (Type -> Type)
-flattenType = def "flattenType" $
-  doc "Eliminate type lambdas and type applications, replacing type variables with the string type" $
-  "typ" ~>
-    Rewriting.rewriteType @@
-      ("recurse" ~> "t" ~>
-        cases _Type (var "t")
-          (Just $ var "recurse" @@ var "t") [
-          _Type_forall>>: "ft" ~> var "recurse" @@ (Variables.replaceFreeTypeVariable @@ (Core.forallTypeParameter (var "ft")) @@ (inject _Type _Type_literal (inject _LiteralType _LiteralType_string unit)) @@ (Core.forallTypeBody (var "ft"))),
-          _Type_application>>: "at" ~> var "recurse" @@ (Core.applicationTypeFunction (var "at"))]) @@
-      var "typ"
-
--- =============================================================================
--- Options
--- =============================================================================
+err :: TTermDefinition (Context -> String -> Either Error a)
+err = def "err" $
+  "cx" ~> "msg" ~>
+  Ctx.failInContext (Error.errorOther $ Error.otherError (var "msg")) (var "cx")
 
 findOptions :: TTermDefinition (Context -> Graph -> Type -> Either Error [P3.Option])
 findOptions = def "findOptions" $
@@ -732,14 +537,89 @@ findOptions = def "findOptions" $
 -- Enum detection
 -- =============================================================================
 
-isEnumFields :: TTermDefinition ([FieldType] -> Bool)
-isEnumFields = def "isEnumFields" $
-  doc "Check if all fields are unit types (i.e., this is an enum)" $
-  "fts" ~>
-    Lists.foldl
-      ("b" ~> "f" ~> Logic.and (var "b") (Predicates.isUnitType @@ (asTerm simplifyType @@ Core.fieldTypeType (var "f"))))
-      true
-      (var "fts")
+-- | Eliminate type lambdas and type applications, simply replacing type variables with the string type
+flattenType :: TTermDefinition (Type -> Type)
+flattenType = def "flattenType" $
+  doc "Eliminate type lambdas and type applications, replacing type variables with the string type" $
+  "typ" ~>
+    Rewriting.rewriteType @@
+      ("recurse" ~> "t" ~>
+        cases _Type (var "t")
+          (Just $ var "recurse" @@ var "t") [
+          _Type_forall>>: "ft" ~> var "recurse" @@ (Variables.replaceFreeTypeVariable @@ (Core.forallTypeParameter (var "ft")) @@ (inject _Type _Type_literal (inject _LiteralType _LiteralType_string unit)) @@ (Core.forallTypeBody (var "ft"))),
+          _Type_application>>: "at" ~> var "recurse" @@ (Core.applicationTypeFunction (var "at"))]) @@
+      var "typ"
+
+-- =============================================================================
+-- Options
+-- =============================================================================
+
+fromEitherString :: TTermDefinition (Context -> Either String a -> Either Error a)
+fromEitherString = def "fromEitherString" $
+  "cx" ~> "e" ~>
+  Eithers.bimap
+    ("msg" ~> Error.errorOther (Error.otherError (var "msg")))
+    ("a" ~> var "a")
+    (var "e")
+
+-- =============================================================================
+-- StructuralTypeRef helpers
+-- =============================================================================
+
+-- | Generate a helper message definition for a structural type.
+-- Returns the definition and the updated context (counter state).
+generateStructuralTypeMessage :: TTermDefinition (Context -> Graph -> Namespace -> Term -> Either Error (P3.Definition, Context))
+generateStructuralTypeMessage = def "generateStructuralTypeMessage" $
+  doc "Generate a helper message definition for a structural type" $
+  "cx" ~> "g" ~> "localNs" ~> "ref" ~> lets [
+    "cx1">: Annotations.resetCount @@ asTerm key_proto_field_index @@ var "cx",
+    "cx2">: Pairs.second (Annotations.nextCount @@ asTerm key_proto_field_index @@ var "cx1"),
+    "makeField">: "cx0" ~> "fname" ~> "ftyp" ~>
+      "ft" <<~ (asTerm encodeSimpleTypeForHelper @@ var "cx0" @@ var "localNs" @@ var "ftyp") $ lets [
+        "idxPair">: Annotations.nextCount @@ asTerm key_proto_field_index @@ var "cx0",
+        "idx">: Pairs.first (var "idxPair"),
+        "cx1_">: Pairs.second (var "idxPair")] $
+        right $ pair
+          (record P3._Field [
+            P3._Field_name>>: wrap P3._FieldName (var "fname"),
+            P3._Field_jsonName>>: nothing,
+            P3._Field_type>>: inject P3._FieldType P3._FieldType_simple (var "ft"),
+            P3._Field_number>>: var "idx",
+            P3._Field_options>>: emptyList])
+          (var "cx1_")] $
+    match _StructuralTypeRef Nothing [
+      (Name "either")>>: "p" ~> lets [
+        "lt">: Pairs.first (var "p"),
+        "rt">: Pairs.second (var "p")] $
+        "leftResult" <<~ (var "makeField" @@ var "cx2" @@ string "left" @@ var "lt") $
+        "leftField" <~ Pairs.first (var "leftResult") $
+        "cx3" <~ Pairs.second (var "leftResult") $
+        "rightResult" <<~ (var "makeField" @@ var "cx3" @@ string "right" @@ var "rt") $
+        "rightField" <~ Pairs.first (var "rightResult") $
+        "cx4" <~ Pairs.second (var "rightResult") $
+        right $ pair
+          (inject P3._Definition P3._Definition_message $
+            record P3._MessageDefinition [
+              P3._MessageDefinition_name>>: asTerm structuralTypeName @@ var "localNs" @@ var "ref",
+              P3._MessageDefinition_fields>>: list [var "leftField", var "rightField"],
+              P3._MessageDefinition_options>>: emptyList])
+          (var "cx4"),
+      (Name "pair")>>: "p" ~> lets [
+        "ft">: Pairs.first (var "p"),
+        "st">: Pairs.second (var "p")] $
+        "firstResult" <<~ (var "makeField" @@ var "cx2" @@ string "first" @@ var "ft") $
+        "firstField" <~ Pairs.first (var "firstResult") $
+        "cx3" <~ Pairs.second (var "firstResult") $
+        "secondResult" <<~ (var "makeField" @@ var "cx3" @@ string "second" @@ var "st") $
+        "secondField" <~ Pairs.first (var "secondResult") $
+        "cx4" <~ Pairs.second (var "secondResult") $
+        right $ pair
+          (inject P3._Definition P3._Definition_message $
+            record P3._MessageDefinition [
+              P3._MessageDefinition_name>>: asTerm structuralTypeName @@ var "localNs" @@ var "ref",
+              P3._MessageDefinition_fields>>: list [var "firstField", var "secondField"],
+              P3._MessageDefinition_options>>: emptyList])
+          (var "cx4")] @@ var "ref"
 
 isEnumDefinition :: TTermDefinition (Type -> Bool)
 isEnumDefinition = def "isEnumDefinition" $
@@ -751,6 +631,74 @@ isEnumDefinition = def "isEnumDefinition" $
 
 -- =============================================================================
 -- Namespace conversion
+-- =============================================================================
+
+isEnumFields :: TTermDefinition ([FieldType] -> Bool)
+isEnumFields = def "isEnumFields" $
+  doc "Check if all fields are unit types (i.e., this is an enum)" $
+  "fts" ~>
+    Lists.foldl
+      ("b" ~> "f" ~> Logic.and (var "b") (Predicates.isUnitType @@ (asTerm simplifyType @@ Core.fieldTypeType (var "f"))))
+      true
+      (var "fts")
+
+javaMultipleFilesOptionName :: TTermDefinition String
+javaMultipleFilesOptionName = def "javaMultipleFilesOptionName" $
+  string "java_multiple_files"
+
+javaPackageOptionName :: TTermDefinition String
+javaPackageOptionName = def "javaPackageOptionName" $
+  string "java_package"
+
+-- =============================================================================
+-- Module construction
+-- =============================================================================
+
+key_proto_field_index :: TTermDefinition Name
+key_proto_field_index = def "key_proto_field_index" $
+  Core.name (string "proto_field_index")
+
+-- =============================================================================
+-- Error helpers
+-- =============================================================================
+
+-- | Helper to thread context through a list, accumulating results
+mapAccumResult :: TTermDefinition ((Context -> a -> Either Error (b, Context)) -> Context -> [a] -> Either Error ([b], Context))
+mapAccumResult = def "mapAccumResult" $
+  doc "Thread context through a list, accumulating results" $
+  "f" ~> "cx0" ~> "xs" ~>
+    Lists.foldl
+      ("accE" ~> "x" ~>
+        Eithers.bind (var "accE") ("accPair" ~> lets [
+          "bs">: Pairs.first (var "accPair"),
+          "cxN">: Pairs.second (var "accPair")] $
+          Eithers.map
+            ("resultPair" ~> pair
+              (Lists.concat (list [var "bs", list [Pairs.first (var "resultPair")]]))
+              (Pairs.second (var "resultPair")))
+            (var "f" @@ var "cxN" @@ var "x")))
+      (right $ pair emptyList (var "cx0"))
+      (var "xs")
+
+-- =============================================================================
+-- Definition encoding
+-- =============================================================================
+
+-- | Note: follows the Protobuf Style Guide (https://protobuf.dev/programming-guides/style)
+moduleToProtobuf :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
+moduleToProtobuf = def "moduleToProtobuf" $
+  doc "Convert a Hydra module to Protocol Buffers v3 source files" $
+  "mod" ~> "defs" ~> "cx" ~> "g" ~> lets [
+    "ns_">: Packaging.moduleNamespace (var "mod"),
+    "partitioned">: Environment.partitionDefinitions @@ var "defs",
+    "typeDefs">: Pairs.first (var "partitioned")] $
+    "pfile" <<~ (asTerm constructModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "typeDefs") $ lets [
+      "content">: Serialization.printExpr @@ (Serialization.parenthesize @@ (ProtobufSerdeSource.writeProtoFile @@ var "pfile")),
+      "path">: unwrap P3._FileReference @@ (asTerm namespaceToFileReference @@ var "ns_")] $
+      right $ Maps.singleton (var "path") (var "content")
+
+-- =============================================================================
+-- Option name constants
 -- =============================================================================
 
 namespaceToFileReference :: TTermDefinition (Namespace -> P3.FileReference)
@@ -796,3 +744,55 @@ simplifyType = def "simplifyType" $
     cases _Type (Strip.deannotateType @@ var "typ")
       (Just $ Strip.deannotateType @@ var "typ") [
       _Type_wrap>>: "wt" ~> asTerm simplifyType @@ (var "wt")]
+
+-- | Generate a message name for a structural type reference.
+-- The StructuralTypeRef is represented as a tagged union with "either" and "pair" variants,
+-- where each variant holds a pair of types (left/right or first/second).
+structuralTypeName :: TTermDefinition (Namespace -> Term -> P3.TypeName)
+structuralTypeName = def "structuralTypeName" $
+  doc "Generate a message name for a structural type reference" $
+  "localNs" ~> "ref" ~> lets [
+    "typeSuffix">: "typ" ~> lets [
+      "st">: asTerm simplifyType @@ var "typ"] $
+      cases _Type (var "st")
+        (Just $ string "value") [
+        _Type_literal>>: "lt" ~>
+          cases _LiteralType (var "lt") (Just $ string "value") [
+            _LiteralType_binary>>: constant $ string "bytes",
+            _LiteralType_boolean>>: constant $ string "bool",
+            _LiteralType_float>>: "ft" ~>
+              cases _FloatType (var "ft") (Just $ string "float") [
+                _FloatType_float32>>: constant $ string "float",
+                _FloatType_float64>>: constant $ string "double"],
+            _LiteralType_integer>>: "it" ~>
+              cases _IntegerType (var "it") (Just $ string "int64") [
+                _IntegerType_int32>>: constant $ string "int32",
+                _IntegerType_int64>>: constant $ string "int64",
+                _IntegerType_uint32>>: constant $ string "uint32",
+                _IntegerType_uint64>>: constant $ string "uint64"],
+            _LiteralType_string>>: constant $ string "string"],
+        _Type_record>>: constant $ string "record",
+        _Type_union>>: constant $ string "union",
+        _Type_variable>>: "name" ~> Names.localNameOf @@ var "name",
+        _Type_unit>>: constant $ string "unit",
+        _Type_list>>: constant $ string "list",
+        _Type_set>>: constant $ string "set",
+        _Type_map>>: constant $ string "map",
+        _Type_maybe>>: constant $ string "maybe"]] $
+    wrap P3._TypeName $
+      match _StructuralTypeRef Nothing [
+        (Name "either")>>: "p" ~>
+          Strings.cat (list [string "Either_",
+            var "typeSuffix" @@ (Pairs.first (var "p")),
+            string "_",
+            var "typeSuffix" @@ (Pairs.second (var "p"))]),
+        (Name "pair")>>: "p" ~>
+          Strings.cat (list [string "Pair_",
+            var "typeSuffix" @@ (Pairs.first (var "p")),
+            string "_",
+            var "typeSuffix" @@ (Pairs.second (var "p"))])] @@ var "ref"
+
+unexpectedE :: TTermDefinition (Context -> String -> String -> Either Error a)
+unexpectedE = def "unexpectedE" $
+  "cx" ~> "expected" ~> "found" ~>
+  asTerm err @@ var "cx" @@ (Strings.cat (list [string "Expected ", var "expected", string ", found: ", var "found"]))
