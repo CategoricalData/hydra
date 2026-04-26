@@ -1,5 +1,6 @@
 {
   "version": 1,
+  "encoderId": "342e1ad1d5d1f36bd846b98da7e4de55e36f719c027092eb91932718651dbe89",
   "hashes": {
     "com.gdblab.pathAlgebra.expressions": "f0719df11c40836e2ad0607bc54c214438fd454cdc9bf54e23ef63a5c02fda0a",
     "com.gdblab.pathAlgebra.syntax": "e79fd7b2ea7bd7a6811f4fe2ca3ff889c8b0d656c53dde56780f6108d17e1d70",

@@ -409,54 +409,65 @@ tryIncrementalInference distJsonRoot universeMods _targetMods = do
   if M.null stored
     then return Nothing
     else do
-      nsFiles <- Digest.discoverNamespaceFiles
-      currentDigest <- Digest.hashUniverse nsFiles universeMods
-      if M.null currentDigest
-        then return Nothing
+      -- Encoder identity check: if the JSON encode/decode/model/writer
+      -- DSL has changed since the digest was written, every module's
+      -- on-disk JSON is potentially stale (it was written by the old
+      -- encoder). Force a full re-encode.
+      storedEnc <- Digest.readEncoderId digestFile
+      currentEnc <- Digest.computeEncoderId
+      if storedEnc /= currentEnc
+        then do
+          putStrLn $ "  Encoder identity changed; falling back to full inference."
+          return Nothing
         else do
-          -- Partition: a module is "clean" if its current DSL source
-          -- hash matches the stored hash for its namespace. Modules
-          -- without a discoverable DSL source (e.g. demos under
-          -- demos/src/, modules from heads/haskell/src/) are treated
-          -- as clean — their definition is determined by code we
-          -- don't have direct access to here, but if they aren't
-          -- in stored AND aren't in currentDigest, no source change
-          -- is detectable so they're effectively unchanged.
-          let isClean m =
-                let ns = moduleNamespace m
-                in case (M.lookup ns currentDigest, M.lookup ns stored) of
-                     (Just c, Just s) -> c == s
-                     (Nothing, Nothing) -> True
-                     _                -> False
-              (cleanMods, dirtyMods) = L.partition isClean universeMods
-
-          if Prelude.null dirtyMods
-            then do
-              -- Everything is clean per the digest, but tryCacheHitSplit
-              -- said miss. That means a JSON file is missing or the
-              -- digest is stale. Fall through to full inference.
-              return Nothing
+          nsFiles <- Digest.discoverNamespaceFiles
+          currentDigest <- Digest.hashUniverse nsFiles universeMods
+          if M.null currentDigest
+            then return Nothing
             else do
-              putStrLn $ "  Incremental inference: "
-                ++ show (length dirtyMods) ++ " dirty / "
-                ++ show (length cleanMods) ++ " clean"
-              -- Load clean modules from JSON (they carry inferred types).
-              let cleanNs = fmap moduleNamespace cleanMods
-              loaded <- E.try (loadCleanFromJson distJsonRoot universeMods cleanNs)
-                        :: IO (Either E.SomeException [Module])
-              case loaded of
-                Left e -> do
-                  putStrLn $ "  Incremental load failed: " ++ show e
+              -- Partition: a module is "clean" if its current DSL source
+              -- hash matches the stored hash for its namespace. Modules
+              -- without a discoverable DSL source (e.g. demos under
+              -- demos/src/, modules from heads/haskell/src/) are treated
+              -- as clean — their definition is determined by code we
+              -- don't have direct access to here, but if they aren't
+              -- in stored AND aren't in currentDigest, no source change
+              -- is detectable so they're effectively unchanged.
+              let isClean m =
+                    let ns = moduleNamespace m
+                    in case (M.lookup ns currentDigest, M.lookup ns stored) of
+                         (Just c, Just s) -> c == s
+                         (Nothing, Nothing) -> True
+                         _                -> False
+                  (cleanMods, dirtyMods) = L.partition isClean universeMods
+
+              if Prelude.null dirtyMods
+                then do
+                  -- Everything is clean per the digest, but tryCacheHitSplit
+                  -- said miss. That means a JSON file is missing or the
+                  -- digest is stale. Fall through to full inference.
                   return Nothing
-                Right cleanLoaded -> do
-                  let typedUniverse = cleanLoaded ++ dirtyMods
-                  inferred <- inferModulesGivenIO typedUniverse dirtyMods
-                  -- Return:
-                  --   * all modules (cleanLoaded ++ inferred), so the
-                  --     schemaMap can be built over the complete set.
-                  --   * dirty subset (inferred), so the caller writes
-                  --     JSON only for the modules that actually changed.
-                  return (Just (IncrementalPartial (cleanLoaded ++ inferred) inferred))
+                else do
+                  putStrLn $ "  Incremental inference: "
+                    ++ show (length dirtyMods) ++ " dirty / "
+                    ++ show (length cleanMods) ++ " clean"
+                  -- Load clean modules from JSON (they carry inferred types).
+                  let cleanNs = fmap moduleNamespace cleanMods
+                  loaded <- E.try (loadCleanFromJson distJsonRoot universeMods cleanNs)
+                            :: IO (Either E.SomeException [Module])
+                  case loaded of
+                    Left e -> do
+                      putStrLn $ "  Incremental load failed: " ++ show e
+                      return Nothing
+                    Right cleanLoaded -> do
+                      let typedUniverse = cleanLoaded ++ dirtyMods
+                      inferred <- inferModulesGivenIO typedUniverse dirtyMods
+                      -- Return:
+                      --   * all modules (cleanLoaded ++ inferred), so the
+                      --     schemaMap can be built over the complete set.
+                      --   * dirty subset (inferred), so the caller writes
+                      --     JSON only for the modules that actually changed.
+                      return (Just (IncrementalPartial (cleanLoaded ++ inferred) inferred))
 
 -- | Load modules from per-package JSON paths. The dist-json-root
 -- layout is dist/json/<pkg>/src/main/json/<ns-path>.json; we route
@@ -503,6 +514,14 @@ tryCacheHitSplit distJsonRoot universeMods targetMods = do
 -- decode/encode modules generated from 'Hydra.Sources.Kernel.Terms.*') are
 -- transparently handled because their generator's source IS in the map, so
 -- any change upstream invalidates the cache.
+--
+-- Additionally, the universe-wide digest carries an `encoderId` (a hash of
+-- the JSON encode/decode/model/writer DSL files). When the on-disk
+-- encoderId doesn't match the current one, every namespace's stored JSON
+-- is potentially stale even if its DSL source is unchanged — we treat
+-- this as a universal cache miss. Per-package digests don't carry an
+-- encoderId because the universe-wide check fires first (before any
+-- per-package read).
 checkCacheHit :: FilePath -> [Module] -> [FilePath] -> IO (Maybe Digest.DigestMap)
 checkCacheHit digestFile universeMods targetPaths = do
   nsFiles <- Digest.discoverNamespaceFiles
@@ -511,11 +530,18 @@ checkCacheHit digestFile universeMods targetPaths = do
     then return Nothing  -- nothing to verify against; always recompute
     else do
       stored <- Digest.readDigest digestFile
-      if stored /= currentDigest
-        then return Nothing
-        else do
-          existFlags <- mapM SD.doesFileExist targetPaths
-          if and existFlags then return (Just currentDigest) else return Nothing
+      storedEnc <- Digest.readEncoderId digestFile
+      currentEnc <- Digest.computeEncoderId
+      let encoderMatches = storedEnc == currentEnc
+      if not encoderMatches
+        then do
+          putStrLn $ "  Encoder identity changed; invalidating universe cache."
+          return Nothing
+        else if stored /= currentDigest
+          then return Nothing
+          else do
+            existFlags <- mapM SD.doesFileExist targetPaths
+            if and existFlags then return (Just currentDigest) else return Nothing
 
 -- | After a successful slow-path run, overwrite the digest with fresh hashes.
 refreshDigest :: FilePath -> [Module] -> IO ()
@@ -525,7 +551,8 @@ refreshDigestAt :: FilePath -> [Module] -> IO ()
 refreshDigestAt digestFile universeMods = do
   nsFiles <- Digest.discoverNamespaceFiles
   current <- Digest.hashUniverse nsFiles universeMods
-  Digest.writeDigest digestFile current
+  encoderId <- Digest.computeEncoderId
+  Digest.writeUniverseDigest digestFile encoderId current
   putStrLn $ "  Digest refreshed: " ++ digestFile ++ " (" ++ show (M.size current) ++ " entries)"
 
 -- | Write DSL modules to JSON files.
