@@ -85,7 +85,7 @@ Demo output is written to `/tmp/hydra-avro-demo/`:
 You can also run the demos interactively:
 
 ```haskell
-import Hydra.Sources.Demos.AvroBicoder
+import Hydra.Demos.AvroBicoder
 runAllDemos          -- run all five demos
 runForwardDemo       -- just the forward pipeline
 runReverseDemo       -- just the reverse pipeline

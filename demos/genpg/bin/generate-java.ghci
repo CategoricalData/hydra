@@ -1,0 +1,5 @@
+-- Generate all Java modules for the GenPG demo.
+-- Usage: cd heads/haskell && stack ghci --ghci-options='+RTS -K256M -A32M -RTS' < ../../demos/genpg/bin/generate-java.ghci
+
+import Hydra.Demos.GenPG.GenerateJava
+generateJavaModules

@@ -49,7 +49,7 @@ error e =
       Errors.ErrorExtraction _ -> "extraction error"
       Errors.ErrorInference _ -> "inference error"
       Errors.ErrorOther v0 -> otherError v0
-      Errors.ErrorResolution _ -> "resolution error"
+      Errors.ErrorResolution v0 -> resolutionError v0
       Errors.ErrorUndefinedField v0 -> ErrorCore.undefinedFieldError v0
       Errors.ErrorUndefinedTermVariable v0 -> ErrorCore.undefinedTermVariableError v0
       Errors.ErrorUntypedTermVariable v0 -> ErrorCore.untypedTermVariableError v0
@@ -88,6 +88,20 @@ notAFunctionTypeError e =
 -- | Show an other error as a string
 otherError :: Errors.OtherError -> String
 otherError oe = Errors.unOtherError oe
+
+-- | Show a resolution error as a string, including the offending name or shape
+resolutionError :: Errors.ResolutionError -> String
+resolutionError re =
+    case re of
+      Errors.ResolutionErrorNoSuchBinding v0 -> Strings.cat2 "no such binding: " (Core.unName (Errors.noSuchBindingErrorName v0))
+      Errors.ResolutionErrorNoSuchPrimitive v0 -> Strings.cat2 "no such primitive: " (Core.unName (Errors.noSuchPrimitiveErrorName v0))
+      Errors.ResolutionErrorNoMatchingField v0 -> Strings.cat2 "no matching field: " (Core.unName (Errors.noMatchingFieldErrorFieldName v0))
+      Errors.ResolutionErrorOther v0 -> Strings.cat2 "resolution error: " (Errors.unOtherResolutionError v0)
+      Errors.ResolutionErrorUnexpectedShape v0 -> Strings.cat [
+        "unexpected shape: expected ",
+        (Errors.unexpectedShapeErrorExpected v0),
+        " but got ",
+        (Errors.unexpectedShapeErrorActual v0)]
 
 -- | Show a type arity mismatch error as a string
 typeArityMismatchError :: Checking.TypeArityMismatchError -> String

@@ -257,8 +257,15 @@ def round_float32(n: int, x: float) -> float:
         return 0.0
     if math.isnan(x) or math.isinf(x):
         return x
-    # Round-trip through float32 to ensure input is in float32 precision
+    # Round-trip through float32 to ensure input is in float32 precision.
+    # If the input underflows float32 (e.g. very small denormals), x32 may
+    # be 0.0 even though x != 0; treat it as zero rather than passing 0.0
+    # to log10 (which would give -inf and crash math.floor → OverflowError).
     x32 = struct.unpack('f', struct.pack('f', x))[0]
+    if x32 == 0:
+        return 0.0
+    if math.isnan(x32) or math.isinf(x32):
+        return x32
     factor = 10 ** (n - 1 - math.floor(math.log10(_builtins.abs(x32))))
     result = _builtins.round(x32 * factor) / factor
     # Round-trip result through float32
