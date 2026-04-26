@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Type inference following Algorithm W, extended for nominal terms and types
 
 module Hydra.Inference where
-
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Checking as Checking
 import qualified Hydra.Context as Context
@@ -38,17 +36,14 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
-
 -- | Return the element at the given index, or Left(Other) with the given description if out of range
 atOrFail :: Int -> String -> [t0] -> Either Errors.Error t0
 atOrFail i desc xs =
     Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "atOrFail: " desc)))) (\x -> Right x) (Lists.maybeAt i xs)
-
 -- | Unify type constraints and check the substitution
 bindConstraints :: t0 -> Graph.Graph -> [Typing.TypeConstraint] -> Either Errors.Error Typing.TypeSubst
 bindConstraints flowCx cx constraints =
     Eithers.bind (Eithers.bimap (\_e -> Errors.ErrorUnification _e) (\_a -> _a) (Unification.unifyTypeConstraints flowCx (Graph.graphSchemaTypes cx) constraints)) (\s -> Eithers.bind (Checking.checkTypeSubst flowCx cx s) (\_ -> Right s))
-
 -- | Handle unbound type variables under a typed let binding. Variables appearing free in the binding's declared type (but not in schema types or the scheme's own quantified variables) are added to the scheme and the term is wrapped in matching TypeLambdas. Variables appearing only in the term body (at type-application or lambda-domain positions) are phantom — they have no external effect on the binding's type — and are substituted with hydra.core.Unit in the body rather than generalized. This keeps downstream stages from seeing vacuous foralls that target languages with non-polymorphic value bindings (e.g. Scala val) cannot express.
 bindUnboundTypeVariables :: Graph.Graph -> Core.Term -> Core.Term
 bindUnboundTypeVariables cx term0 =
@@ -90,14 +85,12 @@ bindUnboundTypeVariables cx term0 =
                         Core.letBody = (bindUnboundTypeVariables cx (Core.letBody v0))}))
                     _ -> recurse term
       in (Rewriting.rewriteTerm rewrite term0)
-
 -- | Fold a list of type variables over a term to build a type application term
 buildTypeApplicationTerm :: [Core.Name] -> Core.Term -> Core.Term
 buildTypeApplicationTerm tvars body =
     Lists.foldl (\t -> \v -> Core.TermTypeApplication (Core.TypeApplicationTerm {
       Core.typeApplicationTermBody = t,
       Core.typeApplicationTermType = (Core.TypeVariable v)})) body tvars
-
 -- | Add (term variable, type scheme) pairs to the graph's bound types
 extendContext :: [(Core.Name, Core.TypeScheme)] -> Graph.Graph -> Graph.Graph
 extendContext pairs cx =
@@ -110,24 +103,20 @@ extendContext pairs cx =
       Graph.graphPrimitives = (Graph.graphPrimitives cx),
       Graph.graphSchemaTypes = (Graph.graphSchemaTypes cx),
       Graph.graphTypeVariables = (Graph.graphTypeVariables cx)}
-
 -- | Finalize an inferred term by checking for unbound type variables, then normalizing type variables
 finalizeInferredTerm :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 finalizeInferredTerm flowCx cx term =
 
       let term2 = bindUnboundTypeVariables cx term
       in (Eithers.bind (Checking.checkForUnboundTypeVariables flowCx cx term2) (\_ -> Right (Variables.normalizeTypeVariablesInTerm term2)))
-
 -- | Infer a term's type and map over the result
 forInferredTerm :: Context.Context -> Graph.Graph -> Core.Term -> String -> (Typing.InferenceResult -> t0) -> Either Errors.Error (t0, Context.Context)
 forInferredTerm fcx cx term desc f =
     Eithers.bind (inferTypeOfTerm fcx cx term desc) (\rp -> Right (f rp, (Typing.inferenceResultContext rp)))
-
 -- | Get all free variables in a graph's bound types
 freeVariablesInContext :: Graph.Graph -> S.Set Core.Name
 freeVariablesInContext cx =
     Lists.foldl Sets.union Sets.empty (Lists.map Variables.freeVariablesInTypeSchemeSimple (Maps.elems (Graph.graphBoundTypes cx)))
-
 -- | Generate a fresh type variable
 freshVariableType :: Context.Context -> (Core.Type, Context.Context)
 freshVariableType cx =
@@ -136,7 +125,6 @@ freshVariableType cx =
           name = Pairs.first result
           cx2 = Pairs.second result
       in (Core.TypeVariable name, cx2)
-
 -- | Generalize a type to a type scheme
 generalize :: Graph.Graph -> Core.Type -> Core.TypeScheme
 generalize cx typ =
@@ -155,12 +143,10 @@ generalize cx typ =
         Core.typeSchemeVariables = vars,
         Core.typeSchemeType = typ,
         Core.typeSchemeConstraints = constraintsMaybe}
-
 -- | Return the first element of a list, or Left(Other) with the given description if the list is empty
 headOrFail :: String -> [t0] -> Either Errors.Error t0
 headOrFail desc xs =
     Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "headOrFail: " desc)))) (\x -> Right x) (Lists.maybeHead xs)
-
 -- | Infer types for all elements in a graph, using the provided ordered bindings. Returns both the inferred graph and the ordered inferred bindings.
 inferGraphTypes :: Context.Context -> [Core.Binding] -> Graph.Graph -> Either Errors.Error ((Graph.Graph, [Core.Binding]), Context.Context)
 inferGraphTypes fcx0 bindings0 g0 =
@@ -197,11 +183,9 @@ inferGraphTypes fcx0 bindings0 g0 =
         in (Eithers.bind (finalizeInferredTerm fcx2 g0 term) (\finalized -> case finalized of
           Core.TermLet v0 -> Right (fromLetTerm v0, fcx2)
           Core.TermVariable _ -> Left (Errors.ErrorOther (Errors.OtherError "Expected inferred graph as let term"))))))
-
 -- | Infer the type of a term in a given inference context
 inferInGraphContext :: Context.Context -> Graph.Graph -> Core.Term -> Either Errors.Error Typing.InferenceResult
 inferInGraphContext fcx cx term = inferTypeOfTerm fcx cx term "single term"
-
 -- | Infer types for multiple terms, propagating class constraints from sub-expressions
 inferMany :: Context.Context -> Graph.Graph -> [(Core.Term, String)] -> Either Errors.Error (([Core.Term], ([Core.Type], (Typing.TypeSubst, (M.Map Core.Name Core.TypeVariableMetadata)))), Context.Context)
 inferMany fcx cx pairs =
@@ -228,7 +212,6 @@ inferMany fcx cx pairs =
                 c1Subst = Substitution.substInClassConstraints s2 c1
                 mergedConstraints = mergeClassConstraints c1Subst c2
             in (Right ((Lists.cons (Substitution.substTypesInTerm s2 e1) e2, (Lists.cons (Substitution.substInType s2 t1) t2, (Substitution.composeTypeSubst s1 s2, mergedConstraints))), fcx3))))))) (Lists.uncons pairs))
-
 -- | Map a possibly untyped term to a fully typed term and its type
 inferTypeOf :: Context.Context -> Graph.Graph -> Core.Term -> Either Errors.Error ((Core.Term, Core.TypeScheme), Context.Context)
 inferTypeOf fcx cx term =
@@ -252,7 +235,6 @@ inferTypeOf fcx cx term =
             "Expected a single binding with a type scheme, but got: ",
             (Literals.showInt32 (Lists.length bindings)),
             " bindings"]))))))))))
-
 -- | Infer the type of an annotated term (Either version)
 inferTypeOfAnnotatedTerm :: Context.Context -> Graph.Graph -> Core.AnnotatedTerm -> Either Errors.Error Typing.InferenceResult
 inferTypeOfAnnotatedTerm fcx cx at =
@@ -273,7 +255,6 @@ inferTypeOfAnnotatedTerm fcx cx at =
           Typing.inferenceResultSubst = isubst,
           Typing.inferenceResultClassConstraints = iconstraints,
           Typing.inferenceResultContext = fcx2}))))
-
 -- | Infer the type of a function application (Either version)
 inferTypeOfApplication :: Context.Context -> Graph.Graph -> Core.Application -> Either Errors.Error Typing.InferenceResult
 inferTypeOfApplication fcx0 cx app =
@@ -322,7 +303,6 @@ inferTypeOfApplication fcx0 cx app =
               Typing.inferenceResultSubst = rSubst,
               Typing.inferenceResultClassConstraints = rConstraints,
               Typing.inferenceResultContext = fcx4})))))))))
-
 -- | Infer the type of a case statement (Either version)
 inferTypeOfCaseStatement :: Context.Context -> Graph.Graph -> Core.CaseStatement -> Either Errors.Error Typing.InferenceResult
 inferTypeOfCaseStatement fcx cx caseStmt =
@@ -386,7 +366,6 @@ inferTypeOfCaseStatement fcx cx caseStmt =
                 subst]])) (Substitution.substInClassConstraints subst allElemConstraints)) (Lists.concat [
               dfltConstraints,
               caseConstraints])) (\mcResult -> Right mcResult)))))))))
-
 -- | Infer the type of a collection. The classNames parameter specifies type classes (e.g. ordering) that the element type variable must satisfy.
 inferTypeOfCollection :: Context.Context -> Graph.Graph -> (Core.Type -> Core.Type) -> ([Core.Term] -> Core.Term) -> String -> S.Set Core.Name -> [Core.Term] -> Either Errors.Error Typing.InferenceResult
 inferTypeOfCollection fcx cx typCons trmCons desc classNames els =
@@ -418,7 +397,6 @@ inferTypeOfCollection fcx cx typCons trmCons desc classNames els =
               itype = typCons (Core.TypeVariable var)
               isubst = Substitution.composeTypeSubst subst1 subst2
           in (yieldWithConstraints fcx3 iterm itype isubst (Substitution.substInClassConstraints subst2 allConstraints))) constraints) (\mcResult -> Right mcResult)))))
-
 -- | Infer the type of an either value (Either version)
 inferTypeOfEither :: Context.Context -> Graph.Graph -> Either Core.Term Core.Term -> Either Errors.Error Typing.InferenceResult
 inferTypeOfEither fcx cx e =
@@ -465,7 +443,6 @@ inferTypeOfEither fcx cx e =
                     Core.eitherTypeLeft = leftType,
                     Core.eitherTypeRight = rightType})
       in (Right (yieldChecked fcx3 termWithBothTypes eitherType subst)))) e
-
 -- | Infer the type of a union injection (Either version)
 inferTypeOfInjection :: Context.Context -> Graph.Graph -> Core.Injection -> Either Errors.Error Typing.InferenceResult
 inferTypeOfInjection fcx cx injection =
@@ -493,7 +470,6 @@ inferTypeOfInjection fcx cx injection =
               Typing.typeConstraintLeft = ftyp,
               Typing.typeConstraintRight = ityp,
               Typing.typeConstraintComment = "schema type of injected field"}]) (\mcResult -> Right mcResult))))))))
-
 -- | Infer the type of a lambda function (Either version)
 inferTypeOfLambda :: Context.Context -> Graph.Graph -> Core.Lambda -> Either Errors.Error Typing.InferenceResult
 inferTypeOfLambda fcx cx lambda =
@@ -538,7 +514,6 @@ inferTypeOfLambda fcx cx lambda =
           Typing.inferenceResultSubst = isubst,
           Typing.inferenceResultClassConstraints = iconstraints,
           Typing.inferenceResultContext = fcx3}))))
-
 -- | Normalize a let term before inferring its type (Either version)
 inferTypeOfLet :: Context.Context -> Graph.Graph -> Core.Let -> Either Errors.Error Typing.InferenceResult
 inferTypeOfLet fcx0 cx let0 =
@@ -603,7 +578,6 @@ inferTypeOfLet fcx0 cx let0 =
                     Core.TermLet v0 -> inferTypeOfLetNormalized fcx cx v0
                     _ -> inferTypeOfTerm fcx cx rewrittenLet "empty let term"
       in (Eithers.map rewriteResult res)
-
 -- | Infer the type of a let (letrec) term which is already in a normal form (Either version)
 inferTypeOfLetNormalized :: Context.Context -> Graph.Graph -> Core.Let -> Either Errors.Error Typing.InferenceResult
 inferTypeOfLetNormalized fcx0 cx0 letTerm =
@@ -694,12 +668,10 @@ inferTypeOfLetNormalized fcx0 cx0 letTerm =
                 sbody]),
               Typing.inferenceResultClassConstraints = allConstraints,
               Typing.inferenceResultContext = fcx4})))))))))
-
 -- | Infer the type of a list (Either version)
 inferTypeOfList :: Context.Context -> Graph.Graph -> [Core.Term] -> Either Errors.Error Typing.InferenceResult
 inferTypeOfList fcx cx =
     inferTypeOfCollection fcx cx (\x -> Core.TypeList x) (\x -> Core.TermList x) "list element" Sets.empty
-
 -- | Infer the type of a literal
 inferTypeOfLiteral :: Context.Context -> Core.Literal -> Typing.InferenceResult
 inferTypeOfLiteral fcx lit =
@@ -709,7 +681,6 @@ inferTypeOfLiteral fcx lit =
       Typing.inferenceResultSubst = Substitution.idTypeSubst,
       Typing.inferenceResultClassConstraints = Maps.empty,
       Typing.inferenceResultContext = fcx}
-
 -- | Infer the type of a map (Either version)
 inferTypeOfMap :: Context.Context -> Graph.Graph -> M.Map Core.Term Core.Term -> Either Errors.Error Typing.InferenceResult
 inferTypeOfMap fcx cx m =
@@ -760,14 +731,12 @@ inferTypeOfMap fcx cx m =
             subst]) (Substitution.substInClassConstraints subst allMapConstraints)) (Lists.concat [
             kcons,
             vcons])) (\mcResult -> Right mcResult)))))))
-
 -- | Infer the type of a Maybe value
 inferTypeOfOptional :: Context.Context -> Graph.Graph -> Maybe Core.Term -> Either Errors.Error Typing.InferenceResult
 inferTypeOfOptional fcx cx m =
 
       let trmCons = \terms -> Core.TermMaybe (Lists.maybeHead terms)
       in (inferTypeOfCollection fcx cx (\x -> Core.TypeMaybe x) trmCons "optional element" Sets.empty (Maybes.maybe [] Lists.singleton m))
-
 -- | Infer the type of a pair (Either version)
 inferTypeOfPair :: Context.Context -> Graph.Graph -> (Core.Term, Core.Term) -> Either Errors.Error Typing.InferenceResult
 inferTypeOfPair fcx cx p =
@@ -791,7 +760,6 @@ inferTypeOfPair fcx cx p =
         in (Right (yieldWithConstraints fcx2 termWithTypes (Core.TypePair (Core.PairType {
           Core.pairTypeFirst = tyFst,
           Core.pairTypeSecond = tySnd})) isubst pairElemConstraints))))))))
-
 -- | Infer the type of a primitive function (Either version)
 inferTypeOfPrimitive :: Context.Context -> Graph.Graph -> Core.Name -> Either Errors.Error Typing.InferenceResult
 inferTypeOfPrimitive fcx cx name =
@@ -802,7 +770,6 @@ inferTypeOfPrimitive fcx cx name =
           fcx2 = Pairs.second tsResult
           constraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
       in (Right (yieldCheckedWithConstraints fcx2 (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)) (Core.typeSchemeType ts) Substitution.idTypeSubst constraints))) (Maybes.map Graph.primitiveType (Maps.lookup name (Graph.graphPrimitives cx)))
-
 -- | Infer the type of a record projection (Either version)
 inferTypeOfProjection :: Context.Context -> Graph.Graph -> Core.Projection -> Either Errors.Error Typing.InferenceResult
 inferTypeOfProjection fcx cx proj =
@@ -819,7 +786,6 @@ inferTypeOfProjection fcx cx proj =
           Core.projectionField = fname}))) (Core.TypeFunction (Core.FunctionType {
           Core.functionTypeDomain = (Resolution.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
           Core.functionTypeCodomain = ftyp})) Substitution.idTypeSubst))))))
-
 -- | Infer the type of a record (Either version)
 inferTypeOfRecord :: Context.Context -> Graph.Graph -> Core.Record -> Either Errors.Error Typing.InferenceResult
 inferTypeOfRecord fcx cx record =
@@ -852,12 +818,10 @@ inferTypeOfRecord fcx cx record =
               Typing.typeConstraintLeft = stype,
               Typing.typeConstraintRight = ityp,
               Typing.typeConstraintComment = "schema type of record"}]) (\mcResult -> Right mcResult))))))
-
 -- | Infer the type of a set (Either version)
 inferTypeOfSet :: Context.Context -> Graph.Graph -> S.Set Core.Term -> Either Errors.Error Typing.InferenceResult
 inferTypeOfSet fcx cx s =
     inferTypeOfCollection fcx cx (\x -> Core.TypeSet x) (\terms -> Core.TermSet (Sets.fromList terms)) "set element" (Sets.singleton (Core.Name "ordering")) (Sets.toList s)
-
 -- | Infer the type of a given term (Either version)
 inferTypeOfTerm :: Context.Context -> Graph.Graph -> Core.Term -> String -> Either Errors.Error Typing.InferenceResult
 inferTypeOfTerm fcx cx term desc =
@@ -889,15 +853,12 @@ inferTypeOfTerm fcx cx term desc =
         Core.TermUnwrap v0 -> inferTypeOfUnwrap fcx2 cx v0
         Core.TermVariable v0 -> inferTypeOfVariable fcx2 cx v0
         Core.TermWrap v0 -> inferTypeOfWrappedTerm fcx2 cx v0
-
 -- | Infer the type of a type application (Either version)
 inferTypeOfTypeApplication :: Context.Context -> Graph.Graph -> Core.TypeApplicationTerm -> Either Errors.Error Typing.InferenceResult
 inferTypeOfTypeApplication fcx cx tt = inferTypeOfTerm fcx cx (Core.typeApplicationTermBody tt) "type application term"
-
 -- | Infer the type of a type abstraction (Either version)
 inferTypeOfTypeLambda :: Context.Context -> Graph.Graph -> Core.TypeLambda -> Either Errors.Error Typing.InferenceResult
 inferTypeOfTypeLambda fcx cx ta = inferTypeOfTerm fcx cx (Core.typeLambdaBody ta) "type abstraction"
-
 -- | The trivial inference rule for the unit term
 inferTypeOfUnit :: Context.Context -> Typing.InferenceResult
 inferTypeOfUnit fcx =
@@ -907,7 +868,6 @@ inferTypeOfUnit fcx =
       Typing.inferenceResultSubst = Substitution.idTypeSubst,
       Typing.inferenceResultClassConstraints = Maps.empty,
       Typing.inferenceResultContext = fcx}
-
 -- | Infer the type of an unwrap operation (Either version)
 inferTypeOfUnwrap :: Context.Context -> Graph.Graph -> Core.Name -> Either Errors.Error Typing.InferenceResult
 inferTypeOfUnwrap fcx cx tname =
@@ -919,7 +879,6 @@ inferTypeOfUnwrap fcx cx tname =
       in (Eithers.bind (ExtractCore.wrappedType tname stype) (\wtyp -> Right (yield fcx2 (buildTypeApplicationTerm svars (Core.TermUnwrap tname)) (Core.TypeFunction (Core.FunctionType {
         Core.functionTypeDomain = (Resolution.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
         Core.functionTypeCodomain = wtyp})) Substitution.idTypeSubst))))
-
 -- | Infer the type of a variable (Either version)
 inferTypeOfVariable :: Context.Context -> Graph.Graph -> Core.Name -> Either Errors.Error Typing.InferenceResult
 inferTypeOfVariable fcx cx name =
@@ -940,7 +899,6 @@ inferTypeOfVariable fcx cx name =
         Typing.inferenceResultSubst = Substitution.idTypeSubst,
         Typing.inferenceResultClassConstraints = constraints,
         Typing.inferenceResultContext = fcx2}))) (Maps.lookup name (Graph.graphBoundTypes cx))
-
 -- | Infer the type of a wrapped term (Either version)
 inferTypeOfWrappedTerm :: Context.Context -> Graph.Graph -> Core.WrappedTerm -> Either Errors.Error Typing.InferenceResult
 inferTypeOfWrappedTerm fcx cx wt =
@@ -965,7 +923,6 @@ inferTypeOfWrappedTerm fcx cx wt =
               Typing.typeConstraintLeft = stype,
               Typing.typeConstraintRight = ityp,
               Typing.typeConstraintComment = "schema type of wrapper"}]) (\mcResult -> Right mcResult))))))
-
 -- | Infer types for temporary let bindings (Either version)
 inferTypesOfTemporaryBindings :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either Errors.Error (([Core.Term], ([Core.Type], (Typing.TypeSubst, (M.Map Core.Name Core.TypeVariableMetadata)))), Context.Context)
 inferTypesOfTemporaryBindings fcx cx bins =
@@ -1002,17 +959,14 @@ inferTypesOfTemporaryBindings fcx cx bins =
                   c1Subst = Substitution.substInClassConstraints r c1
                   mergedConstraints = mergeClassConstraints c1Subst c2
               in (Right ((Lists.cons (Substitution.substTypesInTerm r j) h, (Lists.cons (Substitution.substInType r u_prime) r_prime, (Substitution.composeTypeSubst u r, mergedConstraints))), fcx3))))))))) (Lists.uncons bins))
-
 -- | Check if a variable is unbound in context
 isUnbound :: Graph.Graph -> Core.Name -> Bool
 isUnbound cx v =
     Logic.and (Logic.not (Sets.member v (freeVariablesInContext cx))) (Logic.not (Maps.member v (Graph.graphSchemaTypes cx)))
-
 -- | Map over type constraints after unification
 mapConstraints :: t0 -> Graph.Graph -> (Typing.TypeSubst -> t1) -> [Typing.TypeConstraint] -> Either Errors.Error t1
 mapConstraints flowCx cx f constraints =
     Eithers.bind (Eithers.bimap (\_e -> Errors.ErrorUnification _e) (\_a -> _a) (Unification.unifyTypeConstraints flowCx (Graph.graphSchemaTypes cx) constraints)) (\s -> Eithers.bind (Checking.checkTypeSubst flowCx cx s) (\_ -> Right (f s)))
-
 -- | Merge two maps of class constraints. When both maps have constraints for the same variable, union the class sets.
 mergeClassConstraints :: Ord t0 => (M.Map t0 Core.TypeVariableMetadata -> M.Map t0 Core.TypeVariableMetadata -> M.Map t0 Core.TypeVariableMetadata)
 mergeClassConstraints m1 m2 =
@@ -1024,7 +978,6 @@ mergeClassConstraints m1 m2 =
                 Core.TypeVariableMetadata {
                   Core.typeVariableMetadataClasses = (Sets.union (Core.typeVariableMetadataClasses existing) (Core.typeVariableMetadataClasses v))}
         in (Maps.insert k merged acc)) (Maps.lookup k acc))) m1 (Maps.toList m2)
-
 -- | Show an inference result for debugging
 showInferenceResult :: Typing.InferenceResult -> String
 showInferenceResult result =
@@ -1040,7 +993,6 @@ showInferenceResult result =
         ", subst=",
         (ShowTyping.typeSubst subst),
         "}"])
-
 -- | Create an inference result with no class constraints
 yield :: Context.Context -> Core.Term -> Core.Type -> Typing.TypeSubst -> Typing.InferenceResult
 yield fcx term typ subst =
@@ -1050,7 +1002,6 @@ yield fcx term typ subst =
       Typing.inferenceResultSubst = subst,
       Typing.inferenceResultClassConstraints = Maps.empty,
       Typing.inferenceResultContext = fcx}
-
 -- | Create a checked inference result
 yieldChecked :: Context.Context -> Core.Term -> Core.Type -> Typing.TypeSubst -> Typing.InferenceResult
 yieldChecked fcx term typ subst =
@@ -1063,7 +1014,6 @@ yieldChecked fcx term typ subst =
         Typing.inferenceResultSubst = subst,
         Typing.inferenceResultClassConstraints = Maps.empty,
         Typing.inferenceResultContext = fcx}
-
 -- | Create a checked inference result with class constraints
 yieldCheckedWithConstraints :: Context.Context -> Core.Term -> Core.Type -> Typing.TypeSubst -> M.Map Core.Name Core.TypeVariableMetadata -> Typing.InferenceResult
 yieldCheckedWithConstraints fcx term typ subst constraints =
@@ -1077,7 +1027,6 @@ yieldCheckedWithConstraints fcx term typ subst constraints =
         Typing.inferenceResultSubst = subst,
         Typing.inferenceResultClassConstraints = iconstraints,
         Typing.inferenceResultContext = fcx}
-
 -- | Create an inference result with debug output
 yieldDebug :: Context.Context -> t0 -> String -> Core.Term -> Core.Type -> Typing.TypeSubst -> Either Errors.Error Typing.InferenceResult
 yieldDebug fcx cx debugId term typ subst =
@@ -1100,7 +1049,6 @@ yieldDebug fcx cx debugId term typ subst =
         Typing.inferenceResultSubst = subst,
         Typing.inferenceResultClassConstraints = Maps.empty,
         Typing.inferenceResultContext = fcx})))
-
 -- | Create an inference result with class constraints
 yieldWithConstraints :: Context.Context -> Core.Term -> Core.Type -> Typing.TypeSubst -> M.Map Core.Name Core.TypeVariableMetadata -> Typing.InferenceResult
 yieldWithConstraints fcx term typ subst constraints =

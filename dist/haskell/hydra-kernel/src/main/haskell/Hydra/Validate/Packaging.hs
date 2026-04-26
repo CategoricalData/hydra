@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Validation functions for modules and packages
 
 module Hydra.Validate.Packaging where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Formatting as Formatting
@@ -19,7 +17,6 @@ import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Check for module namespaces that conflict when mapped to target language paths
 checkConflictingModuleNamespaces :: Packaging.Package -> Maybe ErrorPackaging.InvalidPackageError
 checkConflictingModuleNamespaces pkg =
@@ -36,7 +33,6 @@ checkConflictingModuleNamespaces pkg =
                     ErrorPackaging.conflictingModuleNamespaceErrorFirst = first,
                     ErrorPackaging.conflictingModuleNamespaceErrorSecond = ns}))))))) (\_ -> acc))) (Maps.empty, Nothing) (Packaging.packageModules pkg)
       in (Pairs.second result)
-
 -- | Check for union variant names that, when mapped to constructor names, conflict with other type definitions
 checkConflictingVariantNames :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
 checkConflictingVariantNames mod =
@@ -61,7 +57,6 @@ checkConflictingVariantNames mod =
                 ErrorPackaging.conflictingVariantNameErrorConflictingName = (Core.Name constructorName)}))) Nothing)) (\_ -> innerAcc)) Nothing v1
             _ -> Nothing
         _ -> Nothing) (\_ -> acc)) Nothing defs)
-
 -- | Check that all definition names in a module have the module's namespace as a prefix
 checkDefinitionNamespaces :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
 checkDefinitionNamespaces mod =
@@ -76,7 +71,6 @@ checkDefinitionNamespaces mod =
         in (Logic.ifElse (Equality.equal (Strings.fromList namePrefix) prefix) Nothing (Just (ErrorPackaging.InvalidModuleErrorDefinitionNotInModuleNamespace (ErrorPackaging.DefinitionNotInModuleNamespaceError {
           ErrorPackaging.definitionNotInModuleNamespaceErrorNamespace = ns,
           ErrorPackaging.definitionNotInModuleNamespaceErrorName = name}))))) (\_ -> acc)) Nothing (Packaging.moduleDefinitions mod))
-
 -- | Check for duplicate definition names in a module
 checkDuplicateDefinitionNames :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
 checkDuplicateDefinitionNames mod =
@@ -92,7 +86,6 @@ checkDuplicateDefinitionNames mod =
                         ErrorPackaging.duplicateDefinitionNameErrorNamespace = ns,
                         ErrorPackaging.duplicateDefinitionNameErrorName = name})))) (Sets.insert name seen, Nothing))) (\_ -> acc))) (Sets.empty, Nothing) (Packaging.moduleDefinitions mod)
       in (Pairs.second result)
-
 -- | Check for duplicate module namespaces in a package
 checkDuplicateModuleNamespaces :: Packaging.Package -> Maybe ErrorPackaging.InvalidPackageError
 checkDuplicateModuleNamespaces pkg =
@@ -106,14 +99,12 @@ checkDuplicateModuleNamespaces pkg =
                   in (Logic.ifElse (Sets.member ns seen) (seen, (Just (ErrorPackaging.InvalidPackageErrorDuplicateModuleNamespace (ErrorPackaging.DuplicateModuleNamespaceError {
                     ErrorPackaging.duplicateModuleNamespaceErrorNamespace = ns})))) (Sets.insert ns seen, Nothing))) (\_ -> acc))) (Sets.empty, Nothing) (Packaging.packageModules pkg)
       in (Pairs.second result)
-
 -- | Extract the name from a definition
 definitionName :: Packaging.Definition -> Core.Name
 definitionName def =
     case def of
       Packaging.DefinitionTerm v0 -> Packaging.termDefinitionName v0
       Packaging.DefinitionType v0 -> Packaging.typeDefinitionName v0
-
 -- | Validate a module, returning the first error found or nothing if valid
 module_ :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
 module_ mod =
@@ -122,7 +113,6 @@ module_ mod =
       in (Maybes.cases r1 (
         let r2 = checkDuplicateDefinitionNames mod
         in (Maybes.cases r2 (checkConflictingVariantNames mod) (\_ -> r2))) (\_ -> r1))
-
 -- | Validate a package, returning the first error found or nothing if valid
 package :: Packaging.Package -> Maybe ErrorPackaging.InvalidPackageError
 package pkg =

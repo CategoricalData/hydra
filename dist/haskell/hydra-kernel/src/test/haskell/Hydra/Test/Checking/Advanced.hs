@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Advanced type checking test cases: annotated terms and flows
 
 module Hydra.Test.Checking.Advanced where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Lib.Eithers as Eithers
@@ -16,7 +14,6 @@ import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
 -- | Advanced type checking test cases
 allTests :: Testing.TestGroup
 allTests =
@@ -26,7 +23,6 @@ allTests =
       Testing.testGroupSubgroups = [
         annotatedTermsTests],
       Testing.testGroupCases = []}
-
 annotatedTermsTests :: Testing.TestGroup
 annotatedTermsTests =
     Testing.TestGroup {
@@ -37,7 +33,6 @@ annotatedTermsTests =
         nestedAnnotationsTests,
         annotationsInComplexContextsTests],
       Testing.testGroupCases = []}
-
 annotationsInComplexContextsTests :: Testing.TestGroup
 annotationsInComplexContextsTests =
     Testing.TestGroup {
@@ -117,7 +112,6 @@ annotationsInComplexContextsTests =
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 nestedAnnotationsTests :: Testing.TestGroup
 nestedAnnotationsTests =
     Testing.TestGroup {
@@ -165,7 +159,6 @@ nestedAnnotationsTests =
             Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
-
 topLevelAnnotationsTests :: Testing.TestGroup
 topLevelAnnotationsTests =
     Testing.TestGroup {

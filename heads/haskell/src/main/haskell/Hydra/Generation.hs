@@ -94,9 +94,12 @@ generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doH
                   else return False
         CM.unless skip $ writeFile fullPath withNewline
       where
-        cleaned = unlines $ map stripTrailingWhitespace $ lines s
-        stripTrailingWhitespace line = reverse $ dropWhile (== ' ') $ reverse line
-        withNewline = if L.isSuffixOf "\n" cleaned then cleaned else cleaned ++ "\n"
+        -- Trailing whitespace is the coder's responsibility. The Hydra
+        -- serialization layer in `hydra.serialization` and per-coder
+        -- writers (e.g. the Haskell `toHaskellComments` formatter)
+        -- avoid emitting trailing whitespace at the source. This
+        -- writer just adds the final newline.
+        withNewline = if L.isSuffixOf "\n" s then s else s ++ "\n"
 
 -- | Build a graph from a list of modules using the Haskell bootstrapGraph.
 -- Thin wrapper around modulesToGraphWith.

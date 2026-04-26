@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Test cases for automatic differentiation
 
 module Hydra.Test.Differentiation where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Differentiation as Differentiation
 import qualified Hydra.Lib.Eithers as Eithers
@@ -14,7 +12,6 @@ import qualified Hydra.Testing as Testing
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Test cases for automatic differentiation
 allTests :: Testing.TestGroup
 allTests =

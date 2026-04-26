@@ -1,5 +1,4 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | A basic YAML representation model. Based on:
 -- |   https://yaml.org/spec/1.2/spec.html
 -- | The Serialization and Presentation properties of YAML,
@@ -7,12 +6,10 @@
 -- | In addition, tags are omitted from this model, and non-standard scalars are unsupported.
 
 module Hydra.Yaml.Model where
-
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
 -- | A YAML node (value)
 data Node =
   -- | A mapping from nodes to nodes
@@ -22,15 +19,10 @@ data Node =
   -- | A sequence of nodes
   NodeSequence [Node]
   deriving (Eq, Ord, Read, Show)
-
 _Node = Core.Name "hydra.yaml.model.Node"
-
 _Node_mapping = Core.Name "mapping"
-
 _Node_scalar = Core.Name "scalar"
-
 _Node_sequence = Core.Name "sequence"
-
 -- | A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here
 data Scalar =
   -- | Represents a true/false value
@@ -42,21 +34,14 @@ data Scalar =
   -- | Represents arbitrary sized finite mathematical integers
   ScalarInt Integer |
   -- | Represents the lack of a value
-  ScalarNull  |
+  ScalarNull |
   -- | A string value
   ScalarStr String
   deriving (Eq, Ord, Read, Show)
-
 _Scalar = Core.Name "hydra.yaml.model.Scalar"
-
 _Scalar_bool = Core.Name "bool"
-
 _Scalar_decimal = Core.Name "decimal"
-
 _Scalar_float = Core.Name "float"
-
 _Scalar_int = Core.Name "int"
-
 _Scalar_null = Core.Name "null"
-
 _Scalar_str = Core.Name "str"

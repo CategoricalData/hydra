@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term decoders for hydra.classes
 
 module Hydra.Decode.Classes where
-
 import qualified Hydra.Classes as Classes
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
@@ -15,7 +13,6 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 typeClass :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Classes.TypeClass
 typeClass cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of

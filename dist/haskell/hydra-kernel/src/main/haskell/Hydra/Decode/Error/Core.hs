@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term decoders for hydra.error.core
 
 module Hydra.Decode.Error.Core where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Decode.Paths as Paths
@@ -18,7 +16,6 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 constantConditionError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.ConstantConditionError
 constantConditionError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -32,7 +29,6 @@ constantConditionError cx raw =
           ErrorCore.constantConditionErrorLocation = field_location,
           ErrorCore.constantConditionErrorValue = field_value}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 duplicateBindingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.DuplicateBindingError
 duplicateBindingError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -42,7 +38,6 @@ duplicateBindingError cx raw =
           ErrorCore.duplicateBindingErrorLocation = field_location,
           ErrorCore.duplicateBindingErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 duplicateFieldError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.DuplicateFieldError
 duplicateFieldError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -52,7 +47,6 @@ duplicateFieldError cx raw =
           ErrorCore.duplicateFieldErrorLocation = field_location,
           ErrorCore.duplicateFieldErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 duplicateRecordTypeFieldNamesError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.DuplicateRecordTypeFieldNamesError
 duplicateRecordTypeFieldNamesError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -62,7 +56,6 @@ duplicateRecordTypeFieldNamesError cx raw =
           ErrorCore.duplicateRecordTypeFieldNamesErrorLocation = field_location,
           ErrorCore.duplicateRecordTypeFieldNamesErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 duplicateUnionTypeFieldNamesError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.DuplicateUnionTypeFieldNamesError
 duplicateUnionTypeFieldNamesError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -72,7 +65,6 @@ duplicateUnionTypeFieldNamesError cx raw =
           ErrorCore.duplicateUnionTypeFieldNamesErrorLocation = field_location,
           ErrorCore.duplicateUnionTypeFieldNamesErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 emptyCaseStatementError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.EmptyCaseStatementError
 emptyCaseStatementError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -82,7 +74,6 @@ emptyCaseStatementError cx raw =
           ErrorCore.emptyCaseStatementErrorLocation = field_location,
           ErrorCore.emptyCaseStatementErrorTypeName = field_typeName}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 emptyLetBindingsError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.EmptyLetBindingsError
 emptyLetBindingsError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -91,7 +82,6 @@ emptyLetBindingsError cx raw =
         in (Eithers.bind (ExtractCore.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (ErrorCore.EmptyLetBindingsError {
           ErrorCore.emptyLetBindingsErrorLocation = field_location})))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 emptyRecordTypeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.EmptyRecordTypeError
 emptyRecordTypeError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -100,7 +90,6 @@ emptyRecordTypeError cx raw =
         in (Eithers.bind (ExtractCore.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (ErrorCore.EmptyRecordTypeError {
           ErrorCore.emptyRecordTypeErrorLocation = field_location})))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 emptyTermAnnotationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.EmptyTermAnnotationError
 emptyTermAnnotationError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -109,7 +98,6 @@ emptyTermAnnotationError cx raw =
         in (Eithers.bind (ExtractCore.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (ErrorCore.EmptyTermAnnotationError {
           ErrorCore.emptyTermAnnotationErrorLocation = field_location})))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 emptyTypeAnnotationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.EmptyTypeAnnotationError
 emptyTypeAnnotationError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -118,7 +106,6 @@ emptyTypeAnnotationError cx raw =
         in (Eithers.bind (ExtractCore.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (ErrorCore.EmptyTypeAnnotationError {
           ErrorCore.emptyTypeAnnotationErrorLocation = field_location})))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 emptyTypeNameInTermError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.EmptyTypeNameInTermError
 emptyTypeNameInTermError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -127,7 +114,6 @@ emptyTypeNameInTermError cx raw =
         in (Eithers.bind (ExtractCore.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (ErrorCore.EmptyTypeNameInTermError {
           ErrorCore.emptyTypeNameInTermErrorLocation = field_location})))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 emptyUnionTypeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.EmptyUnionTypeError
 emptyUnionTypeError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -136,7 +122,6 @@ emptyUnionTypeError cx raw =
         in (Eithers.bind (ExtractCore.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (ErrorCore.EmptyUnionTypeError {
           ErrorCore.emptyUnionTypeErrorLocation = field_location})))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 invalidForallParameterNameError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.InvalidForallParameterNameError
 invalidForallParameterNameError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -146,7 +131,6 @@ invalidForallParameterNameError cx raw =
           ErrorCore.invalidForallParameterNameErrorLocation = field_location,
           ErrorCore.invalidForallParameterNameErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 invalidLambdaParameterNameError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.InvalidLambdaParameterNameError
 invalidLambdaParameterNameError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -156,7 +140,6 @@ invalidLambdaParameterNameError cx raw =
           ErrorCore.invalidLambdaParameterNameErrorLocation = field_location,
           ErrorCore.invalidLambdaParameterNameErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 invalidLetBindingNameError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.InvalidLetBindingNameError
 invalidLetBindingNameError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -166,7 +149,6 @@ invalidLetBindingNameError cx raw =
           ErrorCore.invalidLetBindingNameErrorLocation = field_location,
           ErrorCore.invalidLetBindingNameErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 invalidTermError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.InvalidTermError
 invalidTermError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -203,7 +185,6 @@ invalidTermError cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 invalidTypeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.InvalidTypeError
 invalidTypeError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -232,7 +213,6 @@ invalidTypeError cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 invalidTypeLambdaParameterNameError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.InvalidTypeLambdaParameterNameError
 invalidTypeLambdaParameterNameError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -242,7 +222,6 @@ invalidTypeLambdaParameterNameError cx raw =
           ErrorCore.invalidTypeLambdaParameterNameErrorLocation = field_location,
           ErrorCore.invalidTypeLambdaParameterNameErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 invalidTypeSchemeVariableNameError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.InvalidTypeSchemeVariableNameError
 invalidTypeSchemeVariableNameError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -252,7 +231,6 @@ invalidTypeSchemeVariableNameError cx raw =
           ErrorCore.invalidTypeSchemeVariableNameErrorLocation = field_location,
           ErrorCore.invalidTypeSchemeVariableNameErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 nestedTermAnnotationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.NestedTermAnnotationError
 nestedTermAnnotationError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -261,7 +239,6 @@ nestedTermAnnotationError cx raw =
         in (Eithers.bind (ExtractCore.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (ErrorCore.NestedTermAnnotationError {
           ErrorCore.nestedTermAnnotationErrorLocation = field_location})))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 nestedTypeAnnotationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.NestedTypeAnnotationError
 nestedTypeAnnotationError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -270,7 +247,6 @@ nestedTypeAnnotationError cx raw =
         in (Eithers.bind (ExtractCore.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (ErrorCore.NestedTypeAnnotationError {
           ErrorCore.nestedTypeAnnotationErrorLocation = field_location})))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 nonComparableMapKeyTypeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.NonComparableMapKeyTypeError
 nonComparableMapKeyTypeError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -280,7 +256,6 @@ nonComparableMapKeyTypeError cx raw =
           ErrorCore.nonComparableMapKeyTypeErrorLocation = field_location,
           ErrorCore.nonComparableMapKeyTypeErrorKeyType = field_keyType}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 nonComparableSetElementTypeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.NonComparableSetElementTypeError
 nonComparableSetElementTypeError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -290,7 +265,6 @@ nonComparableSetElementTypeError cx raw =
           ErrorCore.nonComparableSetElementTypeErrorLocation = field_location,
           ErrorCore.nonComparableSetElementTypeErrorElementType = field_elementType}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 redundantWrapUnwrapError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.RedundantWrapUnwrapError
 redundantWrapUnwrapError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -300,7 +274,6 @@ redundantWrapUnwrapError cx raw =
           ErrorCore.redundantWrapUnwrapErrorLocation = field_location,
           ErrorCore.redundantWrapUnwrapErrorTypeName = field_typeName}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 selfApplicationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.SelfApplicationError
 selfApplicationError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -310,7 +283,6 @@ selfApplicationError cx raw =
           ErrorCore.selfApplicationErrorLocation = field_location,
           ErrorCore.selfApplicationErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 singleVariantUnionError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.SingleVariantUnionError
 singleVariantUnionError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -320,7 +292,6 @@ singleVariantUnionError cx raw =
           ErrorCore.singleVariantUnionErrorLocation = field_location,
           ErrorCore.singleVariantUnionErrorFieldName = field_fieldName}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 termVariableShadowingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.TermVariableShadowingError
 termVariableShadowingError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -330,7 +301,6 @@ termVariableShadowingError cx raw =
           ErrorCore.termVariableShadowingErrorLocation = field_location,
           ErrorCore.termVariableShadowingErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 typeVariableShadowingInForallError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.TypeVariableShadowingInForallError
 typeVariableShadowingInForallError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -340,7 +310,6 @@ typeVariableShadowingInForallError cx raw =
           ErrorCore.typeVariableShadowingInForallErrorLocation = field_location,
           ErrorCore.typeVariableShadowingInForallErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 typeVariableShadowingInTypeLambdaError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.TypeVariableShadowingInTypeLambdaError
 typeVariableShadowingInTypeLambdaError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -350,7 +319,6 @@ typeVariableShadowingInTypeLambdaError cx raw =
           ErrorCore.typeVariableShadowingInTypeLambdaErrorLocation = field_location,
           ErrorCore.typeVariableShadowingInTypeLambdaErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 undefinedFieldError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.UndefinedFieldError
 undefinedFieldError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -360,7 +328,6 @@ undefinedFieldError cx raw =
           ErrorCore.undefinedFieldErrorFieldName = field_fieldName,
           ErrorCore.undefinedFieldErrorTypeName = field_typeName}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 undefinedTermVariableError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.UndefinedTermVariableError
 undefinedTermVariableError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -370,7 +337,6 @@ undefinedTermVariableError cx raw =
           ErrorCore.undefinedTermVariableErrorLocation = field_location,
           ErrorCore.undefinedTermVariableErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 undefinedTypeVariableError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.UndefinedTypeVariableError
 undefinedTypeVariableError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -380,7 +346,6 @@ undefinedTypeVariableError cx raw =
           ErrorCore.undefinedTypeVariableErrorLocation = field_location,
           ErrorCore.undefinedTypeVariableErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 undefinedTypeVariableInBindingTypeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.UndefinedTypeVariableInBindingTypeError
 undefinedTypeVariableInBindingTypeError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -390,7 +355,6 @@ undefinedTypeVariableInBindingTypeError cx raw =
           ErrorCore.undefinedTypeVariableInBindingTypeErrorLocation = field_location,
           ErrorCore.undefinedTypeVariableInBindingTypeErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 undefinedTypeVariableInLambdaDomainError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.UndefinedTypeVariableInLambdaDomainError
 undefinedTypeVariableInLambdaDomainError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -400,7 +364,6 @@ undefinedTypeVariableInLambdaDomainError cx raw =
           ErrorCore.undefinedTypeVariableInLambdaDomainErrorLocation = field_location,
           ErrorCore.undefinedTypeVariableInLambdaDomainErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 undefinedTypeVariableInTypeApplicationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.UndefinedTypeVariableInTypeApplicationError
 undefinedTypeVariableInTypeApplicationError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -410,7 +373,6 @@ undefinedTypeVariableInTypeApplicationError cx raw =
           ErrorCore.undefinedTypeVariableInTypeApplicationErrorLocation = field_location,
           ErrorCore.undefinedTypeVariableInTypeApplicationErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 unexpectedTermVariantError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.UnexpectedTermVariantError
 unexpectedTermVariantError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -420,7 +382,6 @@ unexpectedTermVariantError cx raw =
           ErrorCore.unexpectedTermVariantErrorExpectedVariant = field_expectedVariant,
           ErrorCore.unexpectedTermVariantErrorActualTerm = field_actualTerm}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 unexpectedTypeVariantError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.UnexpectedTypeVariantError
 unexpectedTypeVariantError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -430,7 +391,6 @@ unexpectedTypeVariantError cx raw =
           ErrorCore.unexpectedTypeVariantErrorExpectedVariant = field_expectedVariant,
           ErrorCore.unexpectedTypeVariantErrorActualType = field_actualType}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 unknownPrimitiveNameError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.UnknownPrimitiveNameError
 unknownPrimitiveNameError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -440,7 +400,6 @@ unknownPrimitiveNameError cx raw =
           ErrorCore.unknownPrimitiveNameErrorLocation = field_location,
           ErrorCore.unknownPrimitiveNameErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 unnecessaryIdentityApplicationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.UnnecessaryIdentityApplicationError
 unnecessaryIdentityApplicationError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -449,7 +408,6 @@ unnecessaryIdentityApplicationError cx raw =
         in (Eithers.bind (ExtractCore.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (ErrorCore.UnnecessaryIdentityApplicationError {
           ErrorCore.unnecessaryIdentityApplicationErrorLocation = field_location})))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 untypedTermVariableError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.UntypedTermVariableError
 untypedTermVariableError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -459,7 +417,6 @@ untypedTermVariableError cx raw =
           ErrorCore.untypedTermVariableErrorLocation = field_location,
           ErrorCore.untypedTermVariableErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 voidInNonBottomPositionError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.VoidInNonBottomPositionError
 voidInNonBottomPositionError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of

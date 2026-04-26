@@ -153,12 +153,15 @@ caseExpressionToExpr = define "caseExpressionToExpr" $
       var "clauseExprs",
       var "defaultPart"])))
 
--- | Serialize a comment
+-- | Serialize a comment. Empty text emits `;` (no trailing space) so
+--   blank comment lines don't carry trailing whitespace.
 commentToExpr :: TTermDefinition (L.Comment -> Expr)
 commentToExpr = define "commentToExpr" $
   lambda "c" $ lets [
     "text">: project L._Comment L._Comment_text @@ var "c"] $
-    Serialization.cst @@ Strings.cat2 (string "; ") (var "text")
+    Serialization.cst @@ Logic.ifElse (Equality.equal (var "text") (string ""))
+      (string ";")
+      (Strings.cat2 (string "; ") (var "text"))
 
 -- | Serialize a cond expression
 condExpressionToExpr :: TTermDefinition (L.Dialect -> L.CondExpression -> Expr)
@@ -262,11 +265,15 @@ doExpressionToExpr = define "doExpressionToExpr" $
       (list [Serialization.cst @@ var "kw"])
       (Lists.map (expressionToExpr @@ var "d") (project L._DoExpression L._DoExpression_expressions @@ var "doExpr")))
 
--- | Serialize a docstring as a comment
+-- | Serialize a docstring as a comment. Empty text emits `;;` (no
+--   trailing space) so blank docstring lines don't carry trailing whitespace.
 docstringToExpr :: TTermDefinition (L.Docstring -> Expr)
 docstringToExpr = define "docstringToExpr" $
-  lambda "ds" $
-    Serialization.cst @@ Strings.cat (list [string ";; ", unwrap L._Docstring @@ var "ds"])
+  lambda "ds" $ lets [
+    "text">: unwrap L._Docstring @@ var "ds"] $
+    Serialization.cst @@ Logic.ifElse (Equality.equal (var "text") (string ""))
+      (string ";;")
+      (Strings.cat (list [string ";; ", var "text"]))
 
 -- | Serialize an export declaration
 exportDeclarationToExpr :: TTermDefinition (L.Dialect -> L.ExportDeclaration -> Expr)
