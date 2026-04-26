@@ -81,20 +81,12 @@ else
 fi
 
 # Step 3: Package-specific post-processing.
+# (Clojure exception: do NOT copy heads/lisp/clojure/.../lib/ into
+# dist/clojure/hydra-kernel/. heads/lisp/clojure/deps.edn lists both
+# heads/lisp/clojure/src/main/clojure AND dist/clojure/hydra-kernel/...
+# on :paths, so a copy would create namespace conflicts at load time.)
 case "$PACKAGE" in
     hydra-kernel)
-        # Copy hand-written hydra/lib/ from heads/lisp/clojure into dist/.
-        # heads is the source of truth for these helpers; dist mirrors it.
-        for d in lib; do
-            LIB_SRC="$HYDRA_CLOJURE_HEAD/src/main/clojure/hydra/$d"
-            LIB_DST="$OUT_MAIN/hydra/$d"
-            if [ -d "$LIB_SRC" ]; then
-                echo "Step 3a: Copying hand-written hydra/$d/ from heads/lisp/clojure/..."
-                mkdir -p "$LIB_DST"
-                cp -R "$LIB_SRC/." "$LIB_DST/"
-            fi
-        done
-
         # Patch testGraph.clj: replace empty graph/context with a full test
         # graph (primitives + schema types + annotation bindings). The graph
         # must be defined AFTER test_terms/test_types to avoid forward

@@ -82,17 +82,10 @@ fi
 
 case "$PACKAGE" in
     hydra-kernel)
-        # Copy hand-written hydra/lib/ from heads/lisp/common-lisp into dist/.
-        # heads is the source of truth for these helpers; dist mirrors it.
-        for d in lib; do
-            LIB_SRC="$HYDRA_CL_HEAD/src/main/common-lisp/hydra/$d"
-            LIB_DST="$OUT_MAIN/hydra/$d"
-            if [ -d "$LIB_SRC" ]; then
-                echo "Step 3a: Copying hand-written hydra/$d/ from heads/lisp/common-lisp/..."
-                mkdir -p "$LIB_DST"
-                cp -R "$LIB_SRC/." "$LIB_DST/"
-            fi
-        done
+        # (Common Lisp exception: do NOT copy heads/lisp/common-lisp/.../lib/
+        # into dist/common-lisp/hydra-kernel/. The Common Lisp test runner
+        # loads from both heads and dist, so a copy could produce conflicting
+        # symbol definitions at load time.)
 
         # Patch test_graph.lisp — same pattern as Clojure and Scheme: delete
         # empty defs, append full graph/context defs at end of file.
