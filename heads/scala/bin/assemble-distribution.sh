@@ -84,22 +84,13 @@ fi
 # (testGraph.scala emptyGraph-to-buildTestGraph patch eliminated: the DSL now
 # emits `hydra.test.testEnv.testGraph(testTypes)` directly, and the hand-written
 # heads/scala testEnv.scala resolves the call to TestSuiteRunner.buildTestGraph.)
+#
+# (Scala exception: do NOT copy heads/scala/.../lib/ into dist/scala/hydra-kernel/.
+# packages/hydra-scala/build.sbt lists both heads/scala/src/main/scala AND
+# dist/scala/hydra-kernel/src/main/scala under unmanagedSourceDirectories,
+# so a copy would duplicate every class. Bootstrap-demo target setup
+# handles the runtime layout independently.)
 case "$PACKAGE" in
-    hydra-kernel)
-        # Copy hand-written hydra/lib/ from heads/scala into dist/.
-        # heads/scala is the source of truth for these helpers; dist mirrors it
-        # so that downstream consumers importing from dist/scala/hydra-kernel
-        # see the same surface as the bootstrap demo.
-        for d in lib; do
-            LIB_SRC="$HYDRA_SCALA_HEAD/src/main/scala/hydra/$d"
-            LIB_DST="$OUT_MAIN/hydra/$d"
-            if [ -d "$LIB_SRC" ]; then
-                echo "Step 3a: Copying hand-written hydra/$d/ from heads/scala/..."
-                mkdir -p "$LIB_DST"
-                cp -R "$LIB_SRC/." "$LIB_DST/"
-            fi
-        done
-        ;;
     *)
         ;;
 esac
