@@ -234,7 +234,7 @@
     "show/meta.scm" "show/typing.scm" "show/util.scm" "show/paths.scm"
     ;; Validate
     "validate/core.scm"
-    ;; Decode modules (needed by hydra_decode_module_module)
+    ;; Decode modules (needed by hydra_decode_packaging_module)
     "decode/paths.scm" "decode/ast.scm" "decode/classes.scm"
     "decode/coders.scm" "decode/context.scm" "decode/core.scm"
     "decode/error/core.scm" "decode/error/checking.scm" "decode/errors.scm"
@@ -347,7 +347,16 @@
           (loop (cdr pairs) (cons (cons name stripped) result))))))
 
 (define (namespace-to-path ns)
-  (hydra_code_generation_namespace_to_path ns))
+  ;; Convert "hydra.foo.bar" to "hydra/foo/bar" for the filesystem path.
+  ;; The kernel function hydra_names_namespace_to_file_path requires a
+  ;; case_conv + ext argument bundle; for our use (locating the JSON file
+  ;; on disk, where path mirrors namespace exactly), we only need '.' -> '/'.
+  (let ((len (string-length ns)))
+    (let loop ((i 0) (result '()))
+      (if (>= i len)
+          (list->string (reverse result))
+          (let ((c (string-ref ns i)))
+            (loop (+ i 1) (cons (if (char=? c #\.) #\/ c) result)))))))
 
 ;; ============================================================================
 ;; Module loading from JSON
@@ -357,14 +366,14 @@
   (let* ((file-path (string-append json-dir "/" (namespace-to-path ns-str) ".json"))
          (json-obj (json-read-file file-path))
          (hydra-json (scheme-to-hydra-json json-obj))
-         (mod-type (list 'variable "hydra.module.Module"))
+         (mod-type (list 'variable "hydra.packaging.Module"))
          (json-result ((((hydra_json_decode_from_json schema-map)
-                          "hydra.module.Module") mod-type) hydra-json)))
+                          "hydra.packaging.Module") mod-type) hydra-json)))
     (when (eq? (car json-result) 'left)
       (error (string-append "JSON decode error for " ns-str ": ")
              (cadr json-result)))
     (let* ((term (cadr json-result))
-           (mod-result ((hydra_decode_module_module bs-graph) term)))
+           (mod-result ((hydra_decode_packaging_module bs-graph) term)))
       (when (eq? (car mod-result) 'left)
         (error (string-append "Module decode error for " ns-str ": ")
                (cadr mod-result)))
@@ -429,9 +438,9 @@
                                   (code (hydra_serialization_print_expr
                                           (hydra_serialization_parenthesize
                                             (pte program))))
-                                  (ns-val (let ((ns (hydra_module_module-namespace mod)))
+                                  (ns-val (let ((ns (hydra_packaging_module-namespace mod)))
                                             (if (string? ns) ns
-                                                (hydra_module_namespace-value ns))))
+                                                (hydra_packaging_namespace-value ns))))
                                   (ext (cond ((equal? target "clojure") "clj")
                                              ((equal? target "scheme") "scm")
                                              ((equal? target "common-lisp") "lisp")
@@ -497,7 +506,7 @@
          (do-hoist-case (list-ref flags 2))
          (do-hoist-poly (list-ref flags 3))
          (t0 (current-time-millis))
-         (result ((((((((((hydra_code_generation_generate_source_files
+         (result ((((((((((hydra_codegen_generate_source_files
                             coder) language) do-infer) do-expand) do-hoist-case) do-hoist-poly)
                        bs-graph) universe-mods) mods-to-generate) cx)))
     (when (eq? (car result) 'left)
@@ -542,7 +551,7 @@
            (all-ns (append main-ns eval-ns))
            (all-mods (load-modules-from-json *json-dir* all-ns))
            (total-bindings (apply + (map (lambda (m)
-                                           (let ((els (hydra_module_module-definitions m)))
+                                           (let ((els (hydra_packaging_module-definitions m)))
                                              (if (list? els) (length els) 0)))
                                          all-mods))))
       (display (string-append "  Loaded " (number->string (length all-mods))
@@ -555,10 +564,10 @@
                    (let ((filtered '()))
                      (for-each
                        (lambda (m)
-                         (let* ((ns (hydra_module_module-namespace m))
+                         (let* ((ns (hydra_packaging_module-namespace m))
                                 (ns-str (if (string? ns) ns
-                                            (if (hydra_module_namespace? ns)
-                                                (hydra_module_namespace-value ns)
+                                            (if (hydra_packaging_namespace? ns)
+                                                (hydra_packaging_namespace-value ns)
                                                 ns))))
                            (unless (or (string-prefix? "hydra." ns-str)
                                        (string-prefix? "hydra.json.yaml." ns-str))
@@ -592,17 +601,25 @@
               (display "\nLoading test modules from JSON...\n")
               (force-output (current-output-port))
               (let* ((test-json-dir
-                       ;; Replace gen-main with gen-test in json-dir
-                       (let ((pos (let loop ((i 0))
-                                    (cond
-                                      ((>= i (- (string-length *json-dir*) 8)) #f)
-                                      ((equal? (substring *json-dir* i (+ i 8)) "gen-main") i)
-                                      (else (loop (+ i 1)))))))
+                       ;; Derive the test-json dir from *json-dir*. The new
+                       ;; per-source-set layout has main JSON at
+                       ;;   <pkg>/src/main/json/...
+                       ;; and test JSON at
+                       ;;   <pkg>/src/test/json/... .
+                       ;; Substitute "src/main/json" with "src/test/json".
+                       (let* ((needle "src/main/json")
+                              (replacement "src/test/json")
+                              (nlen (string-length needle))
+                              (jlen (string-length *json-dir*))
+                              (pos (let loop ((i 0))
+                                     (cond
+                                       ((> (+ i nlen) jlen) #f)
+                                       ((equal? (substring *json-dir* i (+ i nlen)) needle) i)
+                                       (else (loop (+ i 1)))))))
                          (if pos
                              (string-append (substring *json-dir* 0 pos)
-                                            "gen-test"
-                                            (substring *json-dir* (+ pos 8)
-                                                       (string-length *json-dir*)))
+                                            replacement
+                                            (substring *json-dir* (+ pos nlen) jlen))
                              *json-dir*)))
                      (test-ns (read-manifest-field *json-dir* "testModules"))
                      (test-mods (load-modules-from-json test-json-dir test-ns))
