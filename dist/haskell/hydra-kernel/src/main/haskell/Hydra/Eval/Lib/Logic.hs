@@ -1,13 +1,10 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Evaluation-level implementations of Logic functions for the Hydra interpreter.
 
 module Hydra.Eval.Lib.Logic where
-
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Interpreter-friendly logical AND.
 and :: t0 -> t1 -> Core.Term -> Core.Term -> Either t2 Core.Term
 and cx g a b =
@@ -18,7 +15,6 @@ and cx g a b =
           Core.applicationArgument = a})),
         Core.applicationArgument = b})),
       Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))}))
-
 -- | Interpreter-friendly logical NOT.
 not :: t0 -> t1 -> Core.Term -> Either t2 Core.Term
 not cx g a =
@@ -29,7 +25,6 @@ not cx g a =
           Core.applicationArgument = a})),
         Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))})),
       Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))}))
-
 -- | Interpreter-friendly logical OR.
 or :: t0 -> t1 -> Core.Term -> Core.Term -> Either t2 Core.Term
 or cx g a b =

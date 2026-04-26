@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Inference tests for examples from the Hydra kernel
 
 module Hydra.Test.Inference.KernelExamples where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Lib.Eithers as Eithers
@@ -14,7 +12,6 @@ import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Examples from the Hydra kernel
 allTests :: Testing.TestGroup
 allTests =
@@ -24,7 +21,6 @@ allTests =
       Testing.testGroupSubgroups = [
         testGroupForNestedLet],
       Testing.testGroupCases = []}
-
 testGroupForNestedLet :: Testing.TestGroup
 testGroupForNestedLet =
     Testing.TestGroup {

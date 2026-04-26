@@ -727,22 +727,52 @@
             "annotation": [
               {
                 "@key": "description",
-                "@value": {"literal": {"string": "Create a single-line Java comment"}}}],
+                "@value": {
+                  "literal": {
+                    "string": "Create a single-line Java comment. Empty text emits `//` (no trailing space) so blank line comments don't carry trailing whitespace."}}}],
             "body": {
               "lambda": {
                 "body": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "sanitized",
+                        "term": {
                           "application": {
                             "argument": {"variable": "c"},
                             "function": {"variable": "hydra.java.serde.sanitizeJavaComment"}}},
-                        "function": {
+                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                    "body": {
+                      "application": {
+                        "argument": {
                           "application": {
-                            "argument": {"literal": {"string": "// "}},
-                            "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                    "function": {"variable": "hydra.serialization.cst"}}},
+                            "argument": {
+                              "application": {
+                                "argument": {"variable": "sanitized"},
+                                "function": {
+                                  "application": {
+                                    "argument": {"literal": {"string": "// "}},
+                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                            "function": {
+                              "application": {
+                                "argument": {"literal": {"string": "//"}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"literal": {"string": ""}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "sanitized"},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.equality.equal"},
+                                                "type": {"literal": {"string": {}}}}}}}}},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.lib.logic.ifElse"},
+                                        "type": {"literal": {"string": {}}}}}}}}}}},
+                        "function": {"variable": "hydra.serialization.cst"}}}}},
                 "domain": {"literal": {"string": {}}},
                 "parameter": "c"}}}},
         "type": {
@@ -760,7 +790,8 @@
               {
                 "@key": "description",
                 "@value": {
-                  "literal": {"string": "Wrap an expression with optional Javadoc comments"}}}],
+                  "literal": {
+                    "string": "Wrap an expression with optional Javadoc comments. Blank lines inside the doc body emit ` *` (no trailing space) instead of ` * `."}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -802,11 +833,32 @@
                                                                       "lambda": {
                                                                         "body": {
                                                                           "application": {
-                                                                            "argument": {"variable": "l"},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "l"},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {"literal": {"string": " * "}},
+                                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"literal": {"string": " * "}},
-                                                                                "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                                                "argument": {"literal": {"string": " *"}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {"literal": {"string": ""}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "l"},
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"variable": "hydra.lib.equality.equal"},
+                                                                                                "type": {"literal": {"string": {}}}}}}}}},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                        "type": {"literal": {"string": {}}}}}}}}}}},
                                                                         "domain": {"literal": {"string": {}}},
                                                                         "parameter": "l"}},
                                                                     "function": {

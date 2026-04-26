@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Test cases for hydra.lib.sets primitives
 
 module Hydra.Test.Lib.Sets where
-
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Sets as Sets
@@ -12,7 +10,6 @@ import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
-
 -- | Test cases for hydra.lib.sets primitives
 allTests :: Testing.TestGroup
 allTests =

@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Functions for working with qualified names.
 
 module Hydra.Names where
-
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
@@ -24,7 +22,6 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
-
 -- | Given a mapping of namespaces to prefixes, convert a name to a compact string representation
 compactName :: M.Map Packaging.Namespace String -> Core.Name -> String
 compactName namespaces name =
@@ -36,14 +33,12 @@ compactName namespaces name =
         pre,
         ":",
         local]) (Maps.lookup ns namespaces)) mns)
-
 -- | Generate a fresh type variable name, threading Context
 freshName :: Context.Context -> (Core.Name, Context.Context)
 freshName cx =
 
       let count = Annotations.getCount Constants.key_freshTypeVariableCount cx
       in (normalTypeVariable count, (Annotations.putCount Constants.key_freshTypeVariableCount (Math.add count 1) cx))
-
 -- | Generate multiple fresh type variable names, threading Context
 freshNames :: Int -> Context.Context -> ([Core.Name], Context.Context)
 freshNames n cx =
@@ -57,11 +52,9 @@ freshNames n cx =
                     cx1 = Pairs.second result
                 in (Lists.concat2 names (Lists.pure name), cx1)
       in (Lists.foldl go ([], cx) (Lists.replicate n ()))
-
 -- | Extract the local part of a name
 localNameOf :: Core.Name -> String
 localNameOf arg_ = Packaging.qualifiedNameLocal (qualifyName arg_)
-
 -- | Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator
 nameToFilePath :: Util.CaseConvention -> Util.CaseConvention -> Packaging.FileExtension -> Core.Name -> String
 nameToFilePath nsConv localConv ext name =
@@ -78,22 +71,18 @@ nameToFilePath nsConv localConv ext name =
         suffix,
         ".",
         (Packaging.unFileExtension ext)])
-
 -- | Extract the namespace of a name, if any
 namespaceOf :: Core.Name -> Maybe Packaging.Namespace
 namespaceOf arg_ = Packaging.qualifiedNameNamespace (qualifyName arg_)
-
 -- | Convert a namespace to a file path with the given case convention and file extension
 namespaceToFilePath :: Util.CaseConvention -> Packaging.FileExtension -> Packaging.Namespace -> String
 namespaceToFilePath caseConv ext ns =
 
       let parts = Lists.map (Formatting.convertCase Util.CaseConventionCamel caseConv) (Strings.splitOn "." (Packaging.unNamespace ns))
       in (Strings.cat2 (Strings.cat2 (Strings.intercalate "/" parts) ".") (Packaging.unFileExtension ext))
-
 -- | Type variable naming convention follows Haskell: t0, t1, etc.
 normalTypeVariable :: Int -> Core.Name
 normalTypeVariable i = Core.Name (Strings.cat2 "t" (Literals.showInt32 i))
-
 -- | Construct a qualified (dot-separated) name
 qname :: Packaging.Namespace -> String -> Core.Name
 qname ns name =
@@ -101,7 +90,6 @@ qname ns name =
       Packaging.unNamespace ns,
       ".",
       name])
-
 -- | Split a dot-separated name into a namespace and local name
 qualifyName :: Core.Name -> Packaging.QualifiedName
 qualifyName name =
@@ -117,11 +105,9 @@ qualifyName name =
           Packaging.qualifiedNameLocal = (Core.unName name)}) (Packaging.QualifiedName {
           Packaging.qualifiedNameNamespace = (Just (Packaging.Namespace (Strings.intercalate "." (Lists.reverse restReversed)))),
           Packaging.qualifiedNameLocal = localName}))) (Lists.uncons parts))
-
 -- | Generate a unique label by appending a suffix if the label is already in use
 uniqueLabel :: S.Set String -> String -> String
 uniqueLabel visited l = Logic.ifElse (Sets.member l visited) (uniqueLabel visited (Strings.cat2 l "'")) l
-
 -- | Convert a qualified name to a dot-separated name
 unqualifyName :: Packaging.QualifiedName -> Core.Name
 unqualifyName qname =

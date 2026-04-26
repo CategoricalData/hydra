@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Validation functions for core terms and types
 
 module Hydra.Validate.Core where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Graph as Graph
@@ -20,7 +18,6 @@ import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
-
 -- | Check for duplicate binding names in a list of bindings
 checkDuplicateBindings :: Paths.SubtermPath -> [Core.Binding] -> Maybe ErrorCore.InvalidTermError
 checkDuplicateBindings path bindings =
@@ -30,7 +27,6 @@ checkDuplicateBindings path bindings =
       in (Maybes.map (\name -> ErrorCore.InvalidTermErrorDuplicateBinding (ErrorCore.DuplicateBindingError {
         ErrorCore.duplicateBindingErrorLocation = path,
         ErrorCore.duplicateBindingErrorName = name})) dup)
-
 -- | Check for duplicate field names in a list of field types
 checkDuplicateFieldTypes :: [Core.FieldType] -> (Core.Name -> Maybe t0) -> Maybe t0
 checkDuplicateFieldTypes fields mkError =
@@ -38,7 +34,6 @@ checkDuplicateFieldTypes fields mkError =
       let names = Lists.map Core.fieldTypeName fields
           dup = findDuplicateFieldType names
       in (Maybes.cases dup Nothing (\name -> mkError name))
-
 -- | Check for duplicate field names in a list of fields
 checkDuplicateFields :: Paths.SubtermPath -> [Core.Name] -> Maybe ErrorCore.InvalidTermError
 checkDuplicateFields path names =
@@ -47,7 +42,6 @@ checkDuplicateFields path names =
       in (Maybes.map (\name -> ErrorCore.InvalidTermErrorDuplicateField (ErrorCore.DuplicateFieldError {
         ErrorCore.duplicateFieldErrorLocation = path,
         ErrorCore.duplicateFieldErrorName = name})) dup)
-
 -- | Check if any name in a list shadows a variable already in scope
 checkShadowing :: Paths.SubtermPath -> Graph.Graph -> [Core.Name] -> Maybe ErrorCore.InvalidTermError
 checkShadowing path cx names =
@@ -57,7 +51,6 @@ checkShadowing path cx names =
                 ErrorCore.termVariableShadowingErrorLocation = path,
                 ErrorCore.termVariableShadowingErrorName = name}))) Nothing) (\_ -> acc)) Nothing names
       in result
-
 -- | Check a single term node for validation errors
 checkTerm :: Bool -> Paths.SubtermPath -> Graph.Graph -> Core.Term -> Maybe ErrorCore.InvalidTermError
 checkTerm typed path cx term =
@@ -182,7 +175,6 @@ checkTerm typed path cx term =
         in (Logic.ifElse (Equality.equal (Core.unName tname) "") (Just (ErrorCore.InvalidTermErrorEmptyTypeNameInTerm (ErrorCore.EmptyTypeNameInTermError {
           ErrorCore.emptyTypeNameInTermErrorLocation = path}))) Nothing)
       _ -> Nothing
-
 -- | Check a type for type variables not bound in the current scope
 checkUndefinedTypeVariablesInType :: t0 -> Graph.Graph -> Core.Type -> (Core.Name -> Maybe t1) -> Maybe t1
 checkUndefinedTypeVariablesInType path cx typ mkError =
@@ -190,7 +182,6 @@ checkUndefinedTypeVariablesInType path cx typ mkError =
       let freeVars = Variables.freeVariablesInType typ
           undefined = Sets.difference freeVars (Graph.graphTypeVariables cx)
       in (Maybes.maybe Nothing (\firstUndefined -> mkError firstUndefined) (Lists.maybeHead (Sets.toList undefined)))
-
 -- | Check a type scheme for type variables not bound by the scheme or the current scope
 checkUndefinedTypeVariablesInTypeScheme :: t0 -> Graph.Graph -> Core.TypeScheme -> (Core.Name -> Maybe t1) -> Maybe t1
 checkUndefinedTypeVariablesInTypeScheme path cx ts mkError =
@@ -198,7 +189,6 @@ checkUndefinedTypeVariablesInTypeScheme path cx ts mkError =
       let freeVars = Variables.freeVariablesInTypeScheme ts
           undefined = Sets.difference freeVars (Graph.graphTypeVariables cx)
       in (Maybes.maybe Nothing (\firstUndefined -> mkError firstUndefined) (Lists.maybeHead (Sets.toList undefined)))
-
 -- | Return an error if the given type is TypeVoid
 checkVoid :: Core.Type -> Maybe ErrorCore.InvalidTypeError
 checkVoid typ =
@@ -206,7 +196,6 @@ checkVoid typ =
       Core.TypeVoid -> Just (ErrorCore.InvalidTypeErrorVoidInNonBottomPosition (ErrorCore.VoidInNonBottomPositionError {
         ErrorCore.voidInNonBottomPositionErrorLocation = (Paths.SubtermPath [])}))
       _ -> Nothing
-
 -- | Find the first duplicate name in a list
 findDuplicate :: Ord t0 => ([t0] -> Maybe t0)
 findDuplicate names =
@@ -217,7 +206,6 @@ findDuplicate names =
                     dup = Pairs.second acc
                 in (Maybes.cases dup (Logic.ifElse (Sets.member name seen) (seen, (Just name)) (Sets.insert name seen, Nothing)) (\_ -> acc))) (Sets.empty, Nothing) names
       in (Pairs.second result)
-
 -- | Find the first duplicate name in a list (for field type validation)
 findDuplicateFieldType :: Ord t0 => ([t0] -> Maybe t0)
 findDuplicateFieldType names =
@@ -228,26 +216,21 @@ findDuplicateFieldType names =
                     dup = Pairs.second acc
                 in (Maybes.cases dup (Logic.ifElse (Sets.member name seen) (seen, (Just name)) (Sets.insert name seen, Nothing)) (\_ -> acc))) (Sets.empty, Nothing) names
       in (Pairs.second result)
-
 -- | Return the first error from a list of optional errors, or nothing if all are valid
 firstError :: [Maybe t0] -> Maybe t0
 firstError checks = Lists.foldl (\acc -> \check -> Maybes.cases acc check (\_ -> acc)) Nothing checks
-
 -- | Return the first type error from a list of optional errors, or nothing if all are valid
 firstTypeError :: [Maybe t0] -> Maybe t0
 firstTypeError checks = Lists.foldl (\acc -> \check -> Maybes.cases acc check (\_ -> acc)) Nothing checks
-
 -- | Check whether a name is valid at an introduction site. Currently rejects empty strings.
 isValidName :: Core.Name -> Bool
 isValidName name = Logic.not (Equality.equal (Core.unName name) "")
-
 -- | Validate a term, returning the first error found or nothing if valid. The 'typed' parameter indicates whether to expect System F (typed) terms; when true, type variable binding checks and UntypedTermVariableError are active.
 term :: Bool -> Graph.Graph -> Core.Term -> Maybe ErrorCore.InvalidTermError
 term typed g t =
     Rewriting.foldTermWithGraphAndPath (\recurse -> \path -> \cx -> \acc -> \trm -> Maybes.cases acc (
       let checkResult = checkTerm typed (Paths.SubtermPath path) cx trm
       in (Maybes.cases checkResult (recurse Nothing trm) (\err -> Just err))) (\_ -> acc)) g Nothing t
-
 -- | Validate a type, returning the first error found or nothing if valid. The first argument is the set of type variables already in scope.
 type_ :: S.Set Core.Name -> Core.Type -> Maybe ErrorCore.InvalidTypeError
 type_ boundVars typ =
@@ -280,7 +263,6 @@ type_ boundVars typ =
         Core.TypeUnion v0 -> firstTypeError (Lists.map (\f -> type_ boundVars (Core.fieldTypeType f)) v0)
         Core.TypeWrap v0 -> type_ boundVars v0
         _ -> Nothing) (\err -> Just err))
-
 -- | Check a single type node for validation errors
 validateTypeNode :: S.Set Core.Name -> Core.Type -> Maybe ErrorCore.InvalidTypeError
 validateTypeNode boundVars typ =

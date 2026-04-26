@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Test cases for hydra.lib.equality primitives
 
 module Hydra.Test.Lib.Equality where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Reduction as Reduction
@@ -12,7 +10,6 @@ import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Test cases for hydra.lib.equality primitives
 allTests :: Testing.TestGroup
 allTests =

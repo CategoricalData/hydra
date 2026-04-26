@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Graph context extension and type scheme conversion
 
 module Hydra.Scoping where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Lists as Lists
@@ -12,7 +10,6 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Extend a graph by descending into a lambda body
 extendGraphForLambda :: Graph.Graph -> Core.Lambda -> Graph.Graph
 extendGraphForLambda g lam =
@@ -27,7 +24,6 @@ extendGraphForLambda g lam =
         Graph.graphPrimitives = (Graph.graphPrimitives g),
         Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
         Graph.graphTypeVariables = (Graph.graphTypeVariables g)}
-
 -- | Extend a graph by descending into a let body
 extendGraphForLet :: (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> Graph.Graph -> Core.Let -> Graph.Graph
 extendGraphForLet forBinding g letrec =
@@ -54,7 +50,6 @@ extendGraphForLet forBinding g letrec =
         Graph.graphPrimitives = (Graph.graphPrimitives g),
         Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
         Graph.graphTypeVariables = (Graph.graphTypeVariables g)}
-
 -- | Extend a graph by descending into a type lambda body
 extendGraphForTypeLambda :: Graph.Graph -> Core.TypeLambda -> Graph.Graph
 extendGraphForTypeLambda g tlam =
@@ -69,7 +64,6 @@ extendGraphForTypeLambda g tlam =
         Graph.graphPrimitives = (Graph.graphPrimitives g),
         Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
         Graph.graphTypeVariables = (Sets.insert name (Graph.graphTypeVariables g))}
-
 -- | Add bindings to an existing graph
 extendGraphWithBindings :: [Core.Binding] -> Graph.Graph -> Graph.Graph
 extendGraphWithBindings bindings g =
@@ -86,7 +80,6 @@ extendGraphWithBindings bindings g =
         Graph.graphPrimitives = (Graph.graphPrimitives g),
         Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
         Graph.graphTypeVariables = (Graph.graphTypeVariables g)}
-
 -- | Convert a forall type to a type scheme
 fTypeToTypeScheme :: Core.Type -> Core.TypeScheme
 fTypeToTypeScheme typ =
@@ -103,7 +96,6 @@ fTypeToTypeScheme typ =
                       Core.typeSchemeType = typ2,
                       Core.typeSchemeConstraints = Nothing}
       in (gatherForall [] typ)
-
 -- | Convert a type scheme to a forall type
 typeSchemeToFType :: Core.TypeScheme -> Core.Type
 typeSchemeToFType ts =

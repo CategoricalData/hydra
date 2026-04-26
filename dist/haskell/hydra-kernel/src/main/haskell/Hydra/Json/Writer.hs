@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | JSON serialization functions using the Hydra AST
 
 module Hydra.Json.Writer where
-
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lib.Equality as Equality
@@ -18,7 +16,6 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Serialization as Serialization
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | The colon operator used to separate keys and values in JSON objects
 colonOp :: Ast.Op
 colonOp =
@@ -29,7 +26,6 @@ colonOp =
         Ast.paddingRight = Ast.WsSpace},
       Ast.opPrecedence = (Ast.Precedence 0),
       Ast.opAssociativity = Ast.AssociativityNone}
-
 -- | Encode a byte (0..255) as a two-character lowercase hex string. Non-byte inputs yield placeholder '?' characters.
 hexByte :: Int -> String
 hexByte c =
@@ -39,7 +35,6 @@ hexByte c =
           hi = nibble (Maybes.fromMaybe 0 (Math.maybeDiv c 16))
           lo = nibble (Maybes.fromMaybe 0 (Math.maybeMod c 16))
       in (Strings.cat2 hi lo)
-
 -- | Escape and quote a string for JSON output
 jsonString :: String -> String
 jsonString s =
@@ -49,7 +44,6 @@ jsonString s =
                   \c -> Logic.ifElse (Equality.equal c 34) "\\\"" (Logic.ifElse (Equality.equal c 92) "\\\\" (Logic.ifElse (Equality.equal c 8) "\\b" (Logic.ifElse (Equality.equal c 12) "\\f" (Logic.ifElse (Equality.equal c 10) "\\n" (Logic.ifElse (Equality.equal c 13) "\\r" (Logic.ifElse (Equality.equal c 9) "\\t" (Logic.ifElse (Equality.lt c 32) (hexEscape c) (Strings.fromList (Lists.pure c)))))))))
           escaped = Strings.cat (Lists.map escape (Strings.toList s))
       in (Strings.cat2 (Strings.cat2 "\"" escaped) "\"")
-
 -- | Convert a key-value pair to an AST expression
 keyValueToExpr :: (String, Model.Value) -> Ast.Expr
 keyValueToExpr pair =
@@ -57,11 +51,9 @@ keyValueToExpr pair =
       let key = Pairs.first pair
           value = Pairs.second pair
       in (Serialization.ifx colonOp (Serialization.cst (jsonString key)) (valueToExpr value))
-
 -- | Serialize a JSON value to a string
 printJson :: Model.Value -> String
 printJson value = Serialization.printExpr (valueToExpr value)
-
 -- | Convert a JSON value to an AST expression for serialization
 valueToExpr :: Model.Value -> Ast.Expr
 valueToExpr value =

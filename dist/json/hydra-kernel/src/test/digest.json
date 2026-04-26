@@ -1,5 +1,6 @@
 {
   "version": 1,
+  "encoderId": "342e1ad1d5d1f36bd846b98da7e4de55e36f719c027092eb91932718651dbe89",
   "hashes": {
     "hydra.adapt": "902e3834d675ec3e3db1c7c27e4cd9a78527da599ee110baaa2b2290a748b721",
     "hydra.analysis": "d604bfeef06e7f183a2b4b9966be60f2ac632baca2f9d9bd94daf42778c4b024",
@@ -30,7 +31,7 @@
     "hydra.haskell.environment": "4f7318c7c1b1627871d89ff08cce391ebc8b6964ad326e9ef8d8f5af1a778e69",
     "hydra.haskell.language": "bad192304a7b237ddc79bdb3f8c05ce19e6a0f56f567e561ea98719de4254868",
     "hydra.haskell.operators": "8eed252ceba4e60a2454a09550925a8cdbd91e8438b9ae4fa8c96f1dc2168fd2",
-    "hydra.haskell.serde": "7568621028bca9da16e26a0eacbc1518a3da4a5325964739aa754de34bcab2f0",
+    "hydra.haskell.serde": "0dc307b4302bb77ef369c9e247ce5aacdd606f5804e8efe2a6e81df1a43cd94e",
     "hydra.haskell.syntax": "9810d83e6bff28c5f1f81bee06444f3b2f8a7cc2b89fbac2cf3031e75842a7bd",
     "hydra.haskell.testing": "7de74bfb51360cd4f081e3a21a52aa58311c1f0e7d2215f81d74bef628340d50",
     "hydra.haskell.utils": "c0f02a08b56e39288d29b30984fce948aeccd29204278d22e64613e4120b4a78",
@@ -61,7 +62,7 @@
     "hydra.resolution": "57abe3d2653f586aa2a18eb374138b288b7b9445b08d6a9289da23cb131afb6d",
     "hydra.rewriting": "1cbbf56e367ba56a42cf460652277dfe6b2670cce4d9a212e63ddd31919e7bf2",
     "hydra.scoping": "b5e52116eb14ad879d026333fc3fb3472a38a1acae12039c085adfa9e26403d5",
-    "hydra.serialization": "13fbf5932a8def4015fa384d39b4c089dfd0b7f3150f90b269409749d8936bad",
+    "hydra.serialization": "9c2a6b576dd242a0bc6e285b09750e846e4792a750ef17b204e8356df2a22c15",
     "hydra.show.core": "e34bb42b1c4dfc61f13e1b0f63fed09d4809e4293d3a85bde3cadb4ad3f7861c",
     "hydra.show.error.core": "2cf88072acf2ad6464e4443c0baf381aafddc4f7af3bb008ab04eba5c41836cf",
     "hydra.show.errors": "fdf0b6ab1d5cb7f5ac40d4f7a188900ca98328a87d154733a3420e5ff8d1c33d",

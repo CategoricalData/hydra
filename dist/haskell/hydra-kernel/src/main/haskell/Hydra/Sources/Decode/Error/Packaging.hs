@@ -1,14 +1,11 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Source module for hydra.decode.error.packaging
 
 module Hydra.Sources.Decode.Error.Packaging where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 module_ :: Packaging.Module
 module_ =
     Packaging.Module {

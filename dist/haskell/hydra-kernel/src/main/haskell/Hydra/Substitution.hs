@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Variable substitution in type and term expressions.
 
 module Hydra.Substitution where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Lists as Lists
@@ -18,16 +16,13 @@ import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
 -- | Compose two type substitutions
 composeTypeSubst :: Typing.TypeSubst -> Typing.TypeSubst -> Typing.TypeSubst
 composeTypeSubst s1 s2 =
     Logic.ifElse (Maps.null (Typing.unTypeSubst s1)) s2 (Logic.ifElse (Maps.null (Typing.unTypeSubst s2)) s1 (composeTypeSubstNonEmpty s1 s2))
-
 -- | Compose a list of type substitutions
 composeTypeSubstList :: [Typing.TypeSubst] -> Typing.TypeSubst
 composeTypeSubstList = Lists.foldl composeTypeSubst idTypeSubst
-
 -- | Compose two non-empty type substitutions (internal helper)
 composeTypeSubstNonEmpty :: Typing.TypeSubst -> Typing.TypeSubst -> Typing.TypeSubst
 composeTypeSubstNonEmpty s1 s2 =
@@ -35,15 +30,12 @@ composeTypeSubstNonEmpty s1 s2 =
       let isExtra = \k -> \v -> Maybes.isNothing (Maps.lookup k (Typing.unTypeSubst s1))
           withExtra = Maps.filterWithKey isExtra (Typing.unTypeSubst s2)
       in (Typing.TypeSubst (Maps.union withExtra (Maps.map (substInType s2) (Typing.unTypeSubst s1))))
-
 -- | The identity type substitution
 idTypeSubst :: Typing.TypeSubst
 idTypeSubst = Typing.TypeSubst Maps.empty
-
 -- | Create a type substitution with a single variable mapping
 singletonTypeSubst :: Core.Name -> Core.Type -> Typing.TypeSubst
 singletonTypeSubst v t = Typing.TypeSubst (Maps.singleton v t)
-
 -- | Apply a type substitution to class constraints, propagating to free variables
 substInClassConstraints :: Typing.TypeSubst -> M.Map Core.Name Core.TypeVariableMetadata -> M.Map Core.Name Core.TypeVariableMetadata
 substInClassConstraints subst constraints =
@@ -61,7 +53,6 @@ substInClassConstraints subst constraints =
         in (Maybes.maybe (insertOrMerge varName metadata acc) (\targetType ->
           let freeVars = Sets.toList (Variables.freeVariablesInType targetType)
           in (Lists.foldl (\acc2 -> \freeVar -> insertOrMerge freeVar metadata acc2) acc freeVars)) (Maps.lookup varName substMap))) Maps.empty (Maps.toList constraints))
-
 -- | Apply a type substitution to a graph's bound types and class constraints
 substInContext :: Typing.TypeSubst -> Graph.Graph -> Graph.Graph
 substInContext subst cx =
@@ -87,11 +78,9 @@ substInContext subst cx =
         Graph.graphPrimitives = (Graph.graphPrimitives cx2),
         Graph.graphSchemaTypes = (Graph.graphSchemaTypes cx2),
         Graph.graphTypeVariables = (Graph.graphTypeVariables cx2)}
-
 -- | Apply a type substitution to a type
 substInType :: Typing.TypeSubst -> Core.Type -> Core.Type
 substInType subst typ0 = Logic.ifElse (Maps.null (Typing.unTypeSubst subst)) typ0 (substInTypeNonEmpty subst typ0)
-
 -- | Apply a non-empty type substitution to a type (internal helper)
 substInTypeNonEmpty :: Typing.TypeSubst -> Core.Type -> Core.Type
 substInTypeNonEmpty subst typ0 =
@@ -105,7 +94,6 @@ substInTypeNonEmpty subst typ0 =
                 _ -> recurse typ
           removeVar = \v -> Typing.TypeSubst (Maps.delete v (Typing.unTypeSubst subst))
       in (Rewriting.rewriteType rewrite typ0)
-
 -- | Apply a type substitution to a type scheme. The scheme's quantifier variables shadow the substitution: any name in typeSchemeVariables is removed from subst before substituting into the body and constraints. Without this, a substitution like {t0 -> Foo} applied to `forall [t0]. t0 -> t0` would incorrectly replace the bound t0.
 substInTypeScheme :: Typing.TypeSubst -> Core.TypeScheme -> Core.TypeScheme
 substInTypeScheme subst ts =
@@ -116,7 +104,6 @@ substInTypeScheme subst ts =
         Core.typeSchemeVariables = (Core.typeSchemeVariables ts),
         Core.typeSchemeType = (substInType scopedSubst (Core.typeSchemeType ts)),
         Core.typeSchemeConstraints = (Maybes.map (substInClassConstraints scopedSubst) (Core.typeSchemeConstraints ts))}
-
 -- | Apply a type substitution to the type annotations within a term
 substTypesInTerm :: Typing.TypeSubst -> Core.Term -> Core.Term
 substTypesInTerm subst term0 =
@@ -157,7 +144,6 @@ substTypesInTerm subst term0 =
                   Core.TermTypeLambda v0 -> forTypeLambda v0
                   _ -> dflt
       in (Rewriting.rewriteTerm rewrite term0)
-
 -- | Apply a term substitution to a binding
 substituteInBinding :: Typing.TermSubst -> Core.Binding -> Core.Binding
 substituteInBinding subst b =
@@ -165,7 +151,6 @@ substituteInBinding subst b =
       Core.bindingName = (Core.bindingName b),
       Core.bindingTerm = (substituteInTerm subst (Core.bindingTerm b)),
       Core.bindingType = (Core.bindingType b)}
-
 -- | Apply a type substitution to a type constraint
 substituteInConstraint :: Typing.TypeSubst -> Typing.TypeConstraint -> Typing.TypeConstraint
 substituteInConstraint subst c =
@@ -173,11 +158,9 @@ substituteInConstraint subst c =
       Typing.typeConstraintLeft = (substInType subst (Typing.typeConstraintLeft c)),
       Typing.typeConstraintRight = (substInType subst (Typing.typeConstraintRight c)),
       Typing.typeConstraintComment = (Typing.typeConstraintComment c)}
-
 -- | Apply a type substitution to a list of type constraints
 substituteInConstraints :: Typing.TypeSubst -> [Typing.TypeConstraint] -> [Typing.TypeConstraint]
 substituteInConstraints subst cs = Lists.map (substituteInConstraint subst) cs
-
 -- | Apply a term substitution to a term
 substituteInTerm :: Typing.TermSubst -> Core.Term -> Core.Term
 substituteInTerm subst term0 =

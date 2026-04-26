@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term encoders for hydra.error.core
 
 module Hydra.Encode.Error.Core where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Paths as Paths
@@ -11,7 +9,6 @@ import qualified Hydra.Encode.Variants as Variants
 import qualified Hydra.Error.Core as ErrorCore
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 constantConditionError :: ErrorCore.ConstantConditionError -> Core.Term
 constantConditionError x =
     Core.TermRecord (Core.Record {
@@ -23,7 +20,6 @@ constantConditionError x =
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (ErrorCore.constantConditionErrorValue x))}]})
-
 duplicateBindingError :: ErrorCore.DuplicateBindingError -> Core.Term
 duplicateBindingError x =
     Core.TermRecord (Core.Record {
@@ -35,7 +31,6 @@ duplicateBindingError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.duplicateBindingErrorName x))}]})
-
 duplicateFieldError :: ErrorCore.DuplicateFieldError -> Core.Term
 duplicateFieldError x =
     Core.TermRecord (Core.Record {
@@ -47,7 +42,6 @@ duplicateFieldError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.duplicateFieldErrorName x))}]})
-
 duplicateRecordTypeFieldNamesError :: ErrorCore.DuplicateRecordTypeFieldNamesError -> Core.Term
 duplicateRecordTypeFieldNamesError x =
     Core.TermRecord (Core.Record {
@@ -59,7 +53,6 @@ duplicateRecordTypeFieldNamesError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.duplicateRecordTypeFieldNamesErrorName x))}]})
-
 duplicateUnionTypeFieldNamesError :: ErrorCore.DuplicateUnionTypeFieldNamesError -> Core.Term
 duplicateUnionTypeFieldNamesError x =
     Core.TermRecord (Core.Record {
@@ -71,7 +64,6 @@ duplicateUnionTypeFieldNamesError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.duplicateUnionTypeFieldNamesErrorName x))}]})
-
 emptyCaseStatementError :: ErrorCore.EmptyCaseStatementError -> Core.Term
 emptyCaseStatementError x =
     Core.TermRecord (Core.Record {
@@ -83,7 +75,6 @@ emptyCaseStatementError x =
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.emptyCaseStatementErrorTypeName x))}]})
-
 emptyLetBindingsError :: ErrorCore.EmptyLetBindingsError -> Core.Term
 emptyLetBindingsError x =
     Core.TermRecord (Core.Record {
@@ -92,7 +83,6 @@ emptyLetBindingsError x =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Paths.subtermPath (ErrorCore.emptyLetBindingsErrorLocation x))}]})
-
 emptyRecordTypeError :: ErrorCore.EmptyRecordTypeError -> Core.Term
 emptyRecordTypeError x =
     Core.TermRecord (Core.Record {
@@ -101,7 +91,6 @@ emptyRecordTypeError x =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Paths.subtermPath (ErrorCore.emptyRecordTypeErrorLocation x))}]})
-
 emptyTermAnnotationError :: ErrorCore.EmptyTermAnnotationError -> Core.Term
 emptyTermAnnotationError x =
     Core.TermRecord (Core.Record {
@@ -110,7 +99,6 @@ emptyTermAnnotationError x =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Paths.subtermPath (ErrorCore.emptyTermAnnotationErrorLocation x))}]})
-
 emptyTypeAnnotationError :: ErrorCore.EmptyTypeAnnotationError -> Core.Term
 emptyTypeAnnotationError x =
     Core.TermRecord (Core.Record {
@@ -119,7 +107,6 @@ emptyTypeAnnotationError x =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Paths.subtermPath (ErrorCore.emptyTypeAnnotationErrorLocation x))}]})
-
 emptyTypeNameInTermError :: ErrorCore.EmptyTypeNameInTermError -> Core.Term
 emptyTypeNameInTermError x =
     Core.TermRecord (Core.Record {
@@ -128,7 +115,6 @@ emptyTypeNameInTermError x =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Paths.subtermPath (ErrorCore.emptyTypeNameInTermErrorLocation x))}]})
-
 emptyUnionTypeError :: ErrorCore.EmptyUnionTypeError -> Core.Term
 emptyUnionTypeError x =
     Core.TermRecord (Core.Record {
@@ -137,7 +123,6 @@ emptyUnionTypeError x =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Paths.subtermPath (ErrorCore.emptyUnionTypeErrorLocation x))}]})
-
 invalidForallParameterNameError :: ErrorCore.InvalidForallParameterNameError -> Core.Term
 invalidForallParameterNameError x =
     Core.TermRecord (Core.Record {
@@ -149,7 +134,6 @@ invalidForallParameterNameError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.invalidForallParameterNameErrorName x))}]})
-
 invalidLambdaParameterNameError :: ErrorCore.InvalidLambdaParameterNameError -> Core.Term
 invalidLambdaParameterNameError x =
     Core.TermRecord (Core.Record {
@@ -161,7 +145,6 @@ invalidLambdaParameterNameError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.invalidLambdaParameterNameErrorName x))}]})
-
 invalidLetBindingNameError :: ErrorCore.InvalidLetBindingNameError -> Core.Term
 invalidLetBindingNameError x =
     Core.TermRecord (Core.Record {
@@ -173,7 +156,6 @@ invalidLetBindingNameError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.invalidLetBindingNameErrorName x))}]})
-
 invalidTermError :: ErrorCore.InvalidTermError -> Core.Term
 invalidTermError x =
     case x of
@@ -287,7 +269,6 @@ invalidTermError x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "untypedTermVariable"),
           Core.fieldTerm = (untypedTermVariableError v0)}})
-
 invalidTypeError :: ErrorCore.InvalidTypeError -> Core.Term
 invalidTypeError x =
     case x of
@@ -361,7 +342,6 @@ invalidTypeError x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "voidInNonBottomPosition"),
           Core.fieldTerm = (voidInNonBottomPositionError v0)}})
-
 invalidTypeLambdaParameterNameError :: ErrorCore.InvalidTypeLambdaParameterNameError -> Core.Term
 invalidTypeLambdaParameterNameError x =
     Core.TermRecord (Core.Record {
@@ -373,7 +353,6 @@ invalidTypeLambdaParameterNameError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.invalidTypeLambdaParameterNameErrorName x))}]})
-
 invalidTypeSchemeVariableNameError :: ErrorCore.InvalidTypeSchemeVariableNameError -> Core.Term
 invalidTypeSchemeVariableNameError x =
     Core.TermRecord (Core.Record {
@@ -385,7 +364,6 @@ invalidTypeSchemeVariableNameError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.invalidTypeSchemeVariableNameErrorName x))}]})
-
 nestedTermAnnotationError :: ErrorCore.NestedTermAnnotationError -> Core.Term
 nestedTermAnnotationError x =
     Core.TermRecord (Core.Record {
@@ -394,7 +372,6 @@ nestedTermAnnotationError x =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Paths.subtermPath (ErrorCore.nestedTermAnnotationErrorLocation x))}]})
-
 nestedTypeAnnotationError :: ErrorCore.NestedTypeAnnotationError -> Core.Term
 nestedTypeAnnotationError x =
     Core.TermRecord (Core.Record {
@@ -403,7 +380,6 @@ nestedTypeAnnotationError x =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Paths.subtermPath (ErrorCore.nestedTypeAnnotationErrorLocation x))}]})
-
 nonComparableMapKeyTypeError :: ErrorCore.NonComparableMapKeyTypeError -> Core.Term
 nonComparableMapKeyTypeError x =
     Core.TermRecord (Core.Record {
@@ -415,7 +391,6 @@ nonComparableMapKeyTypeError x =
         Core.Field {
           Core.fieldName = (Core.Name "keyType"),
           Core.fieldTerm = (EncodeCore.type_ (ErrorCore.nonComparableMapKeyTypeErrorKeyType x))}]})
-
 nonComparableSetElementTypeError :: ErrorCore.NonComparableSetElementTypeError -> Core.Term
 nonComparableSetElementTypeError x =
     Core.TermRecord (Core.Record {
@@ -427,7 +402,6 @@ nonComparableSetElementTypeError x =
         Core.Field {
           Core.fieldName = (Core.Name "elementType"),
           Core.fieldTerm = (EncodeCore.type_ (ErrorCore.nonComparableSetElementTypeErrorElementType x))}]})
-
 redundantWrapUnwrapError :: ErrorCore.RedundantWrapUnwrapError -> Core.Term
 redundantWrapUnwrapError x =
     Core.TermRecord (Core.Record {
@@ -439,7 +413,6 @@ redundantWrapUnwrapError x =
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.redundantWrapUnwrapErrorTypeName x))}]})
-
 selfApplicationError :: ErrorCore.SelfApplicationError -> Core.Term
 selfApplicationError x =
     Core.TermRecord (Core.Record {
@@ -451,7 +424,6 @@ selfApplicationError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.selfApplicationErrorName x))}]})
-
 singleVariantUnionError :: ErrorCore.SingleVariantUnionError -> Core.Term
 singleVariantUnionError x =
     Core.TermRecord (Core.Record {
@@ -463,7 +435,6 @@ singleVariantUnionError x =
         Core.Field {
           Core.fieldName = (Core.Name "fieldName"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.singleVariantUnionErrorFieldName x))}]})
-
 termVariableShadowingError :: ErrorCore.TermVariableShadowingError -> Core.Term
 termVariableShadowingError x =
     Core.TermRecord (Core.Record {
@@ -475,7 +446,6 @@ termVariableShadowingError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.termVariableShadowingErrorName x))}]})
-
 typeVariableShadowingInForallError :: ErrorCore.TypeVariableShadowingInForallError -> Core.Term
 typeVariableShadowingInForallError x =
     Core.TermRecord (Core.Record {
@@ -487,7 +457,6 @@ typeVariableShadowingInForallError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.typeVariableShadowingInForallErrorName x))}]})
-
 typeVariableShadowingInTypeLambdaError :: ErrorCore.TypeVariableShadowingInTypeLambdaError -> Core.Term
 typeVariableShadowingInTypeLambdaError x =
     Core.TermRecord (Core.Record {
@@ -499,7 +468,6 @@ typeVariableShadowingInTypeLambdaError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.typeVariableShadowingInTypeLambdaErrorName x))}]})
-
 undefinedFieldError :: ErrorCore.UndefinedFieldError -> Core.Term
 undefinedFieldError x =
     Core.TermRecord (Core.Record {
@@ -511,7 +479,6 @@ undefinedFieldError x =
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.undefinedFieldErrorTypeName x))}]})
-
 undefinedTermVariableError :: ErrorCore.UndefinedTermVariableError -> Core.Term
 undefinedTermVariableError x =
     Core.TermRecord (Core.Record {
@@ -523,7 +490,6 @@ undefinedTermVariableError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.undefinedTermVariableErrorName x))}]})
-
 undefinedTypeVariableError :: ErrorCore.UndefinedTypeVariableError -> Core.Term
 undefinedTypeVariableError x =
     Core.TermRecord (Core.Record {
@@ -535,7 +501,6 @@ undefinedTypeVariableError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.undefinedTypeVariableErrorName x))}]})
-
 undefinedTypeVariableInBindingTypeError :: ErrorCore.UndefinedTypeVariableInBindingTypeError -> Core.Term
 undefinedTypeVariableInBindingTypeError x =
     Core.TermRecord (Core.Record {
@@ -547,7 +512,6 @@ undefinedTypeVariableInBindingTypeError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.undefinedTypeVariableInBindingTypeErrorName x))}]})
-
 undefinedTypeVariableInLambdaDomainError :: ErrorCore.UndefinedTypeVariableInLambdaDomainError -> Core.Term
 undefinedTypeVariableInLambdaDomainError x =
     Core.TermRecord (Core.Record {
@@ -559,7 +523,6 @@ undefinedTypeVariableInLambdaDomainError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.undefinedTypeVariableInLambdaDomainErrorName x))}]})
-
 undefinedTypeVariableInTypeApplicationError :: ErrorCore.UndefinedTypeVariableInTypeApplicationError -> Core.Term
 undefinedTypeVariableInTypeApplicationError x =
     Core.TermRecord (Core.Record {
@@ -571,7 +534,6 @@ undefinedTypeVariableInTypeApplicationError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.undefinedTypeVariableInTypeApplicationErrorName x))}]})
-
 unexpectedTermVariantError :: ErrorCore.UnexpectedTermVariantError -> Core.Term
 unexpectedTermVariantError x =
     Core.TermRecord (Core.Record {
@@ -583,7 +545,6 @@ unexpectedTermVariantError x =
         Core.Field {
           Core.fieldName = (Core.Name "actualTerm"),
           Core.fieldTerm = (EncodeCore.term (ErrorCore.unexpectedTermVariantErrorActualTerm x))}]})
-
 unexpectedTypeVariantError :: ErrorCore.UnexpectedTypeVariantError -> Core.Term
 unexpectedTypeVariantError x =
     Core.TermRecord (Core.Record {
@@ -595,7 +556,6 @@ unexpectedTypeVariantError x =
         Core.Field {
           Core.fieldName = (Core.Name "actualType"),
           Core.fieldTerm = (EncodeCore.type_ (ErrorCore.unexpectedTypeVariantErrorActualType x))}]})
-
 unknownPrimitiveNameError :: ErrorCore.UnknownPrimitiveNameError -> Core.Term
 unknownPrimitiveNameError x =
     Core.TermRecord (Core.Record {
@@ -607,7 +567,6 @@ unknownPrimitiveNameError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.unknownPrimitiveNameErrorName x))}]})
-
 unnecessaryIdentityApplicationError :: ErrorCore.UnnecessaryIdentityApplicationError -> Core.Term
 unnecessaryIdentityApplicationError x =
     Core.TermRecord (Core.Record {
@@ -616,7 +575,6 @@ unnecessaryIdentityApplicationError x =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Paths.subtermPath (ErrorCore.unnecessaryIdentityApplicationErrorLocation x))}]})
-
 untypedTermVariableError :: ErrorCore.UntypedTermVariableError -> Core.Term
 untypedTermVariableError x =
     Core.TermRecord (Core.Record {
@@ -628,7 +586,6 @@ untypedTermVariableError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.untypedTermVariableErrorName x))}]})
-
 voidInNonBottomPositionError :: ErrorCore.VoidInNonBottomPositionError -> Core.Term
 voidInNonBottomPositionError x =
     Core.TermRecord (Core.Record {

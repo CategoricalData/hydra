@@ -6148,7 +6148,8 @@
               {
                 "@key": "description",
                 "@value": {
-                  "literal": {"string": "Format a description and tags as a JSDoc comment"}}}],
+                  "literal": {
+                    "string": "Format a description and tags as a JSDoc comment. Empty doc lines emit ` *` (no trailing space) so blank lines don't carry trailing whitespace."}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -6172,11 +6173,32 @@
                                           "lambda": {
                                             "body": {
                                               "application": {
-                                                "argument": {"variable": "line"},
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "line"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"literal": {"string": " * "}},
+                                                        "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {"literal": {"string": " * "}},
-                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                    "argument": {"literal": {"string": " *"}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"literal": {"string": ""}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "line"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.equality.equal"},
+                                                                    "type": {"literal": {"string": {}}}}}}}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                            "type": {"literal": {"string": {}}}}}}}}}}},
                                             "domain": {"literal": {"string": {}}},
                                             "parameter": "line"}},
                                         "function": {
@@ -6289,7 +6311,9 @@
             "annotation": [
               {
                 "@key": "description",
-                "@value": {"literal": {"string": "Convert a documentation tag to a JSDoc line"}}}],
+                "@value": {
+                  "literal": {
+                    "string": "Convert a documentation tag to a JSDoc line. Built by joining non-empty parts with spaces so that absent type/param/description components don't introduce trailing whitespace."}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -6357,7 +6381,7 @@
                                               "application": {
                                                 "argument": {"variable": "t"},
                                                 "function": {"variable": "hydra.javaScript.serde.typeExpressionToString"}}},
-                                            {"literal": {"string": "} "}}]},
+                                            {"literal": {"string": "}"}}]},
                                         "function": {"variable": "hydra.lib.strings.cat"}}},
                                     "domain": {"variable": "hydra.javaScript.syntax.TypeExpression"},
                                     "parameter": "t"}},
@@ -6383,14 +6407,8 @@
                                   "lambda": {
                                     "body": {
                                       "application": {
-                                        "argument": {"literal": {"string": " "}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "p"},
-                                                "function": {"unwrap": "hydra.javaScript.syntax.Identifier"}}},
-                                            "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                        "argument": {"variable": "p"},
+                                        "function": {"unwrap": "hydra.javaScript.syntax.Identifier"}}},
                                     "domain": {"variable": "hydra.javaScript.syntax.Identifier"},
                                     "parameter": "p"}},
                                 "function": {
@@ -6403,18 +6421,64 @@
                                             "body": {"variable": "hydra.lib.maybes.maybe"},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"variable": "hydra.javaScript.syntax.Identifier"}}}}}}}}},
-                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
-                    "body": {
-                      "application": {
-                        "argument": {
+                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                      {
+                        "name": "parts",
+                        "term": {
                           "list": [
-                            {"literal": {"string": " * @"}},
-                            {"variable": "name"},
-                            {"literal": {"string": " "}},
+                            {
+                              "application": {
+                                "argument": {"variable": "name"},
+                                "function": {
+                                  "application": {
+                                    "argument": {"literal": {"string": "@"}},
+                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                             {"variable": "typePart"},
                             {"variable": "paramPart"},
                             {"variable": "description"}]},
-                        "function": {"variable": "hydra.lib.strings.cat"}}}}},
+                        "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                      {
+                        "name": "nonEmpty",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "parts"},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"literal": {"string": ""}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "p"},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.equality.equal"},
+                                                    "type": {"literal": {"string": {}}}}}}}}},
+                                        "function": {"variable": "hydra.lib.logic.not"}}},
+                                    "domain": {"literal": {"string": {}}},
+                                    "parameter": "p"}},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.lib.lists.filter"},
+                                    "type": {"literal": {"string": {}}}}}}}}},
+                        "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {"variable": "nonEmpty"},
+                            "function": {
+                              "application": {
+                                "argument": {"literal": {"string": " "}},
+                                "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
+                        "function": {
+                          "application": {
+                            "argument": {"literal": {"string": " * "}},
+                            "function": {"variable": "hydra.lib.strings.cat2"}}}}}}},
                 "domain": {"variable": "hydra.javaScript.syntax.DocumentationTag"},
                 "parameter": "tag"}}}},
         "type": {
@@ -6634,7 +6698,8 @@
               {
                 "@key": "description",
                 "@value": {
-                  "literal": {"string": "Convert a string to a JavaScript line comment"}}}],
+                  "literal": {
+                    "string": "Convert a string to a JavaScript line comment. Empty source lines emit `//` (no trailing space)."}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -6651,11 +6716,32 @@
                               "lambda": {
                                 "body": {
                                   "application": {
-                                    "argument": {"variable": "line"},
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "line"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"literal": {"string": "// "}},
+                                            "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                     "function": {
                                       "application": {
-                                        "argument": {"literal": {"string": "// "}},
-                                        "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                        "argument": {"literal": {"string": "//"}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"literal": {"string": ""}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "line"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.equality.equal"},
+                                                        "type": {"literal": {"string": {}}}}}}}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                "type": {"literal": {"string": {}}}}}}}}}}},
                                 "domain": {"literal": {"string": {}}},
                                 "parameter": "line"}},
                             "function": {

@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Functions for generating term encoders from type modules
 
 module Hydra.Encoding where
-
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
@@ -26,7 +24,6 @@ import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Predicates as Predicates
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Transform a type binding into an encoder binding
 encodeBinding :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.DecodingError Core.Binding
 encodeBinding cx graph b =
@@ -34,7 +31,6 @@ encodeBinding cx graph b =
       Core.bindingName = (encodeBindingName (Core.bindingName b)),
       Core.bindingTerm = (encodeTypeNamed (Core.bindingName b) typ),
       Core.bindingType = (Just (encoderTypeSchemeNamed (Core.bindingName b) typ))}))
-
 -- | Generate a binding name for an encoder function from a type name
 encodeBindingName :: Core.Name -> Core.Name
 encodeBindingName n =
@@ -48,7 +44,6 @@ encodeBindingName n =
           "hydra",
           "encode"] (Lists.concat2 tail [
           localPart]))))) (Lists.uncons nsParts)) (Lists.maybeInit parts))
-
 -- | Generate an encoder for an Either type
 encodeEitherType :: Core.EitherType -> Core.Term
 encodeEitherType et =
@@ -66,7 +61,6 @@ encodeEitherType et =
                 Core.applicationArgument = (encodeType (Core.eitherTypeLeft et))})),
               Core.applicationArgument = (encodeType (Core.eitherTypeRight et))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))}}))})
-
 -- | Generate the encoder for a field's value
 encodeFieldValue :: Core.Name -> Core.Name -> Core.Type -> Core.Term
 encodeFieldValue typeName fieldName fieldType =
@@ -80,7 +74,6 @@ encodeFieldValue typeName fieldName fieldType =
           Core.fieldTerm = (encodeInjection typeName fieldName (Core.TermApplication (Core.Application {
             Core.applicationFunction = (encodeType fieldType),
             Core.applicationArgument = (Core.TermVariable (Core.Name "y"))})))}}))})
-
 -- | Encode a float value based on its float type
 encodeFloatValue :: Core.FloatType -> Core.Term -> Core.Term
 encodeFloatValue floatType valTerm =
@@ -92,7 +85,6 @@ encodeFloatValue floatType valTerm =
           Core.FloatTypeFloat32 -> Core.Name "float32"
           Core.FloatTypeFloat64 -> Core.Name "float64",
         Core.fieldTerm = valTerm}})
-
 -- | Generate an encoder for a polymorphic (forall) type
 encodeForallType :: Core.ForallType -> Core.Term
 encodeForallType ft =
@@ -100,7 +92,6 @@ encodeForallType ft =
       Core.lambdaParameter = (encodeBindingName (Core.forallTypeParameter ft)),
       Core.lambdaDomain = Nothing,
       Core.lambdaBody = (encodeType (Core.forallTypeBody ft))})
-
 -- | Encode an Injection as a term
 encodeInjection :: Core.Name -> Core.Name -> Core.Term -> Core.Term
 encodeInjection typeName fieldName fieldTerm =
@@ -121,7 +112,6 @@ encodeInjection typeName fieldName fieldTerm =
               Core.Field {
                 Core.fieldName = (Core.Name "term"),
                 Core.fieldTerm = fterm}]})) fieldName fieldTerm)}]})
-
 -- | Encode an integer value based on its integer type
 encodeIntegerValue :: Core.IntegerType -> Core.Term -> Core.Term
 encodeIntegerValue intType valTerm =
@@ -139,7 +129,6 @@ encodeIntegerValue intType valTerm =
           Core.IntegerTypeUint32 -> Core.Name "uint32"
           Core.IntegerTypeUint64 -> Core.Name "uint64",
         Core.fieldTerm = valTerm}})
-
 -- | Generate an encoder for a list type
 encodeListType :: Core.Type -> Core.Term
 encodeListType elemType =
@@ -155,7 +144,6 @@ encodeListType elemType =
               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
               Core.applicationArgument = (encodeType elemType)})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}}))})
-
 -- | Generate an encoder for a literal type
 encodeLiteralType :: Core.LiteralType -> Core.Term
 encodeLiteralType x =
@@ -236,7 +224,6 @@ encodeLiteralType x =
         Core.lambdaParameter = (Core.Name "x"),
         Core.lambdaDomain = Nothing,
         Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})
-
 -- | Generate an encoder for a map type
 encodeMapType :: Core.MapType -> Core.Term
 encodeMapType mt =
@@ -254,7 +241,6 @@ encodeMapType mt =
                 Core.applicationArgument = (encodeType (Core.mapTypeKeys mt))})),
               Core.applicationArgument = (encodeType (Core.mapTypeValues mt))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}}))})
-
 -- | Transform a type module into an encoder module
 encodeModule :: Context.Context -> Graph.Graph -> Packaging.Module -> Either Errors.Error (Maybe Packaging.Module)
 encodeModule cx graph mod =
@@ -285,14 +271,12 @@ encodeModule cx graph mod =
       Packaging.moduleDescription = (Just (Strings.cat [
         "Term encoders for ",
         (Packaging.unNamespace (Packaging.moduleNamespace mod))]))})))))
-
 -- | Encode a Name as a term
 encodeName :: Core.Name -> Core.Term
 encodeName n =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName n)))})
-
 -- | Generate an encoder module namespace from a source module namespace
 encodeNamespace :: Packaging.Namespace -> Packaging.Namespace
 encodeNamespace ns =
@@ -302,7 +286,6 @@ encodeNamespace ns =
       in (Maybes.maybe fallback (\uc -> Packaging.Namespace (Strings.cat [
         "hydra.encode.",
         (Strings.intercalate "." (Pairs.second uc))])) (Lists.uncons parts))
-
 -- | Generate an encoder for a Maybe type
 encodeOptionalType :: Core.Type -> Core.Term
 encodeOptionalType elemType =
@@ -318,7 +301,6 @@ encodeOptionalType elemType =
               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.map")),
               Core.applicationArgument = (encodeType elemType)})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "opt"))}))}}))})
-
 -- | Generate an encoder for a pair type
 encodePairType :: Core.PairType -> Core.Term
 encodePairType pt =
@@ -336,11 +318,9 @@ encodePairType pt =
                 Core.applicationArgument = (encodeType (Core.pairTypeFirst pt))})),
               Core.applicationArgument = (encodeType (Core.pairTypeSecond pt))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}}))})
-
 -- | Generate an encoder for a record type (unnamed — should not be called directly)
 encodeRecordType :: [Core.FieldType] -> Core.Term
 encodeRecordType rt = encodeRecordTypeNamed (Core.Name "unknown") rt
-
 -- | Generate an encoder for a record type with the given element name
 encodeRecordTypeNamed :: Core.Name -> [Core.FieldType] -> Core.Term
 encodeRecordTypeNamed ename rt =
@@ -374,7 +354,6 @@ encodeRecordTypeNamed ename rt =
                             Core.projectionTypeName = tname,
                             Core.projectionField = (Core.fieldTypeName ft)})),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})) ename rt) rt))}]}))}}))})
-
 -- | Generate an encoder for a set type
 encodeSetType :: Core.Type -> Core.Term
 encodeSetType elemType =
@@ -390,7 +369,6 @@ encodeSetType elemType =
               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.map")),
               Core.applicationArgument = (encodeType elemType)})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))}}))})
-
 -- | Generate an encoder term for a Type
 encodeType :: Core.Type -> Core.Term
 encodeType x =
@@ -435,7 +413,6 @@ encodeType x =
         Core.lambdaParameter = (Core.Name "x"),
         Core.lambdaDomain = Nothing,
         Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})
-
 -- | Generate an encoder term for a Type, with the element name for nominal types
 encodeTypeNamed :: Core.Name -> Core.Type -> Core.Term
 encodeTypeNamed ename typ =
@@ -483,11 +460,9 @@ encodeTypeNamed ename typ =
         Core.lambdaParameter = (Core.Name "x"),
         Core.lambdaDomain = Nothing,
         Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})
-
 -- | Generate an encoder for a union type (placeholder name)
 encodeUnionType :: [Core.FieldType] -> Core.Term
 encodeUnionType rt = encodeUnionTypeNamed (Core.Name "unknown") rt
-
 -- | Generate an encoder for a union type with the given element name
 encodeUnionTypeNamed :: Core.Name -> [Core.FieldType] -> Core.Term
 encodeUnionTypeNamed ename rt =
@@ -497,11 +472,9 @@ encodeUnionTypeNamed ename rt =
       Core.caseStatementCases = (Lists.map (\ft -> Core.Field {
         Core.fieldName = (Core.fieldTypeName ft),
         Core.fieldTerm = (encodeFieldValue ename (Core.fieldTypeName ft) (Core.fieldTypeType ft))}) rt)})
-
 -- | Generate an encoder for a wrapped type (placeholder name)
 encodeWrappedType :: Core.Type -> Core.Term
 encodeWrappedType wt = encodeWrappedTypeNamed (Core.Name "unknown") wt
-
 -- | Generate an encoder for a wrapped type with the given element name
 encodeWrappedTypeNamed :: Core.Name -> Core.Type -> Core.Term
 encodeWrappedTypeNamed ename wt =
@@ -525,7 +498,6 @@ encodeWrappedTypeNamed ename wt =
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermUnwrap ename),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))})
-
 -- | Collect forall type variable names from a type
 encoderCollectForallVariables :: Core.Type -> [Core.Name]
 encoderCollectForallVariables typ =
@@ -533,7 +505,6 @@ encoderCollectForallVariables typ =
       Core.TypeAnnotated v0 -> encoderCollectForallVariables (Core.annotatedTypeBody v0)
       Core.TypeForall v0 -> Lists.cons (Core.forallTypeParameter v0) (encoderCollectForallVariables (Core.forallTypeBody v0))
       _ -> []
-
 -- | Collect type variables needing Ord constraints
 encoderCollectOrdVars :: Core.Type -> [Core.Name]
 encoderCollectOrdVars typ =
@@ -554,7 +525,6 @@ encoderCollectOrdVars typ =
       Core.TypeUnion v0 -> Lists.concat (Lists.map (\ft -> encoderCollectOrdVars (Core.fieldTypeType ft)) v0)
       Core.TypeWrap v0 -> encoderCollectOrdVars v0
       _ -> []
-
 -- | Collect all type variable names from a type expression
 encoderCollectTypeVarsFromType :: Core.Type -> [Core.Name]
 encoderCollectTypeVarsFromType typ =
@@ -573,7 +543,6 @@ encoderCollectTypeVarsFromType typ =
         v0]
       Core.TypeWrap v0 -> encoderCollectTypeVarsFromType v0
       _ -> []
-
 -- | Get full result type for encoder input
 encoderFullResultType :: Core.Type -> Core.Type
 encoderFullResultType typ =
@@ -605,7 +574,6 @@ encoderFullResultType typ =
       Core.TypeVoid -> Core.TypeVoid
       Core.TypeWrap _ -> Core.TypeVariable (Core.Name "hydra.core.Term")
       _ -> Core.TypeVariable (Core.Name "hydra.core.Term")
-
 -- | Get full result type for encoder input, using element name for nominal types
 encoderFullResultTypeNamed :: Core.Name -> Core.Type -> Core.Type
 encoderFullResultTypeNamed ename typ =
@@ -637,7 +605,6 @@ encoderFullResultTypeNamed ename typ =
       Core.TypeVoid -> Core.TypeVoid
       Core.TypeWrap _ -> Core.TypeVariable ename
       _ -> Core.TypeVariable (Core.Name "hydra.core.Term")
-
 -- | Build encoder function type
 encoderType :: Core.Type -> Core.Type
 encoderType typ =
@@ -648,7 +615,6 @@ encoderType typ =
                     Core.functionTypeDomain = resultType,
                     Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})
       in (prependForallEncoders baseType typ)
-
 -- | Build encoder function type with element name for nominal types
 encoderTypeNamed :: Core.Name -> Core.Type -> Core.Type
 encoderTypeNamed ename typ =
@@ -659,7 +625,6 @@ encoderTypeNamed ename typ =
                     Core.functionTypeDomain = resultType,
                     Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})
       in (prependForallEncoders baseType typ)
-
 -- | Construct a TypeScheme for an encoder function from a source type
 encoderTypeScheme :: Core.Type -> Core.TypeScheme
 encoderTypeScheme typ =
@@ -675,7 +640,6 @@ encoderTypeScheme typ =
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeType = encoderFunType,
         Core.typeSchemeConstraints = constraints}
-
 -- | Construct a TypeScheme for an encoder function, with element name for nominal types
 encoderTypeSchemeNamed :: Core.Name -> Core.Type -> Core.TypeScheme
 encoderTypeSchemeNamed ename typ =
@@ -691,24 +655,20 @@ encoderTypeSchemeNamed ename typ =
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeType = encoderFunType,
         Core.typeSchemeConstraints = constraints}
-
 -- | Filter bindings to only encodable type definitions
 filterTypeBindings :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either Errors.Error [Core.Binding]
 filterTypeBindings cx graph bindings =
     Eithers.map Maybes.cat (Eithers.mapList (isEncodableBinding cx graph) (Lists.filter Annotations.isNativeType bindings))
-
 -- | Check if a binding is encodable (serializable type)
 isEncodableBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either Errors.Error (Maybe Core.Binding)
 isEncodableBinding cx graph b =
     Eithers.bind (Predicates.isSerializableByName cx graph (Core.bindingName b)) (\serializable -> Right (Logic.ifElse serializable (Just b) Nothing))
-
 -- | Check whether a type is the unit type
 isUnitType :: Core.Type -> Bool
 isUnitType x =
     case x of
       Core.TypeUnit -> True
       _ -> False
-
 -- | Prepend encoder types for forall parameters to base type
 prependForallEncoders :: Core.Type -> Core.Type -> Core.Type
 prependForallEncoders baseType typ =
