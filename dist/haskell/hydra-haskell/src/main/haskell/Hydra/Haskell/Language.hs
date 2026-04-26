@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Language constraints and reserved words for Haskell
 
 module Hydra.Haskell.Language where
-
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
@@ -12,7 +10,6 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
-
 -- | Language constraints for Haskell
 haskellLanguage :: Coders.Language
 haskellLanguage =
@@ -99,7 +96,6 @@ haskellLanguage =
           Variants.TypeVariantVoid,
           Variants.TypeVariantWrap]
     typePredicate = \_ -> True
-
 -- | Created on 2025-02-28 using GHCi 9.6.6
 -- |
 -- | You can reproduce these lists of symbols by issuing the command `:browse Prelude` in GHCi, pasting the results into

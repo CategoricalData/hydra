@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term decoders for hydra.paths
 
 module Hydra.Decode.Paths where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Errors as Errors
@@ -16,7 +14,6 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Paths as Paths
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 subtermEdge :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Paths.SubtermEdge
 subtermEdge cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -27,7 +24,6 @@ subtermEdge cx raw =
           Paths.subtermEdgePath = field_path,
           Paths.subtermEdgeTarget = field_target})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 subtermGraph :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Paths.SubtermGraph
 subtermGraph cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -37,7 +33,6 @@ subtermGraph cx raw =
           Paths.subtermGraphNodes = field_nodes,
           Paths.subtermGraphEdges = field_edges}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 subtermNode :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Paths.SubtermNode
 subtermNode cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -56,13 +51,11 @@ subtermNode cx raw =
           Paths.subtermNodeLabel = field_label,
           Paths.subtermNodeId = field_id})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 subtermPath :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Paths.SubtermPath
 subtermPath cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermWrap v0 -> Eithers.map (\b -> Paths.SubtermPath b) (ExtractCore.decodeList subtermStep cx (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
-
 subtermStep :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Paths.SubtermStep
 subtermStep cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -127,7 +120,6 @@ subtermStep cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 subtypeEdge :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Paths.SubtypeEdge
 subtypeEdge cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -138,7 +130,6 @@ subtypeEdge cx raw =
           Paths.subtypeEdgePath = field_path,
           Paths.subtypeEdgeTarget = field_target})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 subtypeGraph :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Paths.SubtypeGraph
 subtypeGraph cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -148,7 +139,6 @@ subtypeGraph cx raw =
           Paths.subtypeGraphNodes = field_nodes,
           Paths.subtypeGraphEdges = field_edges}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 subtypeNode :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Paths.SubtypeNode
 subtypeNode cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -167,13 +157,11 @@ subtypeNode cx raw =
           Paths.subtypeNodeLabel = field_label,
           Paths.subtypeNodeId = field_id})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 subtypePath :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Paths.SubtypePath
 subtypePath cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermWrap v0 -> Eithers.map (\b -> Paths.SubtypePath b) (ExtractCore.decodeList subtypeStep cx (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
-
 subtypeStep :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Paths.SubtypeStep
 subtypeStep cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of

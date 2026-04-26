@@ -1,19 +1,15 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Type definitions for the test suite
 
 module Hydra.Test.TestTypes where
-
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 compareStringsType :: Core.Type
 compareStringsType =
     Core.TypeFunction (Core.FunctionType {
       Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
       Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})
-
 concatType :: Core.Type
 concatType =
     Core.TypeFunction (Core.FunctionType {
@@ -21,7 +17,6 @@ concatType =
       Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
         Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
         Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))})
-
 eitherStringOrInt8Type :: Core.Type
 eitherStringOrInt8Type =
     Core.TypeUnion [
@@ -31,52 +26,38 @@ eitherStringOrInt8Type =
       Core.FieldType {
         Core.fieldTypeName = (Core.Name "right"),
         Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8))}]
-
 eitherStringOrInt8TypeName :: Core.Name
 eitherStringOrInt8TypeName = Core.Name "EitherStringOrInt8"
-
 exampleProjectionType :: Core.Type
 exampleProjectionType =
     Core.TypeFunction (Core.FunctionType {
       Core.functionTypeDomain = (Core.TypeVariable testTypePersonName),
       Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})
-
 listOfInt16sType :: Core.Type
 listOfInt16sType = Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt16))
-
 listOfInt8sType :: Core.Type
 listOfInt8sType = Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8))
-
 listOfListsOfStringsType :: Core.Type
 listOfListsOfStringsType = Core.TypeList (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))
-
 listOfSetOfStringsType :: Core.Type
 listOfSetOfStringsType = Core.TypeList (Core.TypeSet (Core.TypeLiteral Core.LiteralTypeString))
-
 listOfStringsType :: Core.Type
 listOfStringsType = Core.TypeList (Core.TypeLiteral Core.LiteralTypeString)
-
 mapOfStringsToIntsType :: Core.Type
 mapOfStringsToIntsType =
     Core.TypeMap (Core.MapType {
       Core.mapTypeKeys = (Core.TypeLiteral Core.LiteralTypeString),
       Core.mapTypeValues = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})
-
 optionalInt16Type :: Core.Type
 optionalInt16Type = Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt16))
-
 optionalInt8Type :: Core.Type
 optionalInt8Type = Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt8))
-
 optionalStringType :: Core.Type
 optionalStringType = Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)
-
 setOfStringsType :: Core.Type
 setOfStringsType = Core.TypeSet (Core.TypeLiteral Core.LiteralTypeString)
-
 stringOrIntName :: Core.Name
 stringOrIntName = Core.Name "StringOrInt"
-
 stringOrIntType :: Core.Type
 stringOrIntType =
     Core.TypeUnion [
@@ -86,7 +67,6 @@ stringOrIntType =
       Core.FieldType {
         Core.fieldTypeName = (Core.Name "right"),
         Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}]
-
 testTypeBuddyListA :: Core.Type
 testTypeBuddyListA =
     Core.TypeForall (Core.ForallType {
@@ -100,10 +80,8 @@ testTypeBuddyListA =
           Core.fieldTypeType = (Core.TypeMaybe (Core.TypeApplication (Core.ApplicationType {
             Core.applicationTypeFunction = (Core.TypeVariable testTypeBuddyListBName),
             Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))})))}])})
-
 testTypeBuddyListAName :: Core.Name
 testTypeBuddyListAName = Core.Name "BuddyListA"
-
 testTypeBuddyListB :: Core.Type
 testTypeBuddyListB =
     Core.TypeForall (Core.ForallType {
@@ -117,10 +95,8 @@ testTypeBuddyListB =
           Core.fieldTypeType = (Core.TypeMaybe (Core.TypeApplication (Core.ApplicationType {
             Core.applicationTypeFunction = (Core.TypeVariable testTypeBuddyListAName),
             Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))})))}])})
-
 testTypeBuddyListBName :: Core.Name
 testTypeBuddyListBName = Core.Name "BuddyListB"
-
 testTypeComparison :: Core.Type
 testTypeComparison =
     Core.TypeUnion [
@@ -133,10 +109,8 @@ testTypeComparison =
       Core.FieldType {
         Core.fieldTypeName = (Core.Name "greaterThan"),
         Core.fieldTypeType = Core.TypeUnit}]
-
 testTypeComparisonName :: Core.Name
 testTypeComparisonName = Core.Name "Comparison"
-
 testTypeEither :: Core.Type
 testTypeEither =
     Core.TypeForall (Core.ForallType {
@@ -150,10 +124,8 @@ testTypeEither =
           Core.FieldType {
             Core.fieldTypeName = (Core.Name "right"),
             Core.fieldTypeType = (Core.TypeVariable (Core.Name "b"))}])}))})
-
 testTypeEitherName :: Core.Name
 testTypeEitherName = Core.Name "Either"
-
 testTypeHydraLiteralType :: Core.Type
 testTypeHydraLiteralType =
     Core.TypeUnion [
@@ -163,10 +135,8 @@ testTypeHydraLiteralType =
       Core.FieldType {
         Core.fieldTypeName = (Core.Name "string"),
         Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)}]
-
 testTypeHydraLiteralTypeName :: Core.Name
 testTypeHydraLiteralTypeName = Core.Name "HydraLiteralType"
-
 testTypeHydraType :: Core.Type
 testTypeHydraType =
     Core.TypeUnion [
@@ -176,10 +146,8 @@ testTypeHydraType =
       Core.FieldType {
         Core.fieldTypeName = (Core.Name "list"),
         Core.fieldTypeType = (Core.TypeVariable testTypeHydraTypeName)}]
-
 testTypeHydraTypeName :: Core.Name
 testTypeHydraTypeName = Core.Name "HydraType"
-
 testTypeIntList :: Core.Type
 testTypeIntList =
     Core.TypeRecord [
@@ -189,10 +157,8 @@ testTypeIntList =
       Core.FieldType {
         Core.fieldTypeName = (Core.Name "tail"),
         Core.fieldTypeType = (Core.TypeMaybe (Core.TypeVariable testTypeIntListName))}]
-
 testTypeIntListName :: Core.Name
 testTypeIntListName = Core.Name "IntList"
-
 testTypeLatLon :: Core.Type
 testTypeLatLon =
     Core.TypeRecord [
@@ -202,10 +168,8 @@ testTypeLatLon =
       Core.FieldType {
         Core.fieldTypeName = (Core.Name "lon"),
         Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}]
-
 testTypeLatLonName :: Core.Name
 testTypeLatLonName = Core.Name "LatLon"
-
 testTypeLatLonPoly :: Core.Type
 testTypeLatLonPoly =
     Core.TypeForall (Core.ForallType {
@@ -217,10 +181,8 @@ testTypeLatLonPoly =
         Core.FieldType {
           Core.fieldTypeName = (Core.Name "lon"),
           Core.fieldTypeType = (Core.TypeVariable (Core.Name "a"))}])})
-
 testTypeLatLonPolyName :: Core.Name
 testTypeLatLonPolyName = Core.Name "LatLonPoly"
-
 testTypeList :: Core.Type
 testTypeList =
     Core.TypeForall (Core.ForallType {
@@ -234,13 +196,10 @@ testTypeList =
           Core.fieldTypeType = (Core.TypeMaybe (Core.TypeApplication (Core.ApplicationType {
             Core.applicationTypeFunction = (Core.TypeVariable testTypeListName),
             Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))})))}])})
-
 testTypeListName :: Core.Name
 testTypeListName = Core.Name "List"
-
 testTypeName :: Core.Name
 testTypeName = Core.Name "Test"
-
 testTypeNumber :: Core.Type
 testTypeNumber =
     Core.TypeUnion [
@@ -250,10 +209,8 @@ testTypeNumber =
       Core.FieldType {
         Core.fieldTypeName = (Core.Name "float"),
         Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}]
-
 testTypeNumberName :: Core.Name
 testTypeNumberName = Core.Name "Number"
-
 testTypePerson :: Core.Type
 testTypePerson =
     Core.TypeRecord [
@@ -266,10 +223,8 @@ testTypePerson =
       Core.FieldType {
         Core.fieldTypeName = (Core.Name "age"),
         Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}]
-
 testTypePersonName :: Core.Name
 testTypePersonName = Core.Name "Person"
-
 testTypePersonOrSomething :: Core.Type
 testTypePersonOrSomething =
     Core.TypeForall (Core.ForallType {
@@ -281,19 +236,15 @@ testTypePersonOrSomething =
         Core.FieldType {
           Core.fieldTypeName = (Core.Name "other"),
           Core.fieldTypeType = (Core.TypeVariable (Core.Name "a"))}])})
-
 testTypePersonOrSomethingName :: Core.Name
 testTypePersonOrSomethingName = Core.Name "PersonOrSomething"
-
 testTypePolymorphicWrapper :: Core.Type
 testTypePolymorphicWrapper =
     Core.TypeForall (Core.ForallType {
       Core.forallTypeParameter = (Core.Name "a"),
       Core.forallTypeBody = (Core.TypeWrap (Core.TypeList (Core.TypeVariable (Core.Name "a"))))})
-
 testTypePolymorphicWrapperName :: Core.Name
 testTypePolymorphicWrapperName = Core.Name "PolymorphicWrapper"
-
 testTypeSimpleNumber :: Core.Type
 testTypeSimpleNumber =
     Core.TypeUnion [
@@ -303,16 +254,12 @@ testTypeSimpleNumber =
       Core.FieldType {
         Core.fieldTypeName = (Core.Name "float"),
         Core.fieldTypeType = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))}]
-
 testTypeSimpleNumberName :: Core.Name
 testTypeSimpleNumberName = Core.Name "SimpleNumber"
-
 testTypeStringAlias :: Core.Type
 testTypeStringAlias = Core.TypeWrap (Core.TypeLiteral Core.LiteralTypeString)
-
 testTypeStringAliasName :: Core.Name
 testTypeStringAliasName = Core.Name "StringAlias"
-
 testTypeSymmetricTriple :: Core.Type
 testTypeSymmetricTriple =
     Core.TypeForall (Core.ForallType {
@@ -326,10 +273,8 @@ testTypeSymmetricTriple =
               Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))})),
             Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "e"))})),
           Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))})))}))})
-
 testTypeSymmetricTripleName :: Core.Name
 testTypeSymmetricTripleName = Core.Name "SymmetricTriple"
-
 testTypeTimestamp :: Core.Type
 testTypeTimestamp =
     Core.TypeUnion [
@@ -339,10 +284,8 @@ testTypeTimestamp =
       Core.FieldType {
         Core.fieldTypeName = (Core.Name "date"),
         Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)}]
-
 testTypeTimestampName :: Core.Name
 testTypeTimestampName = Core.Name "Timestamp"
-
 testTypeTriple :: Core.Type
 testTypeTriple =
     Core.TypeForall (Core.ForallType {
@@ -361,10 +304,8 @@ testTypeTriple =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "third"),
               Core.fieldTypeType = (Core.TypeVariable (Core.Name "c"))}])}))}))})
-
 testTypeTripleName :: Core.Name
 testTypeTripleName = Core.Name "Triple"
-
 testTypeUnionMonomorphic :: Core.Type
 testTypeUnionMonomorphic =
     Core.TypeUnion [
@@ -377,10 +318,8 @@ testTypeUnionMonomorphic =
       Core.FieldType {
         Core.fieldTypeName = (Core.Name "unit"),
         Core.fieldTypeType = Core.TypeUnit}]
-
 testTypeUnionMonomorphicName :: Core.Name
 testTypeUnionMonomorphicName = Core.Name "UnionMonomorphic"
-
 testTypeUnionPolymorphicRecursive :: Core.Type
 testTypeUnionPolymorphicRecursive =
     Core.TypeForall (Core.ForallType {
@@ -397,12 +336,9 @@ testTypeUnionPolymorphicRecursive =
           Core.fieldTypeType = (Core.TypeApplication (Core.ApplicationType {
             Core.applicationTypeFunction = (Core.TypeVariable testTypeUnionPolymorphicRecursiveName),
             Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))}))}])})
-
 testTypeUnionPolymorphicRecursiveName :: Core.Name
 testTypeUnionPolymorphicRecursiveName = Core.Name "UnionPolymorphicRecursive"
-
 testTypeUnit :: Core.Type
 testTypeUnit = Core.TypeRecord []
-
 testTypeUnitName :: Core.Name
 testTypeUnitName = Core.Name "Unit"

@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term decoders for hydra.topology
 
 module Hydra.Decode.Topology where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
@@ -13,10 +11,8 @@ import qualified Hydra.Topology as Topology
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
 graph :: Graph.Graph -> Core.Term -> Either Errors.DecodingError (M.Map Int [Int])
 graph = ExtractCore.decodeMap vertex (ExtractCore.decodeList vertex)
-
 tarjanState :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Topology.TarjanState
 tarjanState cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -48,7 +44,6 @@ tarjanState cx raw =
           Topology.tarjanStateOnStack = field_onStack,
           Topology.tarjanStateSccs = field_sccs}))))))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 vertex :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Int
 vertex cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of

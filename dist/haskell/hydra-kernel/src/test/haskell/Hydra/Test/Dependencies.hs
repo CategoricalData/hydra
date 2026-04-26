@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Test cases for dependency analysis and let-term transformations
 
 module Hydra.Test.Dependencies where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Lib.Maps as Maps
@@ -14,7 +12,6 @@ import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
 -- | Test cases for dependency analysis and let-term transformations
 allTests :: Testing.TestGroup
 allTests =

@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Inference tests for expected failures
 
 module Hydra.Test.Inference.Failures where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Lib.Eithers as Eithers
@@ -14,7 +12,6 @@ import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Expected failure tests
 allTests :: Testing.TestGroup
 allTests =
@@ -36,7 +33,6 @@ allTests =
         primitiveTypeErrorTests,
         complexConstraintFailureTests],
       Testing.testGroupCases = []}
-
 arityMismatchTests :: Testing.TestGroup
 arityMismatchTests =
     Testing.TestGroup {
@@ -138,7 +134,6 @@ arityMismatchTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
-
 complexConstraintFailureTests :: Testing.TestGroup
 complexConstraintFailureTests =
     Testing.TestGroup {
@@ -397,7 +392,6 @@ complexConstraintFailureTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
-
 constraintSolverEdgeCaseTests :: Testing.TestGroup
 constraintSolverEdgeCaseTests =
     Testing.TestGroup {
@@ -631,7 +625,6 @@ constraintSolverEdgeCaseTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
-
 invalidApplicationTests :: Testing.TestGroup
 invalidApplicationTests =
     Testing.TestGroup {
@@ -763,7 +756,6 @@ invalidApplicationTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
-
 letBindingMismatchTests :: Testing.TestGroup
 letBindingMismatchTests =
     Testing.TestGroup {
@@ -970,7 +962,6 @@ letBindingMismatchTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
-
 occurCheckTests :: Testing.TestGroup
 occurCheckTests =
     Testing.TestGroup {
@@ -1138,7 +1129,6 @@ occurCheckTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
-
 polymorphismViolationTests :: Testing.TestGroup
 polymorphismViolationTests =
     Testing.TestGroup {
@@ -1348,7 +1338,6 @@ polymorphismViolationTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
-
 primitiveTypeErrorTests :: Testing.TestGroup
 primitiveTypeErrorTests =
     Testing.TestGroup {
@@ -1507,7 +1496,6 @@ primitiveTypeErrorTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
-
 recursiveTypeTests :: Testing.TestGroup
 recursiveTypeTests =
     Testing.TestGroup {
@@ -1680,7 +1668,6 @@ recursiveTypeTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
-
 selfApplicationTests :: Testing.TestGroup
 selfApplicationTests =
     Testing.TestGroup {
@@ -1796,7 +1783,6 @@ selfApplicationTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
-
 typeConstructorMisuseTests :: Testing.TestGroup
 typeConstructorMisuseTests =
     Testing.TestGroup {
@@ -1940,7 +1926,6 @@ typeConstructorMisuseTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
-
 undefinedVariableTests :: Testing.TestGroup
 undefinedVariableTests =
     Testing.TestGroup {
@@ -2091,7 +2076,6 @@ undefinedVariableTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
-
 unificationFailureTests :: Testing.TestGroup
 unificationFailureTests =
     Testing.TestGroup {

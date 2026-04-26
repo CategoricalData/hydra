@@ -1,16 +1,13 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Test cases for AST serialization
 
 module Hydra.Test.Serialization where
-
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Test cases for AST serialization
 allTests :: Testing.TestGroup
 allTests =
@@ -169,21 +166,15 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
-
 arrowOp :: Ast.Op
 arrowOp = Serialization.op "->" (Math.negate 1) Ast.AssociativityRight
-
 caseOp :: Ast.Op
 caseOp = Serialization.op "->" 0 Ast.AssociativityNone
-
 gtOp :: Ast.Op
 gtOp = Serialization.op ">" 4 Ast.AssociativityNone
-
 lambdaOp :: Ast.Op
 lambdaOp = Serialization.op "->" (Math.negate 1) Ast.AssociativityRight
-
 multOp :: Ast.Op
 multOp = Serialization.op "*" 7 Ast.AssociativityBoth
-
 plusOp :: Ast.Op
 plusOp = Serialization.op "+" 6 Ast.AssociativityBoth
