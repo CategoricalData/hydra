@@ -303,7 +303,7 @@ checkTypeSubst = define "checkTypeSubst" $
   "s" <~ Typing.unTypeSubst (var "subst") $
   "vars" <~ Sets.fromList (Maps.keys $ var "s") $
   "suspectVars" <~ Sets.intersection (var "vars") (Sets.fromList $ Maps.keys $ Graph.graphSchemaTypes $ var "tx") $
-  "isNominal" <~ ("ts" ~> cases _Type (Strip.deannotateType @@ (Core.typeSchemeType $ var "ts"))
+  "isNominal" <~ ("ts" ~> cases _Type (Strip.deannotateType @@ (Core.typeSchemeBody $ var "ts"))
     (Just false) [
     _Type_record>>: constant true,
     _Type_union>>: constant true,
@@ -556,7 +556,7 @@ typeOfInjection = define "typeOfInjection" $
   "schemaType" <~ Pairs.first (var "schemaResult") $
   "cx2" <~ Pairs.second (var "schemaResult") $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
-  "sbody" <~ Core.typeSchemeType (var "schemaType") $
+  "sbody" <~ Core.typeSchemeBody (var "schemaType") $
   "sfields" <<~ ExtractCore.unionType @@ var "tname" @@ var "sbody" $
   "ftyp" <<~ Resolution.findFieldType @@ var "cx2" @@ var "fname" @@ var "sfields" $
   right $ pair (Resolution.nominalApplication @@ var "tname" @@ var "typeArgs") (var "cx2")
@@ -774,7 +774,7 @@ typeOfProjection = define "typeOfProjection" $
   "schemaType" <~ Pairs.first (var "schemaResult") $
   "cx2" <~ Pairs.second (var "schemaResult") $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
-  "sbody" <~ Core.typeSchemeType (var "schemaType") $
+  "sbody" <~ Core.typeSchemeBody (var "schemaType") $
   "sfields" <<~ ExtractCore.recordType @@ var "tname" @@ var "sbody" $
   "ftyp" <<~ Resolution.findFieldType @@ var "cx2" @@ var "fname" @@ var "sfields" $
   "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (var "typeArgs")) $
@@ -879,7 +879,7 @@ typeOfUnwrap = define "typeOfUnwrap" $
   "schemaType" <~ Pairs.first (var "schemaResult") $
   "cx2" <~ Pairs.second (var "schemaResult") $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
-  "sbody" <~ Core.typeSchemeType (var "schemaType") $
+  "sbody" <~ Core.typeSchemeBody (var "schemaType") $
   "wrapped" <<~ ExtractCore.wrappedType @@ var "tname" @@ var "sbody" $
   "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (var "typeArgs")) $
   "swrapped" <~ Substitution.substInType @@ var "subst" @@ var "wrapped" $

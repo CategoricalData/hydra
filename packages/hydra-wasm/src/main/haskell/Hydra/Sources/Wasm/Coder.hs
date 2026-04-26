@@ -1079,7 +1079,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.typeDefinitionName (var "tdef") $
     "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ var "name")) $
-    "typ" <~ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "tdef")) $
+    "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionType (var "tdef")) $
     "dtyp" <~ (Strip.deannotateType @@ var "typ") $
     -- Emit a type section entry for function types
     cases _Type (var "dtyp") (Just $
@@ -1245,7 +1245,7 @@ buildFunctionSignatures = def "buildFunctionSignatures" $
       "nm" <~ Pairs.first (var "nameAndScheme") $
       "ts" <~ Pairs.second (var "nameAndScheme") $
       "snakeName" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (var "nm")) $
-      "sigEither" <~ (extractSignature @@ var "cx" @@ var "g" @@ Core.typeSchemeType (var "ts")) $
+      "sigEither" <~ (extractSignature @@ var "cx" @@ var "g" @@ Core.typeSchemeBody (var "ts")) $
       Eithers.either_
         (lambda "_err" $ nothing)
         (lambda "sig" $ just (pair (var "snakeName") (var "sig")))
@@ -1279,7 +1279,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (var "name")) $
     "typ" <~ Maybes.maybe
       (Core.typeUnit)
-      (unaryFunction Core.typeSchemeType)
+      (unaryFunction Core.typeSchemeBody)
       (Packaging.termDefinitionType (var "tdef")) $
     -- Extract lambda parameters and inner body
     "extracted" <~ (extractLambdaParams @@ var "term") $
@@ -1425,7 +1425,7 @@ buildFieldOffsets = def "buildFieldOffsets" $
     "entryFor" <~ (lambda "nameSchemePair" $
       "tname" <~ Pairs.first (var "nameSchemePair") $
       "tscheme" <~ Pairs.second (var "nameSchemePair") $
-      "tbody" <~ Core.typeSchemeType (var "tscheme") $
+      "tbody" <~ Core.typeSchemeBody (var "tscheme") $
       "mfields" <~ (var "recordFieldsOf" @@ var "tbody") $
       Maybes.cases (var "mfields")
         (nothing :: TTerm (Maybe (Name, [(Name, Int)])))
@@ -1470,7 +1470,7 @@ buildVariantIndexes = def "buildVariantIndexes" $
     "entryFor" <~ (lambda "nameSchemePair" $
       "tname" <~ Pairs.first (var "nameSchemePair") $
       "tscheme" <~ Pairs.second (var "nameSchemePair") $
-      "tbody" <~ Core.typeSchemeType (var "tscheme") $
+      "tbody" <~ Core.typeSchemeBody (var "tscheme") $
       "mfields" <~ (var "unionFieldsOf" @@ var "tbody") $
       Maybes.cases (var "mfields")
         (nothing :: TTerm (Maybe (Name, [(Name, Int)])))

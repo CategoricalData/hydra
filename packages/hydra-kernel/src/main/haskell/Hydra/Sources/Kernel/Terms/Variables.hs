@@ -124,7 +124,7 @@ freeTypeVariablesInTerm = define "freeTypeVariablesInTerm" $
             (var "getAll" @@ var "newVars" @@ (Core.bindingTerm $ var "b"))
             (optCases (Core.bindingType $ var "b")
               Sets.empty
-              ("ts" ~> var "tryType" @@ var "newVars" @@ (Core.typeSchemeType $ var "ts")))) $
+              ("ts" ~> var "tryType" @@ var "newVars" @@ (Core.typeSchemeBody $ var "ts")))) $
         Sets.union
           (var "allOf" @@ Lists.map (var "forBinding") (Core.letBindings $ var "l"))
           (var "recurse" @@ (Core.letBody $ var "l")),
@@ -209,7 +209,7 @@ freeVariablesInTypeScheme = define "freeVariablesInTypeScheme" $
   doc "Find free variables in a type scheme" $
   "ts" ~>
   "vars" <~ Core.typeSchemeVariables (var "ts") $
-  "t" <~ Core.typeSchemeType (var "ts") $
+  "t" <~ Core.typeSchemeBody (var "ts") $
   Sets.difference (freeVariablesInType @@ var "t") (Sets.fromList $ var "vars")
 
 freeVariablesInTypeSchemeSimple :: TTermDefinition (TypeScheme -> S.Set Name)
@@ -217,7 +217,7 @@ freeVariablesInTypeSchemeSimple = define "freeVariablesInTypeSchemeSimple" $
   doc "Find free variables in a type scheme (simple version)" $
   "ts" ~>
   "vars" <~ Core.typeSchemeVariables (var "ts") $
-  "t" <~ Core.typeSchemeType (var "ts") $
+  "t" <~ Core.typeSchemeBody (var "ts") $
   Sets.difference (freeVariablesInTypeSimple @@ var "t") (Sets.fromList $ var "vars")
 
 isFreeVariableInTerm :: TTermDefinition (Name -> Term -> Bool)
@@ -268,7 +268,7 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
             var "step" @@ (Lists.cons (var "b1") (var "acc")) @@ var "tl") $
           "withType" <~ ("ts" ~>
             "vars" <~ Core.typeSchemeVariables (var "ts") $
-            "typ"  <~ Core.typeSchemeType (var "ts") $
+            "typ"  <~ Core.typeSchemeBody (var "ts") $
             "k"    <~ Lists.length (var "vars") $
             -- Build exactly k fresh names t{next}, t{next+1}, ...
             "gen"  <~ ("i" ~> "rem" ~> "acc2" ~>

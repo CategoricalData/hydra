@@ -362,7 +362,7 @@ encodeTypeDefinition = define "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "tdef" $
     encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes"
       @@ (Packaging.typeDefinitionName $ var "tdef")
-      @@ (Core.typeSchemeType $ Packaging.typeDefinitionType $ var "tdef")
+      @@ (Core.typeSchemeBody $ Packaging.typeDefinitionType $ var "tdef")
 
 -- | Encode a Hydra Name as a GraphQL Name with namespace prefix
 encodeTypeName :: TTermDefinition (M.Map Namespace String -> Name -> G.Name)

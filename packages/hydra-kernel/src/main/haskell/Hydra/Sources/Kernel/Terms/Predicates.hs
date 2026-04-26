@@ -121,7 +121,7 @@ isComplexBinding = define "isComplexBinding" $
       -- Check if polymorphic
       "isPolymorphic" <~ Logic.not (Lists.null (Core.typeSchemeVariables $ var "ts")) $
       -- Check if non-nullary
-      "isNonNullary" <~ Equality.gt (Arity.typeArity @@ (Core.typeSchemeType $ var "ts")) (int32 0) $
+      "isNonNullary" <~ Equality.gt (Arity.typeArity @@ (Core.typeSchemeBody $ var "ts")) (int32 0) $
       -- Check if complex term
       "isComplex" <~ isComplexTerm @@ var "tc" @@ var "term" $
       Logic.or (Logic.or (var "isPolymorphic") (var "isNonNullary")) (var "isComplex")

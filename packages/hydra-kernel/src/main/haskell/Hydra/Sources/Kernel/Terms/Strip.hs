@@ -139,7 +139,7 @@ deannotateTypeSchemeRecursive = define "deannotateTypeSchemeRecursive" $
   doc "Recursively strip all annotations from a type scheme" $
   "ts" ~>
   "vars" <~ Core.typeSchemeVariables (var "ts") $
-  "typ" <~ Core.typeSchemeType (var "ts") $
+  "typ" <~ Core.typeSchemeBody (var "ts") $
   "constraints" <~ Core.typeSchemeConstraints (var "ts") $
   Core.typeScheme (var "vars") (deannotateTypeRecursive @@ var "typ") (var "constraints")
 

@@ -112,7 +112,7 @@ healthNamespace = Namespace "hydra.demos.genpg.health"
 listTableTypeScheme :: TypeScheme
 listTableTypeScheme = TypeScheme {
   typeSchemeVariables = [],
-  typeSchemeType = TypeList (TypeVariable (Name "hydra.tabular.TableType")),
+  typeSchemeBody = TypeList (TypeVariable (Name "hydra.tabular.TableType")),
   typeSchemeConstraints = Nothing
 }
 
@@ -121,7 +121,7 @@ listTableTypeScheme = TypeScheme {
 graphSchemaTypeScheme :: TypeScheme
 graphSchemaTypeScheme = TypeScheme {
   typeSchemeVariables = [],
-  typeSchemeType = TypeApplication (ApplicationType
+  typeSchemeBody = TypeApplication (ApplicationType
     (TypeVariable (Name "hydra.pg.model.GraphSchema"))
     (TypeVariable (Name "hydra.core.Type"))),
   typeSchemeConstraints = Nothing
@@ -132,7 +132,7 @@ graphSchemaTypeScheme = TypeScheme {
 lazyGraphTermScheme :: TypeScheme
 lazyGraphTermScheme = TypeScheme {
   typeSchemeVariables = [],
-  typeSchemeType = TypeApplication (ApplicationType
+  typeSchemeBody = TypeApplication (ApplicationType
     (TypeVariable (Name "hydra.pg.model.LazyGraph"))
     (TypeVariable (Name "hydra.core.Term"))),
   typeSchemeConstraints = Nothing

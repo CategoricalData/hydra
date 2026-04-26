@@ -127,7 +127,7 @@ moduleTypeBindings :: TTerm Module -> TTerm [Binding]
 moduleTypeBindings m = Maybes.cat $ Lists.map
   ("d" ~> cases _Definition (var "d") (Just nothing) [
     _Definition_type>>: "td" ~>
-      just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Packaging.typeDefinitionType $ var "td"))])
+      just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionType $ var "td"))])
   (Packaging.moduleDefinitions m)
 
 -- | Extract term definitions from a module as Bindings (for elementsToGraph compatibility).
@@ -392,7 +392,7 @@ buildSchemaMap :: TTermDefinition (Graph -> M.Map Name Type)
 buildSchemaMap = define "buildSchemaMap" $
   doc "Build a schema map (Name -> Type) from a graph's schema types" $
   "g" ~>
-  Maps.map ("ts" ~> Strip.deannotateType @@ (Core.typeSchemeType $ var "ts"))
+  Maps.map ("ts" ~> Strip.deannotateType @@ (Core.typeSchemeBody $ var "ts"))
     (Graph.graphSchemaTypes $ var "g")
 
 -- | Convert a generated Module into a Source module.

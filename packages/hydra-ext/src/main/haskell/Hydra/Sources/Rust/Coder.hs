@@ -414,7 +414,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ var "name")) $
     "typ" <~ Maybes.maybe
       (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
-      (unaryFunction Core.typeSchemeType)
+      (unaryFunction Core.typeSchemeBody)
       (Packaging.termDefinitionType (var "tdef")) $
     "body" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "term") $
     "retType" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
@@ -514,7 +514,7 @@ encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> E
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.typeDefinitionName (var "tdef") $
-    "typ" <~ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "tdef")) $
+    "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionType (var "tdef")) $
     "lname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ var "name")) $
     -- Filter free type variables to unqualified names only (type parameters, not type references)
     "freeVars" <~ (Lists.filter

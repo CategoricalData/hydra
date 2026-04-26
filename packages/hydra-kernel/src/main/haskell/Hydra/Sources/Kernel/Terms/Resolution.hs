@@ -156,7 +156,7 @@ fieldTypes = define "fieldTypes" $
           Eithers.bind (Eithers.bimap ("_e" ~> Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "type") (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
               (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))) (
             "decodedType" ~> fieldTypes @@ var "cx" @@ var "graph" @@ var "decodedType")))
-        ("ts" ~> fieldTypes @@ var "cx" @@ var "graph" @@ Core.typeSchemeType (var "ts"))
+        ("ts" ~> fieldTypes @@ var "cx" @@ var "graph" @@ Core.typeSchemeBody (var "ts"))
         (Maps.lookup (var "name") (Graph.graphSchemaTypes $ var "graph"))]
   @@ (Strip.deannotateType @@ var "t")
 
@@ -238,7 +238,7 @@ instantiateTypeScheme = define "instantiateTypeScheme" $
     (Core.typeSchemeConstraints (var "scheme")) $
   pair
     (Core.typeScheme (var "newVars")
-      (Substitution.substInType @@ var "subst" @@ Core.typeSchemeType (var "scheme"))
+      (Substitution.substInType @@ var "subst" @@ Core.typeSchemeBody (var "scheme"))
       (var "renamedConstraints"))
     (var "cx2")
 

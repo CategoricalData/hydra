@@ -652,7 +652,7 @@ etaExpansionArity = define "etaExpansionArity" $
     _Term_variable>>: "name" ~>
       -- Note: we assume that the graph is fully typed.
       Maybes.maybe (int32 0)
-        ("ts" ~> Arity.typeArity @@ (Core.typeSchemeType $ var "ts"))
+        ("ts" ~> Arity.typeArity @@ (Core.typeSchemeBody $ var "ts"))
         (Maybes.bind
           (Lexical.lookupBinding @@ var "graph" @@ var "name")
           ("b" ~> Core.bindingType $ var "b"))]

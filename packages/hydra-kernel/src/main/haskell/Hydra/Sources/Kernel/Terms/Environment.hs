@@ -105,7 +105,7 @@ definitionAsTypeApplicationTerm = define "definitionAsTypeApplicationTerm" $
   doc "Convert a definition to a typed term" $
   "el" ~>
   Maybes.maybe (Ctx.failInContext (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "typed binding") (string "untyped binding")) (var "cx"))
-    ("ts" ~> right (Core.typeApplicationTerm (Core.bindingTerm (var "el")) (Core.typeSchemeType (var "ts"))))
+    ("ts" ~> right (Core.typeApplicationTerm (Core.bindingTerm (var "el")) (Core.typeSchemeBody (var "ts"))))
     (Core.bindingType (var "el"))
 
 graphAsLet :: TTermDefinition ([Binding] -> Term -> Let)

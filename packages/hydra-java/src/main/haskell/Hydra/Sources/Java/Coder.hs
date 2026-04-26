@@ -355,7 +355,7 @@ annotateLambdaArgs = def "annotateLambdaArgs" $
       Maybes.cases (var "mts")
         (right (var "argTerms"))
         (lambda "ts" $
-          "schemeType" <~ Core.typeSchemeType (var "ts") $
+          "schemeType" <~ Core.typeSchemeBody (var "ts") $
           "schemeTypeVars" <~ (collectTypeVars @@ var "schemeType") $
           "schemeVars" <~ Lists.filter
             (lambda "v" $ Sets.member (var "v") (var "schemeTypeVars"))
@@ -590,7 +590,7 @@ bindingIsFunctionType = def "bindingIsFunctionType" $
         _Term_unwrap>>: lambda "_f" $ boolean True])
       -- Has type scheme: check type
       (lambda "ts" $
-        cases _Type (Strip.deannotateType @@ Core.typeSchemeType (var "ts"))
+        cases _Type (Strip.deannotateType @@ Core.typeSchemeBody (var "ts"))
           (Just $ boolean False) [
           _Type_function>>: lambda "_ft" $ boolean True,
           _Type_forall>>: lambda "fa" $
@@ -1382,7 +1382,7 @@ correctTypeApps = def "correctTypeApps" $
         Maybes.cases (Core.bindingType (var "el"))
           (right (var "fallbackTypeApps"))
           (lambda "ts" $
-            "schemeType" <~ Core.typeSchemeType (var "ts") $
+            "schemeType" <~ Core.typeSchemeBody (var "ts") $
             "allSchemeVars" <~ Lists.filter (lambda "v" $ isSimpleName @@ var "v") (Core.typeSchemeVariables (var "ts")) $
             "schemeTypeVars" <~ collectTypeVars @@ var "schemeType" $
             "usedFlags" <~ Lists.map (lambda "v" $ Sets.member (var "v") (var "schemeTypeVars")) (var "allSchemeVars") $
@@ -1998,7 +1998,7 @@ encodeDefinitions = def "encodeDefinitions" $
     "termDefs" <~ Pairs.second (var "partitioned") $
     -- Filter out typedefs (non-record/union/wrap types)
     "nonTypedefDefs" <~ Lists.filter (lambda "td" $
-      "typ" <~ (Core.typeSchemeType $ project _TypeDefinition _TypeDefinition_type @@ var "td") $
+      "typ" <~ (Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_type @@ var "td") $
       isSerializableJavaType @@ (var "typ"))
       (var "typeDefs") $
     "typeUnits" <<~ (Eithers.mapList (lambda "td" $ encodeTypeDefinition @@ var "pkg" @@ var "aliases" @@ var "td" @@ var "cx" @@ var "g") (var "nonTypedefDefs")) $
@@ -2524,7 +2524,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
       -- Get type parameters from scheme
       "schemeVars" <~ Lists.filter (lambda "v" $ isSimpleName @@ var "v") (Core.typeSchemeVariables (var "ts")) $
       "termVars" <~ (project _FunctionStructure _FunctionStructure_typeParams @@ var "fs") $
-      "schemeTypeVars" <~ (collectTypeVars @@ Core.typeSchemeType (var "ts")) $
+      "schemeTypeVars" <~ (collectTypeVars @@ Core.typeSchemeBody (var "ts")) $
       "usedSchemeVars" <~ Lists.filter (lambda "v" $ Sets.member (var "v") (var "schemeTypeVars")) (var "schemeVars") $
       "tparams" <~ Logic.ifElse (Lists.null (var "usedSchemeVars")) (var "termVars") (var "usedSchemeVars") $
       "params" <~ (project _FunctionStructure _FunctionStructure_params @@ var "fs") $
@@ -2533,7 +2533,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
       "doms" <~ (project _FunctionStructure _FunctionStructure_domains @@ var "fs") $
       "env2" <~ (project _FunctionStructure _FunctionStructure_environment @@ var "fs") $
       -- Derive codomain from TypeScheme
-      "schemeType" <~ Core.typeSchemeType (var "ts") $
+      "schemeType" <~ Core.typeSchemeBody (var "ts") $
       "numParams" <~ Lists.length (var "params") $
       "peelResult" <~ (peelDomainsAndCod @@ var "numParams" @@ var "schemeType") $
       "schemeDoms" <~ Pairs.first (var "peelResult") $
@@ -3422,7 +3422,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
   lambda "pkg" $ lambda "aliases" $ lambda "tdef" $
     "cx" ~> "g" ~>
     "name" <~ (project _TypeDefinition _TypeDefinition_name @@ var "tdef") $
-    "typ" <~ (Core.typeSchemeType $ project _TypeDefinition _TypeDefinition_type @@ var "tdef") $
+    "typ" <~ (Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_type @@ var "tdef") $
     -- Check if serializable
     "serializable" <~ (isSerializableJavaType @@ var "typ") $
     "imports" <~ Logic.ifElse (var "serializable")
@@ -3457,8 +3457,8 @@ encodeType_resolveIfTypedef = def "encodeType_resolveIfTypedef" $
             (lambda "ts" $
               Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables (var "ts"))))
                 (right nothing)
-                (cases _Type (Strip.deannotateType @@ Core.typeSchemeType (var "ts"))
-                  (Just $ right (just (Core.typeSchemeType (var "ts")))) [
+                (cases _Type (Strip.deannotateType @@ Core.typeSchemeBody (var "ts"))
+                  (Just $ right (just (Core.typeSchemeBody (var "ts")))) [
                   _Type_record>>: lambda "_" $ right nothing,
                   _Type_union>>: lambda "_" $ right nothing,
                   _Type_wrap>>: lambda "_" $ right nothing]))))
@@ -3565,7 +3565,7 @@ encodeVariable_hoistedLambdaCase = def "encodeVariable_hoistedLambdaCase" $
         Maybes.cases (Core.bindingType (var "el"))
           (right (var "lam"))
           (lambda "ts" $
-            "typ" <~ Core.typeSchemeType (var "ts") $
+            "typ" <~ Core.typeSchemeBody (var "ts") $
             "jtype" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "typ" @@ var "cx" @@ var "g") $
             "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jtype" @@ var "cx") $
             right (JavaUtilsSource.javaCastExpressionToJavaExpression @@
@@ -3731,8 +3731,8 @@ filterPhantomTypeArgs = def "filterPhantomTypeArgs" $
           (right (var "allTypeArgs"))
           (lambda "ts" $
             "schemeVars" <~ Lists.filter (lambda "v" $ isSimpleName @@ var "v") (Core.typeSchemeVariables (var "ts")) $
-            "schemeTypeVars" <~ collectTypeVars @@ Core.typeSchemeType (var "ts") $
-            "schemeType" <~ Core.typeSchemeType (var "ts") $
+            "schemeTypeVars" <~ collectTypeVars @@ Core.typeSchemeBody (var "ts") $
+            "schemeType" <~ Core.typeSchemeBody (var "ts") $
             "nParams" <~ countFunctionParams @@ var "schemeType" $
             "peeled" <~ peelDomainTypes @@ var "nParams" @@ var "schemeType" $
             "calleeDoms" <~ Pairs.first (var "peeled") $
@@ -4097,7 +4097,7 @@ isFieldUnitType = def "isFieldUnitType" $
     Maybes.cases (Maps.lookup (var "typeName") (var "schemaTypes"))
       (right false)
       (lambda "ts" $
-        cases _Type (Strip.deannotateType @@ Core.typeSchemeType (var "ts"))
+        cases _Type (Strip.deannotateType @@ Core.typeSchemeBody (var "ts"))
           (Just $ right false) [
           _Type_union>>: lambda "rt" $
             right (Maybes.cases
@@ -4429,7 +4429,7 @@ propagateType = def "propagateType" $
               (var "b")
               ("ts" ~> Core.binding
                 (Core.bindingName $ var "b")
-                (propagateType @@ (Core.typeSchemeType $ var "ts") @@ (Core.bindingTerm $ var "b"))
+                (propagateType @@ (Core.typeSchemeBody $ var "ts") @@ (Core.bindingTerm $ var "b"))
                 (Core.bindingType $ var "b")))
           (Core.letBindings (var "lt")) $
         var "setTypeAnn" @@
@@ -4942,7 +4942,7 @@ toDeclInit = def "toDeclInit" $
         "value" <~ Core.bindingTerm (var "binding") $
         "typ" <<~ Maybes.cases (Core.bindingType (var "binding"))
           (Checking.typeOfTerm @@ var "cx" @@ var "gExt" @@ var "value")
-          (lambda "ts" $ right (Core.typeSchemeType (var "ts"))) $
+          (lambda "ts" $ right (Core.typeSchemeBody (var "ts"))) $
         "jtype" <<~ (encodeType @@ var "aliasesExt" @@ Sets.empty @@ var "typ" @@ var "cx" @@ var "g") $
         "id" <~ (JavaUtilsSource.variableToJavaIdentifier @@ var "name") $
         "arid" <~ (JavaDsl.identifier (string "java.util.concurrent.atomic.AtomicReference")) $
@@ -4967,7 +4967,7 @@ toDeclStatement = def "toDeclStatement" $
     "value" <~ Core.bindingTerm (var "binding") $
     "typ" <<~ Maybes.cases (Core.bindingType (var "binding"))
       (Checking.typeOfTerm @@ var "cx" @@ var "gExt" @@ var "value")
-      (lambda "ts" $ right (Core.typeSchemeType (var "ts"))) $
+      (lambda "ts" $ right (Core.typeSchemeBody (var "ts"))) $
     "jtype" <<~ (encodeType @@ var "aliasesExt" @@ Sets.empty @@ var "typ" @@ var "cx" @@ var "g") $
     "id" <~ (JavaUtilsSource.variableToJavaIdentifier @@ var "name") $
     "annotatedValue" <~ (Annotations.setTermAnnotation @@ asTerm Constants.key_type

@@ -99,7 +99,7 @@ typeSchemeToFType = define "typeSchemeToFType" $
   doc "Convert a type scheme to a forall type" $
   "ts" ~>
   "vars" <~ Core.typeSchemeVariables (var "ts") $
-  "body" <~ Core.typeSchemeType (var "ts") $
+  "body" <~ Core.typeSchemeBody (var "ts") $
   Lists.foldl
     ("t" ~> "v" ~> Core.typeForall $ Core.forallType (var "v") (var "t"))
     (var "body")

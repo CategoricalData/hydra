@@ -253,7 +253,7 @@ definitionDependencyNamespaces = define "definitionDependencyNamespaces" $
   "defNames" <~ ("def" ~> cases _Definition (var "def")
     Nothing [
     _Definition_type>>: "typeDef" ~>
-      Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "typeDef")),
+      Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Packaging.typeDefinitionType (var "typeDef")),
     _Definition_term>>: "termDef" ~>
       Dependencies.termDependencyNames @@ true @@ true @@ true @@ Packaging.termDefinitionTerm (var "termDef")]) $
   "allNames" <~ Sets.unions (Lists.map (var "defNames") (var "defs")) $
@@ -269,7 +269,7 @@ dependencyNamespaces = define "dependencyNamespaces" $
     "dataNames" <~ Dependencies.termDependencyNames @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "term" $
     "schemaNames" <~ Logic.ifElse (var "withSchema")
       (Maybes.maybe Sets.empty
-        ("ts" ~> Dependencies.typeDependencyNames @@ true @@ Core.typeSchemeType (var "ts"))
+        ("ts" ~> Dependencies.typeDependencyNames @@ true @@ Core.typeSchemeBody (var "ts"))
         (Core.bindingType (var "el")))
       Sets.empty $
     -- Handle encoded types: decode as Type and extract type dependency names
@@ -501,7 +501,7 @@ moduleDependencyNamespaces = define "moduleDependencyNamespaces" $
   "allBindings" <~ Maybes.cat (Lists.map
     ("d" ~> cases _Definition (var "d") (Just nothing) [
       _Definition_type>>: "td" ~>
-        just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Packaging.typeDefinitionType $ var "td")),
+        just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionType $ var "td")),
       _Definition_term>>: "td" ~>
         just (Core.binding (Packaging.termDefinitionName $ var "td") (Packaging.termDefinitionTerm $ var "td")
           (Packaging.termDefinitionType $ var "td"))])

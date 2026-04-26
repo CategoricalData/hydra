@@ -269,7 +269,7 @@ replaceTypedefs = define "replaceTypedefs" $
           _Type_union>>: constant $ var "typ",
           _Type_wrap>>: constant $ var "typ"]) $
         "forTypeScheme" <~ ("ts" ~>
-          "t" <~ Core.typeSchemeType (var "ts") $
+          "t" <~ Core.typeSchemeBody (var "ts") $
           Logic.ifElse (Lists.null $ Core.typeSchemeVariables $ var "ts")
             (var "forMono" @@ var "t")
             (var "typ")) $ -- TODO: this may be too simple
@@ -414,7 +414,7 @@ topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
   "defs" ~>
   "toPair" <~ ("def" ~> pair
     (Packaging.typeDefinitionName (var "def"))
-    (Sets.toList (typeDependencyNames @@ false @@ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "def"))))) $
+    (Sets.toList (typeDependencyNames @@ false @@ (Core.typeSchemeBody $ Packaging.typeDefinitionType (var "def"))))) $
   "nameToDef" <~ Maps.fromList (Lists.map
     ("d" ~> pair (Packaging.typeDefinitionName (var "d")) (var "d"))
     (var "defs")) $

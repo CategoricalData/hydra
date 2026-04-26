@@ -158,7 +158,7 @@ dereferenceSchemaType = define "dereferenceSchemaType" $
       ("ts" ~> Core.typeScheme
         -- Note: no alpha-renaming of type variables
         (Lists.cons (Core.forallTypeParameter (var "ft")) (Core.typeSchemeVariables (var "ts")))
-        (Core.typeSchemeType (var "ts"))
+        (Core.typeSchemeBody (var "ts"))
         (Core.typeSchemeConstraints (var "ts")))
       (var "forType" @@ (Core.forallTypeBody (var "ft"))),
     _Type_variable>>: "v" ~> dereferenceSchemaType @@ var "v" @@ var "types"]) $
@@ -168,9 +168,9 @@ dereferenceSchemaType = define "dereferenceSchemaType" $
       ("ts2" ~> Core.typeScheme
         -- Note: no alpha-renaming of type variables
         (Lists.concat2 (Core.typeSchemeVariables (var "ts")) (Core.typeSchemeVariables (var "ts2")))
-        (Core.typeSchemeType (var "ts2"))
+        (Core.typeSchemeBody (var "ts2"))
         (Core.typeSchemeConstraints (var "ts2")))
-      (var "forType" @@ (Core.typeSchemeType (var "ts"))))
+      (var "forType" @@ (Core.typeSchemeBody (var "ts"))))
 
 dereferenceVariable :: TTermDefinition (Graph -> Name -> Either Error Binding)
 dereferenceVariable = define "dereferenceVariable" $

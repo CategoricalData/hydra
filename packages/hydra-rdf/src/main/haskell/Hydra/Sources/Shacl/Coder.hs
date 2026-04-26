@@ -470,7 +470,7 @@ shaclCoder = define "shaclCoder" $
     "typeEls">: Maybes.cat (Lists.map
       ("d" ~> cases _Definition (var "d") (Just nothing) [
         _Definition_type>>: "td" ~>
-          just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Packaging.typeDefinitionType $ var "td"))])
+          just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionType $ var "td"))])
       (Packaging.moduleDefinitions (var "mod"))),
     "toShape">: lambda "el" $
       Eithers.bind

@@ -281,7 +281,7 @@ collectQualifiedNamesInTypeScheme :: TTermDefinition (TypeScheme -> S.Set String
 collectQualifiedNamesInTypeScheme = define "collectQualifiedNamesInTypeScheme" $
   doc "Collect qualified (hydra.*) Name strings from a TypeScheme's body, after stripping forall binders" $
   lambda "ts" $ lets [
-    "extracted">: extractTypeParams @@ (Core.typeSchemeType $ var "ts"),
+    "extracted">: extractTypeParams @@ (Core.typeSchemeBody $ var "ts"),
     "body">: Pairs.second (var "extracted")] $
     collectQualifiedNamesInType @@ var "body"
 
@@ -552,7 +552,7 @@ buildFieldMapping = define "buildFieldMapping" $
           _Definition_type>>: "td" ~> lets [
             "qname">: unwrap _Name @@ (Packaging.typeDefinitionName $ var "td"),
             "tname">: localName @@ var "qname",
-            "ty">: Core.typeSchemeType (Packaging.typeDefinitionType $ var "td"),
+            "ty">: Core.typeSchemeBody (Packaging.typeDefinitionType $ var "td"),
             "extracted">: extractTypeParams @@ var "ty",
             "bodyTy">: Pairs.second (var "extracted")] $
             cases _Type (var "bodyTy") (Just $ list ([] :: [TTerm ((String, String), String)])) [
@@ -634,7 +634,7 @@ collectFreeTypeVarsInTypeScheme = define "collectFreeTypeVarsInTypeScheme" $
     "explicit">: Sets.fromList $ Lists.map (lambda "n" $ unwrap _Name @@ var "n") $
       Lists.filter (lambda "n" $ isTypeVarLike @@ (unwrap _Name @@ var "n"))
         (Core.typeSchemeVariables $ var "ts")] $
-    Sets.union (var "explicit") (collectFreeTypeVarsInType @@ (Core.typeSchemeType $ var "ts"))
+    Sets.union (var "explicit") (collectFreeTypeVarsInType @@ (Core.typeSchemeBody $ var "ts"))
 
 -- | Collect all free type-variable-like names referenced inside a Term,
 -- recursing through lambda domains, type applications, let binding type

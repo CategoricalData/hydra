@@ -62,7 +62,7 @@ scheme vars body = Core.typeScheme (list [nm v | v <- vars]) body nothing
 -- preserved unchanged so we test it separately via showSubstInTypeSchemeVars.
 showSubstInTypeSchemeBody :: [(String, TTerm Type)] -> TTerm TypeScheme -> TTerm String
 showSubstInTypeSchemeBody pairs inputScheme =
-  ShowCore.type_ @@ (Core.typeSchemeType $ SubstitutionModule.substInTypeScheme @@
+  ShowCore.type_ @@ (Core.typeSchemeBody $ SubstitutionModule.substInTypeScheme @@
     (wrap _TypeSubst (Maps.fromList (subst pairs))) @@ inputScheme)
 
 substInTypeSchemeBodyCase :: String -> [(String, TTerm Type)] -> TTerm TypeScheme -> TTerm Type -> TTerm TestCaseWithMetadata

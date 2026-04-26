@@ -465,7 +465,7 @@ adaptTypeScheme = define "adaptTypeScheme" $
   doc "Adapt a type scheme to the given language constraints, prior to inference" $
   "constraints" ~> "litmap" ~> "ts0" ~>
   "vars0" <~ Core.typeSchemeVariables (var "ts0") $
-  "t0" <~ Core.typeSchemeType (var "ts0") $
+  "t0" <~ Core.typeSchemeBody (var "ts0") $
   "t1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "t0" $
   right $ Core.typeScheme (var "vars0") (var "t1") (Core.typeSchemeConstraints (var "ts0"))
 
