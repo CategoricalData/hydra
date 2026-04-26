@@ -91,7 +91,7 @@
 ;; and compile+run successfully.
 (fset 'hydra-byte-compile-all
   (lambda ()
-    (let ((skip-prefixes '("hydra_code_generation_" "hydra_reduction_"
+    (let ((skip-prefixes '("hydra_codegen_" "hydra_reduction_"
                            "hydra_adapt_" "hydra_checking_" "hydra_inference_"
                            "hydra_hoisting_" "hydra_encoding_" "hydra_decoding_"
                            "hydra_rewriting_" "hydra_schemas_")))
@@ -181,7 +181,7 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
 
 (defun bootstrap-namespace-to-path (ns)
   "Convert a namespace string to a file path."
-  (funcall (symbol-value 'hydra_code_generation_namespace_to_path) ns))
+  (funcall (symbol-value 'hydra_codegen_namespace_to_path) ns))
 
 ;; ============================================================================
 ;; Module loading from JSON
@@ -192,15 +192,15 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
   (let* ((file-path (format "%s/%s.json" bootstrap-json-dir (bootstrap-namespace-to-path ns-str)))
          (json-obj (bootstrap-read-json-file file-path))
          (hydra-json (bootstrap-json-to-hydra json-obj))
-         (mod-type (list :variable "hydra.module.Module"))
+         (mod-type (list :variable "hydra.packaging.Module"))
          (json-result (funcall (funcall (funcall (funcall
                         (symbol-value 'hydra_json_decode_from_json) schema-map)
-                        "hydra.module.Module") mod-type) hydra-json)))
+                        "hydra.packaging.Module") mod-type) hydra-json)))
     (when (eq (car json-result) :left)
       (error "JSON decode error for %s: %s" ns-str (cadr json-result)))
     (let* ((term (cadr json-result))
            (mod-result (funcall (funcall
-                         (symbol-value 'hydra_decode_module_module) bs-graph) term)))
+                         (symbol-value 'hydra_decode_packaging_module) bs-graph) term)))
       (when (eq (car mod-result) :left)
         (error "Module decode error for %s: %s" ns-str (cadr mod-result)))
       (cadr mod-result))))
@@ -293,7 +293,7 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
          (result (condition-case err
                      (funcall (funcall (funcall (funcall (funcall (funcall (funcall (funcall
                        (funcall (funcall
-                         (symbol-value 'hydra_code_generation_generate_source_files)
+                         (symbol-value 'hydra_codegen_generate_source_files)
                          coder) language) do-infer) do-expand) do-hoist-case) do-hoist-poly)
                        bs-graph) universe-mods) mods-to-generate) cx)
                    (error (princ (format "  GENERATE ERROR: %s\n" err)) (list :left (format "%s" err)))))
