@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Test cases for JSON serialization
 
 module Hydra.Test.Json.Writer where
-
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Json.Writer as Writer
 import qualified Hydra.Testing as Testing
@@ -11,7 +9,6 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Hydra.Lib.Literals as Literals
-
 -- | Test cases for JSON serialization (writer)
 allTests :: Testing.TestGroup
 allTests =

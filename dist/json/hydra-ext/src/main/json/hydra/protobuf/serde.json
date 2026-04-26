@@ -215,11 +215,32 @@
                                                           "lambda": {
                                                             "body": {
                                                               "application": {
-                                                                "argument": {"variable": "line"},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "line"},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"literal": {"string": "// "}},
+                                                                        "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                                                 "function": {
                                                                   "application": {
-                                                                    "argument": {"literal": {"string": "// "}},
-                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                                    "argument": {"literal": {"string": "//"}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"literal": {"string": ""}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "line"},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"variable": "hydra.lib.equality.equal"},
+                                                                                    "type": {"literal": {"string": {}}}}}}}}},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                            "type": {"literal": {"string": {}}}}}}}}}}},
                                                             "domain": {"literal": {"string": {}}},
                                                             "parameter": "line"}},
                                                         "function": {

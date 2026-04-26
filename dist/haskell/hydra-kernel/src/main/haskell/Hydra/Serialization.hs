@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation.
 
 module Hydra.Serialization where
-
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
@@ -16,63 +14,52 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 angleBraces :: Ast.Brackets
 angleBraces =
     Ast.Brackets {
       Ast.bracketsOpen = (Ast.Symbol "<"),
       Ast.bracketsClose = (Ast.Symbol ">")}
-
 angleBracesList :: Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr
 angleBracesList style els = Logic.ifElse (Lists.null els) (cst "<>") (brackets angleBraces style (commaSep style els))
-
 -- | Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression.
 bracesListAdaptive :: [Ast.Expr] -> Ast.Expr
 bracesListAdaptive els =
 
       let inlineList = curlyBracesList Nothing inlineStyle els
       in (Logic.ifElse (Equality.gt (expressionLength inlineList) 70) (curlyBracesList Nothing halfBlockStyle els) inlineList)
-
 bracketList :: Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr
 bracketList style els = Logic.ifElse (Lists.null els) (cst "[]") (brackets squareBrackets style (commaSep style els))
-
 -- | Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression.
 bracketListAdaptive :: [Ast.Expr] -> Ast.Expr
 bracketListAdaptive els =
 
       let inlineList = bracketList inlineStyle els
       in (Logic.ifElse (Equality.gt (expressionLength inlineList) 70) (bracketList halfBlockStyle els) inlineList)
-
 brackets :: Ast.Brackets -> Ast.BlockStyle -> Ast.Expr -> Ast.Expr
 brackets br style e =
     Ast.ExprBrackets (Ast.BracketExpr {
       Ast.bracketExprBrackets = br,
       Ast.bracketExprEnclosed = e,
       Ast.bracketExprStyle = style})
-
 commaSep :: Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr
 commaSep = symbolSep ","
-
 cst :: String -> Ast.Expr
 cst s = Ast.ExprConst (sym s)
-
 curlyBlock :: Ast.BlockStyle -> Ast.Expr -> Ast.Expr
 curlyBlock style e = curlyBracesList Nothing style [
   e]
-
 curlyBraces :: Ast.Brackets
 curlyBraces =
     Ast.Brackets {
       Ast.bracketsOpen = (Ast.Symbol "{"),
       Ast.bracketsClose = (Ast.Symbol "}")}
-
 curlyBracesList :: Maybe String -> Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr
 curlyBracesList msymb style els =
     Logic.ifElse (Lists.null els) (cst "{}") (brackets curlyBraces style (symbolSep (Maybes.fromMaybe "," msymb) style els))
-
+-- | Indent every non-empty line of `s` by `idt`. Empty lines stay empty (no trailing whitespace) so downstream byte-identity checks don't care about indent depth.
 customIndent :: String -> String -> String
-customIndent idt s = Strings.cat (Lists.intersperse "\n" (Lists.map (\line -> Strings.cat2 idt line) (Strings.lines s)))
-
+customIndent idt s =
+    Strings.cat (Lists.intersperse "\n" (Lists.map (\line -> Logic.ifElse (Equality.equal line "") line (Strings.cat2 idt line)) (Strings.lines s)))
 customIndentBlock :: String -> [Ast.Expr] -> Ast.Expr
 customIndentBlock idt els =
 
@@ -85,7 +72,6 @@ customIndentBlock idt els =
                 Ast.opPrecedence = (Ast.Precedence 0),
                 Ast.opAssociativity = Ast.AssociativityNone}
       in (Maybes.maybe (cst "") (\head -> Logic.ifElse (Equality.equal (Lists.length els) 1) head (ifx idtOp head (newlineSep (Lists.drop 1 els)))) (Lists.maybeHead els))
-
 dotSep :: [Ast.Expr] -> Ast.Expr
 dotSep =
     sep (Ast.Op {
@@ -95,7 +81,6 @@ dotSep =
         Ast.paddingRight = Ast.WsNone},
       Ast.opPrecedence = (Ast.Precedence 0),
       Ast.opAssociativity = Ast.AssociativityNone})
-
 doubleNewlineSep :: [Ast.Expr] -> Ast.Expr
 doubleNewlineSep =
     sep (Ast.Op {
@@ -105,10 +90,8 @@ doubleNewlineSep =
         Ast.paddingRight = Ast.WsBreak},
       Ast.opPrecedence = (Ast.Precedence 0),
       Ast.opAssociativity = Ast.AssociativityNone})
-
 doubleSpace :: String
 doubleSpace = "  "
-
 -- | Find the approximate length (number of characters, including spaces and newlines) of an expression without actually printing it.
 expressionLength :: Ast.Expr -> Int
 expressionLength e =
@@ -165,47 +148,39 @@ expressionLength e =
         Ast.ExprOp v0 -> opExprLength v0
         Ast.ExprBrackets v0 -> bracketExprLength v0
         Ast.ExprSeq v0 -> seqExprLength v0
-
 fullBlockStyle :: Ast.BlockStyle
 fullBlockStyle =
     Ast.BlockStyle {
       Ast.blockStyleIndent = (Just doubleSpace),
       Ast.blockStyleNewlineBeforeContent = True,
       Ast.blockStyleNewlineAfterContent = True}
-
 halfBlockStyle :: Ast.BlockStyle
 halfBlockStyle =
     Ast.BlockStyle {
       Ast.blockStyleIndent = (Just doubleSpace),
       Ast.blockStyleNewlineBeforeContent = True,
       Ast.blockStyleNewlineAfterContent = False}
-
 ifx :: Ast.Op -> Ast.Expr -> Ast.Expr -> Ast.Expr
 ifx op lhs rhs =
     Ast.ExprOp (Ast.OpExpr {
       Ast.opExprOp = op,
       Ast.opExprLhs = lhs,
       Ast.opExprRhs = rhs})
-
 indent :: String -> String
 indent = customIndent doubleSpace
-
 indentBlock :: [Ast.Expr] -> Ast.Expr
 indentBlock = customIndentBlock doubleSpace
-
 indentSubsequentLines :: String -> Ast.Expr -> Ast.Expr
 indentSubsequentLines idt e =
     Ast.ExprIndent (Ast.IndentedExpression {
       Ast.indentedExpressionStyle = (Ast.IndentStyleSubsequentLines idt),
       Ast.indentedExpressionExpr = e})
-
 infixWs :: String -> Ast.Expr -> Ast.Expr -> Ast.Expr
 infixWs op l r =
     spaceSep [
       l,
       (cst op),
       r]
-
 infixWsList :: String -> [Ast.Expr] -> Ast.Expr
 infixWsList op opers =
 
@@ -213,14 +188,12 @@ infixWsList op opers =
           foldFun = \e -> \r -> Logic.ifElse (Lists.null e) [
                 r] (Lists.cons r (Lists.cons opExpr e))
       in (spaceSep (Lists.foldl foldFun [] (Lists.reverse opers)))
-
 inlineStyle :: Ast.BlockStyle
 inlineStyle =
     Ast.BlockStyle {
       Ast.blockStyleIndent = Nothing,
       Ast.blockStyleNewlineBeforeContent = False,
       Ast.blockStyleNewlineAfterContent = False}
-
 newlineSep :: [Ast.Expr] -> Ast.Expr
 newlineSep =
     sep (Ast.Op {
@@ -230,13 +203,11 @@ newlineSep =
         Ast.paddingRight = Ast.WsBreak},
       Ast.opPrecedence = (Ast.Precedence 0),
       Ast.opAssociativity = Ast.AssociativityNone})
-
 noPadding :: Ast.Padding
 noPadding =
     Ast.Padding {
       Ast.paddingLeft = Ast.WsNone,
       Ast.paddingRight = Ast.WsNone}
-
 noSep :: [Ast.Expr] -> Ast.Expr
 noSep =
     sep (Ast.Op {
@@ -246,10 +217,8 @@ noSep =
         Ast.paddingRight = Ast.WsNone},
       Ast.opPrecedence = (Ast.Precedence 0),
       Ast.opAssociativity = Ast.AssociativityNone})
-
 num :: Int -> Ast.Expr
 num i = cst (Literals.showInt32 i)
-
 op :: String -> Int -> Ast.Associativity -> Ast.Op
 op s p assoc =
     Ast.Op {
@@ -259,7 +228,6 @@ op s p assoc =
         Ast.paddingRight = Ast.WsSpace},
       Ast.opPrecedence = (Ast.Precedence p),
       Ast.opAssociativity = assoc}
-
 orOp :: Bool -> Ast.Op
 orOp newlines =
     Ast.Op {
@@ -269,28 +237,23 @@ orOp newlines =
         Ast.paddingRight = (Logic.ifElse newlines Ast.WsBreak Ast.WsSpace)},
       Ast.opPrecedence = (Ast.Precedence 0),
       Ast.opAssociativity = Ast.AssociativityNone}
-
 orSep :: Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr
 orSep style l =
 
       let newlines = Ast.blockStyleNewlineBeforeContent style
       in (Maybes.maybe (cst "") (\h -> Lists.foldl (\acc -> \el -> ifx (orOp newlines) acc el) h (Lists.drop 1 l)) (Lists.maybeHead l))
-
 parenList :: Bool -> [Ast.Expr] -> Ast.Expr
 parenList newlines els =
 
       let style = Logic.ifElse (Logic.and newlines (Equality.gt (Lists.length els) 1)) halfBlockStyle inlineStyle
       in (Logic.ifElse (Lists.null els) (cst "()") (brackets parentheses style (commaSep style els)))
-
 parens :: Ast.Expr -> Ast.Expr
 parens = brackets parentheses inlineStyle
-
 parentheses :: Ast.Brackets
 parentheses =
     Ast.Brackets {
       Ast.bracketsOpen = (Ast.Symbol "("),
       Ast.bracketsClose = (Ast.Symbol ")")}
-
 parenthesize :: Ast.Expr -> Ast.Expr
 parenthesize exp =
 
@@ -350,7 +313,6 @@ parenthesize exp =
             Ast.opExprOp = op,
             Ast.opExprLhs = lhs2,
             Ast.opExprRhs = rhs2}))
-
 prefix :: String -> Ast.Expr -> Ast.Expr
 prefix p expr =
 
@@ -363,7 +325,6 @@ prefix p expr =
                 Ast.opPrecedence = (Ast.Precedence 0),
                 Ast.opAssociativity = Ast.AssociativityNone}
       in (ifx preOp (cst "") expr)
-
 printExpr :: Ast.Expr -> String
 printExpr e =
 
@@ -384,10 +345,11 @@ printExpr e =
           let style = Ast.indentedExpressionStyle v0
               expr = Ast.indentedExpressionExpr v0
               lns = Strings.lines (printExpr expr)
+              indentLine = \idt2 -> \line -> Logic.ifElse (Equality.equal line "") line (Strings.cat2 idt2 line)
               ilns =
                       case style of
-                        Ast.IndentStyleAllLines v1 -> Lists.map (\line -> Strings.cat2 v1 line) lns
-                        Ast.IndentStyleSubsequentLines v1 -> Logic.ifElse (Equality.equal (Lists.length lns) 1) lns (Maybes.fromMaybe lns (Maybes.map (\uc -> Lists.cons (Pairs.first uc) (Lists.map (\line -> Strings.cat2 v1 line) (Pairs.second uc))) (Lists.uncons lns)))
+                        Ast.IndentStyleAllLines v1 -> Lists.map (indentLine v1) lns
+                        Ast.IndentStyleSubsequentLines v1 -> Logic.ifElse (Equality.equal (Lists.length lns) 1) lns (Maybes.fromMaybe lns (Maybes.map (\uc -> Lists.cons (Pairs.first uc) (Lists.map (indentLine v1) (Pairs.second uc))) (Lists.uncons lns)))
           in (Strings.intercalate "\n" ilns)
         Ast.ExprSeq v0 ->
           let sop = Ast.seqExprOp v0
@@ -396,9 +358,30 @@ printExpr e =
               spadl = Ast.paddingLeft spadding
               spadr = Ast.paddingRight spadding
               selements = Ast.seqExprElements v0
-              separator = Strings.cat2 (Strings.cat2 (pad spadl) ssym) (pad spadr)
               printedElements = Lists.map (\el -> idt spadr (printExpr el)) selements
-          in (Strings.intercalate separator printedElements)
+              isNewlineWs =
+                      \ws -> case ws of
+                        Ast.WsBreak -> True
+                        Ast.WsBreakAndIndent _ -> True
+                        Ast.WsDoubleBreak -> True
+                        _ -> False
+              spadlIsNewline = isNewlineWs spadl
+              spadrIsNewline = isNewlineWs spadr
+              joinElements =
+                      \acc -> \el ->
+                        let elStartsWithNewline = Maybes.maybe False (\c -> Equality.equal c 10) (Strings.maybeCharAt 0 el)
+                            elIsEmpty = Equality.equal el ""
+                            padlEff =
+                                    Logic.ifElse (Logic.or (Logic.and elStartsWithNewline (Logic.not spadlIsNewline)) (Logic.and elIsEmpty (Equality.equal ssym ""))) "" (pad spadl)
+                            padrEff =
+                                    Logic.ifElse (Logic.or (Logic.and elStartsWithNewline (Logic.not spadrIsNewline)) (Logic.and elIsEmpty (Equality.equal ssym ""))) "" (pad spadr)
+                        in (Strings.cat [
+                          acc,
+                          padlEff,
+                          ssym,
+                          padrEff,
+                          el])
+          in (Maybes.maybe "" (\h -> Lists.foldl joinElements h (Lists.drop 1 printedElements)) (Lists.maybeHead printedElements))
         Ast.ExprOp v0 ->
           let op = Ast.opExprOp v0
               sym = Ast.unSymbol (Ast.opSymbol op)
@@ -409,7 +392,17 @@ printExpr e =
               r = Ast.opExprRhs v0
               lhs = idt padl (printExpr l)
               rhs = idt padr (printExpr r)
-          in (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 lhs (pad padl)) sym) (pad padr)) rhs)
+              padrIsNewline =
+                      case padr of
+                        Ast.WsBreak -> True
+                        Ast.WsBreakAndIndent _ -> True
+                        Ast.WsDoubleBreak -> True
+                        _ -> False
+              padlEffective = Logic.ifElse (Logic.and (Equality.equal sym "") (Logic.or padrIsNewline (Equality.equal rhs ""))) "" (pad padl)
+              padrPad = pad padr
+              rhsStartsWithNewline = Maybes.maybe False (\c -> Equality.equal c 10) (Strings.maybeCharAt 0 rhs)
+              padrEffective = Logic.ifElse (Logic.and rhsStartsWithNewline (Logic.not padrIsNewline)) "" padrPad
+          in (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 lhs padlEffective) sym) padrEffective) rhs)
         Ast.ExprBrackets v0 ->
           let brs = Ast.bracketExprBrackets v0
               l = Ast.unSymbol (Ast.bracketsOpen brs)
@@ -424,14 +417,11 @@ printExpr e =
               pre = Logic.ifElse nlBefore "\n" ""
               suf = Logic.ifElse nlAfter "\n" ""
           in (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 l pre) ibody) suf) r)
-
 semicolonSep :: [Ast.Expr] -> Ast.Expr
 semicolonSep = symbolSep ";" inlineStyle
-
 sep :: Ast.Op -> [Ast.Expr] -> Ast.Expr
 sep op els =
     Maybes.maybe (cst "") (\h -> Lists.foldl (\acc -> \el -> ifx op acc el) h (Lists.drop 1 els)) (Lists.maybeHead els)
-
 spaceSep :: [Ast.Expr] -> Ast.Expr
 spaceSep =
     sep (Ast.Op {
@@ -441,20 +431,17 @@ spaceSep =
         Ast.paddingRight = Ast.WsNone},
       Ast.opPrecedence = (Ast.Precedence 0),
       Ast.opAssociativity = Ast.AssociativityNone})
-
 squareBrackets :: Ast.Brackets
 squareBrackets =
     Ast.Brackets {
       Ast.bracketsOpen = (Ast.Symbol "["),
       Ast.bracketsClose = (Ast.Symbol "]")}
-
 -- | Like sep, but produces a SeqExpr instead of an OpExpr chain. SeqExpr is treated as structural layout and is not subject to parenthesization.
 structuralSep :: Ast.Op -> [Ast.Expr] -> Ast.Expr
 structuralSep op els =
     Logic.ifElse (Lists.null els) (cst "") (Logic.ifElse (Equality.equal (Lists.length els) 1) (Maybes.fromMaybe (cst "") (Lists.maybeHead els)) (Ast.ExprSeq (Ast.SeqExpr {
       Ast.seqExprOp = op,
       Ast.seqExprElements = els})))
-
 -- | Like spaceSep, but produces a SeqExpr. Use for structural layout that should not trigger parenthesization of children.
 structuralSpaceSep :: [Ast.Expr] -> Ast.Expr
 structuralSpaceSep =
@@ -465,7 +452,6 @@ structuralSpaceSep =
         Ast.paddingRight = Ast.WsNone},
       Ast.opPrecedence = (Ast.Precedence 0),
       Ast.opAssociativity = Ast.AssociativityNone})
-
 -- | Append a suffix string to an expression
 suffix :: String -> Ast.Expr -> Ast.Expr
 suffix s expr =
@@ -479,10 +465,8 @@ suffix s expr =
                 Ast.opPrecedence = (Ast.Precedence 0),
                 Ast.opAssociativity = Ast.AssociativityNone}
       in (ifx sufOp expr (cst ""))
-
 sym :: String -> Ast.Symbol
 sym s = Ast.Symbol s
-
 symbolSep :: String -> Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr
 symbolSep symb style l =
 
@@ -501,32 +485,25 @@ symbolSep symb style l =
                     Ast.opPrecedence = (Ast.Precedence 0),
                     Ast.opAssociativity = Ast.AssociativityNone}
       in (Maybes.maybe (cst "") (\h -> Lists.foldl (\acc -> \el -> ifx commaOp acc el) h (Lists.drop 1 l)) (Lists.maybeHead l))
-
 tabIndent :: Ast.Expr -> Ast.Expr
 tabIndent e =
     Ast.ExprIndent (Ast.IndentedExpression {
       Ast.indentedExpressionStyle = (Ast.IndentStyleAllLines "    "),
       Ast.indentedExpressionExpr = e})
-
 tabIndentDoubleSpace :: [Ast.Expr] -> Ast.Expr
 tabIndentDoubleSpace exprs = tabIndent (doubleNewlineSep exprs)
-
 tabIndentSingleSpace :: [Ast.Expr] -> Ast.Expr
 tabIndentSingleSpace exprs = tabIndent (newlineSep exprs)
-
 unsupportedType :: String -> Ast.Expr
 unsupportedType label = cst (Strings.cat2 (Strings.cat2 "[" label) "]")
-
 unsupportedVariant :: String -> String -> Ast.Expr
 unsupportedVariant label obj =
     cst (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "[unsupported " label) ": ") (Literals.showString obj)) "]")
-
 withComma :: Ast.Expr -> Ast.Expr
 withComma e =
     noSep [
       e,
       (cst ",")]
-
 withSemi :: Ast.Expr -> Ast.Expr
 withSemi e =
     noSep [

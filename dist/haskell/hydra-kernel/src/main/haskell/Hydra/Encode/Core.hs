@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term encoders for hydra.core
 
 module Hydra.Encode.Core where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
@@ -13,7 +11,6 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 annotatedTerm :: Core.AnnotatedTerm -> Core.Term
 annotatedTerm x =
     Core.TermRecord (Core.Record {
@@ -25,7 +22,6 @@ annotatedTerm x =
         Core.Field {
           Core.fieldName = (Core.Name "annotation"),
           Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap name term m)) (Core.annotatedTermAnnotation x))}]})
-
 annotatedType :: Core.AnnotatedType -> Core.Term
 annotatedType x =
     Core.TermRecord (Core.Record {
@@ -37,7 +33,6 @@ annotatedType x =
         Core.Field {
           Core.fieldName = (Core.Name "annotation"),
           Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap name term m)) (Core.annotatedTypeAnnotation x))}]})
-
 application :: Core.Application -> Core.Term
 application x =
     Core.TermRecord (Core.Record {
@@ -49,7 +44,6 @@ application x =
         Core.Field {
           Core.fieldName = (Core.Name "argument"),
           Core.fieldTerm = (term (Core.applicationArgument x))}]})
-
 applicationType :: Core.ApplicationType -> Core.Term
 applicationType x =
     Core.TermRecord (Core.Record {
@@ -61,7 +55,6 @@ applicationType x =
         Core.Field {
           Core.fieldName = (Core.Name "argument"),
           Core.fieldTerm = (type_ (Core.applicationTypeArgument x))}]})
-
 binding :: Core.Binding -> Core.Term
 binding x =
     Core.TermRecord (Core.Record {
@@ -76,7 +69,6 @@ binding x =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map typeScheme opt)) (Core.bindingType x))}]})
-
 caseStatement :: Core.CaseStatement -> Core.Term
 caseStatement x =
     Core.TermRecord (Core.Record {
@@ -91,7 +83,6 @@ caseStatement x =
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map field xs)) (Core.caseStatementCases x))}]})
-
 eitherType :: Core.EitherType -> Core.Term
 eitherType x =
     Core.TermRecord (Core.Record {
@@ -103,7 +94,6 @@ eitherType x =
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (type_ (Core.eitherTypeRight x))}]})
-
 field :: Core.Field -> Core.Term
 field x =
     Core.TermRecord (Core.Record {
@@ -115,7 +105,6 @@ field x =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (term (Core.fieldTerm x))}]})
-
 fieldType :: Core.FieldType -> Core.Term
 fieldType x =
     Core.TermRecord (Core.Record {
@@ -127,7 +116,6 @@ fieldType x =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (type_ (Core.fieldTypeType x))}]})
-
 floatType :: Core.FloatType -> Core.Term
 floatType x =
     case x of
@@ -146,7 +134,6 @@ floatType x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "float64"),
           Core.fieldTerm = Core.TermUnit}})
-
 floatValue :: Core.FloatValue -> Core.Term
 floatValue x =
     case x of
@@ -165,7 +152,6 @@ floatValue x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "float64"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 v0)))}})
-
 forallType :: Core.ForallType -> Core.Term
 forallType x =
     Core.TermRecord (Core.Record {
@@ -177,7 +163,6 @@ forallType x =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (type_ (Core.forallTypeBody x))}]})
-
 functionType :: Core.FunctionType -> Core.Term
 functionType x =
     Core.TermRecord (Core.Record {
@@ -189,7 +174,6 @@ functionType x =
         Core.Field {
           Core.fieldName = (Core.Name "codomain"),
           Core.fieldTerm = (type_ (Core.functionTypeCodomain x))}]})
-
 injection :: Core.Injection -> Core.Term
 injection x =
     Core.TermRecord (Core.Record {
@@ -201,7 +185,6 @@ injection x =
         Core.Field {
           Core.fieldName = (Core.Name "field"),
           Core.fieldTerm = (field (Core.injectionField x))}]})
-
 integerType :: Core.IntegerType -> Core.Term
 integerType x =
     case x of
@@ -250,7 +233,6 @@ integerType x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "uint64"),
           Core.fieldTerm = Core.TermUnit}})
-
 integerValue :: Core.IntegerValue -> Core.Term
 integerValue x =
     case x of
@@ -299,7 +281,6 @@ integerValue x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "uint64"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint64 v0)))}})
-
 lambda :: Core.Lambda -> Core.Term
 lambda x =
     Core.TermRecord (Core.Record {
@@ -314,7 +295,6 @@ lambda x =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (term (Core.lambdaBody x))}]})
-
 let_ :: Core.Let -> Core.Term
 let_ x =
     Core.TermRecord (Core.Record {
@@ -326,7 +306,6 @@ let_ x =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (term (Core.letBody x))}]})
-
 literal :: Core.Literal -> Core.Term
 literal x =
     case x of
@@ -360,7 +339,6 @@ literal x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "string"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v0))}})
-
 literalType :: Core.LiteralType -> Core.Term
 literalType x =
     case x of
@@ -394,7 +372,6 @@ literalType x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "string"),
           Core.fieldTerm = Core.TermUnit}})
-
 mapType :: Core.MapType -> Core.Term
 mapType x =
     Core.TermRecord (Core.Record {
@@ -406,13 +383,11 @@ mapType x =
         Core.Field {
           Core.fieldName = (Core.Name "values"),
           Core.fieldTerm = (type_ (Core.mapTypeValues x))}]})
-
 name :: Core.Name -> Core.Term
 name x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Core.unName x))})
-
 pairType :: Core.PairType -> Core.Term
 pairType x =
     Core.TermRecord (Core.Record {
@@ -424,7 +399,6 @@ pairType x =
         Core.Field {
           Core.fieldName = (Core.Name "second"),
           Core.fieldTerm = (type_ (Core.pairTypeSecond x))}]})
-
 projection :: Core.Projection -> Core.Term
 projection x =
     Core.TermRecord (Core.Record {
@@ -436,7 +410,6 @@ projection x =
         Core.Field {
           Core.fieldName = (Core.Name "field"),
           Core.fieldTerm = (name (Core.projectionField x))}]})
-
 record :: Core.Record -> Core.Term
 record x =
     Core.TermRecord (Core.Record {
@@ -448,7 +421,6 @@ record x =
         Core.Field {
           Core.fieldName = (Core.Name "fields"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map field xs)) (Core.recordFields x))}]})
-
 term :: Core.Term -> Core.Term
 term x =
     case x of
@@ -557,7 +529,6 @@ term x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "wrap"),
           Core.fieldTerm = (wrappedTerm v0)}})
-
 type_ :: Core.Type -> Core.Term
 type_ x =
     case x of
@@ -646,7 +617,6 @@ type_ x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "wrap"),
           Core.fieldTerm = (type_ v0)}})
-
 typeApplicationTerm :: Core.TypeApplicationTerm -> Core.Term
 typeApplicationTerm x =
     Core.TermRecord (Core.Record {
@@ -658,7 +628,6 @@ typeApplicationTerm x =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (type_ (Core.typeApplicationTermType x))}]})
-
 typeLambda :: Core.TypeLambda -> Core.Term
 typeLambda x =
     Core.TermRecord (Core.Record {
@@ -670,7 +639,6 @@ typeLambda x =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (term (Core.typeLambdaBody x))}]})
-
 typeScheme :: Core.TypeScheme -> Core.Term
 typeScheme x =
     Core.TermRecord (Core.Record {
@@ -685,7 +653,6 @@ typeScheme x =
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\m -> Core.TermMap (Maps.bimap name typeVariableMetadata m)) opt)) (Core.typeSchemeConstraints x))}]})
-
 typeVariableMetadata :: Core.TypeVariableMetadata -> Core.Term
 typeVariableMetadata x =
     Core.TermRecord (Core.Record {
@@ -694,7 +661,6 @@ typeVariableMetadata x =
         Core.Field {
           Core.fieldName = (Core.Name "classes"),
           Core.fieldTerm = ((\s -> Core.TermSet (Sets.map name s)) (Core.typeVariableMetadataClasses x))}]})
-
 wrappedTerm :: Core.WrappedTerm -> Core.Term
 wrappedTerm x =
     Core.TermRecord (Core.Record {

@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term decoders for hydra.variants
 
 module Hydra.Decode.Variants where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
@@ -15,7 +13,6 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 eliminationVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.EliminationVariant
 eliminationVariant cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -33,7 +30,6 @@ eliminationVariant cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 functionVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.FunctionVariant
 functionVariant cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -50,7 +46,6 @@ functionVariant cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 literalVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.LiteralVariant
 literalVariant cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -71,7 +66,6 @@ literalVariant cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 termVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.TermVariant
 termVariant cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -107,7 +101,6 @@ termVariant cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 typeVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.TypeVariant
 typeVariant cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of

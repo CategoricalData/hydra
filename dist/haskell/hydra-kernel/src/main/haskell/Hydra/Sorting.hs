@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Utilities for sorting. This module includes an implementation of Tarjan's algorithm, originally based on GraphSCC by Iavor S. Diatchki: https://hackage.haskell.org/package/GraphSCC.
 
 module Hydra.Sorting where
-
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
@@ -18,7 +16,6 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
-
 -- | Convert an adjacency list to a map, concatenating values for duplicate keys
 adjacencyListToMap :: Ord t0 => ([(t0, [t1])] -> M.Map t0 [t1])
 adjacencyListToMap pairs =
@@ -27,7 +24,6 @@ adjacencyListToMap pairs =
           vs = Pairs.second p
           existing = Maybes.maybe [] Equality.identity (Maps.lookup k mp)
       in (Maps.insert k (Lists.concat2 existing vs) mp)) Maps.empty pairs
-
 -- | Given a list of adjacency lists represented as (key, [key]) pairs, construct a graph along with a function mapping each vertex (an Int) back to its original key (Nothing for unknown vertices).
 adjacencyListsToGraph :: Ord t0 => ([(t0, [t0])] -> (M.Map Int [Int], (Int -> Maybe t0)))
 adjacencyListsToGraph edges0 =
@@ -54,7 +50,6 @@ adjacencyListsToGraph edges0 =
                     in (v, (Maybes.mapMaybe (\k -> Maps.lookup k keyToVertex) neighbors))) indexedEdges)
           vertexToKey = \v -> Maps.lookup v vertexMap
       in (graph, vertexToKey)
-
 createOrderingIsomorphism :: Ord t0 => ([t0] -> [t0] -> Topology.OrderingIsomorphism t1)
 createOrderingIsomorphism sourceOrd targetOrd =
 
@@ -69,7 +64,6 @@ createOrderingIsomorphism sourceOrd targetOrd =
       in Topology.OrderingIsomorphism {
         Topology.orderingIsomorphismEncode = sourceToTargetMapping,
         Topology.orderingIsomorphismDecode = targetToSourceMapping}
-
 -- | Given an adjacency function and a distinguished root node, find all reachable nodes (including the root node)
 findReachableNodes :: Ord t0 => ((t0 -> S.Set t0) -> t0 -> S.Set t0)
 findReachableNodes adj root =
@@ -79,7 +73,6 @@ findReachableNodes adj root =
                 let toVisit = Sets.difference (adj node) visited
                 in (Logic.ifElse (Sets.null toVisit) visited (Lists.foldl (\v -> \n -> visit (Sets.insert n v) n) visited (Sets.toList toVisit)))
       in (visit (Sets.singleton root) root)
-
 -- | Initial state for Tarjan's algorithm
 initialState :: Topology.TarjanState
 initialState =
@@ -90,7 +83,6 @@ initialState =
       Topology.tarjanStateStack = [],
       Topology.tarjanStateOnStack = Sets.empty,
       Topology.tarjanStateSccs = []}
-
 -- | Pop vertices off the stack until the given vertex is reached, collecting the current strongly connected component
 popStackUntil :: Int -> Topology.TarjanState -> ([Int], Topology.TarjanState)
 popStackUntil v st0 =
@@ -118,7 +110,6 @@ popStackUntil v st0 =
                     acc_ = Lists.cons x acc
                 in (Logic.ifElse (Equality.equal x v) (Lists.reverse acc_, newSt2) (go acc_ newSt2))) (Lists.uncons (Topology.tarjanStateStack st))
       in (go [] st0)
-
 -- | Given a graph as an adjacency list of edges and a list of explicit tags per node, compute the full set of tags for each node by propagating tags through edges. If there is an edge from n1 to n2 and n2 has tag t, then n1 also has tag t. Note: pairs in the output are not ordered.
 propagateTags :: (Ord t0, Ord t1) => ([(t0, [t0])] -> [(t0, [t1])] -> [(t0, (S.Set t1))])
 propagateTags edges nodeTags =
@@ -131,7 +122,6 @@ propagateTags edges nodeTags =
                     let reachable = findReachableNodes (\n -> Sets.fromList (Maybes.maybe [] Equality.identity (Maps.lookup n adjMap))) node
                     in (Sets.unions (Lists.map (\n -> Maybes.maybe Sets.empty Equality.identity (Maps.lookup n tagMap)) (Sets.toList reachable)))
       in (Lists.map (\n -> (n, (getTagsForNode n))) allNodes)
-
 -- | Visit a vertex and recursively explore its successors
 strongConnect :: M.Map Int [Int] -> Int -> Topology.TarjanState -> Topology.TarjanState
 strongConnect graph v st =
@@ -184,7 +174,6 @@ strongConnect graph v st =
           Topology.tarjanStateStack = (Topology.tarjanStateStack stPopped),
           Topology.tarjanStateOnStack = (Topology.tarjanStateOnStack stPopped),
           Topology.tarjanStateSccs = (Lists.cons comp (Topology.tarjanStateSccs stPopped))}) stAfterNeighbors)
-
 -- | Compute the strongly connected components of the given graph. The components are returned in reverse topological order
 stronglyConnectedComponents :: M.Map Int [Int] -> [[Int]]
 stronglyConnectedComponents graph =
@@ -193,7 +182,6 @@ stronglyConnectedComponents graph =
           finalState =
                   Lists.foldl (\st -> \v -> Logic.ifElse (Maps.member v (Topology.tarjanStateIndices st)) st (strongConnect graph v st)) initialState verts
       in (Lists.reverse (Lists.map Lists.sort (Topology.tarjanStateSccs finalState)))
-
 -- | Sort a directed acyclic graph (DAG) based on an adjacency list. Yields a list of nontrivial strongly connected components if the graph has cycles, otherwise a simple list.
 topologicalSort :: Ord t0 => ([(t0, [t0])] -> Either [[t0]] [t0])
 topologicalSort pairs =
@@ -202,7 +190,6 @@ topologicalSort pairs =
           isCycle = \scc -> Equality.gt (Lists.length scc) 1
           withCycles = Lists.filter isCycle sccs
       in (Logic.ifElse (Lists.null withCycles) (Right (Lists.concat sccs)) (Left withCycles))
-
 -- | Find the strongly connected components (including cycles and isolated vertices) of a graph, in (reverse) topological order, i.e. dependencies before dependents
 topologicalSortComponents :: Ord t0 => ([(t0, [t0])] -> [[t0]])
 topologicalSortComponents pairs =
@@ -210,7 +197,6 @@ topologicalSortComponents pairs =
       let graphResult = adjacencyListsToGraph pairs
           g = Pairs.first graphResult
       in (Lists.map (\comp -> Maybes.mapMaybe (Pairs.second graphResult) comp) (stronglyConnectedComponents g))
-
 -- | Sort a directed acyclic graph (DAG) of nodes using two helper functions: one for node keys, and one for the adjacency list of connected node keys. The result is a list of strongly-connected components (cycles), in which singleton lists represent acyclic nodes.
 topologicalSortNodes :: Ord t1 => ((t0 -> t1) -> (t0 -> [t1]) -> [t0] -> [[t0]])
 topologicalSortNodes getKey getAdj nodes =

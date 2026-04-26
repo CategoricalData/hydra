@@ -10266,7 +10266,9 @@
             "annotation": [
               {
                 "@key": "description",
-                "@value": {"literal": {"string": "Convert a string to Rust doc comments"}}}],
+                "@value": {
+                  "literal": {
+                    "string": "Convert a string to Rust doc comments. Empty source lines emit `///` (no trailing space) so blank doc lines don't carry trailing whitespace."}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -10283,11 +10285,32 @@
                               "lambda": {
                                 "body": {
                                   "application": {
-                                    "argument": {"variable": "s"},
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "s"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"literal": {"string": "/// "}},
+                                            "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                     "function": {
                                       "application": {
-                                        "argument": {"literal": {"string": "/// "}},
-                                        "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                        "argument": {"literal": {"string": "///"}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"literal": {"string": ""}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "s"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.equality.equal"},
+                                                        "type": {"literal": {"string": {}}}}}}}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                "type": {"literal": {"string": {}}}}}}}}}}},
                                 "domain": {"literal": {"string": {}}},
                                 "parameter": "s"}},
                             "function": {
@@ -10317,7 +10340,9 @@
             "annotation": [
               {
                 "@key": "description",
-                "@value": {"literal": {"string": "Convert a string to Rust line comments"}}}],
+                "@value": {
+                  "literal": {
+                    "string": "Convert a string to Rust line comments. Empty source lines emit `//` (no trailing space)."}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -10334,11 +10359,32 @@
                               "lambda": {
                                 "body": {
                                   "application": {
-                                    "argument": {"variable": "s"},
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "s"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"literal": {"string": "// "}},
+                                            "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                     "function": {
                                       "application": {
-                                        "argument": {"literal": {"string": "// "}},
-                                        "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                        "argument": {"literal": {"string": "//"}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"literal": {"string": ""}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "s"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.equality.equal"},
+                                                        "type": {"literal": {"string": {}}}}}}}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                "type": {"literal": {"string": {}}}}}}}}}}},
                                 "domain": {"literal": {"string": {}}},
                                 "parameter": "s"}},
                             "function": {

@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling.
 
 module Hydra.Json.Encode where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lib.Eithers as Eithers
@@ -21,7 +19,6 @@ import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
-
 -- | Encode a float value to JSON. Bigfloat rejects anything the decimal space can't hold; Float64 uses string sentinels for NaN/Inf/-0.0; Float32 always strings.
 encodeFloat :: Core.FloatValue -> Either String Model.Value
 encodeFloat fv =
@@ -35,7 +32,6 @@ encodeFloat fv =
       Core.FloatValueFloat64 v0 ->
         let s = Literals.showFloat64 v0
         in (Logic.ifElse (requiresJsonStringSentinel s) (Right (Model.ValueString s)) (Right (Model.ValueNumber (Literals.float64ToDecimal v0))))
-
 -- | Encode an integer value to JSON. Small ints use native numbers; large ints use strings.
 encodeInteger :: Core.IntegerValue -> Either t0 Model.Value
 encodeInteger iv =
@@ -49,7 +45,6 @@ encodeInteger iv =
       Core.IntegerValueInt32 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.int32ToBigint v0)))
       Core.IntegerValueUint8 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.uint8ToBigint v0)))
       Core.IntegerValueUint16 v0 -> Right (Model.ValueNumber (Literals.bigintToDecimal (Literals.uint16ToBigint v0)))
-
 -- | Encode a Hydra literal to a JSON value
 encodeLiteral :: Core.Literal -> Either String Model.Value
 encodeLiteral lit =
@@ -60,12 +55,10 @@ encodeLiteral lit =
       Core.LiteralFloat v0 -> encodeFloat v0
       Core.LiteralInteger v0 -> encodeInteger v0
       Core.LiteralString v0 -> Right (Model.ValueString v0)
-
 -- | True for IEEE sentinel strings that JSON must escape as a string to preserve.
 requiresJsonStringSentinel :: String -> Bool
 requiresJsonStringSentinel s =
     Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))
-
 -- | Encode a Hydra term to a JSON value given a type and type name. Returns Left for unsupported constructs.
 toJson :: M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Core.Term -> Either String Model.Value
 toJson types tname typ term =
@@ -195,7 +188,6 @@ toJson types tname typ term =
         _ -> Left (Strings.cat [
           "unsupported type for JSON encoding: ",
           (ShowCore.type_ typ)])
-
 -- | Encode a Hydra term to a JSON value without type information. Falls back to array-wrapped Maybe encoding.
 toJsonUntyped :: Core.Term -> Either String Model.Value
 toJsonUntyped term =
