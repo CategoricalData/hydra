@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Lisp code generator: converts Hydra type and term modules to Lisp AST
 
 module Hydra.Lisp.Coder where
-
 import qualified Hydra.Analysis as Analysis
 import qualified Hydra.Core as Core
 import qualified Hydra.Environment as Environment
@@ -29,25 +27,21 @@ import qualified Hydra.Strip as Strip
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 dialectCadr :: Syntax.Dialect -> String
 dialectCadr d =
     case d of
       Syntax.DialectClojure -> "second"
       _ -> "cadr"
-
 dialectCar :: Syntax.Dialect -> String
 dialectCar d =
     case d of
       Syntax.DialectClojure -> "first"
       _ -> "car"
-
 dialectConstructorPrefix :: Syntax.Dialect -> String
 dialectConstructorPrefix d =
     case d of
       Syntax.DialectClojure -> "->"
       _ -> "make-"
-
 dialectEqual :: Syntax.Dialect -> String
 dialectEqual d =
     case d of
@@ -55,13 +49,11 @@ dialectEqual d =
       Syntax.DialectCommonLisp -> "equal"
       Syntax.DialectEmacsLisp -> "equal"
       _ -> "equal?"
-
 dialectSupportsLetrec :: Syntax.Dialect -> Bool
 dialectSupportsLetrec d =
     case d of
       Syntax.DialectClojure -> False
       _ -> True
-
 encodeApplication :: Syntax.Dialect -> t0 -> t1 -> Core.Term -> Core.Term -> Either t2 Syntax.Expression
 encodeApplication dialect cx g rawFun rawArg =
 
@@ -96,7 +88,6 @@ encodeApplication dialect cx g rawFun rawArg =
                 eJ])))))) normal)))
             _ -> normal))
         _ -> normal
-
 encodeFieldDef :: Core.FieldType -> Syntax.FieldDefinition
 encodeFieldDef ft =
 
@@ -104,7 +95,6 @@ encodeFieldDef ft =
       in Syntax.FieldDefinition {
         Syntax.fieldDefinitionName = (Syntax.Symbol (Formatting.convertCaseCamelToLowerSnake fname)),
         Syntax.fieldDefinitionDefaultValue = Nothing}
-
 encodeLambdaTerm :: Syntax.Dialect -> t0 -> t1 -> Core.Lambda -> Either t2 Syntax.Expression
 encodeLambdaTerm dialect cx g lam =
 
@@ -112,7 +102,6 @@ encodeLambdaTerm dialect cx g lam =
               Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.lambdaParameter lam)))
       in (Eithers.bind (encodeTerm dialect cx g (Core.lambdaBody lam)) (\body -> Right (lispLambdaExpr [
         param] body)))
-
 encodeLetAsLambdaApp :: Syntax.Dialect -> t0 -> t1 -> [Core.Binding] -> Core.Term -> Either t2 Syntax.Expression
 encodeLetAsLambdaApp dialect cx g bindings body =
     Eithers.bind (encodeTerm dialect cx g body) (\bodyExpr -> Eithers.foldl (\acc -> \b ->
@@ -121,7 +110,6 @@ encodeLetAsLambdaApp dialect cx g bindings body =
       in (Eithers.bind (encodeTerm dialect cx g (Core.bindingTerm b)) (\bval -> Right (lispApp (lispLambdaExpr [
         bname] acc) [
         bval])))) bodyExpr (Lists.reverse bindings))
-
 encodeLetAsNative :: Syntax.Dialect -> t0 -> t1 -> [Core.Binding] -> Core.Term -> Either t2 Syntax.Expression
 encodeLetAsNative dialect cx g bindings body =
     Eithers.bind (encodeTerm dialect cx g body) (\bodyExpr ->
@@ -170,7 +158,6 @@ encodeLetAsNative dialect cx g bindings body =
           Syntax.letExpressionBindings = lispBindings,
           Syntax.letExpressionBody = [
             bodyExpr]}))))))
-
 encodeLiteral :: Core.Literal -> Syntax.Expression
 encodeLiteral lit =
     case lit of
@@ -223,7 +210,6 @@ encodeLiteral lit =
           Syntax.vectorLiteralElements = (Lists.map (\bv -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
             Syntax.integerLiteralValue = (Literals.int32ToBigint bv),
             Syntax.integerLiteralBigint = False}))) byteValues)}))
-
 encodeProjectionElim :: Syntax.Dialect -> t0 -> t1 -> Core.Projection -> Maybe Core.Term -> Either t2 Syntax.Expression
 encodeProjectionElim dialect cx g proj marg =
 
@@ -237,7 +223,6 @@ encodeProjectionElim dialect cx g proj marg =
         Syntax.fieldAccessRecordType = (Syntax.Symbol tname),
         Syntax.fieldAccessField = (Syntax.Symbol fname),
         Syntax.fieldAccessTarget = sarg})))))
-
 encodeTerm :: Syntax.Dialect -> t0 -> t1 -> Core.Term -> Either t2 Syntax.Expression
 encodeTerm dialect cx g term =
     case term of
@@ -301,7 +286,6 @@ encodeTerm dialect cx g term =
       Core.TermTypeApplication v0 -> encodeTerm dialect cx g (Core.typeApplicationTermBody v0)
       Core.TermTypeLambda v0 -> encodeTerm dialect cx g (Core.typeLambdaBody v0)
       Core.TermWrap v0 -> encodeTerm dialect cx g (Core.wrappedTermBody v0)
-
 encodeTermDefinition :: Syntax.Dialect -> t0 -> t1 -> Packaging.TermDefinition -> Either t2 Syntax.TopLevelFormWithComments
 encodeTermDefinition dialect cx g tdef =
 
@@ -318,7 +302,6 @@ encodeTermDefinition dialect cx g tdef =
           Syntax.variableDefinitionName = (Syntax.Symbol lname),
           Syntax.variableDefinitionValue = sterm,
           Syntax.variableDefinitionDoc = Nothing}))))
-
 encodeType :: t0 -> t1 -> Core.Type -> Either t2 Syntax.TypeSpecifier
 encodeType cx g t =
 
@@ -347,7 +330,6 @@ encodeType cx g t =
         Core.TypeVariable v0 -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol (Core.unName v0)))
         Core.TypeForall v0 -> encodeType cx g (Core.forallTypeBody v0)
         _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Any"))
-
 encodeTypeBody :: String -> Core.Type -> Core.Type -> Either t0 Syntax.TopLevelFormWithComments
 encodeTypeBody lname origTyp typ =
     case typ of
@@ -380,7 +362,6 @@ encodeTypeBody lname origTyp typ =
           Syntax.commentStyle = Syntax.CommentStyleLine,
           Syntax.commentText = (Strings.cat2 (Strings.cat2 lname " = ") (ShowCore.type_ origTyp))})),
         Syntax.topLevelFormWithCommentsForm = (Syntax.TopLevelFormExpression (Syntax.ExpressionLiteral Syntax.LiteralNil))})
-
 encodeTypeDefinition :: t0 -> t1 -> Packaging.TypeDefinition -> Either t2 Syntax.TopLevelFormWithComments
 encodeTypeDefinition cx g tdef =
 
@@ -389,7 +370,6 @@ encodeTypeDefinition cx g tdef =
           lname = qualifiedSnakeName name
           dtyp = Strip.deannotateType typ
       in (encodeTypeBody lname typ dtyp)
-
 encodeUnionElim :: Syntax.Dialect -> t0 -> t1 -> Core.CaseStatement -> Maybe Core.Term -> Either t2 Syntax.Expression
 encodeUnionElim dialect cx g cs marg =
 
@@ -422,22 +402,17 @@ encodeUnionElim dialect cx g cs marg =
           "match_target"] innerExpr)) (\arg -> Eithers.bind (encodeTerm dialect cx g arg) (\sarg -> Right (lispApp (lispLambdaExpr [
           "match_target"] innerExpr) [
           sarg])))))))
-
 encodeUnwrapElim :: Syntax.Dialect -> t0 -> t1 -> Core.Name -> Maybe Core.Term -> Either t2 Syntax.Expression
 encodeUnwrapElim dialect cx g name marg =
     Maybes.cases marg (Right (lispLambdaExpr [
       "v"] (lispVar "v"))) (\arg -> encodeTerm dialect cx g arg)
-
 isCasesPrimitive :: Core.Name -> Bool
 isCasesPrimitive name = Equality.equal name (Core.Name "hydra.lib.maybes.cases")
-
 isLazy2ArgPrimitive :: Core.Name -> Bool
 isLazy2ArgPrimitive name =
     Logic.or (Equality.equal name (Core.Name "hydra.lib.eithers.fromLeft")) (Logic.or (Equality.equal name (Core.Name "hydra.lib.eithers.fromRight")) (Equality.equal name (Core.Name "hydra.lib.maybes.fromMaybe")))
-
 isLazy3ArgPrimitive :: Core.Name -> Bool
 isLazy3ArgPrimitive name = Equality.equal name (Core.Name "hydra.lib.maybes.maybe")
-
 isPrimitiveRef :: String -> Core.Term -> Bool
 isPrimitiveRef primName term =
     case term of
@@ -446,19 +421,16 @@ isPrimitiveRef primName term =
       Core.TermTypeApplication v0 -> isPrimitiveRef primName (Core.typeApplicationTermBody v0)
       Core.TermTypeLambda v0 -> isPrimitiveRef primName (Core.typeLambdaBody v0)
       _ -> False
-
 lispApp :: Syntax.Expression -> [Syntax.Expression] -> Syntax.Expression
 lispApp fun args =
     Syntax.ExpressionApplication (Syntax.Application {
       Syntax.applicationFunction = fun,
       Syntax.applicationArguments = args})
-
 lispKeyword :: String -> Syntax.Expression
 lispKeyword name =
     Syntax.ExpressionLiteral (Syntax.LiteralKeyword (Syntax.Keyword {
       Syntax.keywordName = name,
       Syntax.keywordNamespace = Nothing}))
-
 lispLambdaExpr :: [String] -> Syntax.Expression -> Syntax.Expression
 lispLambdaExpr params body =
     Syntax.ExpressionLambda (Syntax.Lambda {
@@ -467,16 +439,13 @@ lispLambdaExpr params body =
       Syntax.lambdaRestParam = Nothing,
       Syntax.lambdaBody = [
         body]})
-
 lispListExpr :: [Syntax.Expression] -> Syntax.Expression
 lispListExpr elements =
     Syntax.ExpressionList (Syntax.ListLiteral {
       Syntax.listLiteralElements = elements,
       Syntax.listLiteralQuoted = False})
-
 lispLitExpr :: Syntax.Literal -> Syntax.Expression
 lispLitExpr lit = Syntax.ExpressionLiteral lit
-
 lispNamedLambdaExpr :: String -> [String] -> Syntax.Expression -> Syntax.Expression
 lispNamedLambdaExpr name params body =
     Syntax.ExpressionLambda (Syntax.Lambda {
@@ -485,33 +454,27 @@ lispNamedLambdaExpr name params body =
       Syntax.lambdaRestParam = Nothing,
       Syntax.lambdaBody = [
         body]})
-
 lispNilExpr :: Syntax.Expression
 lispNilExpr = Syntax.ExpressionLiteral Syntax.LiteralNil
-
 lispSymbol :: String -> Syntax.Symbol
 lispSymbol name = Syntax.Symbol name
-
 lispTopForm :: Syntax.TopLevelForm -> Syntax.TopLevelFormWithComments
 lispTopForm form =
     Syntax.TopLevelFormWithComments {
       Syntax.topLevelFormWithCommentsDoc = Nothing,
       Syntax.topLevelFormWithCommentsComment = Nothing,
       Syntax.topLevelFormWithCommentsForm = form}
-
 lispTopFormWithComments :: Maybe String -> Syntax.TopLevelForm -> Syntax.TopLevelFormWithComments
 lispTopFormWithComments mdoc form =
     Syntax.TopLevelFormWithComments {
       Syntax.topLevelFormWithCommentsDoc = (Maybes.map (\d -> Syntax.Docstring d) mdoc),
       Syntax.topLevelFormWithCommentsComment = Nothing,
       Syntax.topLevelFormWithCommentsForm = form}
-
 lispVar :: String -> Syntax.Expression
 lispVar name =
     Syntax.ExpressionVariable (Syntax.VariableReference {
       Syntax.variableReferenceName = (Syntax.Symbol name),
       Syntax.variableReferenceFunctionNamespace = False})
-
 moduleExports :: [Syntax.TopLevelFormWithComments] -> [Syntax.ExportDeclaration]
 moduleExports forms =
 
@@ -540,7 +503,6 @@ moduleExports forms =
       in (Logic.ifElse (Lists.null symbols) [] [
         Syntax.ExportDeclaration {
           Syntax.exportDeclarationSymbols = symbols}])
-
 moduleImports :: Packaging.Namespace -> [Packaging.Definition] -> [Syntax.ImportDeclaration]
 moduleImports focusNs defs =
 
@@ -548,7 +510,6 @@ moduleImports focusNs defs =
       in (Lists.map (\ns -> Syntax.ImportDeclaration {
         Syntax.importDeclarationModule = (Syntax.NamespaceName (Packaging.unNamespace ns)),
         Syntax.importDeclarationSpec = Syntax.ImportSpecAll}) depNss)
-
 moduleToLisp :: Syntax.Dialect -> Packaging.Module -> [Packaging.Definition] -> t0 -> t1 -> Either t2 Syntax.Program
 moduleToLisp dialect mod defs0 cx g =
 
@@ -572,7 +533,6 @@ moduleToLisp dialect mod defs0 cx g =
           Syntax.programImports = imports,
           Syntax.programExports = exports,
           Syntax.programForms = allItems})))))
-
 qualifiedSnakeName :: Core.Name -> String
 qualifiedSnakeName name =
 
@@ -581,10 +541,8 @@ qualifiedSnakeName name =
           snakeParts = Lists.map (\p -> Formatting.convertCaseCamelOrUnderscoreToLowerSnake p) parts
           joined = Strings.intercalate "_" snakeParts
       in (Formatting.sanitizeWithUnderscores Language.lispReservedWords joined)
-
 qualifiedTypeName :: Core.Name -> String
 qualifiedTypeName name = Formatting.capitalize (Names.localNameOf name)
-
 wrapInThunk :: Syntax.Expression -> Syntax.Expression
 wrapInThunk expr =
     Syntax.ExpressionLambda (Syntax.Lambda {
