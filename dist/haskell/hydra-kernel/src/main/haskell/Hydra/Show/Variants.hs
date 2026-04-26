@@ -1,13 +1,10 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | String representations of hydra.variants types
 
 module Hydra.Show.Variants where
-
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Show a term variant as a string
 termVariant :: Variants.TermVariant -> String
 termVariant x =
@@ -33,7 +30,6 @@ termVariant x =
       Variants.TermVariantUnwrap -> "unwrap"
       Variants.TermVariantVariable -> "variable"
       Variants.TermVariantWrap -> "wrap"
-
 -- | Show a type variant as a string
 typeVariant :: Variants.TypeVariant -> String
 typeVariant x =

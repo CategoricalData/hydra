@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term decoders for hydra.tabular
 
 module Hydra.Decode.Tabular where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Decode.Relational as Relational
@@ -14,7 +12,6 @@ import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Tabular as Tabular
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 columnType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Tabular.ColumnType
 columnType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -24,13 +21,11 @@ columnType cx raw =
           Tabular.columnTypeName = field_name,
           Tabular.columnTypeType = field_type}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 dataRow :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Tabular.DataRow t0)
 dataRow v cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermWrap v0 -> Eithers.map (\b -> Tabular.DataRow b) (ExtractCore.decodeList (ExtractCore.decodeMaybe v) cx (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
-
 headerRow :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Tabular.HeaderRow
 headerRow cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -40,7 +35,6 @@ headerRow cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) cx (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
-
 table :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Tabular.Table t0)
 table v cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -50,7 +44,6 @@ table v cx raw =
           Tabular.tableHeader = field_header,
           Tabular.tableData = field_data}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 tableType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Tabular.TableType
 tableType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of

@@ -1,14 +1,11 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term definitions for the test suite
 
 module Hydra.Test.TestTerms where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Test.TestTypes as TestTypes
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 latlonRecord :: Float -> Float -> Core.Term
 latlonRecord lat lon =
     Core.TermRecord (Core.Record {
@@ -20,7 +17,6 @@ latlonRecord lat lon =
         Core.Field {
           Core.fieldName = (Core.Name "lon"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 lon)))}]})
-
 testDataArthur :: Core.Term
 testDataArthur =
     Core.TermRecord (Core.Record {
@@ -35,7 +31,6 @@ testDataArthur =
         Core.Field {
           Core.fieldName = (Core.Name "age"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}]})
-
 testElementArthur :: Core.Binding
 testElementArthur =
     Core.Binding {
@@ -45,7 +40,6 @@ testElementArthur =
         Core.typeSchemeVariables = [],
         Core.typeSchemeBody = (Core.TypeVariable TestTypes.testTypePersonName),
         Core.typeSchemeConstraints = Nothing}))}
-
 testElementFirstName :: Core.Binding
 testElementFirstName =
     Core.Binding {

@@ -298,7 +298,15 @@ wrapLongScalaLine line
           commaCont = indent ++ "  "
           arrowCont = indent ++ "    "
           (segments, lastSeg) = scan line "" [] False '\NUL' commaCont arrowCont
-          allSegments = if null lastSeg then segments else segments ++ [lastSeg]
+          -- Drop a whitespace-only trailing segment: when scan breaks at the
+          -- final comma in the input, the residual `cur` is just `commaCont`
+          -- (the indent prefix) with no real content. Emitting it adds a
+          -- blank-but-indented line at the end, which the post-strip used to
+          -- silently fix; with the strip removed, we filter here at source.
+          isWhitespaceOnly = all (== ' ')
+          allSegments = if null lastSeg || isWhitespaceOnly lastSeg
+                          then segments
+                          else segments ++ [lastSeg]
       in if length allSegments <= 1
            then line
            else L.intercalate "\n" allSegments

@@ -562,13 +562,24 @@ statementToExpr = haskellSerdeDefinition "statementToExpr" $
 
 toHaskellComments :: TTermDefinition (String -> String)
 toHaskellComments = haskellSerdeDefinition "toHaskellComments" $
-  doc "Convert a string to Haddock documentation comments" $
-  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map (lambda "s" $ Strings.cat2 (string "-- | ") (var "s")) (Strings.lines $ var "c")
+  doc ("Convert a string to Haddock documentation comments. Empty source lines"
+    <> " emit `-- |` (no trailing space) so blank doc lines don't carry trailing"
+    <> " whitespace into the generated file.") $
+  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map
+    (lambda "s" $ Logic.ifElse (Equality.equal (var "s") (string ""))
+      (string "-- |")
+      (Strings.cat2 (string "-- | ") (var "s")))
+    (Strings.lines $ var "c")
 
 toSimpleComments :: TTermDefinition (String -> String)
 toSimpleComments = haskellSerdeDefinition "toSimpleComments" $
-  doc "Convert a string to simple line comments" $
-  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map (lambda "s" $ Strings.cat2 (string "-- ") (var "s")) (Strings.lines $ var "c")
+  doc ("Convert a string to simple line comments. Empty source lines emit"
+    <> " `--` (no trailing space) for the same reason as toHaskellComments.") $
+  lambda "c" $ Strings.intercalate (string "\n") $ Lists.map
+    (lambda "s" $ Logic.ifElse (Equality.equal (var "s") (string ""))
+      (string "--")
+      (Strings.cat2 (string "-- ") (var "s")))
+    (Strings.lines $ var "c")
 
 typeSignatureToExpr :: TTermDefinition (H.TypeSignature -> Expr)
 typeSignatureToExpr = haskellSerdeDefinition "typeSignatureToExpr" $

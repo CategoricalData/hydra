@@ -1,20 +1,16 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Functions dealing with arguments and arity.
 
 module Hydra.Arity where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Math as Math
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Find the arity (expected number of arguments) of a primitive constant or function
 primitiveArity :: Graph.Primitive -> Int
-primitiveArity arg_ = (\arg_2 -> typeArity (Core.typeSchemeBody arg_2)) (Graph.primitiveType arg_)
-
+primitiveArity arg_ = (\arg_2 -> typeArity (Core.typeSchemeType arg_2)) (Graph.primitiveType arg_)
 -- | Find the arity (expected number of arguments) of a term
 termArity :: Core.Term -> Int
 termArity x =
@@ -25,7 +21,6 @@ termArity x =
       Core.TermProject _ -> 1
       Core.TermUnwrap _ -> 1
       _ -> 0
-
 -- | Find the arity (expected number of arguments) of a type
 typeArity :: Core.Type -> Int
 typeArity x =
@@ -35,11 +30,9 @@ typeArity x =
       Core.TypeForall v0 -> typeArity (Core.forallTypeBody v0)
       Core.TypeFunction v0 -> Math.add 1 (typeArity (Core.functionTypeCodomain v0))
       _ -> 0
-
 -- | Find the arity (expected number of arguments) of a type scheme
 typeSchemeArity :: Core.TypeScheme -> Int
-typeSchemeArity arg_ = typeArity (Core.typeSchemeBody arg_)
-
+typeSchemeArity arg_ = typeArity (Core.typeSchemeType arg_)
 -- | Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)
 uncurryType :: Core.Type -> [Core.Type]
 uncurryType t =

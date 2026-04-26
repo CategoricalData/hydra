@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term decoders for hydra.core
 
 module Hydra.Decode.Core where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
@@ -14,7 +12,6 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 annotatedTerm :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.AnnotatedTerm
 annotatedTerm cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -24,7 +21,6 @@ annotatedTerm cx raw =
           Core.annotatedTermBody = field_body,
           Core.annotatedTermAnnotation = field_annotation}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 annotatedType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.AnnotatedType
 annotatedType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -34,7 +30,6 @@ annotatedType cx raw =
           Core.annotatedTypeBody = field_body,
           Core.annotatedTypeAnnotation = field_annotation}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 application :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Application
 application cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -44,7 +39,6 @@ application cx raw =
           Core.applicationFunction = field_function,
           Core.applicationArgument = field_argument}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 applicationType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.ApplicationType
 applicationType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -54,7 +48,6 @@ applicationType cx raw =
           Core.applicationTypeFunction = field_function,
           Core.applicationTypeArgument = field_argument}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 binding :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Binding
 binding cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -65,7 +58,6 @@ binding cx raw =
           Core.bindingTerm = field_term,
           Core.bindingType = field_type})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 caseStatement :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.CaseStatement
 caseStatement cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -76,7 +68,6 @@ caseStatement cx raw =
           Core.caseStatementDefault = field_default,
           Core.caseStatementCases = field_cases})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 eitherType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.EitherType
 eitherType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -86,7 +77,6 @@ eitherType cx raw =
           Core.eitherTypeLeft = field_left,
           Core.eitherTypeRight = field_right}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 field :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Field
 field cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -96,7 +86,6 @@ field cx raw =
           Core.fieldName = field_name,
           Core.fieldTerm = field_term}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 fieldType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.FieldType
 fieldType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -106,7 +95,6 @@ fieldType cx raw =
           Core.fieldTypeName = field_name,
           Core.fieldTypeType = field_type}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 floatType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.FloatType
 floatType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -124,7 +112,6 @@ floatType cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 floatValue :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.FloatValue
 floatValue cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -160,7 +147,6 @@ floatValue cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 forallType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.ForallType
 forallType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -170,7 +156,6 @@ forallType cx raw =
           Core.forallTypeParameter = field_parameter,
           Core.forallTypeBody = field_body}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 functionType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.FunctionType
 functionType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -180,7 +165,6 @@ functionType cx raw =
           Core.functionTypeDomain = field_domain,
           Core.functionTypeCodomain = field_codomain}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 injection :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Injection
 injection cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -190,7 +174,6 @@ injection cx raw =
           Core.injectionTypeName = field_typeName,
           Core.injectionField = field_field}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 integerType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.IntegerType
 integerType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -214,7 +197,6 @@ integerType cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 integerValue :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.IntegerValue
 integerValue cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -292,7 +274,6 @@ integerValue cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 lambda :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Lambda
 lambda cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -303,7 +284,6 @@ lambda cx raw =
           Core.lambdaDomain = field_domain,
           Core.lambdaBody = field_body})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 let_ :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Let
 let_ cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -313,7 +293,6 @@ let_ cx raw =
           Core.letBindings = field_bindings,
           Core.letBody = field_body}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 literal :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Literal
 literal cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -350,7 +329,6 @@ literal cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 literalType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.LiteralType
 literalType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -371,7 +349,6 @@ literalType cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 mapType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.MapType
 mapType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -381,7 +358,6 @@ mapType cx raw =
           Core.mapTypeKeys = field_keys,
           Core.mapTypeValues = field_values}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 name :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Name
 name cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -391,7 +367,6 @@ name cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
-
 pairType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.PairType
 pairType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -401,7 +376,6 @@ pairType cx raw =
           Core.pairTypeFirst = field_first,
           Core.pairTypeSecond = field_second}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 projection :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Projection
 projection cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -411,7 +385,6 @@ projection cx raw =
           Core.projectionTypeName = field_typeName,
           Core.projectionField = field_field}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 record :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Record
 record cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -421,7 +394,6 @@ record cx raw =
           Core.recordTypeName = field_typeName,
           Core.recordFields = field_fields}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 term :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Term
 term cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -457,7 +429,6 @@ term cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 type_ :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Type
 type_ cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -489,7 +460,6 @@ type_ cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 typeApplicationTerm :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeApplicationTerm
 typeApplicationTerm cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -499,7 +469,6 @@ typeApplicationTerm cx raw =
           Core.typeApplicationTermBody = field_body,
           Core.typeApplicationTermType = field_type}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 typeLambda :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeLambda
 typeLambda cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -509,7 +478,6 @@ typeLambda cx raw =
           Core.typeLambdaParameter = field_parameter,
           Core.typeLambdaBody = field_body}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 typeScheme :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeScheme
 typeScheme cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -520,7 +488,6 @@ typeScheme cx raw =
           Core.typeSchemeBody = field_body,
           Core.typeSchemeConstraints = field_constraints})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 typeVariableMetadata :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeVariableMetadata
 typeVariableMetadata cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -529,7 +496,6 @@ typeVariableMetadata cx raw =
         in (Eithers.bind (ExtractCore.requireField "classes" (ExtractCore.decodeSet name) fieldMap cx) (\field_classes -> Right (Core.TypeVariableMetadata {
           Core.typeVariableMetadataClasses = field_classes})))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 wrappedTerm :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.WrappedTerm
 wrappedTerm cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of

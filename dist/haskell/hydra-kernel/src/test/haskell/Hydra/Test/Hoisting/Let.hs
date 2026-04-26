@@ -1,16 +1,13 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Test cases for let-binding hoisting transformations
 
 module Hydra.Test.Hoisting.Let where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Hoisting as Hoisting
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Test cases for let-binding hoisting transformations
 allTests :: Testing.TestGroup
 allTests =

@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Test cases for code generation operations such as inferModules and inferModulesGiven
 
 module Hydra.Test.Generation where
-
 import qualified Hydra.Codegen as Codegen
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Eithers as Eithers
@@ -16,7 +14,6 @@ import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Test cases for code generation operations
 allTests :: Testing.TestGroup
 allTests =

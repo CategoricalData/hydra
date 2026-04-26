@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term encoders for hydra.packaging
 
 module Hydra.Encode.Packaging where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Lib.Lists as Lists
@@ -13,7 +11,6 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 definition :: Packaging.Definition -> Core.Term
 definition x =
     case x of
@@ -27,13 +24,11 @@ definition x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (typeDefinition v0)}})
-
 fileExtension :: Packaging.FileExtension -> Core.Term
 fileExtension x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.packaging.FileExtension"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Packaging.unFileExtension x))})
-
 module_ :: Packaging.Module -> Core.Term
 module_ x =
     Core.TermRecord (Core.Record {
@@ -54,13 +49,11 @@ module_ x =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Packaging.moduleDescription x))}]})
-
 namespace :: Packaging.Namespace -> Core.Term
 namespace x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.packaging.Namespace"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Packaging.unNamespace x))})
-
 namespaces :: (t0 -> Core.Term) -> Packaging.Namespaces t0 -> Core.Term
 namespaces n x =
     Core.TermRecord (Core.Record {
@@ -72,7 +65,6 @@ namespaces n x =
         Core.Field {
           Core.fieldName = (Core.Name "mapping"),
           Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap namespace n m)) (Packaging.namespacesMapping x))}]})
-
 package :: Packaging.Package -> Core.Term
 package x =
     Core.TermRecord (Core.Record {
@@ -90,13 +82,11 @@ package x =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Packaging.packageDescription x))}]})
-
 packageName :: Packaging.PackageName -> Core.Term
 packageName x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.packaging.PackageName"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Packaging.unPackageName x))})
-
 qualifiedName :: Packaging.QualifiedName -> Core.Term
 qualifiedName x =
     Core.TermRecord (Core.Record {
@@ -108,7 +98,6 @@ qualifiedName x =
         Core.Field {
           Core.fieldName = (Core.Name "local"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Packaging.qualifiedNameLocal x))}]})
-
 termDefinition :: Packaging.TermDefinition -> Core.Term
 termDefinition x =
     Core.TermRecord (Core.Record {
@@ -123,7 +112,6 @@ termDefinition x =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map EncodeCore.typeScheme opt)) (Packaging.termDefinitionType x))}]})
-
 typeDefinition :: Packaging.TypeDefinition -> Core.Term
 typeDefinition x =
     Core.TermRecord (Core.Record {

@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Haskell test code generation for HSpec-based generation tests
 
 module Hydra.Haskell.Testing where
-
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
@@ -36,7 +34,6 @@ import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
-
 -- | Add namespaces from a set of names to existing namespaces
 addNamespacesToNamespaces :: Packaging.Namespaces Syntax.ModuleName -> S.Set Core.Name -> Packaging.Namespaces Syntax.ModuleName
 addNamespacesToNamespaces ns0 names =
@@ -48,7 +45,6 @@ addNamespacesToNamespaces ns0 names =
       in Packaging.Namespaces {
         Packaging.namespacesFocus = (Packaging.namespacesFocus ns0),
         Packaging.namespacesMapping = (Maps.union (Packaging.namespacesMapping ns0) newMappings)}
-
 -- | Build namespaces for a test group including encoded term references
 buildNamespacesForTestGroup :: Packaging.Module -> Testing.TestGroup -> Graph.Graph -> Either String (Packaging.Namespaces Syntax.ModuleName)
 buildNamespacesForTestGroup mod tgroup graph_ =
@@ -73,7 +69,6 @@ buildNamespacesForTestGroup mod tgroup graph_ =
       in (Eithers.bind (Eithers.bimap (\e -> Errors.error e) (\a -> a) (Utils.namespacesForModule tempModule Lexical.emptyContext graph_)) (\baseNamespaces ->
         let encodedNames = Sets.unions (Lists.map (\t -> extractEncodedTermVariableNames graph_ t) testTerms)
         in (Right (addNamespacesToNamespaces baseNamespaces encodedNames))))
-
 -- | Build the complete test module for Haskell HSpec
 buildTestModule :: Packaging.Module -> Testing.TestGroup -> String -> Packaging.Namespaces Syntax.ModuleName -> String
 buildTestModule testModule testGroup testBody namespaces =
@@ -117,26 +112,21 @@ buildTestModule testModule testGroup testBody namespaces =
         "\n",
         testBody,
         "\n"])
-
 -- | Collect variable names from encoded terms within a single term node
 collectNames :: Graph.Graph -> S.Set Core.Name -> Core.Term -> S.Set Core.Name
 collectNames graf names t =
     Logic.ifElse (Predicates.isEncodedTerm (Strip.deannotateTerm t)) (Eithers.either (\_ -> names) (\decodedTerm -> Sets.union names (Dependencies.termDependencyNames True True True decodedTerm)) (Eithers.bimap (\_e -> _e) (\_a -> _a) (DecodeCore.term graf t))) names
-
 -- | Collect all test cases from a test group recursively
 collectTestCases :: Testing.TestGroup -> [Testing.TestCaseWithMetadata]
 collectTestCases tg =
     Lists.concat2 (Testing.testGroupCases tg) (Lists.concat (Lists.map collectTestCases (Testing.testGroupSubgroups tg)))
-
 -- | Extract all variable names from term-encoded terms in a given term
 extractEncodedTermVariableNames :: Graph.Graph -> Core.Term -> S.Set Core.Name
 extractEncodedTermVariableNames graf term =
     Rewriting.foldOverTerm Coders.TraversalOrderPre (collectNames graf) Sets.empty term
-
 -- | Extract input and output terms from a test case
 extractTestTerms :: t0 -> [t1]
 extractTestTerms tcm = []
-
 -- | Find necessary imports for Haskell based on referenced names
 findHaskellImports :: Packaging.Namespaces Syntax.ModuleName -> t0 -> [String]
 findHaskellImports namespaces names_ =
@@ -149,12 +139,10 @@ findHaskellImports namespaces names_ =
         (Strings.intercalate "." (Lists.map Formatting.capitalize (Strings.splitOn "." (Packaging.unNamespace (Pairs.first entry))))),
         " as ",
         (Syntax.unModuleName (Pairs.second entry))]) (Maps.toList filtered))
-
 -- | Generate a Haskell test file for a test group, with type inference and namespace building
 generateHaskellTestFile :: Packaging.Module -> Testing.TestGroup -> Graph.Graph -> Either String (String, String)
 generateHaskellTestFile testModule testGroup g =
     Eithers.bind (buildNamespacesForTestGroup testModule testGroup g) (\namespaces -> generateTestFile testModule testGroup namespaces)
-
 -- | Generate a single HSpec test case from a universal test case
 generateTestCase :: t0 -> Testing.TestCaseWithMetadata -> Either t1 [String]
 generateTestCase depth tcm =
@@ -179,7 +167,6 @@ generateTestCase depth tcm =
           "  (",
           expected_,
           ")"])])
-
 -- | Generate a complete Haskell test file
 generateTestFile :: Packaging.Module -> Testing.TestGroup -> Packaging.Namespaces Syntax.ModuleName -> Either t0 (String, String)
 generateTestFile testModule testGroup namespaces =
@@ -189,7 +176,6 @@ generateTestFile testModule testGroup namespaces =
           specNs = Packaging.Namespace (Strings.cat2 (Packaging.unNamespace ns_) "Spec")
           filePath = Names.namespaceToFilePath Util.CaseConventionPascal (Packaging.FileExtension "hs") specNs
       in (filePath, testModuleContent)) (generateTestGroupHierarchy 1 testGroup)
-
 -- | Generate test hierarchy preserving the structure with H.describe blocks for subgroups
 generateTestGroupHierarchy :: Int -> Testing.TestGroup -> Either t0 String
 generateTestGroupHierarchy depth testGroup =
@@ -211,7 +197,6 @@ generateTestGroupHierarchy depth testGroup =
             (Literals.showString groupName_),
             " $ do\n",
             content]) (generateTestGroupHierarchy (Math.add depth 1) subgroup))) subgroups)))))
-
 -- | Convert namespace to Haskell module name
 namespaceToModuleName :: Packaging.Namespace -> String
 namespaceToModuleName ns_ =

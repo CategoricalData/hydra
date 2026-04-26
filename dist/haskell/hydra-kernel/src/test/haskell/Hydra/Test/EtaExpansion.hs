@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Test cases for eta expansion of terms
 
 module Hydra.Test.EtaExpansion where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Strings as Strings
@@ -14,7 +12,6 @@ import qualified Hydra.Test.TestTypes as TestTypes
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Test cases for eta expansion of terms
 allTests :: Testing.TestGroup
 allTests =
